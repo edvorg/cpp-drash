@@ -1,0 +1,1 @@
+/home/edvorg/edvorg-drash/qtcreator-build/CMakeFiles/drash-project.dir
