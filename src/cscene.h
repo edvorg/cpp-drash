@@ -2,7 +2,6 @@
 #define CSCENE_H
 
 #include "csceneobject.h"
-#include <vector>
 
 namespace drash
 {

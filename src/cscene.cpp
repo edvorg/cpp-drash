@@ -22,6 +22,12 @@ bool CScene::Init(const CSceneParams &_params)
 
 void CScene::Release()
 {
+    while (mWorld.GetBodyCount())
+    {
+        CSceneObject* obj = reinterpret_cast<CSceneObject*>(mWorld.GetBodyList()->GetUserData());
+        this->DestroyObject(obj);
+    }
+
     mInitialized = false;
 }
 

@@ -31,6 +31,6 @@ class CLogger
 #define LOG_WARN(mes) CLogger()<<LOG_WARN_PREFIX<<mes
 #define LOG_INFO(mes) CLogger()<<LOG_INFO_PREFIX<<mes
 
-}//namespace Greng
+}//namespace drash
 
 #endif // CLOGGER_H_INCLUDED

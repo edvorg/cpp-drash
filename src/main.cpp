@@ -15,13 +15,11 @@ int main()
 
     CSceneObjectParams params;
 
-    CSceneObject* obj = scene.CreateObject(params);
+    CSceneObject* obj1 = scene.CreateObject(params);
+    CSceneObject* obj2 = scene.CreateObject(params);
+    CSceneObject* obj3 = scene.CreateObject(params);
 
-    for (;;)
-    {
-        scene.step(1);
-        LOG_ERR("bla bla");
-    }
+    scene.DestroyObject(obj1);
 
     return 0;
 }
