@@ -29,17 +29,18 @@ CDebugRenderer::~CDebugRenderer()
 {
 }
 
-// TODO: <dismay> release color
 // TODO: <dismay> not use GL_POLYGON
+
+
 void CDebugRenderer::DrawPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &color)
 {
-
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
     glOrtho( -(float)mWidth/2 ,(float)mWidth/2,-(float)mHeight /2 ,(float)mHeight /2 ,1.0f,-1.0f);
     glBegin(GL_POLYGON);
+    glColor3f(color.r,color.g,color.b);
     for(int i =0 ; i < vertexCount ; i++){
         b2Vec2 curvertex = vertices[i];// + i;
         glVertex2f(curvertex.x, curvertex.y);
@@ -56,7 +57,7 @@ void CDebugRenderer::DrawSolidPolygon(const b2Vec2 *vertices, int32 vertexCount,
     glOrtho( -(float)mWidth/2 ,(float)mWidth/2,-(float)mHeight /2 ,(float)mHeight /2,1.0f,-1.0f);
     glBegin(GL_POLYGON);
 //    glColor3b();
-    //glColor3f(color.r,color.g,color.b);
+    glColor3f(color.r,color.g,color.b);
     for(int i =0 ; i < vertexCount ; i++){
         b2Vec2 curvertex = vertices[i];// + i;
         glVertex3f(curvertex.x, curvertex.y, 0.0f);
@@ -74,13 +75,21 @@ void CDebugRenderer::DrawCircle(const b2Vec2 &center, float32 radius, const b2Co
     //glColor3f(color.r,color.g,color.b);
     glOrtho( -(float)mWidth /2 ,(float)mWidth /2,-(float)mHeight /2 ,(float)mHeight /2,1.0f,-1.0f);
     glBegin(GL_LINE_LOOP);
-    //float radius = 40;
-    for(int i = 1 ;i < 20 ; i++){
-        float angle = (float)i/M_PI * 180;
-        glVertex2f(cos(angle)*radius,sin(angle)*radius);
+    glColor3f(color.r,color.g,color.b);
+    int num_segments = 50;
+
+    for(int ii = 0; ii < num_segments; ii++)
+    {
+        float theta = 2.0f * 3.1415926f * float(ii) / (float)num_segments;
+        float x = radius * cos(theta);
+        float y = radius * sin(theta);
+        glVertex2f(x + center.x, y + center.y);
+
     }
     glEnd();
 }
+
+// TODO: <dismay> i don't now axis
 
 void CDebugRenderer::DrawSolidCircle(const b2Vec2 &center, float32 radius, const b2Vec2 &axis, const b2Color &color)
 {
@@ -90,12 +99,21 @@ void CDebugRenderer::DrawSolidCircle(const b2Vec2 &center, float32 radius, const
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
     glOrtho( -(float)mWidth /2 ,(float)mWidth /2,-(float)mHeight /2 ,(float)mHeight /2,1.0f,-1.0f);
-    glBegin(GL_LINE_LOOP);
-    //float radius = 40;
-    for(int i = 1 ;i < 20 ; i++){
-        float angle = (float)i/M_PI * 180;
-        glVertex2f(cos(angle)*radius,sin(angle)*radius);
+
+    float x1,y1,x2,y2;
+    float angle = 0;
+
+    x1 = center.x,y1=center.y;
+    glBegin(GL_TRIANGLE_FAN);
+    glColor3f(color.r,color.g,color.b);
+    glVertex2f(x1,y1);
+    for (angle=1.0f;angle<361.0f;angle+=0.1)
+    {
+        x2 = x1+sin(angle)*radius;
+        y2 = y1+cos(angle)*radius;
+        glVertex2f(x2,y2);
     }
+
     glEnd();
 }
 
@@ -107,11 +125,14 @@ void CDebugRenderer::DrawSegment(const b2Vec2 &p1, const b2Vec2 &p2, const b2Col
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
     glOrtho( -(float)mWidth /2 ,(float)mWidth /2,-(float)mHeight /2 ,(float)mHeight /2,1.0f,-1.0f);
-    glBegin(GL_LINE);
+    glBegin(GL_LINE_LOOP);
+    glColor3f(color.r,color.g,color.b);
     glVertex2f(p1.x,p1.y);
     glVertex2f(p2.x,p2.y);
     glEnd();
 }
+
+// TODO: <dismay> release drawTransform
 
 void CDebugRenderer::DrawTransform(const b2Transform &xf)
 {
