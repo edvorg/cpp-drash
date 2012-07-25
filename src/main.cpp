@@ -6,26 +6,36 @@
 #include <math.h>
 #include "cdebugrenderer.h"
 
+using namespace drash;
 
 int main(int argc, char *argv[]) {
-    SDL_Event event;
-    srand(0);
+
+
     SDL_Init(SDL_INIT_VIDEO);
     SDL_WM_SetCaption("hello, sdl", NULL);
     SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE | SDL_OPENGL);
     glViewport(0,0,800,600);
     static int inc = 0;
     CDebugRenderer render;
-    if (!render.Init()) exit(1);
-    //assert(render.Init() == false);
-    while (true) {
-        SDL_PollEvent(&event);
-        if (event.type == SDL_MOUSEBUTTONDOWN){
-            break;
-        }
-        if (event.type == SDL_QUIT)
-                break;
+    assert(render.Init() == true);
 
+    for(;;) {
+        bool go = true;
+        SDL_Event event;
+        while (SDL_PollEvent(&event)){
+            // Catch all events
+            if (event.type == SDL_MOUSEBUTTONDOWN){
+                go = false;
+                break;
+            }
+            if (event.type == SDL_QUIT){
+                go = false;
+                break;
+            }
+        }
+        // If event for exit
+        if (!go)
+            break;
         glClear(GL_COLOR_BUFFER_BIT);
 
 //        glMatrixMode( GL_MODELVIEW );
@@ -67,17 +77,48 @@ int main(int argc, char *argv[]) {
         ver[0].Set(0,0);
         ver[1].Set(10,20);
         ver[2].Set(30,0);
-
+        int32 countVertex = 3;
         b2Color color;
         color.Set(1,0.1,1);
-        int32 s = 3;
-        render.DrawPolygon(ver,s,color);
+
+        render.DrawPolygon(ver,countVertex,color);
+
+
+
         render.DrawCircle(ver[1],50,color);
         SDL_GL_SwapBuffers();
 
-        inc++;
-
     }
+
     SDL_Quit();
+
     return 0;
 }
+
+// Sorry, it is conflict merging
+
+//=======
+//#include "cscene.h"
+//#include "clogger.h"
+
+//using namespace drash;
+
+////int main()
+////{
+////    CScene scene;
+
+////    CSceneParams sceneparams;
+////    sceneparams.mGravity.set(0, -10);
+////    scene.Init(sceneparams);
+
+////    CSceneObjectParams params;
+
+////    CSceneObject* obj1 = scene.CreateObject(params);
+////    CSceneObject* obj2 = scene.CreateObject(params);
+////    CSceneObject* obj3 = scene.CreateObject(params);
+
+////    scene.DestroyObject(obj1);
+
+////>>>>>>> origin/master
+////    return 0;
+////}

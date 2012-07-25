@@ -1,6 +1,10 @@
 SOURCES += \
     ../src/main.cpp \
-    ../src/cdebugrenderer.cpp
+    ../src/cdebugrenderer.cpp \
+    ../src/csceneobject.cpp \
+    ../src/cscene.cpp \
+    ../src/cvec2.cpp \
+    ../src/clogger.cpp
 
 CONFIG += console
 CONFIG -= qt
@@ -8,9 +12,14 @@ CONFIG -= qt
 #PKGCONFIG += sdl
 #LIBS += sdl
 
-unix: CONFIG += link_pkgconfig
-unix: PKGCONFIG += sdl gl
-unix: LIBS += -lBox2D
+unix|win32: CONFIG += link_pkgconfig
+unix|win32: PKGCONFIG += sdl gl
+unix|win32: LIBS += -lBox2D
 
 HEADERS += \
-    ../src/cdebugrenderer.h
+    ../src/cdebugrenderer.h \
+    ../src/csceneobject.h \
+    ../src/cscene.h \
+    ../src/cvec2.h \
+    ../src/clogger.h
+

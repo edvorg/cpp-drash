@@ -4,9 +4,11 @@
 #include <SDL/SDL.h>
 #include <iostream>
 
+using namespace drash;
+
 CDebugRenderer::CDebugRenderer():b2Draw()
 {
-
+    mHeight = mWidth = 1;
 }
 
 bool CDebugRenderer::Init()
@@ -18,7 +20,7 @@ bool CDebugRenderer::Init()
     mWidth = info->current_w;
     mHeight = info->current_h;
 
-    std::cout << mWidth << " " << mHeight << std::endl;
+    //std::cout << mWidth << " " << mHeight << std::endl;
 
     return true;
 }
@@ -27,21 +29,20 @@ CDebugRenderer::~CDebugRenderer()
 {
 }
 
+// TODO: <dismay> release color
+// TODO: <dismay> not use GL_POLYGON
 void CDebugRenderer::DrawPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &color)
 {
-    //glClear(GL_COLOR_BUFFER_BIT);
+
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
     glOrtho( -(float)mWidth/2 ,(float)mWidth/2,-(float)mHeight /2 ,(float)mHeight /2 ,1.0f,-1.0f);
-//    glColor3f(color.r,color.g,color.b);
     glBegin(GL_POLYGON);
-//    glColor3f(color.r,color.g,color.b);
     for(int i =0 ; i < vertexCount ; i++){
         b2Vec2 curvertex = vertices[i];// + i;
         glVertex2f(curvertex.x, curvertex.y);
-        //std::cout << curvertex.x << " " << curvertex.y << std::endl;
     }
     glEnd();
 }
@@ -55,7 +56,7 @@ void CDebugRenderer::DrawSolidPolygon(const b2Vec2 *vertices, int32 vertexCount,
     glOrtho( -(float)mWidth/2 ,(float)mWidth/2,-(float)mHeight /2 ,(float)mHeight /2,1.0f,-1.0f);
     glBegin(GL_POLYGON);
 //    glColor3b();
-    glColor3f(color.r,color.g,color.b);
+    //glColor3f(color.r,color.g,color.b);
     for(int i =0 ; i < vertexCount ; i++){
         b2Vec2 curvertex = vertices[i];// + i;
         glVertex3f(curvertex.x, curvertex.y, 0.0f);
@@ -70,7 +71,7 @@ void CDebugRenderer::DrawCircle(const b2Vec2 &center, float32 radius, const b2Co
     glLoadIdentity();
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
-    glColor3f(color.r,color.g,color.b);
+    //glColor3f(color.r,color.g,color.b);
     glOrtho( -(float)mWidth /2 ,(float)mWidth /2,-(float)mHeight /2 ,(float)mHeight /2,1.0f,-1.0f);
     glBegin(GL_LINE_LOOP);
     //float radius = 40;

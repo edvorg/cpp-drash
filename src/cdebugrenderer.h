@@ -3,6 +3,8 @@
 
 #include <Box2D/Box2D.h>
 
+namespace drash{
+
 class CDebugRenderer : public b2Draw
 {
 public:
@@ -34,5 +36,5 @@ private:
     unsigned int mHeight;
 
 };
-
+} // namespace drash
 #endif // CDEBUGRENDERER_H
