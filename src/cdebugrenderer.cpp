@@ -5,7 +5,7 @@
 #include <iostream>
 
 using namespace drash;
-
+namespace drash{
 CDebugRenderer::CDebugRenderer():b2Draw()
 {
     mHeight = mWidth = 1;
@@ -137,4 +137,5 @@ void CDebugRenderer::DrawSegment(const b2Vec2 &p1, const b2Vec2 &p2, const b2Col
 void CDebugRenderer::DrawTransform(const b2Transform &xf)
 {
 
+}
 }
