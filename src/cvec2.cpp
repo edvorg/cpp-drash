@@ -9,23 +9,13 @@ CVec2::CVec2():
 {
 }
 
-CVec2::CVec2(float _val):
-    x(_val),
-    y(_val)
+CVec2::CVec2(float32 _val):b2Vec2(_val,_val)
 {
 }
 
-CVec2::CVec2(float _x, float _y):
-    x(_x),
-    y(_y)
+CVec2::CVec2(float32 _x, float32 _y):b2Vec2(_x,_y)
 {
 }
 
-
-CVec2 &CVec2::set(float _x, float _y)
-{
-    x = _x;
-    y = _x;
-}
 
 }// namespace drash

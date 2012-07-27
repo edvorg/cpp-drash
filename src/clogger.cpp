@@ -83,4 +83,4 @@ CLogger& CLogger::operator<<(float _v)
 	return (*this);
 }
 
-}//namespace Greng
+}//namespace drash
