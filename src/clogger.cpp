@@ -4,13 +4,16 @@
 
 using namespace std;
 
-namespace drash{
+namespace drash
+{
 
-class GnLogStarter {
+class GnLogStarter
+{
 public:
-	GnLogStarter() {
+    GnLogStarter()
+    {
 		ofstream out;
-		out.open("greng.log", ios_base::ate);
+        out.open( "greng.log", ios_base::ate );
 		out.close();
         CLogger()<<LOG_INFO_PREFIX<<"\"greng.log\" started. made by Edward Knyshov";
 	}
@@ -18,13 +21,13 @@ public:
 
 CLogger::CLogger(void)
 {
-	out.open("greng.log", ios_base::app);
+    out.open( "greng.log", ios_base::app );
     mOpened = out.is_open();
 }
 
 CLogger::~CLogger(void)
 {
-    if (mOpened)
+    if ( mOpened == true )
 	{
 		out<<endl;
 		cout<<endl;
@@ -32,9 +35,9 @@ CLogger::~CLogger(void)
 	}
 }
 
-CLogger& CLogger::operator<<(char _c)
+CLogger& CLogger::operator<<( char _c )
 {
-    if (mOpened)
+    if ( mOpened == true )
 	{
         out<<_c;
         cout<<_c;
@@ -42,9 +45,9 @@ CLogger& CLogger::operator<<(char _c)
 	return (*this);
 }
 
-CLogger& CLogger::operator<<(const char* _str)
+CLogger& CLogger::operator<<( const char* _str )
 {
-    if (mOpened)
+    if ( mOpened == true )
 	{
         out<<_str;
         cout<<_str;
@@ -52,9 +55,9 @@ CLogger& CLogger::operator<<(const char* _str)
 	return (*this);
 }
 
-CLogger& CLogger::operator<<(int _v)
+CLogger& CLogger::operator<<( int _v )
 {
-    if (mOpened)
+    if ( mOpened == true )
 	{
         out<<_v;
         cout<<_v;
@@ -63,9 +66,9 @@ CLogger& CLogger::operator<<(int _v)
 }
 
 
-CLogger& CLogger::operator<<(unsigned int _v)
+CLogger& CLogger::operator<<( unsigned int _v )
 {
-    if (mOpened)
+    if ( mOpened == true )
 	{
         out<<_v;
         cout<<_v;
@@ -73,9 +76,9 @@ CLogger& CLogger::operator<<(unsigned int _v)
 	return (*this);
 }
 
-CLogger& CLogger::operator<<(float _v)
+CLogger& CLogger::operator<<( float _v )
 {
-    if (mOpened)
+    if ( mOpened == true )
 	{
         out<<_v;
         cout<<_v;
@@ -83,4 +86,4 @@ CLogger& CLogger::operator<<(float _v)
 	return (*this);
 }
 
-}//namespace drash
+} // namespace drash

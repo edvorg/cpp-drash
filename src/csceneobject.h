@@ -24,6 +24,6 @@ protected:
 private:
 };
 
-}// namespace drash
+} // namespace drash
 
 #endif // CSCENEOBJECT_H

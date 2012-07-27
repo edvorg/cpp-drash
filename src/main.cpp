@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include <SDL/SDL.h>
 #include <GL/gl.h>
 #include <Box2D/Box2D.h>
@@ -11,12 +9,12 @@
 
 using namespace drash;
 
-bool Init(CScene& _scene);
-void Run(CScene& _scene);
-void Render(CScene& _scene);
-void Release(CScene &_scene);
+bool Init( CScene& _scene );
+void Run( CScene& _scene );
+void Render( CScene& _scene );
+void Release( CScene &_scene );
 
-int main(int _argc, char *_argv[])
+int main( int _argc, char *_argv[] )
 {
     CScene scene;
 
@@ -37,23 +35,23 @@ int main(int _argc, char *_argv[])
 // realize CApp::Release()
 // realize dummy CAppParams class
 
-bool Init(CScene& _scene)
+bool Init( CScene& _scene )
 {
     if ( SDL_Init(SDL_INIT_VIDEO) < 0 )
     {
-        LOG_ERR("SDL_Init failed");
+        LOG_ERR( "SDL_Init failed" );
         return false;
     }
 
-    SDL_WM_SetCaption("Drash", NULL);
+    SDL_WM_SetCaption( "Drash", NULL );
 
-    if ( SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE | SDL_OPENGL) == NULL )
+    if ( SDL_SetVideoMode( 800, 600, 32, SDL_HWSURFACE | SDL_OPENGL ) == NULL )
     {
-        LOG_ERR("SDL_SetVideoMode failed");
+        LOG_ERR( "SDL_SetVideoMode failed" );
         return false;
     }
 
-    glViewport(0,0,800,600);
+    glViewport( 0, 0, 800, 600 );
 
     CSceneParams params;
 
@@ -62,8 +60,8 @@ bool Init(CScene& _scene)
         return false;
     }
 
-    CObjectSolidBody* obj1 = _scene.CreateObject<CObjectSolidBody>();
-    CObjectSolidBody* obj2 = _scene.CreateObject<CObjectSolidBody>();
+    CObjectSolidBody* obj1 = _scene.CreateObject< CObjectSolidBody >();
+    CObjectSolidBody* obj2 = _scene.CreateObject< CObjectSolidBody >();
 
     _scene.DestroyObject(obj1);
     //_scene.DestroyObject(obj2);
@@ -71,17 +69,18 @@ bool Init(CScene& _scene)
     return true;
 }
 
-void Run(CScene &_scene)
+void Run( CScene &_scene )
 {
     for(;;)
     {
         bool go = true;
         SDL_Event event;
 
-        while (SDL_PollEvent(&event))
+        while ( SDL_PollEvent(&event) )
         {
             // Catch all events
-            if (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_QUIT)
+            if ( event.type == SDL_MOUSEBUTTONDOWN ||
+                 event.type == SDL_QUIT )
             {
                 go = false;
                 break;
@@ -100,17 +99,17 @@ void Run(CScene &_scene)
     }
 }
 
-void Render(CScene &_scene)
+void Render( CScene &_scene )
 {
-    glClearColor( 1.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     _scene.Draw();
 
     SDL_GL_SwapBuffers();
 }
 
-void Release(CScene &_scene)
+void Release( CScene &_scene )
 {
     _scene.Release();
 

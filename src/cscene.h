@@ -22,20 +22,20 @@ public:
     CScene(void);
     virtual ~CScene(void);
 
-    bool Init(const CSceneParams& _params);
+    bool Init( const CSceneParams& _params );
     void Release(void);
 
     /// T must extend CSceneObject class
-    template <typename T>
+    template < typename T >
     T* CreateObject(void);
 
     /// T must extend CSceneObject class
-    template <typename T>
-    void DestroyObject(T* _obj);
+    template < typename T >
+    void DestroyObject( T* _obj );
 
     /// must be called once in update cycle
     /// dt - microseconds
-    void Step(unsigned int dt);
+    void Step( unsigned int dt );
 
     void Draw(void);
 
@@ -50,7 +50,7 @@ private:
     ObjectsT mObjects;
 };
 
-template <typename T>
+template < typename T >
 T* CScene::CreateObject(void)
 {
     T* res = new T();
@@ -69,8 +69,8 @@ T* CScene::CreateObject(void)
     return res;
 }
 
-template <typename T>
-void CScene::DestroyObject(T* _obj)
+template < typename T >
+void CScene::DestroyObject( T* _obj )
 {
     for ( ObjectsT::iterator i=mObjects.begin(), i_e=mObjects.end(); i!=i_e; i++ )
     {
@@ -99,6 +99,6 @@ void CScene::DestroyObject(T* _obj)
     }
 }
 
-}// namespace drash
+} // namespace drash
 
 #endif // CSCENE_H
