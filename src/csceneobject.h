@@ -31,7 +31,10 @@ class CSceneObject
 public:
     friend class CScene;
 
-private:
+    virtual void Update() = 0;
+    virtual void Draw() = 0;
+
+protected:
     CSceneObject();
     ~CSceneObject();
 
