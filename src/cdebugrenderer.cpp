@@ -179,10 +179,10 @@ void CDebugRenderer::ProjectionMatrix()
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho( -(float)mWidth / 2,
-             (float)mWidth / 2,
-             -(float)mHeight /2,
-             (float)mHeight /2,
+    glOrtho( -(float)mWidth / 2.0f / mZoom,
+             (float)mWidth / 2.0f / mZoom,
+             -(float)mHeight / 2.0f / mZoom,
+             (float)mHeight / 2.0f / mZoom,
              1.0f,
              -1.0f );
 }

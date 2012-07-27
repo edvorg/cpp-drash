@@ -38,6 +38,7 @@ bool CScene::Init(const CSceneParams &_params)
     else
     {
         mWorld.SetDebugDraw(&mDebugRenderer);
+    	mDebugRenderer.SetFlags(0xffffffff);
     }
 
     mInitialized = true;
@@ -75,7 +76,7 @@ void CScene::Step(unsigned long _dt )
         return;
     }
 
-    mWorld.Step( _dt / 1000000000.0, mVelocityIterations, mPositionIterations );
+    mWorld.Step( _dt / 1000000.0, mVelocityIterations, mPositionIterations );
 }
 
 void CScene::Draw(void)

@@ -7,6 +7,7 @@
 #include "cscene.h"
 #include "cobjectsolidbody.h"
 #include <time.h>
+#include <sys/time.h>
 
 using namespace drash;
 
@@ -55,27 +56,24 @@ bool Init( CScene& _scene )
     glViewport( 0, 0, 800, 600 );
 
     CSceneParams params;
+    params.mGravity.Set( 0.0f, -9.8f );
 
     if ( _scene.Init(params) == false )
     {
         return false;
     }
 
-    CObjectSolidBody* obj1 = _scene.CreateObject< CObjectSolidBody >();
-    CObjectSolidBody* obj2 = _scene.CreateObject< CObjectSolidBody >();
-
-    _scene.DestroyObject(obj1);
-    //_scene.DestroyObject(obj2);
-
     return true;
 }
 
 void Run( CScene &_scene )
 {
-    long prevnsec = 0;
-    timespec ts;
-    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts);
-    prevnsec = ts.tv_nsec;
+    timeval t;
+    long curr = 0;
+    long prev = 0;
+
+    gettimeofday(&t, NULL);
+    curr = prev = t.tv_sec * 1000000 + t.tv_usec;
 
     for(;;)
     {
@@ -99,9 +97,10 @@ void Run( CScene &_scene )
             break;
         }
 
-        clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts);
-        _scene.Step( ts.tv_nsec - prevnsec );
-        prevnsec = ts.tv_nsec;
+        gettimeofday(&t, NULL);
+        curr = t.tv_sec * 1000000 + t.tv_usec;
+        _scene.Step( curr - prev );
+        prev = curr;
         
         Render(_scene);
     }
@@ -109,7 +108,7 @@ void Run( CScene &_scene )
 
 void Render( CScene &_scene )
 {
-    glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
+    glClearColor( 0.5f, 0.5f, 0.5f, 1.0f );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     _scene.Draw();

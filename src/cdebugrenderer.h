@@ -50,6 +50,7 @@ private:
 
     unsigned int mWidth;
     unsigned int mHeight;
+    static const double mZoom = 3;
 };
 
 } // namespace drash
