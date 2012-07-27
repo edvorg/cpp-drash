@@ -22,3 +22,6 @@ HEADERS += \
     ../src/clogger.h \
     ../src/cobjectsolidbody.h
 
+CONFIG(debug, debug|release) {
+    DEFINES += DRASH_DEBUG
+}
