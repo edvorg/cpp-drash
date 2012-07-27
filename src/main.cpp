@@ -54,14 +54,6 @@ bool Init(CScene& _scene)
 
     glViewport(0,0,800,600);
 
-    CDebugRenderer render;
-
-    if (render.Init() == false)
-    {
-        LOG_ERR("debug render init failed");
-        return false;
-    }
-
     CSceneParams params;
 
     if ( _scene.Init(params) == false )
