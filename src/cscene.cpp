@@ -1,5 +1,6 @@
 #include "cscene.h"
 #include <assert.h>
+#include "clogger.h"
 
 namespace drash
 {
@@ -15,6 +16,15 @@ bool CScene::Init(const CSceneParams &_params)
     mWorld.SetAllowSleeping(true);
     mWorld.SetContinuousPhysics(false);
     mWorld.SetGravity(_params.mGravity);
+
+    if ( mDebugRenderer.Init() == false )
+    {
+        LOG_WARN("CScene::Init(): debug renderer init failed");
+    }
+    else
+    {
+        mWorld.SetDebugDraw(&mDebugRenderer);
+    }
 
     mInitialized = true;
     return true;
@@ -77,11 +87,16 @@ void CScene::DestroyObject(CSceneObject *_obj)
     _obj = NULL;
 }
 
-void CScene::step(unsigned int dt)
+void CScene::Step(unsigned int dt)
 {
     assert(mInitialized == true);
 
     mWorld.Step(static_cast<float>(dt) / 1000.0f, mVelocityIterations, mPositionIterations);
+}
+
+void CScene::Draw()
+{
+    mWorld.DrawDebugData();
 }
 
 }// namespace drash

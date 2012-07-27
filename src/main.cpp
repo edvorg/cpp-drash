@@ -6,28 +6,37 @@
 #include <math.h>
 #include "cdebugrenderer.h"
 #include "clogger.h"
+#include "cscene.h"
 
 using namespace drash;
 
-bool Init();
-void Run();
-void Render();
-void Release();
+bool Init(CScene& _scene);
+void Run(CScene& _scene);
+void Render(CScene& _scene);
+void Release(CScene &_scene);
 
 int main(int _argc, char *_argv[])
 {
-    if (!Init())
+    CScene scene;
+
+    if ( Init(scene) == false )
     {
         return 0;
     }
 
-    Run();
-    Release();
+    Run(scene);
+    Release(scene);
 
     return 0;
 }
 
-bool Init()
+// TODO: wrap the sdl initialization code in CApp class
+// realize CApp::Init(CAppParams& _params, CScene& _scene)
+// realize CApp::Run()
+// realize CApp::Release()
+// realize dummy CAppParams class
+
+bool Init(CScene& _scene)
 {
     if ( SDL_Init(SDL_INIT_VIDEO) < 0 )
     {
@@ -53,12 +62,17 @@ bool Init()
         return false;
     }
 
-    // TODO: init scene here
+    CSceneParams params;
+
+    if ( _scene.Init(params) == false )
+    {
+        return false;
+    }
 
     return true;
 }
 
-void Run()
+void Run(CScene &_scene)
 {
     for(;;)
     {
@@ -81,23 +95,23 @@ void Run()
             break;
         }
 
-        Render();
+        Render(_scene);
     }
 }
 
-void Render()
+void Render(CScene &_scene)
 {
     glClearColor( 1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // TODO: draw scene objects
+    _scene.Draw();
 
     SDL_GL_SwapBuffers();
 }
 
-void Release()
+void Release(CScene &_scene)
 {
-    // TODO: release scene here
+    _scene.Release();
 
     SDL_Quit();
 }

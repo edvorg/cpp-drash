@@ -2,6 +2,7 @@
 #define CSCENE_H
 
 #include "csceneobject.h"
+#include "cdebugrenderer.h"
 
 namespace drash
 {
@@ -32,13 +33,16 @@ public:
      * must be called once in update cycle
      * dt - microseconds
     */
-    void step(unsigned int dt);
+    void Step(unsigned int dt);
+
+    void Draw();
 
 private:
     b2World mWorld;
     bool mInitialized;
     static const int mVelocityIterations = 1;
     static const int mPositionIterations = 1;
+    CDebugRenderer mDebugRenderer;
 };
 
 }// namespace drash
