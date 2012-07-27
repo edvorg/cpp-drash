@@ -5,101 +5,99 @@
 #include <Box2D/Box2D.h>
 #include <math.h>
 #include "cdebugrenderer.h"
+#include "clogger.h"
 
 using namespace drash;
 
-int main(int argc, char *argv[]) {
+bool Init();
+void Run();
+void Render();
+void Release();
 
-
-    SDL_Init(SDL_INIT_VIDEO);
-    SDL_WM_SetCaption("hello, sdl", NULL);
-    SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE | SDL_OPENGL);
-    glViewport(0,0,800,600);
-
-    CDebugRenderer render;
-    assert(render.Init() == true);
-
-    for(;;) {
-        bool go = true;
-        SDL_Event event;
-        while (SDL_PollEvent(&event)){
-            // Catch all events
-            if (event.type == SDL_MOUSEBUTTONDOWN){
-                go = false;
-                break;
-            }
-            if (event.type == SDL_QUIT){
-                go = false;
-                break;
-            }
-        }
-        // If event for exit
-        if (!go)
-            break;
-        glClear(GL_COLOR_BUFFER_BIT);
-
-
-        b2Vec2 verForPolygon[4];
-
-        verForPolygon[0].Set(0,0);
-        verForPolygon[1].Set(70,50);
-        verForPolygon[2].Set(100,0);
-//        verForPolygon[2].Set(,);
-//        int32 countVertex = 3;
-        b2Color color;
-        color.Set(1,0.1,1);
-
-//        render.DrawPolygon(verForPolygon,3,color);
-
-        verForPolygon[0].Set(150,80);
-        verForPolygon[1].Set(150,130);
-        verForPolygon[2].Set(250,130);
-        verForPolygon[3].Set(250,80);
-
-        color.Set(1,0,0);
-//        render.DrawPolygo.n(verForPolygon,4,color);
-
-        color.Set(0,1,0);
-//        render.DrawCircle(b2Vec2(-150,70),120,color);
-
-        color.Set(1,1,1);
-//        render.DrawSolidCircle(b2Vec2(-70,-200),100,b2Vec2(0,0),color);
-
-//        render.DrawSegment(b2Vec2(100,50),b2Vec2(15,50),color);
-        render.DrawTransform(b2Transform(verForPolygon[0],b2Rot(120 *M_PI / 180)));
-        SDL_GL_SwapBuffers();
-
+int main(int _argc, char *_argv[])
+{
+    if (!Init())
+    {
+        return 0;
     }
 
-    SDL_Quit();
+    Run();
+    Release();
 
     return 0;
 }
 
-// Sorry, it is conflict merging
+bool Init()
+{
+    if ( SDL_Init(SDL_INIT_VIDEO) < 0 )
+    {
+        LOG_ERR("SDL_Init failed");
+        return false;
+    }
 
-//=======
-//#include "cscene.h"
-//#include "clogger.h"
+    SDL_WM_SetCaption("Drash", NULL);
 
-//using namespace drash;
+    if ( SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE | SDL_OPENGL) == NULL )
+    {
+        LOG_ERR("SDL_SetVideoMode failed");
+        return false;
+    }
 
-////int main()
-////{
-////    CScene scene;
+    glViewport(0,0,800,600);
 
-////    CSceneParams sceneparams;
-////    sceneparams.mGravity.set(0, -10);
-////    scene.Init(sceneparams);
+    CDebugRenderer render;
 
-////    CSceneObjectParams params;
+    if (render.Init() == false)
+    {
+        LOG_ERR("debug render init failed");
+        return false;
+    }
 
-////    CSceneObject* obj1 = scene.CreateObject(params);
-////    CSceneObject* obj2 = scene.CreateObject(params);
-////    CSceneObject* obj3 = scene.CreateObject(params);
+    // TODO: init scene here
 
-////    scene.DestroyObject(obj1);
+    return true;
+}
 
-////>>>>>>> origin/master
-////    return 0;
-////}
+void Run()
+{
+    for(;;)
+    {
+        bool go = true;
+        SDL_Event event;
+
+        while (SDL_PollEvent(&event))
+        {
+            // Catch all events
+            if (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_QUIT)
+            {
+                go = false;
+                break;
+            }
+        }
+
+        // If event for exit
+        if (!go)
+        {
+            break;
+        }
+
+        Render();
+    }
+}
+
+void Render()
+{
+    glClearColor( 1.0f, 1.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // TODO: draw scene objects
+
+    SDL_GL_SwapBuffers();
+}
+
+void Release()
+{
+    // TODO: release scene here
+
+    SDL_Quit();
+}
