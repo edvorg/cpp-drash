@@ -8,4 +8,8 @@ CSceneObject::CSceneObject():
 {
 }
 
+CSceneObject::~CSceneObject()
+{
+}
+
 }// namespace drash

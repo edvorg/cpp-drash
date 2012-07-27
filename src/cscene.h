@@ -6,8 +6,6 @@
 namespace drash
 {
 
-#define DRASH_BOX2D_USE_SAFE_DESTROY
-
 class CSceneParams
 {
 public:
@@ -36,12 +34,11 @@ public:
     */
     void step(unsigned int dt);
 
-    static const int mVelocityIterations = 1;
-    static const int mPositionIterations = 1;
-
 private:
     b2World mWorld;
     bool mInitialized;
+    static const int mVelocityIterations = 1;
+    static const int mPositionIterations = 1;
 };
 
 }// namespace drash

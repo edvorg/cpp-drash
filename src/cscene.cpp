@@ -14,7 +14,7 @@ bool CScene::Init(const CSceneParams &_params)
 {
     mWorld.SetAllowSleeping(true);
     mWorld.SetContinuousPhysics(false);
-    mWorld.SetGravity(b2Vec2(_params.mGravity.x, _params.mGravity.y));
+    mWorld.SetGravity(_params.mGravity);
 
     mInitialized = true;
     return true;
@@ -71,25 +71,6 @@ void CScene::DestroyObject(CSceneObject *_obj)
         return;
     }
 
-#ifdef DRASH_BOX2D_USE_SAFE_DESTROY
-    // look for body in mWorld, delete if it only exists
-    bool notfound = true;
-
-    for (b2Body* b=mWorld.GetBodyList(); b; b++)
-    {
-        if (b == _obj->mBody)
-        {
-            notfound = false;
-            break;
-        }
-    }
-
-    if (notfound)
-    {
-        return;
-    }
-#endif
-
     mWorld.DestroyBody(_obj->mBody);
 
     delete _obj;
@@ -100,7 +81,7 @@ void CScene::step(unsigned int dt)
 {
     assert(mInitialized == true);
 
-    mWorld.Step(static_cast<float>(dt) * 1000.0f, mVelocityIterations, mPositionIterations);
+    mWorld.Step(static_cast<float>(dt) / 1000.0f, mVelocityIterations, mPositionIterations);
 }
 
 }// namespace drash

@@ -31,9 +31,10 @@ class CSceneObject
 public:
     friend class CScene;
 
-    CSceneObject();
-
 private:
+    CSceneObject();
+    ~CSceneObject();
+
     b2Body* mBody;
 };
 
