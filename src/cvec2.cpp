@@ -21,6 +21,7 @@ CVec2::CVec2(float _x, float _y):
 {
 }
 
+
 CVec2 &CVec2::set(float _x, float _y)
 {
     x = _x;

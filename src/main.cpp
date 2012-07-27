@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
         b2Color color;
         color.Set(1,0.1,1);
 
-        render.DrawPolygon(verForPolygon,3,color);
+//        render.DrawPolygon(verForPolygon,3,color);
 
         verForPolygon[0].Set(150,80);
         verForPolygon[1].Set(150,130);
@@ -57,16 +57,16 @@ int main(int argc, char *argv[]) {
         verForPolygon[3].Set(250,80);
 
         color.Set(1,0,0);
-        render.DrawPolygon(verForPolygon,4,color);
+//        render.DrawPolygo.n(verForPolygon,4,color);
 
         color.Set(0,1,0);
-        render.DrawCircle(b2Vec2(-150,70),120,color);
+//        render.DrawCircle(b2Vec2(-150,70),120,color);
 
         color.Set(1,1,1);
-        render.DrawSolidCircle(b2Vec2(-70,-200),100,b2Vec2(0,0),color);
+//        render.DrawSolidCircle(b2Vec2(-70,-200),100,b2Vec2(0,0),color);
 
-        render.DrawSegment(b2Vec2(100,50),b2Vec2(15,50),color);
-
+//        render.DrawSegment(b2Vec2(100,50),b2Vec2(15,50),color);
+        render.DrawTransform(b2Transform(verForPolygon[0],b2Rot(120 *M_PI / 180)));
         SDL_GL_SwapBuffers();
 
     }

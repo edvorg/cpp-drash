@@ -4,8 +4,8 @@
 #include <SDL/SDL.h>
 #include <iostream>
 
-using namespace drash;
-
+//using namespace drash;
+namespace drash{
 CDebugRenderer::CDebugRenderer():b2Draw()
 {
     mHeight = mWidth = 1;
@@ -151,4 +151,5 @@ void CDebugRenderer::DrawTransform(const b2Transform &xf)
     b2Vec2 p3(xf.p.x + d , xf.p.y);
     DrawSegment(xf.p,p2,b2Color(0,1,0));
     DrawSegment(xf.p,p3,b2Color(0,1,0));
+}
 }
