@@ -9,8 +9,8 @@ namespace drash
 class CLogger
 {
 	public:
-        CLogger();
-        ~CLogger();
+        CLogger(void);
+        ~CLogger(void);
         CLogger& operator<<(char _c);
         CLogger& operator<<(const char* _str);
         CLogger& operator<<(int _v);

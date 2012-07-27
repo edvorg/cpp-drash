@@ -8,11 +8,12 @@ namespace drash{
 class CDebugRenderer : public b2Draw
 {
 public:
-    CDebugRenderer();
+    CDebugRenderer(void);
+    virtual ~CDebugRenderer(void);
 
-    bool Init();
+    bool Init(void);
+    void Release(void);
 
-    virtual ~CDebugRenderer();
     /// Draw a closed polygon provided in CCW order.
     virtual void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
 

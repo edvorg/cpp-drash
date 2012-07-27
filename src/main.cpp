@@ -7,6 +7,7 @@
 #include "cdebugrenderer.h"
 #include "clogger.h"
 #include "cscene.h"
+#include "cobjectsolidbody.h"
 
 using namespace drash;
 
@@ -60,6 +61,12 @@ bool Init(CScene& _scene)
     {
         return false;
     }
+
+    CObjectSolidBody* obj1 = _scene.CreateObject<CObjectSolidBody>();
+    CObjectSolidBody* obj2 = _scene.CreateObject<CObjectSolidBody>();
+
+    _scene.DestroyObject(obj1);
+    //_scene.DestroyObject(obj2);
 
     return true;
 }

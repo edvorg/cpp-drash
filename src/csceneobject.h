@@ -7,38 +7,21 @@
 namespace drash
 {
 
-class CSceneObjectParams
-{
-public:
-    CSceneObjectParams():
-        mPos(0),
-        mSize(0),
-        angle(0)
-    {
-    }
-
-    CVec2 mPos;
-    CVec2 mSize;
-
-    /*
-     * angle in radians
-    */
-    float angle;
-};
-
 class CSceneObject
 {
 public:
     friend class CScene;
 
-    virtual void Update() = 0;
-    virtual void Draw() = 0;
+    CSceneObject(void);
+    virtual ~CSceneObject(void);
+
+    virtual bool Init(void) = 0;
+    virtual void Release(void) = 0;
 
 protected:
-    CSceneObject();
-    ~CSceneObject();
-
     b2Body* mBody;
+
+private:
 };
 
 }// namespace drash

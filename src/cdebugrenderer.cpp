@@ -6,12 +6,16 @@
 
 //using namespace drash;
 namespace drash{
-CDebugRenderer::CDebugRenderer():b2Draw()
+CDebugRenderer::CDebugRenderer(void):b2Draw()
 {
     mHeight = mWidth = 1;
 }
 
-bool CDebugRenderer::Init()
+CDebugRenderer::~CDebugRenderer()
+{
+}
+
+bool CDebugRenderer::Init(void)
 {
     const SDL_VideoInfo *info =  SDL_GetVideoInfo();
     if (!info){
@@ -25,7 +29,7 @@ bool CDebugRenderer::Init()
     return true;
 }
 
-CDebugRenderer::~CDebugRenderer()
+void CDebugRenderer::Release(void)
 {
 }
 

@@ -3,13 +3,13 @@
 namespace drash
 {
 
-CSceneObject::CSceneObject():
+CSceneObject::CSceneObject(void):
     mBody(NULL)
 {
 }
 
-CSceneObject::~CSceneObject()
+CSceneObject::~CSceneObject(void)
 {
 }
 
-}// namespace drash
+} // namespace drash

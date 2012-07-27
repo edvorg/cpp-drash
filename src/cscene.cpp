@@ -1,18 +1,34 @@
 #include "cscene.h"
 #include <assert.h>
 #include "clogger.h"
+#include "cobjectsolidbody.h"
 
 namespace drash
 {
 
-CScene::CScene():
+CScene::CScene(void):
     mWorld(b2Vec2(0,0)),
     mInitialized(false)
 {
 }
 
+CScene::~CScene(void)
+{
+    if ( mInitialized == true )
+    {
+        LOG_WARN("CScene::~CScene(): warning Release() called from destructor");
+        Release();
+    }
+}
+
 bool CScene::Init(const CSceneParams &_params)
 {
+    if ( mInitialized == true )
+    {
+        LOG_WARN("CScene::Init(): already initialized");
+        return false;
+    }
+
     mWorld.SetAllowSleeping(true);
     mWorld.SetContinuousPhysics(false);
     mWorld.SetGravity(_params.mGravity);
@@ -30,61 +46,27 @@ bool CScene::Init(const CSceneParams &_params)
     return true;
 }
 
-void CScene::Release()
+void CScene::Release(void)
 {
-    while (mWorld.GetBodyCount())
+    if ( mInitialized == false )
     {
-        CSceneObject* obj = reinterpret_cast<CSceneObject*>(mWorld.GetBodyList()->GetUserData());
-        this->DestroyObject(obj);
-    }
-
-    mInitialized = false;
-}
-
-CSceneObject* CScene::CreateObject(const CSceneObjectParams &_params)
-{
-    assert(mInitialized == true);
-
-    CSceneObject* obj = new CSceneObject();
-
-    assert(obj != NULL);
-
-    b2BodyDef bdef;
-    bdef.userData = obj;
-    bdef.position.Set(_params.mPos.x, _params.mPos.y);
-    bdef.angle = _params.angle;
-    bdef.angularVelocity = 0.0f;
-    bdef.linearVelocity.SetZero();
-    bdef.angularDamping = 0.0f;
-    bdef.linearDamping = 0.0f;
-    bdef.allowSleep = true;
-    bdef.awake = true;
-    bdef.fixedRotation = false;
-    bdef.bullet = false;
-    bdef.type = b2_dynamicBody;
-    bdef.active = true;
-    bdef.gravityScale = 1.0f;
-
-    obj->mBody = mWorld.CreateBody(&bdef);
-
-    assert(obj->mBody != NULL);
-
-    return obj;
-}
-
-void CScene::DestroyObject(CSceneObject *_obj)
-{
-    assert(mInitialized == true);
-
-    if (_obj == NULL)
-    {
+        LOG_WARN("CScene::Release(): already released");
         return;
     }
 
-    mWorld.DestroyBody(_obj->mBody);
+    if ( mObjects.size() )
+    {
+        LOG_WARN("CScene::Release(): "<<
+                 (unsigned int)mObjects.size()<<
+                 " object(s) haven't been destroyed. Autorelease");
 
-    delete _obj;
-    _obj = NULL;
+        while ( mObjects.size() )
+        {
+            DestroyObject<CSceneObject>(*mObjects.begin());
+        }
+    }
+
+    mInitialized = false;
 }
 
 void CScene::Step(unsigned int dt)
@@ -94,8 +76,10 @@ void CScene::Step(unsigned int dt)
     mWorld.Step(static_cast<float>(dt) / 1000.0f, mVelocityIterations, mPositionIterations);
 }
 
-void CScene::Draw()
+void CScene::Draw(void)
 {
+    assert(mInitialized == true);
+
     mWorld.DrawDebugData();
 }
 

@@ -16,13 +16,13 @@ public:
 	}
 } starter;
 
-CLogger::CLogger()
+CLogger::CLogger(void)
 {
 	out.open("greng.log", ios_base::app);
     mOpened = out.is_open();
 }
 
-CLogger::~CLogger()
+CLogger::~CLogger(void)
 {
     if (mOpened)
 	{
