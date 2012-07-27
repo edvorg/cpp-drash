@@ -34,8 +34,8 @@ public:
     void DestroyObject( T* _obj );
 
     /// must be called once in update cycle
-    /// dt - microseconds
-    void Step( unsigned int dt );
+    /// dt - nanoseconds
+    void Step(unsigned long _dt );
 
     void Draw(void);
 

@@ -15,7 +15,10 @@ public:
     CLogger& operator<<( const char* _str );
     CLogger& operator<<( int _v );
     CLogger& operator<<( unsigned int _v );
+    CLogger& operator<<( long _v );
+    CLogger& operator<<( unsigned long _v );
     CLogger& operator<<( float _v );
+    CLogger& operator<<( double _v );
 
 private:
     std::ofstream out;

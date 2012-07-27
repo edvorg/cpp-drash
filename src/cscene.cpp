@@ -67,7 +67,7 @@ void CScene::Release(void)
     mInitialized = false;
 }
 
-void CScene::Step( unsigned int dt )
+void CScene::Step(unsigned long _dt )
 {
     if ( mInitialized == false )
     {
@@ -75,7 +75,7 @@ void CScene::Step( unsigned int dt )
         return;
     }
 
-    mWorld.Step( static_cast<float>(dt) / 1000.0f, mVelocityIterations, mPositionIterations );
+    mWorld.Step( _dt / 1000000000.0, mVelocityIterations, mPositionIterations );
 }
 
 void CScene::Draw(void)

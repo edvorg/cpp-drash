@@ -72,8 +72,29 @@ CLogger& CLogger::operator<<( unsigned int _v )
 	{
         out<<_v;
         cout<<_v;
-	}
-	return (*this);
+    }
+    return (*this);
+}
+
+CLogger& CLogger::operator<<( long _v )
+{
+    if ( mOpened == true )
+    {
+        out<<_v;
+        cout<<_v;
+    }
+    return (*this);
+}
+
+
+CLogger& CLogger::operator<<( unsigned long _v )
+{
+    if ( mOpened == true )
+    {
+        out<<_v;
+        cout<<_v;
+    }
+    return (*this);
 }
 
 CLogger& CLogger::operator<<( float _v )
@@ -83,7 +104,17 @@ CLogger& CLogger::operator<<( float _v )
         out<<_v;
         cout<<_v;
 	}
-	return (*this);
+    return (*this);
+}
+
+CLogger &CLogger::operator <<(double _v)
+{
+    if ( mOpened == true )
+    {
+        out<<_v;
+        cout<<_v;
+    }
+    return (*this);
 }
 
 } // namespace drash

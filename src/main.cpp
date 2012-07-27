@@ -6,6 +6,7 @@
 #include "clogger.h"
 #include "cscene.h"
 #include "cobjectsolidbody.h"
+#include <time.h>
 
 using namespace drash;
 
@@ -71,6 +72,11 @@ bool Init( CScene& _scene )
 
 void Run( CScene &_scene )
 {
+    long prevnsec = 0;
+    timespec ts;
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts);
+    prevnsec = ts.tv_nsec;
+
     for(;;)
     {
         bool go = true;
@@ -93,7 +99,9 @@ void Run( CScene &_scene )
             break;
         }
 
-        // TODO: compute delta time and call _scene.Step()
+        clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts);
+        _scene.Step( ts.tv_nsec - prevnsec );
+        prevnsec = ts.tv_nsec;
         
         Render(_scene);
     }

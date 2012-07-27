@@ -12,7 +12,7 @@ CONFIG -= qt
 
 unix|win32: CONFIG += link_pkgconfig
 unix|win32: PKGCONFIG += sdl gl
-unix|win32: LIBS += -lBox2D
+unix|win32: LIBS += -lBox2D -lrt
 
 HEADERS += \
     ../src/cdebugrenderer.h \
