@@ -2,7 +2,7 @@
 
 #include <GL/gl.h>
 #include <SDL/SDL.h>
-#include <iostream>
+#include <math.h>
 
 namespace drash
 {
@@ -163,16 +163,22 @@ void CDebugRenderer::DrawTransform( const b2Transform &_xf )
     this->ModelViewIdentity();
     this->ProjectionMatrix();
 
-    float dx , dy;
-    const float d = 120;
+    float angle = _xf.q.GetAngle();
+    const float size = mWidth / 20.0f;
 
-    dx = cos( _xf.q.GetAngle() ) * d;
-    dy = sin( _xf.q.GetAngle() ) * d;
+    b2Vec2 p;
 
-    b2Vec2 p2( _xf.p.x + dx, _xf.p.y + dy );
-    b2Vec2 p3( _xf.p.x + d, _xf.p.y );
-    DrawSegment( _xf.p, p2, b2Color( 0, 1, 0 ) );
-    DrawSegment( _xf.p, p3, b2Color( 0, 1, 0 ) );
+    p.x = _xf.p.x + cos(angle) * size;
+    p.y = _xf.p.y + sin(angle) * size;
+
+    DrawSegment( _xf.p, p, b2Color( 1, 0, 0 ) );
+
+    angle += M_PI * 0.5f;
+
+    p.x = _xf.p.x + cos(angle) * size;
+    p.y = _xf.p.y + sin(angle) * size;
+
+    DrawSegment( _xf.p, p, b2Color( 0, 1, 0 ) );
 }
 
 void CDebugRenderer::ProjectionMatrix()
