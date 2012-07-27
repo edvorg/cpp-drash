@@ -5,7 +5,7 @@
 #include <iostream>
 
 using namespace drash;
-namespace drash{
+
 CDebugRenderer::CDebugRenderer():b2Draw()
 {
     mHeight = mWidth = 1;
@@ -72,7 +72,6 @@ void CDebugRenderer::DrawCircle(const b2Vec2 &center, float32 radius, const b2Co
     glLoadIdentity();
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
-    //glColor3f(color.r,color.g,color.b);
     glOrtho( -(float)mWidth /2 ,(float)mWidth /2,-(float)mHeight /2 ,(float)mHeight /2,1.0f,-1.0f);
     glBegin(GL_LINE_LOOP);
     glColor3f(color.r,color.g,color.b);
@@ -89,7 +88,7 @@ void CDebugRenderer::DrawCircle(const b2Vec2 &center, float32 radius, const b2Co
     glEnd();
 }
 
-// TODO: <dismay> i don't now axis
+
 
 void CDebugRenderer::DrawSolidCircle(const b2Vec2 &center, float32 radius, const b2Vec2 &axis, const b2Color &color)
 {
@@ -115,12 +114,18 @@ void CDebugRenderer::DrawSolidCircle(const b2Vec2 &center, float32 radius, const
     }
 
     glEnd();
+
+    glBegin(GL_LINE_LOOP);
+    glColor3f(1,1,1);
+    glVertex2f(center.x,center.y);
+    glVertex2f(axis.x,axis.y);
+    glEnd();
 }
 
 void CDebugRenderer::DrawSegment(const b2Vec2 &p1, const b2Vec2 &p2, const b2Color &color)
 {
     glMatrixMode( GL_MODELVIEW );
-//    glTranslatef(center.x,center.y);
+
     glLoadIdentity();
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
@@ -132,10 +137,18 @@ void CDebugRenderer::DrawSegment(const b2Vec2 &p1, const b2Vec2 &p2, const b2Col
     glEnd();
 }
 
-// TODO: <dismay> release drawTransform
+
 
 void CDebugRenderer::DrawTransform(const b2Transform &xf)
 {
+    float dx , dy;
+    const float d = 120;
 
-}
+    dx = cos(xf.q.GetAngle()) * d;
+    dy = sin(xf.q.GetAngle()) * d;
+
+    b2Vec2 p2(xf.p.x + dx , xf.p.y + dy);
+    b2Vec2 p3(xf.p.x + d , xf.p.y);
+    DrawSegment(xf.p,p2,b2Color(0,1,0));
+    DrawSegment(xf.p,p3,b2Color(0,1,0));
 }
