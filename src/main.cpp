@@ -87,6 +87,8 @@ void Run(CScene &_scene)
             break;
         }
 
+        // TODO: compute delta time and call _scene.Step()
+        
         Render(_scene);
     }
 }
