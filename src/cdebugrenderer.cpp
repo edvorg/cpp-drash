@@ -158,25 +158,19 @@ void CDebugRenderer::DrawSegment( const b2Vec2 &_p1,
 
 void CDebugRenderer::DrawTransform( const b2Transform &_xf )
 {
-    // TODO: seems that it is not working, need more testing
-
-    this->ModelViewIdentity();
-    this->ProjectionMatrix();
-
+    b2Vec2 p;
     float angle = _xf.q.GetAngle();
     const float size = mWidth / 20.0f;
+    float cs = cos(angle) * size;
+    float sn = sin(angle) * size;
 
-    b2Vec2 p;
-
-    p.x = _xf.p.x + cos(angle) * size;
-    p.y = _xf.p.y + sin(angle) * size;
+    p.x = _xf.p.x + cs;
+    p.y = _xf.p.y + sn;
 
     DrawSegment( _xf.p, p, b2Color( 1, 0, 0 ) );
 
-    angle += M_PI * 0.5f;
-
-    p.x = _xf.p.x + cos(angle) * size;
-    p.y = _xf.p.y + sin(angle) * size;
+    p.x = _xf.p.x - sn;
+    p.y = _xf.p.y + cs;
 
     DrawSegment( _xf.p, p, b2Color( 0, 1, 0 ) );
 }
