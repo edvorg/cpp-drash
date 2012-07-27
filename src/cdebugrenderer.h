@@ -15,34 +15,34 @@ public:
     void Release(void);
 
     /// Draw a closed polygon provided in CCW order.
-    virtual void DrawPolygon( const b2Vec2* vertices,
-                              int32 vertexCount,
-                              const b2Color& color );
+    virtual void DrawPolygon( const b2Vec2* _vertices,
+                              int32 _vertexCount,
+                              const b2Color& _color );
 
     /// Draw a solid closed polygon provided in CCW order.
-    virtual void DrawSolidPolygon( const b2Vec2* vertices,
-                                   int32 vertexCount,
-                                   const b2Color& color );
+    virtual void DrawSolidPolygon( const b2Vec2* _vertices,
+                                   int32 _vertexCount,
+                                   const b2Color& _color );
 
     /// Draw a circle.
-    virtual void DrawCircle( const b2Vec2& center,
-                             float32 radius,
-                             const b2Color& color );
+    virtual void DrawCircle( const b2Vec2& _center,
+                             float32 _radius,
+                             const b2Color& _color );
 
     /// Draw a solid circle.
-    virtual void DrawSolidCircle( const b2Vec2& center,
-                                  float32 radius,
-                                  const b2Vec2& axis,
-                                  const b2Color& color );
+    virtual void DrawSolidCircle( const b2Vec2& _center,
+                                  float32 _radius,
+                                  const b2Vec2& _axis,
+                                  const b2Color& _color );
 
     /// Draw a line segment.
-    virtual void DrawSegment( const b2Vec2& p1,
-                              const b2Vec2& p2,
-                              const b2Color& color );
+    virtual void DrawSegment( const b2Vec2& _p1,
+                              const b2Vec2& _p2,
+                              const b2Color& _color );
 
     /// Draw a transform. Choose your own length scale.
     /// @param xf a transform.
-    virtual void DrawTransform( const b2Transform& xf );
+    virtual void DrawTransform( const b2Transform& _xf );
 
 private:
     void ProjectionMatrix();

@@ -36,43 +36,37 @@ void CDebugRenderer::Release(void)
 {
 }
 
-// TODO: <dismay> not use GL_POLYGON
-
-void CDebugRenderer::DrawPolygon( const b2Vec2 *vertices,
-                                  int32 vertexCount,
-                                  const b2Color &color )
+void CDebugRenderer::DrawPolygon( const b2Vec2 *_vertices,
+                                  int32 _vertexCount,
+                                  const b2Color &_color )
 {
-    this->ModelViewIdentity();
-    this->ProjectionMatrix();
-
-    glBegin(GL_POLYGON);
-
-    glColor3f( color.r, color.g, color.b );
-
-    for ( int i =0 ; i < vertexCount ; i++ )
+    if ( _vertexCount > 1 )
     {
-        b2Vec2 curvertex = vertices[i];// + i;
+        for ( int i = 1 ; i < _vertexCount; i++ )
+        {
+            DrawSegment( _vertices[i-1], _vertices[i], _color );
+        }
 
-        glVertex2f( curvertex.x, curvertex.y );
+        DrawSegment( _vertices[0], _vertices[_vertexCount-1], _color );
     }
-
-    glEnd();
 }
 
-void CDebugRenderer::DrawSolidPolygon( const b2Vec2 *vertices,
-                                       int32 vertexCount,
-                                       const b2Color &color )
+void CDebugRenderer::DrawSolidPolygon( const b2Vec2 *_vertices,
+                                       int32 _vertexCount,
+                                       const b2Color &_color )
 {
     this->ModelViewIdentity();
     this->ProjectionMatrix();
 
+    // TODO: do not use GL_POLYGON, use GL_TRIANGLES
+
     glBegin(GL_POLYGON);
 
-    glColor3f( color.r, color.g, color.b );
+    glColor3f( _color.r, _color.g, _color.b );
 
-    for ( int i =0 ; i < vertexCount ; i++ )
+    for ( int i =0 ; i < _vertexCount ; i++ )
     {
-        b2Vec2 curvertex = vertices[i];// + i;
+        b2Vec2 curvertex = _vertices[i];// + i;
 
         glVertex3f( curvertex.x, curvertex.y, 0.0f );
     }
@@ -80,26 +74,26 @@ void CDebugRenderer::DrawSolidPolygon( const b2Vec2 *vertices,
     glEnd();
 }
 
-void CDebugRenderer::DrawCircle( const b2Vec2 &center,
-                                 float32 radius,
-                                 const b2Color &color )
+void CDebugRenderer::DrawCircle( const b2Vec2 &_center,
+                                 float32 _radius,
+                                 const b2Color &_color )
 {
     this->ModelViewIdentity();
-    glTranslatef( center.x, center.y, 0 );
+    glTranslatef( _center.x, _center.y, 0 );
     this->ProjectionMatrix();
 
     int num_segments = 50;
 
     glBegin(GL_LINE_LOOP);
 
-    glColor3f( color.r, color.g, color.b );
+    glColor3f( _color.r, _color.g, _color.b );
 
     for( int ii = 0; ii < num_segments; ii++ )
     {
         float theta = 2.0f * 3.1415926f * float(ii) / (float)num_segments;
-        float x = radius * cos(theta);
-        float y = radius * sin(theta);
-        glVertex2f( x + center.x, y + center.y );
+        float x = _radius * cos(theta);
+        float y = _radius * sin(theta);
+        glVertex2f( x + _center.x, y + _center.y );
     }
 
     glEnd();
@@ -107,72 +101,78 @@ void CDebugRenderer::DrawCircle( const b2Vec2 &center,
 
 
 
-void CDebugRenderer::DrawSolidCircle( const b2Vec2 &center,
-                                      float32 radius,
-                                      const b2Vec2 &axis,
-                                      const b2Color &color )
+void CDebugRenderer::DrawSolidCircle( const b2Vec2 &_center,
+                                      float32 _radius,
+                                      const b2Vec2 &_axis,
+                                      const b2Color &_color )
 {
     this->ModelViewIdentity();
-    glTranslatef( center.x, center.y, 0 );
+    glTranslatef( _center.x, _center.y, 0 );
     this->ProjectionMatrix();
 
     float x1, y1, x2, y2;
     float angle = 0;
 
-    x1 = center.x;
-    y1 = center.y;
+    x1 = _center.x;
+    y1 = _center.y;
+
+    // TODO: use only GL_TRIANGLES, not GL_TRIANGLE_FAN
 
     glBegin(GL_TRIANGLE_FAN);
-    glColor3f( color.r, color.g, color.b );
+    glColor3f( _color.r, _color.g, _color.b );
     glVertex2f( x1, y1 );
 
     for ( angle = 1.0f; angle<361.0f; angle+=0.1 )
     {
-        x2 = x1 + sin(angle) * radius;
-        y2 = y1 + cos(angle) * radius;
+        x2 = x1 + sin(angle) * _radius;
+        y2 = y1 + cos(angle) * _radius;
         glVertex2f( x2, y2 );
     }
 
     glEnd();
 
-    glBegin(GL_LINE_LOOP);
-    glColor3f( 1, 1, 1 );
-    glVertex2f( center.x, center.y );
-    glVertex2f( axis.x, axis.y );
-    glEnd();
+    b2Vec2 axis = _axis;
+    axis.Normalize();
+    axis *= _radius;
+
+    DrawSegment( _center, axis, b2Color( 1.0f - _color.r,
+                                         1.0f - _color.g,
+                                         1.0f - _color.b ) );
 }
 
-void CDebugRenderer::DrawSegment( const b2Vec2 &p1,
-                                  const b2Vec2 &p2,
-                                  const b2Color &color )
+void CDebugRenderer::DrawSegment( const b2Vec2 &_p1,
+                                  const b2Vec2 &_p2,
+                                  const b2Color &_color )
 {
     this->ModelViewIdentity();
     this->ProjectionMatrix();
 
-    glBegin(GL_LINE_LOOP);
-    glColor3f( color.r, color.g, color.b );
-    glVertex2f( p1.x, p1.y );
-    glVertex2f( p2.x, p2.y );
+    glBegin(GL_LINES);
+    glColor3f( _color.r, _color.g, _color.b );
+    glVertex2f( _p1.x, _p1.y );
+    glVertex2f( _p2.x, _p2.y );
     glEnd();
 }
 
 
 
-void CDebugRenderer::DrawTransform( const b2Transform &xf )
+void CDebugRenderer::DrawTransform( const b2Transform &_xf )
 {
+    // TODO: seems that it is not working, need more testing
+
     this->ModelViewIdentity();
     this->ProjectionMatrix();
 
     float dx , dy;
     const float d = 120;
 
-    dx = cos( xf.q.GetAngle() ) * d;
-    dy = sin( xf.q.GetAngle() ) * d;
+    dx = cos( _xf.q.GetAngle() ) * d;
+    dy = sin( _xf.q.GetAngle() ) * d;
 
-    b2Vec2 p2( xf.p.x + dx, xf.p.y + dy );
-    b2Vec2 p3( xf.p.x + d, xf.p.y );
-    DrawSegment( xf.p, p2, b2Color( 0, 1, 0 ) );
-    DrawSegment( xf.p, p3, b2Color( 0, 1, 0 ) );
+    b2Vec2 p2( _xf.p.x + dx, _xf.p.y + dy );
+    b2Vec2 p3( _xf.p.x + d, _xf.p.y );
+    DrawSegment( _xf.p, p2, b2Color( 0, 1, 0 ) );
+    DrawSegment( _xf.p, p3, b2Color( 0, 1, 0 ) );
 }
 
 void CDebugRenderer::ProjectionMatrix()
