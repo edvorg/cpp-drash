@@ -15,7 +15,6 @@ public:
     CSceneObject(void);
     virtual ~CSceneObject(void);
 
-    virtual bool Init(void) = 0;
     virtual void Release(void) = 0;
 
 protected:

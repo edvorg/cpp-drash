@@ -72,7 +72,7 @@ void Run( CScene &_scene )
     long curr = 0;
     long prev = 0;
 
-    gettimeofday(&t, NULL);
+    gettimeofday( &t, NULL );
     curr = prev = t.tv_sec * 1000000 + t.tv_usec;
 
     for(;;)
@@ -97,7 +97,7 @@ void Run( CScene &_scene )
             break;
         }
 
-        gettimeofday(&t, NULL);
+        gettimeofday( &t, NULL );
         curr = t.tv_sec * 1000000 + t.tv_usec;
         _scene.Step( curr - prev );
         prev = curr;

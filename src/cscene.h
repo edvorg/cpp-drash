@@ -27,7 +27,7 @@ public:
 
     /// T must extend CSceneObject class
     template < typename T >
-    T* CreateObject(void);
+    T* CreateObject( const typename T::ParamsT& _params );
 
     /// T must extend CSceneObject class
     template < typename T >
@@ -51,14 +51,14 @@ private:
 };
 
 template < typename T >
-T* CScene::CreateObject(void)
+T* CScene::CreateObject( const typename T::ParamsT& _params )
 {
     T* res = new T();
 
     b2BodyDef bdef;
     res->mBody = mWorld.CreateBody(&bdef);
 
-    if ( res->mBody == NULL || res->Init() == false )
+    if ( res->mBody == NULL || res->Init(_params) == false )
     {
         delete res;
         return NULL;
@@ -88,6 +88,11 @@ void CScene::DestroyObject( T* _obj )
                 if ( b == body )
                 {
                     // ok, it's out body
+
+                    while ( b2Fixture* f = b->GetFixtureList() )
+                    {
+                        b->DestroyFixture(f);
+                    }
 
                     mWorld.DestroyBody(body);
                     break;

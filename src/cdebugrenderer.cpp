@@ -93,7 +93,7 @@ void CDebugRenderer::DrawCircle( const b2Vec2 &_center,
         float theta = 2.0f * 3.1415926f * float(ii) / (float)num_segments;
         float x = _radius * cos(theta);
         float y = _radius * sin(theta);
-        glVertex2f( x + _center.x, y + _center.y );
+        glVertex2f( _center.x, _center.y );
     }
 
     glEnd();
@@ -124,8 +124,8 @@ void CDebugRenderer::DrawSolidCircle( const b2Vec2 &_center,
 
     for ( angle = 1.0f; angle<361.0f; angle+=0.1 )
     {
-        x2 = x1 + sin(angle) * _radius;
-        y2 = y1 + cos(angle) * _radius;
+        x2 = sin(angle) * _radius;
+        y2 = cos(angle) * _radius;
         glVertex2f( x2, y2 );
     }
 
@@ -160,7 +160,7 @@ void CDebugRenderer::DrawTransform( const b2Transform &_xf )
 {
     b2Vec2 p;
     float angle = _xf.q.GetAngle();
-    const float size = mWidth / 20.0f;
+    const float size = mWidth / 20.0f / mZoom;
     float cs = cos(angle) * size;
     float sn = sin(angle) * size;
 
