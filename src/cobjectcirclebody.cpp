@@ -21,6 +21,11 @@ CObjectCircleBody::~CObjectCircleBody()
 
 bool CObjectCircleBody::Init(const CObjectCircleBody::ParamsT &_params)
 {
+    if ( CSceneObject::Init(_params) == false )
+    {
+        return false;
+    }
+
     b2MassData md;
     md.center.SetZero();
     md.I = 0.0f;
@@ -43,14 +48,7 @@ bool CObjectCircleBody::Init(const CObjectCircleBody::ParamsT &_params)
         return false;
     }
 
-    mBody->SetTransform( _params.mPos, _params.mAngle );
-    mBody->SetActive(true);
-    mBody->SetAwake(true);
-    mBody->SetSleepingAllowed(true);
-    mBody->SetUserData(this);
-    mBody->SetType( _params.mDynamic ?
-                        b2_dynamicBody :
-                        b2_staticBody );
+    return true;
 }
 
 void CObjectCircleBody::Release()
