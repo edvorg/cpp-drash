@@ -44,8 +44,8 @@ protected:
 private:
     b2World mWorld;
     bool mInitialized;
-    static const int mVelocityIterations = 10;
-    static const int mPositionIterations = 10;
+    static const int mVelocityIterations = 5;
+    static const int mPositionIterations = 2;
     CDebugRenderer mDebugRenderer;
     ObjectsT mObjects;
 };

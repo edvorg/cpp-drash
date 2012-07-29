@@ -15,6 +15,14 @@ public:
     float mFriction;
     float mRestitution;
     float mMass;
+
+    /// if mVertices is NULL, creates a box with (1, 1) dimentions
+    CVec2 *mVertices;
+
+    /// size of mVertices array if present
+    unsigned int mVerticesCount;
+
+    CSolidBodyParams();
 };
 
 class CObjectSolidBody : public CSceneObject

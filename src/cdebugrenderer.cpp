@@ -160,7 +160,7 @@ void CDebugRenderer::DrawTransform( const b2Transform &_xf )
 {
     b2Vec2 p;
     float angle = _xf.q.GetAngle();
-    const float size = mWidth / 20.0f / mZoom;
+    const float size = mWidth / 40.0f / mZoom;
     float cs = cos(angle) * size;
     float sn = sin(angle) * size;
 

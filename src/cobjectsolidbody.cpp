@@ -3,6 +3,18 @@
 namespace drash
 {
 
+CSolidBodyParams::CSolidBodyParams():
+    mDynamic(true),
+    mPos(0),
+    mAngle(0),
+    mFriction(1.0f),
+    mRestitution(0.0f),
+    mMass(1.0f),
+    mVertices(NULL),
+    mVerticesCount(0)
+{
+}
+
 CObjectSolidBody::CObjectSolidBody(void)
 {
 }
@@ -19,7 +31,16 @@ bool CObjectSolidBody::Init(const ParamsT &_params )
     md.mass = _params.mMass;
 
     b2PolygonShape s;
-    s.SetAsBox( 1.0f, 1.0f );
+
+    if ( _params.mVertices == NULL )
+    {
+        s.SetAsBox( 1.0f, 1.0f );
+    }
+    else
+    {
+        s.Set( _params.mVertices, _params.mVerticesCount );
+    }
+
     s.ComputeMass( &md, 1.0f );
 
     b2FixtureDef fdef;

@@ -31,6 +31,9 @@ bool CScene::Init(const CSceneParams &_params)
     mWorld.SetContinuousPhysics(false);
     mWorld.SetGravity(_params.mGravity);
 
+    mDebugRenderer.SetFlags(0xffffffff);
+    mDebugRenderer.ClearFlags(b2Draw::e_aabbBit);
+
     if ( mDebugRenderer.Init() == false )
     {
         LOG_WARN( "CScene::Init(): debug renderer init failed" );
@@ -38,7 +41,6 @@ bool CScene::Init(const CSceneParams &_params)
     else
     {
         mWorld.SetDebugDraw(&mDebugRenderer);
-    	mDebugRenderer.SetFlags(0xffffffff);
     }
 
     mInitialized = true;

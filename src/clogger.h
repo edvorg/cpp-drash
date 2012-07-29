@@ -35,7 +35,7 @@ private:
 #define LOG_INFO(mes) CLogger()<<LOG_INFO_PREFIX<<mes
 #else
 #define LOG_ERR(mes) CLogger()<<LOG_ERR_PREFIX<<mes
-#define LOG_WARN(mes) CLogger()<<LOG_WARN_PREFIX<<mes
+#define LOG_WARN(mes)
 #define LOG_INFO(mes)
 #endif
 
