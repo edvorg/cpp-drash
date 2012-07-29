@@ -4,9 +4,6 @@ namespace drash
 {
 
 CSolidBodyParams::CSolidBodyParams():
-    mDynamic(true),
-    mPos(0),
-    mAngle(0),
     mFriction(1.0f),
     mRestitution(0.0f),
     mMass(1.0f),
@@ -25,6 +22,11 @@ CObjectSolidBody::~CObjectSolidBody(void)
 
 bool CObjectSolidBody::Init(const ParamsT &_params )
 {
+    if ( CSceneObject::Init(_params) == false )
+    {
+        return false;
+    }
+
     b2MassData md;
     md.center.SetZero();
     md.I = 0.0f;
@@ -54,16 +56,7 @@ bool CObjectSolidBody::Init(const ParamsT &_params )
     if ( mBody->CreateFixture(&fdef) == NULL )
 	{
 		return false;
-	}
-
-    mBody->SetTransform( _params.mPos, _params.mAngle );
-    mBody->SetActive(true);
-    mBody->SetAwake(true);
-    mBody->SetSleepingAllowed(true);
-    mBody->SetUserData(this);
-    mBody->SetType( _params.mDynamic ?
-                        b2_dynamicBody :
-                        b2_staticBody );
+    }
 
 	return true;
 }

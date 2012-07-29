@@ -6,12 +6,9 @@
 namespace drash
 {
 
-class CSolidBodyParams
+class CSolidBodyParams : public CSceneObjectParams
 {
 public:
-    bool mDynamic;
-    CVec2 mPos;
-    float mAngle;
     float mFriction;
     float mRestitution;
     float mMass;

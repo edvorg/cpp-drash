@@ -3,7 +3,7 @@
 
 #include "csceneobject.h"
 #include "cdebugrenderer.h"
-#include <vector>
+#include <list>
 
 namespace drash
 {
@@ -17,7 +17,7 @@ public:
 class CScene
 {
 public:
-    typedef std::vector<CSceneObject*> ObjectsT;
+    typedef std::list<CSceneObject*> ObjectsT;
 
     CScene(void);
     virtual ~CScene(void);

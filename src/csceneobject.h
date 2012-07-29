@@ -7,15 +7,28 @@
 namespace drash
 {
 
+class CSceneObjectParams
+{
+public:
+    bool mDynamic;
+    CVec2 mPos;
+    float mAngle;
+
+    CSceneObjectParams();
+};
+
 class CSceneObject
 {
 public:
     friend class CScene;
 
+    typedef CSceneObjectParams ParamsT;
+
     CSceneObject(void);
     virtual ~CSceneObject(void);
 
-    virtual void Release(void) = 0;
+    virtual bool Init( const ParamsT &_params );
+    virtual void Release(void);
 
 protected:
     b2Body* mBody;
