@@ -6,7 +6,7 @@
 namespace drash
 {
 
-float randf( int _min, int _max, float _step = 1 );
+float Randf( float _min, float _max, float _step = 1 );
 
 class CVec2 :  public b2Vec2
 {
@@ -15,10 +15,10 @@ public:
     CVec2( float32 _val );
     CVec2( float32 _x, float32 _y );
 
-    CVec2& Rand( int _min, int _max, float _step = 1 );
+    CVec2& Rand( float _min, float _max, float _step = 1 );
 
-    CVec2& RandX( int _min, int _max, float _step = 1 );
-    CVec2& RandY( int _min, int _max, float _step = 1 );
+    CVec2& RandX( float _min, float _max, float _step = 1 );
+    CVec2& RandY( float _min, float _max, float _step = 1 );
 };
 
 } // namespace drash
