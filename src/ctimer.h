@@ -9,8 +9,11 @@ class CTimer
 public:
     CTimer();
 
-    void Reset();
+    void Reset( bool _start );
     void Tick();
+
+    void SetPaused( bool _paused );
+    bool IsPaused() const;
 
     /// time from mStartTime (in seconds)
     double GetFullTime() const;
@@ -24,6 +27,7 @@ private:
     unsigned long mStartTime;
     unsigned long mPrevTime;
     unsigned long mCurrTime;
+    bool mPaused;
 };
 
 } // namespace drash

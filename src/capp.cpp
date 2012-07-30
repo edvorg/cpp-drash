@@ -67,7 +67,7 @@ void CApp::Run()
 {
     assert( mInitialized == true );
 
-    mTimer.Reset();
+    mTimer.Reset(true);
 
     for ( ;; )
     {
@@ -80,8 +80,15 @@ void CApp::Run()
             if ( event.type == SDL_MOUSEBUTTONDOWN ||
                  event.type == SDL_QUIT )
             {
-                go = false;
-                break;
+                if ( event.button.button == SDL_BUTTON_LEFT )
+                {
+                    mTimer.SetPaused( !mTimer.IsPaused() );
+                }
+                else
+                {
+                    go = false;
+                    break;
+                }
             }
         }
 
