@@ -16,7 +16,7 @@ using namespace drash;
 int main( int _argc, char *_argv[] )
 {
 
-    srand(0);
+    srand(time(0));
     CApp app;
     CAppParams params;
     if (!app.init(params)){
