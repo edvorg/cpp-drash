@@ -6,7 +6,8 @@ SOURCES += \
     ../src/cvec2.cpp \
     ../src/clogger.cpp \
     ../src/cobjectsolidbody.cpp \
-    ../src/cobjectcirclebody.cpp
+    ../src/cobjectcirclebody.cpp \
+    ../src/capp.cpp
 
 CONFIG += console
 CONFIG -= qt
@@ -22,7 +23,8 @@ HEADERS += \
     ../src/cvec2.h \
     ../src/clogger.h \
     ../src/cobjectsolidbody.h \
-    ../src/cobjectcirclebody.h
+    ../src/cobjectcirclebody.h \
+    ../src/capp.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG
