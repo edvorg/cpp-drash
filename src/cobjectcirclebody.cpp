@@ -32,7 +32,7 @@ bool CObjectCircleBody::Init(const CObjectCircleBody::ParamsT &_params)
     md.mass = _params.mMass;
 
     b2CircleShape s;
-    s.m_radius = 3.0f;
+    s.m_radius = _params.mRadius;
     s.ComputeMass( &md, 1.0f );
 
     b2FixtureDef fdef;

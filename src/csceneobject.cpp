@@ -19,7 +19,7 @@ CSceneObject::~CSceneObject(void)
 {
 }
 
-bool CSceneObject::Init(const CSceneObject::ParamsT &_params)
+bool CSceneObject::Init( const CSceneObject::ParamsT &_params )
 {
     if ( mBody == NULL )
     {
@@ -31,9 +31,14 @@ bool CSceneObject::Init(const CSceneObject::ParamsT &_params)
     mBody->SetAwake(true);
     mBody->SetSleepingAllowed(true);
     mBody->SetUserData(this);
+    mBody->SetAngularDamping(0);
+    mBody->SetBullet(false);
+    mBody->SetFixedRotation(false);
+    mBody->SetLinearDamping(0);
+    mBody->SetGravityScale(1.0f);
     mBody->SetType( _params.mDynamic ?
                         b2_dynamicBody :
-                        b2_staticBody );
+                        b2_kinematicBody );
 
     return true;
 }

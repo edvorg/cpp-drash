@@ -72,6 +72,8 @@ void CDebugRenderer::DrawSolidPolygon( const b2Vec2 *_vertices,
     }
 
     glEnd();
+
+    DrawPolygon( _vertices, _vertexCount, b2Color( 0, 0, 0 ) );
 }
 
 void CDebugRenderer::DrawCircle( const b2Vec2 &_center,
@@ -93,7 +95,7 @@ void CDebugRenderer::DrawCircle( const b2Vec2 &_center,
         float theta = 2.0f * 3.1415926f * float(ii) / (float)num_segments;
         float x = _radius * cos(theta);
         float y = _radius * sin(theta);
-        glVertex2f( _center.x, _center.y );
+        glVertex2f( x, y );
     }
 
     glEnd();
@@ -110,17 +112,14 @@ void CDebugRenderer::DrawSolidCircle( const b2Vec2 &_center,
     glTranslatef( _center.x, _center.y, 0 );
     this->ProjectionMatrix();
 
-    float x1, y1, x2, y2;
+    float x2, y2;
     float angle = 0;
-
-    x1 = _center.x;
-    y1 = _center.y;
 
     // TODO: use only GL_TRIANGLES, not GL_TRIANGLE_FAN
 
     glBegin(GL_TRIANGLE_FAN);
     glColor3f( _color.r, _color.g, _color.b );
-    glVertex2f( x1, y1 );
+    glVertex2f( 0, 0 );
 
     for ( angle = 1.0f; angle<361.0f; angle+=0.1 )
     {
@@ -134,6 +133,9 @@ void CDebugRenderer::DrawSolidCircle( const b2Vec2 &_center,
     b2Vec2 axis = _axis;
     axis.Normalize();
     axis *= _radius;
+    axis += _center;
+
+    DrawCircle( _center, _radius, b2Color( 0, 0, 0 ) );
 
     DrawSegment( _center, axis, b2Color( 1.0f - _color.r,
                                          1.0f - _color.g,
@@ -172,7 +174,7 @@ void CDebugRenderer::DrawTransform( const b2Transform &_xf )
     p.x = _xf.p.x - sn;
     p.y = _xf.p.y + cs;
 
-    DrawSegment( _xf.p, p, b2Color( 0, 1, 0 ) );
+    DrawSegment( _xf.p, p, b2Color( 0, 0, 1 ) );
 }
 
 void CDebugRenderer::ProjectionMatrix()

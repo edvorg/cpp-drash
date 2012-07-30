@@ -6,6 +6,7 @@
 #include "clogger.h"
 #include "cscene.h"
 #include "cobjectsolidbody.h"
+#include "cobjectcirclebody.h"
 #include <time.h>
 #include <sys/time.h>
 
@@ -75,7 +76,7 @@ void Run( CScene &_scene )
     gettimeofday( &t, NULL );
     curr = prev = t.tv_sec * 1000000 + t.tv_usec;
 
-    for(;;)
+    for ( ;; )
     {
         bool go = true;
         SDL_Event event;

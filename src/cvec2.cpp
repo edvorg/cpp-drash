@@ -18,5 +18,12 @@ CVec2::CVec2( float32 _x, float32 _y ):
 {
 }
 
+CVec2 &CVec2::rand( int _min, int _max, float _step ) const
+{
+    // TODO: realise this
+
+    return this;
+}
+
 
 } // namespace drash
