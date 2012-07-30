@@ -13,11 +13,6 @@
 
 using namespace drash;
 
-bool Init( CScene& _scene );
-void Run( CScene& _scene );
-void Render( CScene& _scene );
-void Release( CScene &_scene );
-
 int main( int _argc, char *_argv[] )
 {
 
@@ -25,7 +20,6 @@ int main( int _argc, char *_argv[] )
     CAppParams params;
     if (!app.init(params)){
         return 0;
-
     }
     app.Run();
     app.Release();
