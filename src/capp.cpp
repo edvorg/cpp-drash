@@ -51,6 +51,18 @@ bool CApp::init( const CAppParams &_params )
         return false;
     }
 
+    mDebugRenderer.SetFlags(0xffffffff);
+    mDebugRenderer.ClearFlags(b2Draw::e_aabbBit);
+
+    if ( mDebugRenderer.Init() == false )
+    {
+        LOG_WARN( "CScene::Init(): debug renderer init failed" );
+    }
+    else
+    {
+        mScene.SetDebugRenderer(&mDebugRenderer);
+    }
+
     mInitialized = true;
     return true;
 }
@@ -84,6 +96,14 @@ void CApp::Run()
                 {
                     mTimer.SetPaused( !mTimer.IsPaused() );
                 }
+                else if ( event.button.button == SDL_BUTTON_WHEELDOWN )
+                {
+                    mDebugRenderer.SetZoom( mDebugRenderer.GetZoom() + 5.0f * mTimer.GetDeltaTime() );
+                }
+                else if ( event.button.button == SDL_BUTTON_WHEELUP )
+                {
+                    mDebugRenderer.SetZoom( mDebugRenderer.GetZoom() - 5.0f * mTimer.GetDeltaTime() );
+                }
                 else
                 {
                     go = false;
@@ -107,6 +127,9 @@ void CApp::Update()
 {
     mTimer.Tick();
     mScene.Step( mTimer.GetDeltaTime() );
+
+//    CSolidBodyParams p;
+//    mScene.CreateObject<CObjectSolidBody>(p);
 }
 
 void CApp::Render()

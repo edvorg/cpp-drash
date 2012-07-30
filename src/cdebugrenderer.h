@@ -44,13 +44,16 @@ public:
     /// @param xf a transform.
     virtual void DrawTransform( const b2Transform& _xf );
 
+    void SetZoom( float _zoom );
+    float GetZoom(void) const;
+
 private:
     void ProjectionMatrix();
     void ModelViewIdentity();
 
     unsigned int mWidth;
     unsigned int mHeight;
-    static const float mZoom = 3.0f;
+    float mZoom;
 };
 
 } // namespace drash
