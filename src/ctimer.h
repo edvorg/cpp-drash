@@ -1,6 +1,9 @@
 #ifndef CTIMER_H
 #define CTIMER_H
 
+namespace drash
+{
+
 class CTimer
 {
 public:
@@ -22,5 +25,7 @@ private:
     unsigned long mPrevTime;
     unsigned long mCurrTime;
 };
+
+} // namespace drash
 
 #endif // CTIMER_H

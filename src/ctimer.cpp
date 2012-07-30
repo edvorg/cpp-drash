@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
+namespace drash
+{
+
 CTimer::CTimer():
     mStartTime(0),
     mPrevTime(0),
@@ -37,3 +40,5 @@ void CTimer::Update()
     gettimeofday( &t, NULL );
     mCurrTime = t.tv_sec * 1000000 + t.tv_usec;
 }
+
+} // namespace drash

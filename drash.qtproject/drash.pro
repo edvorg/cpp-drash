@@ -7,7 +7,8 @@ SOURCES += \
     ../src/clogger.cpp \
     ../src/cobjectsolidbody.cpp \
     ../src/cobjectcirclebody.cpp \
-    ../src/capp.cpp
+    ../src/capp.cpp \
+    ../src/ctimer.cpp
 
 CONFIG += console
 CONFIG -= qt
@@ -24,7 +25,8 @@ HEADERS += \
     ../src/clogger.h \
     ../src/cobjectsolidbody.h \
     ../src/cobjectcirclebody.h \
-    ../src/capp.h
+    ../src/capp.h \
+    ../src/ctimer.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG
