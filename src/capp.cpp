@@ -68,6 +68,17 @@ void CApp::Run()
     assert( mInitialized == true );
 
     mTimer.Reset();
+    CVec2 ver[4];
+    ver[0].Set(-100,-10);
+    ver[1].Set(100,-10);
+    ver[2].Set(100,10);
+    ver[3].Set(-100,10);
+    CSolidBodyParams params;
+    params.mVertices = ver;
+    params.mVerticesCount =4;
+    params.mPos.Set(0,-50);
+    params.mDynamic = false;
+    mScene.CreateObject< CObjectSolidBody>(params);
 
     for ( ;; )
     {
@@ -100,6 +111,14 @@ void CApp::Update()
 {
     mTimer.Tick();
     mScene.Step( mTimer.GetDeltaTime() );
+    CSolidBodyParams par;
+    par.mAngle = 4;
+    par.mMass = 50;
+    par.mRestitution = (rand()%2) ? 0:10;
+    //CVec2 ver();
+    //ver.Rand(-100,100,0.1);
+    par.mPos.Rand(-100,100,0.1);
+    mScene.CreateObject< CObjectSolidBody >(par);
 }
 
 void CApp::Render()
