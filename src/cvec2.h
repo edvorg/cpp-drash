@@ -13,10 +13,10 @@ public:
     CVec2( float32 _val );
     CVec2( float32 _x, float32 _y );
 
-    CVec2& rand( int _min, int _max, float _step );
+    CVec2& rand( int _min, int _max, float _step = 1);
 
-    CVec2& randX(int _min, int _max, float _step);
-    CVec2& randY(int _min, int _max, float _step);
+    CVec2& randX(int _min, int _max, float _step = 1);
+    CVec2& randY(int _min, int _max, float _step = 1);
 
 };
 
