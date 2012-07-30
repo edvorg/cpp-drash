@@ -6,6 +6,8 @@
 namespace drash
 {
 
+float randf( int _min, int _max, float _step = 1 );
+
 class CVec2 :  public b2Vec2
 {
 public:
