@@ -15,7 +15,6 @@ using namespace drash;
 
 int main( int _argc, char *_argv[] )
 {
-
     srand(time(0));
     CApp app;
     CAppParams params;

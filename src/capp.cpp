@@ -19,9 +19,9 @@ CApp::CApp():
 
 }
 
-bool CApp::init(const CAppParams &_params)
+bool CApp::init( const CAppParams &_params )
 {
-    (void)_params; // while Unused
+    (void)_params; // while Unused // wtf???
 
     if ( SDL_Init(SDL_INIT_VIDEO) < 0 )
     {
@@ -47,7 +47,6 @@ bool CApp::init(const CAppParams &_params)
         return false;
     }
 
-    mCurrTime = 0;
     mPrevTime = 0;
 
     mInitialized = true;
@@ -56,7 +55,7 @@ bool CApp::init(const CAppParams &_params)
 
 void CApp::Release()
 {
-    assert(mInitialized == true);
+    assert( mInitialized == true );
 
     mScene.Release();
     SDL_Quit();
@@ -64,10 +63,11 @@ void CApp::Release()
 
 void CApp::Run()
 {
-    assert(mInitialized == true);
+    assert( mInitialized == true );
 
-    gettimeofday( &mTime, NULL );
-    mCurrTime = mPrevTime = mTime.tv_sec * 1000000 + mTime.tv_usec;
+    timeval time;
+    gettimeofday( &time, NULL );
+    mPrevTime = time.tv_sec * 1000000 + time.tv_usec;
 
     for ( ;; )
     {
@@ -98,18 +98,13 @@ void CApp::Run()
 
 void CApp::Update()
 {
-    gettimeofday( &mTime, NULL );
-    mCurrTime = mTime.tv_sec * 1000000 + mTime.tv_usec;
-    mScene.Step( mCurrTime - mPrevTime );
-    mPrevTime = mCurrTime;
-    //CVec2 p;
-    //CCircleBodyParams params;
-    //params.mRadius = 10;
-    //params.mDynamic = true;
-    //params.mPos = p.rand(0,400,1);
-    //params.mRestitution = 10;
-    //mScene.CreateObject< CObjectCircleBody >(params);
+    timeval time;
+    gettimeofday( &time, NULL );
+    unsigned int currtime = time.tv_sec * 1000000 + time.tv_usec;
 
+    mScene.Step( currtime - mPrevTime );
+
+    mPrevTime = currtime;
 }
 
 void CApp::Render()
