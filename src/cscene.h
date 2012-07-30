@@ -35,7 +35,7 @@ public:
 
     /// must be called once in update cycle
     /// dt - nanoseconds
-    void Step(unsigned long _dt );
+    void Step( double _dt );
 
     void Draw(void);
 

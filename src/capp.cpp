@@ -9,9 +9,13 @@
 #include "cscene.h"
 #include "cobjectsolidbody.h"
 #include "cobjectcirclebody.h"
-//#include <time.h>
 
-namespace drash{
+namespace drash
+{
+
+CAppParams::CAppParams()
+{
+}
 
 CApp::CApp():
     mInitialized(false)
@@ -47,8 +51,6 @@ bool CApp::init( const CAppParams &_params )
         return false;
     }
 
-    mPrevTime = 0;
-
     mInitialized = true;
     return true;
 }
@@ -65,9 +67,7 @@ void CApp::Run()
 {
     assert( mInitialized == true );
 
-    timeval time;
-    gettimeofday( &time, NULL );
-    mPrevTime = time.tv_sec * 1000000 + time.tv_usec;
+    mTimer.Reset();
 
     for ( ;; )
     {
@@ -90,21 +90,16 @@ void CApp::Run()
         {
             break;
         }
-        Update();
 
+        Update();
         Render();
     }
 }
 
 void CApp::Update()
 {
-    timeval time;
-    gettimeofday( &time, NULL );
-    unsigned int currtime = time.tv_sec * 1000000 + time.tv_usec;
-
-    mScene.Step( currtime - mPrevTime );
-
-    mPrevTime = currtime;
+    mTimer.Tick();
+    mScene.Step( mTimer.GetDeltaTime() );
 }
 
 void CApp::Render()

@@ -19,7 +19,8 @@ int main( int _argc, char *_argv[] )
     srand( time(NULL) );
     CApp app;
     CAppParams params;
-    if (!app.init(params)){
+    if ( !app.init(params) )
+    {
         return 0;
     }
     app.Run();

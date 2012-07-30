@@ -70,7 +70,7 @@ void CScene::Release(void)
     mInitialized = false;
 }
 
-void CScene::Step(unsigned long _dt )
+void CScene::Step( double _dt )
 {
     if ( mInitialized == false )
     {
@@ -78,7 +78,7 @@ void CScene::Step(unsigned long _dt )
         return;
     }
 
-    mWorld.Step( _dt / 1000000.0, mVelocityIterations, mPositionIterations );
+    mWorld.Step( _dt, mVelocityIterations, mPositionIterations );
 }
 
 void CScene::Draw(void)
