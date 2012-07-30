@@ -23,7 +23,7 @@ class CApp
 public:
     CApp();
 
-    bool init(const CAppParams & _params);
+    bool init( const CAppParams & _params );
     void Release();
     void Run();
 
@@ -36,9 +36,6 @@ private:
     static const int mWidth = 800;
     static const int mHeight = 600;
     CScene mScene;
-
-    timeval mTime;
-    long mCurrTime;
     long mPrevTime;
 };
 }
