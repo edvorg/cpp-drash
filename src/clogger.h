@@ -28,7 +28,7 @@ private:
 #define LOG_ERR_PREFIX "[E]: "
 #define LOG_WARN_PREFIX "[W]: "
 #define LOG_INFO_PREFIX "[I]: "
-
+// TODO: Erros writes in stderr
 #ifdef DRASH_DEBUG
 #define LOG_ERR(mes) CLogger()<<LOG_ERR_PREFIX<<mes
 #define LOG_WARN(mes) CLogger()<<LOG_WARN_PREFIX<<mes

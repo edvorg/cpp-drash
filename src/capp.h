@@ -23,7 +23,7 @@ class CApp
 public:
     CApp();
 
-    bool init(CAppParams & _params);
+    bool init(const CAppParams & _params);
     void Release();
     void Run();
 

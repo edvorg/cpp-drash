@@ -19,7 +19,7 @@ CApp::CApp():
 
 }
 
-bool CApp::init(CAppParams &_params)
+bool CApp::init(const CAppParams &_params)
 {
     (void)_params; // while Unused
 
@@ -91,6 +91,8 @@ void CApp::Run()
             break;
         }
         Update();
+
+        Render();
     }
 }
 
@@ -100,14 +102,14 @@ void CApp::Update()
     mCurrTime = mTime.tv_sec * 1000000 + mTime.tv_usec;
     mScene.Step( mCurrTime - mPrevTime );
     mPrevTime = mCurrTime;
+    //CVec2 p;
+    //CCircleBodyParams params;
+    //params.mRadius = 10;
+    //params.mDynamic = true;
+    //params.mPos = p.rand(0,400,1);
+    //params.mRestitution = 10;
+    //mScene.CreateObject< CObjectCircleBody >(params);
 
-//    CCircleBodyParams params;
-//    params.mRadius = 10;
-//    params.mDynamic = true;
-//    params.mRestitution = 10;
-//    mScene.CreateObject< CObjectCircleBody >(params);
-
-    Render();
 }
 
 void CApp::Render()
