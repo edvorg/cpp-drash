@@ -27,7 +27,7 @@ CVec2 &CVec2::rand( int _min, int _max, float _step ) //const
 
 CVec2 &CVec2::randX(int _min, int _max, float _step)
 {
-    float r = static_cast<float>(::rand()%(int)((_max - _min + 1)/_step)+ _min);
+    float r = static_cast<float>((::rand()%(int)((_max - _min + 1)/_step))*_step+ _min);
     Set(r,this->y);
 
     return *this;
@@ -35,7 +35,7 @@ CVec2 &CVec2::randX(int _min, int _max, float _step)
 
 CVec2 &CVec2::randY(int _min, int _max, float _step)
 {
-    float r = static_cast<float>(::rand()%(int)((_max-_min + 1)/_step) + _min);
+    float r = static_cast<float>((::rand()%(int)((_max-_min + 1)/_step))*_step + _min);
     Set(this->x,r);
 
     return *this;
