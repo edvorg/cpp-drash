@@ -27,12 +27,20 @@ CApp::CApp():
 
 }
 
-bool CApp::init( const CAppParams &_params )
+bool CApp::Init( const CAppParams &_params )
 {
+    if ( mInitialized == true )
+    {
+        LOG_WARN("CApp::Init(): app already initialized");
+        return true;
+    }
+
+    /////////////////////////
+    // sdl/opengl init
 
     if ( SDL_Init(SDL_INIT_VIDEO) < 0 )
     {
-        LOG_ERR( "SDL_Init failed" );
+        LOG_ERR( "CApp::Init(): SDL_Init failed" );
         return false;
     }
 
@@ -40,27 +48,40 @@ bool CApp::init( const CAppParams &_params )
 
     if ( SDL_SetVideoMode( mWidth, mHeight, 32, SDL_HWSURFACE | SDL_OPENGL ) == NULL )
     {
-        LOG_ERR( "SDL_SetVideoMode failed" );
+        LOG_ERR( "CApp::Init(): SDL_SetVideoMode failed" );
+        SDL_Quit();
         return false;
     }
 
     glViewport( 0, 0, mWidth, mHeight );
+
+    /////////////////////////
+    // scene init
 
     CSceneParams params;
     params.mGravity.Set( 0.0f, -9.8f );
 
     if ( mScene.Init(params) == false )
     {
+        SDL_Quit();
         return false;
     }
+
+    /////////////////////////
+    // camera init
 
     CCameraParams p;
     mCamera = mScene.CreateObject< CObjectCamera >(p);
 
     if ( mCamera == NULL )
     {
+        mScene.Release();
+        SDL_Quit();
         return false;
     }
+
+    /////////////////////////
+    // debug renderer init
 
     mDebugRenderer.SetFlags(0xffffffff);
     mDebugRenderer.ClearFlags(b2Draw::e_aabbBit);
@@ -69,6 +90,7 @@ bool CApp::init( const CAppParams &_params )
     if ( mDebugRenderer.Init() == false )
     {
         LOG_WARN( "CScene::Init(): debug renderer init failed" );
+        mScene.SetDebugRenderer(NULL);
     }
     else
     {
@@ -83,8 +105,16 @@ void CApp::Release()
 {
     assert( mInitialized == true );
 
+    if ( mCamera != NULL )
+    {
+        mScene.DestroyObject(mCamera);
+        mCamera = NULL;
+    }
+
     mScene.Release();
     SDL_Quit();
+
+    mInitialized = false;
 }
 
 void CApp::Run()
@@ -228,6 +258,8 @@ void CApp::Run()
 
 void CApp::Update()
 {
+    assert( mInitialized == true );
+
     mTimer.Tick();
     mScene.Step( mTimer.GetDeltaTime() );
 
@@ -238,6 +270,8 @@ void CApp::Update()
 
 void CApp::Render()
 {
+    assert( mInitialized == true );
+
     glClearColor( 0.5f, 0.5f, 0.5f, 1.0f );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 

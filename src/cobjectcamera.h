@@ -45,4 +45,5 @@ private:
 };
 
 }// namespace drash
+
 #endif // COBJECTCAMERA_H

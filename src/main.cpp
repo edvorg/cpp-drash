@@ -12,13 +12,11 @@ int main( int _argc, char *_argv[] )
     CApp app;
     CAppParams params;
 
-    if ( !app.init(params) )
+    if ( app.Init(params) == true )
     {
-        return 0;
+        app.Run();
+        app.Release();
     }
-
-    app.Run();
-    app.Release();
 
     return 0;
 }

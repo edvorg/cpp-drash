@@ -18,14 +18,16 @@ class CApp
 public:
     CApp();
 
-    bool init( const CAppParams & _params );
+    /// if already initialized or init successfull, returns true
+    bool Init( const CAppParams & _params );
+
     void Release();
     void Run();
-
 
 private:
     void Update();
     void Render();
+
     bool mInitialized;
 
     static const int mWidth = 800;
