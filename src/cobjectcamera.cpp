@@ -14,7 +14,10 @@ CObjectCamera::CObjectCamera():
     mTarget(0),
     mTargetSpeed(1),
     mTargetSet(false),
-    mZoom(1)
+    mZoom(1),
+    mZoomTarget(1),
+    mZoomTargetSpeed(1),
+    mZoomTargetSet(false)
 {
 }
 
@@ -52,46 +55,44 @@ void CObjectCamera::Step(double _dt)
 
         mBody->SetTransform( dir, mBody->GetAngle() );
     }
+
+    if ( mZoomTargetSet == true )
+    {
+        mZoom += ( mZoomTarget - mZoom ) * mZoomTargetSpeed * _dt;
+    }
 }
 
-const CVec2 CObjectCamera::GetPos() const
-{
-    CVec2 res;
-    res.Set(mBody->GetWorldCenter().x, mBody->GetWorldCenter().y );
-    return res;
-}
-
-void CObjectCamera::SetTarget( const CVec2 &_target )
+void CObjectCamera::SetPosTarget( const CVec2 &_target )
 {
     mTarget = _target;
     mTargetSet = true;
 }
 
-void CObjectCamera::SetTargetSpeed( const CVec2 &_speed )
+void CObjectCamera::SetPosTargetSpeed( const CVec2 &_speed )
 {
     mTargetSpeed = _speed;
 }
 
-const CVec2 &CObjectCamera::GetTarget() const
+const CVec2 &CObjectCamera::GetPosTarget() const
 {
     return mTarget;
 }
 
-const CVec2 &CObjectCamera::GetTargetSpeed() const
+const CVec2 &CObjectCamera::GetPosTargetSpeed() const
 {
     return mTargetSpeed;
 }
 
-void CObjectCamera::RemoveTarget()
+void CObjectCamera::RemovePosTarget()
 {
     mTargetSet = false;
 }
 
 void CObjectCamera::SetZoom(float _zoom)
 {
-    if ( _zoom < 0.0f )
+    if ( _zoom < 1.0f )
     {
-        mZoom = 0;
+        mZoom = 1;
     }
     else
     {
@@ -102,6 +103,40 @@ void CObjectCamera::SetZoom(float _zoom)
 float CObjectCamera::GetZoom() const
 {
     return mZoom;
+}
+
+void CObjectCamera::SetZoomTarget( float _target )
+{
+    if ( _target < 1.0f )
+    {
+        mZoomTarget = 1;
+    }
+    else
+    {
+        mZoomTarget = _target;
+    }
+
+    mZoomTargetSet = true;
+}
+
+void CObjectCamera::SetZoomTargetSpeed( float _speed )
+{
+    mZoomTargetSpeed = _speed;
+}
+
+float CObjectCamera::GetZoomTarget(void)
+{
+    return mZoomTarget;
+}
+
+float CObjectCamera::GetZoomTargetSpeed(void)
+{
+    return mZoomTargetSpeed;
+}
+
+void CObjectCamera::RemoveZoomTarget(void)
+{
+    mZoomTargetSet = false;
 }
 
 

@@ -25,22 +25,30 @@ public:
 
     virtual void Step(double _dt);
 
-    const CVec2 GetPos() const;
-
-    void SetTarget( const CVec2 &_target );
-    void SetTargetSpeed( const CVec2 &_speed );
-    const CVec2 &GetTarget() const;
-    const CVec2 &GetTargetSpeed() const;
-    void RemoveTarget();
+    void SetPosTarget( const CVec2 &_target );
+    void SetPosTargetSpeed( const CVec2 &_speed );
+    const CVec2 &GetPosTarget() const;
+    const CVec2 &GetPosTargetSpeed() const;
+    void RemovePosTarget();
 
     void SetZoom( float _zoom );
     float GetZoom() const;
+
+    void SetZoomTarget( float _target );
+    void SetZoomTargetSpeed( float _speed );
+    float GetZoomTarget(void);
+    float GetZoomTargetSpeed(void);
+    void RemoveZoomTarget(void);
 
 private:
     CVec2 mTarget;
     CVec2 mTargetSpeed;
     bool mTargetSet;
+
     float mZoom;
+    float mZoomTarget;
+    float mZoomTargetSpeed;
+    bool mZoomTargetSet;
 };
 
 }// namespace drash

@@ -32,6 +32,9 @@ public:
 
     virtual void Step( double _dt );
 
+    void SetPos( const CVec2 &_pos );
+    const CVec2 GetPos() const;
+
 protected:
     b2Body* mBody;
 

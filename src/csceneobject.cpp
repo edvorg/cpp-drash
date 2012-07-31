@@ -48,8 +48,20 @@ void CSceneObject::Release()
 {
 }
 
-void CSceneObject::Step(double _dt)
+void CSceneObject::Step( double _dt )
 {
+}
+
+void CSceneObject::SetPos( const CVec2 &_pos )
+{
+    mBody->SetTransform( _pos, mBody->GetAngle() );
+}
+
+const CVec2 CSceneObject::GetPos() const
+{
+    CVec2 res;
+    res.Set(mBody->GetWorldCenter().x, mBody->GetWorldCenter().y );
+    return res;
 }
 
 } // namespace drash

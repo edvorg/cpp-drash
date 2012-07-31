@@ -105,8 +105,11 @@ void CApp::Run()
 
     const unsigned int delta = 100;
     const unsigned int speed = 3;
+    const float zoomdelta = 0.35f;
+    const unsigned int zoomspeed = 5;
 
-    mCamera->SetTargetSpeed( CVec2(speed) );
+    mCamera->SetPosTargetSpeed( CVec2(speed) );
+    mCamera->SetZoomTargetSpeed(zoomspeed);
 
     bool movexr = false;
     bool movexl = false;
@@ -132,11 +135,11 @@ void CApp::Run()
                 }
                 else if ( event.button.button == SDL_BUTTON_WHEELDOWN )
                 {
-                    mCamera->SetZoom( mCamera->GetZoom() + 0.5f); //* mTimer.GetDeltaTime() );
+                    mCamera->SetZoomTarget( mCamera->GetZoom() + zoomdelta * mCamera->GetZoom() );
                 }
                 else if ( event.button.button == SDL_BUTTON_WHEELUP )
                 {
-                    mCamera->SetZoom( mCamera->GetZoom() - 0.5f); //* mTimer.GetDeltaTime() );
+                    mCamera->SetZoomTarget( mCamera->GetZoom() - zoomdelta * mCamera->GetZoom() );
                 }
                 else
                 {
@@ -192,24 +195,24 @@ void CApp::Run()
 
         if ( movexr )
         {
-            newt.x += delta;
-            mCamera->SetTarget( newt );
+            newt.x += delta / mCamera->GetZoom();
+            mCamera->SetPosTarget( newt );
         }
         else if ( movexl )
         {
-            newt.x -= delta;
-            mCamera->SetTarget( newt );
+            newt.x -= delta / mCamera->GetZoom();
+            mCamera->SetPosTarget( newt );
         }
 
         if ( moveyu )
         {
-            newt.y += delta;
-            mCamera->SetTarget( newt );
+            newt.y += delta / mCamera->GetZoom();
+            mCamera->SetPosTarget( newt );
         }
         else if ( moveyd )
         {
-            newt.y -= delta;
-            mCamera->SetTarget( newt );
+            newt.y -= delta / mCamera->GetZoom();
+            mCamera->SetPosTarget( newt );
         }
 
         // If event for exit
