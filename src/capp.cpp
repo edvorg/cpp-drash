@@ -18,7 +18,11 @@ CAppParams::CAppParams()
 }
 
 CApp::CApp():
-    mInitialized(false)
+    mInitialized(false),
+    mScene(),
+    mTimer(),
+    mDebugRenderer(),
+    mCamera(NULL)
 {
 
 }
@@ -50,8 +54,17 @@ bool CApp::init( const CAppParams &_params )
         return false;
     }
 
+    CCameraParams p;
+    mCamera = mScene.CreateObject< CObjectCamera >(p);
+
+    if ( mCamera == NULL )
+    {
+        return false;
+    }
+
     mDebugRenderer.SetFlags(0xffffffff);
     mDebugRenderer.ClearFlags(b2Draw::e_aabbBit);
+    mDebugRenderer.SetCamera(mCamera);
 
     if ( mDebugRenderer.Init() == false )
     {
@@ -89,6 +102,17 @@ void CApp::Run()
     params.mPos.Set(0,-50);
     params.mDynamic = false;
     mScene.CreateObject< CObjectSolidBody>(params);
+
+    const unsigned int delta = 100;
+    const unsigned int speed = 3;
+
+    mCamera->SetTargetSpeed( CVec2(speed) );
+
+    bool movexr = false;
+    bool movexl = false;
+    bool moveyu = false;
+    bool moveyd = false;
+
     mTimer.Reset(true);
 
     for ( ;; )
@@ -108,11 +132,11 @@ void CApp::Run()
                 }
                 else if ( event.button.button == SDL_BUTTON_WHEELDOWN )
                 {
-                    mDebugRenderer.SetZoom( mDebugRenderer.GetZoom() + 0.5f); //* mTimer.GetDeltaTime() );
+                    mCamera->SetZoom( mCamera->GetZoom() + 0.5f); //* mTimer.GetDeltaTime() );
                 }
                 else if ( event.button.button == SDL_BUTTON_WHEELUP )
                 {
-                    mDebugRenderer.SetZoom( mDebugRenderer.GetZoom() - 0.5f); //* mTimer.GetDeltaTime() );
+                    mCamera->SetZoom( mCamera->GetZoom() - 0.5f); //* mTimer.GetDeltaTime() );
                 }
                 else
                 {
@@ -120,6 +144,72 @@ void CApp::Run()
                     break;
                 }
             }
+            else if ( event.type == SDL_KEYDOWN )
+            {
+                if ( event.key.keysym.sym == SDLK_RIGHT )
+                {
+                    movexr = true;
+                    movexl = false;
+                }
+                else if ( event.key.keysym.sym == SDLK_LEFT )
+                {
+                    movexr = false;
+                    movexl = true;
+                }
+                else if ( event.key.keysym.sym == SDLK_UP )
+                {
+                    moveyu = true;
+                    moveyd = false;
+                }
+                else if ( event.key.keysym.sym == SDLK_DOWN )
+                {
+                    moveyu = false;
+                    moveyd = true;
+                }
+            }
+            else if ( event.type == SDL_KEYUP )
+            {
+                if ( event.key.keysym.sym == SDLK_RIGHT )
+                {
+                    movexr = false;
+                }
+                else if ( event.key.keysym.sym == SDLK_LEFT )
+                {
+                    movexl = false;
+                }
+                else if ( event.key.keysym.sym == SDLK_UP )
+                {
+                    moveyu = false;
+                }
+                else if ( event.key.keysym.sym == SDLK_DOWN )
+                {
+                    moveyd = false;
+                }
+            }
+        }
+
+        CVec2 newt = mCamera->GetPos();
+
+        if ( movexr )
+        {
+            newt.x += delta;
+            mCamera->SetTarget( newt );
+        }
+        else if ( movexl )
+        {
+            newt.x -= delta;
+            mCamera->SetTarget( newt );
+        }
+
+        if ( moveyu )
+        {
+            newt.y += delta;
+            mCamera->SetTarget( newt );
+        }
+        else if ( moveyd )
+        {
+            newt.y -= delta;
+            mCamera->SetTarget( newt );
         }
 
         // If event for exit
@@ -139,12 +229,8 @@ void CApp::Update()
     mScene.Step( mTimer.GetDeltaTime() );
 
     CSolidBodyParams par;
-    par.mAngle = 4;
-    par.mMass = 50;
-    par.mRestitution = (rand()%2) ? 0:10;
-    par.mPos.Rand(-100,100,0.1);
+    par.mPos.Rand(-100,100);
     mScene.CreateObject< CObjectSolidBody >(par);
-
 }
 
 void CApp::Render()

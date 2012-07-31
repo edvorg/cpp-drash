@@ -67,6 +67,11 @@ void CScene::Step( double _dt )
     }
 
     mWorld.Step( _dt, mVelocityIterations, mPositionIterations );
+
+    for ( ObjectsT::iterator i=mObjects.begin(), i_e=mObjects.end(); i!=i_e; i++ )
+    {
+        (*i)->Step(_dt);
+    }
 }
 
 void CScene::SetDebugRenderer( CDebugRenderer *_renderer )

@@ -48,4 +48,8 @@ void CSceneObject::Release()
 {
 }
 
+void CSceneObject::Step(double _dt)
+{
+}
+
 } // namespace drash

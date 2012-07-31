@@ -9,7 +9,7 @@ namespace drash
 
 CDebugRenderer::CDebugRenderer(void):
     b2Draw(),
-    mZoom(1.0f)
+    mCamera(NULL)
 {
     mHeight = mWidth = 1;
 }
@@ -57,6 +57,7 @@ void CDebugRenderer::DrawSolidPolygon( const b2Vec2 *_vertices,
                                        const b2Color &_color )
 {
     this->ModelViewIdentity();
+    this->ModelViewCamera();
     this->ProjectionMatrix();
 
     // TODO: do not use GL_POLYGON, use GL_TRIANGLES
@@ -82,6 +83,8 @@ void CDebugRenderer::DrawCircle( const b2Vec2 &_center,
                                  const b2Color &_color )
 {
     this->ModelViewIdentity();
+    this->ModelViewCamera();
+    // TODO: test this
     glTranslatef( _center.x, _center.y, 0 );
     this->ProjectionMatrix();
 
@@ -110,6 +113,8 @@ void CDebugRenderer::DrawSolidCircle( const b2Vec2 &_center,
                                       const b2Color &_color )
 {
     this->ModelViewIdentity();
+    this->ModelViewCamera();
+    // TODO: test this
     glTranslatef( _center.x, _center.y, 0 );
     this->ProjectionMatrix();
 
@@ -148,6 +153,7 @@ void CDebugRenderer::DrawSegment( const b2Vec2 &_p1,
                                   const b2Color &_color )
 {
     this->ModelViewIdentity();
+    this->ModelViewCamera();
     this->ProjectionMatrix();
 
     glBegin(GL_LINES);
@@ -163,7 +169,7 @@ void CDebugRenderer::DrawTransform( const b2Transform &_xf )
 {
     b2Vec2 p;
     float angle = _xf.q.GetAngle();
-    const float size = mWidth / 40.0f / mZoom;
+    const float size = mWidth / 40.0f / ( mCamera ? mCamera->GetZoom() : 1.0 );
     float cs = cos(angle) * size;
     float sn = sin(angle) * size;
 
@@ -178,31 +184,19 @@ void CDebugRenderer::DrawTransform( const b2Transform &_xf )
     DrawSegment( _xf.p, p, b2Color( 0, 0, 1 ) );
 }
 
-void CDebugRenderer::SetZoom( float _zoom )
+void CDebugRenderer::SetCamera( const CObjectCamera *_camera )
 {
-    if ( _zoom < 0.0f )
-    {
-        mZoom = 0.0f;
-    }
-    else
-    {
-        mZoom = _zoom;
-    }
-}
-
-float CDebugRenderer::GetZoom() const
-{
-    return mZoom;
+    mCamera = _camera;
 }
 
 void CDebugRenderer::ProjectionMatrix()
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho( -(float)mWidth / 2.0f / mZoom,
-             (float)mWidth / 2.0f / mZoom,
-             -(float)mHeight / 2.0f / mZoom,
-             (float)mHeight / 2.0f / mZoom,
+    glOrtho( ( -(float)mWidth / 2.0f ) / ( mCamera ? mCamera->GetZoom() : 1.0 ),
+             ( (float)mWidth / 2.0f ) / ( mCamera ? mCamera->GetZoom() : 1.0 ),
+             ( -(float)mHeight / 2.0f ) / ( mCamera ? mCamera->GetZoom() : 1.0 ),
+             ( (float)mHeight / 2.0f ) / ( mCamera ? mCamera->GetZoom() : 1.0 ),
              1.0f,
              -1.0f );
 }
@@ -211,6 +205,14 @@ void CDebugRenderer::ModelViewIdentity()
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+}
+
+void CDebugRenderer::ModelViewCamera()
+{
+    glMatrixMode(GL_MODELVIEW);
+    glTranslatef( mCamera ? (-mCamera->GetPos().x) : 0,
+                  mCamera ? (-mCamera->GetPos().y) : 0,
+                  0 );
 }
 
 } // namespace drash
