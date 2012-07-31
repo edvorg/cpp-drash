@@ -15,21 +15,12 @@ public:
 class CObjectCamera : public CSceneObject
 {
 public:
+    friend class CScene;
+
     typedef CCameraParams ParamsT;
 
     CObjectCamera( void );
     virtual ~CObjectCamera( void );
-
-    virtual bool Init( const ParamsT &_params );
-    virtual void Release(void);
-
-    virtual void Step(double _dt);
-
-    void SetPosTarget( const CVec2 &_target );
-    void SetPosTargetSpeed( const CVec2 &_speed );
-    const CVec2 &GetPosTarget() const;
-    const CVec2 &GetPosTargetSpeed() const;
-    void RemovePosTarget();
 
     void SetZoom( float _zoom );
     float GetZoom() const;
@@ -40,11 +31,13 @@ public:
     float GetZoomTargetSpeed(void);
     void RemoveZoomTarget(void);
 
-private:
-    CVec2 mTarget;
-    CVec2 mTargetSpeed;
-    bool mTargetSet;
+protected:
+    virtual bool Init( const ParamsT &_params );
+    virtual void Release(void);
 
+    virtual void Step(double _dt);
+
+private:
     float mZoom;
     float mZoomTarget;
     float mZoomTargetSpeed;

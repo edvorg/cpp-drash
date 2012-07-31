@@ -25,11 +25,14 @@ public:
 class CObjectSolidBody : public CSceneObject
 {
 public:
+    friend class CScene;
+
     typedef CSolidBodyParams ParamsT;
 
     CObjectSolidBody(void);
     virtual ~CObjectSolidBody(void);
 
+protected:
     virtual bool Init( const ParamsT &_params );
     virtual void Release(void);
 };

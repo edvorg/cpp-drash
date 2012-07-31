@@ -20,11 +20,14 @@ public:
 class CObjectCircleBody : public CObjectSolidBody
 {
 public:
+    friend class CScene;
+
     typedef CCircleBodyParams ParamsT;
 
     CObjectCircleBody();
     virtual ~CObjectCircleBody();
 
+protected:
     virtual bool Init( const ParamsT &_params );
     virtual void Release();
 };

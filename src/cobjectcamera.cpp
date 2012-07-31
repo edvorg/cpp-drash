@@ -11,9 +11,6 @@ CCameraParams::CCameraParams():
 
 CObjectCamera::CObjectCamera():
     CSceneObject(),
-    mTarget(0),
-    mTargetSpeed(1),
-    mTargetSet(false),
     mZoom(1),
     mZoomTarget(1),
     mZoomTargetSpeed(1),
@@ -23,69 +20,6 @@ CObjectCamera::CObjectCamera():
 
 CObjectCamera::~CObjectCamera(void)
 {
-}
-
-bool CObjectCamera::Init( const ParamsT &_params )
-{
-    if ( !CSceneObject::Init(_params) )
-    {
-        return false;
-    }
-
-    mBody->SetType( b2_kinematicBody );
-
-    return true;
-}
-
-void CObjectCamera::Release(void)
-{
-    CSceneObject::Release();
-}
-
-void CObjectCamera::Step(double _dt)
-{
-    if ( mTargetSet == true )
-    {
-        CVec2 dir = mTarget;
-        dir -= mBody->GetWorldCenter();
-        dir.x *= mTargetSpeed.x;
-        dir.y *= mTargetSpeed.y;
-        dir *= _dt;
-        dir += mBody->GetWorldCenter();
-
-        mBody->SetTransform( dir, mBody->GetAngle() );
-    }
-
-    if ( mZoomTargetSet == true )
-    {
-        mZoom += ( mZoomTarget - mZoom ) * mZoomTargetSpeed * _dt;
-    }
-}
-
-void CObjectCamera::SetPosTarget( const CVec2 &_target )
-{
-    mTarget = _target;
-    mTargetSet = true;
-}
-
-void CObjectCamera::SetPosTargetSpeed( const CVec2 &_speed )
-{
-    mTargetSpeed = _speed;
-}
-
-const CVec2 &CObjectCamera::GetPosTarget() const
-{
-    return mTarget;
-}
-
-const CVec2 &CObjectCamera::GetPosTargetSpeed() const
-{
-    return mTargetSpeed;
-}
-
-void CObjectCamera::RemovePosTarget()
-{
-    mTargetSet = false;
 }
 
 void CObjectCamera::SetZoom(float _zoom)
@@ -137,6 +71,33 @@ float CObjectCamera::GetZoomTargetSpeed(void)
 void CObjectCamera::RemoveZoomTarget(void)
 {
     mZoomTargetSet = false;
+}
+
+bool CObjectCamera::Init( const ParamsT &_params )
+{
+    if ( !CSceneObject::Init(_params) )
+    {
+        return false;
+    }
+
+    GetBody()->SetType( b2_kinematicBody );
+
+    return true;
+}
+
+void CObjectCamera::Release(void)
+{
+    CSceneObject::Release();
+}
+
+void CObjectCamera::Step(double _dt)
+{
+    CSceneObject::Step(_dt);
+
+    if ( mZoomTargetSet == true )
+    {
+        mZoom += ( mZoomTarget - mZoom ) * mZoomTargetSpeed * _dt;
+    }
 }
 
 

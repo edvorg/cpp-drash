@@ -27,18 +27,33 @@ public:
     CSceneObject(void);
     virtual ~CSceneObject(void);
 
+    void SetPos( const CVec2 &_pos );
+    const CVec2 GetPos() const;
+
+    void SetPosTarget( const CVec2 &_target );
+    void SetPosTargetSpeed( const CVec2 &_speed );
+    const CVec2 &GetPosTarget() const;
+    const CVec2 &GetPosTargetSpeed() const;
+    void RemovePosTarget();
+
+    void SetAngle( float _angle );
+    float GetAngle(void);
+
+protected:
     virtual bool Init( const ParamsT &_params );
     virtual void Release(void);
 
     virtual void Step( double _dt );
 
-    void SetPos( const CVec2 &_pos );
-    const CVec2 GetPos() const;
-
-protected:
-    b2Body* mBody;
+    b2Body* GetBody(void);
+    const b2Body* GetBody(void) const;
 
 private:
+    b2Body* mBody;
+
+    CVec2 mTarget;
+    CVec2 mTargetSpeed;
+    bool mTargetSet;
 };
 
 } // namespace drash

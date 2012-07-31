@@ -53,7 +53,7 @@ bool CObjectSolidBody::Init(const ParamsT &_params )
     fdef.shape = &s;
     fdef.userData = NULL;
 
-    if ( mBody->CreateFixture(&fdef) == NULL )
+    if ( GetBody()->CreateFixture(&fdef) == NULL )
 	{
 		return false;
     }
