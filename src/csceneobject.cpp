@@ -6,7 +6,8 @@ namespace drash
 CSceneObjectParams::CSceneObjectParams():
     mDynamic(true),
     mPos(0),
-    mAngle(0)
+    mAngle(0),
+    mFixedRotation(false)
 {
 }
 
@@ -33,7 +34,7 @@ bool CSceneObject::Init( const CSceneObject::ParamsT &_params )
     mBody->SetUserData(this);
     mBody->SetAngularDamping(0);
     mBody->SetBullet(false);
-    mBody->SetFixedRotation(false);
+    mBody->SetFixedRotation(_params.mFixedRotation);
     mBody->SetLinearDamping(0);
     mBody->SetGravityScale(1.0f);
     mBody->SetType( _params.mDynamic ?

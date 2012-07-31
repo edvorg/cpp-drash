@@ -8,7 +8,8 @@ namespace drash
 {
 
 CDebugRenderer::CDebugRenderer(void):
-    b2Draw()
+    b2Draw(),
+    mZoom(1.0f)
 {
     mHeight = mWidth = 1;
 }
@@ -175,6 +176,23 @@ void CDebugRenderer::DrawTransform( const b2Transform &_xf )
     p.y = _xf.p.y + cs;
 
     DrawSegment( _xf.p, p, b2Color( 0, 0, 1 ) );
+}
+
+void CDebugRenderer::SetZoom( float _zoom )
+{
+    if ( _zoom < 0.0f )
+    {
+        mZoom = 0.0f;
+    }
+    else
+    {
+        mZoom = _zoom;
+    }
+}
+
+float CDebugRenderer::GetZoom() const
+{
+    return mZoom;
 }
 
 void CDebugRenderer::ProjectionMatrix()

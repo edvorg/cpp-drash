@@ -8,20 +8,41 @@ namespace drash
 CTimer::CTimer():
     mStartTime(0),
     mPrevTime(0),
-    mCurrTime(0)
+    mCurrTime(0),
+    mPaused(true)
 {
 }
 
-void CTimer::Reset()
+void CTimer::Reset(bool _start)
 {
     this->Update();
     mStartTime = mPrevTime = mStartTime;
+
+    SetPaused(!_start);
 }
 
 void CTimer::Tick()
 {
-    mPrevTime = mCurrTime;
-    this->Update();
+    if ( mPaused == false )
+    {
+        mPrevTime = mCurrTime;
+        this->Update();
+    }
+    else
+    {
+        this->Update();
+        mPrevTime = mCurrTime;
+    }
+}
+
+void CTimer::SetPaused( bool _paused )
+{
+    mPaused = _paused;
+}
+
+bool CTimer::IsPaused() const
+{
+    return mPaused;
 }
 
 double CTimer::GetFullTime() const

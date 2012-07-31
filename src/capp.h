@@ -32,6 +32,7 @@ private:
     static const int mHeight = 600;
     CScene mScene;
     CTimer mTimer;
+    CDebugRenderer mDebugRenderer;
 };
 }
 #endif // CAPP_H

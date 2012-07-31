@@ -9,7 +9,7 @@
 #include "cscene.h"
 #include "cobjectsolidbody.h"
 #include "cobjectcirclebody.h"
-
+#include <iostream>
 namespace drash
 {
 
@@ -25,7 +25,6 @@ CApp::CApp():
 
 bool CApp::init( const CAppParams &_params )
 {
-    (void)_params; // while Unused // wtf???
 
     if ( SDL_Init(SDL_INIT_VIDEO) < 0 )
     {
@@ -51,6 +50,18 @@ bool CApp::init( const CAppParams &_params )
         return false;
     }
 
+    mDebugRenderer.SetFlags(0xffffffff);
+    mDebugRenderer.ClearFlags(b2Draw::e_aabbBit);
+
+    if ( mDebugRenderer.Init() == false )
+    {
+        LOG_WARN( "CScene::Init(): debug renderer init failed" );
+    }
+    else
+    {
+        mScene.SetDebugRenderer(&mDebugRenderer);
+    }
+
     mInitialized = true;
     return true;
 }
@@ -67,7 +78,6 @@ void CApp::Run()
 {
     assert( mInitialized == true );
 
-    mTimer.Reset();
     CVec2 ver[4];
     ver[0].Set(-100,-10);
     ver[1].Set(100,-10);
@@ -79,6 +89,7 @@ void CApp::Run()
     params.mPos.Set(0,-50);
     params.mDynamic = false;
     mScene.CreateObject< CObjectSolidBody>(params);
+    mTimer.Reset(true);
 
     for ( ;; )
     {
@@ -91,8 +102,23 @@ void CApp::Run()
             if ( event.type == SDL_MOUSEBUTTONDOWN ||
                  event.type == SDL_QUIT )
             {
-                go = false;
-                break;
+                if ( event.button.button == SDL_BUTTON_LEFT )
+                {
+                    mTimer.SetPaused( !mTimer.IsPaused() );
+                }
+                else if ( event.button.button == SDL_BUTTON_WHEELDOWN )
+                {
+                    mDebugRenderer.SetZoom( mDebugRenderer.GetZoom() + 0.5f); //* mTimer.GetDeltaTime() );
+                }
+                else if ( event.button.button == SDL_BUTTON_WHEELUP )
+                {
+                    mDebugRenderer.SetZoom( mDebugRenderer.GetZoom() - 0.5f); //* mTimer.GetDeltaTime() );
+                }
+                else
+                {
+                    go = false;
+                    break;
+                }
             }
         }
 
@@ -111,14 +137,14 @@ void CApp::Update()
 {
     mTimer.Tick();
     mScene.Step( mTimer.GetDeltaTime() );
+
     CSolidBodyParams par;
     par.mAngle = 4;
     par.mMass = 50;
     par.mRestitution = (rand()%2) ? 0:10;
-    //CVec2 ver();
-    //ver.Rand(-100,100,0.1);
     par.mPos.Rand(-100,100,0.1);
     mScene.CreateObject< CObjectSolidBody >(par);
+
 }
 
 void CApp::Render()

@@ -37,6 +37,7 @@ public:
     /// dt - nanoseconds
     void Step( double _dt );
 
+    void SetDebugRenderer( CDebugRenderer *_renderer );
     void Draw(void);
 
 protected:
@@ -46,7 +47,6 @@ private:
     bool mInitialized;
     static const int mVelocityIterations = 5;
     static const int mPositionIterations = 2;
-    CDebugRenderer mDebugRenderer;
     ObjectsT mObjects;
 };
 

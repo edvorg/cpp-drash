@@ -13,7 +13,7 @@ public:
     bool mDynamic;
     CVec2 mPos;
     float mAngle;
-
+    bool mFixedRotation;
     CSceneObjectParams();
 };
 
