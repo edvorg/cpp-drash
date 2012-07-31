@@ -103,7 +103,11 @@ bool CApp::Init( const CAppParams &_params )
 
 void CApp::Release()
 {
-    assert( mInitialized == true );
+    if ( mInitialized == false )
+    {
+        LOG_WARN( "CApp::Release(): app is not initialized" );
+        return;
+    }
 
     if ( mCamera != NULL )
     {
