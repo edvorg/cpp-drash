@@ -17,7 +17,7 @@ CSceneObject::CSceneObject(void):
     mTargetSpeed(1),
     mTargetSet(false),
     mTargetAngleSet(false),
-    mAngleTargeSpeed(1)
+    mAngleTargetSpeed(1)
 {
 }
 
@@ -133,13 +133,13 @@ void CSceneObject::Step( double _dt )
         dir -= GetPos();
         dir.x *= mTargetSpeed.x;
         dir.y *= mTargetSpeed.y;
-        dir *= _dt;
+        dir *= (float)_dt;
         dir += GetPos();
 
         GetBody()->SetTransform( dir, GetAngle() );
     }
     if ( mTargetAngleSet == true ){
-        float curAngle = ((mTargetAngle - GetAngle()) * mAngleTargeSpeed * _dt) + GetAngle();
+        float curAngle = ((mTargetAngle - GetAngle()) * mAngleTargetSpeed * _dt) + GetAngle();
         this->SetAngle(curAngle);
         if ( fabs(curAngle - GetAngle()) < 0.01 )
             RemoveTargetAngle();

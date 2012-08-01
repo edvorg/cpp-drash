@@ -55,13 +55,21 @@ CVec2 &CVec2::operator=(const b2Vec2 &_ver)
 {
     this->x = _ver.x;
     this->y = _ver.y;
+    return (*this);
 }
 
-CVec2 &CVec2::operator*(const b2Vec2 &_ver)
+CVec2 &CVec2::operator*=(const b2Vec2 &_ver)
 {
     this->x = x*_ver.x;
     this->y = y*_ver.y;
     return *this;
+}
+
+CVec2 &CVec2::operator *=(float _val)
+{
+    x *= _val;
+    y *= _val;
+    return (*this);
 }
 
 float CVec2::Dot(const b2Vec2 &_ver) const

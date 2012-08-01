@@ -21,7 +21,8 @@ public:
     CVec2& RandY( float _min, float _max, float _step = 1 );
 
     CVec2 & operator=( const b2Vec2 &_ver );
-    CVec2 & operator*( const b2Vec2 &_ver );
+    CVec2 & operator*=( const b2Vec2 &_ver );
+    CVec2 & operator*=( float _val );
     float Dot(const b2Vec2 &_ver)const;
 };
 

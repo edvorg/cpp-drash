@@ -63,6 +63,7 @@ bool CSolidBody::Init(const ParamsT &_params )
 
 void CSolidBody::Release(void)
 {
+    CSceneObject::Release();
 }
 
 } // namespace drash
