@@ -9,7 +9,7 @@ CCameraParams::CCameraParams():
 {
 }
 
-CObjectCamera::CObjectCamera():
+CCamera::CCamera():
     CSceneObject(),
     mZoom(1),
     mZoomTarget(1),
@@ -18,11 +18,11 @@ CObjectCamera::CObjectCamera():
 {
 }
 
-CObjectCamera::~CObjectCamera(void)
+CCamera::~CCamera(void)
 {
 }
 
-void CObjectCamera::SetZoom(float _zoom)
+void CCamera::SetZoom(float _zoom)
 {
     if ( _zoom < 1.0f )
     {
@@ -34,12 +34,12 @@ void CObjectCamera::SetZoom(float _zoom)
     }
 }
 
-float CObjectCamera::GetZoom() const
+float CCamera::GetZoom() const
 {
     return mZoom;
 }
 
-void CObjectCamera::SetZoomTarget( float _target )
+void CCamera::SetZoomTarget( float _target )
 {
     if ( _target < 1.0f )
     {
@@ -53,27 +53,27 @@ void CObjectCamera::SetZoomTarget( float _target )
     mZoomTargetSet = true;
 }
 
-void CObjectCamera::SetZoomTargetSpeed( float _speed )
+void CCamera::SetZoomTargetSpeed( float _speed )
 {
     mZoomTargetSpeed = _speed;
 }
 
-float CObjectCamera::GetZoomTarget(void)
+float CCamera::GetZoomTarget(void)
 {
     return mZoomTarget;
 }
 
-float CObjectCamera::GetZoomTargetSpeed(void)
+float CCamera::GetZoomTargetSpeed(void)
 {
     return mZoomTargetSpeed;
 }
 
-void CObjectCamera::RemoveZoomTarget(void)
+void CCamera::RemoveZoomTarget(void)
 {
     mZoomTargetSet = false;
 }
 
-bool CObjectCamera::Init( const ParamsT &_params )
+bool CCamera::Init( const ParamsT &_params )
 {
     if ( !CSceneObject::Init(_params) )
     {
@@ -85,12 +85,12 @@ bool CObjectCamera::Init( const ParamsT &_params )
     return true;
 }
 
-void CObjectCamera::Release(void)
+void CCamera::Release(void)
 {
     CSceneObject::Release();
 }
 
-void CObjectCamera::Step(double _dt)
+void CCamera::Step(double _dt)
 {
     CSceneObject::Step(_dt);
 

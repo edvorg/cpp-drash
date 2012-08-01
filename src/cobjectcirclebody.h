@@ -17,15 +17,15 @@ public:
     float mRadius;
 };
 
-class CObjectCircleBody : public CObjectSolidBody
+class CCircleBody : public CSolidBody
 {
 public:
     friend class CScene;
 
     typedef CCircleBodyParams ParamsT;
 
-    CObjectCircleBody();
-    virtual ~CObjectCircleBody();
+    CCircleBody();
+    virtual ~CCircleBody();
 
 protected:
     virtual bool Init( const ParamsT &_params );

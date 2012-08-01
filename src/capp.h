@@ -35,7 +35,7 @@ private:
     CScene mScene;
     CTimer mTimer;
     CDebugRenderer mDebugRenderer;
-    CObjectCamera *mCamera;
+    CCamera *mCamera;
 };
 }
 #endif // CAPP_H

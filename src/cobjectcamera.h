@@ -12,15 +12,15 @@ public:
     CCameraParams();
 };
 
-class CObjectCamera : public CSceneObject
+class CCamera : public CSceneObject
 {
 public:
     friend class CScene;
 
     typedef CCameraParams ParamsT;
 
-    CObjectCamera( void );
-    virtual ~CObjectCamera( void );
+    CCamera( void );
+    virtual ~CCamera( void );
 
     void SetZoom( float _zoom );
     float GetZoom() const;

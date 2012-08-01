@@ -184,7 +184,7 @@ void CDebugRenderer::DrawTransform( const b2Transform &_xf )
     DrawSegment( _xf.p, p, b2Color( 0, 0, 1 ) );
 }
 
-void CDebugRenderer::SetCamera( const CObjectCamera *_camera )
+void CDebugRenderer::SetCamera( const CCamera *_camera )
 {
     mCamera = _camera;
 }

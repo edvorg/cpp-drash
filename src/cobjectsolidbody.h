@@ -22,15 +22,15 @@ public:
     CSolidBodyParams();
 };
 
-class CObjectSolidBody : public CSceneObject
+class CSolidBody : public CSceneObject
 {
 public:
     friend class CScene;
 
     typedef CSolidBodyParams ParamsT;
 
-    CObjectSolidBody(void);
-    virtual ~CObjectSolidBody(void);
+    CSolidBody(void);
+    virtual ~CSolidBody(void);
 
 protected:
     virtual bool Init( const ParamsT &_params );

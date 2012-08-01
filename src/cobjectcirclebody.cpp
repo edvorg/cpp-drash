@@ -11,15 +11,15 @@ CCircleBodyParams::CCircleBodyParams():
 {
 }
 
-CObjectCircleBody::CObjectCircleBody()
+CCircleBody::CCircleBody()
 {
 }
 
-CObjectCircleBody::~CObjectCircleBody()
+CCircleBody::~CCircleBody()
 {
 }
 
-bool CObjectCircleBody::Init(const CObjectCircleBody::ParamsT &_params)
+bool CCircleBody::Init(const CCircleBody::ParamsT &_params)
 {
     if ( CSceneObject::Init(_params) == false )
     {
@@ -51,7 +51,7 @@ bool CObjectCircleBody::Init(const CObjectCircleBody::ParamsT &_params)
     return true;
 }
 
-void CObjectCircleBody::Release()
+void CCircleBody::Release()
 {
 }
 

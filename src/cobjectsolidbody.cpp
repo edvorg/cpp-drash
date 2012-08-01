@@ -12,15 +12,15 @@ CSolidBodyParams::CSolidBodyParams():
 {
 }
 
-CObjectSolidBody::CObjectSolidBody(void)
+CSolidBody::CSolidBody(void)
 {
 }
 
-CObjectSolidBody::~CObjectSolidBody(void)
+CSolidBody::~CSolidBody(void)
 {
 }
 
-bool CObjectSolidBody::Init(const ParamsT &_params )
+bool CSolidBody::Init(const ParamsT &_params )
 {
     if ( CSceneObject::Init(_params) == false )
     {
@@ -61,7 +61,7 @@ bool CObjectSolidBody::Init(const ParamsT &_params )
 	return true;
 }
 
-void CObjectSolidBody::Release(void)
+void CSolidBody::Release(void)
 {
 }
 

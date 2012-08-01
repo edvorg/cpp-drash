@@ -29,7 +29,7 @@ public:
     virtual void DrawSegment( const b2Vec2 &_p1, const b2Vec2 &_p2, const b2Color &_color );
     virtual void DrawTransform( const b2Transform &_xf );
 
-    void SetCamera( const CObjectCamera *_camera );
+    void SetCamera( const CCamera *_camera );
 
 private:
     void ProjectionMatrix();
@@ -38,7 +38,7 @@ private:
 
     unsigned int mWidth;
     unsigned int mHeight;
-    const CObjectCamera *mCamera;
+    const CCamera *mCamera;
 };
 
 } // namespace drash

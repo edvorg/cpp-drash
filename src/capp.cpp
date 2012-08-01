@@ -10,6 +10,7 @@
 #include "cobjectsolidbody.h"
 #include "cobjectcirclebody.h"
 #include <iostream>
+
 namespace drash
 {
 
@@ -71,7 +72,7 @@ bool CApp::Init( const CAppParams &_params )
     // camera init
 
     CCameraParams p;
-    mCamera = mScene.CreateObject< CObjectCamera >(p);
+    mCamera = mScene.CreateObject< CCamera >(p);
 
     if ( mCamera == NULL )
     {
@@ -135,7 +136,7 @@ void CApp::Run()
     params.mVerticesCount =4;
     params.mPos.Set(0,-50);
     params.mDynamic = false;
-    mScene.CreateObject< CObjectSolidBody>(params);
+    mScene.CreateObject< CSolidBody>(params);
 
     const unsigned int delta = 100;
     const unsigned int speed = 3;
@@ -269,7 +270,7 @@ void CApp::Update()
 
     CSolidBodyParams par;
     par.mPos.Rand(-100,100);
-    mScene.CreateObject< CObjectSolidBody >(par);
+    mScene.CreateObject< CSolidBody >(par);
 }
 
 void CApp::Render()
