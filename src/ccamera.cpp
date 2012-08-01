@@ -1,4 +1,4 @@
-#include "cobjectcamera.h"
+#include "ccamera.h"
 
 
 namespace drash

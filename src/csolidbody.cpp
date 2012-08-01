@@ -1,25 +1,26 @@
-#include "cobjectcirclebody.h"
+#include "csolidbody.h"
 
 namespace drash
 {
 
-CCircleBodyParams::CCircleBodyParams():
+CSolidBodyParams::CSolidBodyParams():
     mFriction(1.0f),
     mRestitution(0.0f),
     mMass(1.0f),
-    mRadius(3.0f)
+    mVertices(NULL),
+    mVerticesCount(0)
 {
 }
 
-CCircleBody::CCircleBody()
+CSolidBody::CSolidBody(void)
 {
 }
 
-CCircleBody::~CCircleBody()
+CSolidBody::~CSolidBody(void)
 {
 }
 
-bool CCircleBody::Init(const CCircleBody::ParamsT &_params)
+bool CSolidBody::Init(const ParamsT &_params )
 {
     if ( CSceneObject::Init(_params) == false )
     {
@@ -31,8 +32,17 @@ bool CCircleBody::Init(const CCircleBody::ParamsT &_params)
     md.I = 0.0f;
     md.mass = _params.mMass;
 
-    b2CircleShape s;
-    s.m_radius = _params.mRadius;
+    b2PolygonShape s;
+
+    if ( _params.mVertices == NULL )
+    {
+        s.SetAsBox( 1.0f, 1.0f );
+    }
+    else
+    {
+        s.Set( _params.mVertices, _params.mVerticesCount );
+    }
+
     s.ComputeMass( &md, 1.0f );
 
     b2FixtureDef fdef;
@@ -44,15 +54,15 @@ bool CCircleBody::Init(const CCircleBody::ParamsT &_params)
     fdef.userData = NULL;
 
     if ( GetBody()->CreateFixture(&fdef) == NULL )
-    {
-        return false;
+	{
+		return false;
     }
 
-    return true;
+	return true;
 }
 
-void CCircleBody::Release()
+void CSolidBody::Release(void)
 {
 }
 
-}
+} // namespace drash
