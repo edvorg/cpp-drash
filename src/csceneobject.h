@@ -44,7 +44,6 @@ public:
     virtual void BeginContact( CSceneObject* _object );
     virtual void EndContact( CSceneObject* _object );
 
-    void RemoveTargetAngle();
 protected:
     virtual bool Init( const ParamsT &_params );
     virtual void Release(void);

@@ -12,7 +12,7 @@ SOURCES += \
     ../src/ccamera.cpp \
     ../src/csolidbody.cpp \
     ../src/canimatedparam.cpp \
-    ../src/cdrashbody.cpp
+    ../src/cdrashbody.cpp \
     ../src/clist.cpp
 
 
@@ -36,7 +36,7 @@ HEADERS += \
     ../src/ccirclebody.h \
     ../src/csolidbody.h \
     ../src/canimatedparam.h \
-    ../src/cdrashbody.h
+    ../src/cdrashbody.h \
     ../src/clist.h
 
 CONFIG(debug, debug|release) {
