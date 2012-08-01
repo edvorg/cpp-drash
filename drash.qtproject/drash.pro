@@ -24,11 +24,11 @@ HEADERS += \
     ../src/cscene.h \
     ../src/cvec2.h \
     ../src/clogger.h \
-    ../src/cobjectsolidbody.h \
-    ../src/cobjectcirclebody.h \
     ../src/capp.h \
     ../src/ctimer.h \
-    ../src/cobjectcamera.h
+    ../src/ccamera.h \
+    ../src/ccirclebody.h \
+    ../src/csolidbody.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG

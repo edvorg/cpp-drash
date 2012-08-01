@@ -1,7 +1,7 @@
 #ifndef COBJECTCIRCLEBODY_H
 #define COBJECTCIRCLEBODY_H
 
-#include "cobjectsolidbody.h"
+#include "csolidbody.h"
 
 namespace drash
 {
