@@ -51,7 +51,6 @@ void CContactListener::EndContact(b2Contact *_contact)
 
     if ( obj1 == NULL || obj2 == NULL )
     {
-        LOG_WARN("CContactListener::BeginContact(): can not get pointer for one of objects. Skipping");
         return;
     }
 

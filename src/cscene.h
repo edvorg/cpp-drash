@@ -82,6 +82,8 @@ void CScene::DestroyObject( T* _obj )
             // ok, it's our object
 
             b2Body* body = _obj->mBody;
+            body->SetUserData(NULL);
+
             mObjects.erase(i);
             _obj->Release();
             delete _obj;
