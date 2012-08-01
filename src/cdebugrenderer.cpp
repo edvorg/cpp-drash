@@ -84,7 +84,6 @@ void CDebugRenderer::DrawCircle( const b2Vec2 &_center,
 {
     this->ModelViewIdentity();
     this->ModelViewCamera();
-    // TODO: test this
     glTranslatef( _center.x, _center.y, 0 );
     this->ProjectionMatrix();
 
@@ -114,7 +113,6 @@ void CDebugRenderer::DrawSolidCircle( const b2Vec2 &_center,
 {
     this->ModelViewIdentity();
     this->ModelViewCamera();
-    // TODO: test this
     glTranslatef( _center.x, _center.y, 0 );
     this->ProjectionMatrix();
 
