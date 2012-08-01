@@ -14,11 +14,15 @@ public:
     CVec2();
     CVec2( float32 _val );
     CVec2( float32 _x, float32 _y );
-
+    CVec2( const b2Vec2 &_copy);
     CVec2& Rand( float _min, float _max, float _step = 1 );
 
     CVec2& RandX( float _min, float _max, float _step = 1 );
     CVec2& RandY( float _min, float _max, float _step = 1 );
+
+    CVec2 & operator=( const b2Vec2 &_ver );
+    CVec2 & operator*( const b2Vec2 &_ver );
+    float Dot(const b2Vec2 &_ver)const;
 };
 
 } // namespace drash
