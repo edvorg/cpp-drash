@@ -71,6 +71,14 @@ float CSceneObject::GetAngle()
     return mBody->GetAngle();
 }
 
+void CSceneObject::BeginContact( CSceneObject *_object )
+{
+}
+
+void CSceneObject::EndContact( CSceneObject *_object )
+{
+}
+
 bool CSceneObject::Init( const CSceneObject::ParamsT &_params )
 {
     if ( mBody == NULL )
