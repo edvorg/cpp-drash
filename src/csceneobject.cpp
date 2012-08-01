@@ -71,7 +71,12 @@ void CSceneObject::SetTargetAngle(const float _angle)
 
 void CSceneObject::SetAngleTargetSpeed(const float _speed)
 {
-    mAngleTargeSpeed = _speed;
+    mAngleTargetSpeed = _speed;
+}
+
+void CSceneObject::RemoveTargetAngle()
+{
+    mAngleTargetSpeed = false;
 }
 
 void CSceneObject::SetAngle(float _angle)
@@ -136,6 +141,8 @@ void CSceneObject::Step( double _dt )
     if ( mTargetAngleSet == true ){
         float curAngle = ((mTargetAngle - GetAngle()) * mAngleTargeSpeed * _dt) + GetAngle();
         this->SetAngle(curAngle);
+        if ( fabs(curAngle - GetAngle()) < 0.01 )
+            RemoveTargetAngle();
     }
 }
 

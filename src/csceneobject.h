@@ -60,7 +60,7 @@ private:
     bool mTargetSet;
     bool mTargetAngleSet;
 
-    float mAngleTargeSpeed;
+    float mAngleTargetSpeed;
     float mTargetAngle;
 };
 
