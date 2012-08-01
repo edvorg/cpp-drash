@@ -37,6 +37,7 @@ public:
     void RemovePosTarget();
     void SetTargetAngle(const float _angle);
     void SetAngleTargetSpeed(const float _speed);
+    void RemoveTargetAngle();
     void SetAngle( float _angle );
     float GetAngle(void);
 
