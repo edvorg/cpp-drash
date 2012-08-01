@@ -26,6 +26,12 @@ CVec2::CVec2( float32 _x, float32 _y ):
 {
 }
 
+CVec2::CVec2( const b2Vec2 &_copy )
+{
+    this->x = _copy.x;
+    this->y = _copy.y;
+}
+
 CVec2 &CVec2::Rand( float _min, float _max, float _step ) //const
 {
     x = drash::Randf( _min, _max, _step );
@@ -45,5 +51,22 @@ CVec2 &CVec2::RandY( float _min, float _max, float _step )
     return *this;
 }
 
+CVec2 &CVec2::operator=(const b2Vec2 &_ver)
+{
+    this->x = _ver.x;
+    this->y = _ver.y;
+}
+
+CVec2 &CVec2::operator*(const b2Vec2 &_ver)
+{
+    this->x = x*_ver.x;
+    this->y = y*_ver.y;
+    return *this;
+}
+
+float CVec2::Dot(const b2Vec2 &_ver) const
+{
+    return x*_ver.x + y*_ver.y;
+}
 
 } // namespace drash
