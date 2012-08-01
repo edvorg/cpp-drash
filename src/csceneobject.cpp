@@ -1,5 +1,5 @@
 #include "csceneobject.h"
-
+#include "clogger.h"
 namespace drash
 {
 
@@ -15,7 +15,8 @@ CSceneObject::CSceneObject(void):
     mBody(NULL),
     mTarget(0),
     mTargetSpeed(1),
-    mTargetSet(false)
+    mTargetSet(false),
+    mTargetAngleSet(false)
 {
 }
 
@@ -59,6 +60,17 @@ const CVec2 &CSceneObject::GetPosTargetSpeed() const
 void CSceneObject::RemovePosTarget()
 {
     mTargetSet = false;
+}
+
+void CSceneObject::SetTargetAngle(const float _angle)
+{
+    mTargetAngle = _angle;
+    mTargetAngleSet = true;
+}
+
+void CSceneObject::SetAngleTargetSpeed(const float _speed)
+{
+    mAngleTargeSpeed = _speed;
 }
 
 void CSceneObject::SetAngle(float _angle)
@@ -111,6 +123,10 @@ void CSceneObject::Step( double _dt )
         dir += GetPos();
 
         GetBody()->SetTransform( dir, GetAngle() );
+    }
+    if ( mTargetAngleSet == true ){
+        float curAngle = ((mTargetAngle - GetAngle()) * mAngleTargeSpeed * _dt) + GetAngle();
+        this->SetAngle(curAngle);
     }
 }
 
