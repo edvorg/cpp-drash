@@ -5,7 +5,7 @@ CContactListener::CContactListener()
 {
 }
 
-void CContactListener::BeginContact(b2Contact *contact)
+void CContactListener::BeginContact(b2Contact * _contact)
 {
 }
 
@@ -13,11 +13,11 @@ void CContactListener::EndContact(b2Contact *contact)
 {
 }
 
-void CContactListener::PreSolve(b2Contact *contact, const b2Manifold *oldManifold)
+void CContactListener::PreSolve(b2Contact *_contact, const b2Manifold *_oldManifold)
 {
 }
 
-void CContactListener::PostSolve(b2Contact *contact, const b2ContactImpulse *impulse)
+void CContactListener::PostSolve(b2Contact * _contact, const b2ContactImpulse * _impulse)
 {
 }
 

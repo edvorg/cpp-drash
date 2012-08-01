@@ -10,9 +10,17 @@
 #include "csolidbody.h"
 #include "ccirclebody.h"
 #include <iostream>
-
+using namespace std;
 namespace drash
 {
+
+void CAppParams::SetCommandLine( int _argc, char *_argv[] )
+{
+    for(int i = 0 ; i < _argc ; i++){
+        string buff(_argv[i]);
+        mArgv.push_back( buff );
+    }
+}
 
 CAppParams::CAppParams()
 {

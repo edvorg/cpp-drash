@@ -3,6 +3,7 @@
 
 #include "csceneobject.h"
 #include "cdebugrenderer.h"
+#include "ccontactlistener.h"
 #include <list>
 
 namespace drash
@@ -47,7 +48,9 @@ private:
     bool mInitialized;
     static const int mVelocityIterations = 5;
     static const int mPositionIterations = 2;
+    CContactListener mContactListener;
     ObjectsT mObjects;
+
 };
 
 template < typename T >

@@ -27,6 +27,7 @@ bool CScene::Init(const CSceneParams &_params)
         return false;
     }
 
+    mWorld.SetContactListener(&mContactListener);
     mWorld.SetAllowSleeping(true);
     mWorld.SetContinuousPhysics(false);
     mWorld.SetGravity(_params.mGravity);

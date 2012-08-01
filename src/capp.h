@@ -4,12 +4,17 @@
 #include "cscene.h"
 #include "ctimer.h"
 
+#include <vector>
+#include <string>
+
 namespace drash
 {
 
 class CAppParams
 {
 public:
+    std::vector<std::string> mArgv;
+    void SetCommandLine( int _argc,char *_argv[] );
     CAppParams();
 };
 
