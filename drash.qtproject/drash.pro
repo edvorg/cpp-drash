@@ -11,7 +11,8 @@ SOURCES += \
     ../src/ccirclebody.cpp \
     ../src/ccamera.cpp \
     ../src/csolidbody.cpp \
-    ../src/canimatedparam.cpp
+    ../src/canimatedparam.cpp \
+    ../src/clist.cpp
 
 
 CONFIG += console
@@ -33,7 +34,8 @@ HEADERS += \
     ../src/ccamera.h \
     ../src/ccirclebody.h \
     ../src/csolidbody.h \
-    ../src/canimatedparam.h
+    ../src/canimatedparam.h \
+    ../src/clist.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG
