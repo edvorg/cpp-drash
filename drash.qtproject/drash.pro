@@ -5,11 +5,11 @@ SOURCES += \
     ../src/cscene.cpp \
     ../src/cvec2.cpp \
     ../src/clogger.cpp \
-    ../src/cobjectsolidbody.cpp \
-    ../src/cobjectcirclebody.cpp \
     ../src/capp.cpp \
     ../src/ctimer.cpp \
-    ../src/cobjectcamera.cpp
+    ../src/ccirclebody.cpp \
+    ../src/ccamera.cpp \
+    ../src/csolidbody.cpp
 
 CONFIG += console
 CONFIG -= qt
