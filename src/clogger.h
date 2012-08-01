@@ -2,14 +2,14 @@
 #define CLOGGER_H_INCLUDED
 
 #include <fstream>
-
+#include <iostream>
 namespace drash
 {
 
 class CLogger
 {
 public:
-    CLogger(void);
+    explicit CLogger(std::ostream &_stream);
     ~CLogger(void);
     CLogger& operator<<( char _c );
     CLogger& operator<<( const char* _str );
@@ -22,19 +22,20 @@ public:
 
 private:
     std::ofstream out;
+    std::ostream & mStream;
     bool mOpened;
 };
 
 #define LOG_ERR_PREFIX "[E]: "
 #define LOG_WARN_PREFIX "[W]: "
 #define LOG_INFO_PREFIX "[I]: "
-// TODO: Erros writes in stderr
+
 #ifdef DRASH_DEBUG
-#define LOG_ERR(mes) CLogger()<<LOG_ERR_PREFIX<<mes
-#define LOG_WARN(mes) CLogger()<<LOG_WARN_PREFIX<<mes
-#define LOG_INFO(mes) CLogger()<<LOG_INFO_PREFIX<<mes
+#define LOG_ERR(mes) CLogger(std::cerr)<<LOG_ERR_PREFIX<<mes
+#define LOG_WARN(mes) CLogger(std::cerr)<<LOG_WARN_PREFIX<<mes
+#define LOG_INFO(mes) CLogger(std::cout)<<LOG_INFO_PREFIX<<mes
 #else
-#define LOG_ERR(mes) CLogger()<<LOG_ERR_PREFIX<<mes
+#define LOG_ERR(mes) CLogger(std::cerr)<<LOG_ERR_PREFIX<<mes
 #define LOG_WARN(mes)
 #define LOG_INFO(mes)
 #endif
