@@ -10,7 +10,8 @@ SOURCES += \
     ../src/ccontactlistener.cpp \
     ../src/ccirclebody.cpp \
     ../src/ccamera.cpp \
-    ../src/csolidbody.cpp
+    ../src/csolidbody.cpp \
+    ../src/canimatedparam.cpp
 
 
 CONFIG += console
@@ -31,7 +32,8 @@ HEADERS += \
     ../src/ccontactlistener.h\
     ../src/ccamera.h \
     ../src/ccirclebody.h \
-    ../src/csolidbody.h
+    ../src/csolidbody.h \
+    ../src/canimatedparam.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG

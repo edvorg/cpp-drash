@@ -143,8 +143,8 @@ void CApp::Run()
     params.mVertices = ver;
     params.mVerticesCount =4;
     params.mPos.Set(0,-50);
-    params.mDynamic = false;
-    mScene.CreateObject< CSolidBody>(params);
+    params.mDynamic = false;    
+    mScene.CreateObject< CSolidBody>(params)->SetTargetAngle(M_PI * 10);
 
     const unsigned int delta = 100;
     const unsigned int speed = 3;
