@@ -9,7 +9,8 @@ SOURCES += \
     ../src/cobjectcirclebody.cpp \
     ../src/capp.cpp \
     ../src/ctimer.cpp \
-    ../src/cobjectcamera.cpp
+    ../src/cobjectcamera.cpp \
+    ../src/ccontactlistener.cpp
 
 CONFIG += console
 CONFIG -= qt
@@ -28,7 +29,8 @@ HEADERS += \
     ../src/cobjectcirclebody.h \
     ../src/capp.h \
     ../src/ctimer.h \
-    ../src/cobjectcamera.h
+    ../src/cobjectcamera.h \
+    ../src/ccontactlistener.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG
