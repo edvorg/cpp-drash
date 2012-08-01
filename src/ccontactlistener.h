@@ -3,6 +3,8 @@
 
 #include <Box2D/Box2D.h>
 
+namespace drash{
+
 class CContactListener : public b2ContactListener
 {
 public:
@@ -17,4 +19,5 @@ public:
     virtual void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse);
 };
 
+}// namespace drash
 #endif // CCONTACTLISTENER_H

@@ -2,7 +2,7 @@
 #define CDEBUGRENDERER_H
 
 #include <Box2D/Box2D.h>
-#include "cobjectcamera.h"
+#include "ccamera.h"
 
 namespace drash{
 

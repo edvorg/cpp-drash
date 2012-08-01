@@ -7,8 +7,8 @@
 #include "clogger.h"
 #include "cdebugrenderer.h"
 #include "cscene.h"
-#include "cobjectsolidbody.h"
-#include "cobjectcirclebody.h"
+#include "csolidbody.h"
+#include "ccirclebody.h"
 #include <iostream>
 
 namespace drash
