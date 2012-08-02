@@ -13,7 +13,8 @@ SOURCES += \
     ../src/csolidbody.cpp \
     ../src/canimatedparam.cpp \
     ../src/cdrashbody.cpp \
-    ../src/clist.cpp
+    ../src/clist.cpp \
+    ../src/cplayer.cpp
 
 
 CONFIG += console
@@ -37,7 +38,8 @@ HEADERS += \
     ../src/csolidbody.h \
     ../src/canimatedparam.h \
     ../src/cdrashbody.h \
-    ../src/clist.h
+    ../src/clist.h \
+    ../src/cplayer.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG

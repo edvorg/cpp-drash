@@ -29,10 +29,9 @@ public:
 
     typedef CSolidBodyParams ParamsT;
 
-protected:
     CSolidBody(void);
     virtual ~CSolidBody(void);
-
+protected:
     virtual bool Init( const ParamsT &_params );
     virtual void Release(void);
 };
