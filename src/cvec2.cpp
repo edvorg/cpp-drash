@@ -3,6 +3,8 @@
 namespace drash
 {
 
+const float CVec2::mAccuracy = 0.001;
+
 float Randf( float _min, float _max, float _step )
 {
     return ::rand() %
@@ -70,6 +72,16 @@ CVec2 &CVec2::operator *=(float _val)
     x *= _val;
     y *= _val;
     return (*this);
+}
+
+bool CVec2::operator ==(const CVec2 &_var)
+{
+    if (fabs(x - _var.x) < mAccuracy){
+        if (fabs(y - _var.y) < mAccuracy){
+            return true;
+        }
+    }
+    return false;
 }
 
 float CVec2::Dot(const b2Vec2 &_ver) const

@@ -138,11 +138,13 @@ void CSceneObject::Step( double _dt )
         dir += GetPos();
 
         GetBody()->SetTransform( dir, GetAngle() );
+        if (mTarget == GetPos()){
+            mTargetSet = false;
+        }
     }
     if ( mTargetAngleSet == true ){
         float curAngle = ((mTargetAngle - GetAngle()) * mAngleTargetSpeed * _dt) + GetAngle();
         this->SetAngle(curAngle);
-        //LOG_INFO(fabs(curAngle - mTargetAngle));
         if ( fabs(curAngle - mTargetAngle) < 0.01 )
             RemoveTargetAngle();
     }

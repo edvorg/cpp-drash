@@ -6,7 +6,8 @@ namespace drash
 
 CScene::CScene(void):
     mWorld( b2Vec2( 0, 0 ) ),
-    mInitialized(false)
+    mInitialized(false),
+    mCountPlayers(0)
 {
 }
 

@@ -4,6 +4,7 @@
 #include "csceneobject.h"
 #include "cdebugrenderer.h"
 #include "ccontactlistener.h"
+#include "cplayer.h"
 #include <list>
 
 namespace drash
@@ -41,16 +42,20 @@ public:
     void SetDebugRenderer( CDebugRenderer *_renderer );
     void Draw(void);
 
+    void onEvent();
+
 protected:
 
 private:
     b2World mWorld;
     bool mInitialized;
+    unsigned int mCountPlayers;
     static const int mVelocityIterations = 5;
     static const int mPositionIterations = 2;
+    static const int mPlayersMaxAmount = 4;
     CContactListener mContactListener;
     ObjectsT mObjects;
-
+    CPlayer* mPlayers[mPlayersMaxAmount];
 };
 
 template < typename T >
