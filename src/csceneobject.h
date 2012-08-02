@@ -52,13 +52,12 @@ protected:
 
     b2Body* GetBody(void);
     const b2Body* GetBody(void) const;
-
+    bool mTargetSet;
 private:
     b2Body* mBody;
 
     CVec2 mTarget;
     CVec2 mTargetSpeed;
-    bool mTargetSet;
     bool mTargetAngleSet;
 
     float mAngleTargetSpeed;
