@@ -29,11 +29,12 @@ public:
 
     typedef CSolidBodyParams ParamsT;
 
-    CSolidBody(void);
-    virtual ~CSolidBody(void);
 protected:
     virtual bool Init( const ParamsT &_params );
     virtual void Release(void);
+
+    CSolidBody(void);
+    virtual ~CSolidBody(void);
 };
 
 } // namespace drash

@@ -1,16 +1,16 @@
 #ifndef CPLAYER_H
 #define CPLAYER_H
 
-#include "csceneobject.h"
+#include "csolidbody.h"
 
 namespace drash{
 
-class CPlayerParams: public CSceneObjectParams{
+class CPlayerParams: public CSolidBodyParams{
 public:
     CPlayerParams();
 };
 
-class CPlayer: public CSceneObject
+class CPlayer: public CSolidBody
 {
 public:
     typedef CPlayerParams ParamsT;

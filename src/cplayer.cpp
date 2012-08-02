@@ -3,24 +3,25 @@
 namespace drash{
 
 CPlayerParams::CPlayerParams():
-    CSceneObjectParams()
+    CSolidBodyParams()
 {
 }
 
 
 CPlayer::CPlayer():
-    CSceneObject()
+    CSolidBody()
 {
 
 }
 
 CPlayer::~CPlayer()
 {
+
 }
 
 bool CPlayer::Init(const CPlayer::ParamsT &_params)
 {
-    if ( CSceneObject::Init(_params) == false ){
+    if ( CSolidBody::Init(_params) == false ){
         return false;
     }
 
@@ -29,12 +30,12 @@ bool CPlayer::Init(const CPlayer::ParamsT &_params)
 
 void CPlayer::Release()
 {
-    CSceneObject::Release();
+    CSolidBody::Release();
 }
 
 void CPlayer::Step(double _dt)
 {
-    CSceneObject::Step(_dt);
+    CSolidBody::Step(_dt);
 }
 
 }// namespace drash
