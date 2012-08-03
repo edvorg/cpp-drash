@@ -5,6 +5,7 @@
 #include "graphics/cdebugrenderer.h"
 #include "ccontactlistener.h"
 #include "sceneobjects/cplayer.h"
+#include "sceneobjects/cplayer.h"
 #include <list>
 
 namespace drash
@@ -42,8 +43,9 @@ public:
     void SetDebugRenderer( CDebugRenderer *_renderer );
     void Draw(void);
 
-    void onEvent();
+    void OnPlayerEvent(const CPlayer::PlayerEvent & _event, unsigned int _playerId);
 
+    void AddPlayer();
 protected:
 
 private:

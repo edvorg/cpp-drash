@@ -19,6 +19,7 @@ CSceneObject::CSceneObject(void):
     mTargetAngleSet(false),
     mAngleTargetSpeed(1)
 {
+    mTargetSpeed = CVec2(0,0);
 }
 
 CSceneObject::~CSceneObject(void)

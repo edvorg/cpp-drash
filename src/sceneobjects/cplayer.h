@@ -2,7 +2,7 @@
 #define CPLAYER_H
 
 #include "csolidbody.h"
-// TODO: I not test this class
+
 namespace drash{
 
 class CPlayerParams: public CSolidBodyParams{
@@ -17,9 +17,9 @@ public:
     friend class CScene;
 
 
-    enum Action{moveLeft,moveRight,jump,fire};
+    enum PlayerEvent{moveLeft,moveRight,jump,fire};
 
-    virtual void onAction(const Action & _action);
+    virtual void onEvent(const PlayerEvent & _event);
 protected:
     CPlayer();
     virtual ~CPlayer();
@@ -29,7 +29,7 @@ protected:
 
     virtual void Step(double _dt);
 
-    void mJump();
+    void Jump();
 
     bool mJumping;
     static const float mHeightJump;

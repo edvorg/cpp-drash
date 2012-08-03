@@ -92,4 +92,27 @@ void CScene::Draw(void)
     mWorld.DrawDebugData();
 }
 
+void CScene::OnPlayerEvent(const CPlayer::PlayerEvent &_event, unsigned int _playerId)
+{
+    if (_playerId < 0 || _playerId >= mCountPlayers){
+        LOG_ERR("Player with id = " <<
+                _playerId << " no exist");
+
+        return;
+    }
+
+    mPlayers[_playerId]->onEvent(_event);
+}
+
+void CScene::AddPlayer()
+{
+    if (mCountPlayers == mPlayersMaxAmount){
+        LOG_ERR("Achieved maximum Amount of Players");
+        return;
+    }
+
+    mPlayers[mCountPlayers++] = CreateObject<CPlayer>(CPlayerParams());
+
+}
+
 } // namespace drash
