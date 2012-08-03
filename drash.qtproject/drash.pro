@@ -1,20 +1,20 @@
 SOURCES += \
     ../src/main.cpp \
-    ../src/cdebugrenderer.cpp \
-    ../src/csceneobject.cpp \
+    ../src/graphics/cdebugrenderer.cpp \
+    ../src/sceneobjects/csceneobject.cpp \
     ../src/cscene.cpp \
     ../src/cvec2.cpp \
     ../src/clogger.cpp \
     ../src/capp.cpp \
     ../src/ctimer.cpp \
     ../src/ccontactlistener.cpp \
-    ../src/ccirclebody.cpp \
-    ../src/ccamera.cpp \
-    ../src/csolidbody.cpp \
+    ../src/sceneobjects/ccirclebody.cpp \
+    ../src/sceneobjects/ccamera.cpp \
+    ../src/sceneobjects/csolidbody.cpp \
     ../src/canimatedparam.cpp \
-    ../src/cdrashbody.cpp \
+    ../src/sceneobjects/cdrashbody.cpp \
     ../src/clist.cpp \
-    ../src/cplayer.cpp
+    ../src/sceneobjects/cplayer.cpp
 
 
 CONFIG += console
@@ -25,8 +25,8 @@ unix|win32: PKGCONFIG += sdl gl
 unix|win32: LIBS += -lBox2D -lrt
 
 HEADERS += \
-    ../src/cdebugrenderer.h \
-    ../src/csceneobject.h \
+    ../src/graphics/cdebugrenderer.h \
+    ../src/sceneobjects/csceneobject.h \
     ../src/cscene.h \
     ../src/cvec2.h \
     ../src/clogger.h \
@@ -34,12 +34,12 @@ HEADERS += \
     ../src/ctimer.h \
     ../src/ccontactlistener.h\
     ../src/ccamera.h \
-    ../src/ccirclebody.h \
-    ../src/csolidbody.h \
+    ../src/sceneobjects/ccirclebody.h \
+    ../src/sceneobjects/csolidbody.h \
     ../src/canimatedparam.h \
-    ../src/cdrashbody.h \
+    ../src/sceneobjects/cdrashbody.h \
     ../src/clist.h \
-    ../src/cplayer.h
+    ../src/sceneobjects/cplayer.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG

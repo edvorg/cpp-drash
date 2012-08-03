@@ -2,7 +2,7 @@
 #define CSCENEOBJECT_H
 
 #include <Box2D/Box2D.h>
-#include "cvec2.h"
+#include "../cvec2.h"
 
 namespace drash
 {

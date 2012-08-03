@@ -5,10 +5,10 @@
 #include <Box2D/Box2D.h>
 #include <math.h>
 #include "clogger.h"
-#include "cdebugrenderer.h"
+#include "graphics/cdebugrenderer.h"
 #include "cscene.h"
-#include "csolidbody.h"
-#include "ccirclebody.h"
+#include "sceneobjects/csolidbody.h"
+#include "sceneobjects/ccirclebody.h"
 #include <iostream>
 using namespace std;
 namespace drash
