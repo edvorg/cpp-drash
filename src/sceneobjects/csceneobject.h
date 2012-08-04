@@ -53,8 +53,9 @@ protected:
     b2Body* GetBody(void);
     const b2Body* GetBody(void) const;
     bool mTargetSet;
-private:
     b2Body* mBody;
+private:
+
 
     CVec2 mTarget;
     CVec2 mTargetSpeed;

@@ -94,13 +94,13 @@ void CScene::Draw(void)
 
 void CScene::OnPlayerEvent(const CPlayer::PlayerEvent &_event, unsigned int _playerId)
 {
-    if (_playerId < 0 || _playerId >= mCountPlayers){
+    if (_playerId >= mCountPlayers){
         LOG_ERR("Player with id = " <<
                 _playerId << " no exist");
 
         return;
     }
-
+    //LOG_INFO("sdfdf");
     mPlayers[_playerId]->onEvent(_event);
 }
 

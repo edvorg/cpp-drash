@@ -52,7 +52,6 @@ bool CSolidBody::Init(const ParamsT &_params )
     fdef.restitution = _params.mRestitution;
     fdef.shape = &s;
     fdef.userData = NULL;
-
     if ( GetBody()->CreateFixture(&fdef) == NULL )
 	{
 		return false;

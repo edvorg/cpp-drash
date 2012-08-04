@@ -33,13 +33,14 @@ HEADERS += \
     ../src/capp.h \
     ../src/ctimer.h \
     ../src/ccontactlistener.h\
-    ../src/ccamera.h \
+    ../src/sceneobjects/ccamera.h \
     ../src/sceneobjects/ccirclebody.h \
     ../src/sceneobjects/csolidbody.h \
     ../src/canimatedparam.h \
     ../src/sceneobjects/cdrashbody.h \
     ../src/clist.h \
-    ../src/sceneobjects/cplayer.h
+    ../src/sceneobjects/cplayer.h \
+    ../src/sceneobjects.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG

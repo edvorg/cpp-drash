@@ -7,8 +7,6 @@
 #include "clogger.h"
 #include "graphics/cdebugrenderer.h"
 #include "cscene.h"
-#include "sceneobjects/csolidbody.h"
-#include "sceneobjects/ccirclebody.h"
 #include <iostream>
 using namespace std;
 namespace drash
@@ -287,7 +285,6 @@ void CApp::Update()
 
     mTimer.Tick();
     mScene.Step( mTimer.GetDeltaTime() );
-
     CSolidBodyParams par;
     par.mPos.Rand(-100,100);
     //mScene.CreateObject< CSolidBody >(par);

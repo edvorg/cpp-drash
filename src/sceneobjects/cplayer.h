@@ -20,6 +20,8 @@ public:
     enum PlayerEvent{moveLeft,moveRight,jump,fire};
 
     virtual void onEvent(const PlayerEvent & _event);
+    virtual void BeginContact(CSceneObject *_object);
+    virtual void EndContact(CSceneObject *_object);
 protected:
     CPlayer();
     virtual ~CPlayer();
@@ -28,9 +30,9 @@ protected:
     virtual void Release(void);
 
     virtual void Step(double _dt);
-
     void Jump();
-
+    void MoveRight();
+    void MoveLeft();
     bool mJumping;
     static const float mHeightJump;
 };
