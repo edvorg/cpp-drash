@@ -151,7 +151,7 @@ void CApp::Run()
 
     mCamera->SetPosTargetSpeed( CVec2(speed) );
     mCamera->SetZoomTargetSpeed(zoomspeed);
-
+    mCamera->SetZoomTarget(5);
 //    CSolidBodyParams paramsPlayer;
 //    paramsPlayer.mMass = 50;
 //    ver[0].Set(10,0);
@@ -160,7 +160,7 @@ void CApp::Run()
 //    ver[3].Set(10,10);
 //    paramsPlayer.mVertices = ver;
 //    paramsPlayer.mVerticesCount =4;
-    mScene.AddPlayer();
+    mScene.AddPlayer(CPlayerParams());
     bool movexr = false;
     bool movexl = false;
     bool moveyu = false;
@@ -222,6 +222,12 @@ void CApp::Run()
                 if (event.key.keysym.sym == SDLK_SPACE){
                     mScene.OnPlayerEvent(CPlayer::jump,0);
                 }
+                if ( event.key.keysym.sym == SDLK_a ){
+                    mScene.OnPlayerEvent(CPlayer::StartMoveLeft,0);
+                }
+                if ( event.key.keysym.sym == SDLK_d ){
+                    mScene.OnPlayerEvent(CPlayer::StartMoveRight,0);
+                }
             }
             else if ( event.type == SDL_KEYUP )
             {
@@ -240,6 +246,15 @@ void CApp::Run()
                 else if ( event.key.keysym.sym == SDLK_DOWN )
                 {
                     moveyd = false;
+                }
+                if (event.key.keysym.sym == SDLK_SPACE){
+                    mScene.OnPlayerEvent(CPlayer::jump,0);
+                }
+                if ( event.key.keysym.sym == SDLK_a ){
+                    mScene.OnPlayerEvent(CPlayer::EndMoveLeft,0);
+                }
+                if ( event.key.keysym.sym == SDLK_d ){
+                    mScene.OnPlayerEvent(CPlayer::EndMoveRight,0);
                 }
             }
         }

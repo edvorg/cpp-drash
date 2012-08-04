@@ -43,7 +43,7 @@ public:
 
     void OnPlayerEvent(const CPlayer::PlayerEvent & _event, unsigned int _playerId);
 
-    void AddPlayer();
+    void AddPlayer(const CPlayerParams & _params);
 protected:
 
 private:

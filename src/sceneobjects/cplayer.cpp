@@ -5,21 +5,23 @@ namespace drash{
 const float CPlayer::mHeightJump = 10;
 
 CPlayerParams::CPlayerParams():
-    CSolidBodyParams()
+    CSolidBodyParams(),
+    mSpeedJump(10),
+    mSpeedMoving(20)
 {
-    mFixedRotation = true;
-    mFriction = 1;
+
 }
 
 CPlayer::CPlayer():
     CSolidBody(),
-    mJumping(false)
+    mJumpAllowed(false),
+    mMovingLeft(false),
+    mMovingRight(false)
 {
 }
 
 CPlayer::~CPlayer()
 {
-
 }
 
 bool CPlayer::Init(const CPlayer::ParamsT &_params)
@@ -27,6 +29,11 @@ bool CPlayer::Init(const CPlayer::ParamsT &_params)
     if ( CSolidBody::Init(_params) == false ){
         return false;
     }
+
+    mBody->SetFixedRotation(true);
+    mBody->GetFixtureList()->SetFriction(10);
+    mSpeedJump = _params.mSpeedJump;
+    mSpeedMoving = _params.mSpeedMoving;
 
     return true;
 }
@@ -39,48 +46,67 @@ void CPlayer::Release()
 void CPlayer::Step(double _dt)
 {
     CSolidBody::Step(_dt);
-
-    mJumping = mTargetSet;
+    if (mMovingLeft){
+        MoveLeft();
+    }
+    if (mMovingRight){
+        MoveRight();
+    }
 }
 
 void CPlayer::Jump()
 {
-    MoveRight();
-    CVec2 v = mBody->GetLinearVelocity();
-    v.y += 15;
-    mBody->SetLinearVelocity(v);
+    if (mJumpAllowed){
+        CVec2 v = mBody->GetLinearVelocity();
+        v.y = mSpeedJump;
+        GetBody()->SetLinearVelocity(v);
+    }
 }
 
 void CPlayer::MoveRight()
 {
-    CVec2 force(15,0);
-    ///mBody->ApplyForce(force,CVec2(0,0));
-
-    mBody->SetLinearVelocity(force);
+    CVec2 velocity = mBody->GetLinearVelocity();
+    if (velocity.y > 0){
+        velocity.x = mSpeedMoving;
+    } else {
+        velocity.x = mSpeedMoving;
+    }
+    GetBody()->SetLinearVelocity(velocity);
 }
 
 void CPlayer::MoveLeft()
 {
+    CVec2 velocity = mBody->GetLinearVelocity();
+    if (velocity.y > 0){
+        velocity.x = -mSpeedMoving;
+    } else {
+        velocity.x = -mSpeedMoving;
+    }
+    GetBody()->SetLinearVelocity(velocity);
 }
-// TODO: release move player
+
 // TODO: release fire player
 void CPlayer::onEvent(const PlayerEvent &_event){
     switch (_event){
         case jump:Jump() ;break;
-        case moveLeft: break;
-        case moveRight: break;
-        case fire: break;
+        case StartMoveLeft: mMovingLeft = true; break;
+        case StartMoveRight: mMovingRight = true; break;
+        case EndMoveLeft: mMovingLeft = false; break;
+        case EndMoveRight: mMovingRight = false; break;
+        case fire: ;break;
     }
 }
 
 void CPlayer::BeginContact(CSceneObject *_object)
 {
-    mJumping = true;
+    CSolidBody::BeginContact(_object);
+    mJumpAllowed = true;
 }
 
 void CPlayer::EndContact(CSceneObject *_object)
 {
-    mJumping = false;
+    CSolidBody::BeginContact(_object);
+    mJumpAllowed = false;
 }
 
 }// namespace drash

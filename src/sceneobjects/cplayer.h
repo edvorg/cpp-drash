@@ -7,6 +7,8 @@ namespace drash{
 
 class CPlayerParams: public CSolidBodyParams{
 public:
+    float mSpeedJump;
+    float mSpeedMoving;
     CPlayerParams();
 };
 
@@ -17,7 +19,7 @@ public:
     friend class CScene;
 
 
-    enum PlayerEvent{moveLeft,moveRight,jump,fire};
+    enum PlayerEvent{StartMoveLeft,StartMoveRight,EndMoveLeft,EndMoveRight ,jump,fire};
 
     virtual void onEvent(const PlayerEvent & _event);
     virtual void BeginContact(CSceneObject *_object);
@@ -33,7 +35,13 @@ protected:
     void Jump();
     void MoveRight();
     void MoveLeft();
-    bool mJumping;
+
+    bool mJumpAllowed;
+    bool mMovingLeft;
+    bool mMovingRight;
+    float mSpeedJump;
+    float mSpeedMoving;
+
     static const float mHeightJump;
 };
 

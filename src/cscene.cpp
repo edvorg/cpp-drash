@@ -95,7 +95,7 @@ void CScene::Draw(void)
 void CScene::OnPlayerEvent(const CPlayer::PlayerEvent &_event, unsigned int _playerId)
 {
     if (_playerId >= mCountPlayers){
-        LOG_ERR("Player with id = " <<
+        LOG_ERR("CScene::OnPlayerEvent() : Player with id = " <<
                 _playerId << " no exist");
 
         return;
@@ -104,14 +104,14 @@ void CScene::OnPlayerEvent(const CPlayer::PlayerEvent &_event, unsigned int _pla
     mPlayers[_playerId]->onEvent(_event);
 }
 
-void CScene::AddPlayer()
+void CScene::AddPlayer(const CPlayerParams &_params)
 {
     if (mCountPlayers == mPlayersMaxAmount){
-        LOG_ERR("Achieved maximum Amount of Players");
+        LOG_ERR("CScene::AddPlayer() : Achieved maximum Amount of Players");
         return;
     }
 
-    mPlayers[mCountPlayers++] = CreateObject<CPlayer>(CPlayerParams());
+    mPlayers[mCountPlayers++] = CreateObject<CPlayer>(_params);
 
 }
 
