@@ -6,9 +6,20 @@
 namespace drash
 {
 
+class CDrashBodyStrip
+{
+public:
+    unsigned int mBegin;
+    unsigned int mEnd;
+    unsigned int *mVertices;
+    unsigned int mVerticesCount;
+};
+
 class CDrashBodyParams : public CSolidBodyParams
 {
 public:
+    CDrashBodyStrip *mStrips;
+    unsigned int mStripsCount;
 };
 
 class CDrashBody : public CSolidBody

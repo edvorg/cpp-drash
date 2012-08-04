@@ -1,11 +1,9 @@
 #ifndef CSCENE_H
 #define CSCENE_H
 
-#include "sceneobjects/csceneobject.h"
 #include "graphics/cdebugrenderer.h"
 #include "ccontactlistener.h"
-#include "sceneobjects/cplayer.h"
-#include "sceneobjects/cplayer.h"
+#include "sceneobjects.h"
 #include <list>
 
 namespace drash

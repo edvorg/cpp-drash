@@ -39,7 +39,8 @@ HEADERS += \
     ../src/canimatedparam.h \
     ../src/sceneobjects/cdrashbody.h \
     ../src/clist.h \
-    ../src/sceneobjects/cplayer.h
+    ../src/sceneobjects/cplayer.h \
+    ../src/sceneobjects.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG

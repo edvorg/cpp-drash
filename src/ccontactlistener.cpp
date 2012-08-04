@@ -1,5 +1,5 @@
 #include "ccontactlistener.h"
-#include "sceneobjects/csceneobject.h"
+#include "sceneobjects.h"
 #include "clogger.h"
 
 namespace drash
