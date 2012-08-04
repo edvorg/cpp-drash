@@ -66,12 +66,16 @@ T* CScene::CreateObject( const typename T::ParamsT& _params )
     T* res = new T();
 
     b2BodyDef bdef;
-    res->mBody = mWorld.CreateBody(&bdef);
+    res->mBody = mWorld.CreateBody(&bdef);    
+
     if ( res->mBody == NULL || res->Init(_params) == false )
     {
         delete res;
         return NULL;
     }
+
+    res->mBody->SetUserData(res);
+    res->mScene = this;
 
     mObjects.push_back(res);
 

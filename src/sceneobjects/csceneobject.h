@@ -8,6 +8,8 @@
 namespace drash
 {
 
+class CScene;
+
 class CSceneObjectParams
 {
 public:
@@ -48,6 +50,9 @@ public:
     const b2Body* GetBody(void) const;
     b2Body* GetBody(void);
 
+    CScene *GetScene();
+    const CScene *GetScene() const;
+
 protected:
     virtual bool Init( const ParamsT &_params );
     virtual void Release(void);
@@ -66,6 +71,8 @@ private:
     float mTargetAngle;
     float mAngleTargetSpeed;
     bool mTargetAngleSet;
+
+    CScene* mScene;
 };
 
 } // namespace drash
