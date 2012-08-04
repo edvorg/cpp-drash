@@ -14,8 +14,7 @@ public:
     {
 		ofstream out;
         out.open( "drash.log", ios_base::ate );
-		out.close();
-        LOG_INFO("\"drash.log\" started");
+        out.close();
 	}
 } starter;
 
