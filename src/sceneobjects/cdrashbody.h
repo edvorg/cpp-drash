@@ -7,17 +7,9 @@
 namespace drash
 {
 
-class CDrashBodyStrip
-{
-public:
-    std::vector<unsigned int> mIndices;
-};
-
 class CDrashBodyParams : public CSolidBodyParams
 {
 public:
-    std::vector<CDrashBodyStrip> mStrips;
-    std::vector<CVec2> mDrashVertices;
 };
 
 class CDrashBody : public CSolidBody
@@ -37,8 +29,10 @@ protected:
     virtual bool Init( const ParamsT &_params );
     virtual void Release(void);
 
-    std::vector<CDrashBodyStrip> mStrips;
-    std::vector<CVec2> mDrashVertices;
+    virtual void Step( double _dt );
+
+    bool mDestroy;
+    CVec2 mLastSpeed;
 };
 
 } // namespace drash
