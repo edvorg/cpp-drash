@@ -3,6 +3,7 @@
 
 #include <Box2D/Box2D.h>
 #include "../cvec2.h"
+#include "../ccontactlistener.h"
 
 namespace drash
 {
@@ -41,8 +42,11 @@ public:
     void SetAngle( float _angle );
     float GetAngle(void);
 
-    virtual void BeginContact(CSceneObject* _object , const b2Manifold *_manifold);
-    virtual void EndContact(CSceneObject* _object , const b2Manifold *_manifold);
+    virtual void BeginContact( const CContact &_contact );
+    virtual void EndContact( const CContact &_contact );
+
+    const b2Body* GetBody(void) const;
+    b2Body* GetBody(void);
 
 protected:
     virtual bool Init( const ParamsT &_params );
@@ -50,20 +54,18 @@ protected:
 
     virtual void Step( double _dt );
 
-    b2Body* GetBody(void);
-    const b2Body* GetBody(void) const;
-    bool mTargetSet;
-
 private:
+
+
+    b2Body* mBody;
 
     CVec2 mTarget;
     CVec2 mTargetSpeed;
-    bool mTargetAngleSet;
+    bool mTargetSet;
 
-    float mAngleTargetSpeed;
     float mTargetAngle;
-
-    b2Body* mBody;
+    float mAngleTargetSpeed;
+    bool mTargetAngleSet;
 };
 
 } // namespace drash

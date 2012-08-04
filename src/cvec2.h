@@ -2,6 +2,7 @@
 #define CVEC2_H
 
 #include <Box2D/Box2D.h>
+#include "clogger.h"
 
 namespace drash
 {
@@ -28,6 +29,8 @@ public:
 private:
     static const float mAccuracy;
 };
+
+CLogger& operator<<( CLogger& _logger, const b2Vec2 &_v );
 
 } // namespace drash
 

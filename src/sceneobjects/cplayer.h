@@ -3,6 +3,7 @@
 
 #include "csolidbody.h"
 #include "../cplayerevent.h"
+
 namespace drash{
 
 class CPlayerParams: public CSolidBodyParams{
@@ -19,8 +20,8 @@ public:
     friend class CScene;
 
     virtual void onEvent(const CPlayerEvent & _event);
-    virtual void BeginContact(CSceneObject *_object, const b2Manifold *_manifold);
-    virtual void EndContact(CSceneObject *_object, const b2Manifold *_manifold);
+    virtual void BeginContact( const CContact &_contact );
+    virtual void EndContact( const CContact &_contact );
 protected:
     CPlayer();
     virtual ~CPlayer();

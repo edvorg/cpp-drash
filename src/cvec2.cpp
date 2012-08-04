@@ -76,17 +76,25 @@ CVec2 &CVec2::operator *=(float _val)
 
 bool CVec2::operator ==(const CVec2 &_var)
 {
-    if (fabs(x - _var.x) < mAccuracy){
-        if (fabs(y - _var.y) < mAccuracy){
+    if (fabs(x - _var.x) < mAccuracy)
+    {
+        if (fabs(y - _var.y) < mAccuracy)
+        {
             return true;
         }
     }
     return false;
 }
 
-float CVec2::Dot(const b2Vec2 &_ver) const
+float CVec2::Dot( const b2Vec2 &_ver ) const
 {
     return x*_ver.x + y*_ver.y;
+}
+
+CLogger& operator<<( CLogger& _logger, const b2Vec2 &_v )
+{
+    _logger<<'('<<_v.x<<"; "<<_v.y<<')';
+    return _logger;
 }
 
 } // namespace drash

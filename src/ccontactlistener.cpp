@@ -29,8 +29,25 @@ void CContactListener::BeginContact(b2Contact * _contact)
         return;
     }
 
-    obj1->BeginContact(obj2, _contact->GetManifold());
-    obj2->BeginContact(obj1, _contact->GetManifold());
+    b2WorldManifold m;
+    _contact->GetWorldManifold(&m);
+
+    CContact c;
+    c.mPointCount = _contact->GetManifold()->pointCount;
+
+    for ( unsigned int i=0; i<c.mPointCount; i++ )
+    {
+        c.mPoints[i] = obj1->GetBody()->GetLocalPoint( m.points[i] );
+    }
+    c.obj = obj2;
+    obj1->BeginContact(c);
+
+    for ( unsigned int i=0; i<c.mPointCount; i++ )
+    {
+        c.mPoints[i] = obj2->GetBody()->GetLocalPoint( m.points[i] );
+    }
+    c.obj = obj1;
+    obj2->BeginContact(c);
 }
 
 void CContactListener::PreSolve(b2Contact *_contact, const b2Manifold *_oldManifold)
@@ -60,8 +77,25 @@ void CContactListener::EndContact(b2Contact *_contact)
         return;
     }
 
-    obj1->EndContact(obj2, _contact->GetManifold());
-    obj2->EndContact(obj1, _contact->GetManifold());
+    b2WorldManifold m;
+    _contact->GetWorldManifold(&m);
+
+    CContact c;
+    c.mPointCount = _contact->GetManifold()->pointCount;
+
+    for ( unsigned int i=0; i<c.mPointCount; i++ )
+    {
+        c.mPoints[i] = obj1->GetBody()->GetLocalPoint( m.points[i] );
+    }
+    c.obj = obj2;
+    obj1->EndContact(c);
+
+    for ( unsigned int i=0; i<c.mPointCount; i++ )
+    {
+        c.mPoints[i] = obj2->GetBody()->GetLocalPoint( m.points[i] );
+    }
+    c.obj = obj1;
+    obj2->EndContact(c);
 }
 
 }// namespace drash

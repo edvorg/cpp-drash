@@ -2,8 +2,20 @@
 #define CCONTACTLISTENER_H
 
 #include <Box2D/Box2D.h>
+#include "cvec2.h"
 
-namespace drash{
+namespace drash
+{
+
+class CSceneObject;
+
+class CContact
+{
+public:
+    CVec2 mPoints[b2_maxManifoldPoints];
+    unsigned int mPointCount;
+    CSceneObject *obj;
+};
 
 class CContactListener : public b2ContactListener
 {

@@ -4,6 +4,8 @@
 #include "graphics/cdebugrenderer.h"
 #include "ccontactlistener.h"
 #include "sceneobjects.h"
+#include "cplayerevent.h"
+
 #include <list>
 
 namespace drash

@@ -94,15 +94,15 @@ void CPlayer::onEvent(const CPlayerEvent &_event){
     }
 }
 
-void CPlayer::BeginContact(CSceneObject *_object, const b2Manifold *_manifold)
+void CPlayer::BeginContact(const CContact &_contact)
 {
-    CSolidBody::BeginContact(_object, _manifold);
+    CSolidBody::BeginContact(_contact);
     mJumpAllowed = true;
 }
 
-void CPlayer::EndContact(CSceneObject *_object, const b2Manifold *_manifold)
+void CPlayer::EndContact(const CContact &_contact)
 {
-    CSolidBody::BeginContact(_object, _manifold);
+    CSolidBody::BeginContact(_contact);
     mJumpAllowed = false;
 }
 

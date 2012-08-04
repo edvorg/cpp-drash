@@ -16,8 +16,9 @@ CSceneObject::CSceneObject(void):
     mTarget(0),
     mTargetSpeed(1),
     mTargetSet(false),
-    mTargetAngleSet(false),
-    mAngleTargetSpeed(1)
+    mTargetAngle(0),
+    mAngleTargetSpeed(1),
+    mTargetAngleSet(false)
 {
     mTargetSpeed = CVec2(0,0);
 }
@@ -91,11 +92,11 @@ float CSceneObject::GetAngle()
     return mBody->GetAngle();
 }
 
-void CSceneObject::BeginContact( CSceneObject *_object, const b2Manifold *_manifold )
+void CSceneObject::BeginContact( const CContact &_contact )
 {
 }
 
-void CSceneObject::EndContact( CSceneObject *_object, const b2Manifold *_manifold )
+void CSceneObject::EndContact( const CContact &_contact )
 {
 }
 
