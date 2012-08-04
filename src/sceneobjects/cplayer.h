@@ -10,6 +10,7 @@ class CPlayerParams: public CSolidBodyParams{
 public:
     float mSpeedJump;
     float mSpeedMoving;
+    CVec2 mPointShoot;
     CPlayerParams();
 };
 
