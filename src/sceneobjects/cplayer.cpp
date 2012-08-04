@@ -46,9 +46,9 @@ void CPlayer::Step(double _dt)
 void CPlayer::Jump()
 {
     MoveRight();
-    CVec2 v = mBody->GetLinearVelocity();
+    CVec2 v = GetBody()->GetLinearVelocity();
     v.y += 15;
-    mBody->SetLinearVelocity(v);
+    GetBody()->SetLinearVelocity(v);
 }
 
 void CPlayer::MoveRight()
@@ -56,7 +56,7 @@ void CPlayer::MoveRight()
     CVec2 force(15,0);
     ///mBody->ApplyForce(force,CVec2(0,0));
 
-    mBody->SetLinearVelocity(force);
+    GetBody()->SetLinearVelocity(force);
 }
 
 void CPlayer::MoveLeft()

@@ -142,7 +142,27 @@ void CApp::Run()
     params.mVerticesCount =4;
     params.mPos.Set(0,-50);
     params.mDynamic = false;    
-    mScene.CreateObject< CSolidBody>(params);//->SetTargetAngle(M_PI * 10);
+    mScene.CreateObject< CSolidBody>(params);
+
+    const unsigned int vc = 4;
+    const CVec2 v[vc] =
+    {
+        CVec2(-5.0f, 5.0f),
+        CVec2(-5.0f, -5.0f),
+        CVec2(5.0f, -5.0f),
+        CVec2(5.0f, 5.0f)
+    };
+
+    CDrashBodyParams p;
+    p.mVertices = v;
+    p.mVerticesCount = vc;
+    p.mRestitution = 0.2f;
+    p.mDrashVertices.push_back( CVec2( 2.5f, 2.5f ) );
+    p.mStrips.push_back( CDrashBodyStrip() );
+    p.mStrips.back().mIndices.push_back(0);
+    p.mStrips.back().mIndices.push_back(0);
+    p.mStrips.back().mIndices.push_back(2);
+    mScene.CreateObject<CDrashBody>(p);
 
     const unsigned int delta = 100;
     const unsigned int speed = 3;
@@ -151,16 +171,8 @@ void CApp::Run()
 
     mCamera->SetPosTargetSpeed( CVec2(speed) );
     mCamera->SetZoomTargetSpeed(zoomspeed);
+    mCamera->SetZoomTarget( 3.5f );
 
-//    CSolidBodyParams paramsPlayer;
-//    paramsPlayer.mMass = 50;
-//    ver[0].Set(10,0);
-//    ver[1].Set(0,0);
-//    ver[2].Set(0,10);
-//    ver[3].Set(10,10);
-//    paramsPlayer.mVertices = ver;
-//    paramsPlayer.mVerticesCount =4;
-    mScene.AddPlayer();
     bool movexr = false;
     bool movexl = false;
     bool moveyu = false;
@@ -285,9 +297,6 @@ void CApp::Update()
 
     mTimer.Tick();
     mScene.Step( mTimer.GetDeltaTime() );
-    CSolidBodyParams par;
-    par.mPos.Rand(-100,100);
-    //mScene.CreateObject< CSolidBody >(par);
 }
 
 void CApp::Render()

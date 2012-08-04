@@ -13,9 +13,9 @@ public:
     GnLogStarter()
     {
 		ofstream out;
-        out.open( "greng.log", ios_base::ate );
+        out.open( "drash.log", ios_base::ate );
 		out.close();
-        LOG_INFO("\"drash.log\" started. made by Edward Knyshov");
+        LOG_INFO("\"drash.log\" started");
 	}
 } starter;
 
