@@ -22,8 +22,8 @@ public:
     enum PlayerEvent{StartMoveLeft,StartMoveRight,EndMoveLeft,EndMoveRight ,jump,fire};
 
     virtual void onEvent(const PlayerEvent & _event);
-    virtual void BeginContact(CSceneObject *_object);
-    virtual void EndContact(CSceneObject *_object);
+    virtual void BeginContact(CSceneObject *_object, const b2Manifold *_manifold);
+    virtual void EndContact(CSceneObject *_object, const b2Manifold *_manifold);
 protected:
     CPlayer();
     virtual ~CPlayer();

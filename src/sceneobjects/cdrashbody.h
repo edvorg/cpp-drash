@@ -27,8 +27,8 @@ public:
 
     typedef CDrashBodyParams ParamsT;
 
-    virtual void BeginContact( CSceneObject* _object );
-    virtual void EndContact( CSceneObject* _object );
+    virtual void BeginContact( CSceneObject* _object, const b2Manifold *_manifold );
+    virtual void EndContact( CSceneObject* _object, const b2Manifold *_manifold );
 
 protected:
     CDrashBody();

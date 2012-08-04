@@ -91,11 +91,11 @@ float CSceneObject::GetAngle()
     return mBody->GetAngle();
 }
 
-void CSceneObject::BeginContact( CSceneObject *_object )
+void CSceneObject::BeginContact( CSceneObject *_object, const b2Manifold *_manifold )
 {
 }
 
-void CSceneObject::EndContact( CSceneObject *_object )
+void CSceneObject::EndContact( CSceneObject *_object, const b2Manifold *_manifold )
 {
 }
 

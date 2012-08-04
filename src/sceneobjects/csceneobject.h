@@ -41,8 +41,8 @@ public:
     void SetAngle( float _angle );
     float GetAngle(void);
 
-    virtual void BeginContact( CSceneObject* _object );
-    virtual void EndContact( CSceneObject* _object );
+    virtual void BeginContact(CSceneObject* _object , const b2Manifold *_manifold);
+    virtual void EndContact(CSceneObject* _object , const b2Manifold *_manifold);
 
 protected:
     virtual bool Init( const ParamsT &_params );

@@ -33,16 +33,16 @@ void CDrashBody::Release(void)
     CSolidBody::Release();
 }
 
-void CDrashBody::BeginContact(CSceneObject *_object)
+void CDrashBody::BeginContact(CSceneObject *_object, const b2Manifold *_manifold)
 {
-    CSolidBody::BeginContact(_object);
+    CSolidBody::BeginContact(_object, _manifold);
 
     LOG_INFO("begin");
 }
 
-void CDrashBody::EndContact(CSceneObject *_object)
+void CDrashBody::EndContact(CSceneObject *_object, const b2Manifold *_manifold)
 {
-    CSolidBody::EndContact(_object);
+    CSolidBody::EndContact(_object, _manifold);
 
     LOG_INFO("end");
 }

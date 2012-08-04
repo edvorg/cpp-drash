@@ -29,8 +29,8 @@ void CContactListener::BeginContact(b2Contact * _contact)
         return;
     }
 
-    obj1->BeginContact(obj2);
-    obj2->BeginContact(obj1);
+    obj1->BeginContact(obj2, _contact->GetManifold());
+    obj2->BeginContact(obj1, _contact->GetManifold());
 }
 
 void CContactListener::PreSolve(b2Contact *_contact, const b2Manifold *_oldManifold)
@@ -60,8 +60,8 @@ void CContactListener::EndContact(b2Contact *_contact)
         return;
     }
 
-    obj1->EndContact(obj2);
-    obj2->EndContact(obj1);
+    obj1->EndContact(obj2, _contact->GetManifold());
+    obj2->EndContact(obj1, _contact->GetManifold());
 }
 
 }// namespace drash
