@@ -25,6 +25,9 @@ public:
     void SetZoom( float _zoom );
     float GetZoom() const;
 
+    void SetZoomMax( float _max );
+    float GetZoomMax();
+
     void SetZoomTarget( float _target );
     void SetZoomTargetSpeed( float _speed );
     float GetZoomTarget(void);
@@ -39,6 +42,7 @@ protected:
 
 private:
     float mZoom;
+    float mZoomMax;
     float mZoomTarget;
     float mZoomTargetSpeed;
     bool mZoomTargetSet;

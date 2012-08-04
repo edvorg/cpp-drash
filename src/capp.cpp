@@ -97,6 +97,8 @@ bool CApp::Init( const CAppParams &_params )
         return false;
     }
 
+    mCamera->SetZoomMax(10);
+
     /////////////////////////
     // debug renderer init
 
@@ -142,38 +144,6 @@ void CApp::Run()
 {
     assert( mInitialized == true );
 
-    CVec2 ver[4];
-    ver[0].Set(-100,-10);
-    ver[1].Set(100,-10);
-    ver[2].Set(100,10);
-    ver[3].Set(-100,10);
-    CSolidBodyParams params;
-    params.mVertices = ver;
-    params.mVerticesCount =4;
-    params.mPos.Set(0,-50);
-    params.mDynamic = false;    
-    mScene.CreateObject< CSolidBody>(params);
-
-    const unsigned int vc = 4;
-    const CVec2 v[vc] =
-    {
-        CVec2(-5.0f, 5.0f),
-        CVec2(-5.0f, -5.0f),
-        CVec2(5.0f, -5.0f),
-        CVec2(5.0f, 5.0f)
-    };
-
-    CDrashBodyParams p;
-    p.mVertices = v;
-    p.mVerticesCount = vc;
-    p.mRestitution = 0.2f;
-    p.mDrashVertices.push_back( CVec2( 2.5f, 2.5f ) );
-    p.mStrips.push_back( CDrashBodyStrip() );
-    p.mStrips.back().mIndices.push_back(0);
-    p.mStrips.back().mIndices.push_back(0);
-    p.mStrips.back().mIndices.push_back(2);
-    //mScene.CreateObject<CDrashBody>(p);
-
     const unsigned int delta = 100;
     const unsigned int speed = 3;
     const float zoomdelta = 0.35f;
@@ -182,8 +152,6 @@ void CApp::Run()
     mCamera->SetPosTargetSpeed( CVec2(speed) );
     mCamera->SetZoomTargetSpeed(zoomspeed);
 
-    //mScene.AddPlayer(CPlayerParams());
-    mCamera->SetZoomTarget( 1 );
     bool movexr = false;
     bool movexl = false;
     bool moveyu = false;
@@ -339,6 +307,34 @@ void CApp::Render()
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     mScene.Draw();
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f);
+
+    float y = ( static_cast<float>( mCamera->GetZoom() - 1 ) / ( mCamera->GetZoomMax() - 1 ) ) * 1.7 - 0.85f;
+
+    glBegin(GL_LINES);
+    glColor3f(0,1,0);
+    glVertex2f( -0.85f, -0.9f );
+    glColor3f(0,1,0);
+    glVertex2f( -0.85f, 0.9f );
+    glColor3f(0,1,0);
+    glVertex2f( -0.95f, -0.9f );
+    glColor3f(0,1,0);
+    glVertex2f( -0.75f, -0.9f );
+    glColor3f(0,1,0);
+    glVertex2f( -0.95f, 0.9f );
+    glColor3f(0,1,0);
+    glVertex2f( -0.75f, 0.9f );
+
+    glColor3f(0,1,0);
+    glVertex2f( -0.9f, y );
+    glColor3f(0,1,0);
+    glVertex2f( -0.8f, y );
+    glEnd();
 
     SDL_GL_SwapBuffers();
 }
