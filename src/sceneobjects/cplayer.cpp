@@ -77,7 +77,7 @@ void CPlayer::MoveLeft()
     GetBody()->SetLinearVelocity(velocity);
 }
 
-void CPlayer::FireNow()
+void CPlayer::FireNow(const CVec2 &_fireDirect)
 {
 
 }

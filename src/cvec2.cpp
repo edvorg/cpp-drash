@@ -74,6 +74,20 @@ CVec2 &CVec2::operator *=(float _val)
     return (*this);
 }
 
+CVec2 &CVec2::operator +=(float _val)
+{
+    x += _val;
+    y += _val;
+    return (*this);
+}
+
+CVec2 &CVec2::operator +=(const b2Vec2 &_ver)
+{
+    x += _ver.x;
+    y += _ver.y;
+    return (*this);
+}
+
 bool CVec2::operator ==(const CVec2 &_var)
 {
     if (fabs(x - _var.x) < mAccuracy)

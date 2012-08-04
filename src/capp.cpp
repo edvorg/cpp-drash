@@ -12,6 +12,16 @@ using namespace std;
 namespace drash
 {
 
+CVec2 PointSDLToWorldPoint(unsigned int _x, unsigned int _y,
+                           float _zoom, const CVec2 & _posCamera,
+                           unsigned  int _height,unsigned int _width){
+    CVec2 res;
+    res.y = -(float)_y/_zoom + ((float)_height/_zoom)/2.0f;
+    res.x =  (-(float)_width/_zoom)/2.0f+ (float)_x/_zoom;
+    res += _posCamera;
+    return res;
+}
+
 void CAppParams::SetCommandLine( int _argc, char *_argv[] )
 {
     for(int i = 0 ; i < _argc ; i++){
@@ -173,7 +183,7 @@ void CApp::Run()
     mCamera->SetZoomTargetSpeed(zoomspeed);
 
     //mScene.AddPlayer(CPlayerParams());
-    mCamera->SetZoomTarget( 3.5f );
+    mCamera->SetZoomTarget( 1 );
     bool movexr = false;
     bool movexl = false;
     bool moveyu = false;
@@ -194,7 +204,13 @@ void CApp::Run()
             {
                 if ( event.button.button == SDL_BUTTON_LEFT )
                 {
-                    mTimer.SetPaused( !mTimer.IsPaused() );
+                    CVec2 pos;
+                    pos = PointSDLToWorldPoint(event.button.x,event.button.y,
+                                                  mCamera->GetZoom(),mCamera->GetPos(),
+                                                  mHeight,mWidth);
+                    mScene.OnPlayerEvent(CPlayerEvent(CPlayerEvent::fire,pos),0);
+
+
                 }
                 else if ( event.button.button == SDL_BUTTON_WHEELDOWN )
                 {
