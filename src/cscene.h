@@ -41,7 +41,7 @@ public:
     void SetDebugRenderer( CDebugRenderer *_renderer );
     void Draw(void);
 
-    void OnPlayerEvent(const CPlayer::PlayerEvent & _event, unsigned int _playerId);
+    void OnPlayerEvent(const CPlayerEvent & _event, unsigned int _playerId);
 
     void AddPlayer(const CPlayerParams & _params);
 protected:

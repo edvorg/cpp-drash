@@ -162,7 +162,7 @@ void CApp::Run()
     p.mStrips.back().mIndices.push_back(0);
     p.mStrips.back().mIndices.push_back(0);
     p.mStrips.back().mIndices.push_back(2);
-    mScene.CreateObject<CDrashBody>(p);
+    //mScene.CreateObject<CDrashBody>(p);
 
     const unsigned int delta = 100;
     const unsigned int speed = 3;
@@ -172,7 +172,7 @@ void CApp::Run()
     mCamera->SetPosTargetSpeed( CVec2(speed) );
     mCamera->SetZoomTargetSpeed(zoomspeed);
 
-
+    //mScene.AddPlayer(CPlayerParams());
     mCamera->SetZoomTarget( 3.5f );
     bool movexr = false;
     bool movexl = false;
@@ -233,13 +233,13 @@ void CApp::Run()
                     moveyd = true;
                 }
                 if (event.key.keysym.sym == SDLK_SPACE){
-                    mScene.OnPlayerEvent(CPlayer::jump,0);
+                    mScene.OnPlayerEvent(CPlayerEvent(CPlayerEvent::jump),0);
                 }
                 if ( event.key.keysym.sym == SDLK_a ){
-                    mScene.OnPlayerEvent(CPlayer::StartMoveLeft,0);
+                    mScene.OnPlayerEvent(CPlayerEvent(CPlayerEvent::StartMoveLeft),0);
                 }
                 if ( event.key.keysym.sym == SDLK_d ){
-                    mScene.OnPlayerEvent(CPlayer::StartMoveRight,0);
+                    mScene.OnPlayerEvent(CPlayerEvent(CPlayerEvent::StartMoveRight),0);
                 }
             }
             else if ( event.type == SDL_KEYUP )
@@ -261,13 +261,13 @@ void CApp::Run()
                     moveyd = false;
                 }
                 if (event.key.keysym.sym == SDLK_SPACE){
-                    mScene.OnPlayerEvent(CPlayer::jump,0);
+                    mScene.OnPlayerEvent(CPlayerEvent(CPlayerEvent::jump),0);
                 }
                 if ( event.key.keysym.sym == SDLK_a ){
-                    mScene.OnPlayerEvent(CPlayer::EndMoveLeft,0);
+                    mScene.OnPlayerEvent(CPlayerEvent(CPlayerEvent::EndMoveLeft),0);
                 }
                 if ( event.key.keysym.sym == SDLK_d ){
-                    mScene.OnPlayerEvent(CPlayer::EndMoveRight,0);
+                    mScene.OnPlayerEvent(CPlayerEvent(CPlayerEvent::EndMoveRight),0);
                 }
             }
         }

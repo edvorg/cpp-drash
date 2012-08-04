@@ -92,7 +92,7 @@ void CScene::Draw(void)
     mWorld.DrawDebugData();
 }
 
-void CScene::OnPlayerEvent(const CPlayer::PlayerEvent &_event, unsigned int _playerId)
+void CScene::OnPlayerEvent(const CPlayerEvent &_event, unsigned int _playerId)
 {
     if (_playerId >= mCountPlayers){
         LOG_ERR("CScene::OnPlayerEvent() : Player with id = " <<

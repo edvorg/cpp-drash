@@ -14,7 +14,8 @@ SOURCES += \
     ../src/canimatedparam.cpp \
     ../src/sceneobjects/cdrashbody.cpp \
     ../src/clist.cpp \
-    ../src/sceneobjects/cplayer.cpp
+    ../src/sceneobjects/cplayer.cpp \
+    ../src/cplayerevent.cpp
 
 
 CONFIG += console
@@ -40,7 +41,8 @@ HEADERS += \
     ../src/sceneobjects/cdrashbody.h \
     ../src/clist.h \
     ../src/sceneobjects/cplayer.h \
-    ../src/sceneobjects.h
+    ../src/sceneobjects.h \
+    ../src/cplayerevent.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG

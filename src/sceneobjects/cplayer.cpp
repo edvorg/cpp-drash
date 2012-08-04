@@ -77,15 +77,20 @@ void CPlayer::MoveLeft()
     GetBody()->SetLinearVelocity(velocity);
 }
 
+void CPlayer::FireNow()
+{
+
+}
+
 // TODO: release fire player
-void CPlayer::onEvent(const PlayerEvent &_event){
-    switch (_event){
-        case jump:Jump() ;break;
-        case StartMoveLeft: mMovingLeft = true; break;
-        case StartMoveRight: mMovingRight = true; break;
-        case EndMoveLeft: mMovingLeft = false; break;
-        case EndMoveRight: mMovingRight = false; break;
-        case fire: ;break;
+void CPlayer::onEvent(const CPlayerEvent &_event){
+    switch (_event.mType){
+        case CPlayerEvent::jump:Jump() ;break;
+        case CPlayerEvent::StartMoveLeft: mMovingLeft = true; break;
+        case CPlayerEvent::StartMoveRight: mMovingRight = true; break;
+        case CPlayerEvent::EndMoveLeft: mMovingLeft = false; break;
+        case CPlayerEvent::EndMoveRight: mMovingRight = false; break;
+        case CPlayerEvent::fire: ;break;
     }
 }
 

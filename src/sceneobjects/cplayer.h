@@ -2,7 +2,7 @@
 #define CPLAYER_H
 
 #include "csolidbody.h"
-
+#include "../cplayerevent.h"
 namespace drash{
 
 class CPlayerParams: public CSolidBodyParams{
@@ -18,10 +18,7 @@ public:
     typedef CPlayerParams ParamsT;
     friend class CScene;
 
-
-    enum PlayerEvent{StartMoveLeft,StartMoveRight,EndMoveLeft,EndMoveRight ,jump,fire};
-
-    virtual void onEvent(const PlayerEvent & _event);
+    virtual void onEvent(const CPlayerEvent & _event);
     virtual void BeginContact(CSceneObject *_object, const b2Manifold *_manifold);
     virtual void EndContact(CSceneObject *_object, const b2Manifold *_manifold);
 protected:
@@ -35,7 +32,7 @@ protected:
     void Jump();
     void MoveRight();
     void MoveLeft();
-
+    void FireNow();
     bool mJumpAllowed;
     bool mMovingLeft;
     bool mMovingRight;
