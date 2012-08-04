@@ -54,7 +54,7 @@ private:
     unsigned int mCountPlayers;
     static const int mVelocityIterations = 5;
     static const int mPositionIterations = 2;
-    static const int mPlayersMaxAmount = 4;
+    static const unsigned int mPlayersMaxAmount = 4;
     CContactListener mContactListener;
     ObjectsT mObjects;
     CPlayer* mPlayers[mPlayersMaxAmount];
@@ -67,7 +67,6 @@ T* CScene::CreateObject( const typename T::ParamsT& _params )
 
     b2BodyDef bdef;
     res->mBody = mWorld.CreateBody(&bdef);
-
     if ( res->mBody == NULL || res->Init(_params) == false )
     {
         delete res;

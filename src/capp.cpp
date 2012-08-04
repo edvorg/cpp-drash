@@ -144,7 +144,7 @@ void CApp::Run()
     params.mVerticesCount =4;
     params.mPos.Set(0,-50);
     params.mDynamic = false;    
-    mScene.CreateObject< CSolidBody>(params)->SetTargetAngle(M_PI * 10);
+    mScene.CreateObject< CSolidBody>(params);//->SetTargetAngle(M_PI * 10);
 
     const unsigned int delta = 100;
     const unsigned int speed = 3;
@@ -154,6 +154,15 @@ void CApp::Run()
     mCamera->SetPosTargetSpeed( CVec2(speed) );
     mCamera->SetZoomTargetSpeed(zoomspeed);
 
+//    CSolidBodyParams paramsPlayer;
+//    paramsPlayer.mMass = 50;
+//    ver[0].Set(10,0);
+//    ver[1].Set(0,0);
+//    ver[2].Set(0,10);
+//    ver[3].Set(10,10);
+//    paramsPlayer.mVertices = ver;
+//    paramsPlayer.mVerticesCount =4;
+    mScene.AddPlayer();
     bool movexr = false;
     bool movexl = false;
     bool moveyu = false;
@@ -211,6 +220,9 @@ void CApp::Run()
                 {
                     moveyu = false;
                     moveyd = true;
+                }
+                if (event.key.keysym.sym == SDLK_SPACE){
+                    mScene.OnPlayerEvent(CPlayer::jump,0);
                 }
             }
             else if ( event.type == SDL_KEYUP )
@@ -278,7 +290,7 @@ void CApp::Update()
 
     CSolidBodyParams par;
     par.mPos.Rand(-100,100);
-    mScene.CreateObject< CSolidBody >(par);
+    //mScene.CreateObject< CSolidBody >(par);
 }
 
 void CApp::Render()
