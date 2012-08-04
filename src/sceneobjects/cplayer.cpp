@@ -30,8 +30,8 @@ bool CPlayer::Init(const CPlayer::ParamsT &_params)
         return false;
     }
 
-    mBody->SetFixedRotation(true);
-    mBody->GetFixtureList()->SetFriction(10);
+    GetBody()->SetFixedRotation(true);
+    GetBody()->GetFixtureList()->SetFriction(10);
     mSpeedJump = _params.mSpeedJump;
     mSpeedMoving = _params.mSpeedMoving;
 
@@ -57,7 +57,7 @@ void CPlayer::Step(double _dt)
 void CPlayer::Jump()
 {
     if (mJumpAllowed){
-        CVec2 v = mBody->GetLinearVelocity();
+        CVec2 v = GetBody()->GetLinearVelocity();
         v.y = mSpeedJump;
         GetBody()->SetLinearVelocity(v);
     }
@@ -65,23 +65,15 @@ void CPlayer::Jump()
 
 void CPlayer::MoveRight()
 {
-    CVec2 velocity = mBody->GetLinearVelocity();
-    if (velocity.y > 0){
-        velocity.x = mSpeedMoving;
-    } else {
-        velocity.x = mSpeedMoving;
-    }
+    CVec2 velocity = GetBody()->GetLinearVelocity();
+    velocity.x = mSpeedMoving;
     GetBody()->SetLinearVelocity(velocity);
 }
 
 void CPlayer::MoveLeft()
 {
-    CVec2 velocity = mBody->GetLinearVelocity();
-    if (velocity.y > 0){
-        velocity.x = -mSpeedMoving;
-    } else {
-        velocity.x = -mSpeedMoving;
-    }
+    CVec2 velocity = GetBody()->GetLinearVelocity();
+    velocity.x = -mSpeedMoving;
     GetBody()->SetLinearVelocity(velocity);
 }
 

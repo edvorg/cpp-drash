@@ -2,6 +2,7 @@
 #define CDRASHBODY_H
 
 #include "csolidbody.h"
+#include <vector>
 
 namespace drash
 {
@@ -9,17 +10,14 @@ namespace drash
 class CDrashBodyStrip
 {
 public:
-    unsigned int mBegin;
-    unsigned int mEnd;
-    unsigned int *mVertices;
-    unsigned int mVerticesCount;
+    std::vector<unsigned int> mIndices;
 };
 
 class CDrashBodyParams : public CSolidBodyParams
 {
 public:
-    CDrashBodyStrip *mStrips;
-    unsigned int mStripsCount;
+    std::vector<CDrashBodyStrip> mStrips;
+    std::vector<CVec2> mDrashVertices;
 };
 
 class CDrashBody : public CSolidBody
@@ -38,6 +36,9 @@ protected:
 
     virtual bool Init( const ParamsT &_params );
     virtual void Release(void);
+
+    std::vector<CDrashBodyStrip> mStrips;
+    std::vector<CVec2> mDrashVertices;
 };
 
 } // namespace drash
