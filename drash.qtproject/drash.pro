@@ -8,7 +8,6 @@ SOURCES += \
     ../src/capp.cpp \
     ../src/ctimer.cpp \
     ../src/ccontactlistener.cpp \
-    ../src/sceneobjects/ccirclebody.cpp \
     ../src/sceneobjects/ccamera.cpp \
     ../src/sceneobjects/csolidbody.cpp \
     ../src/canimatedparam.cpp \
@@ -36,7 +35,6 @@ HEADERS += \
     ../src/ctimer.h \
     ../src/ccontactlistener.h\
     ../src/sceneobjects/ccamera.h \
-    ../src/sceneobjects/ccirclebody.h \
     ../src/sceneobjects/csolidbody.h \
     ../src/canimatedparam.h \
     ../src/sceneobjects/cdrashbody.h \

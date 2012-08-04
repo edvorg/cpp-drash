@@ -18,7 +18,8 @@ CSceneObject::CSceneObject(void):
     mTargetSet(false),
     mTargetAngle(0),
     mAngleTargetSpeed(1),
-    mTargetAngleSet(false)
+    mTargetAngleSet(false),
+    mScene(NULL)
 {
     mTargetSpeed = CVec2(0,0);
 }
@@ -164,6 +165,16 @@ const b2Body *CSceneObject::GetBody() const
     assert( mBody != NULL );
 
     return mBody;
+}
+
+CScene *CSceneObject::GetScene()
+{
+    return mScene;
+}
+
+const CScene *CSceneObject::GetScene() const
+{
+    return mScene;
 }
 
 } // namespace drash
