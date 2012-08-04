@@ -1,5 +1,6 @@
 #include "cplayer.h"
 #include "../clogger.h"
+#include "cbullet.h"
 namespace drash{
 
 const float CPlayer::mHeightJump = 10;
@@ -7,7 +8,8 @@ const float CPlayer::mHeightJump = 10;
 CPlayerParams::CPlayerParams():
     CSolidBodyParams(),
     mSpeedJump(10),
-    mSpeedMoving(20)
+    mSpeedMoving(20),
+    mPointShoot(10,0)
 {
 
 }
@@ -79,7 +81,20 @@ void CPlayer::MoveLeft()
 
 void CPlayer::FireNow(const CVec2 &_fireDirect)
 {
+    CBulletParams bulletParams;
 
+    bulletParams.mTarget = _fireDirect;
+    CVec2 posBody = GetBody()->GetWorldPoint(CVec2(0,0));
+    if (_fireDirect.x < posBody.x){
+        LOG_INFO("Hello");
+        bulletParams.mPos.Set(posBody.x - 30,posBody.y);
+    } else {
+        bulletParams.mPos.Set(posBody.x + 10, posBody.y);
+    }
+
+    bulletParams.mPos = GetBody()->GetWorldPoint(CVec2(1,3));
+
+    GetScene()->CreateObject< CBullet >( bulletParams );
 }
 
 // TODO: release fire player
@@ -90,7 +105,7 @@ void CPlayer::onEvent(const CPlayerEvent &_event){
         case CPlayerEvent::StartMoveRight: mMovingRight = true; break;
         case CPlayerEvent::EndMoveLeft: mMovingLeft = false; break;
         case CPlayerEvent::EndMoveRight: mMovingRight = false; break;
-        case CPlayerEvent::fire: ;break;
+        case CPlayerEvent::fire: FireNow(_event.GetPosMouse());break;
     }
 }
 
