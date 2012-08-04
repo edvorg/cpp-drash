@@ -33,7 +33,7 @@ protected:
     void Jump();
     void MoveRight();
     void MoveLeft();
-    void FireNow();
+    void FireNow(const CVec2 & _fireDirect);
     bool mJumpAllowed;
     bool mMovingLeft;
     bool mMovingRight;

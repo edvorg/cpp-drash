@@ -4,7 +4,10 @@
 #include "../cscene.h"
 namespace drash{
 
-
+class CBulletParams:public CSolidBodyParams{
+public:
+    CBulletParams();
+};
 
 class CBullet : public CSolidBody
 {
