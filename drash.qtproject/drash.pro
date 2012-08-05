@@ -15,7 +15,9 @@ SOURCES += \
     ../src/clist.cpp \
     ../src/sceneobjects/cplayer.cpp \
     ../src/cplayerevent.cpp \
-    ../src/sceneobjects/cbullet.cpp
+    ../src/sceneobjects/cbullet.cpp \
+    ../src/ctestapp.cpp \
+    ../src/ctestapp1.cpp
 
 
 CONFIG += console
@@ -42,7 +44,9 @@ HEADERS += \
     ../src/sceneobjects/cplayer.h \
     ../src/sceneobjects.h \
     ../src/cplayerevent.h \
-    ../src/sceneobjects/cbullet.h
+    ../src/sceneobjects/cbullet.h \
+    ../src/ctestapp.h \
+    ../src/ctestapp1.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG

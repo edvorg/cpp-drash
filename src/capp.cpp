@@ -124,6 +124,48 @@ bool CApp::Init( const CAppParams &_params )
         mScene.SetDebugRenderer(&mDebugRenderer);
     }
 
+    ////////////////////////
+    // try to start test app
+
+    for ( unsigned int i=0; i<_params.mArgv.size(); i++ )
+    {
+        if ( _params.mArgv[i] == "--test" )
+        {
+            if ( i+1 < _params.mArgv.size() )
+            {
+                mTestApp = CTestApp::StartApp( _params.mArgv[i+1].c_str() );
+
+                if ( mTestApp == NULL )
+                {
+                    LOG_ERR("CApp::Init(): test app "<<_params.mArgv[i+1].c_str()<<" not found");
+                    mScene.DestroyObject(mCamera);
+                    mCamera = NULL;
+                    mScene.Release();
+                    SDL_Quit();
+                    return false;
+                }
+
+                if ( mTestApp->Init( &mScene, mCamera ) == false )
+                {
+                    mScene.DestroyObject(mCamera);
+                    mCamera = NULL;
+                    mScene.Release();
+                    SDL_Quit();
+                    return false;
+                }
+            }
+            else
+            {
+                mScene.DestroyObject(mCamera);
+                mCamera = NULL;
+                mScene.Release();
+                SDL_Quit();
+                LOG_ERR("CApp::Init(): test app name expected");
+                return false;
+            }
+        }
+    }
+
     mInitialized = true;
     return true;
 }
@@ -134,6 +176,13 @@ void CApp::Release()
     {
         LOG_WARN( "CApp::Release(): app is not initialized" );
         return;
+    }
+
+    if ( mTestApp )
+    {
+        mTestApp->Release();
+        delete mTestApp;
+        mTestApp = NULL;
     }
 
     if ( mCamera != NULL )
@@ -313,6 +362,11 @@ void CApp::Update()
 
     mTimer.Tick();
     mScene.Step( mTimer.GetDeltaTime() );
+
+    if ( mTestApp )
+    {
+        mTestApp->Update();
+    }
 }
 
 void CApp::Render()
@@ -324,35 +378,12 @@ void CApp::Render()
 
     mScene.Draw();
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho( -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f );
-
-    float y = ( static_cast<float>( mCamera->GetZoom() - 1 ) / ( mCamera->GetZoomMax() - 1 ) ) * 1.7 - 0.85f;
-
-    glBegin(GL_LINES);
-    glColor3f( 0, 1, 0 );
-    glVertex2f( -0.85f, -0.9f );
-    glColor3f( 0, 1, 0 );
-    glVertex2f( -0.85f, 0.9f );
-    glColor3f( 0, 1, 0 );
-    glVertex2f( -0.95f, -0.9f );
-    glColor3f( 0, 1, 0 );
-    glVertex2f( -0.75f, -0.9f );
-    glColor3f( 0, 1, 0 );
-    glVertex2f( -0.95f, 0.9f );
-    glColor3f( 0, 1, 0 );
-    glVertex2f( -0.75f, 0.9f );
-
-    glColor3f( 0, 1, 0 );
-    glVertex2f( -0.9f, y );
-    glColor3f( 0, 1, 0 );
-    glVertex2f( -0.8f, y );
-    glEnd();
+    if ( mTestApp )
+    {
+        mTestApp->Render();
+    }
 
     SDL_GL_SwapBuffers();
 }
 
-}// namespace drash
+} // namespace drash

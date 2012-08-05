@@ -3,6 +3,7 @@
 
 #include "cscene.h"
 #include "ctimer.h"
+#include "ctestapp.h"
 
 #include <vector>
 #include <string>
@@ -14,7 +15,7 @@ class CAppParams
 {
 public:
     std::vector<std::string> mArgv;
-    void SetCommandLine(unsigned int _argc, char *_argv[] );
+    void SetCommandLine( unsigned int _argc, char *_argv[] );
     CAppParams();
 };
 
@@ -41,6 +42,7 @@ private:
     CTimer mTimer;
     CDebugRenderer mDebugRenderer;
     CCamera *mCamera;
+    CTestApp *mTestApp;
 };
 }
 #endif // CAPP_H
