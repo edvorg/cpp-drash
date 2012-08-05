@@ -8,25 +8,33 @@
 #include "graphics/cdebugrenderer.h"
 #include "cscene.h"
 #include <iostream>
+
 using namespace std;
+
 namespace drash
 {
 
-CVec2 PointSDLToWorldPoint(unsigned int _x, unsigned int _y,
-                           float _zoom, const CVec2 & _posCamera,
-                           unsigned  int _height,unsigned int _width){
+CVec2 PointSDLToWorldPoint( unsigned int _x,
+                            unsigned int _y,
+                            float _zoom,
+                            const CVec2 & _posCamera,
+                            unsigned  int _height,
+                            unsigned int _width )
+{
     CVec2 res;
-    res.y = -(float)_y/_zoom + ((float)_height/_zoom)/2.0f;
-    res.x =  (-(float)_width/_zoom)/2.0f+ (float)_x/_zoom;
+    res.y = - (float)_y / _zoom + ( (float)_height / _zoom ) / 2.0f;
+    res.x =  ( -(float)_width / _zoom ) / 2.0f + (float)_x / _zoom;
     res += _posCamera;
     return res;
 }
 
-void CAppParams::SetCommandLine( int _argc, char *_argv[] )
+void CAppParams::SetCommandLine( unsigned int _argc, char *_argv[] )
 {
-    for(int i = 0 ; i < _argc ; i++){
-        string buff(_argv[i]);
-        mArgv.push_back( buff );
+    mArgv.resize(_argc);
+
+    for( unsigned int i = 0 ; i < _argc ; i++ )
+    {
+        mArgv[i] = _argv[i];
     }
 }
 
@@ -173,12 +181,14 @@ void CApp::Run()
                 if ( event.button.button == SDL_BUTTON_LEFT )
                 {
                     CVec2 pos;
-                    pos = PointSDLToWorldPoint(event.button.x,event.button.y,
-                                                  mCamera->GetZoom(),mCamera->GetPos(),
-                                                  mHeight,mWidth);
-                    mScene.OnPlayerEvent(CPlayerEvent(CPlayerEvent::fire,pos),0);
+                    pos = PointSDLToWorldPoint( event.button.x,
+                                                event.button.y,
+                                                mCamera->GetZoom(),
+                                                mCamera->GetPos(),
+                                                mHeight,
+                                                mWidth);
 
-
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::fire, pos ), 0 );
                 }
                 else if ( event.button.button == SDL_BUTTON_WHEELDOWN )
                 {
@@ -216,14 +226,17 @@ void CApp::Run()
                     moveyu = false;
                     moveyd = true;
                 }
-                if (event.key.keysym.sym == SDLK_SPACE){
-                    mScene.OnPlayerEvent(CPlayerEvent(CPlayerEvent::jump),0);
+                else if (event.key.keysym.sym == SDLK_SPACE)
+                {
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::jump ), 0 );
                 }
-                if ( event.key.keysym.sym == SDLK_a ){
-                    mScene.OnPlayerEvent(CPlayerEvent(CPlayerEvent::StartMoveLeft),0);
+                else if ( event.key.keysym.sym == SDLK_a )
+                {
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::StartMoveLeft ), 0 );
                 }
-                if ( event.key.keysym.sym == SDLK_d ){
-                    mScene.OnPlayerEvent(CPlayerEvent(CPlayerEvent::StartMoveRight),0);
+                else if ( event.key.keysym.sym == SDLK_d )
+                {
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::StartMoveRight ), 0 );
                 }
             }
             else if ( event.type == SDL_KEYUP )
@@ -244,14 +257,17 @@ void CApp::Run()
                 {
                     moveyd = false;
                 }
-                if (event.key.keysym.sym == SDLK_SPACE){
-                    mScene.OnPlayerEvent(CPlayerEvent(CPlayerEvent::jump),0);
+                else if (event.key.keysym.sym == SDLK_SPACE)
+                {
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::jump ), 0 );
                 }
-                if ( event.key.keysym.sym == SDLK_a ){
-                    mScene.OnPlayerEvent(CPlayerEvent(CPlayerEvent::EndMoveLeft),0);
+                else if ( event.key.keysym.sym == SDLK_a )
+                {
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::EndMoveLeft ), 0 );
                 }
-                if ( event.key.keysym.sym == SDLK_d ){
-                    mScene.OnPlayerEvent(CPlayerEvent(CPlayerEvent::EndMoveRight),0);
+                else if ( event.key.keysym.sym == SDLK_d )
+                {
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::EndMoveRight ), 0 );
                 }
             }
         }
@@ -303,7 +319,7 @@ void CApp::Render()
 {
     assert( mInitialized == true );
 
-    glClearColor( 0.5f, 0.5f, 0.5f, 1.0f );
+    glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     mScene.Draw();
@@ -312,27 +328,27 @@ void CApp::Render()
     glLoadIdentity();
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f);
+    glOrtho( -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f );
 
     float y = ( static_cast<float>( mCamera->GetZoom() - 1 ) / ( mCamera->GetZoomMax() - 1 ) ) * 1.7 - 0.85f;
 
     glBegin(GL_LINES);
-    glColor3f(0,1,0);
+    glColor3f( 0, 1, 0 );
     glVertex2f( -0.85f, -0.9f );
-    glColor3f(0,1,0);
+    glColor3f( 0, 1, 0 );
     glVertex2f( -0.85f, 0.9f );
-    glColor3f(0,1,0);
+    glColor3f( 0, 1, 0 );
     glVertex2f( -0.95f, -0.9f );
-    glColor3f(0,1,0);
+    glColor3f( 0, 1, 0 );
     glVertex2f( -0.75f, -0.9f );
-    glColor3f(0,1,0);
+    glColor3f( 0, 1, 0 );
     glVertex2f( -0.95f, 0.9f );
-    glColor3f(0,1,0);
+    glColor3f( 0, 1, 0 );
     glVertex2f( -0.75f, 0.9f );
 
-    glColor3f(0,1,0);
+    glColor3f( 0, 1, 0 );
     glVertex2f( -0.9f, y );
-    glColor3f(0,1,0);
+    glColor3f( 0, 1, 0 );
     glVertex2f( -0.8f, y );
     glEnd();
 

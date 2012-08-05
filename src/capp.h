@@ -14,7 +14,7 @@ class CAppParams
 {
 public:
     std::vector<std::string> mArgv;
-    void SetCommandLine( int _argc,char *_argv[] );
+    void SetCommandLine(unsigned int _argc, char *_argv[] );
     CAppParams();
 };
 
