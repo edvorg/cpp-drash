@@ -47,7 +47,8 @@ CApp::CApp():
     mScene(),
     mTimer(),
     mDebugRenderer(),
-    mCamera(NULL)
+    mCamera(NULL),
+    mTestApp(NULL)
 {
 
 }
