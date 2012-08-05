@@ -17,7 +17,8 @@ SOURCES += \
     ../src/cplayerevent.cpp \
     ../src/sceneobjects/cbullet.cpp \
     ../src/ctestapp.cpp \
-    ../src/ctestapp1.cpp
+    ../src/ctestapp1.cpp \
+    ../src/ctestapp2.cpp
 
 
 CONFIG += console
@@ -46,7 +47,8 @@ HEADERS += \
     ../src/cplayerevent.h \
     ../src/sceneobjects/cbullet.h \
     ../src/ctestapp.h \
-    ../src/ctestapp1.h
+    ../src/ctestapp1.h \
+    ../src/ctestapp2.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG
