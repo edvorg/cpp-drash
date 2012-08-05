@@ -105,7 +105,7 @@ bool CApp::Init( const CAppParams &_params )
         return false;
     }
 
-    mCamera->SetZoomMax(10);
+    mCamera->SetZoomMax(100);
 
     /////////////////////////
     // debug renderer init
