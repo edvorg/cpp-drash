@@ -1,6 +1,9 @@
 #include "ctimer.h"
 #include <stdlib.h>
 #include <sys/time.h>
+#include <time.h>
+#include "clogger.h"
+#include <cassert>
 
 namespace drash
 {
@@ -47,19 +50,21 @@ bool CTimer::IsPaused() const
 
 double CTimer::GetFullTime() const
 {
-    return ( mCurrTime - mStartTime ) / 1000000.0;
+    return ( mCurrTime - mStartTime ) / 1000000000.0;
 }
 
 double CTimer::GetDeltaTime() const
 {
-    return ( mCurrTime - mPrevTime ) / 1000000.0;
+    return ( mCurrTime - mPrevTime ) / 1000000000.0;
 }
 
 void CTimer::Update()
 {
-    timeval t;
-    gettimeofday( &t, NULL );
-    mCurrTime = t.tv_sec * 1000000 + t.tv_usec;
+    timespec ts;
+    clock_gettime( CLOCK_REALTIME, &ts );
+    mCurrTime = ( ts.tv_sec * 1000000000 + ts.tv_nsec );
+
+    assert( mCurrTime >= mPrevTime );
 }
 
 } // namespace drash
