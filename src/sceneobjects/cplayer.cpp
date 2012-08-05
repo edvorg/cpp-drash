@@ -9,7 +9,7 @@ CPlayerParams::CPlayerParams():
     CSolidBodyParams(),
     mSpeedJump(10),
     mSpeedMoving(20),
-    mPointShoot(10,0)
+    mPointShoot(3,10)
 {
 
 }
@@ -36,7 +36,7 @@ bool CPlayer::Init(const CPlayer::ParamsT &_params)
     GetBody()->GetFixtureList()->SetFriction(10);
     mSpeedJump = _params.mSpeedJump;
     mSpeedMoving = _params.mSpeedMoving;
-
+    mPointShoot = _params.mPointShoot;
     return true;
 }
 
@@ -85,14 +85,12 @@ void CPlayer::FireNow(const CVec2 &_fireDirect)
 
     bulletParams.mTarget = _fireDirect;
     CVec2 posBody = GetBody()->GetWorldPoint(CVec2(0,0));
-    if (_fireDirect.x < posBody.x){
-        LOG_INFO("Hello");
-        bulletParams.mPos.Set(posBody.x - 30,posBody.y);
+    if (_fireDirect.x > posBody.x){
+        bulletParams.mPos = GetBody()->GetWorldPoint(mPointShoot);
     } else {
-        bulletParams.mPos.Set(posBody.x + 10, posBody.y);
+        bulletParams.mPos = GetBody()->GetWorldPoint(CVec2(-mPointShoot.
+                                                           x,mPointShoot.y));
     }
-
-    bulletParams.mPos = GetBody()->GetWorldPoint(CVec2(1,3));
 
     GetScene()->CreateObject< CBullet >( bulletParams );
 }

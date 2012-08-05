@@ -40,6 +40,8 @@ protected:
     bool mMovingRight;
     float mSpeedJump;
     float mSpeedMoving;
+    CVec2 mPointShoot;
+
 
     static const float mHeightJump;
 };
