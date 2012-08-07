@@ -34,6 +34,11 @@ bool CPlayer::Init(const CPlayer::ParamsT &_params)
 
     GetBody()->SetFixedRotation(true);
     GetBody()->GetFixtureList()->SetFriction(10);
+
+    b2Filter filter;
+    filter.maskBits = 0xffff ^ 0x0010;
+    GetBody()->GetFixtureList()->SetFilterData(filter);
+
     mSpeedJump = _params.mSpeedJump;
     mSpeedMoving = _params.mSpeedMoving;
     mPointShoot = _params.mPointShoot;

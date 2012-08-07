@@ -16,6 +16,10 @@ bool CBullet::Init(const ParamsT &_params)
 
     GetBody()->SetBullet(false);
 
+    b2Filter filter;
+    filter.categoryBits = 0x0010;
+    GetBody()->GetFixtureList()->SetFilterData(filter);
+
     CVec2 v = _params.mTarget;
     v.x -= _params.mPos.x;
     v.y -= _params.mPos.y;
