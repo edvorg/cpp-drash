@@ -7,7 +7,8 @@ namespace drash
 CScene::CScene(void):
     mWorld( b2Vec2( 0, 0 ) ),
     mInitialized(false),
-    mCountPlayers(0)
+    mCountPlayers(0),
+    mCountObjects(0)
 {
 }
 
@@ -45,15 +46,15 @@ void CScene::Release(void)
         return;
     }
 
-    if ( mObjects.size() )
+    if (mCountObjects != 0)
     {
         LOG_WARN( "CScene::Release(): "<<
-                  (unsigned int)mObjects.size()<<
+                  mCountObjects<<
                   " object(s) haven't been destroyed. Autorelease" );
 
-        while ( mObjects.size() )
+        while(mCountObjects != 0)
         {
-            DestroyObject< CSceneObject >( *mObjects.begin() );
+            DestroyObject< CSceneObject >( mObjects[0] );
         }
     }
 
@@ -70,10 +71,12 @@ void CScene::Step( double _dt )
 
     mWorld.Step( _dt, mVelocityIterations, mPositionIterations );
 
-    for ( ObjectsT::iterator i=mObjects.begin(), i_e=mObjects.end(); i!=i_e; i++ )
-    {
-        (*i)->Step(_dt);
+    for (unsigned int i = 0 ; i < mCountObjects ; i++){
+        mObjects[i]->Step(_dt);
     }
+    // TODO: delete objects, which dead
+
+
 }
 
 void CScene::SetDebugRenderer( CDebugRenderer *_renderer )
@@ -100,7 +103,6 @@ void CScene::OnPlayerEvent(const CPlayerEvent &_event, unsigned int _playerId)
 
         return;
     }
-    //LOG_INFO("sdfdf");
     mPlayers[_playerId]->onEvent(_event);
 }
 

@@ -55,14 +55,24 @@ private:
     static const int mVelocityIterations = 5;
     static const int mPositionIterations = 2;
     static const unsigned int mPlayersMaxAmount = 4;
+    static const unsigned int mObjectsMaxAmount = 5000;
+
+    unsigned int mCountObjects;
     CContactListener mContactListener;
-    ObjectsT mObjects;
+
+//    ObjectsT mObjects;
     CPlayer* mPlayers[mPlayersMaxAmount];
+    CSceneObject* mObjects[mObjectsMaxAmount];
 };
 
 template < typename T >
 T* CScene::CreateObject( const typename T::ParamsT& _params )
 {
+    if (mCountObjects == mObjectsMaxAmount){
+        LOG_ERR("CScene::CreateObject() : Achieved maximum Amount of Objects in scene");
+        return NULL;
+    }
+
     T* res = new T();
 
     b2BodyDef bdef;
@@ -77,24 +87,25 @@ T* CScene::CreateObject( const typename T::ParamsT& _params )
     res->mBody->SetUserData(res);
     res->mScene = this;
 
-    mObjects.push_back(res);
-
+    mObjects[mCountObjects] = res;
+    mCountObjects++;
     return res;
 }
 
 template < typename T >
 void CScene::DestroyObject( T* _obj )
 {
-    for ( ObjectsT::iterator i=mObjects.begin(), i_e=mObjects.end(); i!=i_e; i++ )
+    for (unsigned int i = 0 ; i < mCountObjects ; i++)
     {
-        if ( (*i) == _obj )
+        if (mObjects[i] == _obj)
         {
             // ok, it's our object
 
             b2Body* body = _obj->mBody;
             body->SetUserData(NULL);
 
-            mObjects.erase(i);
+            mObjects[i] = (mCountObjects > 1) ? mObjects[mCountObjects-1] : NULL;
+            mCountObjects--;
             _obj->Release();
             delete _obj;
 
@@ -113,7 +124,6 @@ void CScene::DestroyObject( T* _obj )
                     break;
                 }
             }
-
             break;
         }
     }
