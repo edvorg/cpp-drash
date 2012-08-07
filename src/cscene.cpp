@@ -71,11 +71,15 @@ void CScene::Step( double _dt )
 
     mWorld.Step( _dt, mVelocityIterations, mPositionIterations );
 
-    for (unsigned int i = 0 ; i < mCountObjects ; i++){
-        mObjects[i]->Step(_dt);
+    for (unsigned int i = 0 ; i < mCountObjects ; ){
+        //mObjects[i]->Step(_dt);
+        if (mObjects[i]->IsDead()){
+            DestroyObject<CSceneObject>(mObjects[i]);
+        }else{
+            mObjects[i]->Step(_dt);
+            i++;
+        }
     }
-    // TODO: delete objects, which dead
-
 
 }
 

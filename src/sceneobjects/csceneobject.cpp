@@ -19,7 +19,8 @@ CSceneObject::CSceneObject(void):
     mTargetAngle(0),
     mAngleTargetSpeed(1),
     mTargetAngleSet(false),
-    mScene(NULL)
+    mScene(NULL),
+    mDead(false)
 {
     mTargetSpeed = CVec2(0,0);
 }
@@ -148,7 +149,7 @@ void CSceneObject::Step( double _dt )
     if ( mTargetAngleSet == true ){
         float curAngle = ((mTargetAngle - GetAngle()) * mAngleTargetSpeed * _dt) + GetAngle();
         this->SetAngle(curAngle);
-        if ( fabs(curAngle - mTargetAngle) < 0.01 )
+        if ( fabs(curAngle - mTargetAngle) < 0.001 )
             RemoveTargetAngle();
     }
 }
@@ -175,6 +176,16 @@ CScene *CSceneObject::GetScene()
 const CScene *CSceneObject::GetScene() const
 {
     return mScene;
+}
+
+void CSceneObject::SetDead(bool _dead)
+{
+    mDead = _dead;
+}
+
+bool CSceneObject::IsDead() const
+{
+    return mDead;
 }
 
 } // namespace drash

@@ -53,6 +53,9 @@ public:
     CScene *GetScene();
     const CScene *GetScene() const;
 
+    void SetDead(bool _dead);
+    bool IsDead()const;
+
 protected:
     virtual bool Init( const ParamsT &_params );
     virtual void Release(void);
@@ -73,6 +76,8 @@ private:
     bool mTargetAngleSet;
 
     CScene* mScene;
+
+    bool mDead;
 };
 
 } // namespace drash
