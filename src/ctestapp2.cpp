@@ -24,8 +24,8 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
     const unsigned int vc = 4;
     const CVec2 v[vc] =
     {
-        CVec2( -100.0f, 5.0f ),
-        CVec2( -100.0f, -5.0f ),
+        CVec2( -150.0f, 5.0f ),
+        CVec2( -150.0f, -5.0f ),
         CVec2( 100.0f, -5.0f ),
         CVec2( 100.0f, 5.0f )
     };
@@ -34,7 +34,7 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
     p.mVerticesCount = vc;
     p.mPos.y = -25;
     p.mDynamic = false;
-    GetScene()->CreateObject<CSolidBody>(p);
+    GetScene()->CreateObject<CSolidBody>(p)->SetTargetAngle(M_PI / 6.0f);
     CPlayerParams player;
     const CVec2 pV[4] = {
         CVec2( -2, 0 ),
@@ -46,6 +46,17 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
     player.mVertices = pV;
     player.mVerticesCount = 4;
     GetScene()->AddPlayer(player);
+    const CVec2 tV[4] = {
+        CVec2( -10, 0 ),
+        CVec2( 10, 0 ),
+        CVec2( 10, 10 ),
+        CVec2( -10, 10 )
+    };
+    CSolidBodyParams targetForFire;
+    targetForFire.mVertices = tV;
+    targetForFire.mVerticesCount = 4;
+    targetForFire.mFriction = 5;
+    GetScene()->CreateObject<CSolidBody>(targetForFire);
     this->GetCamera()->SetZoomTarget(3.4f);
     return true;
 }
