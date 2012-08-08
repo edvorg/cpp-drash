@@ -98,6 +98,14 @@ void CSceneObject::BeginContact( const CContact &_contact )
 {
 }
 
+void CSceneObject::PreSolve(const CContact &_contact)
+{
+}
+
+void CSceneObject::PostSolve(const CContact &_contact)
+{
+}
+
 void CSceneObject::EndContact( const CContact &_contact )
 {
 }

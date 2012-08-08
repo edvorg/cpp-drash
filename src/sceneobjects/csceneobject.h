@@ -45,6 +45,8 @@ public:
     float GetAngle(void);
 
     virtual void BeginContact( const CContact &_contact );
+    virtual void PreSolve(const CContact &_contact);
+    virtual void PostSolve(const CContact &_contact);
     virtual void EndContact( const CContact &_contact );
 
     const b2Body* GetBody(void) const;
