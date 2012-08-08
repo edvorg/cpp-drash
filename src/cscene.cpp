@@ -1,6 +1,8 @@
 #include "cscene.h"
 #include "clogger.h"
 
+// WARNING: System of Booms not tested
+
 namespace drash
 {
 
@@ -72,7 +74,6 @@ void CScene::Step( double _dt )
     mWorld.Step( _dt, mVelocityIterations, mPositionIterations );
 
     for (unsigned int i = 0 ; i < mCountObjects ; ){
-        //mObjects[i]->Step(_dt);
         if (mObjects[i]->IsDead()){
             DestroyObject<CSceneObject>(mObjects[i]);
         }else{
@@ -80,7 +81,7 @@ void CScene::Step( double _dt )
             i++;
         }
     }
-
+    BoomNow();
 }
 
 void CScene::SetDebugRenderer( CDebugRenderer *_renderer )
@@ -119,6 +120,21 @@ void CScene::AddPlayer(const CPlayerParams &_params)
 
     mPlayers[mCountPlayers++] = CreateObject<CPlayer>(_params);
 
+}
+
+void CScene::AddRequestBoom(const CBoomParams _boom)
+{
+    mListBooms.push_back(_boom);
+}
+
+void CScene::BoomNow()
+{
+    for (int i = 0 ; i < mCountObjects ; i++){
+        for (auto it = mListBooms.begin() ; it != mListBooms.end() ; it++){
+            mObjects[i]->Boom(*it);
+        }
+    }
+    mListBooms.clear();
 }
 
 } // namespace drash

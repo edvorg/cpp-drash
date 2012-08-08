@@ -5,9 +5,9 @@
 #include "ccontactlistener.h"
 #include "sceneobjects.h"
 #include "cplayerevent.h"
-
+#include "cboomparams.h"
+#include "clist.h"
 #include <list>
-
 namespace drash
 {
 
@@ -46,10 +46,15 @@ public:
     void OnPlayerEvent(const CPlayerEvent & _event, unsigned int _playerId);
 
     void AddPlayer(const CPlayerParams & _params);
+
+    void AddRequestBoom(const CBoomParams  _boom);
+
+    void BoomNow();
 protected:
 
 private:
     b2World mWorld;
+    std::list<CBoomParams> mListBooms;
     bool mInitialized;
     unsigned int mCountPlayers;
     static const int mVelocityIterations = 5;

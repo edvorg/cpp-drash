@@ -28,6 +28,8 @@ unix|win32: CONFIG += link_pkgconfig
 unix|win32: PKGCONFIG += sdl gl
 unix|win32: LIBS += -lBox2D -lrt
 
+QMAKE_CXXFLAGS += -std=c++11
+
 HEADERS += \
     ../src/graphics/cdebugrenderer.h \
     ../src/sceneobjects/csceneobject.h \
@@ -48,7 +50,8 @@ HEADERS += \
     ../src/sceneobjects/cbullet.h \
     ../src/ctestapp.h \
     ../src/ctestapp1.h \
-    ../src/ctestapp2.h
+    ../src/ctestapp2.h \
+    ../src/cboomparams.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG

@@ -110,6 +110,10 @@ void CSceneObject::EndContact( const CContact &_contact )
 {
 }
 
+void CSceneObject::Boom(const CBoomParams &_boom)
+{
+}
+
 bool CSceneObject::Init( const CSceneObject::ParamsT &_params )
 {
     if ( mBody == NULL )

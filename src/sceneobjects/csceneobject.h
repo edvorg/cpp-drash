@@ -4,6 +4,7 @@
 #include <Box2D/Box2D.h>
 #include "../cvec2.h"
 #include "../ccontactlistener.h"
+#include "../cboomparams.h"
 
 namespace drash
 {
@@ -49,6 +50,7 @@ public:
     virtual void PostSolve(const CContact &_contact);
     virtual void EndContact( const CContact &_contact );
 
+    virtual void Boom(const CBoomParams &_boom);
     const b2Body* GetBody(void) const;
     b2Body* GetBody(void);
 
