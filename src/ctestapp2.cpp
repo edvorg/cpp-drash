@@ -24,17 +24,17 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
     const unsigned int vc = 4;
     const CVec2 v[vc] =
     {
-        CVec2( -150.0f, 5.0f ),
-        CVec2( -150.0f, -5.0f ),
-        CVec2( 100.0f, -5.0f ),
-        CVec2( 100.0f, 5.0f )
+        CVec2( -300.0f, 5.0f ),
+        CVec2( -300.0f, -5.0f ),
+        CVec2( 300.0f, -5.0f ),
+        CVec2( 300.0f, 5.0f )
     };
     CSolidBodyParams p;
     p.mVertices = v;
     p.mVerticesCount = vc;
     p.mPos.y = -25;
     p.mDynamic = false;
-    GetScene()->CreateObject<CSolidBody>(p)->SetTargetAngle(M_PI / 6.0f);
+    GetScene()->CreateObject<CSolidBody>(p);//->SetTargetAngle(M_PI / 6.0f);
     CPlayerParams player;
     const CVec2 pV[4] = {
         CVec2( -2, 0 ),
@@ -46,6 +46,7 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
     player.mVertices = pV;
     player.mVerticesCount = 4;
     GetScene()->AddPlayer(player);
+
     const CVec2 tV[4] = {
         CVec2( -10, 0 ),
         CVec2( 10, 0 ),
@@ -56,7 +57,14 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
     targetForFire.mVertices = tV;
     targetForFire.mVerticesCount = 4;
     targetForFire.mFriction = 5;
-    GetScene()->CreateObject<CSolidBody>(targetForFire);
+    targetForFire.mMass = 50;
+
+    targetForFire.mPos.Set(-20,0);
+    for (int i = 0 ; i < 100 ; i++){
+        GetScene()->CreateObject<CSolidBody>(targetForFire);
+        targetForFire.mPos.Set(-20,i+10);
+    }
+
     this->GetCamera()->SetZoomTarget(3.4f);
     return true;
 }
@@ -69,6 +77,8 @@ void CTestApp2::Release()
 void CTestApp2::Update()
 {
     CTestApp::Update();
+
+
 
 
 

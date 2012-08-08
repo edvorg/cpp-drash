@@ -65,4 +65,17 @@ void CSolidBody::Release(void)
     CSceneObject::Release();
 }
 
+void CSolidBody::Boom(const CBoomParams &_boom)
+{
+    CVec2 pos = GetPos();
+    CVec2 force(pos.x- _boom.mPos.x, pos.y - _boom.mPos.y);
+    float len = force.Length();
+    force.Normalize();
+    force *= _boom.mStregth * 1000;
+    force.x /= len;
+    force.y /= len;
+    GetBody()->ApplyForce(force,GetPos());
+
+}
+
 } // namespace drash
