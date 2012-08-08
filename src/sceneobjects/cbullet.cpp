@@ -29,8 +29,13 @@ bool CBullet::Init(const ParamsT &_params)
 }
 
 
-void CBullet::BeginContact(const drash::CContact &_contact)
+void CBullet::BeginContact(const CContact &_contact)
 {
+}
+
+void CBullet::PostSolve(const CContact &_contact)
+{
+    this->SetDead(true);
 
 }
 

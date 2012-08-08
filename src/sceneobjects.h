@@ -6,5 +6,5 @@
 #include "sceneobjects/cplayer.h"
 #include "sceneobjects/csceneobject.h"
 #include "sceneobjects/csolidbody.h"
-
+#include "sceneobjects/cbullet.h"
 #endif // SCENEOBJECTS_H

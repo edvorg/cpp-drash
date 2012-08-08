@@ -21,6 +21,8 @@ public:
     CBullet();
     virtual bool Init(const ParamsT &_params);
     virtual void BeginContact(const CContact &_contact);
+
+    virtual void PostSolve(const CContact &_contact);
 };
 
 }// namespace drash
