@@ -2,20 +2,20 @@
 
 namespace drash{
 
-CPlayerEvent::CPlayerEvent(const PlayerAction &_action,const CVec2 _posMouse):
+CPlayerEvent::CPlayerEvent(const PlayerAction &_action, const CVec2 _mousePos):
     mType(_action),
-    mPosMouse(_posMouse)
+    mMousePos(_mousePos)
 {
 }
 
-void CPlayerEvent::SetPosMouse(const CVec2 &_pos)
+void CPlayerEvent::SetMousePos(const CVec2 &_pos)
 {
-    mPosMouse = _pos;
+    mMousePos = _pos;
 }
 
-CVec2 CPlayerEvent::GetPosMouse() const
+CVec2 CPlayerEvent::GetMousePos() const
 {
-    return mPosMouse;
+    return mMousePos;
 }
 
 

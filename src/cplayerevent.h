@@ -15,14 +15,14 @@ public:
                       jump,
                       fire
                      };
-    explicit CPlayerEvent( const PlayerAction & _action , const CVec2 _posMouse = CVec2());
+    explicit CPlayerEvent( const PlayerAction & _action , const CVec2 _mousePos = CVec2());
 
 
     PlayerAction mType;
-    void SetPosMouse( const CVec2 &_pos );
-    CVec2 GetPosMouse()const;
+    void SetMousePos( const CVec2 &_pos );
+    CVec2 GetMousePos()const;
 private:
-    CVec2 mPosMouse;
+    CVec2 mMousePos;
 };
 
 
