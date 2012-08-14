@@ -1,6 +1,8 @@
 #include "cplayer.h"
 #include "../clogger.h"
 #include "cbullet.h"
+#include "cgrenade.h"
+
 namespace drash{
 
 const float CPlayer::mHeightJump = 10;
@@ -86,7 +88,7 @@ void CPlayer::MoveLeft()
 
 void CPlayer::FireNow(const CVec2 &_fireDirect)
 {
-    CBulletParams bulletParams;
+    CGrenadeParams bulletParams;
 
     bulletParams.mTarget = _fireDirect;
     CVec2 posBody = GetBody()->GetWorldPoint(CVec2(0,0));
@@ -96,8 +98,8 @@ void CPlayer::FireNow(const CVec2 &_fireDirect)
         bulletParams.mPos = GetBody()->GetWorldPoint(CVec2(-mPointShoot.
                                                            x,mPointShoot.y));
     }
-
-    GetScene()->CreateObject< CBullet >( bulletParams );
+    bulletParams.mBoomTime = 10;
+    GetScene()->CreateObject< CGrenade >( bulletParams );
 }
 
 void CPlayer::onEvent(const CPlayerEvent &_event){

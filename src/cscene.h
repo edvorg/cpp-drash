@@ -6,8 +6,8 @@
 #include "sceneobjects.h"
 #include "cplayerevent.h"
 #include "cboomparams.h"
-#include "clist.h"
 #include <list>
+
 namespace drash
 {
 

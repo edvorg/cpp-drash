@@ -37,6 +37,6 @@ protected:
     virtual ~CSolidBody(void);
 };
 
-} // namespace drash
+}// namespace drash
 
 #endif // COBJECTRECTANGLE_H

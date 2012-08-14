@@ -127,7 +127,7 @@ void CScene::AddRequestBoom(const CBoomParams _boom)
 
 void CScene::BoomNow()
 {
-    for (int i = 0 ; i < mCountObjects ; i++){
+    for (unsigned int i = 0 ; i < mCountObjects ; i++){
         for (auto it = mListBooms.begin() ; it != mListBooms.end() ; it++){
             mObjects[i]->Boom(*it);
         }
