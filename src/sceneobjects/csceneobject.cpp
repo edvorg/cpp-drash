@@ -13,7 +13,7 @@ CSceneObjectParams::CSceneObjectParams():
 
 CSceneObject::CSceneObject(void):
     mBody(NULL),
-    mTarget(0),
+    mTargetPos(0),
     mTargetSpeed(1),
     mTargetSet(false),
     mTargetAngle(0),
@@ -27,6 +27,7 @@ CSceneObject::CSceneObject(void):
 
 CSceneObject::~CSceneObject(void)
 {
+    Release();
 }
 
 void CSceneObject::SetPos( const CVec2 &_pos )
@@ -43,7 +44,7 @@ const CVec2 CSceneObject::GetPos() const
 
 void CSceneObject::SetPosTarget( const CVec2 &_target )
 {
-    mTarget = _target;
+    mTargetPos = _target;
     mTargetSet = true;
 }
 
@@ -54,7 +55,7 @@ void CSceneObject::SetPosTargetSpeed( const CVec2 &_speed )
 
 const CVec2 &CSceneObject::GetPosTarget() const
 {
-    return mTarget;
+    return mTargetPos;
 }
 
 const CVec2 &CSceneObject::GetPosTargetSpeed() const
@@ -67,7 +68,7 @@ void CSceneObject::RemovePosTarget()
     mTargetSet = false;
 }
 
-void CSceneObject::SetTargetAngle(const float _angle)
+void CSceneObject::SetAngleTarget(const float _angle)
 {
     mTargetAngle = _angle;
     mTargetAngleSet = true;
@@ -146,7 +147,7 @@ void CSceneObject::Step( double _dt )
 {
     if ( mTargetSet == true )
     {
-        CVec2 dir = mTarget;
+        CVec2 dir = mTargetPos;
         dir -= GetPos();
         dir.x *= mTargetSpeed.x;
         dir.y *= mTargetSpeed.y;
@@ -154,7 +155,7 @@ void CSceneObject::Step( double _dt )
         dir += GetPos();
 
         GetBody()->SetTransform( dir, GetAngle() );
-        if (mTarget == GetPos()){
+        if (mTargetPos == GetPos()){
             mTargetSet = false;
         }
     }

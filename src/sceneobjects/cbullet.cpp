@@ -37,17 +37,13 @@ void CBullet::PostSolve(const CContact &_contact)
 {
     this->SetDead(true);
     CBoomParams boom;
-//    if (_contact.mPointCount == 2){
-//        boom.mPos.Set((_contact.mPoints[0].x + _contact.mPoints[1].x) /2,
-//                      (_contact.mPoints[0].y + _contact.mPoints[1].y) /2);
-//    }else{
-//        boom.mPos = _contact.mPoints[0];
-//    }
-
     boom.mPos = GetPos();
-    boom.mStregth = 5000;
-    //LOG_INFO(boom.mPos.x << " " << boom.mPos.y);
+    boom.mStregth = 50000;
     GetScene()->AddRequestBoom(boom);
+}
+
+void CBullet::Boom(const CBoomParams &_boom)
+{
 }
 
 CBulletParams::CBulletParams():

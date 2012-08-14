@@ -57,12 +57,12 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
     targetForFire.mVertices = tV;
     targetForFire.mVerticesCount = 4;
     targetForFire.mFriction = 5;
-    targetForFire.mMass = 50;
+    targetForFire.mMass = 150;
 
     targetForFire.mPos.Set(-20,0);
-    for (int i = 0 ; i < 100 ; i++){
+    for (int i = 0 ; i < 10 ; i++){
         GetScene()->CreateObject<CSolidBody>(targetForFire);
-        targetForFire.mPos.Set(-20,i+10);
+        targetForFire.mPos.Set(-20,i*10);
     }
 
     this->GetCamera()->SetZoomTarget(3.4f);

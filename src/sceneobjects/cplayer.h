@@ -23,6 +23,7 @@ public:
     virtual void onEvent(const CPlayerEvent & _event);
     virtual void BeginContact( const CContact &_contact );
     virtual void EndContact( const CContact &_contact );
+    virtual void Boom(const CBoomParams &_boom);
 protected:
     CPlayer();
     virtual ~CPlayer();

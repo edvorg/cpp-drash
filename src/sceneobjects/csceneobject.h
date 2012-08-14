@@ -39,7 +39,7 @@ public:
     const CVec2 &GetPosTarget() const;
     const CVec2 &GetPosTargetSpeed() const;
     void RemovePosTarget();
-    void SetTargetAngle(const float _angle);
+    void SetAngleTarget(const float _angle);
     void SetAngleTargetSpeed(const float _speed);
     void RemoveTargetAngle();
     void SetAngle( float _angle );
@@ -71,7 +71,7 @@ private:
 
     b2Body* mBody;
 
-    CVec2 mTarget;
+    CVec2 mTargetPos;
     CVec2 mTargetSpeed;
     bool mTargetSet;
 

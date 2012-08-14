@@ -1,8 +1,6 @@
 #include "cscene.h"
 #include "clogger.h"
 
-// WARNING: System of Booms not tested
-
 namespace drash
 {
 

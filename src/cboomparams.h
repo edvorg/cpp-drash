@@ -11,7 +11,7 @@ public:
     float mStregth;
     CBoomParams():
         mPos(0.0f),
-        mStregth(0.0f)
+        mStregth(50.0f)
     {}
 
 };

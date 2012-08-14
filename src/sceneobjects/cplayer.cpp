@@ -100,7 +100,6 @@ void CPlayer::FireNow(const CVec2 &_fireDirect)
     GetScene()->CreateObject< CBullet >( bulletParams );
 }
 
-// TODO: release fire player
 void CPlayer::onEvent(const CPlayerEvent &_event){
     switch (_event.mType){
         case CPlayerEvent::jump:Jump() ;break;
@@ -108,7 +107,7 @@ void CPlayer::onEvent(const CPlayerEvent &_event){
         case CPlayerEvent::StartMoveRight: mMovingRight = true; break;
         case CPlayerEvent::EndMoveLeft: mMovingLeft = false; break;
         case CPlayerEvent::EndMoveRight: mMovingRight = false; break;
-        case CPlayerEvent::fire: FireNow(_event.GetPosMouse());break;
+        case CPlayerEvent::fire: FireNow(_event.GetMousePos());break;
     }
 }
 
@@ -120,8 +119,12 @@ void CPlayer::BeginContact(const CContact &_contact)
 
 void CPlayer::EndContact(const CContact &_contact)
 {
-    CSolidBody::BeginContact(_contact);
+    CSolidBody::EndContact(_contact);
     mJumpAllowed = false;
+}
+
+void CPlayer::Boom(const CBoomParams &_boom)
+{
 }
 
 }// namespace drash
