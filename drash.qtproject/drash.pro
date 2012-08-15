@@ -18,7 +18,8 @@ SOURCES += \
     ../src/sceneobjects/cbullet.cpp \
     ../src/ctestapp.cpp \
     ../src/ctestapp1.cpp \
-    ../src/ctestapp2.cpp
+    ../src/ctestapp2.cpp \
+    ../src/sceneobjects/cgrenade.cpp
 
 
 CONFIG += console
@@ -51,7 +52,8 @@ HEADERS += \
     ../src/ctestapp.h \
     ../src/ctestapp1.h \
     ../src/ctestapp2.h \
-    ../src/cboomparams.h
+    ../src/cboomparams.h \
+    ../src/sceneobjects/cgrenade.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG
