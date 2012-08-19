@@ -19,7 +19,8 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
         return false;
     }
 
-    GetCamera()->SetZoomMax(50);
+    // TODO: realize this
+    // GetCamera()->SetZoomMax(50);
 
     const unsigned int vc = 4;
     const CVec2 v[vc] =
@@ -65,7 +66,6 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
         targetForFire.mPos.Set(-20,i*10);
     }
 
-    this->GetCamera()->SetZoomTarget(3.4f);
     return true;
 }
 

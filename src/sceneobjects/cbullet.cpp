@@ -37,7 +37,7 @@ void CBullet::PostSolve(const CContact &_contact)
 {
     this->SetDead(true);
     CBoomParams boom;
-    boom.mPos = GetPos();
+    boom.mPos = mPos.Get();
     boom.mStregth = 50000;
     GetScene()->AddRequestBoom(boom);
 }

@@ -5,6 +5,7 @@
 #include "../cvec2.h"
 #include "../ccontactlistener.h"
 #include "../cboomparams.h"
+#include "../canimatedparam.h"
 
 namespace drash
 {
@@ -31,20 +32,6 @@ public:
     CSceneObject(void);
     virtual ~CSceneObject(void);
 
-    void SetPos( const CVec2 &_pos );
-    const CVec2 GetPos() const;
-
-    void SetPosTarget( const CVec2 &_target );
-    void SetPosTargetSpeed( const CVec2 &_speed );
-    const CVec2 &GetPosTarget() const;
-    const CVec2 &GetPosTargetSpeed() const;
-    void RemovePosTarget();
-    void SetAngleTarget(const float _angle);
-    void SetAngleTargetSpeed(const float _speed);
-    void RemoveTargetAngle();
-    void SetAngle( float _angle );
-    float GetAngle(void);
-
     virtual void BeginContact( const CContact &_contact );
     virtual void PreSolve(const CContact &_contact);
     virtual void PostSolve(const CContact &_contact);
@@ -60,6 +47,9 @@ public:
     void SetDead(bool _dead);
     bool IsDead()const;
 
+    CAnimatedParam<CVec2> mPos;
+    CAnimatedParam<float> mAngle;
+
 protected:
     virtual bool Init( const ParamsT &_params );
     virtual void Release(void);
@@ -67,20 +57,8 @@ protected:
     virtual void Step( double _dt );
 
 private:
-
-
     b2Body* mBody;
-
-    CVec2 mTargetPos;
-    CVec2 mTargetSpeed;
-    bool mTargetSet;
-
-    float mTargetAngle;
-    float mAngleTargetSpeed;
-    bool mTargetAngleSet;
-
     CScene* mScene;
-
     bool mDead;
 };
 

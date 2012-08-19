@@ -49,12 +49,11 @@ void CGrenade::Step(double _dt)
     CBullet::Step(_dt);
     if (mActivatedTimer == true){
         mTimerOfBoom.Tick();
-        if ((unsigned int)mTimerOfBoom.GetFullTime() >= mBoomTime){
+        if (mTimerOfBoom.GetFullTime() >= mBoomTime){
             CBoomParams boom;
-            boom.mPos = GetPos();
+            boom.mPos = mPos.Get();
             boom.mStregth = 500000;
             GetScene()->AddRequestBoom(boom);
-            this->SetDead(true);
         }
     }
 }

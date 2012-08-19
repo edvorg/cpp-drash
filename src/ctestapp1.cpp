@@ -23,7 +23,8 @@ bool CTestApp1::Init( CScene *_scene, CCamera *_camera )
         return false;
     }
 
-    GetCamera()->SetZoomMax(50);
+    // TODO: realize this
+    // GetCamera()->SetZoomMax(50);
 
     t.Reset(true);
 

@@ -29,7 +29,7 @@ public:
     virtual void Step(double _dt);
 
 private:
-    unsigned int mBoomTime;
+    double mBoomTime;
 
     CTimer mTimerOfBoom;
     bool mActivatedTimer;

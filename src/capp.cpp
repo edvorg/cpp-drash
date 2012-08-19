@@ -8,6 +8,7 @@
 #include "graphics/cdebugrenderer.h"
 #include "cscene.h"
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -106,7 +107,8 @@ bool CApp::Init( const CAppParams &_params )
         return false;
     }
 
-    mCamera->SetZoomMax(100);
+    // TODO: realise this
+    //mCamera->SetZoomMax(100);
 
     /////////////////////////
     // debug renderer init
@@ -202,13 +204,10 @@ void CApp::Run()
 {
     assert( mInitialized == true );
 
-    const unsigned int delta = 100;
+    const unsigned int delta = 50;
     const unsigned int speed = 3;
-    const float zoomdelta = 0.35f;
+    const float zoomdelta = 0.15f;
     const unsigned int zoomspeed = 5;
-
-    mCamera->SetPosTargetSpeed( CVec2(speed) );
-    mCamera->SetZoomTargetSpeed(zoomspeed);
 
     bool movexr = false;
     bool movexl = false;
@@ -233,8 +232,8 @@ void CApp::Run()
                     CVec2 pos;
                     pos = PointSDLToWorldPoint( event.button.x,
                                                 event.button.y,
-                                                mCamera->GetZoom(),
-                                                mCamera->GetPos(),
+                                                mCamera->mZoom.Get(),
+                                                mCamera->mPos.Get(),
                                                 mHeight,
                                                 mWidth);
 
@@ -242,11 +241,11 @@ void CApp::Run()
                 }
                 else if ( event.button.button == SDL_BUTTON_WHEELDOWN )
                 {
-                    mCamera->SetZoomTarget( mCamera->GetZoom() + zoomdelta * mCamera->GetZoom() );
+                    mCamera->mZoom.SetTarget(  max( mCamera->mZoom.GetTarget() + zoomdelta * mCamera->mZoom.Get(), 1.0 ), 0.25 );
                 }
                 else if ( event.button.button == SDL_BUTTON_WHEELUP )
                 {
-                    mCamera->SetZoomTarget( mCamera->GetZoom() - zoomdelta * mCamera->GetZoom() );
+                    mCamera->mZoom.SetTarget( max( mCamera->mZoom.GetTarget() - zoomdelta * mCamera->mZoom.Get(), 1.0 ), 0.25 );
                 }
                 else
                 {
@@ -322,28 +321,28 @@ void CApp::Run()
             }
         }
 
-        CVec2 newt = mCamera->GetPos();
+        CVec2 newt = mCamera->mPos.Get();
 
         if ( movexr )
         {
-            newt.x += delta / mCamera->GetZoom();
-            mCamera->SetPosTarget( newt );
+            newt.x += delta / mCamera->mZoom.Get();
+            mCamera->mPos.SetTarget( newt, 0.25 );
         }
         else if ( movexl )
         {
-            newt.x -= delta / mCamera->GetZoom();
-            mCamera->SetPosTarget( newt );
+            newt.x -= delta / mCamera->mZoom.Get();
+            mCamera->mPos.SetTarget( newt, 0.25 );
         }
 
         if ( moveyu )
         {
-            newt.y += delta / mCamera->GetZoom();
-            mCamera->SetPosTarget( newt );
+            newt.y += delta / mCamera->mZoom.Get();
+            mCamera->mPos.SetTarget( newt, 0.25 );
         }
         else if ( moveyd )
         {
-            newt.y -= delta / mCamera->GetZoom();
-            mCamera->SetPosTarget( newt );
+            newt.y -= delta / mCamera->mZoom.Get();
+            mCamera->mPos.SetTarget( newt, 0.25 );
         }
 
         // If event for exit

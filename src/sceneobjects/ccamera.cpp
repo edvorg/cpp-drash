@@ -10,85 +10,13 @@ CCameraParams::CCameraParams():
 }
 
 CCamera::CCamera():
-    CSceneObject(),
-    mZoom(1),
-    mZoomMax(100),
-    mZoomTarget(1),
-    mZoomTargetSpeed(1),
-    mZoomTargetSet(false)
+    CSceneObject()
 {
+    mZoom.Set(1);
 }
 
 CCamera::~CCamera(void)
 {
-}
-
-void CCamera::SetZoom(float _zoom)
-{
-    if ( _zoom < 1.0f )
-    {
-        mZoom = 1;
-    }
-    else
-    {
-        if ( _zoom > mZoomMax )
-        {
-            mZoom = mZoomMax;
-        }
-        else
-        {
-            mZoom = _zoom;
-        }
-    }
-}
-
-float CCamera::GetZoom() const
-{
-    return mZoom;
-}
-
-void CCamera::SetZoomMax(float _max)
-{
-    mZoomMax = _max;
-}
-
-float CCamera::GetZoomMax()
-{
-    return mZoomMax;
-}
-
-void CCamera::SetZoomTarget( float _target )
-{
-    if ( _target < 1.0f )
-    {
-        mZoomTarget = 1;
-    }
-    else
-    {
-        mZoomTarget = _target;
-    }
-
-    mZoomTargetSet = true;
-}
-
-void CCamera::SetZoomTargetSpeed( float _speed )
-{
-    mZoomTargetSpeed = _speed;
-}
-
-float CCamera::GetZoomTarget(void)
-{
-    return mZoomTarget;
-}
-
-float CCamera::GetZoomTargetSpeed(void)
-{
-    return mZoomTargetSpeed;
-}
-
-void CCamera::RemoveZoomTarget(void)
-{
-    mZoomTargetSet = false;
 }
 
 bool CCamera::Init( const ParamsT &_params )
@@ -111,11 +39,7 @@ void CCamera::Release(void)
 void CCamera::Step(double _dt)
 {
     CSceneObject::Step(_dt);
-
-    if ( mZoomTargetSet == true )
-    {
-        SetZoom( mZoom + ( mZoomTarget - mZoom ) * mZoomTargetSpeed * _dt );
-    }
+    mZoom.Step(_dt);
 }
 
 

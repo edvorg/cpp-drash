@@ -67,14 +67,14 @@ void CSolidBody::Release(void)
 
 void CSolidBody::Boom(const CBoomParams &_boom)
 {
-    CVec2 pos = GetPos();
+    CVec2 pos = mPos.Get();
     CVec2 force(pos.x- _boom.mPos.x, pos.y - _boom.mPos.y);
     float len = force.Length();
     force.Normalize();
     force *= _boom.mStregth * 100;
     force.x /= len;
     force.y /= len;
-    GetBody()->ApplyForce(force,GetPos());
+    GetBody()->ApplyForce(force,mPos.Get());
 
 }
 

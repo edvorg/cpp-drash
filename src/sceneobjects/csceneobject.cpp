@@ -13,86 +13,14 @@ CSceneObjectParams::CSceneObjectParams():
 
 CSceneObject::CSceneObject(void):
     mBody(NULL),
-    mTargetPos(0),
-    mTargetSpeed(1),
-    mTargetSet(false),
-    mTargetAngle(0),
-    mAngleTargetSpeed(1),
-    mTargetAngleSet(false),
     mScene(NULL),
     mDead(false)
 {
-    mTargetSpeed = CVec2(0,0);
 }
 
 CSceneObject::~CSceneObject(void)
 {
     Release();
-}
-
-void CSceneObject::SetPos( const CVec2 &_pos )
-{
-    mBody->SetTransform( _pos, mBody->GetAngle() );
-}
-
-const CVec2 CSceneObject::GetPos() const
-{
-    CVec2 res;
-    res.Set(mBody->GetWorldCenter().x, mBody->GetWorldCenter().y );
-    return res;
-}
-
-void CSceneObject::SetPosTarget( const CVec2 &_target )
-{
-    mTargetPos = _target;
-    mTargetSet = true;
-}
-
-void CSceneObject::SetPosTargetSpeed( const CVec2 &_speed )
-{
-    mTargetSpeed = _speed;
-}
-
-const CVec2 &CSceneObject::GetPosTarget() const
-{
-    return mTargetPos;
-}
-
-const CVec2 &CSceneObject::GetPosTargetSpeed() const
-{
-    return mTargetSpeed;
-}
-
-void CSceneObject::RemovePosTarget()
-{
-    mTargetSet = false;
-}
-
-void CSceneObject::SetAngleTarget(const float _angle)
-{
-    mTargetAngle = _angle;
-    mTargetAngleSet = true;
-}
-
-void CSceneObject::SetAngleTargetSpeed(const float _speed)
-{
-    mAngleTargetSpeed = _speed;
-}
-
-void CSceneObject::RemoveTargetAngle()
-{
-    mTargetAngle = GetAngle();
-    mTargetAngleSet = false;
-}
-
-void CSceneObject::SetAngle(float _angle)
-{
-    mBody->SetTransform( mBody->GetWorldCenter(), _angle );
-}
-
-float CSceneObject::GetAngle()
-{
-    return mBody->GetAngle();
 }
 
 void CSceneObject::BeginContact( const CContact &_contact )
@@ -145,26 +73,8 @@ void CSceneObject::Release()
 
 void CSceneObject::Step( double _dt )
 {
-    if ( mTargetSet == true )
-    {
-        CVec2 dir = mTargetPos;
-        dir -= GetPos();
-        dir.x *= mTargetSpeed.x;
-        dir.y *= mTargetSpeed.y;
-        dir *= (float)_dt;
-        dir += GetPos();
-
-        GetBody()->SetTransform( dir, GetAngle() );
-        if (mTargetPos == GetPos()){
-            mTargetSet = false;
-        }
-    }
-    if ( mTargetAngleSet == true ){
-        float curAngle = ((mTargetAngle - GetAngle()) * mAngleTargetSpeed * _dt) + GetAngle();
-        this->SetAngle(curAngle);
-        if ( fabs(curAngle - mTargetAngle) < 0.001 )
-            RemoveTargetAngle();
-    }
+    mPos.Step(_dt);
+    mAngle.Step(_dt);
 }
 
 b2Body *CSceneObject::GetBody()

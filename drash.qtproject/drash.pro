@@ -10,7 +10,6 @@ SOURCES += \
     ../src/ccontactlistener.cpp \
     ../src/sceneobjects/ccamera.cpp \
     ../src/sceneobjects/csolidbody.cpp \
-    ../src/canimatedparam.cpp \
     ../src/sceneobjects/cdrashbody.cpp \
     ../src/clist.cpp \
     ../src/sceneobjects/cplayer.cpp \
