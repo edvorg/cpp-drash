@@ -89,12 +89,21 @@ void CAnimatedParam<T>::Step( double _dt )
     {
         mElaspedTime += _dt;
 
-        double k = ( mAnimationTime < mElaspedTime ? mAnimationTime : mElaspedTime ) / mAnimationTime;
+        double k = std::min( mAnimationTime, mElaspedTime ) / mAnimationTime;
 
-        mValue = k * mTargetValue + ( 1.0 - k ) * mFromValue;
-    }
-    else
-    {
+        if ( std::fabs(1.0 - k) < 0.000001 )
+        {
+            mTargetSet = false;
+            mValue = mTargetValue;
+            LOG_INFO("final");
+        }
+        else
+        {
+            mValue = k * mTargetValue + ( 1.0 - k ) * mFromValue;
+        }
+
+        LOG_INFO(k);
+        LOG_INFO(mValue);
     }
 }
 
