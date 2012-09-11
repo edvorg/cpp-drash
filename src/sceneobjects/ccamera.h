@@ -28,7 +28,7 @@ public:
 
     double GetZoom() const { return mZoom.Get(); }
     double GetZoomTarget() const { return mZoom.GetTarget(); }
-    void SetZoomTarget( double _target, double _time ) { mZoom.SetTarget( std::min( std::max( 1.0, _target ), m_ZoomMax ), _time ); }
+    void SetZoomTarget( double _target, double _time ) { mZoom.SetTarget( std::min( std::max( 1.0, _target ), m_ZoomMax ), _time, AnimationBehaviorSingle ); }
 
 protected:    
     CAnimatedParam<double> mZoom;

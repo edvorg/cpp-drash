@@ -75,6 +75,11 @@ void CSceneObject::Step( double _dt )
 {
     mPos.Step(_dt);
     mAngle.Step(_dt);
+
+    if ( mBody->GetType() == b2_kinematicBody )
+    {
+        mBody->SetTransform( mPos.Get(), mAngle.Get() );
+    }
 }
 
 b2Body *CSceneObject::GetBody()

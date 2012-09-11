@@ -326,23 +326,23 @@ void CApp::Run()
         if ( movexr )
         {
             newt.x += delta / mCamera->GetZoom();
-            mCamera->mPos.SetTarget( newt, 0.25 );
+            mCamera->mPos.SetTarget( newt, 0.25, AnimationBehaviorSingle );
         }
         else if ( movexl )
         {
             newt.x -= delta / mCamera->GetZoom();
-            mCamera->mPos.SetTarget( newt, 0.25 );
+            mCamera->mPos.SetTarget( newt, 0.25, AnimationBehaviorSingle );
         }
 
         if ( moveyu )
         {
             newt.y += delta / mCamera->GetZoom();
-            mCamera->mPos.SetTarget( newt, 0.25 );
+            mCamera->mPos.SetTarget( newt, 0.25, AnimationBehaviorSingle );
         }
         else if ( moveyd )
         {
             newt.y -= delta / mCamera->GetZoom();
-            mCamera->mPos.SetTarget( newt, 0.25 );
+            mCamera->mPos.SetTarget( newt, 0.25, AnimationBehaviorSingle );
         }
 
         // If event for exit
