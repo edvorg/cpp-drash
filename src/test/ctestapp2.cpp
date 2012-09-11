@@ -1,7 +1,7 @@
 #include "ctestapp2.h"
 
-#include "ctimer.h"
-#include "cscene.h"
+#include "../ctimer.h"
+#include "../cscene.h"
 namespace drash{
 
 CTestApp2::CTestApp2()

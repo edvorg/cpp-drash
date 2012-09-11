@@ -1,5 +1,5 @@
 #include "cscene.h"
-#include "clogger.h"
+#include "diag/clogger.h"
 
 namespace drash
 {

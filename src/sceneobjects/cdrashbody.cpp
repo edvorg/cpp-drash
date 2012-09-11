@@ -1,6 +1,6 @@
 #include "cdrashbody.h"
 
-#include "../clogger.h"
+#include "../diag/clogger.h"
 #include "../cscene.h"
 
 namespace drash

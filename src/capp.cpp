@@ -4,7 +4,7 @@
 #include <GL/gl.h>
 #include <Box2D/Box2D.h>
 #include <math.h>
-#include "clogger.h"
+#include "diag/clogger.h"
 #include "graphics/cdebugrenderer.h"
 #include "cscene.h"
 #include <iostream>

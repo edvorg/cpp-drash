@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <time.h>
-#include "clogger.h"
+#include "diag/clogger.h"
 #include <cassert>
 
 namespace drash

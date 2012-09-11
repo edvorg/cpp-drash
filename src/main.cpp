@@ -2,7 +2,7 @@
 #include <ctime>
 
 #include "capp.h"
-#include "clogger.h"
+#include "diag/clogger.h"
 using namespace drash;
 
 int main( int _argc, char *_argv[] )

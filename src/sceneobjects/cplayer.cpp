@@ -1,5 +1,5 @@
 #include "cplayer.h"
-#include "../clogger.h"
+#include "../diag/clogger.h"
 #include "cbullet.h"
 #include "cgrenade.h"
 

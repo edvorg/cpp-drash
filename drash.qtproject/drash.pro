@@ -4,20 +4,20 @@ SOURCES += \
     ../src/sceneobjects/csceneobject.cpp \
     ../src/cscene.cpp \
     ../src/cvec2.cpp \
-    ../src/clogger.cpp \
+    ../src/diag/clogger.cpp \
     ../src/capp.cpp \
     ../src/ctimer.cpp \
     ../src/ccontactlistener.cpp \
     ../src/sceneobjects/ccamera.cpp \
     ../src/sceneobjects/csolidbody.cpp \
     ../src/sceneobjects/cdrashbody.cpp \
-    ../src/clist.cpp \
+    ../src/misc/clist.cpp \
     ../src/sceneobjects/cplayer.cpp \
     ../src/cplayerevent.cpp \
     ../src/sceneobjects/cbullet.cpp \
-    ../src/ctestapp.cpp \
-    ../src/ctestapp1.cpp \
-    ../src/ctestapp2.cpp \
+    ../src/test/ctestapp.cpp \
+    ../src/test/ctestapp1.cpp \
+    ../src/test/ctestapp2.cpp \
     ../src/sceneobjects/cgrenade.cpp
 
 
@@ -35,7 +35,7 @@ HEADERS += \
     ../src/sceneobjects/csceneobject.h \
     ../src/cscene.h \
     ../src/cvec2.h \
-    ../src/clogger.h \
+    ../src/diag/clogger.h \
     ../src/capp.h \
     ../src/ctimer.h \
     ../src/ccontactlistener.h\
@@ -43,14 +43,14 @@ HEADERS += \
     ../src/sceneobjects/csolidbody.h \
     ../src/canimatedparam.h \
     ../src/sceneobjects/cdrashbody.h \
-    ../src/clist.h \
+    ../src/misc/clist.h \
     ../src/sceneobjects/cplayer.h \
     ../src/sceneobjects.h \
     ../src/cplayerevent.h \
     ../src/sceneobjects/cbullet.h \
-    ../src/ctestapp.h \
-    ../src/ctestapp1.h \
-    ../src/ctestapp2.h \
+    ../src/test/ctestapp.h \
+    ../src/test/ctestapp1.h \
+    ../src/test/ctestapp2.h \
     ../src/cboomparams.h \
     ../src/sceneobjects/cgrenade.h
 

@@ -3,7 +3,7 @@
 
 #include "cscene.h"
 #include "ctimer.h"
-#include "ctestapp.h"
+#include "test/ctestapp.h"
 
 #include <vector>
 #include <string>

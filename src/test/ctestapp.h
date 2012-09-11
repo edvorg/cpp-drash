@@ -1,7 +1,7 @@
 #ifndef CTESTAPP_H
 #define CTESTAPP_H
 
-#include "sceneobjects.h"
+#include "../sceneobjects.h"
 
 namespace drash
 {
