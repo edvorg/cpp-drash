@@ -232,8 +232,8 @@ void CApp::Run()
                     CVec2 pos;
                     pos = PointSDLToWorldPoint( event.button.x,
                                                 event.button.y,
-                                                mCamera->mZoom.Get(),
-                                                mCamera->mPos.Get(),
+                                                mCamera->GetZoom(),
+                                                mCamera->GetZoom(),
                                                 mHeight,
                                                 mWidth);
 
@@ -241,11 +241,11 @@ void CApp::Run()
                 }
                 else if ( event.button.button == SDL_BUTTON_WHEELDOWN )
                 {
-                    mCamera->mZoom.SetTarget(  max( mCamera->mZoom.GetTarget() + zoomdelta * mCamera->mZoom.Get(), 1.0 ), 0.25 );
+                    mCamera->SetZoomTarget(  max( mCamera->GetZoomTarget() + zoomdelta * mCamera->GetZoom(), 1.0 ), 0.25 );
                 }
                 else if ( event.button.button == SDL_BUTTON_WHEELUP )
                 {
-                    mCamera->mZoom.SetTarget( max( mCamera->mZoom.GetTarget() - zoomdelta * mCamera->mZoom.Get(), 1.0 ), 0.25 );
+                    mCamera->SetZoomTarget( max( mCamera->GetZoomTarget() - zoomdelta * mCamera->GetZoom(), 1.0 ), 0.25 );
                 }
                 else
                 {
@@ -325,23 +325,23 @@ void CApp::Run()
 
         if ( movexr )
         {
-            newt.x += delta / mCamera->mZoom.Get();
+            newt.x += delta / mCamera->GetZoom();
             mCamera->mPos.SetTarget( newt, 0.25 );
         }
         else if ( movexl )
         {
-            newt.x -= delta / mCamera->mZoom.Get();
+            newt.x -= delta / mCamera->GetZoom();
             mCamera->mPos.SetTarget( newt, 0.25 );
         }
 
         if ( moveyu )
         {
-            newt.y += delta / mCamera->mZoom.Get();
+            newt.y += delta / mCamera->GetZoom();
             mCamera->mPos.SetTarget( newt, 0.25 );
         }
         else if ( moveyd )
         {
-            newt.y -= delta / mCamera->mZoom.Get();
+            newt.y -= delta / mCamera->GetZoom();
             mCamera->mPos.SetTarget( newt, 0.25 );
         }
 

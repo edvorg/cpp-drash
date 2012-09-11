@@ -167,7 +167,7 @@ void CDebugRenderer::DrawTransform( const b2Transform &_xf )
 {
     b2Vec2 p;
     float angle = _xf.q.GetAngle();
-    const float size = mWidth / 40.0f / ( mCamera ? mCamera->mZoom.Get() : 1.0 );
+    const float size = mWidth / 40.0f / ( mCamera ? mCamera->GetZoom() : 1.0 );
     float cs = cos(angle) * size;
     float sn = sin(angle) * size;
 
@@ -191,10 +191,10 @@ void CDebugRenderer::ProjectionMatrix()
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho( ( -(float)mWidth / 2.0f ) / ( mCamera ? mCamera->mZoom.Get() : 1.0 ),
-             ( (float)mWidth / 2.0f ) / ( mCamera ? mCamera->mZoom.Get() : 1.0 ),
-             ( -(float)mHeight / 2.0f ) / ( mCamera ? mCamera->mZoom.Get(): 1.0 ),
-             ( (float)mHeight / 2.0f ) / ( mCamera ? mCamera->mZoom.Get() : 1.0 ),
+    glOrtho( ( -(float)mWidth / 2.0f ) / ( mCamera ? mCamera->GetZoom() : 1.0 ),
+             ( (float)mWidth / 2.0f ) / ( mCamera ? mCamera->GetZoom() : 1.0 ),
+             ( -(float)mHeight / 2.0f ) / ( mCamera ? mCamera->GetZoom(): 1.0 ),
+             ( (float)mHeight / 2.0f ) / ( mCamera ? mCamera->GetZoom() : 1.0 ),
              1.0f,
              -1.0f );
 }

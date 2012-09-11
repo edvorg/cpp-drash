@@ -21,12 +21,18 @@ public:
 
     typedef CCameraParams ParamsT;
 
+    static const double m_ZoomMax;
+
     CCamera( void );
     virtual ~CCamera( void );
 
+    double GetZoom() const { return mZoom.Get(); }
+    double GetZoomTarget() const { return mZoom.GetTarget(); }
+    void SetZoomTarget( double _target, double _time ) { mZoom.SetTarget( std::min( std::max( 1.0, _target ), m_ZoomMax ), _time ); }
+
+protected:    
     CAnimatedParam<double> mZoom;
 
-protected:
     virtual bool Init( const ParamsT &_params );
     virtual void Release(void);
 
