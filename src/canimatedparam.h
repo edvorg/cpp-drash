@@ -26,7 +26,8 @@ public:
 
     const T &Get() const;
     const T &GetTarget() const;
-    double GetAnimationTime() const;
+
+    bool IsTargetSet() const;
 
     void Step( double _dt );
 
@@ -34,6 +35,7 @@ private:
     T mValue;
     T mFromValue;
     T mTargetValue;
+    T mDeltaValue;
     double mElaspedTime;
     double mAnimationTime;
     bool mTargetSet;
@@ -45,6 +47,7 @@ CAnimatedParam<T>::CAnimatedParam():
     mValue(),
     mFromValue(),
     mTargetValue(),
+    mDeltaValue(),
     mElaspedTime(0.0),
     mAnimationTime(0.0),
     mTargetSet(false),
@@ -70,6 +73,7 @@ void CAnimatedParam<T>::SetTarget(const T &_target , double _time , const Animat
     mTargetSet = true;
     mFromValue = mValue;
     mTargetValue = _target;
+    mDeltaValue = mTargetValue - mFromValue;
     mAnimationTime = _time;
     mElaspedTime = 0.0;
     mBehavior = _behavior;
@@ -88,9 +92,9 @@ const T &CAnimatedParam<T>::GetTarget() const
 }
 
 template <class T>
-double CAnimatedParam<T>::GetAnimationTime() const
+bool CAnimatedParam<T>::IsTargetSet() const
 {
-    return mAnimationTime;
+    return mTargetSet;
 }
 
 template <class T>
@@ -100,9 +104,9 @@ void CAnimatedParam<T>::Step( double _dt )
     {
         mElaspedTime += _dt;
 
-        double k = std::min( mAnimationTime, mElaspedTime ) / mAnimationTime;
+        double k = std::min( mAnimationTime, mElaspedTime );
 
-        if ( std::fabs(1.0 - k) < 0.000001 )
+        if ( std::fabs(mAnimationTime - k) < 0.000001 )
         {
             if (mBehavior == AnimationBehaviorSingle)
             {
@@ -119,12 +123,15 @@ void CAnimatedParam<T>::Step( double _dt )
                 mValue = mTargetValue;
                 mTargetValue = mFromValue;
                 mFromValue = mValue;
+                mDeltaValue = -mDeltaValue;
                 mElaspedTime = 0;
             }
         }
         else
         {
-            mValue = k * mTargetValue + ( 1.0 - k ) * mFromValue;
+            mValue = mDeltaValue;
+            mValue *= k / mAnimationTime;
+            mValue += mFromValue;
         }
     }
 }
