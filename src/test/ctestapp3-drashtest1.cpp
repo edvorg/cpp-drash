@@ -21,24 +21,14 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
         return false;
     }
 
-    const int sbvc = 4;
-    CVec2 sbv[sbvc] =
-    {
-        CVec2( -200, -5 ),
-        CVec2( 200, -5 ),
-        CVec2( 200, 5 ),
-        CVec2( -200, 5 )
-    };
-
     CSolidBodyParams sbp;
     sbp.mDynamic = false;
-    sbp.mVertices = sbv;
-    sbp.mVerticesCount = sbvc;
+    sbp.mVertices.push_back( CVec2( -200, -5 ) );
+    sbp.mVertices.push_back( CVec2( 200, -5 ) );
+    sbp.mVertices.push_back( CVec2( 200, 5 ) );
+    sbp.mVertices.push_back( CVec2( -200, 5 ) );
 
     CSolidBody* sb = GetScene()->CreateObject<CSolidBody>(sbp);
-
-    sb->mPos.Set( CVec2( 0, -20 ) );
-    sb->mPos.SetTarget( CVec2( 0, -100 ), 1.0, AnimationBehaviorBounce );
 
     return true;
 }

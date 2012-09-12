@@ -23,22 +23,13 @@ bool CTestApp1::Init( CScene *_scene, CCamera *_camera )
         return false;
     }
 
-    // TODO: realize this
-    // GetCamera()->SetZoomMax(50);
-
     t.Reset(true);
 
-    const unsigned int vc = 4;
-    const CVec2 v[vc] =
-    {
-        CVec2( -100.0f, 5.0f ),
-        CVec2( -100.0f, -5.0f ),
-        CVec2( 100.0f, -5.0f ),
-        CVec2( 100.0f, 5.0f )
-    };
     CSolidBodyParams p;
-    p.mVertices = v;
-    p.mVerticesCount = vc;
+    p.mVertices.push_back( CVec2( -100.0f, 5.0f ) );
+    p.mVertices.push_back( CVec2( -100.0f, -5.0f ) );
+    p.mVertices.push_back( CVec2( 100.0f, -5.0f ) );
+    p.mVertices.push_back( CVec2( 100.0f, 5.0f ) );
     p.mPos.y = -25;
     p.mDynamic = false;
     GetScene()->CreateObject<CSolidBody>(p);

@@ -3,6 +3,8 @@
 
 #include "csceneobject.h"
 
+#include <vector>
+
 namespace drash
 {
 
@@ -13,11 +15,8 @@ public:
     float mRestitution;
     float mMass;
 
-    /// if mVertices is NULL, creates a box with (1, 1) dimentions
-    const CVec2 *mVertices;
-
-    /// size of mVertices array if present
-    unsigned int mVerticesCount;
+    /// if size of mVertices is NULL, creates a box with (1, 1) dimentions
+    std::vector<CVec2> mVertices;
 
     CSolidBodyParams();
 };

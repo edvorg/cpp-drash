@@ -7,8 +7,7 @@ CSolidBodyParams::CSolidBodyParams():
     mFriction(1.0f),
     mRestitution(0.0f),
     mMass(1.0f),
-    mVertices(NULL),
-    mVerticesCount(0)
+    mVertices()
 {
 }
 
@@ -34,13 +33,13 @@ bool CSolidBody::Init(const ParamsT &_params )
 
     b2PolygonShape s;
 
-    if ( _params.mVertices == NULL )
+    if ( _params.mVertices.size() == NULL )
     {
         s.SetAsBox( 1.0f, 1.0f );
     }
     else
     {
-        s.Set( _params.mVertices, _params.mVerticesCount );
+        s.Set( &*_params.mVertices.begin(), _params.mVertices.size() );
     }
 
     s.ComputeMass( &md, 1.0f );

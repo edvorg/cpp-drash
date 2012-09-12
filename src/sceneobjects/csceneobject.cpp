@@ -50,6 +50,9 @@ bool CSceneObject::Init( const CSceneObject::ParamsT &_params )
         return false;
     }
 
+    mPos.Set(_params.mPos);
+    mAngle.Set(_params.mAngle);
+
     mBody->SetTransform( _params.mPos, _params.mAngle );
     mBody->SetActive(true);
     mBody->SetAwake(true);
