@@ -205,9 +205,7 @@ void CApp::Run()
     assert( mInitialized == true );
 
     const unsigned int delta = 50;
-    const unsigned int speed = 3;
     const float zoomdelta = 0.15f;
-    const unsigned int zoomspeed = 5;
 
     bool movexr = false;
     bool movexl = false;
