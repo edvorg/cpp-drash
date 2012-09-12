@@ -33,7 +33,7 @@ bool CSolidBody::Init(const ParamsT &_params )
 
     b2PolygonShape s;
 
-    if ( _params.mVertices.size() == NULL )
+    if ( _params.mVertices.size() == 0 )
     {
         s.SetAsBox( 1.0f, 1.0f );
     }
