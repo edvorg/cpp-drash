@@ -3,6 +3,8 @@
 #include "cbullet.h"
 #include "cgrenade.h"
 
+#include "../cscene.h"
+
 namespace drash
 {
 
