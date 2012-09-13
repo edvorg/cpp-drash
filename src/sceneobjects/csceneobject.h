@@ -3,9 +3,9 @@
 #define CSCENEOBJECT_H
 
 #include <Box2D/Box2D.h>
-#include "../cvec2.h"
+#include "../misc/cvec2.h"
 #include "../cboomparams.h"
-#include "../canimatedparam.h"
+#include "../misc/canimatedparam.h"
 
 namespace drash
 {

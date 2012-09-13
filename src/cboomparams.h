@@ -2,7 +2,7 @@
 #ifndef CBOOMPARAMS_H
 #define CBOOMPARAMS_H
 
-#include "cvec2.h"
+#include "misc/cvec2.h"
 
 namespace drash{
 

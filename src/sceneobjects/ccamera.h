@@ -3,7 +3,7 @@
 #define COBJECTCAMERA_H
 
 #include "csceneobject.h"
-#include "../canimatedparam.h"
+#include "../misc/canimatedparam.h"
 
 namespace drash
 {
