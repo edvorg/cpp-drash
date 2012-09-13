@@ -4,7 +4,31 @@
 #include "csolidbody.h"
 #include "../cplayerevent.h"
 
-namespace drash{
+namespace drash
+{
+
+class CPlayerEvent
+{
+public:
+    enum PlayerAction
+    {
+        StartMoveLeft,
+        StartMoveRight,
+        EndMoveLeft,
+        EndMoveRight,
+        jump,
+        fire
+    };
+
+    CPlayerEvent( const PlayerAction & _action , const CVec2 &_mousePos );
+
+
+    PlayerAction mType;
+    void SetMousePos( const CVec2 &_pos );
+    CVec2 GetMousePos()const;
+private:
+    CVec2 mMousePos;
+};
 
 class CPlayerParams: public CSolidBodyParams{
 public:

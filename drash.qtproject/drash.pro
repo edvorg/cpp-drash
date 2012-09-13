@@ -12,7 +12,6 @@ SOURCES += \
     ../src/sceneobjects/cdrashbody.cpp \
     ../src/misc/clist.cpp \
     ../src/sceneobjects/cplayer.cpp \
-    ../src/cplayerevent.cpp \
     ../src/sceneobjects/cbullet.cpp \
     ../src/test/ctestapp.cpp \
     ../src/test/ctestapp1.cpp \
@@ -45,7 +44,6 @@ HEADERS += \
     ../src/misc/clist.h \
     ../src/sceneobjects/cplayer.h \
     ../src/sceneobjects.h \
-    ../src/cplayerevent.h \
     ../src/sceneobjects/cbullet.h \
     ../src/test/ctestapp.h \
     ../src/test/ctestapp1.h \

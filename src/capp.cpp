@@ -275,15 +275,15 @@ void CApp::Run()
                 }
                 else if (event.key.keysym.sym == SDLK_SPACE)
                 {
-                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::jump ), 0 );
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::jump, CVec2() ), 0 );
                 }
                 else if ( event.key.keysym.sym == SDLK_a )
                 {
-                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::StartMoveLeft ), 0 );
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::StartMoveLeft, CVec2() ), 0 );
                 }
                 else if ( event.key.keysym.sym == SDLK_d )
                 {
-                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::StartMoveRight ), 0 );
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::StartMoveRight, CVec2() ), 0 );
                 }
             }
             else if ( event.type == SDL_KEYUP )
@@ -306,15 +306,15 @@ void CApp::Run()
                 }
                 else if (event.key.keysym.sym == SDLK_SPACE)
                 {
-                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::jump ), 0 );
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::jump, CVec2() ), 0 );
                 }
                 else if ( event.key.keysym.sym == SDLK_a )
                 {
-                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::EndMoveLeft ), 0 );
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::EndMoveLeft, CVec2() ), 0 );
                 }
                 else if ( event.key.keysym.sym == SDLK_d )
                 {
-                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::EndMoveRight ), 0 );
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::EndMoveRight, CVec2() ), 0 );
                 }
             }
         }
