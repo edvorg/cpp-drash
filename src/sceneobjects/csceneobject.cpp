@@ -81,7 +81,20 @@ void CSceneObject::Step( double _dt )
 
     if ( mBody->GetType() == b2_kinematicBody )
     {
-        mBody->SetTransform( mPos.Get(), mAngle.Get() );
+        if ( mPos.IsTargetSet() || mAngle.IsTargetSet() )
+        {
+            mBody->SetTransform( mPos.Get(), mAngle.Get() );
+        }
+        else
+        {
+            mPos.Set( mBody->GetWorldCenter() );
+            mAngle.Set( mBody->GetAngle() );
+        }
+    }
+    else if ( mBody->GetType() == b2_dynamicBody )
+    {
+        mPos.Set( mBody->GetWorldCenter() );
+        mAngle.Set( mBody->GetAngle() );
     }
 }
 

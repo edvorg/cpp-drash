@@ -10,6 +10,8 @@ namespace drash
 class CDrashBodyParams : public CSolidBodyParams
 {
 public:
+    std::vector<CDrashBodyParams> mChilds;
+    CVec2 mLocalPos;
 };
 
 class CDrashBody : public CSolidBody
@@ -32,7 +34,8 @@ protected:
     virtual void Step( double _dt );
 
     bool mDestroy;
-    CVec2 mLastSpeed;
+    CVec2 mLastVelocity;
+    ParamsT mParams;
 };
 
 } // namespace drash
