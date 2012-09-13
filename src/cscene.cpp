@@ -270,15 +270,16 @@ void CScene::OnPlayerEvent(const CPlayerEvent &_event, unsigned int _playerId)
     mPlayers[_playerId]->onEvent(_event);
 }
 
-void CScene::AddPlayer(const CPlayerParams &_params)
+int CScene::AddPlayer( const CPlayerParams &_params )
 {
-    if (mCountPlayers == mPlayersMaxAmount){
+    if ( mCountPlayers == mPlayersMaxAmount )
+    {
         LOG_ERR("CScene::AddPlayer() : Achieved maximum Amount of Players");
-        return;
+        return -1;
     }
 
-    mPlayers[mCountPlayers++] = CreateObject<CPlayer>(_params);
-
+    mPlayers[mCountPlayers] = CreateObject<CPlayer>(_params);
+    return mCountPlayers++;
 }
 
 void CScene::AddRequestBoom(const CBoomParams _boom)

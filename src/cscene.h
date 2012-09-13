@@ -47,7 +47,8 @@ public:
 
     void OnPlayerEvent(const CPlayerEvent & _event, unsigned int _playerId);
 
-    void AddPlayer(const CPlayerParams & _params);
+    // returns player id ( >= 0 ) or -1 if failed
+    int AddPlayer( const CPlayerParams & _params );
 
     void AddRequestBoom(const CBoomParams  _boom);
 
