@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SCENEOBJECTS_H
 #define SCENEOBJECTS_H
 
@@ -8,6 +9,6 @@
 #include "sceneobjects/csceneobject.h"
 #include "sceneobjects/csolidbody.h"
 #include "sceneobjects/cbullet.h"
-//#include "sceneobjects/cgrenade.h"
+#include "sceneobjects/cgrenade.h"
 
 #endif // SCENEOBJECTS_H

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CAPP_H
 #define CAPP_H
 

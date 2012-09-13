@@ -1,3 +1,4 @@
+#pragma once
 #ifndef COBJECTRECTANGLE_H
 #define COBJECTRECTANGLE_H
 

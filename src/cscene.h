@@ -1,9 +1,9 @@
+#pragma once
 #ifndef CSCENE_H
 #define CSCENE_H
 
 #include "graphics/cdebugrenderer.h"
 #include "sceneobjects.h"
-#include "cplayerevent.h"
 #include "cboomparams.h"
 #include <list>
 

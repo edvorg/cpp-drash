@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CSCENEOBJECT_H
 #define CSCENEOBJECT_H
 

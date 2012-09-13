@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CTESTAPP_H
 #define CTESTAPP_H
 

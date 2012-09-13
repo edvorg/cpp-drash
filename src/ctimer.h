@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CTIMER_H
 #define CTIMER_H
 

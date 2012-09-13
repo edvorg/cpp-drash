@@ -1,6 +1,9 @@
 #include "cbullet.h"
 
-namespace drash{
+#include "../cscene.h"
+
+namespace drash
+{
 
 CBullet::CBullet():
     CSolidBody()

@@ -1,8 +1,8 @@
+#pragma once
 #ifndef CPLAYER_H
 #define CPLAYER_H
 
 #include "csolidbody.h"
-#include "../cplayerevent.h"
 
 namespace drash
 {
@@ -25,12 +25,13 @@ public:
 
     PlayerAction mType;
     void SetMousePos( const CVec2 &_pos );
-    CVec2 GetMousePos()const;
+    CVec2 GetMousePos() const;
 private:
     CVec2 mMousePos;
 };
 
-class CPlayerParams: public CSolidBodyParams{
+class CPlayerParams: public CSolidBodyParams
+{
 public:
     float mSpeedJump;
     float mSpeedMoving;
@@ -44,22 +45,23 @@ public:
     typedef CPlayerParams ParamsT;
     friend class CScene;
 
-    virtual void onEvent(const CPlayerEvent & _event);
+    virtual void onEvent( const CPlayerEvent & _event );
     virtual void BeginContact( const CContact &_contact );
     virtual void EndContact( const CContact &_contact );
-    virtual void Boom(const CBoomParams &_boom);
+    virtual void Boom( const CBoomParams &_boom );
+
 protected:
     CPlayer();
     virtual ~CPlayer();
 
-    virtual bool Init(const ParamsT &_params);
+    virtual bool Init( const ParamsT &_params );
     virtual void Release(void);
 
     virtual void Step(double _dt);
     void Jump();
     void MoveRight();
     void MoveLeft();
-    void FireNow(const CVec2 & _fireDirect);
+    void FireNow( const CVec2 & _fireDirect );
     bool mJumpAllowed;
     bool mMovingLeft;
     bool mMovingRight;

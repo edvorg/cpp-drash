@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CLOGGER_H_INCLUDED
 #define CLOGGER_H_INCLUDED
 

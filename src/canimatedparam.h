@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CANIMATEDPARAM_H
 #define CANIMATEDPARAM_H
 

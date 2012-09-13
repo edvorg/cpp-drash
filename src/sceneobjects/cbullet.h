@@ -1,7 +1,8 @@
+#pragma once
 #ifndef CBULLET_H
 #define CBULLET_H
 
-#include "../cscene.h"
+#include "csolidbody.h"
 
 namespace drash{
 

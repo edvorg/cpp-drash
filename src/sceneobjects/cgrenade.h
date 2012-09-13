@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CGRENADE_H
 #define CGRENADE_H
 

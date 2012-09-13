@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CVEC2_H
 #define CVEC2_H
 

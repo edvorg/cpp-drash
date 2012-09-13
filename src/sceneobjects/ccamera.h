@@ -1,8 +1,8 @@
+#pragma once
 #ifndef COBJECTCAMERA_H
 #define COBJECTCAMERA_H
 
 #include "csceneobject.h"
-#include "../canimatedparam.h"
 #include "../canimatedparam.h"
 
 namespace drash

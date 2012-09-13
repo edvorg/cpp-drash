@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CDRASHBODY_H
 #define CDRASHBODY_H
 

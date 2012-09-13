@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CTESTAPP3DRASHTEST_H
 #define CTESTAPP3DRASHTEST_H
 

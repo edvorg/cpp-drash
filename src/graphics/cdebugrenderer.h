@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CDEBUGRENDERER_H
 #define CDEBUGRENDERER_H
 
