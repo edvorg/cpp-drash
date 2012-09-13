@@ -7,7 +7,6 @@ SOURCES += \
     ../src/diag/clogger.cpp \
     ../src/capp.cpp \
     ../src/ctimer.cpp \
-    ../src/ccontactlistener.cpp \
     ../src/sceneobjects/ccamera.cpp \
     ../src/sceneobjects/csolidbody.cpp \
     ../src/sceneobjects/cdrashbody.cpp \
@@ -39,7 +38,6 @@ HEADERS += \
     ../src/diag/clogger.h \
     ../src/capp.h \
     ../src/ctimer.h \
-    ../src/ccontactlistener.h\
     ../src/sceneobjects/ccamera.h \
     ../src/sceneobjects/csolidbody.h \
     ../src/canimatedparam.h \

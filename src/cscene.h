@@ -2,7 +2,6 @@
 #define CSCENE_H
 
 #include "graphics/cdebugrenderer.h"
-#include "ccontactlistener.h"
 #include "sceneobjects.h"
 #include "cplayerevent.h"
 #include "cboomparams.h"
@@ -17,11 +16,9 @@ public:
     CVec2 mGravity;
 };
 
-class CScene
+class CScene : public b2ContactListener
 {
 public:
-    typedef std::list<CSceneObject*> ObjectsT;
-
     CScene(void);
     virtual ~CScene(void);
 
@@ -38,7 +35,12 @@ public:
 
     /// must be called once in update cycle
     /// dt - nanoseconds
-    void Step( double _dt );
+    void Step( double _dt );    
+
+    virtual void BeginContact( b2Contact * _contact );
+    virtual void PreSolve( b2Contact* _contact, const b2Manifold * _oldManifold );
+    virtual void PostSolve( b2Contact * _contact, const b2ContactImpulse * _impulse);
+    virtual void EndContact( b2Contact * _contact );
 
     void SetDebugRenderer( CDebugRenderer *_renderer );
     void Draw(void);
@@ -57,15 +59,13 @@ private:
     std::list<CBoomParams> mListBooms;
     bool mInitialized;
     unsigned int mCountPlayers;
+    unsigned int mCountObjects;
+
     static const int mVelocityIterations = 5;
     static const int mPositionIterations = 2;
     static const unsigned int mPlayersMaxAmount = 4;
     static const unsigned int mObjectsMaxAmount = 5000;
 
-    unsigned int mCountObjects;
-    CContactListener mContactListener;
-
-//    ObjectsT mObjects;
     CPlayer* mPlayers[mPlayersMaxAmount];
     CSceneObject* mObjects[mObjectsMaxAmount];
 };

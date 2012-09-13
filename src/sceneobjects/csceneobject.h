@@ -3,7 +3,6 @@
 
 #include <Box2D/Box2D.h>
 #include "../cvec2.h"
-#include "../ccontactlistener.h"
 #include "../cboomparams.h"
 #include "../canimatedparam.h"
 
@@ -11,6 +10,7 @@ namespace drash
 {
 
 class CScene;
+class CSceneObject;
 
 class CSceneObjectParams
 {
@@ -20,6 +20,14 @@ public:
     float mAngle;
     bool mFixedRotation;
     CSceneObjectParams();
+};
+
+class CContact
+{
+public:
+    CVec2 mPoints[b2_maxManifoldPoints];
+    unsigned int mPointCount;
+    CSceneObject *obj;
 };
 
 class CSceneObject
