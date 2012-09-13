@@ -6,7 +6,6 @@ SOURCES += \
     ../src/cvec2.cpp \
     ../src/diag/clogger.cpp \
     ../src/capp.cpp \
-    ../src/ctimer.cpp \
     ../src/sceneobjects/ccamera.cpp \
     ../src/sceneobjects/csolidbody.cpp \
     ../src/sceneobjects/cdrashbody.cpp \
@@ -17,7 +16,8 @@ SOURCES += \
     ../src/test/ctestapp1.cpp \
     ../src/test/ctestapp2.cpp \
     ../src/sceneobjects/cgrenade.cpp \
-    ../src/test/ctestapp3-drashtest1.cpp
+    ../src/test/ctestapp3-drashtest1.cpp \
+    ../src/diag/ctimer.cpp
 
 
 CONFIG += console
@@ -36,7 +36,6 @@ HEADERS += \
     ../src/cvec2.h \
     ../src/diag/clogger.h \
     ../src/capp.h \
-    ../src/ctimer.h \
     ../src/sceneobjects/ccamera.h \
     ../src/sceneobjects/csolidbody.h \
     ../src/canimatedparam.h \
@@ -50,7 +49,8 @@ HEADERS += \
     ../src/test/ctestapp2.h \
     ../src/cboomparams.h \
     ../src/sceneobjects/cgrenade.h \
-    ../src/test/ctestapp3-drashtest1.h
+    ../src/test/ctestapp3-drashtest1.h \
+    ../src/diag/ctimer.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG

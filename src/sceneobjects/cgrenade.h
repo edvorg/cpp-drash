@@ -3,7 +3,7 @@
 #define CGRENADE_H
 
 #include "cbullet.h"
-#include "../ctimer.h"
+#include "../diag/ctimer.h"
 
 namespace drash {
 

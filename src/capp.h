@@ -3,7 +3,7 @@
 #define CAPP_H
 
 #include "cscene.h"
-#include "ctimer.h"
+#include "diag/ctimer.h"
 #include "test/ctestapp.h"
 
 #include <vector>
