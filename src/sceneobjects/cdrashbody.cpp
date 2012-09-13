@@ -70,7 +70,7 @@ void CDrashBody::Step(double _dt)
             }
         }
 
-        SetDead(true);
+        SetDead();
     }
 }
 

@@ -38,14 +38,15 @@ public:
     virtual void EndContact( const CContact &_contact );
 
     virtual void Boom(const CBoomParams &_boom);
+
     const b2Body* GetBody(void) const;
     b2Body* GetBody(void);
 
     CScene *GetScene();
     const CScene *GetScene() const;
 
-    void SetDead(bool _dead);
-    bool IsDead()const;
+    void SetDead();
+    bool IsDead() const;
 
     CAnimatedParam<CVec2> mPos;
     CAnimatedParam<float> mAngle;

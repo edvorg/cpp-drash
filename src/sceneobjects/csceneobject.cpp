@@ -122,9 +122,9 @@ const CScene *CSceneObject::GetScene() const
     return mScene;
 }
 
-void CSceneObject::SetDead(bool _dead)
+void CSceneObject::SetDead()
 {
-    mDead = _dead;
+    mDead = true;
 }
 
 bool CSceneObject::IsDead() const
