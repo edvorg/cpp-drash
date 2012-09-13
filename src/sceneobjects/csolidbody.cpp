@@ -1,4 +1,5 @@
 #include "csolidbody.h"
+#include "cboom.h"
 
 namespace drash
 {

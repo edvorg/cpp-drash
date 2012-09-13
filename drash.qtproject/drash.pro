@@ -17,7 +17,8 @@ SOURCES += \
     ../src/sceneobjects/cgrenade.cpp \
     ../src/test/ctestapp3-drashtest1.cpp \
     ../src/diag/ctimer.cpp \
-    ../src/misc/cvec2.cpp
+    ../src/misc/cvec2.cpp \
+    ../src/sceneobjects/cboom.cpp
 
 
 CONFIG += console
@@ -45,12 +46,12 @@ HEADERS += \
     ../src/test/ctestapp.h \
     ../src/test/ctestapp1.h \
     ../src/test/ctestapp2.h \
-    ../src/cboomparams.h \
     ../src/sceneobjects/cgrenade.h \
     ../src/test/ctestapp3-drashtest1.h \
     ../src/diag/ctimer.h \
     ../src/misc/cvec2.h \
-    ../src/misc/canimatedparam.h
+    ../src/misc/canimatedparam.h \
+    ../src/sceneobjects/cboom.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG

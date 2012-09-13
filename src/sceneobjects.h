@@ -10,5 +10,6 @@
 #include "sceneobjects/csolidbody.h"
 #include "sceneobjects/cbullet.h"
 #include "sceneobjects/cgrenade.h"
+#include "sceneobjects/cboom.h"
 
 #endif // SCENEOBJECTS_H

@@ -4,7 +4,6 @@
 
 #include "graphics/cdebugrenderer.h"
 #include "sceneobjects.h"
-#include "cboomparams.h"
 #include <list>
 
 namespace drash

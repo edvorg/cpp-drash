@@ -4,11 +4,12 @@
 
 #include <Box2D/Box2D.h>
 #include "../misc/cvec2.h"
-#include "../cboomparams.h"
 #include "../misc/canimatedparam.h"
 
 namespace drash
 {
+
+class CBoomParams;
 
 class CScene;
 class CSceneObject;
