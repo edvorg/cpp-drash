@@ -36,6 +36,7 @@ protected:
 
     bool mDestroy;
     CVec2 mLastVelocity;
+    float mLastAngularVelocity;
     ParamsT mParams;
 };
 

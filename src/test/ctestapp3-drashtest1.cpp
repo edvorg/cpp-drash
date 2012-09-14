@@ -24,7 +24,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     CSolidBodyParams sbp;
     sbp.mDynamic = false;
     sbp.mRestitution = 0.5;
-    sbp.mAngle = 0.1;
+    sbp.mAngle = -0.1;
     sbp.mVertices.push_back( CVec2( -200, -5 ) );
     sbp.mVertices.push_back( CVec2( 200, -5 ) );
     sbp.mVertices.push_back( CVec2( 200, 5 ) );
@@ -35,6 +35,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     CDrashBodyParams dbp;
     dbp.mDynamic = true;
     dbp.mPos.Set(0, 100);
+    dbp.mAngle = - M_PI / 4;
 
     dbp.mVertices.push_back( CVec2( -10, -10 ) );
     dbp.mVertices.push_back( CVec2( 10, -10 ) );
@@ -85,6 +86,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
 
 
     CDrashBody *db = GetScene()->CreateObject<CDrashBody>(dbp);
+    db->GetBody()->SetAngularVelocity(2);
 
     return true;
 }

@@ -12,6 +12,7 @@ void CDrashBody::BeginContact(const CContact &_contact)
 
     mDestroy = true;
     mLastVelocity = GetBody()->GetLinearVelocity();
+    mLastAngularVelocity = GetBody()->GetAngularVelocity();
 }
 
 void CDrashBody::EndContact(const CContact &_contact)
@@ -22,6 +23,7 @@ void CDrashBody::EndContact(const CContact &_contact)
 CDrashBody::CDrashBody():
     mDestroy(false),
     mLastVelocity(0),
+    mLastAngularVelocity(0),
     mParams()
 {
 }
@@ -55,18 +57,20 @@ void CDrashBody::Step(double _dt)
     {
         for ( auto i = mParams.mChilds.begin(); i != mParams.mChilds.end(); i++ )
         {
-            i->mPos = mPos.Get();
-            i->mPos += i->mLocalPos;
+            i->mPos = GetBody()->GetWorldPoint(i->mLocalPos);
+            i->mAngle = GetBody()->GetAngle();
 
             if ( i->mChilds.size() )
             {
                 CSceneObject* o = GetScene()->CreateObject<CDrashBody>(*i);
                 o->GetBody()->SetLinearVelocity(mLastVelocity);
+                o->GetBody()->SetAngularVelocity(mLastAngularVelocity);
             }
             else
             {
                 CSceneObject* o = GetScene()->CreateObject<CSolidBody>(*i);
                 o->GetBody()->SetLinearVelocity(mLastVelocity);
+                o->GetBody()->SetAngularVelocity(mLastAngularVelocity);
             }
         }
 
