@@ -52,7 +52,7 @@ void CTestApp1::Update()
         CDrashBodyParams p;
         p.mPos.RandY(100, 200, 15);
         p.mPos.RandX(-50, 50, 15);
-        GetScene()->CreateObject<CDrashBody>(p);
+        GetScene()->CreateObject<CSolidBody>(p);
         t.Reset(true);
     }
 }
