@@ -27,11 +27,6 @@ bool CSolidBody::Init(const ParamsT &_params )
         return false;
     }
 
-    b2MassData md;
-    md.center.SetZero();
-    md.I = 0.0f;
-    md.mass = _params.mMass;
-
     b2PolygonShape s;
 
     if ( _params.mVertices.size() == 0 )
@@ -43,8 +38,6 @@ bool CSolidBody::Init(const ParamsT &_params )
         s.Set( &*_params.mVertices.begin(), _params.mVertices.size() );
     }
 
-    s.ComputeMass( &md, 1.0f );
-
     b2FixtureDef fdef;
     fdef.density = 1.0f;
     fdef.friction = _params.mFriction;
@@ -52,10 +45,18 @@ bool CSolidBody::Init(const ParamsT &_params )
     fdef.restitution = _params.mRestitution;
     fdef.shape = &s;
     fdef.userData = NULL;
+
     if ( GetBody()->CreateFixture(&fdef) == NULL )
 	{
 		return false;
     }
+
+    b2MassData md;
+    md.center.SetZero();
+    md.I = 1.0f;
+    md.mass = _params.mMass;
+
+    GetBody()->SetMassData(&md);
 
 	return true;
 }
