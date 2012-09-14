@@ -37,17 +37,18 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
     GetScene()->AddPlayer(player);
 
     CSolidBodyParams targetForFire;
-    targetForFire.mVertices.push_back( CVec2( -10, 0 ) );
-    targetForFire.mVertices.push_back( CVec2( 10, 0 ) );
-    targetForFire.mVertices.push_back( CVec2( 10, 10 ) );
-    targetForFire.mVertices.push_back( CVec2( -10, 10 ) );
-    targetForFire.mFriction = 5;
-    targetForFire.mMass = 150;
+    targetForFire.mVertices.push_back( CVec2( -10, -5 ) );
+    targetForFire.mVertices.push_back( CVec2( 10, -5 ) );
+    targetForFire.mVertices.push_back( CVec2( 10, 5 ) );
+    targetForFire.mVertices.push_back( CVec2( -10, 5 ) );
+    targetForFire.mFriction = 0.5;
+    targetForFire.mMass = 1;
 
     targetForFire.mPos.Set(-20,0);
-    for (int i = 0 ; i < 10 ; i++){
+    for (int i = 0 ; i < 10 ; i++)
+    {
         GetScene()->CreateObject<CSolidBody>(targetForFire);
-        targetForFire.mPos.Set(-20,i*10);
+        targetForFire.mPos.Set(-20,20 + i*20);
     }
 
     return true;
@@ -61,11 +62,6 @@ void CTestApp2::Release()
 void CTestApp2::Update()
 {
     CTestApp::Update();
-
-
-
-
-
 }
 
 void CTestApp2::Render()

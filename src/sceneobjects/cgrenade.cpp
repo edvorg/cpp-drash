@@ -7,12 +7,12 @@ namespace drash{
 
 CGrenadeParams::CGrenadeParams():
     CBulletParams(),
-    mBoomTime(3)
+    mBoomTime(1)
 {}
 
 CGrenade::CGrenade():
     CBullet(),
-    mBoomTime(3),
+    mBoomTime(1),
     mActivatedTimer(false)
 {
 }
@@ -49,13 +49,17 @@ void CGrenade::Boom(const CBoomParams &_boom)
 void CGrenade::Step(double _dt)
 {
     CBullet::Step(_dt);
-    if (mActivatedTimer == true){
+
+    if (mActivatedTimer == true)
+    {
         mTimerOfBoom.Tick();
-        if (mTimerOfBoom.GetFullTime() >= mBoomTime){
+        if (mTimerOfBoom.GetFullTime() >= mBoomTime)
+        {
             CBoomParams boom;
             boom.mPos = mPos.Get();
-            boom.mStregth = 500000;
+            boom.mStregth = 500;
             GetScene()->AddRequestBoom(boom);
+            SetDead();
         }
     }
 }
