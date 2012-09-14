@@ -88,6 +88,11 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     CDrashBody *db = GetScene()->CreateObject<CDrashBody>(dbp);
     db->GetBody()->SetAngularVelocity(2);
 
+    CSolidBodyParams pp;
+    pp.mPos.Set(-200, 100);
+    pp.mMass = 10;
+    GetScene()->CreateObject<CSolidBody>(pp)->GetBody()->SetLinearVelocity( CVec2(200, 0) );
+
     return true;
 }
 
