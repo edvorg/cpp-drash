@@ -8,7 +8,6 @@ SOURCES += \
     ../src/sceneobjects/ccamera.cpp \
     ../src/sceneobjects/csolidbody.cpp \
     ../src/sceneobjects/cdrashbody.cpp \
-    ../src/misc/clist.cpp \
     ../src/sceneobjects/cplayer.cpp \
     ../src/sceneobjects/cbullet.cpp \
     ../src/test/ctestapp.cpp \
@@ -39,7 +38,6 @@ HEADERS += \
     ../src/sceneobjects/ccamera.h \
     ../src/sceneobjects/csolidbody.h \
     ../src/sceneobjects/cdrashbody.h \
-    ../src/misc/clist.h \
     ../src/sceneobjects/cplayer.h \
     ../src/sceneobjects.h \
     ../src/sceneobjects/cbullet.h \
