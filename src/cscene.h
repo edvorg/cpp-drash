@@ -37,19 +37,17 @@ public:
     void Step( double _dt );    
 
     virtual void BeginContact( b2Contact * _contact );
-    virtual void PreSolve( b2Contact* _contact, const b2Manifold * _oldManifold );
-    virtual void PostSolve( b2Contact * _contact, const b2ContactImpulse * _impulse);
     virtual void EndContact( b2Contact * _contact );
 
     void SetDebugRenderer( CDebugRenderer *_renderer );
     void Draw(void);
 
-    void OnPlayerEvent(const CPlayerEvent & _event, unsigned int _playerId);
+    void OnPlayerEvent( const CPlayerEvent & _event, unsigned int _playerId );
 
     // returns player id ( >= 0 ) or -1 if failed
     int AddPlayer( const CPlayerParams & _params );
 
-    void AddRequestBoom(const CBoomParams  _boom);
+    void AddRequestBoom( const CBoomParams  _boom );
 
     void BoomNow();
 protected:

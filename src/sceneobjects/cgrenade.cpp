@@ -32,10 +32,6 @@ bool CGrenade::Init( const CGrenade::ParamsT &_params )
 
 void CGrenade::BeginContact( const CContact &_contact )
 {
-}
-
-void CGrenade::PostSolve( const CContact &_contact )
-{
     if ( mCounter == 0 )
     {
         mCounter++;

@@ -27,7 +27,6 @@ public:
     typedef CDrashBodyParams ParamsT;
 
     virtual void BeginContact( const CContact &_contact );
-    virtual void EndContact( const CContact &_contact );
 
 protected:
     CDrashBody();

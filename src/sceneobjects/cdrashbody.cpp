@@ -51,11 +51,6 @@ void CDrashBody::BeginContact( const CContact &_contact )
     }
 }
 
-void CDrashBody::EndContact( const CContact &_contact )
-{
-    CSolidBody::EndContact(_contact);
-}
-
 void CDrashBody::Release(void)
 {
     CSolidBody::Release();
