@@ -21,24 +21,26 @@ public:
 
     typedef CCameraParams ParamsT;
 
-    static const float m_ZoomMax;
-
-    CCamera( void );
-    virtual ~CCamera( void );
-
     double GetZoom() const;
     double GetZoomTarget() const;
     void SetZoomTarget( float _target, double _time );
 
-protected:    
-    CAnimatedParam<float> mZoom;
+    static const float m_ZoomMax;
+
+protected:        
+    CCamera( void );
 
     virtual bool Init( const ParamsT &_params );
     virtual void Release(void);
 
     virtual void Step( double _dt );
 
+    virtual void OnBoom( const CBoomParams &_boom );
+
 private:
+    CAnimatedParam<float> mZoom;
+    int mShake;
+    CVec2 mLastPos;
 };
 
 }// namespace drash

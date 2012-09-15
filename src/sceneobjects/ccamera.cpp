@@ -1,5 +1,5 @@
 #include "ccamera.h"
-
+#include "cboom.h"
 
 namespace drash
 {
@@ -12,13 +12,10 @@ CCameraParams::CCameraParams():
 }
 
 CCamera::CCamera():
-    CSceneObject()
+    CSceneObject(),
+    mShake(0)
 {
     mZoom.Set(1);
-}
-
-CCamera::~CCamera(void)
-{
 }
 
 bool CCamera::Init( const ParamsT &_params )
@@ -38,10 +35,34 @@ void CCamera::Release(void)
     CSceneObject::Release();
 }
 
-void CCamera::Step(double _dt)
+void CCamera::Step( double _dt )
 {
     CSceneObject::Step(_dt);
     mZoom.Step(_dt);
+
+    if ( mPos.IsTargetSet() == false )
+    {
+        mShake = 0;
+    }
+}
+
+void CCamera::OnBoom( const CBoomParams &_boom )
+{
+    CSceneObject::OnBoom(_boom);
+
+    if ( mShake == 0 )
+    {
+        mLastPos = GetBody()->GetWorldCenter();
+    }
+
+    CVec2 tmp = GetBody()->GetWorldCenter();
+    tmp.y += 0.1 * _boom.mStregth / mZoom.Get();
+    mPos.Set( tmp );
+    mPos.SetTarget( mLastPos,
+                    0.2,
+                    AnimationBehaviorSingle );
+
+    mShake++;
 }
 
 double CCamera::GetZoom() const
