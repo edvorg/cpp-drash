@@ -3,6 +3,7 @@
 #define CDRASHBODY_H
 
 #include "csolidbody.h"
+#include "cboom.h"
 #include <vector>
 #include "../diag/ctimer.h"
 
@@ -27,22 +28,24 @@ public:
 
     typedef CDrashBodyParams ParamsT;
 
-    virtual void OnContactBegin( const CContact &_contact );
-
 protected:
     CDrashBody();
     virtual ~CDrashBody();
 
     virtual bool Init( const ParamsT &_params );
-    virtual void Release(void);
 
     virtual void Step( double _dt );
 
+    virtual void OnContactBegin( const CContact &_contact );
+    virtual void OnBoom( const CBoomParams &_boom );
+
+private:
     int mCounter;
     CVec2 mLastVelocity;
     float mLastAngularVelocity;
     ParamsT mParams;
     CTimer mTimer;
+    std::vector<CBoomParams> mBoomParams;
 };
 
 } // namespace drash

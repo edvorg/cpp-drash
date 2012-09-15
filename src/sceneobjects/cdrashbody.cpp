@@ -18,9 +18,9 @@ CDrashBody::CDrashBody():
     mCounter(0),
     mLastVelocity(0),
     mLastAngularVelocity(0),
-    mParams()
+    mParams(),
+    mBoomParams()
 {
-    mTimer.Reset(false);
 }
 
 CDrashBody::~CDrashBody()
@@ -35,9 +35,51 @@ bool CDrashBody::Init( const CDrashBody::ParamsT &_params )
     }
 
     mParams = _params;
-    mTimer.SetPaused(false);
+    mTimer.Reset(true);
 
     return true;
+}
+
+void CDrashBody::Step( double _dt )
+{
+    CSolidBody::Step(_dt);
+
+    mTimer.Tick();
+
+    if ( mCounter == 1 )
+    {
+        mCounter++;
+
+        for ( auto i = mParams.mChilds.begin(); i != mParams.mChilds.end(); i++ )
+        {
+            i->mPos = GetBody()->GetWorldPoint(i->mLocalPos);
+            i->mAngle = GetBody()->GetAngle();
+
+            CSceneObject* o = NULL;
+
+            if ( i->mChilds.size() )
+            {
+                o = GetScene()->CreateObject<CDrashBody>(*i);
+                o->GetBody()->SetLinearVelocity(mLastVelocity);
+                o->GetBody()->SetAngularVelocity(mLastAngularVelocity);
+            }
+            else
+            {
+                o = GetScene()->CreateObject<CSolidBody>(*i);
+                o->GetBody()->SetLinearVelocity(mLastVelocity);
+                o->GetBody()->SetAngularVelocity(mLastAngularVelocity);
+            }
+
+            for ( auto j = mBoomParams.begin(), j_e = mBoomParams.end(); j != j_e; j++ )
+            {
+                o->OnBoom(*j);
+            }
+        }
+
+        mBoomParams.clear();
+
+        SetDead();
+    }
 }
 
 void CDrashBody::OnContactBegin( const CContact &_contact )
@@ -58,41 +100,22 @@ void CDrashBody::OnContactBegin( const CContact &_contact )
     }
 }
 
-void CDrashBody::Release(void)
+void CDrashBody::OnBoom( const CBoomParams &_boom )
 {
-    CSolidBody::Release();
-}
+    CSolidBody::OnBoom(_boom);
 
-void CDrashBody::Step( double _dt )
-{
-    CSolidBody::Step(_dt);
-
-    mTimer.Tick();
-
-    if ( mCounter == 1 )
+    if ( mCounter == 0 && mTimer.GetFullTime() > mParams.mDestroyDelay )
     {
-        mCounter++;
+        CVec2 dist = _boom.mPos;
+        dist -= GetBody()->GetWorldCenter();
 
-        for ( auto i = mParams.mChilds.begin(); i != mParams.mChilds.end(); i++ )
+        if ( dist.Length() < _boom.mStregth )
         {
-            i->mPos = GetBody()->GetWorldPoint(i->mLocalPos);
-            i->mAngle = GetBody()->GetAngle();
-
-            if ( i->mChilds.size() )
-            {
-                CSceneObject* o = GetScene()->CreateObject<CDrashBody>(*i);
-                o->GetBody()->SetLinearVelocity(mLastVelocity);
-                o->GetBody()->SetAngularVelocity(mLastAngularVelocity);
-            }
-            else
-            {
-                CSceneObject* o = GetScene()->CreateObject<CSolidBody>(*i);
-                o->GetBody()->SetLinearVelocity(mLastVelocity);
-                o->GetBody()->SetAngularVelocity(mLastAngularVelocity);
-            }
+            mCounter++;
+            mLastVelocity = GetBody()->GetLinearVelocity();
+            mLastAngularVelocity = GetBody()->GetAngularVelocity();
+            mBoomParams.push_back(_boom);
         }
-
-        SetDead();
     }
 }
 
