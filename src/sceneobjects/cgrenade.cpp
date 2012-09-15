@@ -7,54 +7,58 @@ namespace drash{
 
 CGrenadeParams::CGrenadeParams():
     CBulletParams(),
-    mBoomTime(1)
+    mTime(1.0)
 {}
 
 CGrenade::CGrenade():
     CBullet(),
-    mBoomTime(1),
-    mActivatedTimer(false)
+    mTime(1.0),
+    mTimer(),
+    mCounter(0)
 {
 }
 
-bool CGrenade::Init(const CGrenade::ParamsT &_params)
+bool CGrenade::Init( const CGrenade::ParamsT &_params )
 {
-    if ( CBullet::Init(_params) == false){
+    if ( CBullet::Init(_params) == false )
+    {
         return false;
     }
 
-    mBoomTime = _params.mBoomTime;
+    mTime = _params.mTime;
 
     return true;
 }
 
-void CGrenade::BeginContact(const CContact &_contact)
+void CGrenade::BeginContact( const CContact &_contact )
 {
-
 }
 
-void CGrenade::PostSolve(const CContact &_contact)
+void CGrenade::PostSolve( const CContact &_contact )
 {
-    if ( mActivatedTimer == false ){
-        mActivatedTimer = true;
-        mTimerOfBoom.Reset(true);
+    if ( mCounter == 0 )
+    {
+        mCounter++;
+        mTimer.Reset(true);
     }
 }
 
-void CGrenade::Boom(const CBoomParams &_boom)
+void CGrenade::Boom( const CBoomParams &_boom )
 {
     CBullet::Boom(_boom);
 }
 
-void CGrenade::Step(double _dt)
+void CGrenade::Step( double _dt )
 {
     CBullet::Step(_dt);
 
-    if (mActivatedTimer == true)
+    if ( mCounter == 1 )
     {
-        mTimerOfBoom.Tick();
-        if (mTimerOfBoom.GetFullTime() >= mBoomTime)
+        mTimer.Tick();
+
+        if ( mTimer.GetFullTime() >= mTime )
         {
+            mCounter++;
             CBoomParams boom;
             boom.mPos = mPos.Get();
             boom.mStregth = 500;

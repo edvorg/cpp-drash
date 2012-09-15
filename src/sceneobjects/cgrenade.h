@@ -5,35 +5,39 @@
 #include "cbullet.h"
 #include "../diag/ctimer.h"
 
-namespace drash {
+namespace drash
+{
 
 class CGrenadeParams : public CBulletParams
 {
 public:
     CGrenadeParams();
-    unsigned int mBoomTime;
+
+    double mTime;
 };
 
 class CGrenade : public CBullet
 {
 public:
     friend class CScene;
+
     typedef CGrenadeParams ParamsT;
 
     CGrenade();
 
-    virtual bool Init(const ParamsT &_params);
-    virtual void BeginContact(const CContact &_contact);
+    virtual bool Init( const ParamsT &_params );
 
-    virtual void PostSolve(const CContact &_contact);
-    virtual void Boom(const CBoomParams &_boom);
-    virtual void Step(double _dt);
+    virtual void BeginContact( const CContact &_contact );
+    virtual void PostSolve( const CContact &_contact );
+
+    virtual void Boom( const CBoomParams &_boom );
+
+    virtual void Step( double _dt );
 
 private:
-    double mBoomTime;
-
-    CTimer mTimerOfBoom;
-    bool mActivatedTimer;
+    double mTime;
+    CTimer mTimer;
+    int mCounter;
 
 };
 

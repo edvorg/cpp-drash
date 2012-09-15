@@ -117,7 +117,7 @@ void CPlayer::FireNow(const CVec2 &_fireDirect)
         bulletParams.mPos = GetBody()->GetWorldPoint(CVec2(-mPointShoot.
                                                            x,mPointShoot.y));
     }
-    bulletParams.mBoomTime = 10;
+    bulletParams.mTime = 2;
     GetScene()->CreateObject< CGrenade >( bulletParams );
 }
 
