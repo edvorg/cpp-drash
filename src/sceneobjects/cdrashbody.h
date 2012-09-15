@@ -4,6 +4,7 @@
 
 #include "csolidbody.h"
 #include <vector>
+#include "../diag/ctimer.h"
 
 namespace drash
 {
@@ -11,8 +12,11 @@ namespace drash
 class CDrashBodyParams : public CSolidBodyParams
 {
 public:
+    CDrashBodyParams();
+
     std::vector<CDrashBodyParams> mChilds;
     CVec2 mLocalPos;
+    double mDestroyDelay;
 };
 
 class CDrashBody : public CSolidBody
@@ -34,10 +38,11 @@ protected:
 
     virtual void Step( double _dt );
 
-    bool mDestroy;
+    int mCounter;
     CVec2 mLastVelocity;
     float mLastAngularVelocity;
     ParamsT mParams;
+    CTimer mTimer;
 };
 
 } // namespace drash

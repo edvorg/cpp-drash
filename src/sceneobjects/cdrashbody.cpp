@@ -6,33 +6,27 @@
 namespace drash
 {
 
-void CDrashBody::BeginContact(const CContact &_contact)
+CDrashBodyParams::CDrashBodyParams():
+    mChilds(),
+    mLocalPos(0),
+    mDestroyDelay(0)
 {
-    CSolidBody::BeginContact(_contact);
-
-    mDestroy = true;
-    mLastVelocity = GetBody()->GetLinearVelocity();
-    mLastAngularVelocity = GetBody()->GetAngularVelocity();
-}
-
-void CDrashBody::EndContact(const CContact &_contact)
-{
-    CSolidBody::EndContact(_contact);
 }
 
 CDrashBody::CDrashBody():
-    mDestroy(false),
+    mCounter(0),
     mLastVelocity(0),
     mLastAngularVelocity(0),
     mParams()
 {
+    mTimer.Reset(false);
 }
 
 CDrashBody::~CDrashBody()
 {
 }
 
-bool CDrashBody::Init(const CDrashBody::ParamsT &_params)
+bool CDrashBody::Init( const CDrashBody::ParamsT &_params )
 {
     if ( CSolidBody::Init(_params) == false )
     {
@@ -40,8 +34,26 @@ bool CDrashBody::Init(const CDrashBody::ParamsT &_params)
     }
 
     mParams = _params;
+    mTimer.SetPaused(false);
 
     return true;
+}
+
+void CDrashBody::BeginContact( const CContact &_contact )
+{
+    CSolidBody::BeginContact(_contact);
+
+    if ( mCounter == 0 && mTimer.GetFullTime() > mParams.mDestroyDelay )
+    {
+        mCounter++;
+        mLastVelocity = GetBody()->GetLinearVelocity();
+        mLastAngularVelocity = GetBody()->GetAngularVelocity();
+    }
+}
+
+void CDrashBody::EndContact( const CContact &_contact )
+{
+    CSolidBody::EndContact(_contact);
 }
 
 void CDrashBody::Release(void)
@@ -49,12 +61,16 @@ void CDrashBody::Release(void)
     CSolidBody::Release();
 }
 
-void CDrashBody::Step(double _dt)
+void CDrashBody::Step( double _dt )
 {
     CSolidBody::Step(_dt);
 
-    if ( mDestroy )
+    mTimer.Tick();
+
+    if ( mCounter == 1 )
     {
+        mCounter++;
+
         for ( auto i = mParams.mChilds.begin(); i != mParams.mChilds.end(); i++ )
         {
             i->mPos = GetBody()->GetWorldPoint(i->mLocalPos);
@@ -75,7 +91,6 @@ void CDrashBody::Step(double _dt)
         }
 
         SetDead();
-        mDestroy = false;
     }
 }
 
