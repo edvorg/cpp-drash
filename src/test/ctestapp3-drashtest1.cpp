@@ -6,6 +6,8 @@
 namespace drash
 {
 
+void GenDrashBodyParams( CDrashBodyParams* _params , float _subset_size, unsigned int _level, unsigned int _levels );
+
 CTestApp3::CTestApp3()
 {
 }
@@ -25,15 +27,13 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     sbp.mDynamic = false;
     sbp.mRestitution = 0.5;
     sbp.mAngle = -0.1;
-    sbp.mVertices.push_back( CVec2( -200, -5 ) );
-    sbp.mVertices.push_back( CVec2( 200, -5 ) );
-    sbp.mVertices.push_back( CVec2( 200, 5 ) );
-    sbp.mVertices.push_back( CVec2( -200, 5 ) );
-
-    CSolidBody* sb = GetScene()->CreateObject<CSolidBody>(sbp);
+    sbp.mVertices.push_back( CVec2( -300, -5 ) );
+    sbp.mVertices.push_back( CVec2( 300, -5 ) );
+    sbp.mVertices.push_back( CVec2( 300, 5 ) );
+    sbp.mVertices.push_back( CVec2( -300, 5 ) );
+    GetScene()->CreateObject<CSolidBody>(sbp);
 
     CDrashBodyParams dbp;
-    dbp.mDynamic = true;
     dbp.mPos.Set(0, 100);
     dbp.mAngle = - M_PI / 4;
 
@@ -42,55 +42,16 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     dbp.mVertices.push_back( CVec2( 10, 10 ) );
     dbp.mVertices.push_back( CVec2( -10, 10 ) );
 
-    for ( int i = 0; i < 4; i++ )
-    {
-        dbp.mChilds.push_back( CDrashBodyParams() );
-        dbp.mChilds[i].mVertices.push_back( CVec2( -5, -5 ) );
-        dbp.mChilds[i].mVertices.push_back( CVec2( 5, -5 ) );
-        dbp.mChilds[i].mVertices.push_back( CVec2( 5, 5 ) );
-        dbp.mChilds[i].mVertices.push_back( CVec2( -5, 5 ) );
+    dbp.mDestroyDelay = 0.5;
 
-        for ( int j = 0; j < 4; j++ )
-        {
-            dbp.mChilds[i].mChilds.push_back( CDrashBodyParams() );
-            dbp.mChilds[i].mChilds[j].mVertices.push_back( CVec2( -2.5, -2.5 ) );
-            dbp.mChilds[i].mChilds[j].mVertices.push_back( CVec2( 2.5, -2.5 ) );
-            dbp.mChilds[i].mChilds[j].mVertices.push_back( CVec2( 2.5, 2.5 ) );
-            dbp.mChilds[i].mChilds[j].mVertices.push_back( CVec2( -2.5, 2.5 ) );
-        }
-    }
-
-    dbp.mChilds[0].mLocalPos.Set(-5, 5);
-    dbp.mChilds[0].mChilds[0].mLocalPos.Set(-2.5, 2.5);
-    dbp.mChilds[0].mChilds[1].mLocalPos.Set(2.5, 2.5);
-    dbp.mChilds[0].mChilds[2].mLocalPos.Set(2.5, -2.5);
-    dbp.mChilds[0].mChilds[3].mLocalPos.Set(-2.5, -2.5);
-
-    dbp.mChilds[1].mLocalPos.Set(5, 5);
-    dbp.mChilds[1].mChilds[0].mLocalPos.Set(-2.5, 2.5);
-    dbp.mChilds[1].mChilds[1].mLocalPos.Set(2.5, 2.5);
-    dbp.mChilds[1].mChilds[2].mLocalPos.Set(2.5, -2.5);
-    dbp.mChilds[1].mChilds[3].mLocalPos.Set(-2.5, -2.5);
-
-    dbp.mChilds[2].mLocalPos.Set(5, -5);
-    dbp.mChilds[2].mChilds[0].mLocalPos.Set(-2.5, 2.5);
-    dbp.mChilds[2].mChilds[1].mLocalPos.Set(2.5, 2.5);
-    dbp.mChilds[2].mChilds[2].mLocalPos.Set(2.5, -2.5);
-    dbp.mChilds[2].mChilds[3].mLocalPos.Set(-2.5, -2.5);
-
-    dbp.mChilds[3].mLocalPos.Set(-5, -5);
-    dbp.mChilds[3].mChilds[0].mLocalPos.Set(-2.5, 2.5);
-    dbp.mChilds[3].mChilds[1].mLocalPos.Set(2.5, 2.5);
-    dbp.mChilds[3].mChilds[2].mLocalPos.Set(2.5, -2.5);
-    dbp.mChilds[3].mChilds[3].mLocalPos.Set(-2.5, -2.5);
-
+    GenDrashBodyParams( &dbp, 5, 0, 3 );
 
     CDrashBody *db = GetScene()->CreateObject<CDrashBody>(dbp);
     db->GetBody()->SetAngularVelocity(2);
 
     CSolidBodyParams pp;
     pp.mPos.Set(-200, 100);
-    pp.mMass = 10;
+    pp.mMass = 3;
     GetScene()->CreateObject<CSolidBody>(pp)->GetBody()->SetLinearVelocity( CVec2(200, 0) );
 
     return true;
@@ -109,6 +70,36 @@ void CTestApp3::Update()
 void CTestApp3::Render()
 {
     CTestApp::Render();
+}
+
+void GenDrashBodyParams( CDrashBodyParams* _params, float _subset_size, unsigned int _level, unsigned int _levels )
+{
+    if ( _level > _levels )
+    {
+        return;
+    }
+
+    for ( int i = 0; i < 4; i++ )
+    {
+        _params->mChilds.push_back( CDrashBodyParams() );
+
+        _params->mChilds[i].mDestroyDelay = 0.5;
+
+        _params->mChilds[i].mVertices.push_back( CVec2( -_subset_size, -_subset_size ) );
+        _params->mChilds[i].mVertices.push_back( CVec2( _subset_size, -_subset_size ) );
+        _params->mChilds[i].mVertices.push_back( CVec2( _subset_size, _subset_size ) );
+        _params->mChilds[i].mVertices.push_back( CVec2( -_subset_size, _subset_size ) );
+    }
+
+    _params->mChilds[0].mLocalPos.Set( -_subset_size, _subset_size );
+    _params->mChilds[1].mLocalPos.Set( _subset_size, _subset_size );
+    _params->mChilds[2].mLocalPos.Set( _subset_size, -_subset_size );
+    _params->mChilds[3].mLocalPos.Set( -_subset_size, -_subset_size );
+
+    for ( int i = 0; i < 4; i++ )
+    {
+        GenDrashBodyParams( &_params->mChilds[i], _subset_size / 2.0f, _level + 1, _levels );
+    }
 }
 
 } // namespace drash
