@@ -13,3 +13,7 @@
 
 *.user
 *.log
+
+#build dirs
+drash-build-release
+drash-build-debug
