@@ -33,6 +33,25 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     sbp.mVertices.push_back( CVec2( -300, 5 ) );
     GetScene()->CreateObject<CSolidBody>(sbp);
 
+    sbp.mPos.Set( 0, 600 );
+    GetScene()->CreateObject<CSolidBody>(sbp);
+
+    sbp.mPos.Set( -300, 300 );
+    sbp.mVertices.clear();
+    sbp.mVertices.push_back( CVec2( -5, -300 ) );
+    sbp.mVertices.push_back( CVec2( 5, -300 ) );
+    sbp.mVertices.push_back( CVec2( 5, 300 ) );
+    sbp.mVertices.push_back( CVec2( -5, 300 ) );
+    GetScene()->CreateObject<CSolidBody>(sbp);
+
+    sbp.mPos.Set( 300, 300 );
+    sbp.mVertices.clear();
+    sbp.mVertices.push_back( CVec2( -5, -300 ) );
+    sbp.mVertices.push_back( CVec2( 5, -300 ) );
+    sbp.mVertices.push_back( CVec2( 5, 300 ) );
+    sbp.mVertices.push_back( CVec2( -5, 300 ) );
+    GetScene()->CreateObject<CSolidBody>(sbp);
+
     CDrashBodyParams dbp;
     dbp.mPos.Set( 0, 100 );
     dbp.mAngle = - M_PI / 4;
