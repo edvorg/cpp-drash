@@ -64,15 +64,15 @@ void CSolidBody::Release(void)
 
 void CSolidBody::OnBoom( const CBoomParams &_boom )
 {
-    CVec2 pos = mPos.Get();
-    CVec2 force( pos.x- _boom.mPos.x, pos.y - _boom.mPos.y );
-    float len = force.Length();
-    force.Normalize();
-    force *= _boom.mStregth;
-    force.x /= len;
-    force.y /= len;
-    GetBody()->ApplyLinearImpulse( force, mPos.Get() );
+    CVec2 dir( GetBody()->GetWorldCenter() );
+    dir -= _boom.mPos;
 
+    float k = std::min( dir.Length(), _boom.mStregth )/ _boom.mStregth;
+
+    dir.Normalize();
+    dir *= k * _boom.mStregth;
+
+    GetBody()->ApplyLinearImpulse( dir, mPos.Get() );
 }
 
 } // namespace drash
