@@ -38,8 +38,11 @@ bool CSolidBody::Init( const ParamsT &_params )
         s.Set( &*_params.mVertices.begin(), _params.mVertices.size() );
     }
 
+    b2MassData md;
+    s.ComputeMass( &md, 1.0 );
+
     b2FixtureDef fdef;
-    fdef.density = 1.0f;
+    fdef.density = _params.mMass / md.mass;
     fdef.friction = _params.mFriction;
     fdef.isSensor = false;
     fdef.restitution = _params.mRestitution;
@@ -50,13 +53,6 @@ bool CSolidBody::Init( const ParamsT &_params )
 	{
 		return false;
     }
-
-    b2MassData md;
-    md.center.SetZero();
-    md.I = 1.0f;
-    md.mass = _params.mMass;
-
-    GetBody()->SetMassData(&md);
 
 	return true;
 }
@@ -72,10 +68,10 @@ void CSolidBody::OnBoom( const CBoomParams &_boom )
     CVec2 force( pos.x- _boom.mPos.x, pos.y - _boom.mPos.y );
     float len = force.Length();
     force.Normalize();
-    force *= _boom.mStregth * 100;
+    force *= _boom.mStregth;
     force.x /= len;
     force.y /= len;
-    GetBody()->ApplyForce( force, mPos.Get() );
+    GetBody()->ApplyLinearImpulse( force, mPos.Get() );
 
 }
 
