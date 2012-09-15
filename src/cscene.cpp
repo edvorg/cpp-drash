@@ -16,23 +16,25 @@ CScene::~CScene(void)
 {
     if ( mInitialized == true )
     {
-        LOG_WARN( "CScene::~CScene(): warning Release() called from destructor" );
+        LOG_WARN( "CScene::~CScene(): "
+                  "warning Release() called automatically from destructor" );
         Release();
     }
 }
 
-bool CScene::Init(const CSceneParams &_params)
+bool CScene::Init( const CSceneParams &_params )
 {
     if ( mInitialized == true )
     {
-        LOG_WARN( "CScene::Init(): already initialized" );
+        LOG_WARN( "CScene::Init(): "
+                  "already initialized" );
         return false;
     }
 
     mWorld.SetContactListener(this);
     mWorld.SetAllowSleeping(true);
     mWorld.SetContinuousPhysics(false);
-    mWorld.SetGravity(_params.mGravity);
+    mWorld.SetGravity( _params.mGravity );
 
     mInitialized = true;
     return true;
@@ -42,19 +44,20 @@ void CScene::Release(void)
 {
     if ( mInitialized == false )
     {
-        LOG_WARN( "CScene::Release(): already released" );
+        LOG_WARN( "CScene::Release(): "
+                  "already released" );
         return;
     }
 
-    if (mCountObjects != 0)
+    if ( mCountObjects != 0 )
     {
         LOG_WARN( "CScene::Release(): "<<
                   mCountObjects<<
                   " object(s) haven't been destroyed. Autorelease" );
 
-        while(mCountObjects != 0)
+        while( mCountObjects != 0 )
         {
-            DestroyObject< CSceneObject >( mObjects[0] );
+            DestroyObject<CSceneObject>( mObjects[0] );
         }
     }
 
@@ -65,21 +68,31 @@ void CScene::Step( double _dt )
 {
     if ( mInitialized == false )
     {
-        LOG_ERR( "CScene::Step(): this is not initialized" );
+        LOG_ERR( "CScene::Step(): "
+                 "this is not initialized" );
         return;
     }
 
+    BoomNow();
+
     mWorld.Step( _dt, mVelocityIterations, mPositionIterations );
 
-    for (unsigned int i = 0 ; i < mCountObjects ; ){
-        if (mObjects[i]->IsDead()){
-            DestroyObject<CSceneObject>(mObjects[i]);
-        }else{
-            mObjects[i]->Step(_dt);
+    for ( unsigned int i = 0 ; i < mCountObjects ; i++ )
+    {
+        mObjects[i]->Step(_dt);
+    }
+
+    for ( unsigned int i = 0; i < mCountObjects; )
+    {
+        if ( mObjects[i]->IsDead() )
+        {
+            DestroyObject<CSceneObject>( mObjects[i] );
+        }
+        else
+        {
             i++;
         }
     }
-    BoomNow();
 }
 
 void CScene::BeginContact(b2Contact * _contact)
@@ -92,13 +105,15 @@ void CScene::BeginContact(b2Contact * _contact)
 
     if ( obj1 == NULL || obj2 == NULL )
     {
-        LOG_WARN("CContactListener::BeginContact(): can not get pointer for one of objects. Skipping");
+        LOG_WARN( "CContactListener::BeginContact(): "
+                  "can not get pointer for one of objects. Skipping" );
         return;
     }
 
     if ( obj1 == obj2 )
     {
-        LOG_WARN("CContactListener::BeginContact(): object A is equals to object B. Skipping");
+        LOG_WARN( "CContactListener::BeginContact(): "
+                  "object A is equals to object B. Skipping" );
         return;
     }
 
@@ -178,7 +193,8 @@ void CScene::PostSolve(b2Contact * _contact, const b2ContactImpulse * _impulse)
 
     if ( obj1 == obj2 )
     {
-        LOG_WARN("CContactListener::BeginContact(): object A is equals to object B. Skipping");
+        LOG_WARN( "CContactListener::BeginContact(): "
+                  "object A is equals to object B. Skipping" );
         return;
     }
 
@@ -206,19 +222,22 @@ void CScene::PostSolve(b2Contact * _contact, const b2ContactImpulse * _impulse)
 void CScene::EndContact(b2Contact *_contact)
 {
     CSceneObject *obj1 = reinterpret_cast<CSceneObject*>(
-                _contact->GetFixtureA()->GetBody()->GetUserData() );
+                         _contact->GetFixtureA()->GetBody()->GetUserData() );
 
     CSceneObject *obj2 = reinterpret_cast<CSceneObject*>(
-                _contact->GetFixtureB()->GetBody()->GetUserData() );
+                         _contact->GetFixtureB()->GetBody()->GetUserData() );
 
     if ( obj1 == NULL || obj2 == NULL )
     {
+        LOG_WARN( "CContactListener::BeginContact(): "
+                  "one of objects has NULL user data pointer (CSceneObject)" );
         return;
     }
 
     if ( obj1 == obj2 )
     {
-        LOG_WARN("CContactListener::BeginContact(): object A is equals to object B. Skipping");
+        LOG_WARN( "CContactListener::BeginContact(): "
+                  "object A is equals to object B. Skipping" );
         return;
     }
 
@@ -228,14 +247,14 @@ void CScene::EndContact(b2Contact *_contact)
     CContact c;
     c.mPointCount = _contact->GetManifold()->pointCount;
 
-    for ( unsigned int i=0; i<c.mPointCount; i++ )
+    for ( unsigned int i = 0; i < c.mPointCount; i++ )
     {
         c.mPoints[i] = obj1->GetBody()->GetLocalPoint( m.points[i] );
     }
     c.obj = obj2;
     obj1->EndContact(c);
 
-    for ( unsigned int i=0; i<c.mPointCount; i++ )
+    for ( unsigned int i = 0; i < c.mPointCount; i++ )
     {
         c.mPoints[i] = obj2->GetBody()->GetLocalPoint( m.points[i] );
     }
@@ -252,7 +271,8 @@ void CScene::Draw(void)
 {
     if ( mInitialized == false )
     {
-        LOG_ERR( "CScene::Step(): this is not initialized" );
+        LOG_ERR( "CScene::Step(): "
+                 "this is not initialized" );
         return;
     }
 
@@ -261,12 +281,15 @@ void CScene::Draw(void)
 
 void CScene::OnPlayerEvent(const CPlayerEvent &_event, unsigned int _playerId)
 {
-    if (_playerId >= mCountPlayers){
-        LOG_ERR("CScene::OnPlayerEvent() : Player with id = " <<
-                _playerId << " no exist");
-
+    if (_playerId >= mCountPlayers)
+    {
+        LOG_ERR( "CScene::OnPlayerEvent(): "
+                 "Player with id = " <<
+                 _playerId <<
+                 " no exist" );
         return;
     }
+
     mPlayers[_playerId]->onEvent(_event);
 }
 
@@ -274,7 +297,8 @@ int CScene::AddPlayer( const CPlayerParams &_params )
 {
     if ( mCountPlayers == mPlayersMaxAmount )
     {
-        LOG_ERR("CScene::AddPlayer() : Achieved maximum Amount of Players");
+        LOG_ERR( "CScene::AddPlayer(): "
+                 "Achieved maximum Amount of Players" );
         return -1;
     }
 
@@ -289,11 +313,14 @@ void CScene::AddRequestBoom(const CBoomParams _boom)
 
 void CScene::BoomNow()
 {
-    for (unsigned int i = 0 ; i < mCountObjects ; i++){
-        for (auto it = mListBooms.begin() ; it != mListBooms.end() ; it++){
+    for ( unsigned int i = 0; i < mCountObjects; i++ )
+    {
+        for ( auto it = mListBooms.begin() ; it != mListBooms.end() ; it++ )
+        {
             mObjects[i]->Boom(*it);
         }
     }
+
     mListBooms.clear();
 }
 
