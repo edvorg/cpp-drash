@@ -43,6 +43,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     dbp.mVertices.push_back( CVec2( -10, 10 ) );
 
     dbp.mDestroyDelay = 0.5;
+    dbp.mDestroySpeed = 50.0f;
 
     GenDrashBodyParams( &dbp, 5, 0, 4 );
 
@@ -84,6 +85,7 @@ void GenDrashBodyParams( CDrashBodyParams* _params, float _subset_size, unsigned
         _params->mChilds.push_back( CDrashBodyParams() );
 
         _params->mChilds[i].mDestroyDelay = 0.5;
+        _params->mChilds[i].mDestroySpeed = 50.0f;
 
         _params->mChilds[i].mVertices.push_back( CVec2( -_subset_size, -_subset_size ) );
         _params->mChilds[i].mVertices.push_back( CVec2( _subset_size, -_subset_size ) );

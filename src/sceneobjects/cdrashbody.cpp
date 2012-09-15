@@ -9,7 +9,8 @@ namespace drash
 CDrashBodyParams::CDrashBodyParams():
     mChilds(),
     mLocalPos(0),
-    mDestroyDelay(0)
+    mDestroyDelay(0),
+    mDestroySpeed(0)
 {
 }
 
@@ -45,9 +46,15 @@ void CDrashBody::OnContactBegin( const CContact &_contact )
 
     if ( mCounter == 0 && mTimer.GetFullTime() > mParams.mDestroyDelay )
     {
-        mCounter++;
-        mLastVelocity = GetBody()->GetLinearVelocity();
-        mLastAngularVelocity = GetBody()->GetAngularVelocity();
+        CVec2 vel = GetBody()->GetLinearVelocity();
+        vel -= _contact.obj->GetBody()->GetLinearVelocity();
+
+        if ( vel.Length() > mParams.mDestroySpeed )
+        {
+            mCounter++;
+            mLastVelocity = GetBody()->GetLinearVelocity();
+            mLastAngularVelocity = GetBody()->GetAngularVelocity();
+        }
     }
 }
 

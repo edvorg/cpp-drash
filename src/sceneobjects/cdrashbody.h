@@ -17,6 +17,7 @@ public:
     std::vector<CDrashBodyParams> mChilds;
     CVec2 mLocalPos;
     double mDestroyDelay;
+    float mDestroySpeed;
 };
 
 class CDrashBody : public CSolidBody
