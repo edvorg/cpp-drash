@@ -107,6 +107,7 @@ void CScene::DestroyObject( T* _obj )
             // ok, it's our object
 
             b2Body* body = _obj->mBody;
+            body->SetActive(false);
             body->SetUserData(NULL);
 
             mObjects[i] = (mCountObjects > 1) ? mObjects[mCountObjects-1] : NULL;
