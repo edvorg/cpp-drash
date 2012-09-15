@@ -25,7 +25,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
 
     CSolidBodyParams sbp;
     sbp.mDynamic = false;
-    sbp.mRestitution = 0.5;
+    sbp.mRestitution = 0.0;
     sbp.mAngle = -0.1;
     sbp.mVertices.push_back( CVec2( -300, -5 ) );
     sbp.mVertices.push_back( CVec2( 300, -5 ) );
@@ -44,7 +44,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
 
     dbp.mDestroyDelay = 0.5;
 
-    GenDrashBodyParams( &dbp, 5, 0, 3 );
+    GenDrashBodyParams( &dbp, 5, 0, 4 );
 
     CDrashBody *db = GetScene()->CreateObject<CDrashBody>(dbp);
     db->GetBody()->SetAngularVelocity(2);
