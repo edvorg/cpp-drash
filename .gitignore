@@ -12,6 +12,7 @@
 *.a
 
 *.user
+*.user.*
 *.log
 
 #build dirs
