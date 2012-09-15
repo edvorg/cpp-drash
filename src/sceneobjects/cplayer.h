@@ -12,12 +12,12 @@ class CPlayerEvent
 public:
     enum PlayerAction
     {
-        StartMoveLeft,
-        StartMoveRight,
-        EndMoveLeft,
-        EndMoveRight,
-        jump,
-        fire
+        PlayerActionMoveLeft,
+        PlayerActionMoveRight,
+        PlayerActionEndMoveLeft,
+        PlayerActionEndMoveRight,
+        PlayerActionJump,
+        PlayerActionFire
     };
 
     CPlayerEvent( const PlayerAction & _action , const CVec2 &_mousePos );
@@ -46,9 +46,9 @@ public:
     friend class CScene;
 
     virtual void onEvent( const CPlayerEvent & _event );
-    virtual void BeginContact( const CContact &_contact );
-    virtual void EndContact( const CContact &_contact );
-    virtual void Boom( const CBoomParams &_boom );
+    virtual void OnContactBegin( const CContact &_contact );
+    virtual void OnContactEnd( const CContact &_contact );
+    virtual void OnBoom( const CBoomParams &_boom );
 
 protected:
     CPlayer();
@@ -57,7 +57,7 @@ protected:
     virtual bool Init( const ParamsT &_params );
     virtual void Release(void);
 
-    virtual void Step(double _dt);
+    virtual void Step( double _dt );
     void Jump();
     void MoveRight();
     void MoveLeft();

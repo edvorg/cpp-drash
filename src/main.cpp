@@ -3,6 +3,7 @@
 
 #include "capp.h"
 #include "diag/clogger.h"
+
 using namespace drash;
 
 int main( int _argc, char *_argv[] )
@@ -11,7 +12,7 @@ int main( int _argc, char *_argv[] )
 
     CApp app;
     CAppParams params;
-    params.SetCommandLine(_argc,_argv);
+    params.SetCommandLine( _argc, _argv );
 
     if ( app.Init(params) == true )
     {

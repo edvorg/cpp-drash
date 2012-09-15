@@ -20,7 +20,7 @@ CSolidBody::~CSolidBody(void)
 {
 }
 
-bool CSolidBody::Init(const ParamsT &_params )
+bool CSolidBody::Init( const ParamsT &_params )
 {
     if ( CSceneObject::Init(_params) == false )
     {
@@ -66,16 +66,16 @@ void CSolidBody::Release(void)
     CSceneObject::Release();
 }
 
-void CSolidBody::Boom(const CBoomParams &_boom)
+void CSolidBody::OnBoom( const CBoomParams &_boom )
 {
     CVec2 pos = mPos.Get();
-    CVec2 force(pos.x- _boom.mPos.x, pos.y - _boom.mPos.y);
+    CVec2 force( pos.x- _boom.mPos.x, pos.y - _boom.mPos.y );
     float len = force.Length();
     force.Normalize();
     force *= _boom.mStregth * 100;
     force.x /= len;
     force.y /= len;
-    GetBody()->ApplyForce(force,mPos.Get());
+    GetBody()->ApplyForce( force, mPos.Get() );
 
 }
 

@@ -19,7 +19,7 @@ bool CBoom::Init( const ParamsT &_params )
         return false;
     }
 
-    GetBody()->SetType( b2_kinematicBody );
+    GetBody()->SetType(b2_kinematicBody);
 
     return true;
 }

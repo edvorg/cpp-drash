@@ -42,10 +42,9 @@ public:
     CSceneObject(void);
     virtual ~CSceneObject(void);
 
-    virtual void BeginContact( const CContact &_contact );
-    virtual void EndContact( const CContact &_contact );
-
-    virtual void Boom(const CBoomParams &_boom);
+    virtual void OnContactBegin( const CContact &_contact );
+    virtual void OnContactEnd( const CContact &_contact );
+    virtual void OnBoom( const CBoomParams &_boom );
 
     const b2Body* GetBody(void) const;
     b2Body* GetBody(void);

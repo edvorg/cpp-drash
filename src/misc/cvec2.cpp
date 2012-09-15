@@ -53,35 +53,35 @@ CVec2 &CVec2::RandY( float _min, float _max, float _step )
     return *this;
 }
 
-CVec2 &CVec2::operator=(const b2Vec2 &_ver)
+CVec2 &CVec2::operator=( const b2Vec2 &_ver )
 {
     this->x = _ver.x;
     this->y = _ver.y;
     return (*this);
 }
 
-CVec2 &CVec2::operator*=(const b2Vec2 &_ver)
+CVec2 &CVec2::operator*=( const b2Vec2 &_ver )
 {
     this->x = x*_ver.x;
     this->y = y*_ver.y;
     return *this;
 }
 
-CVec2 &CVec2::operator *=(float _val)
+CVec2 &CVec2::operator *=( float _val )
 {
     x *= _val;
     y *= _val;
     return (*this);
 }
 
-CVec2 &CVec2::operator +=(float _val)
+CVec2 &CVec2::operator +=( float _val )
 {
     x += _val;
     y += _val;
     return (*this);
 }
 
-CVec2 &CVec2::operator +=(const b2Vec2 &_ver)
+CVec2 &CVec2::operator +=( const b2Vec2 &_ver )
 {
     x += _ver.x;
     y += _ver.y;
@@ -89,11 +89,11 @@ CVec2 &CVec2::operator +=(const b2Vec2 &_ver)
 }
 
 
-bool CVec2::operator ==(const CVec2 &_var)
+bool CVec2::operator ==( const CVec2 &_var )
 {
-    if (fabs(x - _var.x) < mAccuracy)
+    if ( fabs(x - _var.x) < mAccuracy )
     {
-        if (fabs(y - _var.y) < mAccuracy)
+        if ( fabs(y - _var.y) < mAccuracy )
         {
             return true;
         }

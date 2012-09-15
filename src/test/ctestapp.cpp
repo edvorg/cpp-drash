@@ -27,7 +27,7 @@ CTestApp *CTestApp::StartApp( const char *_name )
     return NULL;
 }
 
-bool CTestApp::Init(CScene *_scene, CCamera *_camera )
+bool CTestApp::Init( CScene *_scene, CCamera *_camera )
 {
     if ( _camera == NULL )
     {

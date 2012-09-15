@@ -32,7 +32,7 @@ public:
 protected:
     virtual bool Init( const ParamsT &_params );
     virtual void Release(void);
-    virtual void Boom(const CBoomParams &_boom);
+    virtual void OnBoom( const CBoomParams &_boom );
     CSolidBody(void);
     virtual ~CSolidBody(void);
 };

@@ -4,26 +4,29 @@
 
 #include "csolidbody.h"
 
-namespace drash{
+namespace drash
+{
 
 class CBulletParams : public CSolidBodyParams
 {
 public:
-    CVec2 mTarget;
     CBulletParams();
+
+    CVec2 mTarget;
 };
 
 class CBullet : public CSolidBody
 {
 public:
     friend class CScene;
+
     typedef CBulletParams ParamsT;
 
     CBullet();
-    virtual bool Init(const ParamsT &_params);
-    virtual void BeginContact(const CContact &_contact);
+    virtual bool Init( const ParamsT &_params );
 
-    virtual void Boom(const CBoomParams &_boom);
+    virtual void OnContactBegin( const CContact &_contact );
+    virtual void OnBoom( const CBoomParams &_boom );
 };
 
 }// namespace drash

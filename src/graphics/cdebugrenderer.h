@@ -19,15 +19,20 @@ public:
     virtual void DrawPolygon( const b2Vec2 *_vertices,
                               int32 _vertexCount,
                               const b2Color &_color );
+
     virtual void DrawSolidPolygon( const b2Vec2 *_vertices,
                                    int32 _vertexCount,
                                    const b2Color &_color );
+
     virtual void DrawCircle( const b2Vec2 &_center, float32 _radius, const b2Color &_color );
+
     virtual void DrawSolidCircle( const b2Vec2 &_center,
                                   float32 _radius,
                                   const b2Vec2 &_axis,
                                   const b2Color &_color );
+
     virtual void DrawSegment( const b2Vec2 &_p1, const b2Vec2 &_p2, const b2Color &_color );
+
     virtual void DrawTransform( const b2Transform &_xf );
 
     void SetCamera( const CCamera *_camera );

@@ -25,15 +25,15 @@ CSceneObject::~CSceneObject(void)
     Release();
 }
 
-void CSceneObject::BeginContact( const CContact &_contact )
+void CSceneObject::OnContactBegin( const CContact &_contact )
 {
 }
 
-void CSceneObject::EndContact( const CContact &_contact )
+void CSceneObject::OnContactEnd( const CContact &_contact )
 {
 }
 
-void CSceneObject::Boom(const CBoomParams &_boom)
+void CSceneObject::OnBoom( const CBoomParams &_boom )
 {
 }
 
@@ -54,12 +54,12 @@ bool CSceneObject::Init( const CSceneObject::ParamsT &_params )
     mBody->SetUserData(this);
     mBody->SetAngularDamping(0);
     mBody->SetBullet(false);
-    mBody->SetFixedRotation(_params.mFixedRotation);
+    mBody->SetFixedRotation( _params.mFixedRotation );
     mBody->SetLinearDamping(0);
     mBody->SetGravityScale(1.0f);
     mBody->SetType( _params.mDynamic ?
-                        b2_dynamicBody :
-                        b2_kinematicBody );
+                    b2_dynamicBody :
+                    b2_kinematicBody );
 
     return true;
 }

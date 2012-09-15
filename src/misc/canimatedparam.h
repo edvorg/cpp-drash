@@ -69,7 +69,7 @@ void CAnimatedParam<T>::Set( const T &_val )
 }
 
 template <class T>
-void CAnimatedParam<T>::SetTarget(const T &_target , double _time , const AnimationBehavior &_behavior)
+void CAnimatedParam<T>::SetTarget( const T &_target , double _time , const AnimationBehavior &_behavior )
 {
     mTargetSet = true;
     mFromValue = mValue;

@@ -27,9 +27,8 @@ public:
 
     virtual bool Init( const ParamsT &_params );
 
-    virtual void BeginContact( const CContact &_contact );
-
-    virtual void Boom( const CBoomParams &_boom );
+    virtual void OnContactBegin( const CContact &_contact );
+    virtual void OnBoom( const CBoomParams &_boom );
 
     virtual void Step( double _dt );
 

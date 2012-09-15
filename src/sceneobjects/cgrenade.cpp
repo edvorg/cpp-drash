@@ -2,8 +2,8 @@
 
 #include "../cscene.h"
 
-namespace drash{
-
+namespace drash
+{
 
 CGrenadeParams::CGrenadeParams():
     CBulletParams(),
@@ -30,7 +30,7 @@ bool CGrenade::Init( const CGrenade::ParamsT &_params )
     return true;
 }
 
-void CGrenade::BeginContact( const CContact &_contact )
+void CGrenade::OnContactBegin( const CContact &_contact )
 {
     if ( mCounter == 0 )
     {
@@ -39,9 +39,9 @@ void CGrenade::BeginContact( const CContact &_contact )
     }
 }
 
-void CGrenade::Boom( const CBoomParams &_boom )
+void CGrenade::OnBoom( const CBoomParams &_boom )
 {
-    CBullet::Boom(_boom);
+    CBullet::OnBoom(_boom);
 }
 
 void CGrenade::Step( double _dt )

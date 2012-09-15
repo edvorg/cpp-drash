@@ -11,9 +11,10 @@ CBullet::CBullet():
 
 }
 
-bool CBullet::Init(const ParamsT &_params)
+bool CBullet::Init( const ParamsT &_params )
 {
-    if (CSolidBody::Init(_params) == false){
+    if (CSolidBody::Init(_params) == false)
+	{
         return false;
     }
 
@@ -32,7 +33,7 @@ bool CBullet::Init(const ParamsT &_params)
 }
 
 
-void CBullet::BeginContact(const CContact &_contact)
+void CBullet::OnContactBegin( const CContact &_contact )
 {
     this->SetDead();
     CBoomParams boom;
@@ -41,7 +42,7 @@ void CBullet::BeginContact(const CContact &_contact)
     GetScene()->AddRequestBoom(boom);
 }
 
-void CBullet::Boom(const CBoomParams &_boom)
+void CBullet::OnBoom( const CBoomParams &_boom )
 {
 }
 

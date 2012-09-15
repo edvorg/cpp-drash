@@ -14,7 +14,7 @@ CPlayerEvent::CPlayerEvent( const PlayerAction &_action, const CVec2 &_mousePos 
 {
 }
 
-void CPlayerEvent::SetMousePos(const CVec2 &_pos)
+void CPlayerEvent::SetMousePos( const CVec2 &_pos )
 {
     mMousePos = _pos;
 }
@@ -47,9 +47,10 @@ CPlayer::~CPlayer()
 {
 }
 
-bool CPlayer::Init(const CPlayer::ParamsT &_params)
+bool CPlayer::Init( const CPlayer::ParamsT &_params )
 {
-    if ( CSolidBody::Init(_params) == false ){
+    if ( CSolidBody::Init(_params) == false )
+	{
         return false;
     }
 
@@ -71,20 +72,24 @@ void CPlayer::Release()
     CSolidBody::Release();
 }
 
-void CPlayer::Step(double _dt)
+void CPlayer::Step( double _dt )
 {
     CSolidBody::Step(_dt);
-    if (mMovingLeft){
+
+    if (mMovingLeft)
+	{
         MoveLeft();
     }
-    if (mMovingRight){
+	else if (mMovingRight)
+	{
         MoveRight();
     }
 }
 
 void CPlayer::Jump()
 {
-    if (mJumpAllowed){
+    if (mJumpAllowed)
+	{
         CVec2 v = GetBody()->GetLinearVelocity();
         v.y = mSpeedJump;
         GetBody()->SetLinearVelocity(v);
@@ -105,46 +110,70 @@ void CPlayer::MoveLeft()
     GetBody()->SetLinearVelocity(velocity);
 }
 
-void CPlayer::FireNow(const CVec2 &_fireDirect)
+void CPlayer::FireNow( const CVec2 &_fireDirect )
 {
     CGrenadeParams bulletParams;
 
     bulletParams.mTarget = _fireDirect;
-    CVec2 posBody = GetBody()->GetWorldPoint(CVec2(0,0));
-    if (_fireDirect.x > posBody.x){
+    CVec2 posBody = GetBody()->GetWorldPoint( CVec2( 0, 0 ) );
+
+    if ( _fireDirect.x > posBody.x )
+	{
         bulletParams.mPos = GetBody()->GetWorldPoint(mPointShoot);
-    } else {
-        bulletParams.mPos = GetBody()->GetWorldPoint(CVec2(-mPointShoot.
-                                                           x,mPointShoot.y));
     }
+	else
+	{
+        bulletParams.mPos = GetBody()->GetWorldPoint( CVec2( -mPointShoot.x,
+															 mPointShoot.y ) );
+    }
+
     bulletParams.mTime = 2;
-    GetScene()->CreateObject< CGrenade >( bulletParams );
+    GetScene()->CreateObject<CGrenade>(bulletParams);
 }
 
-void CPlayer::onEvent(const CPlayerEvent &_event){
-    switch (_event.mType){
-        case CPlayerEvent::jump:Jump() ;break;
-        case CPlayerEvent::StartMoveLeft: mMovingLeft = true; break;
-        case CPlayerEvent::StartMoveRight: mMovingRight = true; break;
-        case CPlayerEvent::EndMoveLeft: mMovingLeft = false; break;
-        case CPlayerEvent::EndMoveRight: mMovingRight = false; break;
-        case CPlayerEvent::fire: FireNow(_event.GetMousePos());break;
+void CPlayer::onEvent( const CPlayerEvent &_event )
+{
+    switch ( _event.mType )
+	{
+        case CPlayerEvent::PlayerActionJump:
+			Jump();
+			break;
+
+        case CPlayerEvent::PlayerActionMoveLeft:
+            mMovingLeft = true;
+            break;
+
+        case CPlayerEvent::PlayerActionMoveRight:
+            mMovingRight = true;
+            break;
+
+        case CPlayerEvent::PlayerActionEndMoveLeft:
+            mMovingLeft = false;
+            break;
+
+        case CPlayerEvent::PlayerActionEndMoveRight:
+            mMovingRight = false;
+            break;
+
+        case CPlayerEvent::PlayerActionFire:
+            FireNow( _event.GetMousePos() );
+            break;
     }
 }
 
-void CPlayer::BeginContact(const CContact &_contact)
+void CPlayer::OnContactBegin( const CContact &_contact )
 {
-    CSolidBody::BeginContact(_contact);
+    CSolidBody::OnContactBegin(_contact);
     mJumpAllowed = true;
 }
 
-void CPlayer::EndContact(const CContact &_contact)
+void CPlayer::OnContactEnd( const CContact &_contact )
 {
-    CSolidBody::EndContact(_contact);
+    CSolidBody::OnContactEnd(_contact);
     mJumpAllowed = false;
 }
 
-void CPlayer::Boom(const CBoomParams &_boom)
+void CPlayer::OnBoom( const CBoomParams &_boom )
 {
 }
 

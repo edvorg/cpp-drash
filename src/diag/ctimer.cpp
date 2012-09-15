@@ -16,7 +16,7 @@ CTimer::CTimer():
 {
 }
 
-void CTimer::Reset(bool _start)
+void CTimer::Reset( bool _start )
 {
     this->Update();
     mStartTime = mPrevTime = mCurrTime;

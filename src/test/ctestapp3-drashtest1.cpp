@@ -34,7 +34,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     GetScene()->CreateObject<CSolidBody>(sbp);
 
     CDrashBodyParams dbp;
-    dbp.mPos.Set(0, 100);
+    dbp.mPos.Set( 0, 100 );
     dbp.mAngle = - M_PI / 4;
 
     dbp.mVertices.push_back( CVec2( -10, -10 ) );
@@ -50,9 +50,9 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     db->GetBody()->SetAngularVelocity(2);
 
     CSolidBodyParams pp;
-    pp.mPos.Set(-200, 100);
+    pp.mPos.Set( -200, 100 );
     pp.mMass = 3;
-    GetScene()->CreateObject<CSolidBody>(pp)->GetBody()->SetLinearVelocity( CVec2(200, 0) );
+    GetScene()->CreateObject<CSolidBody>(pp)->GetBody()->SetLinearVelocity( CVec2( 200, 0 ) );
 
     return true;
 }

@@ -39,9 +39,9 @@ bool CDrashBody::Init( const CDrashBody::ParamsT &_params )
     return true;
 }
 
-void CDrashBody::BeginContact( const CContact &_contact )
+void CDrashBody::OnContactBegin( const CContact &_contact )
 {
-    CSolidBody::BeginContact(_contact);
+    CSolidBody::OnContactBegin(_contact);
 
     if ( mCounter == 0 && mTimer.GetFullTime() > mParams.mDestroyDelay )
     {

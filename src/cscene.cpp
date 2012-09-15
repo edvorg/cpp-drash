@@ -17,7 +17,7 @@ CScene::~CScene(void)
     if ( mInitialized == true )
     {
         LOG_WARN( "CScene::~CScene(): "
-                  "warning Release() called automatically from destructor" );
+                  "Release() called automatically from destructor" );
         Release();
     }
 }
@@ -128,14 +128,14 @@ void CScene::BeginContact( b2Contact * _contact )
         c.mPoints[i] = obj1->GetBody()->GetLocalPoint( m.points[i] );
     }
     c.obj = obj2;
-    obj1->BeginContact(c);
+    obj1->OnContactBegin(c);
 
     for ( unsigned int i=0; i<c.mPointCount; i++ )
     {
         c.mPoints[i] = obj2->GetBody()->GetLocalPoint( m.points[i] );
     }
     c.obj = obj1;
-    obj2->BeginContact(c);
+    obj2->OnContactBegin(c);
 }
 
 void CScene::EndContact( b2Contact *_contact )
@@ -171,14 +171,14 @@ void CScene::EndContact( b2Contact *_contact )
         c.mPoints[i] = obj1->GetBody()->GetLocalPoint( m.points[i] );
     }
     c.obj = obj2;
-    obj1->EndContact(c);
+    obj1->OnContactEnd(c);
 
     for ( unsigned int i = 0; i < c.mPointCount; i++ )
     {
         c.mPoints[i] = obj2->GetBody()->GetLocalPoint( m.points[i] );
     }
     c.obj = obj1;
-    obj2->EndContact(c);
+    obj2->OnContactEnd(c);
 }
 
 void CScene::SetDebugRenderer( CDebugRenderer *_renderer )
@@ -200,7 +200,7 @@ void CScene::Draw(void)
 
 void CScene::OnPlayerEvent( const CPlayerEvent &_event, unsigned int _playerId )
 {
-    if (_playerId >= mCountPlayers)
+    if ( _playerId >= mCountPlayers )
     {
         LOG_ERR( "CScene::OnPlayerEvent(): "
                  "Player with id = " <<
@@ -225,7 +225,7 @@ int CScene::AddPlayer( const CPlayerParams &_params )
     return mCountPlayers++;
 }
 
-void CScene::AddRequestBoom(const CBoomParams _boom)
+void CScene::AddRequestBoom( const CBoomParams _boom )
 {
     mListBooms.push_back(_boom);
 }
@@ -236,7 +236,7 @@ void CScene::BoomNow()
     {
         for ( auto it = mListBooms.begin() ; it != mListBooms.end() ; it++ )
         {
-            mObjects[i]->Boom(*it);
+            mObjects[i]->OnBoom(*it);
         }
     }
 

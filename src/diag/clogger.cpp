@@ -18,7 +18,7 @@ public:
 	}
 } starter;
 
-CLogger::CLogger(ostream &_stream):
+CLogger::CLogger( ostream &_stream ):
     mStream(_stream)
 {
     out.open( "./drash.log", ios_base::app );

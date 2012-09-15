@@ -235,7 +235,7 @@ void CApp::Run()
                                                 mHeight,
                                                 mWidth);
 
-                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::fire, pos ), 0 );
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionFire, pos ), 0 );
                 }
                 else if ( event.button.button == SDL_BUTTON_WHEELDOWN )
                 {
@@ -275,15 +275,15 @@ void CApp::Run()
                 }
                 else if (event.key.keysym.sym == SDLK_SPACE)
                 {
-                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::jump, CVec2() ), 0 );
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionJump, CVec2() ), 0 );
                 }
                 else if ( event.key.keysym.sym == SDLK_a )
                 {
-                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::StartMoveLeft, CVec2() ), 0 );
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveLeft, CVec2() ), 0 );
                 }
                 else if ( event.key.keysym.sym == SDLK_d )
                 {
-                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::StartMoveRight, CVec2() ), 0 );
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveRight, CVec2() ), 0 );
                 }
             }
             else if ( event.type == SDL_KEYUP )
@@ -306,15 +306,15 @@ void CApp::Run()
                 }
                 else if (event.key.keysym.sym == SDLK_SPACE)
                 {
-                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::jump, CVec2() ), 0 );
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionJump, CVec2() ), 0 );
                 }
                 else if ( event.key.keysym.sym == SDLK_a )
                 {
-                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::EndMoveLeft, CVec2() ), 0 );
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionEndMoveLeft, CVec2() ), 0 );
                 }
                 else if ( event.key.keysym.sym == SDLK_d )
                 {
-                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::EndMoveRight, CVec2() ), 0 );
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionEndMoveRight, CVec2() ), 0 );
                 }
             }
         }

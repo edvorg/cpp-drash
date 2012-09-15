@@ -13,7 +13,7 @@ public:
     CTestApp1();
     virtual ~CTestApp1();
 
-    virtual bool Init(CScene *_scene, CCamera *_camera );
+    virtual bool Init( CScene *_scene, CCamera *_camera );
     virtual void Release();
     virtual void Update();
     virtual void Render();
