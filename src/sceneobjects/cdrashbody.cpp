@@ -59,13 +59,25 @@ void CDrashBody::Step( double _dt )
 
             if ( i->mChilds.size() )
             {
-                o = GetScene()->CreateObject<CDrashBody>(*i);
+                o = GetScene()->CreateObject<CDrashBody>(*i);                
+
+                if ( o == NULL )
+                {
+                    break;
+                }
+
                 o->GetBody()->SetLinearVelocity(mLastVelocity);
                 o->GetBody()->SetAngularVelocity(mLastAngularVelocity);
             }
             else
             {
-                o = GetScene()->CreateObject<CSolidBody>(*i);
+                o = GetScene()->CreateObject<CSolidBody>(*i);                
+
+                if ( o == NULL )
+                {
+                    break;
+                }
+
                 o->GetBody()->SetLinearVelocity(mLastVelocity);
                 o->GetBody()->SetAngularVelocity(mLastAngularVelocity);
             }
