@@ -25,10 +25,12 @@ public:
     void Release(void);
 
     /// T must extend CSceneObject class
+    /// Method excepts, that T has ParamsT typedef
     template < typename T >
     T* CreateObject( const typename T::ParamsT& _params );
 
     /// T must extend CSceneObject class
+    /// Method excepts, that T has ParamsT typedef
     template < typename T >
     void DestroyObject( T* _obj );
 
