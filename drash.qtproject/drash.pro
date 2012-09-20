@@ -24,7 +24,7 @@ CONFIG += console
 CONFIG -= qt
 
 unix|win32: CONFIG += link_pkgconfig
-unix|win32: PKGCONFIG += sdl gl
+unix|win32: PKGCONFIG += sdl gl glu
 unix|win32: LIBS += -lBox2D -lrt
 
 QMAKE_CXXFLAGS += -std=c++11
@@ -49,7 +49,8 @@ HEADERS += \
     ../src/diag/ctimer.h \
     ../src/misc/cvec2.h \
     ../src/misc/canimatedparam.h \
-    ../src/sceneobjects/cboom.h
+    ../src/sceneobjects/cboom.h \
+    ../src/misc/math.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG
