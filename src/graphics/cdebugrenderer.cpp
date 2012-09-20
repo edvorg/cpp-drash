@@ -1,8 +1,10 @@
 #include "cdebugrenderer.h"
 
 #include <GL/gl.h>
+#include <GL/glu.h>
 #include <SDL/SDL.h>
 #include <math.h>
+#include "../misc/math.h"
 
 namespace drash
 {
@@ -41,26 +43,42 @@ void CDebugRenderer::DrawPolygon( const b2Vec2 *_vertices,
                                   int32 _vertexCount,
                                   const b2Color &_color )
 {
-    if ( _vertexCount > 1 )
-    {
-        for ( int i = 1 ; i < _vertexCount; i++ )
-        {
-            DrawSegment( _vertices[i-1], _vertices[i], _color );
-        }
+    DrawSolidPolygon( _vertices,
+                      _vertexCount,
+                      _color );
+}
 
-        DrawSegment( _vertices[0], _vertices[_vertexCount-1], _color );
-    }
+void DrawSide( const b2Vec2 &_v1, const b2Vec2 &_v2, const b2Color &_col )
+{
+    CVec2 dir = _v2;
+    dir -= _v1;
+    dir.Normalize();
+
+    dir.x += 1.0f;
+    dir.x *= 0.25;
+    dir.x += 0.5;
+
+    glBegin(GL_POLYGON);
+    glColor3f( _col.r * dir.x, _col.g * dir.x, _col.b * dir.x );
+    glVertex3f( _v1.x, _v1.y, -1.0 );
+    glVertex3f( _v1.x, _v1.y, -4.0f );
+    glVertex3f( _v2.x, _v2.y, -4.0f );
+    glVertex3f( _v2.x, _v2.y, -1.0f );
+    glEnd();
 }
 
 void CDebugRenderer::DrawSolidPolygon( const b2Vec2 *_vertices,
                                        int32 _vertexCount,
                                        const b2Color &_color )
 {
-    this->ModelViewIdentity();
-    this->ModelViewCamera();
+    static const b2Color side_color( 0.55, 0.75, 0.9 );
+
+    this->ModelViewMatrix();
     this->ProjectionMatrix();
 
     // TODO: do not use GL_POLYGON, use GL_TRIANGLES
+
+    glEnable(GL_DEPTH_TEST);
 
     glBegin(GL_POLYGON);
 
@@ -68,118 +86,44 @@ void CDebugRenderer::DrawSolidPolygon( const b2Vec2 *_vertices,
 
     for ( int i =0 ; i < _vertexCount ; i++ )
     {
-        b2Vec2 curvertex = _vertices[i];// + i;
-
-        glVertex3f( curvertex.x, curvertex.y, 0.0f );
+        glVertex3f( _vertices[i].x, _vertices[i].y, -1.0f );
     }
 
     glEnd();
 
-    DrawPolygon( _vertices, _vertexCount, b2Color( 0, 0, 0 ) );
+    for ( int i =0 ; i < _vertexCount - 1 ; i++ )
+    {
+        DrawSide( _vertices[i+1],
+                  _vertices[i],
+                  side_color );
+    }
+
+    DrawSide( _vertices[0],
+              _vertices[ _vertexCount - 1 ],
+              side_color );
 }
 
 void CDebugRenderer::DrawCircle( const b2Vec2 &_center,
                                  float32 _radius,
                                  const b2Color &_color )
 {
-    this->ModelViewIdentity();
-    this->ModelViewCamera();
-    glTranslatef( _center.x, _center.y, 0 );
-    this->ProjectionMatrix();
-
-    int num_segments = 50;
-
-    glBegin(GL_LINE_LOOP);
-
-    glColor3f( _color.r, _color.g, _color.b );
-
-    for( int ii = 0; ii < num_segments; ii++ )
-    {
-        float theta = 2.0f * 3.1415926f * float(ii) / (float)num_segments;
-        float x = _radius * cos(theta);
-        float y = _radius * sin(theta);
-        glVertex2f( x, y );
-    }
-
-    glEnd();
 }
-
-
 
 void CDebugRenderer::DrawSolidCircle( const b2Vec2 &_center,
                                       float32 _radius,
                                       const b2Vec2 &_axis,
                                       const b2Color &_color )
 {
-    this->ModelViewIdentity();
-    this->ModelViewCamera();
-    glTranslatef( _center.x, _center.y, 0 );
-    this->ProjectionMatrix();
-
-    float x2, y2;
-    float angle = 0;
-
-    // TODO: use only GL_TRIANGLES, not GL_TRIANGLE_FAN
-
-    glBegin(GL_TRIANGLE_FAN);
-    glColor3f( _color.r, _color.g, _color.b );
-    glVertex2f( 0, 0 );
-
-    for ( angle = 1.0f; angle<361.0f; angle+=0.1 )
-    {
-        x2 = sin(angle) * _radius;
-        y2 = cos(angle) * _radius;
-        glVertex2f( x2, y2 );
-    }
-
-    glEnd();
-
-    b2Vec2 axis = _axis;
-    axis.Normalize();
-    axis *= _radius;
-    axis += _center;
-
-    DrawCircle( _center, _radius, b2Color( 0, 0, 0 ) );
-
-    DrawSegment( _center, axis, b2Color( 1.0f - _color.r,
-                                         1.0f - _color.g,
-                                         1.0f - _color.b ) );
 }
 
 void CDebugRenderer::DrawSegment( const b2Vec2 &_p1,
                                   const b2Vec2 &_p2,
                                   const b2Color &_color )
 {
-    this->ModelViewIdentity();
-    this->ModelViewCamera();
-    this->ProjectionMatrix();
-
-    glBegin(GL_LINES);
-    glColor3f( _color.r, _color.g, _color.b );
-    glVertex2f( _p1.x, _p1.y );
-    glVertex2f( _p2.x, _p2.y );
-    glEnd();
 }
-
-
 
 void CDebugRenderer::DrawTransform( const b2Transform &_xf )
 {
-    b2Vec2 p;
-    float angle = _xf.q.GetAngle();
-    const float size = mWidth / 40.0f / ( mCamera ? mCamera->GetZoom() : 1.0 );
-    float cs = cos(angle) * size;
-    float sn = sin(angle) * size;
-
-    p.x = _xf.p.x + cs;
-    p.y = _xf.p.y + sn;
-
-    DrawSegment( _xf.p, p, b2Color( 1, 0, 0 ) );
-
-    p.x = _xf.p.x - sn;
-    p.y = _xf.p.y + cs;
-
-    DrawSegment( _xf.p, p, b2Color( 0, 0, 1 ) );
 }
 
 void CDebugRenderer::SetCamera( const CCamera *_camera )
@@ -191,26 +135,22 @@ void CDebugRenderer::ProjectionMatrix()
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho( ( -(float)mWidth / 2.0f ) / ( mCamera ? mCamera->GetZoom() : 1.0 ),
-             ( (float)mWidth / 2.0f ) / ( mCamera ? mCamera->GetZoom() : 1.0 ),
-             ( -(float)mHeight / 2.0f ) / ( mCamera ? mCamera->GetZoom(): 1.0 ),
-             ( (float)mHeight / 2.0f ) / ( mCamera ? mCamera->GetZoom() : 1.0 ),
-             1.0f,
-             -1.0f );
+    gluPerspective( 60.0f, 1366.0 / 700.0, 1.0f, 1000.0f );
 }
 
-void CDebugRenderer::ModelViewIdentity()
+void CDebugRenderer::ModelViewMatrix()
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-}
 
-void CDebugRenderer::ModelViewCamera()
-{
-    glMatrixMode(GL_MODELVIEW);
-    glTranslatef( mCamera ? (-mCamera->mPos.Get().x) : 0,
-                  mCamera ? (-mCamera->mPos.Get().y) : 0,
-                  0 );
+    if ( mCamera != NULL )
+    {
+        glTranslatef( -mCamera->mPos.Get().x,
+                      -mCamera->mPos.Get().y,
+                      0.0 );
+
+        glTranslatef( 0, 0, mCamera->GetZoom() - mCamera->m_ZoomMax - 50.0 );
+    }
 }
 
 } // namespace drash

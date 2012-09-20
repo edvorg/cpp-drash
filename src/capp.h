@@ -37,8 +37,8 @@ private:
 
     bool mInitialized;
 
-    static const int mWidth = 800;
-    static const int mHeight = 600;
+    static const int mWidth = 1366;
+    static const int mHeight = 700;
     CScene mScene;
     CTimer mTimer;
     CDebugRenderer mDebugRenderer;

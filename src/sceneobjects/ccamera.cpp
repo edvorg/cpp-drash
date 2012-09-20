@@ -4,7 +4,7 @@
 namespace drash
 {
 
-const float CCamera::m_ZoomMax = 100.0f;
+const float CCamera::m_ZoomMax = 500.0f;
 
 CCameraParams::CCameraParams():
     CSceneObjectParams()

@@ -204,8 +204,8 @@ void CApp::Run()
 {
     assert( mInitialized == true );
 
-    const unsigned int delta = 50;
-    const float zoomdelta = 0.15f;
+    const unsigned int delta = 100;
+    const float zoomdelta = 10.0f;
 
     bool movexr = false;
     bool movexl = false;
@@ -239,11 +239,11 @@ void CApp::Run()
                 }
                 else if ( event.button.button == SDL_BUTTON_WHEELDOWN )
                 {
-                    mCamera->SetZoomTarget(  max( mCamera->GetZoomTarget() + zoomdelta * mCamera->GetZoom(), 1.0 ), 0.25 );
+                    mCamera->SetZoomTarget(  max( mCamera->GetZoomTarget() + zoomdelta, 1.0 ), 0.25 );
                 }
                 else if ( event.button.button == SDL_BUTTON_WHEELUP )
                 {
-                    mCamera->SetZoomTarget( max( mCamera->GetZoomTarget() - zoomdelta * mCamera->GetZoom(), 1.0 ), 0.25 );
+                    mCamera->SetZoomTarget( max( mCamera->GetZoomTarget() - zoomdelta, 1.0 ), 0.25 );
                 }
                 else
                 {
@@ -323,23 +323,23 @@ void CApp::Run()
 
         if ( movexr )
         {
-            newt.x += delta / mCamera->GetZoom();
+            newt.x += delta / pow( mCamera->GetZoom(), 0.2 );
             mCamera->mPos.SetTarget( newt, 0.25, AnimationBehaviorSingle );
         }
         else if ( movexl )
         {
-            newt.x -= delta / mCamera->GetZoom();
+            newt.x -= delta / pow( mCamera->GetZoom(), 0.2 );
             mCamera->mPos.SetTarget( newt, 0.25, AnimationBehaviorSingle );
         }
 
         if ( moveyu )
         {
-            newt.y += delta / mCamera->GetZoom();
+            newt.y += delta / pow( mCamera->GetZoom(), 0.2 );
             mCamera->mPos.SetTarget( newt, 0.25, AnimationBehaviorSingle );
         }
         else if ( moveyd )
         {
-            newt.y -= delta / mCamera->GetZoom();
+            newt.y -= delta / pow( mCamera->GetZoom(), 0.2 );
             mCamera->mPos.SetTarget( newt, 0.25, AnimationBehaviorSingle );
         }
 
