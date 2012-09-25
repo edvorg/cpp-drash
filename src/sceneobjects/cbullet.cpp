@@ -18,17 +18,13 @@ bool CBullet::Init( const ParamsT &_params )
         return false;
     }
 
-    GetBody()->SetBullet(false);
-
-    b2Filter filter;
-    filter.categoryBits = 0x0010;
-    GetBody()->GetFixtureList()->SetFilterData(filter);
+    SetBullet(false);
 
     CVec2 v = _params.mTarget;
     v.x -= _params.mPos.x;
     v.y -= _params.mPos.y;
     v *= 30.0;
-    GetBody()->SetLinearVelocity(v);
+    SetLinearVelocity(v);
     return true;
 }
 

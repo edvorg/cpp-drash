@@ -24,6 +24,19 @@ public:
     CSceneObjectParams();
 };
 
+class CFigureParams
+{
+public:
+    float mFriction;
+    float mRestitution;
+    float mMass;
+
+    /// if size of mVertices is NULL, creates a box with (1, 1) dimentions
+    std::vector<CVec2> mVertices;
+
+    CFigureParams();
+};
+
 class CContact
 {
 public:
@@ -39,15 +52,7 @@ public:
 
     typedef CSceneObjectParams ParamsT;
 
-    CSceneObject(void);
-    virtual ~CSceneObject(void);
-
-    virtual void OnContactBegin( const CContact &_contact );
-    virtual void OnContactEnd( const CContact &_contact );
-    virtual void OnBoom( const CBoomParams &_boom );
-
     const b2Body* GetBody(void) const;
-    b2Body* GetBody(void);
 
     CScene *GetScene();
     const CScene *GetScene() const;
@@ -55,14 +60,31 @@ public:
     void SetDead();
     bool IsDead() const;
 
+    void SetDynamic( bool _dynamic );
+
+    void CreateFigure( const CFigureParams &_params );
+
+    void ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos );
+    void SetLinearVelocity( const CVec2 &_vel );
+    void SetAngularVelocity( float _vel );
+    void SetFixedRotation( bool _fixed );
+    void SetBullet( bool _bullet );
+
     CAnimatedParam<CVec2> mPos;
     CAnimatedParam<float> mAngle;
 
-protected:
+protected:    
+    CSceneObject(void);
+    virtual ~CSceneObject(void);
+
     virtual bool Init( const ParamsT &_params );
     virtual void Release(void);
 
     virtual void Step( double _dt );
+
+    virtual void OnContactBegin( const CContact &_contact );
+    virtual void OnContactEnd( const CContact &_contact );
+    virtual void OnBoom( const CBoomParams &_boom );
 
 private:
     b2Body* mBody;

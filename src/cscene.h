@@ -48,6 +48,7 @@ public:
 
     // returns player id ( >= 0 ) or -1 if failed
     int AddPlayer( const CPlayerParams & _params );
+    CPlayer *GetPlayer( unsigned int _id );
 
     void AddRequestBoom( const CBoomParams  _boom );
 

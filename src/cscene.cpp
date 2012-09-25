@@ -73,10 +73,6 @@ void CScene::Step( double _dt )
         return;
     }
 
-    BoomNow();
-
-    mWorld.Step( _dt, mVelocityIterations, mPositionIterations );
-
     for ( unsigned int i = 0 ; i < mCountObjects ; i++ )
     {
         mObjects[i]->Step(_dt);
@@ -93,6 +89,10 @@ void CScene::Step( double _dt )
             i++;
         }
     }
+
+    BoomNow();
+
+    mWorld.Step( _dt, mVelocityIterations, mPositionIterations );
 }
 
 void CScene::BeginContact( b2Contact * _contact )
@@ -125,14 +125,14 @@ void CScene::BeginContact( b2Contact * _contact )
 
     for ( unsigned int i=0; i<c.mPointCount; i++ )
     {
-        c.mPoints[i] = obj1->GetBody()->GetLocalPoint( m.points[i] );
+        c.mPoints[i] = obj1->mBody->GetLocalPoint( m.points[i] );
     }
     c.obj = obj2;
     obj1->OnContactBegin(c);
 
     for ( unsigned int i=0; i<c.mPointCount; i++ )
     {
-        c.mPoints[i] = obj2->GetBody()->GetLocalPoint( m.points[i] );
+        c.mPoints[i] = obj2->mBody->GetLocalPoint( m.points[i] );
     }
     c.obj = obj1;
     obj2->OnContactBegin(c);
@@ -168,14 +168,14 @@ void CScene::EndContact( b2Contact *_contact )
 
     for ( unsigned int i = 0; i < c.mPointCount; i++ )
     {
-        c.mPoints[i] = obj1->GetBody()->GetLocalPoint( m.points[i] );
+        c.mPoints[i] = obj1->mBody->GetLocalPoint( m.points[i] );
     }
     c.obj = obj2;
     obj1->OnContactEnd(c);
 
     for ( unsigned int i = 0; i < c.mPointCount; i++ )
     {
-        c.mPoints[i] = obj2->GetBody()->GetLocalPoint( m.points[i] );
+        c.mPoints[i] = obj2->mBody->GetLocalPoint( m.points[i] );
     }
     c.obj = obj1;
     obj2->OnContactEnd(c);
@@ -223,6 +223,18 @@ int CScene::AddPlayer( const CPlayerParams &_params )
 
     mPlayers[mCountPlayers] = CreateObject<CPlayer>(_params);
     return mCountPlayers++;
+}
+
+CPlayer *CScene::GetPlayer( unsigned int _id )
+{
+    if ( _id >= mCountPlayers )
+    {
+        return NULL;
+    }
+    else
+    {
+        return mPlayers[_id];
+    }
 }
 
 void CScene::AddRequestBoom( const CBoomParams _boom )

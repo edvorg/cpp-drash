@@ -13,6 +13,14 @@ CSceneObjectParams::CSceneObjectParams():
 {
 }
 
+CFigureParams::CFigureParams():
+    mFriction(1),
+    mRestitution(0),
+    mMass(1),
+    mVertices()
+{
+}
+
 CSceneObject::CSceneObject(void):
     mBody(NULL),
     mScene(NULL),
@@ -23,18 +31,6 @@ CSceneObject::CSceneObject(void):
 CSceneObject::~CSceneObject(void)
 {
     Release();
-}
-
-void CSceneObject::OnContactBegin( const CContact &_contact )
-{
-}
-
-void CSceneObject::OnContactEnd( const CContact &_contact )
-{
-}
-
-void CSceneObject::OnBoom( const CBoomParams &_boom )
-{
 }
 
 bool CSceneObject::Init( const CSceneObject::ParamsT &_params )
@@ -92,17 +88,20 @@ void CSceneObject::Step( double _dt )
     }
 }
 
-b2Body *CSceneObject::GetBody()
+void CSceneObject::OnContactBegin( const CContact &_contact )
 {
-    assert( mBody != NULL );
+}
 
-    return mBody;
+void CSceneObject::OnContactEnd( const CContact &_contact )
+{
+}
+
+void CSceneObject::OnBoom( const CBoomParams &_boom )
+{
 }
 
 const b2Body *CSceneObject::GetBody() const
 {
-    assert( mBody != NULL );
-
     return mBody;
 }
 
@@ -124,6 +123,63 @@ void CSceneObject::SetDead()
 bool CSceneObject::IsDead() const
 {
     return mDead;
+}
+
+void CSceneObject::SetDynamic( bool _dynamic )
+{
+    mBody->SetType( _dynamic ? b2_dynamicBody : b2_kinematicBody );
+}
+
+void CSceneObject::CreateFigure( const CFigureParams &_params )
+{
+    b2PolygonShape s;
+
+    if ( _params.mVertices.size() == 0 )
+    {
+        s.SetAsBox( 1.0f, 1.0f );
+    }
+    else
+    {
+        s.Set( &*_params.mVertices.begin(), _params.mVertices.size() );
+    }
+
+    b2MassData md;
+    s.ComputeMass( &md, 1.0 );
+
+    b2FixtureDef fdef;
+    fdef.density = _params.mMass / md.mass;
+    fdef.friction = _params.mFriction;
+    fdef.isSensor = false;
+    fdef.restitution = _params.mRestitution;
+    fdef.shape = &s;
+    fdef.userData = NULL;
+
+    mBody->CreateFixture(&fdef) == NULL;
+}
+
+void CSceneObject::ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos )
+{
+    mBody->ApplyLinearImpulse( _dir, _pos );
+}
+
+void CSceneObject::SetLinearVelocity( const CVec2 &_vel )
+{
+    mBody->SetLinearVelocity(_vel);
+}
+
+void CSceneObject::SetAngularVelocity( float _vel )
+{
+    mBody->SetAngularVelocity(_vel);
+}
+
+void CSceneObject::SetFixedRotation(bool _fixed)
+{
+    mBody->SetFixedRotation(_fixed);
+}
+
+void CSceneObject::SetBullet(bool _bullet)
+{
+    mBody->SetBullet(_bullet);
 }
 
 } // namespace drash

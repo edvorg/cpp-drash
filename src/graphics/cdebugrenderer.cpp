@@ -147,9 +147,13 @@ void CDebugRenderer::ModelViewMatrix()
     {
         glTranslatef( -mCamera->mPos.Get().x,
                       -mCamera->mPos.Get().y,
-                      0.0 );
+                      0 );
 
-        glTranslatef( 0, 0, mCamera->GetZoom() - mCamera->m_ZoomMax - 50.0 );
+        glRotatef( 5, 1, 0, 0 );
+
+        glTranslatef( 0, -30, 0 );
+
+        glTranslatef( 0, 0, mCamera->GetZoom() - mCamera->m_ZoomMax - 20.0 );
     }
 }
 

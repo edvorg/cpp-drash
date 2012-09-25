@@ -20,29 +20,32 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
     }
 
     CSolidBodyParams p;
-    p.mVertices.push_back( CVec2( -300.0f, 5.0f ) );
-    p.mVertices.push_back( CVec2( -300.0f, -5.0f ) );
-    p.mVertices.push_back( CVec2( 300.0f, -5.0f ) );
-    p.mVertices.push_back( CVec2( 300.0f, 5.0f ) );
+    p.mFigures.resize(1);
+    p.mFigures[0].mVertices.push_back( CVec2( -300.0f, 5.0f ) );
+    p.mFigures[0].mVertices.push_back( CVec2( -300.0f, -5.0f ) );
+    p.mFigures[0].mVertices.push_back( CVec2( 300.0f, -5.0f ) );
+    p.mFigures[0].mVertices.push_back( CVec2( 300.0f, 5.0f ) );
     p.mPos.y = -25;
     p.mDynamic = false;
     GetScene()->CreateObject<CSolidBody>(p);
 
     CPlayerParams player;
     player.mPos.Set( 0, -20 );
-    player.mVertices.push_back( CVec2( -2, 0 ) );
-    player.mVertices.push_back( CVec2( 2, 0 ) );
-    player.mVertices.push_back( CVec2( 2, 10 ) );
-    player.mVertices.push_back( CVec2( -2, 10 ) );
+    player.mFigures.resize(1);
+    player.mFigures[0].mVertices.push_back( CVec2( -2, 0 ) );
+    player.mFigures[0].mVertices.push_back( CVec2( 2, 0 ) );
+    player.mFigures[0].mVertices.push_back( CVec2( 2, 10 ) );
+    player.mFigures[0].mVertices.push_back( CVec2( -2, 10 ) );
     GetScene()->AddPlayer(player);
 
     CSolidBodyParams targetForFire;
-    targetForFire.mVertices.push_back( CVec2( -10, -5 ) );
-    targetForFire.mVertices.push_back( CVec2( 10, -5 ) );
-    targetForFire.mVertices.push_back( CVec2( 10, 5 ) );
-    targetForFire.mVertices.push_back( CVec2( -10, 5 ) );
-    targetForFire.mFriction = 0.5;
-    targetForFire.mMass = 1;
+    targetForFire.mFigures.resize(1);
+    targetForFire.mFigures[0].mVertices.push_back( CVec2( -10, -5 ) );
+    targetForFire.mFigures[0].mVertices.push_back( CVec2( 10, -5 ) );
+    targetForFire.mFigures[0].mVertices.push_back( CVec2( 10, 5 ) );
+    targetForFire.mFigures[0].mVertices.push_back( CVec2( -10, 5 ) );
+    targetForFire.mFigures[0].mFriction = 0.5;
+    targetForFire.mFigures[0].mMass = 1;
 
     targetForFire.mPos.Set( -20, 0 );
     for (int i = 0 ; i < 10 ; i++)

@@ -12,14 +12,7 @@ namespace drash
 class CSolidBodyParams : public CSceneObjectParams
 {
 public:
-    float mFriction;
-    float mRestitution;
-    float mMass;
-
-    /// if size of mVertices is NULL, creates a box with (1, 1) dimentions
-    std::vector<CVec2> mVertices;
-
-    CSolidBodyParams();
+    std::vector<CFigureParams> mFigures;
 };
 
 class CSolidBody : public CSceneObject
@@ -30,11 +23,13 @@ public:
     typedef CSolidBodyParams ParamsT;
 
 protected:
-    virtual bool Init( const ParamsT &_params );
-    virtual void Release(void);
-    virtual void OnBoom( const CBoomParams &_boom );
     CSolidBody(void);
     virtual ~CSolidBody(void);
+
+    virtual bool Init( const ParamsT &_params );
+    virtual void Release(void);
+
+    virtual void OnBoom( const CBoomParams &_boom );
 };
 
 }// namespace drash

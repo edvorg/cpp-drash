@@ -15,9 +15,11 @@ namespace drash
 class CAppParams
 {
 public:
-    std::vector<std::string> mArgv;
-    void SetCommandLine( unsigned int _argc, char *_argv[] );
     CAppParams();
+
+    void SetCommandLine( unsigned int _argc, char *_argv[] );
+
+    std::vector<std::string> mArgv;
 };
 
 class CApp

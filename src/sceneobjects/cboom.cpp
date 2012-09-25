@@ -8,10 +8,6 @@ CBoom::CBoom():
 {
 }
 
-CBoom::~CBoom(void)
-{
-}
-
 bool CBoom::Init( const ParamsT &_params )
 {
     if ( !CSceneObject::Init(_params) )
@@ -19,7 +15,7 @@ bool CBoom::Init( const ParamsT &_params )
         return false;
     }
 
-    GetBody()->SetType(b2_kinematicBody);
+    SetDynamic(false);
 
     return true;
 }
@@ -29,7 +25,7 @@ void CBoom::Release(void)
     CSceneObject::Release();
 }
 
-void CBoom::Step(double _dt)
+void CBoom::Step( double _dt )
 {
     CSceneObject::Step(_dt);
 }

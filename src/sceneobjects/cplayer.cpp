@@ -54,12 +54,7 @@ bool CPlayer::Init( const CPlayer::ParamsT &_params )
         return false;
     }
 
-    GetBody()->SetFixedRotation(true);
-    GetBody()->GetFixtureList()->SetFriction(10);
-
-    b2Filter filter;
-    filter.maskBits = 0xffff ^ 0x0010;
-    GetBody()->GetFixtureList()->SetFilterData(filter);
+    SetFixedRotation(true);
 
     mSpeedJump = _params.mSpeedJump;
     mSpeedMoving = _params.mSpeedMoving;
@@ -92,7 +87,7 @@ void CPlayer::Jump()
 	{
         CVec2 v = GetBody()->GetLinearVelocity();
         v.y = mSpeedJump;
-        GetBody()->SetLinearVelocity(v);
+        SetLinearVelocity(v);
     }
 }
 
@@ -100,14 +95,14 @@ void CPlayer::MoveRight()
 {
     CVec2 velocity = GetBody()->GetLinearVelocity();
     velocity.x = mSpeedMoving;
-    GetBody()->SetLinearVelocity(velocity);
+    SetLinearVelocity(velocity);
 }
 
 void CPlayer::MoveLeft()
 {
     CVec2 velocity = GetBody()->GetLinearVelocity();
     velocity.x = -mSpeedMoving;
-    GetBody()->SetLinearVelocity(velocity);
+    SetLinearVelocity(velocity);
 }
 
 void CPlayer::FireNow( const CVec2 &_fireDirect )
@@ -128,6 +123,7 @@ void CPlayer::FireNow( const CVec2 &_fireDirect )
     }
 
     bulletParams.mTime = 2;
+    bulletParams.mFigures.resize(1);
     GetScene()->CreateObject<CGrenade>(bulletParams);
 }
 

@@ -22,7 +22,9 @@ public:
 
     typedef CBulletParams ParamsT;
 
+protected:
     CBullet();
+
     virtual bool Init( const ParamsT &_params );
 
     virtual void OnContactBegin( const CContact &_contact );

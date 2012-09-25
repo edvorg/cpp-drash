@@ -25,7 +25,7 @@ bool CCamera::Init( const ParamsT &_params )
         return false;
     }
 
-    GetBody()->SetType(b2_kinematicBody);
+    SetDynamic(false);
 
     return true;
 }

@@ -21,14 +21,13 @@ public:
 
     typedef CBoomParams ParamsT;
 
-    CBoom(void);
-    virtual ~CBoom(void);
-
 protected:
+    CBoom(void);
+
     virtual bool Init( const ParamsT &_params );
     virtual void Release(void);
 
-    virtual void Step(double _dt);
+    virtual void Step( double _dt );
 
 private:
 };

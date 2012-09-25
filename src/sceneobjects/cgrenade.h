@@ -23,6 +23,7 @@ public:
 
     typedef CGrenadeParams ParamsT;
 
+protected:
     CGrenade();
 
     virtual bool Init( const ParamsT &_params );
