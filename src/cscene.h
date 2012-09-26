@@ -122,12 +122,7 @@ void CScene::DestroyObject( T* _obj )
             {
                 if ( b == body )
                 {
-                    // ok, it's out body
-
-                    while ( b2Fixture* f = b->GetFixtureList() )
-                    {
-                        b->DestroyFixture(f);
-                    }
+                    // ok, it's our body
 
                     mWorld.DestroyBody(body);
                     break;

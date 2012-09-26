@@ -96,9 +96,17 @@ void CScene::Step( double _dt )
     mWorld.Step( _dt, mVelocityIterations, mPositionIterations );
 }
 
-bool CScene::ShouldCollide(b2Fixture *fixtureA, b2Fixture *fixtureB)
+bool CScene::ShouldCollide( b2Fixture *fixtureA, b2Fixture *fixtureB )
 {
-    return true;
+    CInterval *i1 = reinterpret_cast<CInterval*>( fixtureA->GetUserData() );
+    CInterval *i2 = reinterpret_cast<CInterval*>( fixtureB->GetUserData() );
+
+    if ( i1 && i2 )
+    {
+        return i1->IsIntersects(*i2);
+    }
+
+    return false;
 }
 
 void CScene::BeginContact( b2Contact * _contact )

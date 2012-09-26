@@ -5,6 +5,7 @@
 #include <Box2D/Box2D.h>
 #include "../misc/cvec2.h"
 #include "../misc/canimatedparam.h"
+#include "../misc/math.h"
 
 namespace drash
 {
@@ -33,6 +34,8 @@ public:
 
     /// if size of mVertices is NULL, creates a box with (1, 1) dimentions
     std::vector<CVec2> mVertices;
+
+    CInterval mLayers;
 
     CFigureParams();
 };
@@ -90,6 +93,7 @@ private:
     b2Body* mBody;
     CScene* mScene;
     bool mDead;
+    std::vector<CInterval> mLayers;
 };
 
 } // namespace drash

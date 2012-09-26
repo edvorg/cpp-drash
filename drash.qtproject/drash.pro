@@ -17,7 +17,8 @@ SOURCES += \
     ../src/test/ctestapp3-drashtest1.cpp \
     ../src/diag/ctimer.cpp \
     ../src/misc/cvec2.cpp \
-    ../src/sceneobjects/cboom.cpp
+    ../src/sceneobjects/cboom.cpp \
+    ../src/misc/math.cpp
 
 
 CONFIG += console

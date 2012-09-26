@@ -62,6 +62,12 @@ bool CSceneObject::Init( const CSceneObject::ParamsT &_params )
 
 void CSceneObject::Release()
 {
+    while ( b2Fixture *f = mBody->GetFixtureList() )
+    {
+        delete reinterpret_cast<CInterval*>( f->GetUserData() );
+        f->SetUserData(NULL);
+        mBody->DestroyFixture(f);
+    }
 }
 
 void CSceneObject::Step( double _dt )
@@ -154,7 +160,8 @@ void CSceneObject::CreateFigure( const CFigureParams &_params )
     fdef.shape = &s;
     fdef.userData = NULL;
 
-    mBody->CreateFixture(&fdef) == NULL;
+    b2Fixture *f = mBody->CreateFixture(&fdef);
+    f->SetUserData( new CInterval( _params.mLayers ) );
 }
 
 void CSceneObject::ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos )
