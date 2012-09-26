@@ -31,6 +31,7 @@ bool CScene::Init( const CSceneParams &_params )
         return false;
     }
 
+    mWorld.SetContactFilter(this);
     mWorld.SetContactListener(this);
     mWorld.SetAllowSleeping(true);
     mWorld.SetContinuousPhysics(false);
@@ -93,6 +94,11 @@ void CScene::Step( double _dt )
     BoomNow();
 
     mWorld.Step( _dt, mVelocityIterations, mPositionIterations );
+}
+
+bool CScene::ShouldCollide(b2Fixture *fixtureA, b2Fixture *fixtureB)
+{
+    return true;
 }
 
 void CScene::BeginContact( b2Contact * _contact )

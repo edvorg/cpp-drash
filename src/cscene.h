@@ -15,7 +15,7 @@ public:
     CVec2 mGravity;
 };
 
-class CScene : public b2ContactListener
+class CScene : public b2ContactListener, public b2ContactFilter
 {
 public:
     CScene(void);
@@ -37,6 +37,8 @@ public:
     /// must be called once in update cycle
     /// dt - nanoseconds
     void Step( double _dt );    
+
+    virtual bool ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB);
 
     virtual void BeginContact( b2Contact * _contact );
     virtual void EndContact( b2Contact * _contact );
