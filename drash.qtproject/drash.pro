@@ -24,6 +24,10 @@ SOURCES += \
 CONFIG += console
 CONFIG -= qt
 
+INCLUDEPATH += ../3rd/Box2D/include
+
+LIBS += -L../3rd/Box2D/lib
+
 unix|win32: CONFIG += link_pkgconfig
 unix|win32: PKGCONFIG += sdl gl glu
 unix|win32: LIBS += -lBox2D -lrt

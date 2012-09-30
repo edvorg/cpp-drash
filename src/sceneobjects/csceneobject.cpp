@@ -166,7 +166,7 @@ void CSceneObject::CreateFigure( const CFigureParams &_params )
 
 void CSceneObject::ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos )
 {
-    mBody->ApplyLinearImpulse( _dir, _pos );
+    mBody->ApplyLinearImpulse( _dir, _pos, true );
 }
 
 void CSceneObject::SetLinearVelocity( const CVec2 &_vel )
