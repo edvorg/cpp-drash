@@ -44,7 +44,7 @@ public:
     virtual void EndContact( b2Contact * _contact );
 
     void SetDebugRenderer( CDebugRenderer *_renderer );
-    void Draw(void);
+    void Draw( const CCamera &_camera );
 
     void OnPlayerEvent( const CPlayerEvent & _event, unsigned int _playerId );
 

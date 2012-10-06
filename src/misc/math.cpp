@@ -15,10 +15,23 @@ CInterval::CInterval( const CInterval &_interval ):
 {
 }
 
+CInterval::CInterval( float _a, float _b )
+{
+    Set( _a, _b );
+}
+
 CInterval &CInterval::Set( int _a, int _b )
 {
-    a = _a;
-    b = _b;
+	if ( _a < _b )
+	{
+		a = _a;
+		b = _b;
+	}
+	else
+	{
+		a = _b;
+		b = _a;
+	}
     return *this;
 }
 

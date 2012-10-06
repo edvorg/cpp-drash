@@ -14,6 +14,8 @@ public:
     {
         PlayerActionMoveLeft,
         PlayerActionMoveRight,
+        PlayerActionMoveDeep,
+        PlayerActionMoveOut,
         PlayerActionEndMoveLeft,
         PlayerActionEndMoveRight,
         PlayerActionJump,

@@ -88,8 +88,11 @@ protected:
     virtual void OnContactBegin( const CContact &_contact );
     virtual void OnContactEnd( const CContact &_contact );
     virtual void OnBoom( const CBoomParams &_boom );
+    virtual void DrawDebug();
 
 private:
+    void DrawSide( const CVec2 &_v1, const CVec2 &_v2, const CInterval &_interval, const b2Color &_diffuse );
+
     b2Body* mBody;
     CScene* mScene;
     bool mDead;

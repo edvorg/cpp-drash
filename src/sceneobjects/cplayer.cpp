@@ -124,6 +124,9 @@ void CPlayer::FireNow( const CVec2 &_fireDirect )
 
     bulletParams.mTime = 2;
     bulletParams.mFigures.resize(1);
+    float tmp = ( reinterpret_cast<CInterval*>( GetBody()->GetFixtureList()->GetUserData() )->GetMin() +
+                  reinterpret_cast<CInterval*>( GetBody()->GetFixtureList()->GetUserData() )->GetMax() ) / 2;
+    bulletParams.mFigures[0].mLayers.Set( tmp, tmp + 1 );
     GetScene()->CreateObject<CGrenade>(bulletParams);
 }
 
@@ -149,6 +152,23 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
 
         case CPlayerEvent::PlayerActionEndMoveRight:
             mMovingRight = false;
+            break;
+
+        case CPlayerEvent::PlayerActionMoveDeep:
+            for ( auto f = GetBody()->GetFixtureList(); f != NULL; f = f->GetNext() )
+            {
+                auto i = reinterpret_cast<CInterval*>( f->GetUserData() );
+                i->Set( i->GetMin() - 1, i->GetMax() - 1 );
+            }
+            break;
+
+
+        case CPlayerEvent::PlayerActionMoveOut:
+            for ( auto f = GetBody()->GetFixtureList(); f != NULL; f = f->GetNext() )
+            {
+                auto i = reinterpret_cast<CInterval*>( f->GetUserData() );
+                i->Set( i->GetMin() + 2, i->GetMax() + 2 );
+            }
             break;
 
         case CPlayerEvent::PlayerActionFire:

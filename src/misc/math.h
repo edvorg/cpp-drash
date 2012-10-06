@@ -29,19 +29,26 @@ class CInterval
 public:
     CInterval();
     CInterval( const CInterval &_interval );
+    CInterval( float _a, float _b );
 
     inline bool IsIntersects( const CInterval &_interval );
 
     CInterval &Set( int _a, int _b );
     CInterval &Set( int _c );
 
+    int GetMin() const { return a; }
+    int GetMax() const { return b; }
+
+private:
     int a;
     int b;
 };
 
 inline bool CInterval::IsIntersects( const drash::CInterval &_interval )
 {
-    return ( _interval.a <= a && a <= _interval.b ) || ( _interval.a <= b && b <= _interval.b );
+    return ( _interval.a <= a && a <= _interval.b ) ||
+			( _interval.a <= b && b <= _interval.b ) ||
+			( a <= _interval.a && _interval.b <= b );
 }
 
 }

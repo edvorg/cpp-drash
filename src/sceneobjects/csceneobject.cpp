@@ -1,6 +1,7 @@
 #include "csceneobject.h"
 #include "../diag/clogger.h"
 #include "cboom.h"
+#include <GL/gl.h>
 
 namespace drash
 {
@@ -104,6 +105,106 @@ void CSceneObject::OnContactEnd( const CContact &_contact )
 
 void CSceneObject::OnBoom( const CBoomParams &_boom )
 {
+}
+
+static const float g_LayerWidth = 1.0f;
+
+void CSceneObject::DrawSide( const CVec2 &_v1, const CVec2 &_v2, const CInterval &_interval, const b2Color &_diffuse )
+{
+    CVec2 dp = mBody->GetWorldPoint( _v1 ) -
+               mBody->GetWorldPoint( _v2 );
+    dp.Normalize();
+    CVec2 localx(1, 0);
+
+    float dot = dp.x * localx.x + dp.y * localx.y;
+    dot += 1.0;
+    dot /= 4.0f;
+
+    glColor3f( _diffuse.r * ( 0.5 + dot ),
+               _diffuse.g * ( 0.5 + dot ),
+               _diffuse.b * ( 0.5 + dot ) );
+
+    glVertex3f( _v1.x,
+                _v1.y,
+                _interval.GetMax() * g_LayerWidth + g_LayerWidth / 2.0f );
+    glVertex3f( _v1.x,
+                _v1.y,
+                _interval.GetMin() * g_LayerWidth - g_LayerWidth / 2.0f );
+    glVertex3f( _v2.x,
+                _v2.y,
+                _interval.GetMax() * g_LayerWidth + g_LayerWidth / 2.0f );
+
+    glVertex3f( _v2.x,
+                _v2.y,
+                _interval.GetMax() * g_LayerWidth + g_LayerWidth / 2.0f );
+    glVertex3f( _v1.x,
+                _v1.y,
+                _interval.GetMin() * g_LayerWidth - g_LayerWidth / 2.0f );
+    glVertex3f( _v2.x,
+                _v2.y,
+                _interval.GetMin() * g_LayerWidth - g_LayerWidth / 2.0f );
+}
+
+void CSceneObject::DrawDebug()
+{
+    glCullFace(GL_NONE);
+    unsigned int j = 0;
+    for ( b2Fixture *f = mBody->GetFixtureList(); f != NULL; f = f->GetNext() )
+    {
+        if ( f->GetShape()->GetType() == b2Shape::e_polygon )
+        {
+            auto s = reinterpret_cast<b2PolygonShape*>( f->GetShape() );
+
+            if (s)
+            {
+                static const b2Color diffuse(0.1875,0.375,0.75);
+                const CInterval interval = f->GetUserData() ?
+                                            (CInterval&)(*f->GetUserData()) :
+                                            CInterval(-1, 1);
+
+                glEnable(GL_DEPTH_TEST);
+
+                glBegin(GL_TRIANGLE_FAN);
+                glColor3f( 0.5 * diffuse.r,
+                           0.5 * diffuse.g,
+                           0.5 * diffuse.b );
+                for ( unsigned int i = 0; i < s->GetVertexCount(); i++ )
+                {
+                    glVertex3f( s->GetVertex(i).x,
+                                s->GetVertex(i).y,
+                                interval.GetMax() * g_LayerWidth + g_LayerWidth / 2.0f );
+                }
+                glEnd();
+
+                glBegin(GL_TRIANGLE_FAN);
+                glColor3f( 0.5 * diffuse.r,
+                           0.5 * diffuse.g,
+                           0.5 * diffuse.b );
+                for ( unsigned int i = 0; i < s->GetVertexCount(); i++ )
+                {
+                    glVertex3f( s->GetVertex(i).x,
+                                s->GetVertex(i).y,
+                                interval.GetMin() * g_LayerWidth - g_LayerWidth / 2.0f );
+                }
+                glEnd();
+
+                glBegin(GL_TRIANGLES);
+                for ( unsigned int i = 0; i < s->GetVertexCount()-1; i++ )
+                {
+                    DrawSide( s->GetVertex(i),
+                              s->GetVertex(i+1),
+                              interval,
+                              diffuse );
+                }
+                DrawSide( s->GetVertex( s->GetVertexCount() - 1),
+                          s->GetVertex(0),
+                          interval,
+                          diffuse );
+                glEnd();
+            }
+        }
+        j++;
+    }
 }
 
 const b2Body *CSceneObject::GetBody() const

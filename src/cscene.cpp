@@ -1,5 +1,7 @@
 #include "cscene.h"
 #include "diag/clogger.h"
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 namespace drash
 {
@@ -200,7 +202,7 @@ void CScene::SetDebugRenderer( CDebugRenderer *_renderer )
     mWorld.SetDebugDraw(_renderer);
 }
 
-void CScene::Draw(void)
+void CScene::Draw( const CCamera &_camera )
 {
     if ( mInitialized == false )
     {
@@ -209,7 +211,26 @@ void CScene::Draw(void)
         return;
     }
 
-    mWorld.DrawDebugData();
+    for ( b2Body *b = mWorld.GetBodyList(); b != NULL; b = b->GetNext() )
+    {
+        auto o = reinterpret_cast<CSceneObject*>( b->GetUserData() );
+        if (o)
+        {
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+            //glRotatef( 30, 0, 1, 0 );
+            glTranslatef( -_camera.mPos.Get().x, -_camera.mPos.Get().y, -_camera.m_ZoomMax + _camera.GetZoom() );
+            glRotatef(15, 1, 0, 0);
+            glTranslatef( o->GetBody()->GetWorldCenter().x, o->GetBody()->GetWorldCenter().y, 0 );
+            glRotatef( 180.0f / M_PI * o->GetBody()->GetAngle(), 0, 0, 1 );
+
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            gluPerspective( 60.0, 1366.0 / 768.0f, 1.0f, 1000.0f );
+
+            o->DrawDebug();
+        }
+    }
 }
 
 void CScene::OnPlayerEvent( const CPlayerEvent &_event, unsigned int _playerId )

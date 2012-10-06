@@ -285,6 +285,14 @@ void CApp::Run()
                 {
                     mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveRight, CVec2() ), 0 );
                 }
+                else if ( event.key.keysym.sym == SDLK_w )
+                {
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveDeep, CVec2() ), 0 );
+                }
+                else if ( event.key.keysym.sym == SDLK_s )
+                {
+                    mScene.OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveOut, CVec2() ), 0 );
+                }
             }
             else if ( event.type == SDL_KEYUP )
             {
@@ -361,7 +369,7 @@ void CApp::Update()
     mTimer.Tick();
     mScene.Step( mTimer.GetDeltaTime() );
 
-    if ( mTestApp )
+    if ( mTestApp != NULL )
     {
         mTestApp->Update();
     }
@@ -374,9 +382,9 @@ void CApp::Render()
     glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    mScene.Draw();
+    mScene.Draw(*mCamera);
 
-    if ( mTestApp )
+    if ( mTestApp != NULL )
     {
         mTestApp->Render();
     }
