@@ -68,7 +68,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     dbp.mFigures[0].mVertices.push_back( CVec2( -10, 10 ) );
 
     dbp.mDestroyDelay = 0.5;
-    dbp.mDestroySpeed = 0.0f;
+    dbp.mDestroySpeed = 7.0f;
 
     GenDrashBodyParams( &dbp, 5, 0, 3 );
 
