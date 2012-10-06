@@ -69,6 +69,8 @@ void CPlayer::Release()
 
 void CPlayer::Step( double _dt )
 {
+    SetActive(true);
+
     CSolidBody::Step(_dt);
 
     if (mMovingLeft)
@@ -160,6 +162,7 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
                 auto i = reinterpret_cast<CInterval*>( f->GetUserData() );
                 i->Set( i->GetMin() - 1, i->GetMax() - 1 );
             }
+            SetActive(false);
             break;
 
 
@@ -168,6 +171,7 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
             {
                 auto i = reinterpret_cast<CInterval*>( f->GetUserData() );
                 i->Set( i->GetMin() + 2, i->GetMax() + 2 );
+                SetActive(false);
             }
             break;
 

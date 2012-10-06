@@ -290,4 +290,9 @@ void CSceneObject::SetBullet(bool _bullet)
     mBody->SetBullet(_bullet);
 }
 
+void CSceneObject::SetActive(bool _active)
+{
+    mBody->SetActive(_active);
+}
+
 } // namespace drash

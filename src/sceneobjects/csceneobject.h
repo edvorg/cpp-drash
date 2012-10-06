@@ -72,6 +72,7 @@ public:
     void SetAngularVelocity( float _vel );
     void SetFixedRotation( bool _fixed );
     void SetBullet( bool _bullet );
+    void SetActive( bool _active );
 
     CAnimatedParam<CVec2> mPos;
     CAnimatedParam<float> mAngle;
