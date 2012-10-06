@@ -68,12 +68,13 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     dbp.mFigures[0].mVertices.push_back( CVec2( -10, 10 ) );
 
     dbp.mDestroyDelay = 0.5;
-    dbp.mDestroySpeed = 10.0f;
+    dbp.mDestroySpeed = 0.0f;
 
-    GenDrashBodyParams( &dbp, 5, 0, 2 );
+    GenDrashBodyParams( &dbp, 5, 0, 3 );
 
     CDrashBody *db = GetScene()->CreateObject<CDrashBody>(dbp);
     db->SetAngularVelocity(2);
+    db->SetLinearVelocity( CVec2(0, -20) );
 
     CSolidBodyParams pp;
     pp.mPos.Set( -200, 100 );
