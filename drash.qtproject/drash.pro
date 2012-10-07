@@ -1,62 +1,64 @@
-SOURCES += \
-    ../src/main.cpp \
-    ../src/graphics/cdebugrenderer.cpp \
-    ../src/sceneobjects/csceneobject.cpp \
-    ../src/cscene.cpp \
-    ../src/diag/clogger.cpp \
-    ../src/capp.cpp \
-    ../src/sceneobjects/ccamera.cpp \
-    ../src/sceneobjects/csolidbody.cpp \
-    ../src/sceneobjects/cdrashbody.cpp \
-    ../src/sceneobjects/cplayer.cpp \
-    ../src/sceneobjects/cbullet.cpp \
-    ../src/test/ctestapp.cpp \
-    ../src/test/ctestapp1.cpp \
-    ../src/test/ctestapp2.cpp \
-    ../src/sceneobjects/cgrenade.cpp \
-    ../src/test/ctestapp3-drashtest1.cpp \
-    ../src/diag/ctimer.cpp \
-    ../src/misc/cvec2.cpp \
-    ../src/sceneobjects/cboom.cpp \
-    ../src/misc/math.cpp
+#-------------------------------------------------
+#
+# Project created by QtCreator 2012-10-07T13:07:30
+#
+#-------------------------------------------------
 
+QT       += core gui opengl
 
-CONFIG += console
-CONFIG -= qt
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+TARGET = drash
+TEMPLATE = app
 
 INCLUDEPATH += ../3rd/Box2D/include
 
-LIBS += -L../3rd/Box2D/lib
+SOURCES += ../src/main.cpp\
+        ../src/gamewindow.cpp \
+    ../src/scenewidget.cpp \
+    ../src/cscene.cpp \
+    ../src/test/ctestapp3-drashtest1.cpp \
+    ../src/test/ctestapp2.cpp \
+    ../src/test/ctestapp1.cpp \
+    ../src/test/ctestapp.cpp \
+    ../src/misc/math.cpp \
+    ../src/misc/cvec2.cpp \
+    ../src/diag/ctimer.cpp \
+    ../src/diag/clogger.cpp \
+    ../src/sceneobjects/csolidbody.cpp \
+    ../src/sceneobjects/csceneobject.cpp \
+    ../src/sceneobjects/cplayer.cpp \
+    ../src/sceneobjects/cgrenade.cpp \
+    ../src/sceneobjects/cdrashbody.cpp \
+    ../src/sceneobjects/ccamera.cpp \
+    ../src/sceneobjects/cbullet.cpp \
+    ../src/sceneobjects/cboom.cpp
 
-unix|win32: CONFIG += link_pkgconfig
-unix|win32: PKGCONFIG += sdl gl glu
-unix|win32: LIBS += -lBox2D -lrt
-
-QMAKE_CXXFLAGS += -std=c++11
-
-HEADERS += \
-    ../src/graphics/cdebugrenderer.h \
-    ../src/sceneobjects/csceneobject.h \
-    ../src/cscene.h \
-    ../src/diag/clogger.h \
-    ../src/capp.h \
-    ../src/sceneobjects/ccamera.h \
-    ../src/sceneobjects/csolidbody.h \
-    ../src/sceneobjects/cdrashbody.h \
-    ../src/sceneobjects/cplayer.h \
+HEADERS  += ../src/gamewindow.h \
+    ../src/scenewidget.h \
     ../src/sceneobjects.h \
-    ../src/sceneobjects/cbullet.h \
-    ../src/test/ctestapp.h \
-    ../src/test/ctestapp1.h \
-    ../src/test/ctestapp2.h \
-    ../src/sceneobjects/cgrenade.h \
+    ../src/cscene.h \
+    ../src/capp.h \
     ../src/test/ctestapp3-drashtest1.h \
-    ../src/diag/ctimer.h \
+    ../src/test/ctestapp2.h \
+    ../src/test/ctestapp1.h \
+    ../src/test/ctestapp.h \
+    ../src/misc/math.h \
     ../src/misc/cvec2.h \
     ../src/misc/canimatedparam.h \
-    ../src/sceneobjects/cboom.h \
-    ../src/misc/math.h
+    ../src/graphics/cdebugrenderer.h \
+    ../src/diag/ctimer.h \
+    ../src/diag/clogger.h \
+    ../src/sceneobjects/csolidbody.h \
+    ../src/sceneobjects/csceneobject.h \
+    ../src/sceneobjects/cplayer.h \
+    ../src/sceneobjects/cgrenade.h \
+    ../src/sceneobjects/cdrashbody.h \
+    ../src/sceneobjects/ccamera.h \
+    ../src/sceneobjects/cbullet.h \
+    ../src/sceneobjects/cboom.h
 
-CONFIG(debug, debug|release) {
-    DEFINES += DRASH_DEBUG
-}
+FORMS    += ../src/gamewindow.ui
+
+LIBS += -L../3rd/Box2D/lib
+LIBS += -lBox2D -lGLU
