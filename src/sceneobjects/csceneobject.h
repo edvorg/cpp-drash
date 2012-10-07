@@ -6,6 +6,7 @@
 #include "../misc/cvec2.h"
 #include "../misc/canimatedparam.h"
 #include "../misc/math.h"
+#include <vector>
 
 namespace drash
 {

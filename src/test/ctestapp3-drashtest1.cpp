@@ -120,11 +120,6 @@ void GenDrashBodyParams( CDrashBodyParams* _params, float _subset_size, unsigned
         return;
     }
 
-    printf( "level %i: (%i %i)\n",
-            (int)_level,
-            _params->mFigures[0].mLayers.GetMin(),
-            _params->mFigures[0].mLayers.GetMax() );
-
     for ( int i = 0; i < 8; i++ )
     {
         _params->mChilds.push_back( CDrashBodyParams() );

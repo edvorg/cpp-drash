@@ -224,10 +224,6 @@ void CScene::Draw( const CCamera &_camera )
             glTranslatef( o->GetBody()->GetWorldCenter().x, o->GetBody()->GetWorldCenter().y, 0 );
             glRotatef( 180.0f / M_PI * o->GetBody()->GetAngle(), 0, 0, 1 );
 
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            gluPerspective( 60.0, 1366.0 / 768.0f, 1.0f, 1000.0f );
-
             o->DrawDebug();
         }
     }

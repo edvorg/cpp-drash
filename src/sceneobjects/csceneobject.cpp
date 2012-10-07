@@ -73,6 +73,8 @@ void CSceneObject::Release()
 
 void CSceneObject::Step( double _dt )
 {
+    mBody->SetAwake(true);
+    
     mPos.Step(_dt);
     mAngle.Step(_dt);
 

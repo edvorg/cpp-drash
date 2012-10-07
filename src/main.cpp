@@ -1,24 +1,19 @@
-#include <cstdlib>
-#include <ctime>
+#include <QApplication>
+#include "gamewindow.h"
 
-#include "capp.h"
-#include "diag/clogger.h"
-
-using namespace drash;
-
-int main( int _argc, char *_argv[] )
+int main(int argc, char *argv[])
 {
-    srand( time(NULL) );
+    QApplication a(argc, argv);
 
-    CApp app;
-    CAppParams params;
-    params.SetCommandLine( _argc, _argv );
+    GameWindowParams p;
+    p.SetCommandLine( argc, argv );
 
-    if ( app.Init(params) == true )
+    GameWindow w;
+    if ( w.Init(p) == false )
     {
-        app.Run();
-        app.Release();
+        return 0;
     }
-
-    return 0;
+    w.show();
+    
+    return a.exec();
 }
