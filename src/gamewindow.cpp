@@ -26,6 +26,8 @@ GameWindow::GameWindow(QWidget *parent) :
     setCentralWidget( mSceneWidget = new SceneWidget(this) );
 
     mTimer.SetPaused(false);
+
+    mSceneWidget->setFocus();
 }
 
 GameWindow::~GameWindow()

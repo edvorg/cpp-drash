@@ -27,6 +27,11 @@ public:
     void SetCamera( drash::CCamera *_camera );
     void SetTestApp( drash::CTestApp *_app );
 
+    virtual void mousePressEvent( QMouseEvent * _event );
+    virtual void keyReleaseEvent( QKeyEvent *_event );
+    virtual void keyPressEvent( QKeyEvent *_event );
+    virtual void wheelEvent( QWheelEvent *_event );
+
 private:
     drash::CScene *mScene;
     drash::CCamera *mCamera;
