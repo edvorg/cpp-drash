@@ -23,7 +23,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
         return false;
     }
 
-    CSolidBodyParams sbp;
+    CSceneObjectParams sbp;
     sbp.mDynamic = false;
     sbp.mFigures.resize(1);
     sbp.mFigures[0].mLayers.Set( -20, 20 );
@@ -33,10 +33,10 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     sbp.mFigures[0].mVertices.push_back( CVec2( 300, -5 ) );
     sbp.mFigures[0].mVertices.push_back( CVec2( 300, 5 ) );
     sbp.mFigures[0].mVertices.push_back( CVec2( -300, 5 ) );
-    GetScene()->CreateObject<CSolidBody>(sbp);
+    GetScene()->CreateObject<CSceneObject>(sbp);
 
     sbp.mPos.Set( 0, 600 );
-    GetScene()->CreateObject<CSolidBody>(sbp);
+    GetScene()->CreateObject<CSceneObject>(sbp);
 
     sbp.mPos.Set( -300, 300 );
     sbp.mFigures[0].mVertices.clear();
@@ -45,7 +45,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     sbp.mFigures[0].mVertices.push_back( CVec2( 5, -300 ) );
     sbp.mFigures[0].mVertices.push_back( CVec2( 5, 300 ) );
     sbp.mFigures[0].mVertices.push_back( CVec2( -5, 300 ) );
-    GetScene()->CreateObject<CSolidBody>(sbp);
+    GetScene()->CreateObject<CSceneObject>(sbp);
 
     sbp.mPos.Set( 300, 300 );
     sbp.mFigures[0].mVertices.clear();
@@ -54,7 +54,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     sbp.mFigures[0].mVertices.push_back( CVec2( 5, -300 ) );
     sbp.mFigures[0].mVertices.push_back( CVec2( 5, 300 ) );
     sbp.mFigures[0].mVertices.push_back( CVec2( -5, 300 ) );
-    GetScene()->CreateObject<CSolidBody>(sbp);
+    GetScene()->CreateObject<CSceneObject>(sbp);
 
     CDrashBodyParams dbp;
     dbp.mPos.Set( 0, 100 );
@@ -76,11 +76,11 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     db->SetAngularVelocity(2);
     db->SetLinearVelocity( CVec2(0, -20) );
 
-    CSolidBodyParams pp;
+    CSceneObjectParams pp;
     pp.mPos.Set( -200, 100 );
     pp.mFigures.resize(1);
     pp.mFigures[0].mMass = 3;
-    GetScene()->CreateObject<CSolidBody>(pp)->SetLinearVelocity( CVec2( 200, 0 ) );
+    GetScene()->CreateObject<CSceneObject>(pp)->SetLinearVelocity( CVec2( 200, 0 ) );
 
     CPlayerParams ppp;
     ppp.mPos.Set( 0, 10 );

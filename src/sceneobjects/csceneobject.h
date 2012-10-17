@@ -16,19 +16,11 @@ class CBoomParams;
 class CScene;
 class CSceneObject;
 
-class CSceneObjectParams
-{
-public:
-    bool mDynamic;
-    CVec2 mPos;
-    float mAngle;
-    bool mFixedRotation;
-    CSceneObjectParams();
-};
-
 class CFigureParams
 {
 public:
+    CFigureParams();
+
     float mFriction;
     float mRestitution;
     float mMass;
@@ -37,8 +29,18 @@ public:
     std::vector<CVec2> mVertices;
 
     CInterval mLayers;
+};
 
-    CFigureParams();
+class CSceneObjectParams
+{
+public:
+    CSceneObjectParams();
+
+    bool mDynamic;
+    CVec2 mPos;
+    float mAngle;
+    bool mFixedRotation;
+    std::vector<CFigureParams> mFigures;
 };
 
 class CContact

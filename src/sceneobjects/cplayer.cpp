@@ -27,7 +27,7 @@ CVec2 CPlayerEvent::GetMousePos() const
 const float CPlayer::mHeightJump = 10;
 
 CPlayerParams::CPlayerParams():
-    CSolidBodyParams(),
+    CSceneObjectParams(),
     mSpeedJump(10),
     mSpeedMoving(20),
     mPointShoot(3,10)
@@ -36,7 +36,7 @@ CPlayerParams::CPlayerParams():
 }
 
 CPlayer::CPlayer():
-    CSolidBody(),
+    CSceneObject(),
     mJumpAllowed(false),
     mMovingLeft(false),
     mMovingRight(false)
@@ -49,7 +49,7 @@ CPlayer::~CPlayer()
 
 bool CPlayer::Init( const CPlayer::ParamsT &_params )
 {
-    if ( CSolidBody::Init(_params) == false )
+    if ( CSceneObject::Init(_params) == false )
 	{
         return false;
     }
@@ -64,14 +64,14 @@ bool CPlayer::Init( const CPlayer::ParamsT &_params )
 
 void CPlayer::Release()
 {
-    CSolidBody::Release();
+    CSceneObject::Release();
 }
 
 void CPlayer::Step( double _dt )
 {
     SetActive(true);
 
-    CSolidBody::Step(_dt);
+    CSceneObject::Step(_dt);
 
     if (mJumpAllowed)
     {
@@ -190,13 +190,13 @@ void CPlayer::OnContactBegin( const CContact &_contact )
 
 void CPlayer::OnContactPreSolve(const CContact &_contact)
 {
-    CSolidBody::OnContactBegin(_contact);
+    CSceneObject::OnContactBegin(_contact);
     mJumpAllowed = true;
 }
 
 void CPlayer::OnContactEnd( const CContact &_contact )
 {
-    CSolidBody::OnContactEnd(_contact);
+    CSceneObject::OnContactEnd(_contact);
     mJumpAllowed = false;
 }
 

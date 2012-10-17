@@ -2,12 +2,12 @@
 #ifndef CBULLET_H
 #define CBULLET_H
 
-#include "csolidbody.h"
+#include "csceneobject.h"
 
 namespace drash
 {
 
-class CBulletParams : public CSolidBodyParams
+class CBulletParams : public CSceneObjectParams
 {
 public:
     CBulletParams();
@@ -15,7 +15,7 @@ public:
     CVec2 mTarget;
 };
 
-class CBullet : public CSolidBody
+class CBullet : public CSceneObject
 {
 public:
     friend class CScene;

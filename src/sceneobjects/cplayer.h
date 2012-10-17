@@ -2,7 +2,7 @@
 #ifndef CPLAYER_H
 #define CPLAYER_H
 
-#include "csolidbody.h"
+#include "csceneobject.h"
 
 namespace drash
 {
@@ -33,7 +33,7 @@ private:
     CVec2 mMousePos;
 };
 
-class CPlayerParams: public CSolidBodyParams
+class CPlayerParams: public CSceneObjectParams
 {
 public:
     float mSpeedJump;
@@ -42,7 +42,7 @@ public:
     CPlayerParams();
 };
 
-class CPlayer: public CSolidBody
+class CPlayer: public CSceneObject
 {
 public:
     friend class CScene;

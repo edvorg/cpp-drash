@@ -2,7 +2,7 @@
 #ifndef CDRASHBODY_H
 #define CDRASHBODY_H
 
-#include "csolidbody.h"
+#include "csceneobject.h"
 #include "cboom.h"
 #include <vector>
 #include "../diag/ctimer.h"
@@ -10,7 +10,7 @@
 namespace drash
 {
 
-class CDrashBodyParams : public CSolidBodyParams
+class CDrashBodyParams : public CSceneObjectParams
 {
 public:
     CDrashBodyParams();
@@ -21,7 +21,7 @@ public:
     float mDestroySpeed;
 };
 
-class CDrashBody : public CSolidBody
+class CDrashBody : public CSceneObject
 {
 public:
     friend class CScene;

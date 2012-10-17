@@ -29,7 +29,7 @@ CDrashBody::~CDrashBody()
 
 bool CDrashBody::Init( const CDrashBody::ParamsT &_params )
 {
-    if ( CSolidBody::Init(_params) == false )
+    if ( CSceneObject::Init(_params) == false )
     {
         return false;
     }
@@ -42,7 +42,7 @@ bool CDrashBody::Init( const CDrashBody::ParamsT &_params )
 
 void CDrashBody::Step( double _dt )
 {
-    CSolidBody::Step(_dt);
+    CSceneObject::Step(_dt);
 
     mTimer.Tick();
 
@@ -63,7 +63,7 @@ void CDrashBody::Step( double _dt )
             }
             else
             {
-                o = GetScene()->CreateObject<CSolidBody>(*i);   
+                o = GetScene()->CreateObject<CSceneObject>(*i);   
             }              
 
             if ( o == NULL )
@@ -83,7 +83,7 @@ void CDrashBody::Step( double _dt )
 
 void CDrashBody::OnContactBegin( const CContact &_contact )
 {
-    CSolidBody::OnContactBegin(_contact);
+    CSceneObject::OnContactBegin(_contact);
 
     if ( mCounter == 0 && mTimer.GetFullTime() > mParams.mDestroyDelay )
     {
@@ -101,7 +101,7 @@ void CDrashBody::OnContactBegin( const CContact &_contact )
 
 void CDrashBody::OnBoom( const CBoomParams &_boom )
 {
-    CSolidBody::OnBoom(_boom);
+    CSceneObject::OnBoom(_boom);
 
     if ( mCounter == 0 && mTimer.GetFullTime() > mParams.mDestroyDelay )
     {

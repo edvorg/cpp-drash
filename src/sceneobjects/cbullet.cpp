@@ -6,14 +6,14 @@ namespace drash
 {
 
 CBullet::CBullet():
-    CSolidBody()
+    CSceneObject()
 {
 
 }
 
 bool CBullet::Init( const ParamsT &_params )
 {
-    if (CSolidBody::Init(_params) == false)
+    if (CSceneObject::Init(_params) == false)
 	{
         return false;
     }
@@ -43,7 +43,7 @@ void CBullet::OnBoom( const CBoomParams &_boom )
 }
 
 CBulletParams::CBulletParams():
-    CSolidBodyParams(),
+    CSceneObjectParams(),
     mTarget(0,0)
 {
 }

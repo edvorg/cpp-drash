@@ -25,7 +25,6 @@ SOURCES += ../src/main.cpp\
     ../src/misc/cvec2.cpp \
     ../src/diag/ctimer.cpp \
     ../src/diag/clogger.cpp \
-    ../src/sceneobjects/csolidbody.cpp \
     ../src/sceneobjects/csceneobject.cpp \
     ../src/sceneobjects/cplayer.cpp \
     ../src/sceneobjects/cgrenade.cpp \
@@ -50,7 +49,6 @@ HEADERS  += ../src/gamewindow.h \
     ../src/graphics/cdebugrenderer.h \
     ../src/diag/ctimer.h \
     ../src/diag/clogger.h \
-    ../src/sceneobjects/csolidbody.h \
     ../src/sceneobjects/csceneobject.h \
     ../src/sceneobjects/cplayer.h \
     ../src/sceneobjects/cgrenade.h \

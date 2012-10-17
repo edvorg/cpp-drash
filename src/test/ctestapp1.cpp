@@ -25,7 +25,7 @@ bool CTestApp1::Init( CScene *_scene, CCamera *_camera )
 
     t.Reset(true);
 
-    CSolidBodyParams p;
+    CSceneObjectParams p;
     p.mFigures.resize(1);
     p.mFigures[0].mVertices.push_back( CVec2( -100.0f, 5.0f ) );
     p.mFigures[0].mVertices.push_back( CVec2( -100.0f, -5.0f ) );
@@ -33,7 +33,7 @@ bool CTestApp1::Init( CScene *_scene, CCamera *_camera )
     p.mFigures[0].mVertices.push_back( CVec2( 100.0f, 5.0f ) );
     p.mPos.y = -25;
     p.mDynamic = false;
-    GetScene()->CreateObject<CSolidBody>(p);
+    GetScene()->CreateObject<CSceneObject>(p);
 
     return true;
 }
@@ -54,7 +54,7 @@ void CTestApp1::Update()
         p.mPos.RandY(100, 200, 15);
         p.mPos.RandX(-50, 50, 15);
         p.mFigures.resize(1);
-        GetScene()->CreateObject<CSolidBody>(p);
+        GetScene()->CreateObject<CSceneObject>(p);
         t.Reset(true);
     }
 }

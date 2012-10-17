@@ -58,6 +58,11 @@ bool CSceneObject::Init( const CSceneObject::ParamsT &_params )
                     b2_dynamicBody :
                     b2_kinematicBody );
 
+    for ( auto i = _params.mFigures.begin(), i_e = _params.mFigures.end(); i != i_e; i++ )
+    {
+        CreateFigure(*i);
+    }
+
     return true;
 }
 
@@ -111,6 +116,15 @@ void CSceneObject::OnContactEnd( const CContact &_contact )
 
 void CSceneObject::OnBoom( const CBoomParams &_boom )
 {
+    CVec2 dir( GetBody()->GetWorldCenter() );
+    dir -= _boom.mPos;
+
+    float k = std::min( dir.Length(), _boom.mStregth )/ _boom.mStregth;
+
+    dir.Normalize();
+    dir *= k * _boom.mStregth;
+
+    ApplyLinearImpulse( dir, mPos.Get() );
 }
 
 static const float g_LayerWidth = 1.0f;

@@ -19,7 +19,7 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
         return false;
     }
 
-    CSolidBodyParams p;
+    CSceneObjectParams p;
     p.mFigures.resize(1);
     p.mFigures[0].mVertices.push_back( CVec2( -300.0f, 5.0f ) );
     p.mFigures[0].mVertices.push_back( CVec2( -300.0f, -5.0f ) );
@@ -27,7 +27,7 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
     p.mFigures[0].mVertices.push_back( CVec2( 300.0f, 5.0f ) );
     p.mPos.y = -25;
     p.mDynamic = false;
-    GetScene()->CreateObject<CSolidBody>(p);
+    GetScene()->CreateObject<CSceneObject>(p);
 
     CPlayerParams player;
     player.mPos.Set( 0, -20 );
@@ -38,7 +38,7 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
     player.mFigures[0].mVertices.push_back( CVec2( -2, 10 ) );
     GetScene()->AddPlayer(player);
 
-    CSolidBodyParams targetForFire;
+    CSceneObjectParams targetForFire;
     targetForFire.mFigures.resize(1);
     targetForFire.mFigures[0].mVertices.push_back( CVec2( -10, -5 ) );
     targetForFire.mFigures[0].mVertices.push_back( CVec2( 10, -5 ) );
@@ -50,7 +50,7 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
     targetForFire.mPos.Set( -20, 0 );
     for (int i = 0 ; i < 10 ; i++)
     {
-        GetScene()->CreateObject<CSolidBody>(targetForFire);
+        GetScene()->CreateObject<CSceneObject>(targetForFire);
         targetForFire.mPos.Set( -20, 20 + i*20 );
     }
 
