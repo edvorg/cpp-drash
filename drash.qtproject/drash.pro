@@ -32,7 +32,8 @@ SOURCES += ../src/main.cpp\
     ../src/sceneobjects/cdrashbody.cpp \
     ../src/sceneobjects/ccamera.cpp \
     ../src/sceneobjects/cbullet.cpp \
-    ../src/sceneobjects/cboom.cpp
+    ../src/sceneobjects/cboom.cpp \
+    ../src/sound/alsound.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -56,9 +57,10 @@ HEADERS  += ../src/gamewindow.h \
     ../src/sceneobjects/cdrashbody.h \
     ../src/sceneobjects/ccamera.h \
     ../src/sceneobjects/cbullet.h \
-    ../src/sceneobjects/cboom.h
+    ../src/sceneobjects/cboom.h \
+    ../src/sound/alsound.h
 
 FORMS    += ../src/gamewindow.ui
 
 LIBS += -L../3rd/Box2D/lib
-LIBS += -lBox2D -lGLU
+LIBS += -lBox2D -lGLU -lopenal -lvorbis -lvorbisfile
