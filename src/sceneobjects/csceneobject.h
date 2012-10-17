@@ -88,6 +88,7 @@ protected:
     virtual void Step( double _dt );
 
     virtual void OnContactBegin( const CContact &_contact );
+    virtual void OnContactPreSolve( const CContact &_contact );
     virtual void OnContactEnd( const CContact &_contact );
     virtual void OnBoom( const CBoomParams &_boom );
     virtual void DrawDebug();

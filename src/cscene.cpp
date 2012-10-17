@@ -154,6 +154,49 @@ void CScene::BeginContact( b2Contact * _contact )
     obj2->OnContactBegin(c);
 }
 
+void CScene::PreSolve( b2Contact *_contact, const b2Manifold *_oldManifold )
+{
+    CSceneObject *obj1 = reinterpret_cast<CSceneObject*>(
+                _contact->GetFixtureA()->GetBody()->GetUserData() );
+
+    CSceneObject *obj2 = reinterpret_cast<CSceneObject*>(
+                _contact->GetFixtureB()->GetBody()->GetUserData() );
+
+    if ( obj1 == NULL || obj2 == NULL )
+    {
+        LOG_WARN( "CContactListener::BeginContact(): "
+                  "can not get pointer for one of objects. Skipping" );
+        return;
+    }
+
+    if ( obj1 == obj2 )
+    {
+        LOG_WARN( "CContactListener::BeginContact(): "
+                  "object A is equals to object B. Skipping" );
+        return;
+    }
+
+    b2WorldManifold m;
+    _contact->GetWorldManifold(&m);
+
+    CContact c;
+    c.mPointCount = _contact->GetManifold()->pointCount;
+
+    for ( unsigned int i=0; i<c.mPointCount; i++ )
+    {
+        c.mPoints[i] = obj1->mBody->GetLocalPoint( m.points[i] );
+    }
+    c.obj = obj2;
+    obj1->OnContactPreSolve(c);
+
+    for ( unsigned int i=0; i<c.mPointCount; i++ )
+    {
+        c.mPoints[i] = obj2->mBody->GetLocalPoint( m.points[i] );
+    }
+    c.obj = obj1;
+    obj2->OnContactPreSolve(c);
+}
+
 void CScene::EndContact( b2Contact *_contact )
 {
     CSceneObject *obj1 = reinterpret_cast<CSceneObject*>(

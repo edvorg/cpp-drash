@@ -101,6 +101,10 @@ void CSceneObject::OnContactBegin( const CContact &_contact )
 {
 }
 
+void CSceneObject::OnContactPreSolve( const CContact &_contact )
+{
+}
+
 void CSceneObject::OnContactEnd( const CContact &_contact )
 {
 }

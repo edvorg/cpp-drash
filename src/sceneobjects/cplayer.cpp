@@ -73,13 +73,16 @@ void CPlayer::Step( double _dt )
 
     CSolidBody::Step(_dt);
 
-    if (mMovingLeft)
-	{
-        MoveLeft();
-    }
-	else if (mMovingRight)
-	{
-        MoveRight();
+    if (mJumpAllowed)
+    {
+        if (mMovingLeft)
+        {
+            MoveLeft();
+        }
+        else if (mMovingRight)
+        {
+            MoveRight();
+        }
     }
 }
 
@@ -182,6 +185,10 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
 }
 
 void CPlayer::OnContactBegin( const CContact &_contact )
+{
+}
+
+void CPlayer::OnContactPreSolve(const CContact &_contact)
 {
     CSolidBody::OnContactBegin(_contact);
     mJumpAllowed = true;
