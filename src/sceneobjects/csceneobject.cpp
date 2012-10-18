@@ -129,7 +129,7 @@ void CSceneObject::OnBoom( const CBoomParams &_boom )
 
 static const float g_LayerWidth = 1.0f;
 
-void CSceneObject::DrawSide( const CVec2 &_v1, const CVec2 &_v2, const CInterval &_interval, const b2Color &_diffuse )
+void CSceneObject::DrawSide( const CVec2 &_v1, const CVec2 &_v2, const CInterval &_interval, const b2Color &_diffuse ) const
 {
     CVec2 dp = mBody->GetWorldPoint( _v1 ) -
                mBody->GetWorldPoint( _v2 );
@@ -165,7 +165,7 @@ void CSceneObject::DrawSide( const CVec2 &_v1, const CVec2 &_v2, const CInterval
                 _interval.GetMin() * g_LayerWidth - g_LayerWidth / 2.0f );
 }
 
-void CSceneObject::DrawDebug()
+void CSceneObject::DrawDebug() const
 {
     glCullFace(GL_NONE);
     unsigned int j = 0;
@@ -179,7 +179,7 @@ void CSceneObject::DrawDebug()
             {
                 static const b2Color diffuse(0.1875,0.375,0.75);
                 const CInterval interval = f->GetUserData() ?
-                                            (CInterval&)(*f->GetUserData()) :
+                                            *((CInterval*)f->GetUserData()) :
                                             CInterval(-1, 1);
 
                 glEnable(GL_DEPTH_TEST);

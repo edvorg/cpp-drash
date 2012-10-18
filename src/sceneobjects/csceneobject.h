@@ -93,10 +93,10 @@ protected:
     virtual void OnContactPreSolve( const CContact &_contact );
     virtual void OnContactEnd( const CContact &_contact );
     virtual void OnBoom( const CBoomParams &_boom );
-    virtual void DrawDebug();
+    virtual void DrawDebug() const;
 
 private:
-    void DrawSide( const CVec2 &_v1, const CVec2 &_v2, const CInterval &_interval, const b2Color &_diffuse );
+    void DrawSide( const CVec2 &_v1, const CVec2 &_v2, const CInterval &_interval, const b2Color &_diffuse ) const;
 
     b2Body* mBody;
     CScene* mScene;
