@@ -163,7 +163,7 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
             for ( auto f = GetBody()->GetFixtureList(); f != NULL; f = f->GetNext() )
             {
                 auto i = reinterpret_cast<CInterval*>( f->GetUserData() );
-                i->Set( i->GetMin() - 1, i->GetMax() - 1 );
+                i->Set( i->GetMin() - 100, i->GetMax() - 100 );
             }
             SetActive(false);
             break;
@@ -173,7 +173,7 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
             for ( auto f = GetBody()->GetFixtureList(); f != NULL; f = f->GetNext() )
             {
                 auto i = reinterpret_cast<CInterval*>( f->GetUserData() );
-                i->Set( i->GetMin() + 2, i->GetMax() + 2 );
+                i->Set( i->GetMin() + 100, i->GetMax() + 100 );
                 SetActive(false);
             }
             break;

@@ -78,8 +78,6 @@ void CSceneObject::Release()
 
 void CSceneObject::Step( double _dt )
 {
-    mBody->SetAwake(true);
-    
     mPos.Step(_dt);
     mAngle.Step(_dt);
 
@@ -127,7 +125,7 @@ void CSceneObject::OnBoom( const CBoomParams &_boom )
     ApplyLinearImpulse( dir, mPos.Get() );
 }
 
-static const float g_LayerWidth = 1.0f;
+static const float g_LayerWidth = 0.01f;
 
 void CSceneObject::DrawSide( const CVec2 &_v1, const CVec2 &_v2, const CInterval &_interval, const b2Color &_diffuse ) const
 {

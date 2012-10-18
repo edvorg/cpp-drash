@@ -26,7 +26,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     CSceneObjectParams sbp;
     sbp.mDynamic = false;
     sbp.mFigures.resize(1);
-    sbp.mFigures[0].mLayers.Set( -20, 20 );
+    sbp.mFigures[0].mLayers.Set( -2000, 2000 );
     sbp.mFigures[0].mRestitution = 0.0;
     sbp.mAngle = 0;
     sbp.mFigures[0].mVertices.push_back( CVec2( -300, -5 ) );
@@ -61,7 +61,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     dbp.mAngle = - M_PI / 4;
 
     dbp.mFigures.resize(1);
-    dbp.mFigures[0].mLayers.Set( -8, 8 );
+    dbp.mFigures[0].mLayers.Set( -800, 800 );
     dbp.mFigures[0].mVertices.push_back( CVec2( -10, -10 ) );
     dbp.mFigures[0].mVertices.push_back( CVec2( 10, -10 ) );
     dbp.mFigures[0].mVertices.push_back( CVec2( 10, 10 ) );
@@ -85,7 +85,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     CPlayerParams ppp;
     ppp.mPos.Set( 0, 10 );
     ppp.mFigures.resize(1);
-    ppp.mFigures[0].mLayers.Set( -1, 1 );
+    ppp.mFigures[0].mLayers.Set( -100, 100 );
     GetScene()->AddPlayer(ppp);
 
     GetCamera()->SetZoomTarget( 280, 1.0f );
