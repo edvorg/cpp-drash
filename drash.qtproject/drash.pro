@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = drash
 TEMPLATE = app
 
+QMAKE_CXXFLAGS += -std=c++0x
+
 INCLUDEPATH += ../3rd/Box2D/include
 
 SOURCES += ../src/main.cpp\
