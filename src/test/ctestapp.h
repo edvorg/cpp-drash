@@ -15,8 +15,6 @@ public:
     CTestApp();
     virtual ~CTestApp();
 
-    static CTestApp *StartApp( const char *_name );
-
     virtual bool Init( CScene *_scene, CCamera *_camera );
     virtual void Release();
     virtual void Update();

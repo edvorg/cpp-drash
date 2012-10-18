@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "cscene.h"
 #include "sceneobjects.h"
-#include "test/ctestapp.h"
+#include "test/test.h"
 #include "scenewidget.h"
 
 namespace Ui {

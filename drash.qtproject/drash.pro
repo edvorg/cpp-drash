@@ -34,7 +34,8 @@ SOURCES += ../src/main.cpp\
     ../src/sceneobjects/ccamera.cpp \
     ../src/sceneobjects/cbullet.cpp \
     ../src/sceneobjects/cboom.cpp \
-    ../src/sound/alsound.cpp
+    ../src/sound/alsound.cpp \
+    ../src/test/test.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -57,7 +58,8 @@ HEADERS  += ../src/gamewindow.h \
     ../src/sceneobjects/ccamera.h \
     ../src/sceneobjects/cbullet.h \
     ../src/sceneobjects/cboom.h \
-    ../src/sound/alsound.h
+    ../src/sound/alsound.h \
+    ../src/test/test.h
 
 FORMS    += ../src/gamewindow.ui
 
