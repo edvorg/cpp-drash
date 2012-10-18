@@ -240,11 +240,6 @@ void CScene::EndContact( b2Contact *_contact )
     obj2->OnContactEnd(c);
 }
 
-void CScene::SetDebugRenderer( CDebugRenderer *_renderer )
-{
-    mWorld.SetDebugDraw(_renderer);
-}
-
 void CScene::Draw( const CCamera &_camera )
 {
     if ( mInitialized == false )

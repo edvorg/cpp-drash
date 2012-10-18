@@ -2,7 +2,6 @@
 #ifndef CSCENE_H
 #define CSCENE_H
 
-#include "graphics/cdebugrenderer.h"
 #include "sceneobjects.h"
 #include <list>
 
@@ -44,7 +43,6 @@ public:
     virtual void PreSolve( b2Contact* _contact, const b2Manifold* _oldManifold );
     virtual void EndContact( b2Contact * _contact );
 
-    void SetDebugRenderer( CDebugRenderer *_renderer );
     void Draw( const CCamera &_camera );
 
     void OnPlayerEvent( const CPlayerEvent & _event, unsigned int _playerId );

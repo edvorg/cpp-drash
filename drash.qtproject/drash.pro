@@ -48,7 +48,6 @@ HEADERS  += ../src/gamewindow.h \
     ../src/misc/math.h \
     ../src/misc/cvec2.h \
     ../src/misc/canimatedparam.h \
-    ../src/graphics/cdebugrenderer.h \
     ../src/diag/ctimer.h \
     ../src/diag/clogger.h \
     ../src/sceneobjects/csceneobject.h \
