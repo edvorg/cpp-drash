@@ -25,8 +25,6 @@ GameWindow::GameWindow(QWidget *parent) :
 
     setCentralWidget( mSceneWidget = new SceneWidget(this) );
 
-    mTimer.SetPaused(false);
-
     mSceneWidget->setFocus();
 }
 
@@ -114,6 +112,8 @@ bool GameWindow::Init( const GameWindowParams &_params )
 
     timer.start(1);
     connect( &timer, SIGNAL( timeout() ), this, SLOT( UpdateScene() ) );
+
+    mTimer.Reset(true);
 
     return true;
 }
