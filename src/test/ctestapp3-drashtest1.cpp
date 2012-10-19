@@ -16,9 +16,9 @@ CTestApp3::~CTestApp3()
 {
 }
 
-bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
+bool CTestApp3::Init()
 {
-    if ( CTestApp::Init( _scene, _camera ) == false )
+    if ( CTestApp::Init() == false )
     {
         return false;
     }
@@ -33,10 +33,10 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     sbp.mFigures[0].mVertices.push_back( CVec2( 300, -5 ) );
     sbp.mFigures[0].mVertices.push_back( CVec2( 300, 5 ) );
     sbp.mFigures[0].mVertices.push_back( CVec2( -300, 5 ) );
-    GetScene()->CreateObject<CSceneObject>(sbp);
+    GetScene().CreateObject<CSceneObject>(sbp);
 
     sbp.mPos.Set( 0, 600 );
-    GetScene()->CreateObject<CSceneObject>(sbp);
+    GetScene().CreateObject<CSceneObject>(sbp);
 
     sbp.mPos.Set( -300, 300 );
     sbp.mFigures[0].mVertices.clear();
@@ -45,7 +45,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     sbp.mFigures[0].mVertices.push_back( CVec2( 5, -300 ) );
     sbp.mFigures[0].mVertices.push_back( CVec2( 5, 300 ) );
     sbp.mFigures[0].mVertices.push_back( CVec2( -5, 300 ) );
-    GetScene()->CreateObject<CSceneObject>(sbp);
+    GetScene().CreateObject<CSceneObject>(sbp);
 
     sbp.mPos.Set( 300, 300 );
     sbp.mFigures[0].mVertices.clear();
@@ -54,7 +54,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     sbp.mFigures[0].mVertices.push_back( CVec2( 5, -300 ) );
     sbp.mFigures[0].mVertices.push_back( CVec2( 5, 300 ) );
     sbp.mFigures[0].mVertices.push_back( CVec2( -5, 300 ) );
-    GetScene()->CreateObject<CSceneObject>(sbp);
+    GetScene().CreateObject<CSceneObject>(sbp);
 
     CDrashBodyParams dbp;
     dbp.mPos.Set( 0, 100 );
@@ -72,7 +72,7 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
 
     GenDrashBodyParams( &dbp, 5, 0, 3 );
 
-    CDrashBody *db = GetScene()->CreateObject<CDrashBody>(dbp);
+    CDrashBody *db = GetScene().CreateObject<CDrashBody>(dbp);
     db->SetAngularVelocity(2);
     db->SetLinearVelocity( CVec2(0, -20) );
 
@@ -80,13 +80,13 @@ bool CTestApp3::Init( CScene *_scene, CCamera *_camera )
     pp.mPos.Set( -200, 100 );
     pp.mFigures.resize(1);
     pp.mFigures[0].mMass = 3;
-    GetScene()->CreateObject<CSceneObject>(pp)->SetLinearVelocity( CVec2( 200, 0 ) );
+    GetScene().CreateObject<CSceneObject>(pp)->SetLinearVelocity( CVec2( 200, 0 ) );
 
     CPlayerParams ppp;
     ppp.mPos.Set( 0, 10 );
     ppp.mFigures.resize(1);
     ppp.mFigures[0].mLayers.Set( -100, 100 );
-    GetScene()->AddPlayer(ppp);
+    GetScene().AddPlayer(ppp);
 
     GetCamera()->SetZoomTarget( 280, 1.0f );
 
@@ -102,7 +102,7 @@ void CTestApp3::Update()
 {
     CTestApp::Update();
 
-    if ( CPlayer *p = GetScene()->GetPlayer(0) )
+    if ( CPlayer *p = GetScene().GetPlayer(0) )
     {
         GetCamera()->mPos.SetTarget( p->GetBody()->GetWorldCenter(), 1.0, AnimationBehaviorSingle );
     }

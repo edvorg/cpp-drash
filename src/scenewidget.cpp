@@ -22,8 +22,6 @@ CVec2 PointSDLToWorldPoint( unsigned int _x,
 
 SceneWidget::SceneWidget(QWidget *parent) :
     QGLWidget(parent),
-    mCamera(NULL),
-    mScene(NULL),
     mTestApp(NULL),
     mWidth(1),
     mHeight(1)
@@ -31,22 +29,22 @@ SceneWidget::SceneWidget(QWidget *parent) :
     resize( parent->size() );
 }
 
-void SceneWidget::resizeGL(int w, int h)
+void SceneWidget::resizeGL( int _w, int _h )
 {
-    QGLWidget::resizeGL( w, h );
+    QGLWidget::resizeGL( _w, _h );
 
-    glViewport( 0, 0, w, h );
+    glViewport( 0, 0, _w, _h );
 
-    mWidth = w;
-    mHeight = h;
+    mWidth = _w;
+    mHeight = _h;
 }
 
 void SceneWidget::paintGL()
 {
     QGLWidget::paintGL();
 
-    if ( mScene == NULL ||
-         mCamera == NULL )
+    if ( mTestApp == NULL ||
+         mTestApp->GetCamera() == NULL )
     {
         return;
     }
@@ -58,7 +56,7 @@ void SceneWidget::paintGL()
     glLoadIdentity();
     gluPerspective( 60.0, mWidth / mHeight, 1.0f, 1000.0f );
 
-    mScene->Draw(*mCamera);
+    mTestApp->GetScene().Draw( *mTestApp->GetCamera() );
 
     if ( mTestApp != NULL )
     {
@@ -68,17 +66,7 @@ void SceneWidget::paintGL()
     swapBuffers();
 }
 
-void SceneWidget::SetScene( drash::CScene *_scene )
-{
-    mScene = _scene;
-}
-
-void SceneWidget::SetCamera( drash::CCamera *_camera )
-{
-    mCamera = _camera;
-}
-
-void SceneWidget::SetTestApp(drash::CTestApp *_app)
+void SceneWidget::SetTestApp( drash::CTestApp *_app )
 {
     mTestApp = _app;
 }
@@ -87,6 +75,12 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
 {
     QGLWidget::mousePressEvent(_event);
 
+    if ( mTestApp == NULL ||
+         mTestApp->GetCamera() == NULL )
+    {
+        return;
+    }
+
     switch ( _event->button() )
     {
     case Qt::LeftButton:
@@ -94,12 +88,12 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
             CVec2 pos;
             pos = PointSDLToWorldPoint( _event->pos().x(),
                                         _event->pos().y(),
-                                        mCamera->GetZoom(),
-                                        mCamera->GetZoom(),
+                                        mTestApp->GetCamera()->GetZoom(),
+                                        mTestApp->GetCamera()->GetZoom(),
                                         mHeight,
                                         mWidth);
 
-            mScene->OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionFire, pos ), 0 );
+            mTestApp->GetScene().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionFire, pos ), 0 );
             break;
         }
 
@@ -116,14 +110,20 @@ void SceneWidget::keyReleaseEvent( QKeyEvent *_event )
 {
     QGLWidget::keyPressEvent(_event);
 
+    if ( mTestApp == NULL ||
+         mTestApp->GetCamera() == NULL )
+    {
+        return;
+    }
+
     switch ( _event->key() )
     {
     case Qt::Key_A:
-        mScene->OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionEndMoveLeft, CVec2() ), 0 );
+        mTestApp->GetScene().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionEndMoveLeft, CVec2() ), 0 );
         break;
 
     case Qt::Key_D:
-        mScene->OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionEndMoveRight, CVec2() ), 0 );
+        mTestApp->GetScene().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionEndMoveRight, CVec2() ), 0 );
         break;
 
     default:
@@ -135,26 +135,32 @@ void SceneWidget::keyPressEvent( QKeyEvent *_event )
 {
     QGLWidget::keyPressEvent(_event);
 
+    if ( mTestApp == NULL ||
+         mTestApp->GetCamera() == NULL )
+    {
+        return;
+    }
+
     switch ( _event->key() )
     {
     case Qt::Key_Space:
-        mScene->OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionJump, CVec2() ), 0 );
+        mTestApp->GetScene().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionJump, CVec2() ), 0 );
         break;
 
     case Qt::Key_A:
-        mScene->OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveLeft, CVec2() ), 0 );
+        mTestApp->GetScene().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveLeft, CVec2() ), 0 );
         break;
 
     case Qt::Key_D:
-        mScene->OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveRight, CVec2() ), 0 );
+        mTestApp->GetScene().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveRight, CVec2() ), 0 );
         break;
 
     case Qt::Key_W:
-        mScene->OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveDeep, CVec2() ), 0 );
+        mTestApp->GetScene().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveDeep, CVec2() ), 0 );
         break;
 
     case Qt::Key_S:
-        mScene->OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveOut, CVec2() ), 0 );
+        mTestApp->GetScene().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveOut, CVec2() ), 0 );
         break;
 
     default:
@@ -166,7 +172,13 @@ void SceneWidget::wheelEvent( QWheelEvent *_event )
 {
     QGLWidget::wheelEvent(_event);
 
-    float pos = mCamera->GetZoomTarget();
+    if ( mTestApp == NULL ||
+         mTestApp->GetCamera() == NULL )
+    {
+        return;
+    }
+
+    float pos = mTestApp->GetCamera()->GetZoomTarget();
     pos += _event->delta() / 10.0f;
-    mCamera->SetZoomTarget( pos, 0.3 );
+    mTestApp->GetCamera()->SetZoomTarget( pos, 0.3 );
 }

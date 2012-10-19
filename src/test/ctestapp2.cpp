@@ -12,9 +12,9 @@ CTestApp2::~CTestApp2()
 {
 }
 
-bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
+bool CTestApp2::Init()
 {
-    if ( CTestApp::Init( _scene, _camera ) == false )
+    if ( CTestApp::Init() == false )
     {
         return false;
     }
@@ -25,18 +25,20 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
     p.mFigures[0].mVertices.push_back( CVec2( -300.0f, -5.0f ) );
     p.mFigures[0].mVertices.push_back( CVec2( 300.0f, -5.0f ) );
     p.mFigures[0].mVertices.push_back( CVec2( 300.0f, 5.0f ) );
+    p.mFigures[0].mLayers.Set(-500, 500);
     p.mPos.y = -25;
     p.mDynamic = false;
-    GetScene()->CreateObject<CSceneObject>(p);
+    GetScene().CreateObject<CSceneObject>(p);
 
     CPlayerParams player;
     player.mPos.Set( 0, -20 );
     player.mFigures.resize(1);
-    player.mFigures[0].mVertices.push_back( CVec2( -2, 0 ) );
-    player.mFigures[0].mVertices.push_back( CVec2( 2, 0 ) );
-    player.mFigures[0].mVertices.push_back( CVec2( 2, 10 ) );
-    player.mFigures[0].mVertices.push_back( CVec2( -2, 10 ) );
-    GetScene()->AddPlayer(player);
+    player.mFigures[0].mVertices.push_back( CVec2( -2, -5 ) );
+    player.mFigures[0].mVertices.push_back( CVec2( 2, -5 ) );
+    player.mFigures[0].mVertices.push_back( CVec2( 2, 5 ) );
+    player.mFigures[0].mVertices.push_back( CVec2( -2, 5 ) );
+    player.mFigures[0].mLayers.Set(-100, 100);
+    GetScene().AddPlayer(player);
 
     CSceneObjectParams targetForFire;
     targetForFire.mFigures.resize(1);
@@ -46,11 +48,12 @@ bool CTestApp2::Init( CScene *_scene, CCamera *_camera )
     targetForFire.mFigures[0].mVertices.push_back( CVec2( -10, 5 ) );
     targetForFire.mFigures[0].mFriction = 0.5;
     targetForFire.mFigures[0].mMass = 1;
+    targetForFire.mFigures[0].mLayers.Set(-100, 100);
 
     targetForFire.mPos.Set( -20, 0 );
     for (int i = 0 ; i < 10 ; i++)
     {
-        GetScene()->CreateObject<CSceneObject>(targetForFire);
+        GetScene().CreateObject<CSceneObject>(targetForFire);
         targetForFire.mPos.Set( -20, 20 + i*20 );
     }
 

@@ -16,9 +16,9 @@ CTestApp1::~CTestApp1()
 
 CTimer t;
 
-bool CTestApp1::Init( CScene *_scene, CCamera *_camera )
+bool CTestApp1::Init()
 {
-    if ( CTestApp::Init( _scene, _camera ) == false )
+    if ( CTestApp::Init() == false )
     {
         return false;
     }
@@ -27,13 +27,14 @@ bool CTestApp1::Init( CScene *_scene, CCamera *_camera )
 
     CSceneObjectParams p;
     p.mFigures.resize(1);
+    p.mFigures[0].mLayers.Set(-500, 500);
     p.mFigures[0].mVertices.push_back( CVec2( -100.0f, 5.0f ) );
     p.mFigures[0].mVertices.push_back( CVec2( -100.0f, -5.0f ) );
     p.mFigures[0].mVertices.push_back( CVec2( 100.0f, -5.0f ) );
     p.mFigures[0].mVertices.push_back( CVec2( 100.0f, 5.0f ) );
     p.mPos.y = -25;
     p.mDynamic = false;
-    GetScene()->CreateObject<CSceneObject>(p);
+    GetScene().CreateObject<CSceneObject>(p);
 
     return true;
 }
@@ -54,7 +55,8 @@ void CTestApp1::Update()
         p.mPos.RandY(100, 200, 15);
         p.mPos.RandX(-50, 50, 15);
         p.mFigures.resize(1);
-        GetScene()->CreateObject<CSceneObject>(p);
+        p.mFigures[0].mLayers.Set(-500, 500);
+        GetScene().CreateObject<CSceneObject>(p);
         t.Reset(true);
     }
 }

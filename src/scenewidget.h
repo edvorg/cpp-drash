@@ -10,10 +10,10 @@
 class SceneWidget : public QGLWidget
 {
 public:
-    explicit SceneWidget(QWidget *parent = 0);
+    explicit SceneWidget( QWidget *parent = 0 );
 
 //    virtual void initializeGL();
-    virtual void resizeGL(int w, int h);
+    virtual void resizeGL( int _w, int _h );
     virtual void paintGL();
 
 //    virtual void initializeOverlayGL();
@@ -23,8 +23,6 @@ public:
 //    virtual void glInit();
 //    virtual void glDraw();
 
-    void SetScene( drash::CScene *_scene );
-    void SetCamera( drash::CCamera *_camera );
     void SetTestApp( drash::CTestApp *_app );
 
     virtual void mousePressEvent( QMouseEvent * _event );
@@ -33,8 +31,6 @@ public:
     virtual void wheelEvent( QWheelEvent *_event );
 
 private:
-    drash::CScene *mScene;
-    drash::CCamera *mCamera;
     drash::CTestApp *mTestApp;
     float mWidth;
     float mHeight;

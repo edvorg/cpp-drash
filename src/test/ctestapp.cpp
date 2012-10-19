@@ -6,8 +6,7 @@ namespace drash
 {
 
 CTestApp::CTestApp():
-    mCamera(NULL),
-    mScene(NULL)
+    mCamera(NULL)
 {
 }
 
@@ -15,31 +14,45 @@ CTestApp::~CTestApp()
 {
 }
 
-bool CTestApp::Init( CScene *_scene, CCamera *_camera )
+bool CTestApp::Init()
 {
-    if ( _camera == NULL )
-    {
-        return false;
-    }
-    if ( _scene == NULL )
+    CSceneParams params;
+    params.mGravity.Set( 0, -9.8 );
+
+    if ( mScene.Init(params) == false )
     {
         return false;
     }
 
-    mCamera = _camera;
-    mScene = _scene;
+    CCameraParams p;
+    mCamera = mScene.CreateObject< CCamera >(p);
+
+    if ( mCamera == NULL )
+    {
+        return false;
+    }
+
+    mTimer.Reset(true);
 
     return true;
 }
 
 void CTestApp::Release()
 {
-    mScene = NULL;
-    mCamera = NULL;
+    if ( mCamera != NULL )
+    {
+        mScene.DestroyObject(mCamera);
+        mCamera = NULL;
+    }
+
+    mScene.Release();
 }
 
 void CTestApp::Update()
 {
+    mTimer.Tick();
+    printf("%f\n", (float)mTimer.GetDeltaTime());
+    mScene.Step( mTimer.GetDeltaTime() );
 }
 
 void CTestApp::Render()
@@ -73,7 +86,12 @@ void CTestApp::Render()
     glEnd();
 }
 
-CScene *CTestApp::GetScene()
+CScene &CTestApp::GetScene()
+{
+    return mScene;
+}
+
+const CScene &CTestApp::GetScene() const
 {
     return mScene;
 }

@@ -17,7 +17,6 @@ GameWindow::GameWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::GameWindow),
     mInitialized(false),
-    mCamera(NULL),
     mTestApp(NULL),
     mSceneWidget(NULL)
 {
@@ -42,14 +41,6 @@ GameWindow::~GameWindow()
         mTestApp = NULL;
     }
 
-    if ( mCamera != NULL )
-    {
-        mScene.DestroyObject(mCamera);
-        mCamera = NULL;
-    }
-
-    mScene.Release();
-
     delete ui;
 }
 
@@ -57,14 +48,6 @@ bool GameWindow::Init( const GameWindowParams &_params )
 {
     CSceneParams params;
     params.mGravity.Set( 0.0f, -9.8f );
-
-    if ( mScene.Init(params) == false )
-    {
-        return false;
-    }
-
-    CCameraParams p;
-    mCamera = mScene.CreateObject< CCamera >(p);
 
     for ( unsigned int i=0; i<_params.mArgv.size(); i++ )
     {
@@ -77,17 +60,11 @@ bool GameWindow::Init( const GameWindowParams &_params )
                 if ( mTestApp == NULL )
                 {
                     LOG_ERR("CApp::Init(): test app "<<_params.mArgv[i+1].c_str()<<" not found");
-                    mScene.DestroyObject(mCamera);
-                    mCamera = NULL;
-                    mScene.Release();
                     return false;
                 }
 
-                if ( mTestApp->Init( &mScene, mCamera ) == false )
+                if ( mTestApp->Init() == false )
                 {
-                    mScene.DestroyObject(mCamera);
-                    mCamera = NULL;
-                    mScene.Release();
                     return false;
                 }
 
@@ -96,16 +73,11 @@ bool GameWindow::Init( const GameWindowParams &_params )
             else
             {
                 LOG_ERR("CApp::Init(): test app name expected");
-                mScene.DestroyObject(mCamera);
-                mCamera = NULL;
-                mScene.Release();
                 return false;
             }
         }
     }
 
-    mSceneWidget->SetScene(&mScene);
-    mSceneWidget->SetCamera(mCamera);
     mSceneWidget->SetTestApp(mTestApp);
 
     mInitialized = true;    
@@ -113,17 +85,11 @@ bool GameWindow::Init( const GameWindowParams &_params )
     timer.start(1);
     connect( &timer, SIGNAL( timeout() ), this, SLOT( UpdateScene() ) );
 
-    mTimer.Reset(true);
-
     return true;
 }
 
 bool GameWindow::UpdateScene()
 {
-    mTimer.Tick();
-    printf("%f\n", (float)mTimer.GetDeltaTime());
-    mScene.Step( mTimer.GetDeltaTime() );
-
     if ( mTestApp != NULL )
     {
         mTestApp->Update();

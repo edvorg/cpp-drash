@@ -3,6 +3,7 @@
 #define CTESTAPP_H
 
 #include "../sceneobjects.h"
+#include "../cscene.h"
 
 namespace drash
 {
@@ -15,17 +16,19 @@ public:
     CTestApp();
     virtual ~CTestApp();
 
-    virtual bool Init( CScene *_scene, CCamera *_camera );
+    virtual bool Init();
     virtual void Release();
     virtual void Update();
     virtual void Render();
 
-    CScene *GetScene();
+    CScene &GetScene();
+    const CScene &GetScene() const;
     CCamera *GetCamera();
 
 private:
+    CScene mScene;
     CCamera *mCamera;
-    CScene* mScene;
+    CTimer mTimer;
 };
 
 } // namespace drash

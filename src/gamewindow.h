@@ -35,13 +35,10 @@ public:
     
 private:
     Ui::GameWindow *ui;
-    drash::CScene mScene;
-    drash::CCamera *mCamera;
     drash::CTestApp *mTestApp;
     bool mInitialized;
     SceneWidget *mSceneWidget;
     QTimer timer;
-    drash::CTimer mTimer;
 };
 
 #endif // GAMEWINDOW_H
