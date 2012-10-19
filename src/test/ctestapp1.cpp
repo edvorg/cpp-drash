@@ -6,10 +6,6 @@
 namespace drash
 {
 
-CTestApp1::CTestApp1()
-{
-}
-
 CTimer t;
 
 bool CTestApp1::Init()

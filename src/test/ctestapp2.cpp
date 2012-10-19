@@ -2,11 +2,9 @@
 
 #include "../diag/ctimer.h"
 #include "../cscene.h"
-namespace drash{
 
-CTestApp2::CTestApp2()
+namespace drash
 {
-}
 
 bool CTestApp2::Init()
 {

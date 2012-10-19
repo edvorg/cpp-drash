@@ -8,10 +8,6 @@ namespace drash
 
 void GenDrashBodyParams( CDrashBodyParams* _params , float _subset_size, unsigned int _level, unsigned int _levels );
 
-CTestApp3::CTestApp3()
-{
-}
-
 bool CTestApp3::Init()
 {
     if ( CTestApp::Init() == false )

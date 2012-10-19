@@ -10,8 +10,6 @@ namespace drash
 class CTestApp1 : public CTestApp
 {
 public:
-    CTestApp1();
-
     virtual bool Init();
     virtual void Update();
 };
