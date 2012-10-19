@@ -10,10 +10,6 @@ CTestApp1::CTestApp1()
 {
 }
 
-CTestApp1::~CTestApp1()
-{
-}
-
 CTimer t;
 
 bool CTestApp1::Init()
@@ -39,11 +35,6 @@ bool CTestApp1::Init()
     return true;
 }
 
-void CTestApp1::Release()
-{
-    CTestApp::Release();
-}
-
 void CTestApp1::Update()
 {
     CTestApp::Update();
@@ -59,11 +50,6 @@ void CTestApp1::Update()
         GetScene().CreateObject<CSceneObject>(p);
         t.Reset(true);
     }
-}
-
-void CTestApp1::Render()
-{
-    CTestApp::Render();
 }
 
 } // namespace drash

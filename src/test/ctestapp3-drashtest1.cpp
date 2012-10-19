@@ -12,10 +12,6 @@ CTestApp3::CTestApp3()
 {
 }
 
-CTestApp3::~CTestApp3()
-{
-}
-
 bool CTestApp3::Init()
 {
     if ( CTestApp::Init() == false )
@@ -93,11 +89,6 @@ bool CTestApp3::Init()
     return true;
 }
 
-void CTestApp3::Release()
-{
-    CTestApp::Release();
-}
-
 void CTestApp3::Update()
 {
     CTestApp::Update();
@@ -106,11 +97,6 @@ void CTestApp3::Update()
     {
         GetCamera()->mPos.SetTarget( p->GetBody()->GetWorldCenter(), 1.0, AnimationBehaviorSingle );
     }
-}
-
-void CTestApp3::Render()
-{
-    CTestApp::Render();
 }
 
 void GenDrashBodyParams( CDrashBodyParams* _params, float _subset_size, unsigned int _level, unsigned int _levels )

@@ -8,10 +8,6 @@ CTestApp2::CTestApp2()
 {
 }
 
-CTestApp2::~CTestApp2()
-{
-}
-
 bool CTestApp2::Init()
 {
     if ( CTestApp::Init() == false )
@@ -60,18 +56,4 @@ bool CTestApp2::Init()
     return true;
 }
 
-void CTestApp2::Release()
-{
-    CTestApp::Release();
-}
-
-void CTestApp2::Update()
-{
-    CTestApp::Update();
-}
-
-void CTestApp2::Render()
-{
-    CTestApp::Render();
-}
 }

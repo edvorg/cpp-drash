@@ -11,12 +11,9 @@ class CTestApp3 : public CTestApp
 {
 public:
     CTestApp3();
-    virtual ~CTestApp3();
 
     virtual bool Init();
-    virtual void Release();
     virtual void Update();
-    virtual void Render();
 
 private:
 };
