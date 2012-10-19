@@ -154,6 +154,8 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
                 auto i = reinterpret_cast<CInterval*>( f->GetUserData() );
                 i->Set( i->GetMin() - 100, i->GetMax() - 100 );
             }
+            SetActive(false);
+            SetActive(true);
             break;
 
 
@@ -162,7 +164,9 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
             {
                 auto i = reinterpret_cast<CInterval*>( f->GetUserData() );
                 i->Set( i->GetMin() + 100, i->GetMax() + 100 );
-            }
+            }            
+            SetActive(false);
+            SetActive(true);
             break;
 
         case CPlayerEvent::PlayerActionFire:
