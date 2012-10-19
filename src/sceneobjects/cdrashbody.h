@@ -30,7 +30,6 @@ public:
 
 protected:
     CDrashBody();
-    virtual ~CDrashBody();
 
     virtual bool Init( const ParamsT &_params );
 

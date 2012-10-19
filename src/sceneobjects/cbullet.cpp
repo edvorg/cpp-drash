@@ -5,10 +5,15 @@
 namespace drash
 {
 
+CBulletParams::CBulletParams():
+    CSceneObjectParams(),
+    mTarget(0,0)
+{
+}
+
 CBullet::CBullet():
     CSceneObject()
 {
-
 }
 
 bool CBullet::Init( const ParamsT &_params )
@@ -39,12 +44,6 @@ void CBullet::OnContactBegin( const CContact &_contact )
 }
 
 void CBullet::OnBoom( const CBoomParams &_boom )
-{
-}
-
-CBulletParams::CBulletParams():
-    CSceneObjectParams(),
-    mTarget(0,0)
 {
 }
 

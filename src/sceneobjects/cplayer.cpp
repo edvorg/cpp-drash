@@ -43,10 +43,6 @@ CPlayer::CPlayer():
 {
 }
 
-CPlayer::~CPlayer()
-{
-}
-
 bool CPlayer::Init( const CPlayer::ParamsT &_params )
 {
     if ( CSceneObject::Init(_params) == false )
@@ -62,15 +58,8 @@ bool CPlayer::Init( const CPlayer::ParamsT &_params )
     return true;
 }
 
-void CPlayer::Release()
-{
-    CSceneObject::Release();
-}
-
 void CPlayer::Step( double _dt )
 {
-    SetActive(true);
-
     CSceneObject::Step(_dt);
 
     if (mJumpAllowed)
@@ -165,7 +154,6 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
                 auto i = reinterpret_cast<CInterval*>( f->GetUserData() );
                 i->Set( i->GetMin() - 100, i->GetMax() - 100 );
             }
-            SetActive(false);
             break;
 
 
@@ -174,7 +162,6 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
             {
                 auto i = reinterpret_cast<CInterval*>( f->GetUserData() );
                 i->Set( i->GetMin() + 100, i->GetMax() + 100 );
-                SetActive(false);
             }
             break;
 

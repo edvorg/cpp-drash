@@ -23,10 +23,6 @@ CDrashBody::CDrashBody():
 {
 }
 
-CDrashBody::~CDrashBody()
-{
-}
-
 bool CDrashBody::Init( const CDrashBody::ParamsT &_params )
 {
     if ( CSceneObject::Init(_params) == false )

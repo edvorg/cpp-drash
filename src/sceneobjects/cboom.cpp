@@ -20,15 +20,5 @@ bool CBoom::Init( const ParamsT &_params )
     return true;
 }
 
-void CBoom::Release(void)
-{
-    CSceneObject::Release();
-}
-
-void CBoom::Step( double _dt )
-{
-    CSceneObject::Step(_dt);
-}
-
 }// namespace drash
 

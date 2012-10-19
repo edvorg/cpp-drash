@@ -29,7 +29,6 @@ protected:
     virtual bool Init( const ParamsT &_params );
 
     virtual void OnContactBegin( const CContact &_contact );
-    virtual void OnBoom( const CBoomParams &_boom );
 
     virtual void Step( double _dt );
 

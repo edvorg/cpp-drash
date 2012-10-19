@@ -39,11 +39,6 @@ void CGrenade::OnContactBegin( const CContact &_contact )
     }
 }
 
-void CGrenade::OnBoom( const CBoomParams &_boom )
-{
-    CBullet::OnBoom(_boom);
-}
-
 void CGrenade::Step( double _dt )
 {
     CBullet::Step(_dt);

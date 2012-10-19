@@ -51,10 +51,8 @@ public:
 
 protected:
     CPlayer();
-    virtual ~CPlayer();
 
     virtual bool Init( const ParamsT &_params );
-    virtual void Release(void);
 
     virtual void Step( double _dt );
 

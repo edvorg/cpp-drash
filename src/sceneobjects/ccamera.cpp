@@ -30,11 +30,6 @@ bool CCamera::Init( const ParamsT &_params )
     return true;
 }
 
-void CCamera::Release(void)
-{
-    CSceneObject::Release();
-}
-
 void CCamera::Step( double _dt )
 {
     CSceneObject::Step(_dt);
