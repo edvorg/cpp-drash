@@ -95,23 +95,4 @@ void CDrashBody::OnContactBegin( const CContact &_contact )
     }
 }
 
-void CDrashBody::OnBoom( const CBoomParams &_boom )
-{
-    CSceneObject::OnBoom(_boom);
-
-    if ( mCounter == 0 && mTimer.GetFullTime() > mParams.mDestroyDelay )
-    {
-        CVec2 dist = _boom.mPos;
-        dist -= GetBody()->GetWorldCenter();
-
-        if ( dist.Length() < _boom.mStregth )
-        {
-            mCounter++;
-            mLastVelocity = GetBody()->GetLinearVelocity();
-            mLastAngularVelocity = GetBody()->GetAngularVelocity();
-            mBoomParams.push_back(_boom);
-        }
-    }
-}
-
 } // namespace

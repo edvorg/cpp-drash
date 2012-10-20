@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = drash
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -std=c++0x
+QMAKE_CXXFLAGS += -std=c++0x -O3
 
 INCLUDEPATH += ../3rd/Box2D/include
 
@@ -59,9 +59,14 @@ HEADERS  += ../src/gamewindow.h \
     ../src/sceneobjects/cbullet.h \
     ../src/sceneobjects/cboom.h \
     ../src/sound/alsound.h \
-    ../src/test/test.h
+    ../src/test/test.h \
+    ../src/diag/assert.h
 
 FORMS    += ../src/gamewindow.ui
 
 LIBS += -L../3rd/Box2D/lib
 LIBS += -lBox2D -lGLU -lopenal -lvorbis -lvorbisfile
+
+CONFIG(debug, debug|release) {
+    DEFINES += DRASH_DEBUG
+}

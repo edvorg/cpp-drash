@@ -25,7 +25,8 @@ CFigureParams::CFigureParams():
 CSceneObject::CSceneObject(void):
     mBody(NULL),
     mScene(NULL),
-    mDead(false)
+    mDead(false),
+    mInternalId(-1)
 {
 }
 
@@ -186,7 +187,7 @@ void CSceneObject::DrawDebug() const
                 glColor3f( 0.5 * diffuse.r,
                            0.5 * diffuse.g,
                            0.5 * diffuse.b );
-                for ( unsigned int i = 0; i < s->GetVertexCount(); i++ )
+                for ( int i = 0; i < s->GetVertexCount(); i++ )
                 {
                     glVertex3f( s->GetVertex(i).x,
                                 s->GetVertex(i).y,
@@ -198,7 +199,7 @@ void CSceneObject::DrawDebug() const
                 glColor3f( 0.5 * diffuse.r,
                            0.5 * diffuse.g,
                            0.5 * diffuse.b );
-                for ( unsigned int i = 0; i < s->GetVertexCount(); i++ )
+                for ( int i = 0; i < s->GetVertexCount(); i++ )
                 {
                     glVertex3f( s->GetVertex(i).x,
                                 s->GetVertex(i).y,
@@ -207,7 +208,7 @@ void CSceneObject::DrawDebug() const
                 glEnd();
 
                 glBegin(GL_TRIANGLES);
-                for ( unsigned int i = 0; i < s->GetVertexCount()-1; i++ )
+                for ( int i = 0; i < s->GetVertexCount()-1; i++ )
                 {
                     DrawSide( s->GetVertex(i),
                               s->GetVertex(i+1),

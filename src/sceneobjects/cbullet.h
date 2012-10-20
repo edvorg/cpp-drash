@@ -25,7 +25,7 @@ public:
 protected:
     CBullet();
 
-    virtual bool Init( const ParamsT &_params );
+    bool Init( const ParamsT &_params );
 
     virtual void OnContactBegin( const CContact &_contact );
     virtual void OnBoom( const CBoomParams &_boom );

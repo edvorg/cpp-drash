@@ -15,8 +15,8 @@ void GameWindowParams::SetCommandLine(unsigned int _argc, char *_argv[])
 
 GameWindow::GameWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::GameWindow),
     mInitialized(false),
+    ui(new Ui::GameWindow),
     mTestApp(NULL),
     mSceneWidget(NULL)
 {
@@ -88,7 +88,7 @@ bool GameWindow::Init( const GameWindowParams &_params )
     return true;
 }
 
-bool GameWindow::UpdateScene()
+void GameWindow::UpdateScene()
 {
     if ( mTestApp != NULL )
     {

@@ -26,7 +26,7 @@ public:
 protected:
     CGrenade();
 
-    virtual bool Init( const ParamsT &_params );
+    bool Init( const ParamsT &_params );
 
     virtual void OnContactBegin( const CContact &_contact );
 

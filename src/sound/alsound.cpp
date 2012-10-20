@@ -238,9 +238,9 @@ bool AlSound::LoadFromMem( void *_data, size_t _size )
         return false;
     }
     
-    ov_callbacks callbacks = {0};
+    ov_callbacks callbacks;
     int block_size = 0;
-    OggVorbis_File vorbis_file = {0};
+    OggVorbis_File vorbis_file;
     vorbis_info *info = NULL;
     int current_section = 0;
     long total_ret = 0;
@@ -367,7 +367,7 @@ void AlSound::SetPitch( float _pitch )
         return;
     }
     
-    alSourcef( mSourceId, AL_PITCH, 1.0f );
+    alSourcef( mSourceId, AL_PITCH, _pitch );
 }
     
 void AlSound::SetGain( float _gain )
@@ -377,7 +377,7 @@ void AlSound::SetGain( float _gain )
         return;
     }
     
-    alSourcef( mSourceId, AL_GAIN, 1.0f );
+    alSourcef( mSourceId, AL_GAIN, _gain );
 }
     
 void AlSound::SetPos( float _x, float _y, float _z )
@@ -387,7 +387,7 @@ void AlSound::SetPos( float _x, float _y, float _z )
         return;
     }
     
-    alSource3f( mSourceId, AL_POSITION, 0, 0, 0 );
+    alSource3f( mSourceId, AL_POSITION, _x, _y, _z );
 }
     
 void AlSound::SetVel( float _x, float _y, float _z )
@@ -397,7 +397,7 @@ void AlSound::SetVel( float _x, float _y, float _z )
         return;
     }
     
-    alSource3f( mSourceId, AL_VELOCITY, 0, 0, 0 );
+    alSource3f( mSourceId, AL_VELOCITY, _x, _y, _z );
 }
     
 float AlSound::GetFullTime()
@@ -406,6 +406,8 @@ float AlSound::GetFullTime()
     {
         return 0;
     }
+
+    return 0;
 }
     
 float AlSound::GetTime()
@@ -413,7 +415,9 @@ float AlSound::GetTime()
     if (!g_SysInitialized)
     {
         return 0;
-    }   
+    }
+
+    return 0;
 }
     
 bool AlSound::InitSubsystem()
@@ -520,7 +524,7 @@ int SeekOgg( void *_datasource, ogg_int64_t _offset, int _whence )
             break;
     }
     
-    if ( pos < 0 || b->size < pos )
+    if ( b->size < pos )
     {
         return -1;
     }

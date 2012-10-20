@@ -28,15 +28,15 @@ public:
     ~GameWindow();
 
 public slots:
-    bool UpdateScene();
+    void UpdateScene();
 
 public:
     bool Init( const GameWindowParams &_params );
     
 private:
+    bool mInitialized;
     Ui::GameWindow *ui;
     drash::CTestApp *mTestApp;
-    bool mInitialized;
     SceneWidget *mSceneWidget;
     QTimer timer;
 };

@@ -4,6 +4,7 @@
 
 #include "sceneobjects.h"
 #include <list>
+#include "diag/assert.h"
 
 namespace drash
 {
@@ -93,6 +94,7 @@ T* CScene::CreateObject( const typename T::ParamsT& _params )
 
     res->mBody->SetUserData(res);
     res->mScene = this;
+    res->mInternalId = mCountObjects;
 
     mObjects[mCountObjects] = res;
     mCountObjects++;
@@ -102,34 +104,26 @@ T* CScene::CreateObject( const typename T::ParamsT& _params )
 template < typename T >
 void CScene::DestroyObject( T* _obj )
 {
-    for (unsigned int i = 0 ; i < mCountObjects ; i++)
+    DRASH_ASSERT( mObjects[_obj->mInternalId] == _obj &&
+                  "something wrong with objects creation logic" );
+
+    b2Body* body = _obj->mBody;
+    _obj->mBody->SetActive(false);
+    _obj->mBody->SetUserData(NULL);
+
+    mCountObjects--;
+    mObjects[_obj->mInternalId] = mObjects[mCountObjects];
+    mObjects[mCountObjects] = NULL;
+
+    if ( mObjects[_obj->mInternalId] != NULL )
     {
-        if (mObjects[i] == _obj)
-        {
-            // ok, it's our object
-
-            b2Body* body = _obj->mBody;
-            body->SetActive(false);
-            body->SetUserData(NULL);
-
-            mObjects[i] = (mCountObjects > 1) ? mObjects[mCountObjects-1] : NULL;
-            mCountObjects--;
-            _obj->Release();
-            delete _obj;
-
-            for ( b2Body *b = mWorld.GetBodyList(); b; b = b->GetNext() )
-            {
-                if ( b == body )
-                {
-                    // ok, it's our body
-
-                    mWorld.DestroyBody(body);
-                    break;
-                }
-            }
-            break;
-        }
+        mObjects[_obj->mInternalId]->mInternalId = _obj->mInternalId;
     }
+
+    _obj->Release();
+    delete _obj;
+
+    mWorld.DestroyBody(body);
 }
 
 } // namespace drash

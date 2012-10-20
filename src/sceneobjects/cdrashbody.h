@@ -31,12 +31,11 @@ public:
 protected:
     CDrashBody();
 
-    virtual bool Init( const ParamsT &_params );
+    bool Init( const ParamsT &_params );
 
     virtual void Step( double _dt );
 
     virtual void OnContactBegin( const CContact &_contact );
-    virtual void OnBoom( const CBoomParams &_boom );
 
 private:
     int mCounter;

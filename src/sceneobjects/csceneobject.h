@@ -84,7 +84,7 @@ protected:
     CSceneObject(void);
     virtual ~CSceneObject(void);
 
-    virtual bool Init( const ParamsT &_params );
+    bool Init( const ParamsT &_params );
     virtual void Release(void);
 
     virtual void Step( double _dt );
@@ -102,6 +102,7 @@ private:
     CScene* mScene;
     bool mDead;
     std::vector<CInterval> mLayers;
+    int mInternalId;
 };
 
 } // namespace drash

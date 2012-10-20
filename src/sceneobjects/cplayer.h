@@ -52,7 +52,7 @@ public:
 protected:
     CPlayer();
 
-    virtual bool Init( const ParamsT &_params );
+    bool Init( const ParamsT &_params );
 
     virtual void Step( double _dt );
 

@@ -24,7 +24,7 @@ public:
 protected:
     CBoom(void);
 
-    virtual bool Init( const ParamsT &_params );
+    bool Init( const ParamsT &_params );
 
 private:
 };
