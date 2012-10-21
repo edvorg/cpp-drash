@@ -28,6 +28,9 @@ CSceneObject::CSceneObject(void):
     mDead(false),
     mInternalId(-1)
 {
+    mColor[0] = Randf( 0.15f, 0.8f, 0.01f );
+    mColor[1] = Randf( 0.15f, 0.8f, 0.01f );
+    mColor[2] = Randf( 0.15f, 0.8f, 0.01f );
 }
 
 CSceneObject::~CSceneObject(void)
@@ -147,12 +150,12 @@ void CSceneObject::DrawSide( const CVec2 &_v1, const CVec2 &_v2, const CInterval
     CVec2 localx(1, 0);
 
     float dot = dp.x * localx.x + dp.y * localx.y;
-    dot += 1.0;
-    dot /= 4.0f;
+    dot += 2.0;
+    dot /= 3.0f;
 
-    glColor3f( _diffuse.r * ( 0.5 + dot ),
-               _diffuse.g * ( 0.5 + dot ),
-               _diffuse.b * ( 0.5 + dot ) );
+    glColor3f( _diffuse.r * dot,
+               _diffuse.g * dot,
+               _diffuse.b * dot );
 
     glVertex3f( _v1.x,
                 _v1.y,
@@ -187,7 +190,7 @@ void CSceneObject::DrawDebug() const
 
             if (s)
             {
-                static const b2Color diffuse(0.1875,0.375,0.75);
+                b2Color diffuse( mColor[0], mColor[1], mColor[2] );
                 const CInterval interval = f->GetUserData() ?
                                             *((CInterval*)f->GetUserData()) :
                                             CInterval(-1, 1);
@@ -195,9 +198,9 @@ void CSceneObject::DrawDebug() const
                 glEnable(GL_DEPTH_TEST);
 
                 glBegin(GL_TRIANGLE_FAN);
-                glColor3f( 0.5 * diffuse.r,
-                           0.5 * diffuse.g,
-                           0.5 * diffuse.b );
+                glColor3f( 0.4 * diffuse.r,
+                           0.4 * diffuse.g,
+                           0.4 * diffuse.b );
                 for ( int i = 0; i < s->GetVertexCount(); i++ )
                 {
                     glVertex3f( s->GetVertex(i).x,
@@ -207,9 +210,9 @@ void CSceneObject::DrawDebug() const
                 glEnd();
 
                 glBegin(GL_TRIANGLE_FAN);
-                glColor3f( 0.5 * diffuse.r,
-                           0.5 * diffuse.g,
-                           0.5 * diffuse.b );
+                glColor3f( 0.4 * diffuse.r,
+                           0.4 * diffuse.g,
+                           0.4 * diffuse.b );
                 for ( int i = 0; i < s->GetVertexCount(); i++ )
                 {
                     glVertex3f( s->GetVertex(i).x,

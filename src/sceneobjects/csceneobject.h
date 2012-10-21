@@ -109,6 +109,7 @@ private:
     int mInternalId;
     CAnimatedParam<CVec2> mPos;
     CAnimatedParam<float> mAngle;
+    float mColor[3];
 };
 
 } // namespace drash
