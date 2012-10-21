@@ -77,8 +77,12 @@ public:
     void SetBullet( bool _bullet );
     void SetActive( bool _active );
 
-    CAnimatedParam<CVec2> mPos;
-    CAnimatedParam<float> mAngle;
+    void SetPos( const CVec2 &_pos );
+    void SetPosTarget( const CVec2 &_target, double _time, const AnimationBehavior &_behavior );
+    const CAnimatedParam<CVec2> &GetPos() const;
+    void SetAngle( float _angle );
+    void SetAngleTarget( float _target, double _time, const AnimationBehavior &_behavior );
+    const CAnimatedParam<float> &GetAngle() const;
 
 protected:    
     CSceneObject(void);
@@ -103,6 +107,8 @@ private:
     bool mDead;
     std::vector<CInterval> mLayers;
     int mInternalId;
+    CAnimatedParam<CVec2> mPos;
+    CAnimatedParam<float> mAngle;
 };
 
 } // namespace drash

@@ -80,6 +80,23 @@ bool CTestApp3::Init()
     ppp.mFigures[0].mLayers.Set( -100, 100 );
     GetScene().AddPlayer(ppp);
 
+    CSceneObject::ParamsT platform_params;
+    platform_params.mPos.Set( 0, 50 );
+    platform_params.mAngle = -M_PI / 18.0;
+    platform_params.mDynamic = false;
+    platform_params.mFigures.resize(1);
+    platform_params.mFigures[0].mLayers.Set( -400, 400 );
+    platform_params.mFigures[0].mFriction = 1.0;
+    platform_params.mFigures[0].mVertices.push_back( CVec2( -100, -5 ) );
+    platform_params.mFigures[0].mVertices.push_back( CVec2( 100, -5 ) );
+    platform_params.mFigures[0].mVertices.push_back( CVec2( 100, 5 ) );
+    platform_params.mFigures[0].mVertices.push_back( CVec2( -100, 5 ) );
+
+    CSceneObject *platform = GetScene().CreateObject<CSceneObject>(platform_params);
+    platform->SetPos( CVec2( -100, 50 ) );
+    platform->SetPosTarget( CVec2( 100, 50 ), 10, AnimationBehaviorBounce );
+    platform->SetAngleTarget( M_PI / 18.0, 10, AnimationBehaviorBounce );
+
     GetCamera()->SetZoomTarget( 280, 1.0f );
 
     return true;
@@ -91,7 +108,7 @@ void CTestApp3::Update()
 
     if ( CPlayer *p = GetScene().GetPlayer(0) )
     {
-        GetCamera()->mPos.SetTarget( p->GetBody()->GetWorldCenter(), 1.0, AnimationBehaviorSingle );
+        GetCamera()->SetPosTarget( p->GetBody()->GetWorldCenter(), 1.0, AnimationBehaviorSingle );
     }
 }
 

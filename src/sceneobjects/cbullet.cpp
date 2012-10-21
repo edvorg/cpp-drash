@@ -38,7 +38,7 @@ void CBullet::OnContactBegin( const CContact &_contact )
 {
     this->SetDead();
     CBoomParams boom;
-    boom.mPos = mPos.Get();
+    boom.mPos = GetPos().Get();
     boom.mStregth = 50000;
     GetScene()->AddRequestBoom(boom);
 }

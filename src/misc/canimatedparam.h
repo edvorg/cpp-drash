@@ -27,6 +27,7 @@ public:
 
     const T &Get() const;
     const T &GetTarget() const;
+    double GetTimeRemains() const;
 
     bool IsTargetSet() const;
 
@@ -36,9 +37,8 @@ private:
     T mValue;
     T mFromValue;
     T mTargetValue;
-    T mDeltaValue;
-    double mElaspedTime;
-    double mAnimationTime;
+    double mTimeElapsed;
+    double mTimeFull;
     bool mTargetSet;
     AnimationBehavior mBehavior;
 };
@@ -48,9 +48,8 @@ CAnimatedParam<T>::CAnimatedParam():
     mValue(),
     mFromValue(),
     mTargetValue(),
-    mDeltaValue(),
-    mElaspedTime(0.0),
-    mAnimationTime(0.0),
+    mTimeElapsed(0.0),
+    mTimeFull(0.0),
     mTargetSet(false),
     mBehavior(AnimationBehaviorSingle)
 {
@@ -74,9 +73,8 @@ void CAnimatedParam<T>::SetTarget( const T &_target , double _time , const Anima
     mTargetSet = true;
     mFromValue = mValue;
     mTargetValue = _target;
-    mDeltaValue = mTargetValue - mFromValue;
-    mAnimationTime = _time;
-    mElaspedTime = 0.0;
+    mTimeFull = _time;
+    mTimeElapsed = 0.0;
     mBehavior = _behavior;
 }
 
@@ -93,6 +91,12 @@ const T &CAnimatedParam<T>::GetTarget() const
 }
 
 template <class T>
+double CAnimatedParam<T>::GetTimeRemains() const
+{
+    return mTimeFull - mTimeElapsed;
+}
+
+template <class T>
 bool CAnimatedParam<T>::IsTargetSet() const
 {
     return mTargetSet;
@@ -103,11 +107,11 @@ void CAnimatedParam<T>::Step( double _dt )
 {
     if ( mTargetSet == true )
     {
-        mElaspedTime += _dt;
+        mTimeElapsed += _dt;
 
-        double k = std::min( mAnimationTime, mElaspedTime );
+        double k = std::min( mTimeFull, mTimeElapsed );
 
-        if ( std::fabs(mAnimationTime - k) < 0.000001 )
+        if ( std::fabs( mTimeFull - k ) < 0.000001 )
         {
             if (mBehavior == AnimationBehaviorSingle)
             {
@@ -117,21 +121,21 @@ void CAnimatedParam<T>::Step( double _dt )
             else if ( mBehavior == AnimationBehaviorLoop )
             {
                 mValue = mFromValue;
-                mElaspedTime = 0;
+                mTimeElapsed = 0;
             }
             else if ( mBehavior == AnimationBehaviorBounce )
             {
                 mValue = mTargetValue;
                 mTargetValue = mFromValue;
                 mFromValue = mValue;
-                mDeltaValue = -mDeltaValue;
-                mElaspedTime = 0;
+                mTimeElapsed = 0;
             }
         }
         else
         {
-            mValue = mDeltaValue;
-            mValue *= k / mAnimationTime;
+            mValue = mTargetValue;
+            mValue -= mFromValue;
+            mValue *= k / mTimeFull;
             mValue += mFromValue;
         }
     }

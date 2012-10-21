@@ -79,18 +79,29 @@ void CSceneObject::Release()
 
 void CSceneObject::Step( double _dt )
 {
-    mPos.Step(_dt);
-    mAngle.Step(_dt);
-
     if ( mBody->GetType() == b2_kinematicBody )
     {
-        if ( mPos.IsTargetSet() || mAngle.IsTargetSet() )
+        if ( mPos.IsTargetSet() )
         {
-            mBody->SetTransform( mPos.Get(), mAngle.Get() );
+            mPos.Step(_dt);
+            CVec2 lv = mPos.GetTarget();
+            lv -= mPos.Get();
+            lv /= mPos.GetTimeRemains();
+            mBody->SetLinearVelocity(lv);
         }
         else
         {
             mPos.Set( mBody->GetWorldCenter() );
+        }
+
+        if ( mAngle.IsTargetSet() )
+        {
+            mAngle.Step(_dt);
+            float av = ( mAngle.GetTarget() - mAngle.Get() ) / mAngle.GetTimeRemains();
+            mBody->SetAngularVelocity(av);
+        }
+        else
+        {
             mAngle.Set( mBody->GetAngle() );
         }
     }
@@ -299,19 +310,51 @@ void CSceneObject::SetAngularVelocity( float _vel )
     mBody->SetAngularVelocity(_vel);
 }
 
-void CSceneObject::SetFixedRotation(bool _fixed)
+void CSceneObject::SetFixedRotation( bool _fixed )
 {
     mBody->SetFixedRotation(_fixed);
 }
 
-void CSceneObject::SetBullet(bool _bullet)
+void CSceneObject::SetBullet( bool _bullet )
 {
     mBody->SetBullet(_bullet);
 }
 
-void CSceneObject::SetActive(bool _active)
+void CSceneObject::SetActive( bool _active )
 {
     mBody->SetActive(_active);
+}
+
+void CSceneObject::SetPos(const CVec2 &_pos)
+{
+    mBody->SetTransform( _pos, mBody->GetAngle() );
+    mPos.Set(_pos);
+}
+
+void CSceneObject::SetPosTarget( const CVec2 &_target, double _time, const AnimationBehavior &_behavior )
+{
+    mPos.SetTarget( _target, _time, _behavior );
+}
+
+const CAnimatedParam<CVec2> &CSceneObject::GetPos() const
+{
+    return mPos;
+}
+
+void CSceneObject::SetAngle(float _angle)
+{
+    mBody->SetTransform( mBody->GetWorldCenter(), _angle );
+    mAngle.Set(_angle);
+}
+
+void CSceneObject::SetAngleTarget( float _target, double _time, const AnimationBehavior &_behavior )
+{
+    mAngle.SetTarget( _target, _time, _behavior );
+}
+
+const CAnimatedParam<float> &CSceneObject::GetAngle() const
+{
+    return mAngle;
 }
 
 } // namespace drash

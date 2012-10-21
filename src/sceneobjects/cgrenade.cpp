@@ -51,7 +51,7 @@ void CGrenade::Step( double _dt )
         {
             mCounter++;
             CBoomParams boom;
-            boom.mPos = mPos.Get();
+            boom.mPos = GetPos().Get();
             boom.mStregth = 500;
             GetScene()->AddRequestBoom(boom);
             SetDead();

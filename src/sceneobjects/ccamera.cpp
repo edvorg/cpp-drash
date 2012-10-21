@@ -35,7 +35,7 @@ void CCamera::Step( double _dt )
     CSceneObject::Step(_dt);
     mZoom.Step(_dt);
 
-    if ( mPos.IsTargetSet() == false )
+    if ( GetPos().IsTargetSet() == false )
     {
         mShake = 0;
     }
@@ -52,10 +52,10 @@ void CCamera::OnBoom( const CBoomParams &_boom )
 
     CVec2 tmp = GetBody()->GetWorldCenter();
     tmp.y += 0.1 * _boom.mStregth / mZoom.Get();
-    mPos.Set( tmp );
-    mPos.SetTarget( mLastPos,
-                    0.2,
-                    AnimationBehaviorSingle );
+    SetPos( tmp );
+    SetPosTarget( mLastPos,
+                  0.2,
+                  AnimationBehaviorSingle );
 
     mShake++;
 }

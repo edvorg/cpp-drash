@@ -27,6 +27,8 @@ public:
     CVec2 & operator*=( float _val );
     CVec2 & operator+=( float _val );
     CVec2 & operator+=( const b2Vec2 &_ver );
+    CVec2 & operator/=( float _val );
+    CVec2 & operator/=( const b2Vec2 &_ver );
     bool operator==( const CVec2 &_var );
     float Dot( const b2Vec2 &_ver ) const;
 
