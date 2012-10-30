@@ -43,12 +43,6 @@ void SceneWidget::paintGL()
 {
     QGLWidget::paintGL();
 
-    if ( mTestApp == NULL ||
-         mTestApp->GetCamera() == NULL )
-    {
-        return;
-    }
-
     glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
@@ -56,10 +50,9 @@ void SceneWidget::paintGL()
     glLoadIdentity();
     gluPerspective( 60.0, mWidth / mHeight, 1.0f, 1000.0f );
 
-    mTestApp->GetScene().Draw( *mTestApp->GetCamera() );
-
     if ( mTestApp != NULL )
     {
+        mTestApp->GetScene().Draw( *mTestApp->GetCamera() );
         mTestApp->Render();
     }
 
@@ -75,15 +68,10 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
 {
     QGLWidget::mousePressEvent(_event);
 
-    if ( mTestApp == NULL ||
-         mTestApp->GetCamera() == NULL )
-    {
-        return;
-    }
-
     switch ( _event->button() )
     {
     case Qt::LeftButton:
+        if ( mTestApp != NULL && mTestApp->GetCamera() != NULL )
         {
             CVec2 pos;
             pos = PointSDLToWorldPoint( _event->pos().x(),
