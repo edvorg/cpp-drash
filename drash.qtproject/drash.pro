@@ -65,7 +65,7 @@ HEADERS  += ../src/gamewindow.h \
 FORMS    += ../src/gamewindow.ui
 
 LIBS += -L../3rd/Box2D/lib
-LIBS += -lBox2D -lGLU -lopenal -lvorbis -lvorbisfile
+LIBS += -lBox2D -lGLU -lopenal -lvorbis -lvorbisfile -lrt
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG
