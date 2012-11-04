@@ -38,7 +38,8 @@ SOURCES += ../src/main.cpp\
     ../src/sound/alsound.cpp \
     ../src/test/test.cpp \
     ../src/test/ctestapp4.cpp \
-    ../src/subsystem/subsystem.cpp
+    ../src/subsystem/subsystem.cpp \
+    ../src/subsystem/explosionsystem.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -65,7 +66,8 @@ HEADERS  += ../src/gamewindow.h \
     ../src/test/test.h \
     ../src/diag/assert.h \
     ../src/test/ctestapp4.h \
-    ../src/subsystem/subsystem.h
+    ../src/subsystem/subsystem.h \
+    ../src/subsystem/explosionsystem.h
 
 FORMS    += ../src/gamewindow.ui
 
