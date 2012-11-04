@@ -365,6 +365,11 @@ void CScene::DisconnectSubsystem(CSubsystem *_subsystem)
             if (mSubsystemsCount-- != 1)
             {
                 mSubsystems[i] = mSubsystems[mSubsystemsCount];
+                mSubsystems[mSubsystemsCount] = NULL;
+            }
+            else
+            {
+                mSubsystems[0] = NULL;
             }
             return;
         }
