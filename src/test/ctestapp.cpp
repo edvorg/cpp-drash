@@ -106,4 +106,9 @@ CCamera *CTestApp::GetCamera()
     return mCamera;
 }
 
+CPlayersSystem &CTestApp::GetPlayersSystem()
+{
+    return mPlayersSystem;
+}
+
 } // namespace drash

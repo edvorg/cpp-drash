@@ -27,6 +27,8 @@ public:
     const CScene &GetScene() const;
     CCamera *GetCamera();
 
+    CPlayersSystem& GetPlayersSystem();
+
 private:
     CScene mScene;
     CCamera *mCamera;
