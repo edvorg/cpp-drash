@@ -5,6 +5,7 @@
 #include "../sceneobjects.h"
 #include "../cscene.h"
 #include <subsystem/explosionsystem.h>
+#include <subsystem/playerssystem.h>
 
 namespace drash
 {
@@ -31,6 +32,7 @@ private:
     CCamera *mCamera;
     CTimer mTimer;
     CExplosionSystem mExplosionSystem;
+    CPlayersSystem mPlayersSystem;
 };
 
 } // namespace drash

@@ -39,7 +39,8 @@ SOURCES += ../src/main.cpp\
     ../src/test/test.cpp \
     ../src/test/ctestapp4.cpp \
     ../src/subsystem/subsystem.cpp \
-    ../src/subsystem/explosionsystem.cpp
+    ../src/subsystem/explosionsystem.cpp \
+    ../src/subsystem/playerssystem.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -67,7 +68,8 @@ HEADERS  += ../src/gamewindow.h \
     ../src/diag/assert.h \
     ../src/test/ctestapp4.h \
     ../src/subsystem/subsystem.h \
-    ../src/subsystem/explosionsystem.h
+    ../src/subsystem/explosionsystem.h \
+    ../src/subsystem/playerssystem.h
 
 FORMS    += ../src/gamewindow.ui
 

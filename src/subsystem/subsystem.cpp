@@ -8,6 +8,15 @@ CSubsystem::CSubsystem():
 {
 }
 
+CSubsystem::~CSubsystem()
+{
+    if (mScene != NULL)
+    {
+        mScene->DisconnectSubsystem(this);
+        mScene = NULL;
+    }
+}
+
 void CSubsystem::SetScene(CScene *_scene)
 {
     if (mScene != NULL)

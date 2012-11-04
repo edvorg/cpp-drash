@@ -15,6 +15,7 @@ class CSubsystem
 {
 public:
     CSubsystem();
+    ~CSubsystem();
 
     void SetScene(CScene *_scene);
 

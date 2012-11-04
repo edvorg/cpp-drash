@@ -25,6 +25,7 @@ bool CTestApp::Init()
     }
 
     mExplosionSystem.SetScene(&mScene);
+    mPlayersSystem.SetScene(&mScene);
 
     CCameraParams p;
     mCamera = mScene.CreateObject< CCamera >(p);
@@ -41,6 +42,9 @@ bool CTestApp::Init()
 
 void CTestApp::Release()
 {
+    mPlayersSystem.SetScene(NULL);
+    mExplosionSystem.SetScene(NULL);
+
     if ( mCamera != NULL )
     {
         mScene.DestroyObject(mCamera);
