@@ -18,6 +18,7 @@ public:
     ~CSubsystem();
 
     void SetScene(CScene *_scene);
+    CScene *GetScene();
 
 private:
     CScene *mScene;

@@ -34,4 +34,9 @@ void CSubsystem::SetScene(CScene *_scene)
     mScene->ConnectSubsystem(this);
 }
 
+CScene *CSubsystem::GetScene()
+{
+    return mScene;
+}
+
 }// namespace drash
