@@ -82,7 +82,7 @@ bool GameWindow::Init( const GameWindowParams &_params )
 
     mInitialized = true;    
 
-    timer.start(1);
+    timer.start(0);
     connect( &timer, SIGNAL( timeout() ), this, SLOT( UpdateScene() ) );
 
     return true;
