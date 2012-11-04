@@ -11,7 +11,7 @@ CScene::CScene(void):
     mWorld( b2Vec2( 0, 0 ) ),
     mInitialized(false),
     mCountPlayers(0),
-    mCountObjects(0),
+    mObjectsCount(0),
     mSubsystemsCount(0)
 {
 }
@@ -54,19 +54,29 @@ void CScene::Release(void)
         return;
     }
 
-    if ( mCountObjects != 0 )
+    if ( mObjectsCount != 0 )
     {
         LOG_WARN( "CScene::Release(): "<<
-                  mCountObjects<<
+                  mObjectsCount<<
                   " object(s) haven't been destroyed. Autorelease" );
 
-        while( mCountObjects != 0 )
+        while( mObjectsCount != 0 )
         {
             DestroyObject<CSceneObject>( mObjects[0] );
         }
     }
 
     mInitialized = false;
+}
+
+const CScene::CSceneObjectPtr *CScene::GetObjects()
+{
+    return mObjects;
+}
+
+unsigned int CScene::EnumObjects() const
+{
+    return mObjectsCount;
 }
 
 void CScene::Step( double _dt )
@@ -78,12 +88,12 @@ void CScene::Step( double _dt )
         return;
     }
 
-    for ( unsigned int i = 0 ; i < mCountObjects ; i++ )
+    for ( unsigned int i = 0 ; i < mObjectsCount ; i++ )
     {
         mObjects[i]->Step(_dt);
     }
 
-    for ( unsigned int i = 0; i < mCountObjects; )
+    for ( unsigned int i = 0; i < mObjectsCount; )
     {
         if ( mObjects[i]->IsDead() )
         {
@@ -315,7 +325,7 @@ void CScene::AddRequestBoom( const CBoomParams _boom )
 
 void CScene::BoomNow()
 {
-    for ( unsigned int i = 0; i < mCountObjects; i++ )
+    for ( unsigned int i = 0; i < mObjectsCount; i++ )
     {
         for ( auto it = mListBooms.begin() ; it != mListBooms.end() ; it++ )
         {
@@ -378,12 +388,12 @@ void CScene::DisconnectSubsystem(CSubsystem *_subsystem)
     LOG_WARN("CScene::RemSubsystem(): subsystem is not connected");
 }
 
-CSubsystem **CScene::GetSubsystems()
+const CScene::CSubsystemPtr *CScene::GetSubsystems()
 {
     return mSubsystems;
 }
 
-unsigned int CScene::EnumSubsystems()
+unsigned int CScene::EnumSubsystems() const
 {
     return mSubsystemsCount;
 }

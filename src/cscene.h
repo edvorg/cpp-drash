@@ -20,6 +20,11 @@ class CSubsystem;
 class CScene : public b2ContactListener, public b2ContactFilter
 {
 public:
+    typedef CSceneObject *CSceneObjectPtr;
+    typedef const CSceneObject *CSceneObjectConstPtr;
+    typedef CSubsystem *CSubsystemPtr;
+    typedef const CSubsystem *CSubsystemConstPtr;
+
     CScene(void);
     virtual ~CScene(void);
 
@@ -35,6 +40,9 @@ public:
     /// Method excepts, that T has ParamsT typedef
     template < typename T >
     void DestroyObject( T* _obj );
+
+    const CSceneObjectPtr* GetObjects();
+    unsigned int EnumObjects() const;
 
     /// must be called once in update cycle
     /// dt - nanoseconds
@@ -60,8 +68,8 @@ public:
 
     void ConnectSubsystem(CSubsystem *_subsystem);
     void DisconnectSubsystem(CSubsystem *_subsystem);
-    CSubsystem **GetSubsystems();
-    unsigned int EnumSubsystems();
+    const CSubsystemPtr *GetSubsystems();
+    unsigned int EnumSubsystems() const;
 protected:
 
 private:
@@ -69,7 +77,7 @@ private:
     std::list<CBoomParams> mListBooms;
     bool mInitialized;
     unsigned int mCountPlayers;
-    unsigned int mCountObjects;
+    unsigned int mObjectsCount;
 
     static const int mVelocityIterations = 5;
     static const int mPositionIterations = 2;
@@ -87,7 +95,7 @@ private:
 template < typename T >
 T* CScene::CreateObject( const typename T::ParamsT& _params )
 {
-    if (mCountObjects == mObjectsMaxAmount){
+    if (mObjectsCount == mObjectsMaxAmount){
         LOG_ERR("CScene::CreateObject() : Achieved maximum Amount of Objects in scene");
         return NULL;
     }
@@ -105,10 +113,10 @@ T* CScene::CreateObject( const typename T::ParamsT& _params )
 
     res->mBody->SetUserData(res);
     res->mScene = this;
-    res->mInternalId = mCountObjects;
+    res->mInternalId = mObjectsCount;
 
-    mObjects[mCountObjects] = res;
-    mCountObjects++;
+    mObjects[mObjectsCount] = res;
+    mObjectsCount++;
     return res;
 }
 
@@ -122,9 +130,9 @@ void CScene::DestroyObject( T* _obj )
     _obj->mBody->SetActive(false);
     _obj->mBody->SetUserData(NULL);
 
-    mCountObjects--;
-    mObjects[_obj->mInternalId] = mObjects[mCountObjects];
-    mObjects[mCountObjects] = NULL;
+    mObjectsCount--;
+    mObjects[_obj->mInternalId] = mObjects[mObjectsCount];
+    mObjects[mObjectsCount] = NULL;
 
     if ( mObjects[_obj->mInternalId] != NULL )
     {
