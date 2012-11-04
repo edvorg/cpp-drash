@@ -24,6 +24,8 @@ bool CTestApp::Init()
         return false;
     }
 
+    mExplosionSystem.SetScene(&mScene);
+
     CCameraParams p;
     mCamera = mScene.CreateObject< CCamera >(p);
 
