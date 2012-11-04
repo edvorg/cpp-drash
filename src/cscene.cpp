@@ -2,6 +2,7 @@
 #include "diag/clogger.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <subsystem/subsystem.h>
 
 namespace drash
 {
@@ -10,7 +11,8 @@ CScene::CScene(void):
     mWorld( b2Vec2( 0, 0 ) ),
     mInitialized(false),
     mCountPlayers(0),
-    mCountObjects(0)
+    mCountObjects(0),
+    mSubsystemsCount(0)
 {
 }
 
@@ -322,6 +324,63 @@ void CScene::BoomNow()
     }
 
     mListBooms.clear();
+}
+
+void CScene::ConnectSubsystem(CSubsystem *_subsystem)
+{
+    if (_subsystem == NULL)
+    {
+        return;
+    }
+
+    if (mSubsystemsCount >= mMaxSubsystemsCount)
+    {
+        LOG_ERR("CScene::AddSubsystem(): Unable to connect with subsystem. Connection count is maximal");
+        return;
+    }
+
+    for (unsigned int i=0; i<mSubsystemsCount; i++)
+    {
+        if (mSubsystems[i] == _subsystem)
+        {
+            LOG_WARN("CScene::AddSubsystem(): subsystem already connected");
+            return;
+        }
+    }
+
+    mSubsystems[mSubsystemsCount++] = _subsystem;
+}
+
+void CScene::DisconnectSubsystem(CSubsystem *_subsystem)
+{
+    if (_subsystem == NULL)
+    {
+        return;
+    }
+
+    for (unsigned int i = 0; i < mSubsystemsCount; i++)
+    {
+        if (mSubsystems[i] == _subsystem)
+        {
+            if (mSubsystemsCount-- != 1)
+            {
+                mSubsystems[i] = mSubsystems[mSubsystemsCount];
+            }
+            return;
+        }
+    }
+
+    LOG_WARN("CScene::RemSubsystem(): subsystem is not connected");
+}
+
+CSubsystem **CScene::GetSubsystems()
+{
+    return mSubsystems;
+}
+
+unsigned int CScene::EnumSubsystems()
+{
+    return mSubsystemsCount;
 }
 
 } // namespace drash

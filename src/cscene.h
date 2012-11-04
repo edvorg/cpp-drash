@@ -15,6 +15,8 @@ public:
     CVec2 mGravity;
 };
 
+class CSubsystem;
+
 class CScene : public b2ContactListener, public b2ContactFilter
 {
 public:
@@ -55,6 +57,11 @@ public:
     void AddRequestBoom( const CBoomParams  _boom );
 
     void BoomNow();
+
+    void ConnectSubsystem(CSubsystem *_subsystem);
+    void DisconnectSubsystem(CSubsystem *_subsystem);
+    CSubsystem **GetSubsystems();
+    unsigned int EnumSubsystems();
 protected:
 
 private:
@@ -68,9 +75,13 @@ private:
     static const int mPositionIterations = 2;
     static const unsigned int mPlayersMaxAmount = 4;
     static const unsigned int mObjectsMaxAmount = 5000;
+    static const unsigned int mMaxSubsystemsCount = 3;
 
     CPlayer* mPlayers[mPlayersMaxAmount];
     CSceneObject* mObjects[mObjectsMaxAmount];
+
+    CSubsystem *mSubsystems[mMaxSubsystemsCount];
+    unsigned int mSubsystemsCount;
 };
 
 template < typename T >

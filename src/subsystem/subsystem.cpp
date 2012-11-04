@@ -3,8 +3,26 @@
 namespace drash
 {
 
-CSubsystem::CSubsystem()
+CSubsystem::CSubsystem():
+    mScene(NULL)
 {
+}
+
+void CSubsystem::SetScene(CScene *_scene)
+{
+    if (mScene != NULL)
+    {
+        mScene->DisconnectSubsystem(this);
+        mScene = NULL;
+    }
+
+    if (_scene == NULL)
+    {
+        return;
+    }
+
+    mScene = _scene;
+    mScene->ConnectSubsystem(this);
 }
 
 }// namespace drash

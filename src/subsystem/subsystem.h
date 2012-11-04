@@ -15,6 +15,11 @@ class CSubsystem
 {
 public:
     CSubsystem();
+
+    void SetScene(CScene *_scene);
+
+private:
+    CScene *mScene;
 };
 
 }// namespace drash
