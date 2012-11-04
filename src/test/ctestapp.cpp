@@ -51,7 +51,6 @@ void CTestApp::Release()
 void CTestApp::Update()
 {
     mTimer.Tick();
-    printf("%f\n", (float)mTimer.GetDeltaTime());
     mScene.Step( mTimer.GetDeltaTime() );
 }
 
