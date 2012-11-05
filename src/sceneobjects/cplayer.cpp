@@ -1,7 +1,5 @@
 #include "cplayer.h"
 #include "../diag/clogger.h"
-#include "cbullet.h"
-#include "cgrenade.h"
 
 #include "../cscene.h"
 
@@ -101,27 +99,27 @@ void CPlayer::MoveLeft()
 
 void CPlayer::FireNow( const CVec2 &_fireDirect )
 {
-    CGrenadeParams bulletParams;
+//    CGrenadeParams bulletParams;
 
-    bulletParams.mTarget = _fireDirect;
-    CVec2 posBody = GetBody()->GetWorldPoint( CVec2( 0, 0 ) );
+//    bulletParams.mTarget = _fireDirect;
+//    CVec2 posBody = GetBody()->GetWorldPoint( CVec2( 0, 0 ) );
 
-    if ( _fireDirect.x > posBody.x )
-	{
-        bulletParams.mPos = GetBody()->GetWorldPoint(mPointShoot);
-    }
-	else
-	{
-        bulletParams.mPos = GetBody()->GetWorldPoint( CVec2( -mPointShoot.x,
-															 mPointShoot.y ) );
-    }
+//    if ( _fireDirect.x > posBody.x )
+//	{
+//        bulletParams.mPos = GetBody()->GetWorldPoint(mPointShoot);
+//    }
+//	else
+//	{
+//        bulletParams.mPos = GetBody()->GetWorldPoint( CVec2( -mPointShoot.x,
+//															 mPointShoot.y ) );
+//    }
 
-    bulletParams.mTime = 2;
-    bulletParams.mFigures.resize(1);
-    float tmp = ( reinterpret_cast<CInterval*>( GetBody()->GetFixtureList()->GetUserData() )->GetMin() +
-                  reinterpret_cast<CInterval*>( GetBody()->GetFixtureList()->GetUserData() )->GetMax() ) / 2;
-    bulletParams.mFigures[0].mLayers.Set( tmp, tmp + 1 );
-    GetScene()->CreateObject<CGrenade>(bulletParams);
+//    bulletParams.mTime = 2;
+//    bulletParams.mFigures.resize(1);
+//    float tmp = ( reinterpret_cast<CInterval*>( GetBody()->GetFixtureList()->GetUserData() )->GetMin() +
+//                  reinterpret_cast<CInterval*>( GetBody()->GetFixtureList()->GetUserData() )->GetMax() ) / 2;
+//    bulletParams.mFigures[0].mLayers.Set( tmp, tmp + 1 );
+//    GetScene()->CreateObject<CGrenade>(bulletParams);
 }
 
 void CPlayer::onEvent( const CPlayerEvent &_event )

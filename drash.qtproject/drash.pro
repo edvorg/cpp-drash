@@ -30,10 +30,8 @@ SOURCES += ../src/main.cpp\
     ../src/diag/clogger.cpp \
     ../src/sceneobjects/csceneobject.cpp \
     ../src/sceneobjects/cplayer.cpp \
-    ../src/sceneobjects/cgrenade.cpp \
     ../src/sceneobjects/cdrashbody.cpp \
     ../src/sceneobjects/ccamera.cpp \
-    ../src/sceneobjects/cbullet.cpp \
     ../src/sceneobjects/cboom.cpp \
     ../src/sound/alsound.cpp \
     ../src/test/test.cpp \
@@ -58,10 +56,8 @@ HEADERS  += ../src/gamewindow.h \
     ../src/diag/clogger.h \
     ../src/sceneobjects/csceneobject.h \
     ../src/sceneobjects/cplayer.h \
-    ../src/sceneobjects/cgrenade.h \
     ../src/sceneobjects/cdrashbody.h \
     ../src/sceneobjects/ccamera.h \
-    ../src/sceneobjects/cbullet.h \
     ../src/sceneobjects/cboom.h \
     ../src/sound/alsound.h \
     ../src/test/test.h \
