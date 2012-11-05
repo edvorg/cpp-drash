@@ -81,7 +81,12 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
                                         mHeight,
                                         mWidth);
 
-            mTestApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionFire, pos ), 0 );
+            CBoomParams p;
+            p.mFigures.resize(1);
+            p.mLifeTime = 2;
+            p.mPos = pos;
+            p.mStregth = -3;
+            mTestApp->GetScene().CreateObject<CExplosion>(p);
             break;
         }
 
