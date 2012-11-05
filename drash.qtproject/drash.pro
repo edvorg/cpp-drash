@@ -33,7 +33,6 @@ SOURCES += ../src/main.cpp\
     ../src/sceneobjects/cdrashbody.cpp \
     ../src/sceneobjects/ccamera.cpp \
     ../src/sceneobjects/explosion.cpp \
-    ../src/sound/alsound.cpp \
     ../src/test/test.cpp \
     ../src/test/ctestapp4.cpp \
     ../src/subsystem/subsystem.cpp \
@@ -59,7 +58,6 @@ HEADERS  += ../src/gamewindow.h \
     ../src/sceneobjects/cdrashbody.h \
     ../src/sceneobjects/ccamera.h \
     ../src/sceneobjects/explosion.h \
-    ../src/sound/alsound.h \
     ../src/test/test.h \
     ../src/diag/assert.h \
     ../src/test/ctestapp4.h \
@@ -70,7 +68,7 @@ HEADERS  += ../src/gamewindow.h \
 FORMS    += ../src/gamewindow.ui
 
 LIBS += -L../3rd/Box2D/lib
-LIBS += -lBox2D -lGLU -lopenal -lvorbis -lvorbisfile -lrt
+LIBS += -lBox2D -lGLU -lrt
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG
