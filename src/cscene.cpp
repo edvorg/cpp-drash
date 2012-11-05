@@ -105,8 +105,6 @@ void CScene::Step( double _dt )
         }
     }
 
-    BoomNow();
-
     mWorld.Step( _dt, mVelocityIterations, mPositionIterations );
 }
 
@@ -277,24 +275,6 @@ void CScene::Draw( const CCamera &_camera )
             o->DrawDebug();
         }
     }
-}
-
-void CScene::AddRequestBoom( const CBoomParams _boom )
-{
-    mListBooms.push_back(_boom);
-}
-
-void CScene::BoomNow()
-{
-    for ( unsigned int i = 0; i < mObjectsCount; i++ )
-    {
-        for ( auto it = mListBooms.begin() ; it != mListBooms.end() ; it++ )
-        {
-            mObjects[i]->OnBoom(*it);
-        }
-    }
-
-    mListBooms.clear();
 }
 
 void CScene::ConnectSubsystem(CSubsystem *_subsystem)

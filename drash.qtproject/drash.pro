@@ -32,7 +32,7 @@ SOURCES += ../src/main.cpp\
     ../src/sceneobjects/cplayer.cpp \
     ../src/sceneobjects/cdrashbody.cpp \
     ../src/sceneobjects/ccamera.cpp \
-    ../src/sceneobjects/cboom.cpp \
+    ../src/sceneobjects/explosion.cpp \
     ../src/sound/alsound.cpp \
     ../src/test/test.cpp \
     ../src/test/ctestapp4.cpp \
@@ -58,7 +58,7 @@ HEADERS  += ../src/gamewindow.h \
     ../src/sceneobjects/cplayer.h \
     ../src/sceneobjects/cdrashbody.h \
     ../src/sceneobjects/ccamera.h \
-    ../src/sceneobjects/cboom.h \
+    ../src/sceneobjects/explosion.h \
     ../src/sound/alsound.h \
     ../src/test/test.h \
     ../src/diag/assert.h \

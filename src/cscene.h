@@ -3,7 +3,6 @@
 #define CSCENE_H
 
 #include "sceneobjects.h"
-#include <list>
 #include "diag/assert.h"
 
 namespace drash
@@ -56,10 +55,6 @@ public:
 
     void Draw( const CCamera &_camera );
 
-    void AddRequestBoom( const CBoomParams  _boom );
-
-    void BoomNow();
-
     void ConnectSubsystem(CSubsystem *_subsystem);
     void DisconnectSubsystem(CSubsystem *_subsystem);
     const CSubsystemPtr *GetSubsystems();
@@ -68,7 +63,6 @@ protected:
 
 private:
     b2World mWorld;
-    std::list<CBoomParams> mListBooms;
     bool mInitialized;
     unsigned int mCountPlayers;
     unsigned int mObjectsCount;

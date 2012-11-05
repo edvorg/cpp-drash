@@ -55,6 +55,7 @@ class CSceneObject
 {
 public:
     friend class CScene;
+    friend class CExplosion;
 
     typedef CSceneObjectParams ParamsT;
 

@@ -16,7 +16,7 @@ public:
     float mLifeTime;
 };
 
-class CBoom : public CSceneObject
+class CExplosion : public CSceneObject
 {
 public:
     friend class CScene;
@@ -24,11 +24,18 @@ public:
     typedef CBoomParams ParamsT;
 
 protected:
-    CBoom(void);
+    CExplosion(void);
 
     bool Init( const ParamsT &_params );
 
+    virtual void Step( double _dt );
+
+    const CBoomParams &GetParams() const;
+    float GetTime() const;
+
 private:
+    CBoomParams mParams;
+    float mTime;
 };
 
 }// namespace drash
