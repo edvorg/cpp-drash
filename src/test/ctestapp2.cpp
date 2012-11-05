@@ -32,7 +32,7 @@ bool CTestApp2::Init()
     player.mFigures[0].mVertices.push_back( CVec2( 2, 5 ) );
     player.mFigures[0].mVertices.push_back( CVec2( -2, 5 ) );
     player.mFigures[0].mLayers.Set(-100, 100);
-    GetScene().AddPlayer(player);
+    GetPlayersSystem().AddPlayer(player);
 
     CSceneObjectParams targetForFire;
     targetForFire.mFigures.resize(1);

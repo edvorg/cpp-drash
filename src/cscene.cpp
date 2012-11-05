@@ -279,45 +279,6 @@ void CScene::Draw( const CCamera &_camera )
     }
 }
 
-void CScene::OnPlayerEvent( const CPlayerEvent &_event, unsigned int _playerId )
-{
-    if ( _playerId >= mCountPlayers )
-    {
-        LOG_ERR( "CScene::OnPlayerEvent(): "
-                 "Player with id = " <<
-                 _playerId <<
-                 " no exist" );
-        return;
-    }
-
-    mPlayers[_playerId]->onEvent(_event);
-}
-
-int CScene::AddPlayer( const CPlayerParams &_params )
-{
-    if ( mCountPlayers == mPlayersMaxAmount )
-    {
-        LOG_ERR( "CScene::AddPlayer(): "
-                 "Achieved maximum Amount of Players" );
-        return -1;
-    }
-
-    mPlayers[mCountPlayers] = CreateObject<CPlayer>(_params);
-    return mCountPlayers++;
-}
-
-CPlayer *CScene::GetPlayer( unsigned int _id )
-{
-    if ( _id >= mCountPlayers )
-    {
-        return NULL;
-    }
-    else
-    {
-        return mPlayers[_id];
-    }
-}
-
 void CScene::AddRequestBoom( const CBoomParams _boom )
 {
     mListBooms.push_back(_boom);

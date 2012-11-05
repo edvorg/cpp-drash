@@ -56,12 +56,6 @@ public:
 
     void Draw( const CCamera &_camera );
 
-    void OnPlayerEvent( const CPlayerEvent & _event, unsigned int _playerId );
-
-    // returns player id ( >= 0 ) or -1 if failed
-    int AddPlayer( const CPlayerParams & _params );
-    CPlayer *GetPlayer( unsigned int _id );
-
     void AddRequestBoom( const CBoomParams  _boom );
 
     void BoomNow();
@@ -81,11 +75,9 @@ private:
 
     static const int mVelocityIterations = 5;
     static const int mPositionIterations = 2;
-    static const unsigned int mPlayersMaxAmount = 4;
     static const unsigned int mObjectsMaxAmount = 5000;
     static const unsigned int mMaxSubsystemsCount = 3;
 
-    CPlayer* mPlayers[mPlayersMaxAmount];
     CSceneObject* mObjects[mObjectsMaxAmount];
 
     CSubsystem *mSubsystems[mMaxSubsystemsCount];

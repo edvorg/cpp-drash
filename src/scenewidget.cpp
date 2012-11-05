@@ -81,7 +81,7 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
                                         mHeight,
                                         mWidth);
 
-            mTestApp->GetScene().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionFire, pos ), 0 );
+            mTestApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionFire, pos ), 0 );
             break;
         }
 
@@ -107,11 +107,11 @@ void SceneWidget::keyReleaseEvent( QKeyEvent *_event )
     switch ( _event->key() )
     {
     case Qt::Key_A:
-        mTestApp->GetScene().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionEndMoveLeft, CVec2() ), 0 );
+        mTestApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionEndMoveLeft, CVec2() ), 0 );
         break;
 
     case Qt::Key_D:
-        mTestApp->GetScene().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionEndMoveRight, CVec2() ), 0 );
+        mTestApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionEndMoveRight, CVec2() ), 0 );
         break;
 
     default:
@@ -132,23 +132,23 @@ void SceneWidget::keyPressEvent( QKeyEvent *_event )
     switch ( _event->key() )
     {
     case Qt::Key_Space:
-        mTestApp->GetScene().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionJump, CVec2() ), 0 );
+        mTestApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionJump, CVec2() ), 0 );
         break;
 
     case Qt::Key_A:
-        mTestApp->GetScene().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveLeft, CVec2() ), 0 );
+        mTestApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveLeft, CVec2() ), 0 );
         break;
 
     case Qt::Key_D:
-        mTestApp->GetScene().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveRight, CVec2() ), 0 );
+        mTestApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveRight, CVec2() ), 0 );
         break;
 
     case Qt::Key_W:
-        mTestApp->GetScene().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveDeep, CVec2() ), 0 );
+        mTestApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveDeep, CVec2() ), 0 );
         break;
 
     case Qt::Key_S:
-        mTestApp->GetScene().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveOut, CVec2() ), 0 );
+        mTestApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveOut, CVec2() ), 0 );
         break;
 
     default:

@@ -78,7 +78,7 @@ bool CTestApp3::Init()
     ppp.mPos.Set( 0, 10 );
     ppp.mFigures.resize(1);
     ppp.mFigures[0].mLayers.Set( -100, 100 );
-    GetScene().AddPlayer(ppp);
+    GetPlayersSystem().AddPlayer(ppp);
 
     CSceneObject::ParamsT platform_params;
     platform_params.mPos.Set( 0, 50 );
@@ -106,8 +106,9 @@ void CTestApp3::Update()
 {
     CTestApp::Update();
 
-    if ( CPlayer *p = GetScene().GetPlayer(0) )
+    if (GetPlayersSystem().EnumPlayers())
     {
+        CPlayer *p = GetPlayersSystem().GetPlayers()[0];
         GetCamera()->SetPosTarget( p->GetBody()->GetWorldCenter(), 1.0, AnimationBehaviorSingle );
     }
 }
