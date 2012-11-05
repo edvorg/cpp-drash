@@ -63,4 +63,18 @@ unsigned int CPlayersSystem::EnumPlayers() const
     return mPlayersCount;
 }
 
+void CPlayersSystem::OnPlayerEvent( const CPlayerEvent &_event, unsigned int _playerId )
+{
+    if ( _playerId >= mPlayersCount )
+    {
+        LOG_ERR( "CPlayersSystem::OnPlayerEvent(): "
+                 "Player with id = " <<
+                 _playerId <<
+                 " no exist" );
+        return;
+    }
+
+    mPlayers[_playerId]->onEvent(_event);
+}
+
 }// namespace drash

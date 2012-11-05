@@ -46,6 +46,7 @@ class CPlayer: public CSceneObject
 {
 public:
     friend class CScene;
+    friend class CPlayersSystem;
 
     typedef CPlayerParams ParamsT;
 

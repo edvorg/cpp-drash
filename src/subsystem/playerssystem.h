@@ -19,6 +19,8 @@ public:
     const CPlayerPtr *GetPlayers();
     unsigned int EnumPlayers() const;
 
+    void OnPlayerEvent( const CPlayerEvent & _event, unsigned int _playerId );
+
     static const unsigned int mMaxPlayersCount = 10;
 
 private:
