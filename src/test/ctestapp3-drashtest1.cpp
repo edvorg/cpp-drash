@@ -62,7 +62,7 @@ bool CTestApp3::Init()
     dbp.mDestroyDelay = 0.5;
     dbp.mDestroySpeed = 7.0f;
 
-    GenDrashBodyParams( &dbp, 5, 0, 3 );
+    GenDrashBodyParams( &dbp, 5, 0, 2 );
 
     CDrashBody *db = GetScene().CreateObject<CDrashBody>(dbp);
     db->SetAngularVelocity(2);
