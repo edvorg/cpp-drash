@@ -3,7 +3,7 @@
 #define CDRASHBODY_H
 
 #include "csceneobject.h"
-#include "cboom.h"
+#include "explosion.h"
 #include <vector>
 #include "../diag/ctimer.h"
 

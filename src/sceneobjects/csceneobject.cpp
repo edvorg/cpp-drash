@@ -1,6 +1,6 @@
 #include "csceneobject.h"
 #include "../diag/clogger.h"
-#include "cboom.h"
+#include "explosion.h"
 #include <GL/gl.h>
 
 namespace drash

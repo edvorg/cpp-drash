@@ -6,6 +6,6 @@
 #include "sceneobjects/cdrashbody.h"
 #include "sceneobjects/cplayer.h"
 #include "sceneobjects/csceneobject.h"
-#include "sceneobjects/cboom.h"
+#include "sceneobjects/explosion.h"
 
 #endif // SCENEOBJECTS_H
