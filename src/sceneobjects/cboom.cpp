@@ -3,6 +3,12 @@
 namespace drash
 {
 
+CBoomParams::CBoomParams():
+    mStregth(1),
+    mLifeTime(1)
+{
+}
+
 CBoom::CBoom():
     CSceneObject()
 {

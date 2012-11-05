@@ -10,6 +10,8 @@ namespace drash
 class CBoomParams : public CSceneObjectParams
 {
 public:
+    CBoomParams();
+
     float mStregth;
     float mLifeTime;
 };
