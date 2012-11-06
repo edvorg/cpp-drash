@@ -37,7 +37,8 @@ SOURCES += ../src/main.cpp\
     ../src/test/ctestapp4.cpp \
     ../src/subsystem/subsystem.cpp \
     ../src/subsystem/explosionsystem.cpp \
-    ../src/subsystem/playerssystem.cpp
+    ../src/subsystem/playerssystem.cpp \
+    ../src/editor/editorwindow.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -63,9 +64,11 @@ HEADERS  += ../src/gamewindow.h \
     ../src/test/ctestapp4.h \
     ../src/subsystem/subsystem.h \
     ../src/subsystem/explosionsystem.h \
-    ../src/subsystem/playerssystem.h
+    ../src/subsystem/playerssystem.h \
+    ../src/editor/editorwindow.h
 
-FORMS    += ../src/gamewindow.ui
+FORMS    += ../src/gamewindow.ui \
+    ../src/editor/editorwindow.ui
 
 LIBS += -L../3rd/Box2D/lib
 LIBS += -lBox2D -lGLU -lrt
