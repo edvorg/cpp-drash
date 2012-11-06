@@ -6,6 +6,7 @@ EditorWindow::EditorWindow(QWidget *parent) :
     ui(new Ui::EditorWindow)
 {
     ui->setupUi(this);
+
 }
 
 EditorWindow::~EditorWindow()

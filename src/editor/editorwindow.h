@@ -2,7 +2,7 @@
 #define EDITORWINDOW_H
 
 #include <QMainWindow>
-using namespace drash;
+
 namespace Ui {
 class EditorWindow;
 }
@@ -17,7 +17,6 @@ public:
     
 private:
     Ui::EditorWindow *ui;
-
 
 };
 
