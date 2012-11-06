@@ -12,22 +12,23 @@ int main(int argc, char *argv[])
 
     GameWindowParams p;
     p.SetCommandLine( argc, argv );
-
-    if ( p.mArgv.size() > 2) {
-        if (p.mArgv.at(1) != "--editor") {
-            GameWindow w;
-            if ( w.Init(p) == false )
+    QMainWindow *win;
+    if ( p.mArgv.size() > 1) {
+        if (p.mArgv[1] != "--editor") {
+            win = new GameWindow();
+            if ( dynamic_cast<GameWindow*>(win)->Init(p) == false )
             {
                 return 0;
             }
-            w.showFullScreen();
+            win->showFullScreen();
         } else {
-            EditorWindow w;
-            w.show();
+            win = new EditorWindow();
+            win->show();
         }
     }
-
-//    QMainWindow *w;
+    //EditorWindow w;
+    //w.show();
+//    QMainWindow *w;s
 //    if ( argc > 2 ) {
 //        if (strcmp(argv[0],"--editor") == 0) {
 //            w = new GameWindow();
@@ -37,6 +38,7 @@ int main(int argc, char *argv[])
 //    }
 //    w.show();
     //w.showFullScreen();
-    
-    return a.exec();
+    int res = a.exec();
+    delete win;
+    return res;
 }
