@@ -82,7 +82,6 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
                                         mWidth);
 
             CBoomParams p;
-            p.mFigures.resize(1);
             p.mLifeTime = 2;
             p.mPos = pos;
             p.mStregth = -3;
