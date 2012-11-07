@@ -10,35 +10,49 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
-    GameWindowParams p;
-    p.SetCommandLine( argc, argv );
-    QMainWindow *win;
-    if ( p.mArgv.size() > 1) {
-        if (p.mArgv[1] != "--editor") {
-            win = new GameWindow();
-            if ( dynamic_cast<GameWindow*>(win)->Init(p) == false )
-            {
-                return 0;
-            }
-            win->showFullScreen();
-        } else {
-            win = new EditorWindow();
-            win->show();
+    // look for --editor key
+
+    bool editor = false;
+
+    for (int i=0; i<argc; i++)
+    {
+        if (strcmp(argv[i], "--editor") == 0)
+        {
+            editor = true;
+            break;
         }
     }
-    //EditorWindow w;
-    //w.show();
-//    QMainWindow *w;s
-//    if ( argc > 2 ) {
-//        if (strcmp(argv[0],"--editor") == 0) {
-//            w = new GameWindow();
-//        } else {
-//            w = new EditorWindow();
-//        }
-//    }
-//    w.show();
-    //w.showFullScreen();
-    int res = a.exec();
-    delete win;
+
+    // allocate and init editor or game window
+
+    QMainWindow *w = NULL;
+
+    if (editor)
+    {
+        w = new EditorWindow();
+    }
+    else
+    {
+        GameWindowParams p;
+        p.SetCommandLine( argc, argv );
+        w = new GameWindow();
+        if (reinterpret_cast<GameWindow*>(w)->Init(p) == false)
+        {
+            delete w;
+            w = NULL;
+        }
+    }
+
+    // show window and run game loop
+
+    int res = 1;
+
+    if (w != NULL)
+    {
+        w->show();
+        res = a.exec();
+        delete w;
+    }
+
     return res;
 }
