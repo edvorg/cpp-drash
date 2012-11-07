@@ -2,7 +2,8 @@
 #define EDITORWINDOW_H
 
 #include <QMainWindow>
-
+#include "../test/ctestapp.h"
+#include "../test/test.h"
 namespace Ui {
 class EditorWindow;
 }
@@ -17,7 +18,10 @@ public:
     
 private:
     Ui::EditorWindow *ui;
+    bool InitScene();
+    drash::CTestApp  *mTestApp;
 
+    void timerEvent(QTimerEvent *);
 };
 
 #endif // EDITORWINDOW_H
