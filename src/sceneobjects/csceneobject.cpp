@@ -127,7 +127,7 @@ void CSceneObject::OnContactEnd( const CContact &_contact )
 {
 }
 
-void CSceneObject::OnBoom( const CBoomParams &_boom )
+void CSceneObject::OnBoom( const CExplosionParams &_boom )
 {
     CVec2 dir( GetBody()->GetWorldCenter() );
     dir -= _boom.mPos;

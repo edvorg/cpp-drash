@@ -100,7 +100,7 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
     {
     case Qt::LeftButton:
     {
-        CBoomParams p;
+        CExplosionParams p;
         p.mFigures.resize(1);
         p.mLifeTime = 1;
         p.mStregth = -5;

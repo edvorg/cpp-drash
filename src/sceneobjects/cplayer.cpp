@@ -189,7 +189,7 @@ void CPlayer::OnContactEnd( const CContact &_contact )
     mJumpAllowed = false;
 }
 
-void CPlayer::OnBoom( const CBoomParams &_boom )
+void CPlayer::OnBoom( const CExplosionParams &_boom )
 {
 }
 

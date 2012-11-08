@@ -7,10 +7,10 @@
 namespace drash
 {
 
-class CBoomParams : public CSceneObjectParams
+class CExplosionParams : public CSceneObjectParams
 {
 public:
-    CBoomParams();
+    CExplosionParams();
 
     float mStregth;
     float mLifeTime;
@@ -21,7 +21,7 @@ class CExplosion : public CSceneObject
 public:
     friend class CScene;
 
-    typedef CBoomParams ParamsT;
+    typedef CExplosionParams ParamsT;
 
 protected:
     CExplosion(void);
@@ -30,11 +30,11 @@ protected:
 
     virtual void Step( double _dt );
 
-    const CBoomParams &GetParams() const;
+    const CExplosionParams &GetParams() const;
     float GetTime() const;
 
 private:
-    CBoomParams mParams;
+    CExplosionParams mParams;
     float mTime;
 };
 
