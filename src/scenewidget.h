@@ -26,7 +26,7 @@ public:
     virtual void wheelEvent( QWheelEvent *_event );
 
 private:
-    static const double mFov = 60.0;
+    constexpr static double mFov = 60.0;
 
     drash::CTestApp *mTestApp;
     float mWidth;
