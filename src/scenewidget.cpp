@@ -98,6 +98,20 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
 
     switch ( _event->button() )
     {
+    case Qt::LeftButton:
+    {
+        CBoomParams p;
+        p.mFigures.resize(1);
+        p.mLifeTime = 1;
+        p.mStregth = -5;
+        auto cam = mTestApp->GetCamera();
+        p.mPos = ScreenSpaceToWorldSpace(CVec2(_event->x(),
+                                               _event->y()),
+                                         cam->m_ZoomMax - cam->GetZoom());
+        mTestApp->GetScene().CreateObject<CExplosion>(p);
+        break;
+    }
+
     case Qt::RightButton:
         QCoreApplication::quit();
         break;
