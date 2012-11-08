@@ -35,6 +35,7 @@ bool EditorWindow::InitScene()
 
     ui->mScene->SetTestApp(mTestApp);
 
+    return true;
 }
 
 void EditorWindow::timerEvent(QTimerEvent *)
