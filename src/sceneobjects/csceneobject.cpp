@@ -318,11 +318,6 @@ void CSceneObject::SetFixedRotation( bool _fixed )
     mBody->SetFixedRotation(_fixed);
 }
 
-void CSceneObject::SetBullet( bool _bullet )
-{
-    mBody->SetBullet(_bullet);
-}
-
 void CSceneObject::SetActive( bool _active )
 {
     mBody->SetActive(_active);
