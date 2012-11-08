@@ -44,7 +44,7 @@ void CPlayersSystem::RemPlayer(int _player)
         return;
     }
 
-    if (_player < 0 && mPlayersCount <= _player)
+    if (_player < 0 && (int)mPlayersCount <= _player)
     {
         LOG_ERR("CPlayersSystem::RemPlayer(): player does not exist");
         return;
