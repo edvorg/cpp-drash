@@ -101,7 +101,6 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
     case Qt::LeftButton:
     {
         CExplosionParams p;
-        p.mFigures.resize(1);
         p.mLifeTime = 1;
         p.mStregth = -5;
         auto cam = mTestApp->GetCamera();
