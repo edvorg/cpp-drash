@@ -24,7 +24,7 @@ bool EditorWindow::InitScene()
 {
     drash::CSceneParams params;
     params.mGravity.Set( 0.0f, -9.8f );
-    mTestApp = drash::StartApp("test3");
+    mTestApp = drash::StartApp("test1");
     if (mTestApp == NULL) {
         return false;
     }
@@ -34,7 +34,7 @@ bool EditorWindow::InitScene()
     }
 
     ui->mScene->SetTestApp(mTestApp);
-
+    return true;
 }
 
 void EditorWindow::timerEvent(QTimerEvent *)
@@ -45,3 +45,13 @@ void EditorWindow::timerEvent(QTimerEvent *)
     ui->mScene->updateGL();
 }
 
+
+void EditorWindow::on_pushButton_clicked()
+{
+    this->ui->mScene->StartBuildObject();
+}
+
+void EditorWindow::on_pushButton_2_clicked()
+{
+    ui->mScene->BuildNow();
+}

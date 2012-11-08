@@ -7,6 +7,15 @@
 #include "test/ctestapp.h"
 #include "cscene.h"
 
+//class CVec2;
+
+//CVec2 PointSDLToWorldPoint( unsigned int _x,
+//                            unsigned int _y,
+//                            float _zoom,
+//                            const CVec2 & _posCamera,
+//                            unsigned  int _height,
+//                            unsigned int _width );
+
 class SceneWidget : public QGLWidget
 {
 public:
@@ -30,7 +39,7 @@ public:
     virtual void keyPressEvent( QKeyEvent *_event );
     virtual void wheelEvent( QWheelEvent *_event );
 
-private:
+protected:
     drash::CTestApp *mTestApp;
     float mWidth;
     float mHeight;

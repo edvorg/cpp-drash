@@ -16,6 +16,11 @@ public:
     explicit EditorWindow(QWidget *parent = 0);
     ~EditorWindow();
     
+private slots:
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
+
 private:
     Ui::EditorWindow *ui;
     bool InitScene();

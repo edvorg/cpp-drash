@@ -22,7 +22,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="mManageWidget">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -35,10 +35,39 @@
         <height>0</height>
        </size>
       </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
-        <string>Tab 1</string>
+        <string>Create Object</string>
        </attribute>
+       <widget class="QPushButton" name="pushButton">
+        <property name="geometry">
+         <rect>
+          <x>70</x>
+          <y>140</y>
+          <width>92</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Start</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_2">
+        <property name="geometry">
+         <rect>
+          <x>70</x>
+          <y>180</y>
+          <width>92</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Build</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -48,7 +77,7 @@
      </widget>
     </item>
     <item>
-     <widget class="SceneWidget" name="mScene" native="true">
+     <widget class="EditorWidget" name="mScene" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -78,9 +107,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>SceneWidget</class>
+   <class>EditorWidget</class>
    <extends>QWidget</extends>
-   <header location="global">scenewidget.h</header>
+   <header location="global">editor/editorwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
