@@ -108,6 +108,7 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
         p.mPos = ScreenSpaceToWorldSpace(CVec2(_event->x(),
                                                _event->y()),
                                          cam->m_ZoomMax - cam->GetZoom());
+        p.mPos += cam->GetPos().Get();
         mTestApp->GetScene().CreateObject<CExplosion>(p);
         break;
     }
