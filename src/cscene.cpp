@@ -340,7 +340,8 @@ unsigned int CScene::EnumSubsystems() const
 
 void CScene::Clear()
 {
-    for (int i = 0 ; i < this->EnumObjects() ; i++) {
+    for (unsigned int i = 0 ; i < this->EnumObjects() ; i++)
+    {
         DestroyObject(this->GetObjects()[i]);
     }
 }
