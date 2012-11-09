@@ -21,28 +21,25 @@ class SceneWidget : public QGLWidget
 public:
     explicit SceneWidget( QWidget *parent = 0 );
 
-//    virtual void initializeGL();
+    drash::CVec2 ScreenSpaceToWorldSpace(const drash::CVec2& _from, float _depth);
+
     virtual void resizeGL( int _w, int _h );
     virtual void paintGL();
-
-//    virtual void initializeOverlayGL();
-//    virtual void resizeOverlayGL(int w, int h);
-//    virtual void paintOverlayGL();
-
-//    virtual void glInit();
-//    virtual void glDraw();
 
     void SetTestApp( drash::CTestApp *_app );
 
     virtual void mousePressEvent( QMouseEvent * _event );
+    virtual void mouseMoveEvent(QMouseEvent *_event);
     virtual void keyReleaseEvent( QKeyEvent *_event );
     virtual void keyPressEvent( QKeyEvent *_event );
     virtual void wheelEvent( QWheelEvent *_event );
 
 protected:
+    constexpr static double mFov = 60.0;
     drash::CTestApp *mTestApp;
     float mWidth;
     float mHeight;
+    drash::CVec2 mCursorPos;
 };
 
 #endif // SCENEWIDGET_H

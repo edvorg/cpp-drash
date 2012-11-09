@@ -127,7 +127,7 @@ void CSceneObject::OnContactEnd( const CContact &_contact )
 {
 }
 
-void CSceneObject::OnBoom( const CBoomParams &_boom )
+void CSceneObject::OnBoom( const CExplosionParams &_boom )
 {
     CVec2 dir( GetBody()->GetWorldCenter() );
     dir -= _boom.mPos;
@@ -316,11 +316,6 @@ void CSceneObject::SetAngularVelocity( float _vel )
 void CSceneObject::SetFixedRotation( bool _fixed )
 {
     mBody->SetFixedRotation(_fixed);
-}
-
-void CSceneObject::SetBullet( bool _bullet )
-{
-    mBody->SetBullet(_bullet);
 }
 
 void CSceneObject::SetActive( bool _active )

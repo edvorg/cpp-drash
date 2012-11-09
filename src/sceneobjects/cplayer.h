@@ -60,7 +60,7 @@ protected:
     virtual void OnContactBegin( const CContact &_contact );
     virtual void OnContactPreSolve( const CContact &_contact );
     virtual void OnContactEnd( const CContact &_contact );
-    virtual void OnBoom( const CBoomParams &_boom );
+    virtual void OnBoom( const CExplosionParams &_boom );
 
     virtual void onEvent( const CPlayerEvent & _event );
 

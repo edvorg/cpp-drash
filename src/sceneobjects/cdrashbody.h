@@ -43,7 +43,7 @@ private:
     float mLastAngularVelocity;
     ParamsT mParams;
     CTimer mTimer;
-    std::vector<CBoomParams> mBoomParams;
+    std::vector<CExplosionParams> mBoomParams;
 };
 
 } // namespace drash

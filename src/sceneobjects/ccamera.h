@@ -34,12 +34,8 @@ protected:
 
     virtual void Step( double _dt );
 
-    virtual void OnBoom( const CBoomParams &_boom );
-
 private:
     CAnimatedParam<float> mZoom;
-    int mShake;
-    CVec2 mLastPos;
 };
 
 }// namespace drash

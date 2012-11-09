@@ -5,28 +5,42 @@
 
 using namespace drash;
 
-// TODO: this function is incorrect
-CVec2 PointSDLToWorldPoint( unsigned int _x,
-                            unsigned int _y,
-                            float _zoom,
-                            const CVec2 & _posCamera,
-                            unsigned  int _height,
-                            unsigned int _width )
-{
-    CVec2 res;
-    res.y = - (float)_y / _zoom + ( (float)_height / _zoom ) / 2.0f;
-    res.x =  ( -(float)_width / _zoom ) / 2.0f + (float)_x / _zoom;
-    res += _posCamera;
-    return res;
-}
-
 SceneWidget::SceneWidget(QWidget *parent) :
     QGLWidget(parent),
     mTestApp(NULL),
     mWidth(1),
     mHeight(1)
 {
+    // TODO: why you use size of parent as size of widget ???
     resize( parent->size() );
+    //resize(size());
+    setMouseTracking(true);
+}
+
+CVec2 SceneWidget::ScreenSpaceToWorldSpace(const CVec2 &_from, float _depth)
+{
+    double aspect = mWidth / mHeight;
+
+    double fov = mFov * M_PI / 180.0;
+
+    double c = _depth / cos(fov / 2.0); // hypotenuse
+
+    double near_height = 2.0 * sqrt( c*c - _depth*_depth );
+    double near_width = near_height * aspect;
+
+    CVec2 res = _from;
+
+    res.x /= mWidth;
+    res.y /= mHeight;
+
+    res.x -= 0.5;
+    res.y -= 0.5;
+    res.y *= -1;
+
+    res.x *= near_width;
+    res.y *= near_height;
+
+    return res;
 }
 
 void SceneWidget::resizeGL( int _w, int _h )
@@ -46,9 +60,25 @@ void SceneWidget::paintGL()
     glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective( 60.0, mWidth / mHeight, 1.0f, 1000.0f );
+    gluPerspective( mFov, mWidth / mHeight, 1.0f, 1000.0f );
+
+    glPointSize(4);
+    glBegin(GL_POINTS);
+    glColor3f(0, 1, 0);
+    glVertex3f(mCursorPos.x, mCursorPos.y, -1);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(0, 1, 0);
+    glVertex3f(mCursorPos.x - 0.05, mCursorPos.y, -1);
+    glVertex3f(mCursorPos.x + 0.05, mCursorPos.y, -1);
+    glVertex3f(mCursorPos.x, mCursorPos.y - 0.05, -1);
+    glVertex3f(mCursorPos.x, mCursorPos.y + 0.05, -1);
+    glEnd();
 
     if ( mTestApp != NULL )
     {
@@ -71,23 +101,18 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
     switch ( _event->button() )
     {
     case Qt::LeftButton:
-        if ( mTestApp != NULL && mTestApp->GetCamera() != NULL )
-        {
-            CVec2 pos;
-            pos = PointSDLToWorldPoint( _event->pos().x(),
-                                        _event->pos().y(),
-                                        mTestApp->GetCamera()->GetZoom(),
-                                        mTestApp->GetCamera()->GetZoom(),
-                                        mHeight,
-                                        mWidth);
-
-            CBoomParams p;
-            p.mLifeTime = 2;
-            p.mPos = pos;
-            p.mStregth = -3;
-            mTestApp->GetScene().CreateObject<CExplosion>(p);
-            break;
-        }
+    {
+        CExplosionParams p;
+        p.mLifeTime = 1;
+        p.mStregth = -5;
+        auto cam = mTestApp->GetCamera();
+        p.mPos = ScreenSpaceToWorldSpace(CVec2(_event->x(),
+                                               _event->y()),
+                                         cam->m_ZoomMax - cam->GetZoom());
+        p.mPos += cam->GetPos().Get();
+        mTestApp->GetScene().CreateObject<CExplosion>(p);
+        break;
+    }
 
     case Qt::RightButton:
         QCoreApplication::quit();
@@ -96,6 +121,14 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
     default:
         break;
     }
+}
+
+void SceneWidget::mouseMoveEvent(QMouseEvent *_event)
+{
+    QGLWidget::mouseMoveEvent(_event);
+    mCursorPos = ScreenSpaceToWorldSpace(CVec2(_event->x(),
+                                               _event->y()),
+                                         1);
 }
 
 void SceneWidget::keyReleaseEvent( QKeyEvent *_event )
@@ -138,7 +171,6 @@ void SceneWidget::keyPressEvent( QKeyEvent *_event )
     case Qt::Key_Space:
         mTestApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionJump, CVec2() ), 0 );
         break;
-
     case Qt::Key_A:
         mTestApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveLeft, CVec2() ), 0 );
         break;

@@ -5,7 +5,7 @@
 namespace drash
 {
 
-CBoomParams::CBoomParams():
+CExplosionParams::CExplosionParams():
     mStregth(1),
     mLifeTime(1)
 {
@@ -47,7 +47,7 @@ void CExplosion::Step(double _dt)
     }
 }
 
-const CBoomParams &CExplosion::GetParams() const
+const CExplosionParams &CExplosion::GetParams() const
 {
     return mParams;
 }

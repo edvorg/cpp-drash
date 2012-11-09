@@ -39,7 +39,7 @@ SOURCES += ../src/main.cpp\
     ../src/subsystem/explosionsystem.cpp \
     ../src/subsystem/playerssystem.cpp \
     ../src/editor/editorwindow.cpp \
-    ../src/editor/editorwidget.cpp
+    ../src/editor/editorobject.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -67,7 +67,7 @@ HEADERS  += ../src/gamewindow.h \
     ../src/subsystem/explosionsystem.h \
     ../src/subsystem/playerssystem.h \
     ../src/editor/editorwindow.h \
-    ../src/editor/editorwidget.h
+    ../src/editor/editorobject.h
 
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui
