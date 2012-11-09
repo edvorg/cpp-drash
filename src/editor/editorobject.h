@@ -35,7 +35,6 @@ private:
     std::vector<drash::CVec2> mVertexs;
 //private slots:
 //    void ClearScene();
-
 };
 
 #endif // EDITORWIDGET_H

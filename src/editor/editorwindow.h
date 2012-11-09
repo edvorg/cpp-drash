@@ -27,6 +27,12 @@ private:
     drash::CTestApp  *mTestApp;
 
     void timerEvent(QTimerEvent *);
+
+    // Actions
+private:
+    QAction *mQuit;
+private:
+    void CreateActions();
 };
 
 #endif // EDITORWINDOW_H

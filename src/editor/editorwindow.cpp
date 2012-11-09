@@ -7,6 +7,7 @@ EditorWindow::EditorWindow(QWidget *parent) :
     ui(new Ui::EditorWindow)
 {
     ui->setupUi(this);
+    CreateActions();
     this->setWindowTitle("DRASH Editor");
     this->InitScene();
 
@@ -43,6 +44,15 @@ void EditorWindow::timerEvent(QTimerEvent *)
         mTestApp->Update();
     }
     ui->mScene->updateGL();
+}
+
+void EditorWindow::CreateActions()
+{
+    mQuit = new QAction("Quit",this);
+    mQuit->setShortcut(tr("Ctrl+Q"));
+    this->addAction(mQuit);
+    connect(mQuit,SIGNAL(triggered()),
+            this,SLOT(close()));
 }
 
 
