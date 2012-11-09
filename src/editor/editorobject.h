@@ -10,8 +10,12 @@
 // TODO: temp Testing build object
 class EditorObject : public SceneWidget
 {
+    Q_OBJECT
+
 public:
     explicit EditorObject(QWidget * _parent = NULL);
+
+    virtual ~EditorObject();
 
     virtual void mousePressEvent( QMouseEvent * _event );
 
@@ -19,14 +23,19 @@ public:
 
     bool BuildNow();
 
+signals:
+    void CreateNewObject();
+
 private:
-    enum ModeWork{Edit, Create};
+    enum WorkMode{Edit, Create};
     bool mStartBuild;
-    ModeWork mMode;
+    WorkMode mMode;
 //    bool mEditObject;
 
     std::vector<drash::CVec2> mVertexs;
-public slots:
+//private slots:
+//    void ClearScene();
+
 };
 
 #endif // EDITORWIDGET_H

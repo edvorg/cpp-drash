@@ -12,9 +12,13 @@ SceneWidget::SceneWidget(QWidget *parent) :
     mHeight(1)
 {
     // TODO: why you use size of parent as size of widget ???
-    resize( parent->size() );
+    //resize( parent->size() );
     //resize(size());
     setMouseTracking(true);
+}
+
+SceneWidget::~SceneWidget()
+{
 }
 
 CVec2 SceneWidget::ScreenSpaceToWorldSpace(const CVec2 &_from, float _depth)
@@ -205,4 +209,9 @@ void SceneWidget::wheelEvent( QWheelEvent *_event )
     float pos = mTestApp->GetCamera()->GetZoomTarget();
     pos += _event->delta() / 10.0f;
     mTestApp->GetCamera()->SetZoomTarget( pos, 0.3 );
+}
+
+void SceneWidget::RemoveObjects()
+{
+    mTestApp->GetScene().Clear();
 }

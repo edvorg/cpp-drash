@@ -7,6 +7,12 @@ EditorObject::EditorObject(QWidget *_parent):
     mStartBuild(false)
 {
     mMode = Edit;
+    connect(this,SIGNAL(CreateNewObject()),
+            this,SLOT(RemoveObjects()));
+}
+
+EditorObject::~EditorObject()
+{
 }
 
 void EditorObject::mousePressEvent(QMouseEvent *_event){
@@ -23,8 +29,10 @@ void EditorObject::mousePressEvent(QMouseEvent *_event){
 }
 
 void EditorObject::StartBuildObject(){
+    mMode = Create;
     mStartBuild = true;
     mVertexs.clear();
+    emit this->CreateNewObject();
 }
 
 bool EditorObject::BuildNow(){

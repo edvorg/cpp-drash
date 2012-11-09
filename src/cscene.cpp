@@ -338,4 +338,11 @@ unsigned int CScene::EnumSubsystems() const
     return mSubsystemsCount;
 }
 
+void CScene::Clear()
+{
+    for (int i = 0 ; i < this->EnumObjects() ; i++) {
+        DestroyObject(this->GetObjects()[i]);
+    }
+}
+
 } // namespace drash

@@ -6,20 +6,17 @@
 #include "sceneobjects.h"
 #include "test/ctestapp.h"
 #include "cscene.h"
-
+#include <QGLWidget>
 //class CVec2;
-
-//CVec2 PointSDLToWorldPoint( unsigned int _x,
-//                            unsigned int _y,
-//                            float _zoom,
-//                            const CVec2 & _posCamera,
-//                            unsigned  int _height,
-//                            unsigned int _width );
 
 class SceneWidget : public QGLWidget
 {
+    Q_OBJECT
+
 public:
-    explicit SceneWidget( QWidget *parent = 0 );
+    SceneWidget( QWidget *parent = 0 );
+    virtual ~SceneWidget();
+
 
     drash::CVec2 ScreenSpaceToWorldSpace(const drash::CVec2& _from, float _depth);
 
@@ -40,6 +37,8 @@ protected:
     float mWidth;
     float mHeight;
     drash::CVec2 mCursorPos;
+public slots:
+    void RemoveObjects();
 };
 
 #endif // SCENEWIDGET_H

@@ -59,6 +59,9 @@ public:
     void DisconnectSubsystem(CSubsystem *_subsystem);
     const CSubsystemPtr *GetSubsystems();
     unsigned int EnumSubsystems() const;
+
+
+    void Clear();
 protected:
 
 private:
