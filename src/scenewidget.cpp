@@ -11,9 +11,6 @@ SceneWidget::SceneWidget(QWidget *parent) :
     mWidth(1),
     mHeight(1)
 {
-    // TODO: why you use size of parent as size of widget ???
-    //resize( parent->size() );
-    //resize(size());
     setMouseTracking(true);
 }
 
