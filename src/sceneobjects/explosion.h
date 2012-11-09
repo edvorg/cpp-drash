@@ -30,6 +30,8 @@ protected:
 
     virtual void Step( double _dt );
 
+    virtual void DrawDebug() const;
+
     const CExplosionParams &GetParams() const;
     float GetTime() const;
 

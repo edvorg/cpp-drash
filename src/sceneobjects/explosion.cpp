@@ -1,6 +1,7 @@
 #include "explosion.h"
 
 #include <cscene.h>
+#include <GL/gl.h>
 
 namespace drash
 {
@@ -45,6 +46,15 @@ void CExplosion::Step(double _dt)
     {
         GetScene()->GetObjects()[i]->OnBoom(mParams);
     }
+}
+
+void CExplosion::DrawDebug() const
+{
+    glPointSize(8);
+    glBegin(GL_POINTS);
+    glColor3f(1, 0, 0);
+    glVertex2f(0, 0);
+    glEnd();
 }
 
 const CExplosionParams &CExplosion::GetParams() const
