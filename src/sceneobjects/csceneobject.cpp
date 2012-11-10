@@ -38,7 +38,7 @@ CSceneObject::~CSceneObject(void)
     Release();
 }
 
-bool CSceneObject::Init( const CSceneObject::ParamsT &_params )
+bool CSceneObject::Init(const GeometryT &_geometry, const CSceneObject::ParamsT &_params )
 {
     if ( mBody == NULL )
     {
@@ -62,7 +62,7 @@ bool CSceneObject::Init( const CSceneObject::ParamsT &_params )
                     b2_dynamicBody :
                     b2_kinematicBody );
 
-    for ( auto i = _params.mFigures.begin(), i_e = _params.mFigures.end(); i != i_e; i++ )
+    for ( auto i = _geometry.mFigures.begin(), i_e = _geometry.mFigures.end(); i != i_e; i++ )
     {
         CreateFigure(*i);
     }

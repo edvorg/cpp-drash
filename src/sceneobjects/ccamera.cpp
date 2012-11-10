@@ -17,9 +17,9 @@ CCamera::CCamera():
     mZoom.Set(1);
 }
 
-bool CCamera::Init( const ParamsT &_params )
+bool CCamera::Init(const GeometryT &_geometry, const ParamsT &_params )
 {
-    if ( !CSceneObject::Init(_params) )
+    if ( !CSceneObject::Init(_geometry, _params) )
     {
         return false;
     }

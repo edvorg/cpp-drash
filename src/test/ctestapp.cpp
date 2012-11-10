@@ -27,8 +27,9 @@ bool CTestApp::Init()
     mExplosionSystem.SetScene(&mScene);
     mPlayersSystem.SetScene(&mScene);
 
+    CSceneObjectGeometry g;
     CCameraParams p;
-    mCamera = mScene.CreateObject< CCamera >(p);
+    mCamera = mScene.CreateObject< CCamera >(g, p);
 
     if ( mCamera == NULL )
     {

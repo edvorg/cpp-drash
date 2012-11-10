@@ -41,9 +41,9 @@ CPlayer::CPlayer():
 {
 }
 
-bool CPlayer::Init( const CPlayer::ParamsT &_params )
+bool CPlayer::Init(const GeometryT &_geometry, const CPlayer::ParamsT &_params )
 {
-    if ( CSceneObject::Init(_params) == false )
+    if ( CSceneObject::Init(_geometry, _params) == false )
 	{
         return false;
     }

@@ -103,6 +103,8 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
     {
     case Qt::LeftButton:
     {
+        CSceneObjectGeometry g;
+
         CExplosionParams p;
         p.mLifeTime = 1;
         p.mStregth = -5;
@@ -111,7 +113,7 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
                                                _event->y()),
                                          cam->m_ZoomMax - cam->GetZoom());
         p.mPos += cam->GetPos().Get();
-        mTestApp->GetScene().CreateObject<CExplosion>(p);
+        mTestApp->GetScene().CreateObject<CExplosion>(g, p);
         break;
     }
 

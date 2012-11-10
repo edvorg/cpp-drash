@@ -13,41 +13,43 @@ bool CTestApp2::Init()
         return false;
     }
 
+    CSceneObjectGeometry g;
+    g.mFigures.resize(1);
+    g.mFigures[0].mVertices.push_back( CVec2( -300.0f, 5.0f ) );
+    g.mFigures[0].mVertices.push_back( CVec2( -300.0f, -5.0f ) );
+    g.mFigures[0].mVertices.push_back( CVec2( 300.0f, -5.0f ) );
+    g.mFigures[0].mVertices.push_back( CVec2( 300.0f, 5.0f ) );
+    g.mFigures[0].mLayers.Set(-500, 500);
     CSceneObjectParams p;
-    p.mFigures.resize(1);
-    p.mFigures[0].mVertices.push_back( CVec2( -300.0f, 5.0f ) );
-    p.mFigures[0].mVertices.push_back( CVec2( -300.0f, -5.0f ) );
-    p.mFigures[0].mVertices.push_back( CVec2( 300.0f, -5.0f ) );
-    p.mFigures[0].mVertices.push_back( CVec2( 300.0f, 5.0f ) );
-    p.mFigures[0].mLayers.Set(-500, 500);
     p.mPos.y = -25;
     p.mDynamic = false;
-    GetScene().CreateObject<CSceneObject>(p);
+    GetScene().CreateObject<CSceneObject>(g, p);
 
+    CSceneObjectGeometry player_geometry;
+    player_geometry.mFigures.resize(1);
+    player_geometry.mFigures[0].mVertices.push_back( CVec2( -2, -5 ) );
+    player_geometry.mFigures[0].mVertices.push_back( CVec2( 2, -5 ) );
+    player_geometry.mFigures[0].mVertices.push_back( CVec2( 2, 5 ) );
+    player_geometry.mFigures[0].mVertices.push_back( CVec2( -2, 5 ) );
+    player_geometry.mFigures[0].mLayers.Set(-100, 100);
     CPlayerParams player;
     player.mPos.Set( 0, -20 );
-    player.mFigures.resize(1);
-    player.mFigures[0].mVertices.push_back( CVec2( -2, -5 ) );
-    player.mFigures[0].mVertices.push_back( CVec2( 2, -5 ) );
-    player.mFigures[0].mVertices.push_back( CVec2( 2, 5 ) );
-    player.mFigures[0].mVertices.push_back( CVec2( -2, 5 ) );
-    player.mFigures[0].mLayers.Set(-100, 100);
-    GetPlayersSystem().AddPlayer(player);
+    GetPlayersSystem().AddPlayer(player_geometry, player);
 
+    CSceneObjectGeometry tg;
+    tg.mFigures.resize(1);
+    tg.mFigures[0].mVertices.push_back( CVec2( -10, -5 ) );
+    tg.mFigures[0].mVertices.push_back( CVec2( 10, -5 ) );
+    tg.mFigures[0].mVertices.push_back( CVec2( 10, 5 ) );
+    tg.mFigures[0].mVertices.push_back( CVec2( -10, 5 ) );
+    tg.mFigures[0].mFriction = 0.5;
+    tg.mFigures[0].mMass = 1;
+    tg.mFigures[0].mLayers.Set(-100, 100);
     CSceneObjectParams targetForFire;
-    targetForFire.mFigures.resize(1);
-    targetForFire.mFigures[0].mVertices.push_back( CVec2( -10, -5 ) );
-    targetForFire.mFigures[0].mVertices.push_back( CVec2( 10, -5 ) );
-    targetForFire.mFigures[0].mVertices.push_back( CVec2( 10, 5 ) );
-    targetForFire.mFigures[0].mVertices.push_back( CVec2( -10, 5 ) );
-    targetForFire.mFigures[0].mFriction = 0.5;
-    targetForFire.mFigures[0].mMass = 1;
-    targetForFire.mFigures[0].mLayers.Set(-100, 100);
-
     targetForFire.mPos.Set( -20, 0 );
     for (int i = 0 ; i < 10 ; i++)
     {
-        GetScene().CreateObject<CSceneObject>(targetForFire);
+        GetScene().CreateObject<CSceneObject>(tg, targetForFire);
         targetForFire.mPos.Set( -20, 20 + i*20 );
     }
 

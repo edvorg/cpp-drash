@@ -33,7 +33,7 @@ public:
     /// T must extend CSceneObject class
     /// Method excepts, that T has ParamsT typedef
     template < typename T >
-    T* CreateObject( const typename T::ParamsT& _params );
+    T* CreateObject( const typename T::GeometryT &_geometry, const typename T::ParamsT& _params );
 
     /// T must extend CSceneObject class
     /// Method excepts, that T has ParamsT typedef
@@ -82,7 +82,7 @@ private:
 };
 
 template < typename T >
-T* CScene::CreateObject( const typename T::ParamsT& _params )
+T* CScene::CreateObject(const typename T::GeometryT &_geometry, const typename T::ParamsT& _params)
 {
     if (mObjectsCount == mObjectsMaxAmount){
         LOG_ERR("CScene::CreateObject() : Achieved maximum Amount of Objects in scene");
@@ -94,7 +94,7 @@ T* CScene::CreateObject( const typename T::ParamsT& _params )
     b2BodyDef bdef;
     res->mBody = mWorld.CreateBody(&bdef);    
 
-    if ( res->mBody == NULL || res->Init(_params) == false )
+    if ( res->mBody == NULL || res->Init(_geometry, _params) == false )
     {
         delete res;
         return NULL;
