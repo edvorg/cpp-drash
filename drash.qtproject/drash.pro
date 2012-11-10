@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = drash
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -std=c++0x -O3
+QMAKE_CXXFLAGS += -std=c++0x
 
 INCLUDEPATH += ../3rd/Box2D/include\
     ../src/
@@ -77,4 +77,10 @@ LIBS += -lBox2D -lGLU -lrt
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG
+    QMAKE_CXXFLAGS += -O0
+}
+
+CONFIG(release, debug|release) {
+    DEFINES += DRASH_RELEASE
+    QMAKE_CXXFLAGS += -O2
 }
