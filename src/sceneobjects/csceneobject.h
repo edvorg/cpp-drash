@@ -93,7 +93,10 @@ public:
     void SetAngleTarget( float _target, double _time, const AnimationBehavior &_behavior );
     const CAnimatedParam<float> &GetAngle() const;
 
-protected:    
+    void DumpGeometry(GeometryT &_geometry) const;
+    void DumpParams(ParamsT &_params) const;
+
+protected:
     CSceneObject(void);
     virtual ~CSceneObject(void);
 
