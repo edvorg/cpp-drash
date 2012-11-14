@@ -100,8 +100,6 @@ protected:
     virtual void DrawDebug() const;
 
 private:
-    void DrawSide( const CVec2 &_v1, const CVec2 &_v2, const CInterval &_interval, const b2Color &_diffuse ) const;
-
     b2Body* mBody;
     CScene* mScene;
     bool mDead;

@@ -2,6 +2,7 @@
 #include "../diag/clogger.h"
 #include "explosion.h"
 #include <GL/gl.h>
+#include "../misc/graphics.h"
 
 namespace drash
 {
@@ -140,47 +141,10 @@ void CSceneObject::OnBoom( const CExplosionParams &_boom )
     ApplyLinearImpulse( dir, mPos.Get() );
 }
 
-static const float g_LayerWidth = 0.01f;
-
-void CSceneObject::DrawSide( const CVec2 &_v1, const CVec2 &_v2, const CInterval &_interval, const b2Color &_diffuse ) const
-{
-    CVec2 dp = mBody->GetWorldPoint( _v1 ) -
-               mBody->GetWorldPoint( _v2 );
-    dp.Normalize();
-    CVec2 localx(1, 0);
-
-    float dot = dp.x * localx.x + dp.y * localx.y;
-    dot += 2.0;
-    dot /= 3.0f;
-
-    glColor3f( _diffuse.r * dot,
-               _diffuse.g * dot,
-               _diffuse.b * dot );
-
-    glVertex3f( _v1.x,
-                _v1.y,
-                _interval.GetMax() * g_LayerWidth + g_LayerWidth / 2.0f );
-    glVertex3f( _v1.x,
-                _v1.y,
-                _interval.GetMin() * g_LayerWidth - g_LayerWidth / 2.0f );
-    glVertex3f( _v2.x,
-                _v2.y,
-                _interval.GetMax() * g_LayerWidth + g_LayerWidth / 2.0f );
-
-    glVertex3f( _v2.x,
-                _v2.y,
-                _interval.GetMax() * g_LayerWidth + g_LayerWidth / 2.0f );
-    glVertex3f( _v1.x,
-                _v1.y,
-                _interval.GetMin() * g_LayerWidth - g_LayerWidth / 2.0f );
-    glVertex3f( _v2.x,
-                _v2.y,
-                _interval.GetMin() * g_LayerWidth - g_LayerWidth / 2.0f );
-}
-
 void CSceneObject::DrawDebug() const
 {
-    glCullFace(GL_NONE);
+    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
     unsigned int j = 0;
     for ( b2Fixture *f = mBody->GetFixtureList(); f != NULL; f = f->GetNext() )
     {
@@ -195,45 +159,7 @@ void CSceneObject::DrawDebug() const
                                             *((CInterval*)f->GetUserData()) :
                                             CInterval(-1, 1);
 
-                glEnable(GL_DEPTH_TEST);
-
-                glBegin(GL_TRIANGLE_FAN);
-                glColor3f( 0.4 * diffuse.r,
-                           0.4 * diffuse.g,
-                           0.4 * diffuse.b );
-                for ( int i = 0; i < s->GetVertexCount(); i++ )
-                {
-                    glVertex3f( s->GetVertex(i).x,
-                                s->GetVertex(i).y,
-                                interval.GetMax() * g_LayerWidth + g_LayerWidth / 2.0f );
-                }
-                glEnd();
-
-                glBegin(GL_TRIANGLE_FAN);
-                glColor3f( 0.4 * diffuse.r,
-                           0.4 * diffuse.g,
-                           0.4 * diffuse.b );
-                for ( int i = 0; i < s->GetVertexCount(); i++ )
-                {
-                    glVertex3f( s->GetVertex(i).x,
-                                s->GetVertex(i).y,
-                                interval.GetMin() * g_LayerWidth - g_LayerWidth / 2.0f );
-                }
-                glEnd();
-
-                glBegin(GL_TRIANGLES);
-                for ( int i = 0; i < s->GetVertexCount()-1; i++ )
-                {
-                    DrawSide( s->GetVertex(i),
-                              s->GetVertex(i+1),
-                              interval,
-                              diffuse );
-                }
-                DrawSide( s->GetVertex( s->GetVertexCount() - 1),
-                          s->GetVertex(0),
-                          interval,
-                          diffuse );
-                glEnd();
+                DrawBody(s->m_vertices, s->m_count, interval, diffuse);
             }
         }
         j++;
