@@ -40,8 +40,7 @@ SOURCES += ../src/main.cpp\
     ../src/subsystem/playerssystem.cpp \
     ../src/editor/editorwindow.cpp \
     ../src/editor/editorobject.cpp \
-    ../src/misc/graphics.cpp
-    ../src/objectslibrary.cpp \
+    ../src/misc/graphics.cpp \
     ../src/subsystem/templatesystem.cpp
 
 HEADERS  += ../src/gamewindow.h \
@@ -71,8 +70,7 @@ HEADERS  += ../src/gamewindow.h \
     ../src/subsystem/playerssystem.h \
     ../src/editor/editorwindow.h \
     ../src/editor/editorobject.h \
-    ../src/objectslibrary.h \
-    ../src/subsystem/templatesystem.h
+    ../src/subsystem/templatesystem.h \
     ../src/misc/graphics.h
 
 FORMS    += ../src/gamewindow.ui \
