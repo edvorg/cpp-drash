@@ -10,7 +10,7 @@ CPlayersSystem::CPlayersSystem():
 {
 }
 
-int CPlayersSystem::AddPlayer(CPlayerParams &_params)
+int CPlayersSystem::AddPlayer(const CSceneObjectGeometry &_geometry, const CPlayerParams &_params)
 {
     if (GetScene() == NULL)
     {
@@ -23,7 +23,7 @@ int CPlayersSystem::AddPlayer(CPlayerParams &_params)
         return -1;
     }
 
-    CPlayer *p = GetScene()->CreateObject<CPlayer>(_params);
+    CPlayer *p = GetScene()->CreateObject<CPlayer>(_geometry, _params);
 
     if (p != NULL)
     {

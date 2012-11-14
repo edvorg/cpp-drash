@@ -31,6 +31,15 @@ public:
     CInterval mLayers;
 };
 
+class CSceneObjectGeometry
+{
+public:
+    std::vector<CFigureParams> mFigures;
+
+protected:
+private:
+};
+
 class CSceneObjectParams
 {
 public:
@@ -40,7 +49,6 @@ public:
     CVec2 mPos;
     float mAngle;
     bool mFixedRotation;
-    std::vector<CFigureParams> mFigures;
 };
 
 class CContact
@@ -57,6 +65,7 @@ public:
     friend class CScene;
     friend class CExplosion;
 
+    typedef CSceneObjectGeometry GeometryT;
     typedef CSceneObjectParams ParamsT;
 
     const b2Body* GetBody(void) const;
@@ -84,11 +93,14 @@ public:
     void SetAngleTarget( float _target, double _time, const AnimationBehavior &_behavior );
     const CAnimatedParam<float> &GetAngle() const;
 
-protected:    
+    void DumpGeometry(GeometryT &_geometry) const;
+    void DumpParams(ParamsT &_params) const;
+
+protected:
     CSceneObject(void);
     virtual ~CSceneObject(void);
 
-    bool Init( const ParamsT &_params );
+    bool Init( const GeometryT &_geometry, const ParamsT &_params );
     virtual void Release(void);
 
     virtual void Step( double _dt );

@@ -26,7 +26,7 @@ public:
 protected:
     CExplosion(void);
 
-    bool Init( const ParamsT &_params );
+    bool Init( const GeometryT &_geometry, const ParamsT &_params );
 
     virtual void Step( double _dt );
 

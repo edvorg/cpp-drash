@@ -23,9 +23,9 @@ CDrashBody::CDrashBody():
 {
 }
 
-bool CDrashBody::Init( const CDrashBody::ParamsT &_params )
+bool CDrashBody::Init(const GeometryT &_geometry, const CDrashBody::ParamsT &_params )
 {
-    if ( CSceneObject::Init(_params) == false )
+    if ( CSceneObject::Init(_geometry, _params) == false )
     {
         return false;
     }
@@ -40,41 +40,41 @@ void CDrashBody::Step( double _dt )
 {
     CSceneObject::Step(_dt);
 
-    mTimer.Tick();
+//    mTimer.Tick();
 
-    if ( mCounter == 1 )
-    {
-        mCounter++;
+//    if ( mCounter == 1 )
+//    {
+//        mCounter++;
 
-        for ( auto i = mParams.mChilds.begin(); i != mParams.mChilds.end(); i++ )
-        {
-            i->mPos = GetBody()->GetWorldPoint(i->mLocalPos);
-            i->mAngle = GetBody()->GetAngle();
+//        for ( auto i = mParams.mChilds.begin(); i != mParams.mChilds.end(); i++ )
+//        {
+//            i->mPos = GetBody()->GetWorldPoint(i->mLocalPos);
+//            i->mAngle = GetBody()->GetAngle();
 
-            CSceneObject* o = NULL;
+//            CSceneObject* o = NULL;
 
-            if ( i->mChilds.size() )
-            {
-                o = GetScene()->CreateObject<CDrashBody>(*i);  
-            }
-            else
-            {
-                o = GetScene()->CreateObject<CSceneObject>(*i);   
-            }              
+//            if ( i->mChilds.size() )
+//            {
+//                o = GetScene()->CreateObject<CDrashBody>(*i);
+//            }
+//            else
+//            {
+//                o = GetScene()->CreateObject<CSceneObject>(*i);
+//            }
 
-            if ( o == NULL )
-            {
-                break;
-            }
+//            if ( o == NULL )
+//            {
+//                break;
+//            }
 
-            o->SetLinearVelocity(mLastVelocity);
-            o->SetAngularVelocity(mLastAngularVelocity);
-        }
+//            o->SetLinearVelocity(mLastVelocity);
+//            o->SetAngularVelocity(mLastAngularVelocity);
+//        }
 
-        mBoomParams.clear();
+//        mBoomParams.clear();
 
-        SetDead();
-    }
+//        SetDead();
+//    }
 }
 
 void CDrashBody::OnContactBegin( const CContact &_contact )

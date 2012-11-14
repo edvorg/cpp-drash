@@ -41,16 +41,17 @@ bool EditorObject::BuildNow(){
         return false;
     }
     mStartBuild = false;
+    CSceneObjectGeometry sbg;
+    sbg.mFigures.resize(1);
+    sbg.mFigures[0].mLayers.Set( -2000, 2000 );
+    sbg.mFigures[0].mRestitution = 0.0;
+    sbg.mFigures[0].mVertices = mVertexs;
     CSceneObjectParams sbp;
     sbp.mDynamic = false;
-    sbp.mFigures.resize(1);
-    sbp.mFigures[0].mLayers.Set( -2000, 2000 );
-    sbp.mFigures[0].mRestitution = 0.0;
     sbp.mAngle = 0;
     sbp.mPos.Set(0,0);
-    sbp.mFigures[0].mVertices = mVertexs;
     mVertexs.clear();
-    mTestApp->GetScene().CreateObject<CSceneObject>(sbp);
+    mTestApp->GetScene().CreateObject<CSceneObject>(sbg, sbp);
 //    for (auto iter = mVertexs.begin() ; iter != mVertexs.end() ; iter++) {
 //    }
 //    sbp.mFigures[0].mVertices.push_back( CVec2( -300, -5 ) );

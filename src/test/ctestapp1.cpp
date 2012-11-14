@@ -17,16 +17,17 @@ bool CTestApp1::Init()
 
     t.Reset(true);
 
+    CSceneObjectGeometry g;
+    g.mFigures.resize(1);
+    g.mFigures[0].mLayers.Set(-500, 500);
+    g.mFigures[0].mVertices.push_back( CVec2( -100.0f, 5.0f ) );
+    g.mFigures[0].mVertices.push_back( CVec2( -100.0f, -5.0f ) );
+    g.mFigures[0].mVertices.push_back( CVec2( 100.0f, -5.0f ) );
+    g.mFigures[0].mVertices.push_back( CVec2( 100.0f, 5.0f ) );
     CSceneObjectParams p;
-    p.mFigures.resize(1);
-    p.mFigures[0].mLayers.Set(-500, 500);
-    p.mFigures[0].mVertices.push_back( CVec2( -100.0f, 5.0f ) );
-    p.mFigures[0].mVertices.push_back( CVec2( -100.0f, -5.0f ) );
-    p.mFigures[0].mVertices.push_back( CVec2( 100.0f, -5.0f ) );
-    p.mFigures[0].mVertices.push_back( CVec2( 100.0f, 5.0f ) );
     p.mPos.y = -25;
     p.mDynamic = false;
-    GetScene().CreateObject<CSceneObject>(p);
+    GetScene().CreateObject<CSceneObject>(g, p);
 
     return true;
 }
@@ -38,12 +39,13 @@ void CTestApp1::Update()
     t.Tick();
     if ( t.GetFullTime() > 1 )
     {
+        CSceneObjectGeometry g;
+        g.mFigures.resize(1);
+        g.mFigures[0].mLayers.Set(-500, 500);
         CDrashBodyParams p;
         p.mPos.RandY(100, 200, 15);
         p.mPos.RandX(-50, 50, 15);
-        p.mFigures.resize(1);
-        p.mFigures[0].mLayers.Set(-500, 500);
-        GetScene().CreateObject<CSceneObject>(p);
+        GetScene().CreateObject<CSceneObject>(g, p);
         t.Reset(true);
     }
 }

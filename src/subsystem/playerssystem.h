@@ -14,7 +14,7 @@ public:
 
     CPlayersSystem();
 
-    int AddPlayer(CPlayerParams &_params);
+    int AddPlayer(const CSceneObjectGeometry &_geometry, const CPlayerParams &_params);
     void RemPlayer(int _player);
     const CPlayerPtr *GetPlayers();
     unsigned int EnumPlayers() const;

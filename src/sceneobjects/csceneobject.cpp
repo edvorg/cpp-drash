@@ -39,7 +39,7 @@ CSceneObject::~CSceneObject(void)
     Release();
 }
 
-bool CSceneObject::Init( const CSceneObject::ParamsT &_params )
+bool CSceneObject::Init(const GeometryT &_geometry, const CSceneObject::ParamsT &_params )
 {
     if ( mBody == NULL )
     {
@@ -63,7 +63,7 @@ bool CSceneObject::Init( const CSceneObject::ParamsT &_params )
                     b2_dynamicBody :
                     b2_kinematicBody );
 
-    for ( auto i = _params.mFigures.begin(), i_e = _params.mFigures.end(); i != i_e; i++ )
+    for ( auto i = _geometry.mFigures.begin(), i_e = _geometry.mFigures.end(); i != i_e; i++ )
     {
         CreateFigure(*i);
     }
@@ -279,6 +279,43 @@ void CSceneObject::SetAngleTarget( float _target, double _time, const AnimationB
 const CAnimatedParam<float> &CSceneObject::GetAngle() const
 {
     return mAngle;
+}
+
+void CSceneObject::DumpGeometry(CSceneObject::GeometryT &_geometry) const
+{
+    _geometry.mFigures.clear();
+
+    for (auto f=mBody->GetFixtureList(); f!=nullptr; f = f->GetNext())
+    {
+        CFigureParams figure;
+        figure.mFriction = f->GetFriction();
+        figure.mRestitution = f->GetRestitution();
+        b2MassData md;
+        f->GetMassData(&md);
+        figure.mMass = md.mass;
+
+        if (f->GetShape() != nullptr && f->GetShape()->GetType() == b2Shape::e_polygon)
+        {
+            b2PolygonShape *s = reinterpret_cast<b2PolygonShape*>(f->GetShape());
+
+            for (int i=0; i<s->GetVertexCount(); i++)
+            {
+                figure.mVertices.push_back(s->GetVertex(i));
+            }
+        }
+
+        figure.mLayers = (f->GetUserData() == nullptr ? CInterval(0,0) : *reinterpret_cast<CInterval*>(f->GetUserData()));
+
+        _geometry.mFigures.push_back(std::move(figure));
+    }
+}
+
+void CSceneObject::DumpParams(CSceneObject::ParamsT &_params) const
+{
+    _params.mDynamic = (mBody->GetType() == b2_dynamicBody);
+    _params.mPos = mBody->GetWorldCenter();
+    _params.mAngle = mBody->GetAngle();
+    _params.mFixedRotation = mBody->IsFixedRotation();
 }
 
 } // namespace drash

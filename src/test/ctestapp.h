@@ -4,8 +4,9 @@
 
 #include "../sceneobjects.h"
 #include "../cscene.h"
-#include <subsystem/explosionsystem.h>
-#include <subsystem/playerssystem.h>
+#include "../subsystem/explosionsystem.h"
+#include "../subsystem/playerssystem.h"
+#include "../subsystem/templatesystem.h"
 
 namespace drash
 {
@@ -27,7 +28,8 @@ public:
     const CScene &GetScene() const;
     CCamera *GetCamera();
 
-    CPlayersSystem& GetPlayersSystem();
+    CPlayersSystem &GetPlayersSystem();
+    CTemplateSystem &GetTemplateSystem();
 
 private:
     CScene mScene;
@@ -35,6 +37,7 @@ private:
     CTimer mTimer;
     CExplosionSystem mExplosionSystem;
     CPlayersSystem mPlayersSystem;
+    CTemplateSystem mTemplateSystem;
 };
 
 } // namespace drash

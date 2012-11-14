@@ -19,9 +19,9 @@ CExplosion::CExplosion():
 {
 }
 
-bool CExplosion::Init( const ParamsT &_params )
+bool CExplosion::Init(const GeometryT &_geometry, const ParamsT &_params )
 {
-    if ( !CSceneObject::Init(_params) )
+    if ( !CSceneObject::Init(_geometry, _params) )
     {
         return false;
     }

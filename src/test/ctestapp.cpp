@@ -26,9 +26,11 @@ bool CTestApp::Init()
 
     mExplosionSystem.SetScene(&mScene);
     mPlayersSystem.SetScene(&mScene);
+    mTemplateSystem.SetScene(&mScene);
 
+    CSceneObjectGeometry g;
     CCameraParams p;
-    mCamera = mScene.CreateObject< CCamera >(p);
+    mCamera = mScene.CreateObject< CCamera >(g, p);
 
     if ( mCamera == NULL )
     {
@@ -109,6 +111,11 @@ CCamera *CTestApp::GetCamera()
 CPlayersSystem &CTestApp::GetPlayersSystem()
 {
     return mPlayersSystem;
+}
+
+CTemplateSystem &CTestApp::GetTemplateSystem()
+{
+    return mTemplateSystem;
 }
 
 } // namespace drash
