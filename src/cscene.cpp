@@ -88,13 +88,10 @@ void CScene::Step( double _dt )
         return;
     }
 
-    for ( unsigned int i = 0 ; i < mObjectsCount ; i++ )
-    {
-        mObjects[i]->Step(_dt);
-    }
-
     for ( unsigned int i = 0; i < mObjectsCount; )
     {
+        mObjects[i]->Step(_dt);
+
         if ( mObjects[i]->IsDead() )
         {
             DestroyObject<CSceneObject>( mObjects[i] );
