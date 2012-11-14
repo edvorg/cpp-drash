@@ -56,7 +56,7 @@ void DrawBody(const b2Vec2 *_vertices,
     glColor3f( 0.4 * _color.r,
                0.4 * _color.g,
                0.4 * _color.b );
-    for ( int i = 0; i < _count; i++ )
+    for ( unsigned int i = 0; i < _count; i++ )
     {
         glVertex3f( _vertices[i].x,
                     _vertices[i].y,
@@ -68,7 +68,7 @@ void DrawBody(const b2Vec2 *_vertices,
     glColor3f( 0.4 * _color.r,
                0.4 * _color.g,
                0.4 * _color.b );
-    for ( int i = 0; i < _count; i++ )
+    for ( unsigned int i = 0; i < _count; i++ )
     {
         glVertex3f( _vertices[i].x,
                     _vertices[i].y,
@@ -77,7 +77,7 @@ void DrawBody(const b2Vec2 *_vertices,
     glEnd();
 
     glBegin(GL_TRIANGLES);
-    for ( int i = 0; i < _count-1; i++ )
+    for ( unsigned int i = 0; i < _count-1; i++ )
     {
         DrawBodySide(_vertices[i],
                      _vertices[i+1],
