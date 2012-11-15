@@ -12,8 +12,12 @@ class CExplosionParams : public CSceneObjectParams
 public:
     CExplosionParams();
 
+    /// if this value is less than zero, bodies will move in direction of explosion
     float mStregth;
     float mLifeTime;
+    /// maximal distance between explosion and object allowed for interation
+    /// if this value is less than zero, we assume that it's infinite (positive)
+    float mRadius;
 };
 
 class CExplosion : public CSceneObject

@@ -108,6 +108,7 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
         CExplosionParams p;
         p.mLifeTime = 1;
         p.mStregth = -5;
+        p.mRadius = 200;
         auto cam = mTestApp->GetCamera();
         p.mPos = ScreenSpaceToWorldSpace(CVec2(_event->x(),
                                                _event->y()),

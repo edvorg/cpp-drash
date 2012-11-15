@@ -8,7 +8,8 @@ namespace drash
 
 CExplosionParams::CExplosionParams():
     mStregth(1),
-    mLifeTime(1)
+    mLifeTime(1),
+    mRadius(-1)
 {
 }
 
@@ -39,13 +40,25 @@ void CExplosion::Step(double _dt)
 
     if (mTime > mParams.mLifeTime)
     {
-//        SetDead();
         GetScene()->DestroyObject(this);
     }
 
     for (unsigned int i=0; i<GetScene()->EnumObjects(); i++)
     {
-        GetScene()->GetObjects()[i]->OnBoom(mParams);
+        if (mParams.mRadius > 0.0f)
+        {
+            CVec2 dist = GetScene()->GetObjects()[i]->GetBody()->GetWorldCenter();
+            dist -= this->GetBody()->GetWorldCenter();
+
+            if (dist.LengthSquared() <= mParams.mRadius * mParams.mRadius)
+            {
+                GetScene()->GetObjects()[i]->OnBoom(mParams);
+            }
+        }
+        else
+        {
+            GetScene()->GetObjects()[i]->OnBoom(mParams);
+        }
     }
 }
 
