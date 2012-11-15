@@ -3,6 +3,7 @@
 #define CSCENE_H
 
 #include "sceneobjects.h"
+#include "physobserver.h"
 #include "diag/assert.h"
 
 namespace drash
@@ -16,13 +17,27 @@ public:
 
 class CSubsystem;
 
-class CScene : public b2ContactListener, public b2ContactFilter
+class CScene
 {
-public:
+public:    
+    // **************************************************
+    // * static scene configuration *********************
+
+    static const int mVelocityIterations = 5;
+    static const int mPositionIterations = 2;
+    static const unsigned int mObjectsCountLimit = 10000;
+    static const unsigned int mSubsystemsCountLimit = 5;
+
+    // **************************************************
+    // * supporting types *******************************
+
     typedef CSceneObject *CSceneObjectPtr;
-    typedef const CSceneObject *CSceneObjectConstPtr;
+    typedef CSceneObjectPtr ObjectsT[mObjectsCountLimit];
     typedef CSubsystem *CSubsystemPtr;
-    typedef const CSubsystem *CSubsystemConstPtr;
+    typedef CSubsystemPtr SystemsT[mSubsystemsCountLimit];
+
+    // **************************************************
+    // * main routines **********************************
 
     CScene(void);
     virtual ~CScene(void);
@@ -30,68 +45,72 @@ public:
     bool Init( const CSceneParams& _params );
     void Release(void);
 
-    /// T must extend CSceneObject class
-    /// Method excepts, that T has ParamsT typedef
-    template < typename T >
-    T* CreateObject( const typename T::GeometryT &_geometry, const typename T::ParamsT& _params );
+    /// must be called once in update cycle
+    /// dt - seconds
+    void Step( double _dt );
+
+    // **************************************************
+    // * working with objects ***************************
 
     /// T must extend CSceneObject class
-    /// Method excepts, that T has ParamsT typedef
+    /// Method excepts, that T has ParamsT and GeometryT typedefs
+    template < typename T >
+    T* CreateObject( const typename T::GeometryT &_geometry, const typename T::ParamsT& _params );
+    /// T must extend CSceneObject class
+
     template < typename T >
     void DestroyObject( T* _obj );
 
-    const CSceneObjectPtr* GetObjects();
-    unsigned int EnumObjects() const;
+    const ObjectsT &GetObjects(void) const;
 
-    /// must be called once in update cycle
-    /// dt - nanoseconds
-    void Step( double _dt );    
+    /// returns total objects count
+    unsigned int EnumObjects(void) const;
 
-    virtual bool ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB);
+    /// destroyes all objects
+    void DestroyObjects(void);
 
-    virtual void BeginContact( b2Contact * _contact );
-    virtual void PreSolve( b2Contact* _contact, const b2Manifold* _oldManifold );
-    virtual void EndContact( b2Contact * _contact );
+    // **************************************************
+    // TODO: detach this functionality ******************
 
     void Draw( const CCamera &_camera );
 
+    // **************************************************
+    // * working with subsystems ************************
+
+    /// as we made a connection, _subsystem gets a pointer to our CScene instance
+    /// and starts interaction with it
     void ConnectSubsystem(CSubsystem *_subsystem);
+
+    /// as we made disconnect _subsystem, we lose pointer to this CScene instance
     void DisconnectSubsystem(CSubsystem *_subsystem);
-    const CSubsystemPtr *GetSubsystems();
-    unsigned int EnumSubsystems() const;
 
-    void Clear();
+    const SystemsT &GetSubsystems(void) const;
 
-    bool IsLocked() const;
+    /// returns total connected subsystems count
+    unsigned int EnumSubsystems(void) const;
 
 protected:
-
 private:
     template < typename T >
     void DestroyObjectImpl( T* _obj );
 
-    b2World mWorld;
     bool mInitialized;
-    unsigned int mCountPlayers;
+    bool mLocked;
+
+    b2World mWorld;
+    CPhysObserver mObserver;
+
+    ObjectsT mObjects;
     unsigned int mObjectsCount;
 
-    static const int mVelocityIterations = 5;
-    static const int mPositionIterations = 2;
-    static const unsigned int mObjectsMaxAmount = 5000;
-    static const unsigned int mMaxSubsystemsCount = 3;
-
-    CSceneObject* mObjects[mObjectsMaxAmount];
-
-    CSubsystem *mSubsystems[mMaxSubsystemsCount];
+    SystemsT mSubsystems;
     unsigned int mSubsystemsCount;
-
-    bool mLocked;
 };
 
 template < typename T >
 T* CScene::CreateObject(const typename T::GeometryT &_geometry, const typename T::ParamsT& _params)
 {
-    if (mObjectsCount == mObjectsMaxAmount)
+    if (mObjectsCount == mObjectsCountLimit)
 	{
         LOG_ERR("CScene::CreateObject(): Achieved maximum Amount of Objects in scene");
         return NULL;
@@ -126,10 +145,12 @@ T* CScene::CreateObject(const typename T::GeometryT &_geometry, const typename T
 template < typename T >
 void CScene::DestroyObject( T* _obj )
 {
+    DRASH_ASSERT(_obj != nullptr &&
+                 "CScene::DestroyObject(): wrong pointer");
     DRASH_ASSERT( mObjects[_obj->mInternalId] == _obj &&
-                  "something wrong with objects creation logic" );
+                  "CScene::DestroyObject(): something wrong with objects creation logic" );
 
-    if (this->IsLocked() == false)
+    if (mLocked == false && mWorld.IsLocked() == false)
     {
         DestroyObjectImpl(_obj);
     }

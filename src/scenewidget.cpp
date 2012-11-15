@@ -213,5 +213,5 @@ void SceneWidget::wheelEvent( QWheelEvent *_event )
 
 void SceneWidget::RemoveObjects()
 {
-    mTestApp->GetScene().Clear();
+    mTestApp->GetScene().DestroyObjects();
 }

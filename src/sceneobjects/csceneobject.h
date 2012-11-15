@@ -62,6 +62,7 @@ public:
 class CSceneObject
 {
 public:
+    friend class CPhysObserver;
     friend class CScene;
     friend class CExplosion;
 
