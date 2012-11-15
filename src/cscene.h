@@ -91,8 +91,15 @@ private:
 template < typename T >
 T* CScene::CreateObject(const typename T::GeometryT &_geometry, const typename T::ParamsT& _params)
 {
-    if (mObjectsCount == mObjectsMaxAmount){
-        LOG_ERR("CScene::CreateObject() : Achieved maximum Amount of Objects in scene");
+    if (mObjectsCount == mObjectsMaxAmount)
+	{
+        LOG_ERR("CScene::CreateObject(): Achieved maximum Amount of Objects in scene");
+        return NULL;
+    }
+
+    if (mWorld.IsLocked())
+    {
+        LOG_ERR("CScene::CreateObject(): world is locked now");
         return NULL;
     }
 
