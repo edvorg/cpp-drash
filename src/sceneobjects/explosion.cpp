@@ -64,11 +64,34 @@ void CExplosion::Step(double _dt)
 
 void CExplosion::DrawDebug() const
 {
-    glPointSize(8);
-    glBegin(GL_POINTS);
-    glColor3f(1, 0, 0);
-    glVertex2f(0, 0);
+    float scale = (mParams.mLifeTime - mTime) / mParams.mLifeTime;
+
+    glMatrixMode(GL_MODELVIEW);
+    glScalef(scale, scale, scale);
+
+    glDisable(GL_DEPTH_TEST);
+    glBegin(GL_TRIANGLE_STRIP);
+    static const unsigned int segments = 16;
+    static const double delta = 2.0 * M_PI / segments;
+    for (unsigned int i=0; i<segments+1; i++)
+    {
+        glColor3f(0, 1, 0);
+        glVertex2f(0, 0);
+        glColor3f(0, 1, 0);
+        glVertex2f(mParams.mRadius * cos(i*delta), mParams.mRadius * sin(i*delta));
+    }
     glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1, 0, 0);
+    glVertex2f(-mParams.mRadius, 0);
+    glColor3f(1, 0, 0);
+    glVertex2f(mParams.mRadius, 0);
+    glColor3f(1, 0, 0);
+    glVertex2f(0, -mParams.mRadius);
+    glColor3f(1, 0, 0);
+    glVertex2f(0, mParams.mRadius);
+    glEnd();
+    glEnable(GL_DEPTH_TEST);
 }
 
 const CExplosionParams &CExplosion::GetParams() const
