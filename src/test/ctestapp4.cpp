@@ -29,10 +29,10 @@ bool CTestApp4::Init()
     if (t != nullptr)
     {
         t->mGeometry.mFigures.resize(1);
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-2, 1));
         t->mGeometry.mFigures[0].mVertices.push_back(CVec2(2, 1));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(1, -1));
+        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-2, 1));
         t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-1, -1));
+        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(1, -1));
     }
 
     mTimer.Reset(true);
