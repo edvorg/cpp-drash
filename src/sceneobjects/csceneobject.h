@@ -73,9 +73,6 @@ public:
     CScene *GetScene();
     const CScene *GetScene() const;
 
-    void SetDead();
-    bool IsDead() const;
-
     void SetDynamic( bool _dynamic );
 
     void CreateFigure( const CFigureParams &_params );

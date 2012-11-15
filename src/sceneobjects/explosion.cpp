@@ -39,7 +39,8 @@ void CExplosion::Step(double _dt)
 
     if (mTime > mParams.mLifeTime)
     {
-        SetDead();
+//        SetDead();
+        GetScene()->DestroyObject(this);
     }
 
     for (unsigned int i=0; i<GetScene()->EnumObjects(); i++)

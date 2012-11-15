@@ -12,7 +12,8 @@ CScene::CScene(void):
     mInitialized(false),
     mCountPlayers(0),
     mObjectsCount(0),
-    mSubsystemsCount(0)
+    mSubsystemsCount(0),
+    mLocked(false)
 {
 }
 
@@ -88,19 +89,22 @@ void CScene::Step( double _dt )
         return;
     }
 
+    mLocked = true;
+
     for ( unsigned int i = 0; i < mObjectsCount; )
     {
-        mObjects[i]->Step(_dt);
-
-        if ( mObjects[i]->IsDead() )
+        if ( mObjects[i]->mDead )
         {
-            DestroyObject<CSceneObject>( mObjects[i] );
+            DestroyObjectImpl<CSceneObject>( mObjects[i] );
         }
         else
         {
+            mObjects[i]->Step(_dt);
             i++;
         }
     }
+
+    mLocked = false;
 
     mWorld.Step( _dt, mVelocityIterations, mPositionIterations );
 }
@@ -341,6 +345,11 @@ void CScene::Clear()
     {
         DestroyObject(this->GetObjects()[i]);
     }
+}
+
+bool CScene::IsLocked() const
+{
+    return mWorld.IsLocked() || mLocked;
 }
 
 } // namespace drash

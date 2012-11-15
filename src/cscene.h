@@ -60,11 +60,16 @@ public:
     const CSubsystemPtr *GetSubsystems();
     unsigned int EnumSubsystems() const;
 
-
     void Clear();
+
+    bool IsLocked() const;
+
 protected:
 
 private:
+    template < typename T >
+    void DestroyObjectImpl( T* _obj );
+
     b2World mWorld;
     bool mInitialized;
     unsigned int mCountPlayers;
@@ -79,6 +84,8 @@ private:
 
     CSubsystem *mSubsystems[mMaxSubsystemsCount];
     unsigned int mSubsystemsCount;
+
+    bool mLocked;
 };
 
 template < typename T >
@@ -111,6 +118,19 @@ T* CScene::CreateObject(const typename T::GeometryT &_geometry, const typename T
 
 template < typename T >
 void CScene::DestroyObject( T* _obj )
+{
+    if (this->IsLocked() == false)
+    {
+        DestroyObjectImpl(_obj);
+    }
+    else
+    {
+        _obj->mDead = true;
+    }
+}
+
+template < typename T >
+void CScene::DestroyObjectImpl( T* _obj )
 {
     DRASH_ASSERT( mObjects[_obj->mInternalId] == _obj &&
                   "something wrong with objects creation logic" );

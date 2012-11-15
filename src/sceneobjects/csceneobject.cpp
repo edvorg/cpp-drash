@@ -181,16 +181,6 @@ const CScene *CSceneObject::GetScene() const
     return mScene;
 }
 
-void CSceneObject::SetDead()
-{
-    mDead = true;
-}
-
-bool CSceneObject::IsDead() const
-{
-    return mDead;
-}
-
 void CSceneObject::SetDynamic( bool _dynamic )
 {
     mBody->SetType( _dynamic ? b2_dynamicBody : b2_kinematicBody );
