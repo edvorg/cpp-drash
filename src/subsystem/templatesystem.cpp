@@ -7,7 +7,7 @@ CTemplateSystem::CTemplateSystem()
 {
 }
 
-CSceneObjectTemplate *CTemplateSystem::CreateSceneObjectTemplate(const std::string _name)
+CSceneObjectTemplate *CTemplateSystem::CreateSceneObjectTemplate(const std::string &_name)
 {
     if (_name == "")
     {

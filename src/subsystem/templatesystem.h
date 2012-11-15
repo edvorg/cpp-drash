@@ -24,7 +24,9 @@ public:
 
     CTemplateSystem();
 
-    CSceneObjectTemplate* CreateSceneObjectTemplate(const std::string _name);
+    /// template is just named collection of CSceneObject parameters
+    /// we can use it to create many instances of one object at any time we wan
+    CSceneObjectTemplate* CreateSceneObjectTemplate(const std::string &_name);
     CSceneObject *CreateSceneObjectFromTemplate(const std::string &_name, const CSceneObjectParams &_params);
 protected:
 private:
