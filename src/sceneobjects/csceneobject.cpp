@@ -159,7 +159,7 @@ void CSceneObject::DrawDebug() const
                                             *((CInterval*)f->GetUserData()) :
                                             CInterval(-1, 1);
 
-                DrawBody(s->m_vertices, s->m_count, interval, diffuse);
+                DrawBody(s->m_vertices, s->GetVertexCount(), interval, diffuse);
             }
         }
         j++;
@@ -216,7 +216,7 @@ void CSceneObject::CreateFigure( const CFigureParams &_params )
 
 void CSceneObject::ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos )
 {
-    mBody->ApplyLinearImpulse( _dir, _pos, true );
+    mBody->ApplyLinearImpulse( _dir, _pos );
 }
 
 void CSceneObject::SetLinearVelocity( const CVec2 &_vel )
