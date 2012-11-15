@@ -10,16 +10,18 @@ class CTimer
 public:
     CTimer();
 
+    /// if _start is true - automaticly starts timer
     void Reset( bool _start );
+    /// updates full time and delta time
     void Tick();
 
     void SetPaused( bool _paused );
     bool IsPaused() const;
 
-    /// time from mStartTime (in seconds)
+    /// time (seconds) from mStartTime
     double GetFullTime() const;
 
-    /// time from last tick (in seconds)
+    /// time (seconds) spent between last two Tick() invokations
     double GetDeltaTime() const;
 
 private:

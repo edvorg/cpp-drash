@@ -1,9 +1,7 @@
 #include "ctimer.h"
-#include <stdlib.h>
+
 #include <sys/time.h>
-#include <time.h>
-#include "clogger.h"
-#include <cassert>
+#include "assert.h"
 
 namespace drash
 {
@@ -64,7 +62,8 @@ void CTimer::Update()
     clock_gettime( CLOCK_REALTIME, &ts );
     mCurrTime = ( ts.tv_sec * 1000000000 + ts.tv_nsec );
 
-    assert( mCurrTime >= mPrevTime );
+    DRASH_ASSERT( mCurrTime >= mPrevTime &&
+                  "CTimer::Update(): something wrong with time query library" );
 }
 
 } // namespace drash
