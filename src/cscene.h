@@ -126,6 +126,9 @@ T* CScene::CreateObject(const typename T::GeometryT &_geometry, const typename T
 template < typename T >
 void CScene::DestroyObject( T* _obj )
 {
+    DRASH_ASSERT( mObjects[_obj->mInternalId] == _obj &&
+                  "something wrong with objects creation logic" );
+
     if (this->IsLocked() == false)
     {
         DestroyObjectImpl(_obj);
@@ -139,9 +142,6 @@ void CScene::DestroyObject( T* _obj )
 template < typename T >
 void CScene::DestroyObjectImpl( T* _obj )
 {
-    DRASH_ASSERT( mObjects[_obj->mInternalId] == _obj &&
-                  "something wrong with objects creation logic" );
-
     b2Body* body = _obj->mBody;
     _obj->mBody->SetActive(false);
     _obj->mBody->SetUserData(NULL);
