@@ -30,8 +30,6 @@ public:
 
     typedef const b2Vec2 *b2Vec2ConstPtr;
 
-    bool Init(const CFigureParams &_params);
-
     bool GetVertices(b2Vec2ConstPtr *_arr_ptr) const;
     unsigned int EnumVertices() const;
 
@@ -40,9 +38,12 @@ public:
 
 protected:
 private:
+    CFigure();
+
     b2Fixture *mFixture = nullptr;
     CInterval mZ = CInterval(0,0);
     float mMass = 1;
+    unsigned int mInternalId = 0;
 };
 
 }// namespace drash

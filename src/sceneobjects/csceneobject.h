@@ -48,8 +48,12 @@ public:
     friend class CScene;
     friend class CExplosion;
 
+    static const unsigned int mFiguresCountLimit = 16;
+
     typedef CSceneObjectGeometry GeometryT;
     typedef CSceneObjectParams ParamsT;
+    typedef CFigure *CFigurePtr;
+    typedef CFigurePtr FiguresT[mFiguresCountLimit];
 
     const b2Body* GetBody(void) const;
 
@@ -58,7 +62,10 @@ public:
 
     void SetDynamic( bool _dynamic );
 
-    void CreateFigure( const CFigureParams &_params );
+    CFigurePtr CreateFigure( const CFigureParams &_params );
+    void DestroyFigure(CFigure *_figure);
+    const FiguresT &GetFigures();
+    unsigned int EnumFigures() const;
 
     void ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos );
     void SetLinearVelocity( const CVec2 &_vel );
@@ -95,11 +102,12 @@ private:
     b2Body* mBody;
     CScene* mScene;
     bool mDead;
-    std::vector<CInterval> mLayers;
     int mInternalId;
     CAnimatedParam<CVec2> mPos;
     CAnimatedParam<float> mAngle;
     float mColor[3];
+    FiguresT mFigures;
+    unsigned int mFiguresCount = 0;
 };
 
 } // namespace drash

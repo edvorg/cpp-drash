@@ -69,7 +69,7 @@ void CSceneObject::Release()
 {
     while ( b2Fixture *f = mBody->GetFixtureList() )
     {
-        delete reinterpret_cast<CInterval*>( f->GetUserData() );
+        delete reinterpret_cast<CFigure*>( f->GetUserData() );
         f->SetUserData(NULL);
         mBody->DestroyFixture(f);
     }
@@ -150,8 +150,8 @@ void CSceneObject::DrawDebug() const
             {
                 b2Color diffuse( mColor[0], mColor[1], mColor[2] );
                 const CInterval interval = f->GetUserData() ?
-                                            *((CInterval*)f->GetUserData()) :
-                                            CInterval(-1, 1);
+                                           ((CFigure*)f->GetUserData())->GetZ() :
+                                           CInterval(-1, 1);
 
                 DrawBody(s->m_vertices, s->GetVertexCount(), interval, diffuse);
             }
@@ -180,8 +180,14 @@ void CSceneObject::SetDynamic( bool _dynamic )
     mBody->SetType( _dynamic ? b2_dynamicBody : b2_kinematicBody );
 }
 
-void CSceneObject::CreateFigure( const CFigureParams &_params )
+CSceneObject::CFigurePtr CSceneObject::CreateFigure( const CFigureParams &_params )
 {
+    if (mFiguresCount >= mFiguresCountLimit)
+    {
+        LOG_ERR("CSceneObject::CreateFigure(): figures count exceedes it's limit ("<<mFiguresCountLimit<<")");
+        return nullptr;
+    }
+
     b2PolygonShape s;
 
     if ( _params.mVertices.size() == 0 )
@@ -205,7 +211,62 @@ void CSceneObject::CreateFigure( const CFigureParams &_params )
     fdef.userData = NULL;
 
     b2Fixture *f = mBody->CreateFixture(&fdef);
-    f->SetUserData( new CInterval( _params.mLayers ) );
+
+    CFigure *figure = new CFigure;
+
+    figure->mFixture = f;
+    figure->mMass = _params.mMass;
+    figure->mZ = _params.mLayers;
+    figure->mInternalId = mFiguresCount;
+
+    f->SetUserData(figure);
+
+    mFigures[mFiguresCount++] = figure;
+
+    return figure;
+}
+
+void CSceneObject::DestroyFigure(CFigure *_figure)
+{
+    if (_figure->mInternalId >= mFiguresCountLimit ||
+        mFigures[_figure->mInternalId] != _figure)
+    {
+        LOG_ERR("CSceneObject::DestroyFigure(): something wrong with figures creation logic");
+        return;
+    }
+
+    if (_figure->mFixture != nullptr)
+    {
+        mBody->DestroyFixture(_figure->mFixture);
+        _figure->mFixture = nullptr;
+    }
+    else
+    {
+        LOG_WARN("CSceneObject::DestroyFigure(): empty figure destoyed");
+    }
+
+    if (_figure->mInternalId < --mFiguresCount)
+    {
+        mFigures[_figure->mInternalId] = mFigures[mFiguresCount];
+        mFigures[_figure->mInternalId]->mInternalId = _figure->mInternalId;
+        mFigures[mFiguresCount] = nullptr;
+    }
+    else
+    {
+        mFigures[_figure->mInternalId] = nullptr;
+    }
+
+    delete _figure;
+}
+
+const CSceneObject::FiguresT &CSceneObject::GetFigures()
+{
+    return mFigures;
+}
+
+unsigned int CSceneObject::EnumFigures() const
+{
+    return mFiguresCount;
 }
 
 void CSceneObject::ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos )
@@ -288,7 +349,7 @@ void CSceneObject::DumpGeometry(CSceneObject::GeometryT &_geometry) const
             }
         }
 
-        figure.mLayers = (f->GetUserData() == nullptr ? CInterval(0,0) : *reinterpret_cast<CInterval*>(f->GetUserData()));
+        figure.mLayers = (f->GetUserData() == nullptr ? CInterval(0,0) : reinterpret_cast<CFigure*>(f->GetUserData())->GetZ());
 
         _geometry.mFigures.push_back(std::move(figure));
     }

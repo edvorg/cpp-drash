@@ -99,27 +99,6 @@ void CPlayer::MoveLeft()
 
 void CPlayer::FireNow( const CVec2 &_fireDirect )
 {
-//    CGrenadeParams bulletParams;
-
-//    bulletParams.mTarget = _fireDirect;
-//    CVec2 posBody = GetBody()->GetWorldPoint( CVec2( 0, 0 ) );
-
-//    if ( _fireDirect.x > posBody.x )
-//	{
-//        bulletParams.mPos = GetBody()->GetWorldPoint(mPointShoot);
-//    }
-//	else
-//	{
-//        bulletParams.mPos = GetBody()->GetWorldPoint( CVec2( -mPointShoot.x,
-//															 mPointShoot.y ) );
-//    }
-
-//    bulletParams.mTime = 2;
-//    bulletParams.mFigures.resize(1);
-//    float tmp = ( reinterpret_cast<CInterval*>( GetBody()->GetFixtureList()->GetUserData() )->GetMin() +
-//                  reinterpret_cast<CInterval*>( GetBody()->GetFixtureList()->GetUserData() )->GetMax() ) / 2;
-//    bulletParams.mFigures[0].mLayers.Set( tmp, tmp + 1 );
-//    GetScene()->CreateObject<CGrenade>(bulletParams);
 }
 
 void CPlayer::onEvent( const CPlayerEvent &_event )
@@ -149,8 +128,11 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
         case CPlayerEvent::PlayerActionMoveDeep:
             for ( auto f = GetBody()->GetFixtureList(); f != NULL; f = f->GetNext() )
             {
-                auto i = reinterpret_cast<CInterval*>( f->GetUserData() );
-                i->Set( i->GetMin() - 100, i->GetMax() - 100 );
+                if (f->GetUserData() != nullptr)
+                {
+                    CInterval &i = reinterpret_cast<CFigure*>(f->GetUserData())->GetZ();
+                    i.Set( i.GetMin() - 100, i.GetMax() - 100 );
+                }
             }
             SetActive(false);
             SetActive(true);
@@ -160,8 +142,11 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
         case CPlayerEvent::PlayerActionMoveOut:
             for ( auto f = GetBody()->GetFixtureList(); f != NULL; f = f->GetNext() )
             {
-                auto i = reinterpret_cast<CInterval*>( f->GetUserData() );
-                i->Set( i->GetMin() + 100, i->GetMax() + 100 );
+                if (f->GetUserData() != nullptr)
+                {
+                    CInterval &i = reinterpret_cast<CFigure*>(f->GetUserData())->GetZ();
+                    i.Set( i.GetMin() + 100, i.GetMax() + 100 );
+                }
             }            
             SetActive(false);
             SetActive(true);

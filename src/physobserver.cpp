@@ -11,15 +11,14 @@ CPhysObserver::CPhysObserver()
 
 bool CPhysObserver::ShouldCollide( b2Fixture *fixtureA, b2Fixture *fixtureB )
 {
-    CInterval *i1 = reinterpret_cast<CInterval*>( fixtureA->GetUserData() );
-    CInterval *i2 = reinterpret_cast<CInterval*>( fixtureB->GetUserData() );
-
-    if ( i1 && i2 )
+    if (fixtureA->GetUserData() == nullptr || fixtureB->GetUserData() == nullptr)
     {
-        return i1->IsIntersects(*i2);
+        return false;
     }
 
-    return false;
+    const CInterval &i1 = reinterpret_cast<CFigure*>( fixtureA->GetUserData() )->GetZ();
+    const CInterval &i2 = reinterpret_cast<CFigure*>( fixtureB->GetUserData() )->GetZ();
+    return i1.IsIntersects(i2);
 }
 
 void CPhysObserver::BeginContact( b2Contact * _contact )

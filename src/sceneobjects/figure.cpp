@@ -11,12 +11,6 @@ CFigureParams::CFigureParams():
 {
 }
 
-bool CFigure::Init(const CFigureParams &_params)
-{
-    mZ = _params.mLayers;
-    mMass = _params.mMass;
-}
-
 bool CFigure::GetVertices(CFigure::b2Vec2ConstPtr *_arr_ptr) const
 {
     if (mFixture == nullptr ||
@@ -52,6 +46,10 @@ CInterval &CFigure::GetZ()
 const CInterval &CFigure::GetZ() const
 {
     return mZ;
+}
+
+CFigure::CFigure()
+{
 }
 
 }// namespace drash
