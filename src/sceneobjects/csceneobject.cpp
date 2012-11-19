@@ -1,8 +1,10 @@
 #include "csceneobject.h"
+
 #include "../diag/clogger.h"
+#include "../diag/assert.h"
 #include "explosion.h"
-#include <GL/gl.h>
 #include "../misc/graphics.h"
+#include <GL/gl.h>
 
 namespace drash
 {
@@ -12,14 +14,6 @@ CSceneObjectParams::CSceneObjectParams():
     mPos(0),
     mAngle(0),
     mFixedRotation(false)
-{
-}
-
-CFigureParams::CFigureParams():
-    mFriction(1),
-    mRestitution(0),
-    mMass(1),
-    mVertices()
 {
 }
 

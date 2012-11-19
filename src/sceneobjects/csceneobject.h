@@ -3,33 +3,15 @@
 #define CSCENEOBJECT_H
 
 #include <Box2D/Box2D.h>
-#include "../misc/cvec2.h"
+#include "figure.h"
 #include "../misc/canimatedparam.h"
-#include "../misc/math.h"
-#include <vector>
 
 namespace drash
 {
 
-class CExplosionParams;
-
 class CScene;
 class CSceneObject;
-
-class CFigureParams
-{
-public:
-    CFigureParams();
-
-    float mFriction;
-    float mRestitution;
-    float mMass;
-
-    /// if size of mVertices is NULL, creates a box with (1, 1) dimentions
-    std::vector<CVec2> mVertices;
-
-    CInterval mLayers;
-};
+class CExplosionParams;
 
 class CSceneObjectGeometry
 {
