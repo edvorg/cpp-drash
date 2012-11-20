@@ -38,7 +38,7 @@ bool CTestApp4::Init()
     if (t != nullptr)
     {
         t->mGeometry.mFigures.resize(1);
-        t->mGeometry.mFigures[0].mLayers.Set(-1000, 1000);
+        t->mGeometry.mFigures[0].mDepth = 10;
         t->mGeometry.mFigures[0].mVertices.push_back(CVec2(50, 5));
         t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-50, 5));
         t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-50, -5));
@@ -71,25 +71,25 @@ void CTestApp4::Update()
         auto o = GetTemplateSystem().CreateSceneObjectFromTemplate(rand()%2 == 0 ? "name1" : "name2", params);
 
         CFigureParams f1;
-        f1.mLayers.Set(-100,100);
+        f1.mDepth = 1;
         f1.mVertices.push_back(CVec2(0,0));
         f1.mVertices.push_back(CVec2(2,0));
         f1.mVertices.push_back(CVec2(2,2));
         f1.mVertices.push_back(CVec2(0,2));
         CFigureParams f2;
-        f2.mLayers.Set(-100,100);
+        f2.mDepth = 1;
         f2.mVertices.push_back(CVec2(-2,0));
         f2.mVertices.push_back(CVec2(0,0));
         f2.mVertices.push_back(CVec2(0,2));
         f2.mVertices.push_back(CVec2(-2,2));
         CFigureParams f3;
-        f3.mLayers.Set(-100,100);
+        f3.mDepth = 1;
         f3.mVertices.push_back(CVec2(0,-2));
         f3.mVertices.push_back(CVec2(2,-2));
         f3.mVertices.push_back(CVec2(2,0));
         f3.mVertices.push_back(CVec2(0,0));
         CFigureParams f4;
-        f4.mLayers.Set(-100,100);
+        f4.mDepth = 1;
         f4.mVertices.push_back(CVec2(-2,-2));
         f4.mVertices.push_back(CVec2(0,-2));
         f4.mVertices.push_back(CVec2(0,0));

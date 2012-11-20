@@ -16,9 +16,9 @@ bool CPhysObserver::ShouldCollide( b2Fixture *fixtureA, b2Fixture *fixtureB )
         return false;
     }
 
-    const CInterval &i1 = reinterpret_cast<CFigure*>( fixtureA->GetUserData() )->GetZ();
-    const CInterval &i2 = reinterpret_cast<CFigure*>( fixtureB->GetUserData() )->GetZ();
-    return i1.IsIntersects(i2);
+    CFigure *f1 = reinterpret_cast<CFigure*>( fixtureA->GetUserData() );
+    CFigure *f2 = reinterpret_cast<CFigure*>( fixtureB->GetUserData() );
+    return fabs(f1->GetZet() - f2->GetZet()) < (f1->GetDepth() * 0.5 + f2->GetDepth() * 0.5);
 }
 
 void CPhysObserver::BeginContact( b2Contact * _contact )

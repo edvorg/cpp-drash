@@ -17,7 +17,7 @@ bool CTestApp3::Init()
 
     CSceneObjectGeometry sbg;
     sbg.mFigures.resize(1);
-    sbg.mFigures[0].mLayers.Set( -2000, 2000 );
+    sbg.mFigures[0].mDepth = 40;
     sbg.mFigures[0].mRestitution = 0.0;
     sbg.mFigures[0].mVertices.push_back( CVec2( -300, -5 ) );
     sbg.mFigures[0].mVertices.push_back( CVec2( 300, -5 ) );
@@ -51,7 +51,7 @@ bool CTestApp3::Init()
 
     CSceneObjectGeometry dbg;
     dbg.mFigures.resize(1);
-    dbg.mFigures[0].mLayers.Set( -800, 800 );
+    dbg.mFigures[0].mDepth = 16;
     dbg.mFigures[0].mVertices.push_back( CVec2( -10, -10 ) );
     dbg.mFigures[0].mVertices.push_back( CVec2( 10, -10 ) );
     dbg.mFigures[0].mVertices.push_back( CVec2( 10, 10 ) );
@@ -77,14 +77,14 @@ bool CTestApp3::Init()
 
     CSceneObjectGeometry ppg;
     ppg.mFigures.resize(1);
-    ppg.mFigures[0].mLayers.Set( -100, 100 );
+    ppg.mFigures[0].mDepth = 2;
     CPlayerParams ppp;
     ppp.mPos.Set( 0, 10 );
     GetPlayersSystem().AddPlayer(ppg, ppp);
 
     CSceneObjectGeometry platform_geometry;
     platform_geometry.mFigures.resize(1);
-    platform_geometry.mFigures[0].mLayers.Set( -400, 400 );
+    platform_geometry.mFigures[0].mDepth = 8;
     platform_geometry.mFigures[0].mFriction = 1.0;
     platform_geometry.mFigures[0].mVertices.push_back( CVec2( -100, -5 ) );
     platform_geometry.mFigures[0].mVertices.push_back( CVec2( 100, -5 ) );

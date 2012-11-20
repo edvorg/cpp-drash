@@ -43,7 +43,7 @@ bool EditorObject::BuildNow(){
     mStartBuild = false;
     CSceneObjectGeometry sbg;
     sbg.mFigures.resize(1);
-    sbg.mFigures[0].mLayers.Set( -2000, 2000 );
+    sbg.mFigures[0].mDepth = 40;
     sbg.mFigures[0].mRestitution = 0.0;
     sbg.mFigures[0].mVertices = mVertexs;
     CSceneObjectParams sbp;

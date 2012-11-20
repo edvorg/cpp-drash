@@ -20,7 +20,8 @@ public:
     /// if size of mVertices is NULL, creates a box with (1, 1) dimentions
     std::vector<CVec2> mVertices;
 
-    CInterval mLayers;
+    float mDepth = 1;
+    float mZet = 0;
 };
 
 class CFigure
@@ -33,15 +34,18 @@ public:
     bool GetVertices(b2Vec2ConstPtr *_arr_ptr) const;
     unsigned int EnumVertices() const;
 
-    CInterval &GetZ();
-    const CInterval &GetZ() const;
+    float GetZet() const;
+    void SetZet(float _zet);
+    float GetDepth() const;
+    void SetDepth(float _depth);
 
 protected:
 private:
     CFigure();
 
     b2Fixture *mFixture = nullptr;
-    CInterval mZ = CInterval(0,0);
+    float mZet = 0;
+    float mDepth = 1;
     float mMass = 1;
     unsigned int mInternalId = 0;
 };

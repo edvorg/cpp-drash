@@ -19,7 +19,7 @@ bool CTestApp2::Init()
     g.mFigures[0].mVertices.push_back( CVec2( -300.0f, -5.0f ) );
     g.mFigures[0].mVertices.push_back( CVec2( 300.0f, -5.0f ) );
     g.mFigures[0].mVertices.push_back( CVec2( 300.0f, 5.0f ) );
-    g.mFigures[0].mLayers.Set(-500, 500);
+    g.mFigures[0].mDepth = 5;
     CSceneObjectParams p;
     p.mPos.y = -25;
     p.mDynamic = false;
@@ -31,7 +31,7 @@ bool CTestApp2::Init()
     player_geometry.mFigures[0].mVertices.push_back( CVec2( 2, -5 ) );
     player_geometry.mFigures[0].mVertices.push_back( CVec2( 2, 5 ) );
     player_geometry.mFigures[0].mVertices.push_back( CVec2( -2, 5 ) );
-    player_geometry.mFigures[0].mLayers.Set(-100, 100);
+    player_geometry.mFigures[0].mDepth = 1;
     CPlayerParams player;
     player.mPos.Set( 0, -20 );
     GetPlayersSystem().AddPlayer(player_geometry, player);
@@ -44,7 +44,7 @@ bool CTestApp2::Init()
     tg.mFigures[0].mVertices.push_back( CVec2( -10, 5 ) );
     tg.mFigures[0].mFriction = 0.5;
     tg.mFigures[0].mMass = 1;
-    tg.mFigures[0].mLayers.Set(-100, 100);
+    tg.mFigures[0].mDepth = 1;
     CSceneObjectParams targetForFire;
     targetForFire.mPos.Set( -20, 0 );
     for (int i = 0 ; i < 10 ; i++)

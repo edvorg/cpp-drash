@@ -130,8 +130,8 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
             {
                 if (f->GetUserData() != nullptr)
                 {
-                    CInterval &i = reinterpret_cast<CFigure*>(f->GetUserData())->GetZ();
-                    i.Set( i.GetMin() - 100, i.GetMax() - 100 );
+                    CFigure *fg = reinterpret_cast<CFigure*>(f->GetUserData());
+                    fg->SetZet(fg->GetZet()-1);
                 }
             }
             SetActive(false);
@@ -144,8 +144,8 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
             {
                 if (f->GetUserData() != nullptr)
                 {
-                    CInterval &i = reinterpret_cast<CFigure*>(f->GetUserData())->GetZ();
-                    i.Set( i.GetMin() + 100, i.GetMax() + 100 );
+                    CFigure *fg = reinterpret_cast<CFigure*>(f->GetUserData());
+                    fg->SetZet(fg->GetZet()+1);
                 }
             }            
             SetActive(false);

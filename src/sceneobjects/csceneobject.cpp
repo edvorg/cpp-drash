@@ -149,11 +149,18 @@ void CSceneObject::DrawDebug() const
             if (s)
             {
                 b2Color diffuse( mColor[0], mColor[1], mColor[2] );
-                const CInterval interval = f->GetUserData() ?
-                                           ((CFigure*)f->GetUserData())->GetZ() :
-                                           CInterval(-1, 1);
 
-                DrawBody(s->m_vertices, s->GetVertexCount(), interval, diffuse);
+                float depth = 1;
+                float z = 0;
+
+                if (f->GetUserData() != nullptr)
+                {
+                    CFigure *fg = reinterpret_cast<CFigure*>(f->GetUserData());
+                    depth = fg->GetDepth();
+                    z = fg->GetZet();
+                }
+
+                DrawBody(s->m_vertices, s->GetVertexCount(), z, depth, diffuse);
             }
         }
         j++;
@@ -216,7 +223,8 @@ CSceneObject::CFigurePtr CSceneObject::CreateFigure( const CFigureParams &_param
 
     figure->mFixture = f;
     figure->mMass = _params.mMass;
-    figure->mZ = _params.mLayers;
+    figure->mZet = _params.mZet;
+    figure->mDepth = _params.mDepth;
     figure->mInternalId = mFiguresCount;
 
     f->SetUserData(figure);
@@ -349,7 +357,16 @@ void CSceneObject::DumpGeometry(CSceneObject::GeometryT &_geometry) const
             }
         }
 
-        figure.mLayers = (f->GetUserData() == nullptr ? CInterval(0,0) : reinterpret_cast<CFigure*>(f->GetUserData())->GetZ());
+        figure.mDepth = 1;
+        figure.mZet = 0;
+
+        if (f->GetUserData() != nullptr)
+        {
+            CFigure *fg = reinterpret_cast<CFigure*>(f->GetUserData());
+
+            figure.mDepth = fg->GetDepth();
+            figure.mZet = fg->GetZet();
+        }
 
         _geometry.mFigures.push_back(std::move(figure));
     }

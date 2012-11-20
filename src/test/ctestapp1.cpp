@@ -19,7 +19,7 @@ bool CTestApp1::Init()
 
     CSceneObjectGeometry g;
     g.mFigures.resize(1);
-    g.mFigures[0].mLayers.Set(-500, 500);
+    g.mFigures[0].mDepth = 5;
     g.mFigures[0].mVertices.push_back( CVec2( -100.0f, 5.0f ) );
     g.mFigures[0].mVertices.push_back( CVec2( -100.0f, -5.0f ) );
     g.mFigures[0].mVertices.push_back( CVec2( 100.0f, -5.0f ) );
@@ -41,7 +41,7 @@ void CTestApp1::Update()
     {
         CSceneObjectGeometry g;
         g.mFigures.resize(1);
-        g.mFigures[0].mLayers.Set(-500, 500);
+        g.mFigures[0].mDepth = 5;
         CDrashBodyParams p;
         p.mPos.RandY(100, 200, 15);
         p.mPos.RandX(-50, 50, 15);

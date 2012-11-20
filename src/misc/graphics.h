@@ -11,12 +11,14 @@ extern const float g_LayerWidth;
 
 void DrawBodySide(const b2Vec2 &_v1,
               const b2Vec2 &_v2,
-              const CInterval &_interval,
+              float _z,
+              float _depth,
               const b2Color &_diffuse );
 
 void DrawBody(const b2Vec2 *_vertices,
               unsigned int _count,
-              const CInterval &_interval,
+              float _z,
+              float _depth,
               const b2Color &_color);
 
 }// namespace drash

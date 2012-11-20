@@ -9,7 +9,8 @@ const float g_LayerWidth = 0.01f;
 
 void DrawBodySide(const b2Vec2 &_v1,
                   const b2Vec2 &_v2,
-                  const CInterval &_interval,
+                  float _z,
+                  float _depth,
                   const b2Color &_diffuse )
 {
     CVec2 dp = _v1 - _v2;
@@ -26,28 +27,29 @@ void DrawBodySide(const b2Vec2 &_v1,
 
     glVertex3f( _v1.x,
                 _v1.y,
-                _interval.GetMax() * g_LayerWidth + g_LayerWidth / 2.0f );
+                _z + _depth / 2.0f );
     glVertex3f( _v1.x,
                 _v1.y,
-                _interval.GetMin() * g_LayerWidth - g_LayerWidth / 2.0f );
+                _z - _depth / 2.0f );
     glVertex3f( _v2.x,
                 _v2.y,
-                _interval.GetMax() * g_LayerWidth + g_LayerWidth / 2.0f );
+                _z + _depth / 2.0f );
 
     glVertex3f( _v2.x,
                 _v2.y,
-                _interval.GetMax() * g_LayerWidth + g_LayerWidth / 2.0f );
+                _z + _depth / 2.0f );
     glVertex3f( _v1.x,
                 _v1.y,
-                _interval.GetMin() * g_LayerWidth - g_LayerWidth / 2.0f );
+                _z - _depth / 2.0f );
     glVertex3f( _v2.x,
                 _v2.y,
-                _interval.GetMin() * g_LayerWidth - g_LayerWidth / 2.0f );
+                _z - _depth / 2.0f );
 }
 
 void DrawBody(const b2Vec2 *_vertices,
               unsigned int _count,
-              const CInterval &_interval,
+              float _z,
+              float _depth,
               const b2Color &_color)
 {
     glEnable(GL_DEPTH_TEST);
@@ -60,7 +62,7 @@ void DrawBody(const b2Vec2 *_vertices,
     {
         glVertex3f( _vertices[i].x,
                     _vertices[i].y,
-                    _interval.GetMax() * g_LayerWidth + g_LayerWidth / 2.0f );
+                    _z + _depth / 2.0f );
     }
     glEnd();
 
@@ -72,7 +74,7 @@ void DrawBody(const b2Vec2 *_vertices,
     {
         glVertex3f( _vertices[i].x,
                     _vertices[i].y,
-                    _interval.GetMin() * g_LayerWidth - g_LayerWidth / 2.0f );
+                    _z - _depth / 2.0f );
     }
     glEnd();
 
@@ -81,12 +83,14 @@ void DrawBody(const b2Vec2 *_vertices,
     {
         DrawBodySide(_vertices[i],
                      _vertices[i+1],
-                     _interval,
+                     _z,
+                     _depth,
                      _color );
     }
     DrawBodySide(_vertices[_count - 1],
                  _vertices[0],
-                 _interval,
+                 _z,
+                 _depth,
                  _color );
     glEnd();
 }

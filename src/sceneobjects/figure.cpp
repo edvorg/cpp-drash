@@ -38,14 +38,24 @@ unsigned int CFigure::EnumVertices() const
     return reinterpret_cast<b2PolygonShape*>(mFixture->GetShape())->GetVertexCount();
 }
 
-CInterval &CFigure::GetZ()
+float CFigure::GetZet() const
 {
-    return mZ;
+    return mZet;
 }
 
-const CInterval &CFigure::GetZ() const
+void CFigure::SetZet(float _zet)
 {
-    return mZ;
+    mZet = _zet;
+}
+
+float CFigure::GetDepth() const
+{
+    return mDepth;
+}
+
+void CFigure::SetDepth(float _depth)
+{
+    mDepth = _depth;
 }
 
 CFigure::CFigure()
