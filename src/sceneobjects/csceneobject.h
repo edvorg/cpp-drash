@@ -55,33 +55,33 @@ public:
     typedef CFigure *CFigurePtr;
     typedef CFigurePtr FiguresT[mFiguresCountLimit];
 
-    const b2Body* GetBody(void) const;
+    inline const b2Body* GetBody(void) const;
 
-    CScene *GetScene();
-    const CScene *GetScene() const;
+    inline CScene *GetScene();
+    inline const CScene *GetScene() const;
 
-    void SetDynamic( bool _dynamic );
+    inline void SetDynamic( bool _dynamic );
 
     CFigurePtr CreateFigure( const CFigureParams &_params );
     void DestroyFigure(CFigure *_figure);
-    const FiguresT &GetFigures();
-    unsigned int EnumFigures() const;
+    inline const FiguresT &GetFigures();
+    inline unsigned int EnumFigures() const;
 
-    void ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos );
-    void SetLinearVelocity( const CVec2 &_vel );
-    void SetAngularVelocity( float _vel );
-    void SetFixedRotation( bool _fixed );
-    void SetActive( bool _active );
+    inline void ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos );
+    inline void SetLinearVelocity( const CVec2 &_vel );
+    inline void SetAngularVelocity( float _vel );
+    inline void SetFixedRotation( bool _fixed );
+    inline void SetActive( bool _active );
 
     void SetPos( const CVec2 &_pos );
-    void SetPosTarget( const CVec2 &_target, double _time, const AnimationBehavior &_behavior );
-    const CAnimatedParam<CVec2> &GetPos() const;
+    inline void SetPosTarget( const CVec2 &_target, double _time, const AnimationBehavior &_behavior );
+    inline const CAnimatedParam<CVec2> &GetPos() const;
     void SetAngle( float _angle );
-    void SetAngleTarget( float _target, double _time, const AnimationBehavior &_behavior );
-    const CAnimatedParam<float> &GetAngle() const;
+    inline void SetAngleTarget( float _target, double _time, const AnimationBehavior &_behavior );
+    inline const CAnimatedParam<float> &GetAngle() const;
 
-    void SetZ(float _z);
-    float GetZ() const;
+    inline void SetZ(float _z);
+    inline float GetZ() const;
 
     void DumpGeometry(GeometryT &_geometry) const;
     void DumpParams(ParamsT &_params) const;
@@ -113,6 +113,91 @@ private:
     unsigned int mFiguresCount = 0;
     float mZ = 0;
 };
+
+inline const b2Body *CSceneObject::GetBody() const
+{
+    return mBody;
+}
+
+inline CScene *CSceneObject::GetScene()
+{
+    return mScene;
+}
+
+inline const CScene *CSceneObject::GetScene() const
+{
+    return mScene;
+}
+
+inline void CSceneObject::SetDynamic( bool _dynamic )
+{
+    mBody->SetType( _dynamic ? b2_dynamicBody : b2_kinematicBody );
+}
+
+inline const CSceneObject::FiguresT &CSceneObject::GetFigures()
+{
+    return mFigures;
+}
+
+inline unsigned int CSceneObject::EnumFigures() const
+{
+    return mFiguresCount;
+}
+
+inline void CSceneObject::ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos )
+{
+    mBody->ApplyLinearImpulse( _dir, _pos );
+}
+
+inline void CSceneObject::SetLinearVelocity( const CVec2 &_vel )
+{
+    mBody->SetLinearVelocity(_vel);
+}
+
+inline void CSceneObject::SetAngularVelocity( float _vel )
+{
+    mBody->SetAngularVelocity(_vel);
+}
+
+inline void CSceneObject::SetFixedRotation( bool _fixed )
+{
+    mBody->SetFixedRotation(_fixed);
+}
+
+inline void CSceneObject::SetActive( bool _active )
+{
+    mBody->SetActive(_active);
+}
+
+inline void CSceneObject::SetPosTarget( const CVec2 &_target, double _time, const AnimationBehavior &_behavior )
+{
+    mPos.SetTarget( _target, _time, _behavior );
+}
+
+inline const CAnimatedParam<CVec2> &CSceneObject::GetPos() const
+{
+    return mPos;
+}
+
+inline void CSceneObject::SetAngleTarget( float _target, double _time, const AnimationBehavior &_behavior )
+{
+    mAngle.SetTarget( _target, _time, _behavior );
+}
+
+inline const CAnimatedParam<float> &CSceneObject::GetAngle() const
+{
+    return mAngle;
+}
+
+inline void CSceneObject::SetZ(float _z)
+{
+    mZ = _z;
+}
+
+inline float CSceneObject::GetZ() const
+{
+    return mZ;
+}
 
 } // namespace drash
 

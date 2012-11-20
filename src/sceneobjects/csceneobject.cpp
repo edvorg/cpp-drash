@@ -167,26 +167,6 @@ void CSceneObject::DrawDebug() const
     }
 }
 
-const b2Body *CSceneObject::GetBody() const
-{
-    return mBody;
-}
-
-CScene *CSceneObject::GetScene()
-{
-    return mScene;
-}
-
-const CScene *CSceneObject::GetScene() const
-{
-    return mScene;
-}
-
-void CSceneObject::SetDynamic( bool _dynamic )
-{
-    mBody->SetType( _dynamic ? b2_dynamicBody : b2_kinematicBody );
-}
-
 CSceneObject::CFigurePtr CSceneObject::CreateFigure( const CFigureParams &_params )
 {
     if (mFiguresCount >= mFiguresCountLimit)
@@ -267,81 +247,16 @@ void CSceneObject::DestroyFigure(CFigure *_figure)
     delete _figure;
 }
 
-const CSceneObject::FiguresT &CSceneObject::GetFigures()
-{
-    return mFigures;
-}
-
-unsigned int CSceneObject::EnumFigures() const
-{
-    return mFiguresCount;
-}
-
-void CSceneObject::ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos )
-{
-    mBody->ApplyLinearImpulse( _dir, _pos );
-}
-
-void CSceneObject::SetLinearVelocity( const CVec2 &_vel )
-{
-    mBody->SetLinearVelocity(_vel);
-}
-
-void CSceneObject::SetAngularVelocity( float _vel )
-{
-    mBody->SetAngularVelocity(_vel);
-}
-
-void CSceneObject::SetFixedRotation( bool _fixed )
-{
-    mBody->SetFixedRotation(_fixed);
-}
-
-void CSceneObject::SetActive( bool _active )
-{
-    mBody->SetActive(_active);
-}
-
 void CSceneObject::SetPos(const CVec2 &_pos)
 {
     mBody->SetTransform( _pos, mBody->GetAngle() );
     mPos.Set(_pos);
 }
 
-void CSceneObject::SetPosTarget( const CVec2 &_target, double _time, const AnimationBehavior &_behavior )
-{
-    mPos.SetTarget( _target, _time, _behavior );
-}
-
-const CAnimatedParam<CVec2> &CSceneObject::GetPos() const
-{
-    return mPos;
-}
-
 void CSceneObject::SetAngle(float _angle)
 {
     mBody->SetTransform( mBody->GetWorldCenter(), _angle );
     mAngle.Set(_angle);
-}
-
-void CSceneObject::SetAngleTarget( float _target, double _time, const AnimationBehavior &_behavior )
-{
-    mAngle.SetTarget( _target, _time, _behavior );
-}
-
-const CAnimatedParam<float> &CSceneObject::GetAngle() const
-{
-    return mAngle;
-}
-
-void CSceneObject::SetZ(float _z)
-{
-    mZ = _z;
-}
-
-float CSceneObject::GetZ() const
-{
-    return mZ;
 }
 
 void CSceneObject::DumpGeometry(CSceneObject::GeometryT &_geometry) const
