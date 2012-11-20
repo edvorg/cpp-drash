@@ -80,6 +80,9 @@ public:
     void SetAngleTarget( float _target, double _time, const AnimationBehavior &_behavior );
     const CAnimatedParam<float> &GetAngle() const;
 
+    void SetZ(float _z);
+    float GetZ() const;
+
     void DumpGeometry(GeometryT &_geometry) const;
     void DumpParams(ParamsT &_params) const;
 
@@ -108,6 +111,7 @@ private:
     float mColor[3];
     FiguresT mFigures;
     unsigned int mFiguresCount = 0;
+    float mZ = 0;
 };
 
 } // namespace drash

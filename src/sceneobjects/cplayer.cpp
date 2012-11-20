@@ -126,28 +126,14 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
             break;
 
         case CPlayerEvent::PlayerActionMoveDeep:
-            for ( auto f = GetBody()->GetFixtureList(); f != NULL; f = f->GetNext() )
-            {
-                if (f->GetUserData() != nullptr)
-                {
-                    CFigure *fg = reinterpret_cast<CFigure*>(f->GetUserData());
-                    fg->SetZet(fg->GetZet()-1);
-                }
-            }
+            SetZ(GetZ()-1);
             SetActive(false);
             SetActive(true);
             break;
 
 
         case CPlayerEvent::PlayerActionMoveOut:
-            for ( auto f = GetBody()->GetFixtureList(); f != NULL; f = f->GetNext() )
-            {
-                if (f->GetUserData() != nullptr)
-                {
-                    CFigure *fg = reinterpret_cast<CFigure*>(f->GetUserData());
-                    fg->SetZet(fg->GetZet()+1);
-                }
-            }            
+            SetZ(GetZ()+1);
             SetActive(false);
             SetActive(true);
             break;

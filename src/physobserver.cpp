@@ -11,14 +11,24 @@ CPhysObserver::CPhysObserver()
 
 bool CPhysObserver::ShouldCollide( b2Fixture *fixtureA, b2Fixture *fixtureB )
 {
-    if (fixtureA->GetUserData() == nullptr || fixtureB->GetUserData() == nullptr)
+    if (fixtureA->GetUserData() == nullptr ||
+		fixtureB->GetUserData() == nullptr ||
+		fixtureA->GetBody()->GetUserData() == nullptr ||
+		fixtureB->GetBody()->GetUserData() == nullptr)
     {
         return false;
     }
 
+    CSceneObject *o1 = reinterpret_cast<CSceneObject*>(fixtureA->GetBody()->GetUserData());
+    CSceneObject *o2 = reinterpret_cast<CSceneObject*>(fixtureB->GetBody()->GetUserData());
+
     CFigure *f1 = reinterpret_cast<CFigure*>( fixtureA->GetUserData() );
     CFigure *f2 = reinterpret_cast<CFigure*>( fixtureB->GetUserData() );
-    return fabs(f1->GetZet() - f2->GetZet()) < (f1->GetDepth() * 0.5 + f2->GetDepth() * 0.5);
+
+    float z1 = f1->GetZet() + o1->GetZ();
+    float z2 = f1->GetZet() + o2->GetZ();
+
+    return fabs(z1 - z2) < (f1->GetDepth() * 0.5 + f2->GetDepth() * 0.5);
 }
 
 void CPhysObserver::BeginContact( b2Contact * _contact )

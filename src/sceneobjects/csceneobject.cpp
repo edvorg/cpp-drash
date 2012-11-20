@@ -151,16 +151,16 @@ void CSceneObject::DrawDebug() const
                 b2Color diffuse( mColor[0], mColor[1], mColor[2] );
 
                 float depth = 1;
-                float z = 0;
+                float local_z = 0;
 
                 if (f->GetUserData() != nullptr)
                 {
                     CFigure *fg = reinterpret_cast<CFigure*>(f->GetUserData());
                     depth = fg->GetDepth();
-                    z = fg->GetZet();
+                    local_z = fg->GetZet();
                 }
 
-                DrawBody(s->m_vertices, s->GetVertexCount(), z, depth, diffuse);
+                DrawBody(s->m_vertices, s->GetVertexCount(), mZ+local_z, depth, diffuse);
             }
         }
         j++;
@@ -332,6 +332,16 @@ void CSceneObject::SetAngleTarget( float _target, double _time, const AnimationB
 const CAnimatedParam<float> &CSceneObject::GetAngle() const
 {
     return mAngle;
+}
+
+void CSceneObject::SetZ(float _z)
+{
+    mZ = _z;
+}
+
+float CSceneObject::GetZ() const
+{
+    return mZ;
 }
 
 void CSceneObject::DumpGeometry(CSceneObject::GeometryT &_geometry) const
