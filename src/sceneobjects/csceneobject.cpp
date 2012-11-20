@@ -157,7 +157,7 @@ void CSceneObject::DrawDebug() const
                 {
                     CFigure *fg = reinterpret_cast<CFigure*>(f->GetUserData());
                     depth = fg->GetDepth();
-                    local_z = fg->GetZet();
+                    local_z = fg->GetZ();
                 }
 
                 DrawBody(s->m_vertices, s->GetVertexCount(), mZ+local_z, depth, diffuse);
@@ -223,7 +223,7 @@ CSceneObject::CFigurePtr CSceneObject::CreateFigure( const CFigureParams &_param
 
     figure->mFixture = f;
     figure->mMass = _params.mMass;
-    figure->mZet = _params.mZet;
+    figure->mZ = _params.mZ;
     figure->mDepth = _params.mDepth;
     figure->mInternalId = mFiguresCount;
 
@@ -368,14 +368,14 @@ void CSceneObject::DumpGeometry(CSceneObject::GeometryT &_geometry) const
         }
 
         figure.mDepth = 1;
-        figure.mZet = 0;
+        figure.mZ = 0;
 
         if (f->GetUserData() != nullptr)
         {
             CFigure *fg = reinterpret_cast<CFigure*>(f->GetUserData());
 
             figure.mDepth = fg->GetDepth();
-            figure.mZet = fg->GetZet();
+            figure.mZ = fg->GetZ();
         }
 
         _geometry.mFigures.push_back(std::move(figure));

@@ -21,7 +21,7 @@ public:
     std::vector<CVec2> mVertices;
 
     float mDepth = 1;
-    float mZet = 0;
+    float mZ = 0;
 };
 
 class CFigure
@@ -34,8 +34,8 @@ public:
     bool GetVertices(b2Vec2ConstPtr *_arr_ptr) const;
     unsigned int EnumVertices() const;
 
-    float GetZet() const;
-    void SetZet(float _zet);
+    float GetZ() const;
+    void SetZ(float _z);
     float GetDepth() const;
     void SetDepth(float _depth);
 
@@ -44,7 +44,7 @@ private:
     CFigure();
 
     b2Fixture *mFixture = nullptr;
-    float mZet = 0;
+    float mZ = 0;
     float mDepth = 1;
     float mMass = 1;
     unsigned int mInternalId = 0;
