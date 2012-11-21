@@ -5,8 +5,6 @@
 namespace drash
 {
 
-const float g_LayerWidth = 0.01f;
-
 void DrawBodySide(const b2Vec2 &_v1,
                   const b2Vec2 &_v2,
                   float _z,
