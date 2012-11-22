@@ -117,32 +117,6 @@ void CScene::DestroyObjects(void)
     }
 }
 
-void CScene::Draw( const CCamera &_camera )
-{
-    if ( mInitialized == false )
-    {
-        LOG_ERR( "CScene::Step(): "
-                 "this is not initialized" );
-        return;
-    }
-
-    for ( b2Body *b = mWorld.GetBodyList(); b != NULL; b = b->GetNext() )
-    {
-        auto o = reinterpret_cast<CSceneObject*>( b->GetUserData() );
-        if (o)
-        {
-            glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
-            //glRotatef( 30, 0, 1, 0 );
-            glTranslatef( -_camera.mPos.Get().x, -_camera.mPos.Get().y, -_camera.m_ZoomMax + _camera.GetZoom() );
-            glTranslatef( o->GetBody()->GetWorldCenter().x, o->GetBody()->GetWorldCenter().y, 0 );
-            glRotatef( 180.0f / M_PI * o->GetBody()->GetAngle(), 0, 0, 1 );
-
-            o->DrawDebug();
-        }
-    }
-}
-
 void CScene::ConnectSubsystem(CSubsystem *_subsystem)
 {
     if (_subsystem == NULL)

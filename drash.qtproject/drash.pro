@@ -43,7 +43,8 @@ SOURCES += ../src/main.cpp\
     ../src/misc/graphics.cpp \
     ../src/subsystem/templatesystem.cpp \
     ../src/physobserver.cpp \
-    ../src/sceneobjects/figure.cpp
+    ../src/sceneobjects/figure.cpp \
+    ../src/subsystem/debugdrawsystem.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -75,7 +76,8 @@ HEADERS  += ../src/gamewindow.h \
     ../src/subsystem/templatesystem.h \
     ../src/misc/graphics.h \
     ../src/physobserver.h \
-    ../src/sceneobjects/figure.h
+    ../src/sceneobjects/figure.h \
+    ../src/subsystem/debugdrawsystem.h
 
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui

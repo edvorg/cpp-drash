@@ -70,11 +70,6 @@ public:
     void DestroyObjects(void);
 
     // **************************************************
-    // TODO: detach this functionality ******************
-
-    void Draw( const CCamera &_camera );
-
-    // **************************************************
     // * working with subsystems ************************
 
     /// as we made a connection, _subsystem gets a pointer to our CScene instance

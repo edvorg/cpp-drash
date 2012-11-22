@@ -47,6 +47,7 @@ public:
     friend class CPhysObserver;
     friend class CScene;
     friend class CExplosion;
+    friend class CDebugDrawSystem;
 
     static const unsigned int mFiguresCountLimit = 16;
 

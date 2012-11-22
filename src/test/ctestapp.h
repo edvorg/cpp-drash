@@ -7,6 +7,7 @@
 #include "../subsystem/explosionsystem.h"
 #include "../subsystem/playerssystem.h"
 #include "../subsystem/templatesystem.h"
+#include "../subsystem/debugdrawsystem.h"
 
 namespace drash
 {
@@ -30,6 +31,7 @@ public:
 
     CPlayersSystem &GetPlayersSystem();
     CTemplateSystem &GetTemplateSystem();
+    CDebugDrawSystem &GetDebugDrawSystem();
 
 private:
     CScene mScene;
@@ -38,6 +40,7 @@ private:
     CExplosionSystem mExplosionSystem;
     CPlayersSystem mPlayersSystem;
     CTemplateSystem mTemplateSystem;
+    CDebugDrawSystem mDebugDrawSystem;
 };
 
 } // namespace drash

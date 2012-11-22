@@ -19,6 +19,7 @@ public:
 
     void SetScene(CScene *_scene);
     CScene *GetScene();
+    const CScene *GetScene() const;
 
 private:
     CScene *mScene;

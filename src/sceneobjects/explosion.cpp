@@ -69,29 +69,34 @@ void CExplosion::DrawDebug() const
     glMatrixMode(GL_MODELVIEW);
     glScalef(scale, scale, scale);
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     glDisable(GL_DEPTH_TEST);
     glBegin(GL_TRIANGLE_STRIP);
     static const unsigned int segments = 16;
     static const double delta = 2.0 * M_PI / segments;
     for (unsigned int i=0; i<segments+1; i++)
     {
-        glColor3f(0, 1, 0);
+        glColor4f(0, 1, 0, 0.5);
         glVertex2f(0, 0);
-        glColor3f(0, 1, 0);
+        glColor4f(0, 1, 0, 0.5);
         glVertex2f(mParams.mRadius * cos(i*delta), mParams.mRadius * sin(i*delta));
     }
     glEnd();
     glBegin(GL_LINES);
-    glColor3f(1, 0, 0);
+    glColor4f(1, 0, 0, 0.5);
     glVertex2f(-mParams.mRadius, 0);
-    glColor3f(1, 0, 0);
+    glColor4f(1, 0, 0, 0.5);
     glVertex2f(mParams.mRadius, 0);
-    glColor3f(1, 0, 0);
+    glColor4f(1, 0, 0, 0.5);
     glVertex2f(0, -mParams.mRadius);
-    glColor3f(1, 0, 0);
+    glColor4f(1, 0, 0, 0.5);
     glVertex2f(0, mParams.mRadius);
     glEnd();
     glEnable(GL_DEPTH_TEST);
+
+    glDisable(GL_BLEND);
 }
 
 const CExplosionParams &CExplosion::GetParams() const

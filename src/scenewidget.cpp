@@ -83,7 +83,7 @@ void SceneWidget::paintGL()
 
     if ( mTestApp != NULL )
     {
-        mTestApp->GetScene().Draw( *mTestApp->GetCamera() );
+        mTestApp->GetDebugDrawSystem().Draw(*mTestApp->GetCamera());
         mTestApp->Render();
     }
 

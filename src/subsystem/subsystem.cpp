@@ -39,4 +39,9 @@ CScene *CSubsystem::GetScene()
     return mScene;
 }
 
+const CScene *CSubsystem::GetScene() const
+{
+    return mScene;
+}
+
 }// namespace drash

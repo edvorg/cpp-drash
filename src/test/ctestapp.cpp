@@ -27,6 +27,7 @@ bool CTestApp::Init()
     mExplosionSystem.SetScene(&mScene);
     mPlayersSystem.SetScene(&mScene);
     mTemplateSystem.SetScene(&mScene);
+    mDebugDrawSystem.SetScene(&mScene);
 
     CSceneObjectGeometry g;
     CCameraParams p;
@@ -116,6 +117,11 @@ CPlayersSystem &CTestApp::GetPlayersSystem()
 CTemplateSystem &CTestApp::GetTemplateSystem()
 {
     return mTemplateSystem;
+}
+
+CDebugDrawSystem &CTestApp::GetDebugDrawSystem()
+{
+    return mDebugDrawSystem;
 }
 
 } // namespace drash
