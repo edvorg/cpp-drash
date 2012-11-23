@@ -44,6 +44,16 @@ CCamera *CDebugDrawSystem::GetActiveCam()
     return mActiveCam;
 }
 
+void CDebugDrawSystem::SetAspectRatio(float _ratio)
+{
+    mAspectRatio = _ratio;
+}
+
+float CDebugDrawSystem::GetAspectRatio() const
+{
+    return mAspectRatio;
+}
+
 void CDebugDrawSystem::Draw() const
 {
     if (mActiveCam == nullptr)

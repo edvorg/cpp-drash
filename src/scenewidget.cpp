@@ -52,6 +52,11 @@ void SceneWidget::resizeGL( int _w, int _h )
 
     mWidth = _w;
     mHeight = _h;
+
+    if (mTestApp != nullptr)
+    {
+        mTestApp->GetDebugDrawSystem().SetAspectRatio(mWidth / mHeight);
+    }
 }
 
 void SceneWidget::paintGL()

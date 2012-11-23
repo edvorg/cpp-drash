@@ -16,12 +16,16 @@ public:
     void SetActiveCam(CCamera *_cam);
     CCamera *GetActiveCam();
 
+    void SetAspectRatio(float _ratio);
+    float GetAspectRatio() const;
+
     void Draw() const;
 
 protected:
 private:
     CCamera *mActiveCam = nullptr;
     std::vector<CCamera*> mCameras;
+    float mAspectRatio = 1;
 };
 
 }// namespace drash
