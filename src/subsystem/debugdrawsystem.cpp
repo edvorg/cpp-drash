@@ -54,6 +54,28 @@ float CDebugDrawSystem::GetAspectRatio() const
     return mAspectRatio;
 }
 
+bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const
+{
+    if (mActiveCam == nullptr)
+    {
+        return false;
+    }
+    else
+    {
+        double fov = 60.0 * M_PI / 180.0;
+
+        double c = _depth / cos(fov / 2.0); // hypotenuse
+
+        double frame_height = 2.0 * sqrt( c*c - _depth*_depth );
+        double frame_width = frame_height * mAspectRatio;
+
+        _pos.x *= frame_width;
+        _pos.y *= frame_height;
+
+        return true;
+    }
+}
+
 void CDebugDrawSystem::Draw() const
 {
     if (mActiveCam == nullptr)

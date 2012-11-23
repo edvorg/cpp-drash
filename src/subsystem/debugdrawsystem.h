@@ -19,6 +19,12 @@ public:
     void SetAspectRatio(float _ratio);
     float GetAspectRatio() const;
 
+    /// converts coordinates from (-1,-1)..(1, 1) system with center at (0, 0)
+    /// to world coordinates taking depth (distance from camera to required layer)
+    /// into account
+    /// if no camera is activated does nothing and returns false
+    bool ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const;
+
     void Draw() const;
 
 protected:
