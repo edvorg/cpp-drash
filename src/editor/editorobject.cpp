@@ -18,7 +18,7 @@ EditorObject::~EditorObject()
 void EditorObject::mousePressEvent(QMouseEvent *_event){
     QWidget::mousePressEvent(_event);
     if (mStartBuild == true) {
-        auto cam = mTestApp->GetCamera();
+        auto cam = mTestApp->GetDebugDrawSystem().GetActiveCam();
         CVec2 pos = this->ScreenSpaceToWorldSpace(CVec2(_event->x(),
                                                         _event->y()),
                                                         -cam->GetZ().Get());

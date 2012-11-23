@@ -2,10 +2,56 @@
 
 #include <GL/gl.h>
 
-using drash::CDebugDrawSystem;
-
-void CDebugDrawSystem::Draw(const drash::CCamera &_camera) const
+namespace drash
 {
+
+drash::CCamera *CDebugDrawSystem::CreateCam(const drash::CCameraParams &_params)
+{
+    if (GetScene() == nullptr)
+    {
+        return nullptr;
+    }
+
+    drash::CSceneObjectGeometry g;
+    mCameras.push_back(GetScene()->CreateObject<CCamera>(g, _params));
+    return mCameras.back();
+}
+
+void CDebugDrawSystem::DestroyCam(drash::CCamera *_cam)
+{
+    for (auto i=mCameras.begin(); i!=mCameras.end(); i++)
+    {
+        if (*i == _cam)
+        {
+            if (GetScene() != nullptr)
+            {
+                GetScene()->DestroyObject(_cam);
+            }
+
+            mCameras.erase(i);
+            return;
+        }
+    }
+}
+
+void CDebugDrawSystem::SetActiveCam(CCamera *_cam)
+{
+    mActiveCam = _cam;
+}
+
+CCamera *CDebugDrawSystem::GetActiveCam()
+{
+    return mActiveCam;
+}
+
+void CDebugDrawSystem::Draw() const
+{
+    if (mActiveCam == nullptr)
+    {
+        LOG_WARN("CDebugDrawSystem::Draw(): no camera is activated");
+        return;
+    }
+
     const drash::CScene::ObjectsT &objects = GetScene()->GetObjects();
     unsigned int count = GetScene()->EnumObjects();
 
@@ -13,9 +59,9 @@ void CDebugDrawSystem::Draw(const drash::CCamera &_camera) const
     {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        glTranslatef(-_camera.mPos.Get().x,
-                     -_camera.mPos.Get().y,
-                     -_camera.GetZ().Get());
+        glTranslatef(-mActiveCam->mPos.Get().x,
+                     -mActiveCam->mPos.Get().y,
+                     -mActiveCam->GetZ().Get());
         glTranslatef(objects[i]->GetBody()->GetWorldCenter().x,
                      objects[i]->GetBody()->GetWorldCenter().y,
                      0);
@@ -24,3 +70,5 @@ void CDebugDrawSystem::Draw(const drash::CCamera &_camera) const
         objects[i]->DrawDebug();
     }
 }
+
+}// namespace drash

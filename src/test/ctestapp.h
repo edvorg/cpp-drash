@@ -27,7 +27,6 @@ public:
 
     CScene &GetScene();
     const CScene &GetScene() const;
-    CCamera *GetCamera();
 
     CPlayersSystem &GetPlayersSystem();
     CTemplateSystem &GetTemplateSystem();
@@ -35,7 +34,6 @@ public:
 
 private:
     CScene mScene;
-    CCamera *mCamera;
     CTimer mTimer;
     CExplosionSystem mExplosionSystem;
     CPlayersSystem mPlayersSystem;

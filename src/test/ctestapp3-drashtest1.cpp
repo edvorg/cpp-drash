@@ -100,7 +100,7 @@ bool CTestApp3::Init()
     platform->SetPosTarget( CVec2( 100, 50 ), 10, AnimationBehaviorBounce );
     platform->SetAngleTarget( M_PI / 18.0, 10, AnimationBehaviorBounce );
 
-    GetCamera()->SetZTarget( 280, 1.0f, AnimationBehaviorSingle );
+    GetDebugDrawSystem().GetActiveCam()->SetZTarget( 280, 1.0f, AnimationBehaviorSingle );
 
     return true;
 }
@@ -112,7 +112,7 @@ void CTestApp3::Update()
     if (GetPlayersSystem().EnumPlayers())
     {
         CPlayer *p = GetPlayersSystem().GetPlayers()[0];
-        GetCamera()->SetPosTarget( p->GetBody()->GetWorldCenter(), 1.0, AnimationBehaviorSingle );
+        GetDebugDrawSystem().GetActiveCam()->SetPosTarget( p->GetBody()->GetWorldCenter(), 1.0, AnimationBehaviorSingle );
     }
 }
 

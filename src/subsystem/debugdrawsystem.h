@@ -3,6 +3,7 @@
 
 #include "subsystem.h"
 #include "../sceneobjects.h"
+#include <vector>
 
 namespace drash
 {
@@ -10,7 +11,17 @@ namespace drash
 class CDebugDrawSystem : public CSubsystem
 {
 public:
-    void Draw(const CCamera &_camera) const;
+    CCamera *CreateCam(const CCameraParams &_params);
+    void DestroyCam(CCamera *_cam);
+    void SetActiveCam(CCamera *_cam);
+    CCamera *GetActiveCam();
+
+    void Draw() const;
+
+protected:
+private:
+    CCamera *mActiveCam = nullptr;
+    std::vector<CCamera*> mCameras;
 };
 
 }// namespace drash

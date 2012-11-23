@@ -5,8 +5,7 @@
 namespace drash
 {
 
-CTestApp::CTestApp():
-    mCamera(NULL)
+CTestApp::CTestApp()
 {
 }
 
@@ -29,11 +28,11 @@ bool CTestApp::Init()
     mTemplateSystem.SetScene(&mScene);
     mDebugDrawSystem.SetScene(&mScene);
 
-    CSceneObjectGeometry g;
     CCameraParams p;
-    mCamera = mScene.CreateObject< CCamera >(g, p);
+    CCamera *cam = GetDebugDrawSystem().CreateCam(p);
+    GetDebugDrawSystem().SetActiveCam(cam);
 
-    if ( mCamera == NULL )
+    if (cam == nullptr)
     {
         return false;
     }
@@ -45,14 +44,10 @@ bool CTestApp::Init()
 
 void CTestApp::Release()
 {
-    mPlayersSystem.SetScene(NULL);
-    mExplosionSystem.SetScene(NULL);
-
-    if ( mCamera != NULL )
-    {
-        mScene.DestroyObject(mCamera);
-        mCamera = NULL;
-    }
+    mPlayersSystem.SetScene(nullptr);
+    mExplosionSystem.SetScene(nullptr);
+    mTemplateSystem.SetScene(nullptr);
+    mDebugDrawSystem.SetScene(nullptr);
 
     mScene.Release();
 }
@@ -104,11 +99,6 @@ CScene &CTestApp::GetScene()
 const CScene &CTestApp::GetScene() const
 {
     return mScene;
-}
-
-CCamera *CTestApp::GetCamera()
-{
-    return mCamera;
 }
 
 CPlayersSystem &CTestApp::GetPlayersSystem()

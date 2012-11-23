@@ -83,7 +83,7 @@ void SceneWidget::paintGL()
 
     if ( mTestApp != NULL )
     {
-        mTestApp->GetDebugDrawSystem().Draw(*mTestApp->GetCamera());
+        mTestApp->GetDebugDrawSystem().Draw();
         mTestApp->Render();
     }
 
@@ -103,13 +103,17 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
     {
     case Qt::LeftButton:
     {
+		if (mTestApp->GetDebugDrawSystem().GetActiveCam() == nullptr)
+		{
+			return;
+		}
         CSceneObjectGeometry g;
 
         CExplosionParams p;
         p.mLifeTime = 1;
         p.mStregth = -5;
         p.mRadius = 200;
-        auto cam = mTestApp->GetCamera();
+        auto cam = mTestApp->GetDebugDrawSystem().GetActiveCam();
         p.mPos = ScreenSpaceToWorldSpace(CVec2(_event->x(),
                                                _event->y()),
                                                -cam->GetZ().Get());
@@ -139,8 +143,8 @@ void SceneWidget::keyReleaseEvent( QKeyEvent *_event )
 {
     QGLWidget::keyPressEvent(_event);
 
-    if ( mTestApp == NULL ||
-         mTestApp->GetCamera() == NULL )
+    if ( mTestApp == nullptr ||
+         mTestApp->GetDebugDrawSystem().GetActiveCam() == nullptr )
     {
         return;
     }
@@ -164,8 +168,8 @@ void SceneWidget::keyPressEvent( QKeyEvent *_event )
 {
     QGLWidget::keyPressEvent(_event);
 
-    if ( mTestApp == NULL ||
-         mTestApp->GetCamera() == NULL )
+    if ( mTestApp == nullptr ||
+         mTestApp->GetDebugDrawSystem().GetActiveCam() == nullptr )
     {
         return;
     }
@@ -200,15 +204,15 @@ void SceneWidget::wheelEvent( QWheelEvent *_event )
 {
     QGLWidget::wheelEvent(_event);
 
-    if ( mTestApp == NULL ||
-         mTestApp->GetCamera() == NULL )
+    if ( mTestApp == nullptr ||
+         mTestApp->GetDebugDrawSystem().GetActiveCam() == nullptr )
     {
         return;
     }
 
-    float pos = mTestApp->GetCamera()->GetZ().GetTarget();
+    float pos = mTestApp->GetDebugDrawSystem().GetActiveCam()->GetZ().GetTarget();
     pos += _event->delta() / 10.0f;
-    mTestApp->GetCamera()->SetZTarget( pos, 0.3, AnimationBehaviorSingle );
+    mTestApp->GetDebugDrawSystem().GetActiveCam()->SetZTarget( pos, 0.3, AnimationBehaviorSingle );
 }
 
 void SceneWidget::RemoveObjects()
