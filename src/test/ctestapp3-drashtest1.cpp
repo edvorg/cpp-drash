@@ -100,7 +100,7 @@ bool CTestApp3::Init()
     platform->SetPosTarget( CVec2( 100, 50 ), 10, AnimationBehaviorBounce );
     platform->SetAngleTarget( M_PI / 18.0, 10, AnimationBehaviorBounce );
 
-    GetCamera()->SetZoomTarget( 280, 1.0f );
+    GetCamera()->SetZTarget( 280, 1.0f, AnimationBehaviorSingle );
 
     return true;
 }

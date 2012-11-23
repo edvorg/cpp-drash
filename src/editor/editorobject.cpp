@@ -21,8 +21,7 @@ void EditorObject::mousePressEvent(QMouseEvent *_event){
         auto cam = mTestApp->GetCamera();
         CVec2 pos = this->ScreenSpaceToWorldSpace(CVec2(_event->x(),
                                                         _event->y()),
-                                                        cam->m_ZoomMax -
-                                                  cam->GetZoom());
+                                                        -cam->GetZ().Get());
 
         mVertexs.push_back(pos);
     }

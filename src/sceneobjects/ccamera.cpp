@@ -4,8 +4,6 @@
 namespace drash
 {
 
-const float CCamera::m_ZoomMax = 500.0f;
-
 CCameraParams::CCameraParams():
     CSceneObjectParams()
 {
@@ -14,7 +12,7 @@ CCameraParams::CCameraParams():
 CCamera::CCamera():
     CSceneObject()
 {
-    mZoom.Set(1);
+    SetZ(100);
 }
 
 bool CCamera::Init(const GeometryT &_geometry, const ParamsT &_params )
@@ -27,29 +25,6 @@ bool CCamera::Init(const GeometryT &_geometry, const ParamsT &_params )
     SetDynamic(false);
 
     return true;
-}
-
-void CCamera::Step( double _dt )
-{
-    CSceneObject::Step(_dt);
-    mZoom.Step(_dt);
-}
-
-double CCamera::GetZoom() const
-{
-    return mZoom.Get();
-}
-
-double CCamera::GetZoomTarget() const
-{
-    return mZoom.GetTarget();
-}
-
-void CCamera::SetZoomTarget( float _target, double _time )
-{
-    mZoom.SetTarget( std::min( std::max( 1.0f, _target ), m_ZoomMax ),
-                     _time,
-                     AnimationBehaviorSingle );
 }
 
 }// namespace drash

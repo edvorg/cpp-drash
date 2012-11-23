@@ -21,21 +21,12 @@ public:
 
     typedef CCameraParams ParamsT;
 
-    double GetZoom() const;
-    double GetZoomTarget() const;
-    void SetZoomTarget( float _target, double _time );
-
-    static const float m_ZoomMax;
-
 protected:        
     CCamera( void );
 
     bool Init( const GeometryT &_geometry, const ParamsT &_params );
 
-    virtual void Step( double _dt );
-
 private:
-    CAnimatedParam<float> mZoom;
 };
 
 }// namespace drash

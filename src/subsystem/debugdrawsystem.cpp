@@ -15,7 +15,7 @@ void CDebugDrawSystem::Draw(const drash::CCamera &_camera) const
         glLoadIdentity();
         glTranslatef(-_camera.mPos.Get().x,
                      -_camera.mPos.Get().y,
-                     -_camera.m_ZoomMax + _camera.GetZoom());
+                     -_camera.GetZ().Get());
         glTranslatef(objects[i]->GetBody()->GetWorldCenter().x,
                      objects[i]->GetBody()->GetWorldCenter().y,
                      0);

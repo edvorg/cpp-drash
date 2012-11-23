@@ -112,7 +112,7 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
         auto cam = mTestApp->GetCamera();
         p.mPos = ScreenSpaceToWorldSpace(CVec2(_event->x(),
                                                _event->y()),
-                                         cam->m_ZoomMax - cam->GetZoom());
+                                               -cam->GetZ().Get());
         p.mPos += cam->GetPos().Get();
         mTestApp->GetScene().CreateObject<CExplosion>(g, p);
         break;
@@ -206,9 +206,9 @@ void SceneWidget::wheelEvent( QWheelEvent *_event )
         return;
     }
 
-    float pos = mTestApp->GetCamera()->GetZoomTarget();
+    float pos = mTestApp->GetCamera()->GetZ().GetTarget();
     pos += _event->delta() / 10.0f;
-    mTestApp->GetCamera()->SetZoomTarget( pos, 0.3 );
+    mTestApp->GetCamera()->SetZTarget( pos, 0.3, AnimationBehaviorSingle );
 }
 
 void SceneWidget::RemoveObjects()

@@ -77,6 +77,8 @@ void CSceneObject::Release()
 
 void CSceneObject::Step( double _dt )
 {
+    mZ.Step(_dt);
+
     if ( mBody->GetType() == b2_kinematicBody )
     {
         if ( mPos.IsTargetSet() )
