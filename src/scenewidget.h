@@ -18,7 +18,7 @@ public:
     virtual ~SceneWidget();
 
 
-    drash::CVec2 ScreenSpaceToWorldSpace(const drash::CVec2& _from, float _depth);
+    drash::CVec2 WidgetSpaceToWorldSpace(const drash::CVec2& _from, float _depth);
 
     virtual void resizeGL( int _w, int _h );
     virtual void paintGL();
@@ -34,8 +34,8 @@ public:
 protected:
     constexpr static double mFov = 60.0;
     drash::CTestApp *mTestApp;
-    float mWidth;
-    float mHeight;
+    float mWidth = 1.0f;
+    float mHeight = 1.0f;
     drash::CVec2 mCursorPos;
 public slots:
     void RemoveObjects();

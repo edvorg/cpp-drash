@@ -7,9 +7,7 @@ using namespace drash;
 
 SceneWidget::SceneWidget(QWidget *parent) :
     QGLWidget(parent),
-    mTestApp(NULL),
-    mWidth(1),
-    mHeight(1)
+    mTestApp(NULL)
 {
     setMouseTracking(true);
 }
@@ -18,17 +16,8 @@ SceneWidget::~SceneWidget()
 {
 }
 
-CVec2 SceneWidget::ScreenSpaceToWorldSpace(const CVec2 &_from, float _depth)
+CVec2 SceneWidget::WidgetSpaceToWorldSpace(const CVec2 &_from, float _depth)
 {
-    double aspect = mWidth / mHeight;
-
-    double fov = mFov * M_PI / 180.0;
-
-    double c = _depth / cos(fov / 2.0); // hypotenuse
-
-    double near_height = 2.0 * sqrt( c*c - _depth*_depth );
-    double near_width = near_height * aspect;
-
     CVec2 res = _from;
 
     res.x /= mWidth;
@@ -38,8 +27,7 @@ CVec2 SceneWidget::ScreenSpaceToWorldSpace(const CVec2 &_from, float _depth)
     res.y -= 0.5;
     res.y *= -1;
 
-    res.x *= near_width;
-    res.y *= near_height;
+    mTestApp->GetDebugDrawSystem().ScreenSpaceToWorldSpace(res, _depth);
 
     return res;
 }
@@ -48,10 +36,10 @@ void SceneWidget::resizeGL( int _w, int _h )
 {
     QGLWidget::resizeGL( _w, _h );
 
-    glViewport( 0, 0, _w, _h );
+    mWidth = _w ? _w : 1;
+    mHeight = _h ? _h : 1;
 
-    mWidth = _w;
-    mHeight = _h;
+    glViewport( 0, 0, mWidth, mHeight );
 
     if (mTestApp != nullptr)
     {
@@ -119,7 +107,7 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
         p.mStregth = -5;
         p.mRadius = 200;
         auto cam = mTestApp->GetDebugDrawSystem().GetActiveCam();
-        p.mPos = ScreenSpaceToWorldSpace(CVec2(_event->x(),
+        p.mPos = WidgetSpaceToWorldSpace(CVec2(_event->x(),
                                                _event->y()),
                                                -cam->GetZ().Get());
         p.mPos += cam->GetPos().Get();
@@ -139,9 +127,9 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
 void SceneWidget::mouseMoveEvent(QMouseEvent *_event)
 {
     QGLWidget::mouseMoveEvent(_event);
-    mCursorPos = ScreenSpaceToWorldSpace(CVec2(_event->x(),
+    mCursorPos = WidgetSpaceToWorldSpace(CVec2(_event->x(),
                                                _event->y()),
-                                         1);
+                                               1);
 }
 
 void SceneWidget::keyReleaseEvent( QKeyEvent *_event )
