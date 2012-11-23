@@ -16,7 +16,7 @@ SceneWidget::~SceneWidget()
 {
 }
 
-CVec2 SceneWidget::WidgetSpaceToWorldSpace(const CVec2 &_from, float _depth)
+CVec2 SceneWidget::WidgetSpaceToScreenSpace(const CVec2 &_from) const
 {
     CVec2 res = _from;
 
@@ -27,6 +27,12 @@ CVec2 SceneWidget::WidgetSpaceToWorldSpace(const CVec2 &_from, float _depth)
     res.y -= 0.5;
     res.y *= -1;
 
+    return res;
+}
+
+CVec2 SceneWidget::WidgetSpaceToWorldSpace(const CVec2 &_from, float _depth) const
+{
+    CVec2 res = WidgetSpaceToScreenSpace(_from);
     mTestApp->GetDebugDrawSystem().ScreenSpaceToWorldSpace(res, _depth);
 
     return res;
@@ -54,30 +60,41 @@ void SceneWidget::paintGL()
     glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective( mFov, mWidth / mHeight, 1.0f, 1000.0f );
-
-    glPointSize(4);
-    glBegin(GL_POINTS);
-    glColor3f(0, 1, 0);
-    glVertex3f(mCursorPos.x, mCursorPos.y, -1);
-    glEnd();
-    glBegin(GL_LINES);
-    glColor3f(0, 1, 0);
-    glVertex3f(mCursorPos.x - 0.05, mCursorPos.y, -1);
-    glVertex3f(mCursorPos.x + 0.05, mCursorPos.y, -1);
-    glVertex3f(mCursorPos.x, mCursorPos.y - 0.05, -1);
-    glVertex3f(mCursorPos.x, mCursorPos.y + 0.05, -1);
-    glEnd();
-
-    if ( mTestApp != NULL )
+    if (mTestApp != nullptr)
     {
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluPerspective( mFov, mWidth / mHeight, 1.0f, 1000.0f );
+
         mTestApp->GetDebugDrawSystem().Draw();
         mTestApp->Render();
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(-0.5, 0.5, -0.5, 0.5, 1, -1);
+
+        glDisable(GL_DEPTH_TEST);
+
+        glPointSize(4);
+        glBegin(GL_POINTS);
+        glColor3f(1, 0, 0);
+        glVertex3f(mCursorPos.x, mCursorPos.y, -1);
+        glEnd();
+        glBegin(GL_LINES);
+        glColor3f(0, 1, 0);
+        glVertex3f(mCursorPos.x - 0.02, mCursorPos.y, -1);
+        glVertex3f(mCursorPos.x + 0.02, mCursorPos.y, -1);
+        glVertex3f(mCursorPos.x, mCursorPos.y - 0.02 * mTestApp->GetDebugDrawSystem().GetAspectRatio(), -1);
+        glVertex3f(mCursorPos.x, mCursorPos.y + 0.02 * mTestApp->GetDebugDrawSystem().GetAspectRatio(), -1);
+        glEnd();
+
+        glEnable(GL_DEPTH_TEST);
     }
 
     swapBuffers();
@@ -110,7 +127,6 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
         p.mPos = WidgetSpaceToWorldSpace(CVec2(_event->x(),
                                                _event->y()),
                                                -cam->GetZ().Get());
-        p.mPos += cam->GetPos().Get();
         mTestApp->GetScene().CreateObject<CExplosion>(g, p);
         break;
     }
@@ -127,9 +143,8 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
 void SceneWidget::mouseMoveEvent(QMouseEvent *_event)
 {
     QGLWidget::mouseMoveEvent(_event);
-    mCursorPos = WidgetSpaceToWorldSpace(CVec2(_event->x(),
-                                               _event->y()),
-                                               1);
+    mCursorPos = WidgetSpaceToScreenSpace(CVec2(_event->x(),
+                                                _event->y()));
 }
 
 void SceneWidget::keyReleaseEvent( QKeyEvent *_event )

@@ -62,6 +62,7 @@ bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const
     }
     else
     {
+//        TODO: optimize this
         double fov = 60.0 * M_PI / 180.0;
 
         double c = _depth / cos(fov / 2.0); // hypotenuse
@@ -71,6 +72,8 @@ bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const
 
         _pos.x *= frame_width;
         _pos.y *= frame_height;
+
+        _pos += mActiveCam->GetPos().Get();
 
         return true;
     }

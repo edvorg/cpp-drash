@@ -19,9 +19,9 @@ public:
     void SetAspectRatio(float _ratio);
     float GetAspectRatio() const;
 
-    /// converts coordinates from (-1,-1)..(1, 1) system with center at (0, 0)
-    /// to world coordinates taking depth (distance from camera to required layer)
-    /// into account
+    /// converts coordinates from (-0.5,-0.5)..(0.5, 0.5) system with center at (0, 0)
+    /// to world coordinates taking into account depth (distance from camera to required layer)
+    /// and active camera position
     /// if no camera is activated does nothing and returns false
     bool ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const;
 
