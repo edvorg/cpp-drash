@@ -160,7 +160,7 @@ void CSceneObject::DrawDebug() const
                     local_z = fg->GetZ();
                 }
 
-                DrawBody(s->m_vertices, s->GetVertexCount(), mZ+local_z, depth, diffuse);
+                DrawBody(s->m_vertices, s->GetVertexCount(), mZ.Get()+local_z, depth, diffuse);
             }
         }
         j++;

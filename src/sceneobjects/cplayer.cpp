@@ -126,14 +126,14 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
             break;
 
         case CPlayerEvent::PlayerActionMoveDeep:
-            SetZ(GetZ()-1);
+            SetZ(GetZ().Get()-1);
             SetActive(false);
             SetActive(true);
             break;
 
 
         case CPlayerEvent::PlayerActionMoveOut:
-            SetZ(GetZ()+1);
+            SetZ(GetZ().Get()+1);
             SetActive(false);
             SetActive(true);
             break;

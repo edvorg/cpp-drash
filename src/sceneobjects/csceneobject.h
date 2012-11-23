@@ -82,7 +82,8 @@ public:
     inline const CAnimatedParam<float> &GetAngle() const;
 
     inline void SetZ(float _z);
-    inline float GetZ() const;
+    inline void SetZTarget( float _target, double _time, const AnimationBehavior &_behavior );
+    inline const CAnimatedParam<float> &GetZ() const;
 
     void DumpGeometry(GeometryT &_geometry) const;
     void DumpParams(ParamsT &_params) const;
@@ -112,7 +113,7 @@ private:
     float mColor[3];
     FiguresT mFigures;
     unsigned int mFiguresCount = 0;
-    float mZ = 0;
+    CAnimatedParam<float> mZ;
 };
 
 inline const b2Body *CSceneObject::GetBody() const
@@ -192,10 +193,15 @@ inline const CAnimatedParam<float> &CSceneObject::GetAngle() const
 
 inline void CSceneObject::SetZ(float _z)
 {
-    mZ = _z;
+    mZ.Set(_z);
 }
 
-inline float CSceneObject::GetZ() const
+inline void CSceneObject::SetZTarget(float _target, double _time, const AnimationBehavior &_behavior)
+{
+    mZ.SetTarget( _target, _time, _behavior );
+}
+
+inline const CAnimatedParam<float> &CSceneObject::GetZ() const
 {
     return mZ;
 }
