@@ -44,7 +44,8 @@ SOURCES += ../src/main.cpp\
     ../src/physobserver.cpp \
     ../src/sceneobjects/figure.cpp \
     ../src/subsystem/debugdrawsystem.cpp \
-    ../src/test/app.cpp
+    ../src/test/app.cpp \
+    ../src/test/appevent.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -77,7 +78,8 @@ HEADERS  += ../src/gamewindow.h \
     ../src/physobserver.h \
     ../src/sceneobjects/figure.h \
     ../src/subsystem/debugdrawsystem.h \
-    ../src/test/app.h
+    ../src/test/app.h \
+    ../src/test/appevent.h
 
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui
