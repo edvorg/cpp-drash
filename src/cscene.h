@@ -56,15 +56,13 @@ public:
     /// Method excepts, that T has ParamsT and GeometryT typedefs
     template < typename T >
     T* CreateObject( const typename T::GeometryT &_geometry, const typename T::ParamsT& _params );
-    /// T must extend CSceneObject class
 
-    template < typename T >
-    void DestroyObject( T* _obj );
+    void DestroyObject(CSceneObject *_obj);
 
-    const ObjectsT &GetObjects(void) const;
+    inline const ObjectsT &GetObjects(void) const;
 
     /// returns total objects count
-    unsigned int EnumObjects(void) const;
+    inline unsigned int EnumObjects(void) const;
 
     /// destroyes all objects
     void DestroyObjects(void);
@@ -79,15 +77,14 @@ public:
     /// as we made disconnect _subsystem, we lose pointer to this CScene instance
     void DisconnectSubsystem(CSubsystem *_subsystem);
 
-    const SystemsT &GetSubsystems(void) const;
+    inline const SystemsT &GetSubsystems(void) const;
 
     /// returns total connected subsystems count
-    unsigned int EnumSubsystems(void) const;
+    inline unsigned int EnumSubsystems(void) const;
 
 protected:
 private:
-    template < typename T >
-    void DestroyObjectImpl( T* _obj );
+    void DestroyObjectImpl(CSceneObject *_obj);
 
     bool mInitialized = false;
     bool mLocked = false;
@@ -137,44 +134,24 @@ T* CScene::CreateObject(const typename T::GeometryT &_geometry, const typename T
     return res;
 }
 
-template < typename T >
-void CScene::DestroyObject( T* _obj )
+inline const CScene::ObjectsT &CScene::GetObjects(void) const
 {
-    DRASH_ASSERT(_obj != nullptr &&
-                 "CScene::DestroyObject(): wrong pointer");
-    DRASH_ASSERT( mObjects[_obj->mInternalId] == _obj &&
-                  "CScene::DestroyObject(): something wrong with objects creation logic" );
-
-    if (mLocked == false && mWorld.IsLocked() == false)
-    {
-        DestroyObjectImpl(_obj);
-    }
-    else
-    {
-        _obj->mDead = true;
-    }
+    return mObjects;
 }
 
-template < typename T >
-void CScene::DestroyObjectImpl( T* _obj )
+inline unsigned int CScene::EnumObjects(void) const
 {
-    b2Body* body = _obj->mBody;
-    _obj->mBody->SetActive(false);
-    _obj->mBody->SetUserData(NULL);
+    return mObjectsCount;
+}
 
-    mObjectsCount--;
-    mObjects[_obj->mInternalId] = mObjects[mObjectsCount];
-    mObjects[mObjectsCount] = NULL;
+inline const CScene::SystemsT &CScene::GetSubsystems(void) const
+{
+    return mSubsystems;
+}
 
-    if ( mObjects[_obj->mInternalId] != NULL )
-    {
-        mObjects[_obj->mInternalId]->mInternalId = _obj->mInternalId;
-    }
-
-    _obj->Release();
-    delete _obj;
-
-    mWorld.DestroyBody(body);
+inline unsigned int CScene::EnumSubsystems(void) const
+{
+    return mSubsystemsCount;
 }
 
 } // namespace drash

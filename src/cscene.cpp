@@ -61,7 +61,7 @@ void CScene::Release(void)
 
         while( mObjectsCount != 0 )
         {
-            DestroyObject<CSceneObject>( mObjects[0] );
+            DestroyObject(mObjects[0]);
         }
     }
 
@@ -83,7 +83,7 @@ void CScene::Step( double _dt )
     {
         if ( mObjects[i]->mDead )
         {
-            DestroyObjectImpl<CSceneObject>( mObjects[i] );
+            DestroyObjectImpl(mObjects[i]);
         }
         else
         {
@@ -97,14 +97,21 @@ void CScene::Step( double _dt )
     mWorld.Step( _dt, mVelocityIterations, mPositionIterations );
 }
 
-const CScene::ObjectsT &CScene::GetObjects(void) const
+void CScene::DestroyObject(CSceneObject *_obj)
 {
-    return mObjects;
-}
+    DRASH_ASSERT(_obj != nullptr &&
+                 "CScene::DestroyObject(): wrong pointer");
+    DRASH_ASSERT( mObjects[_obj->mInternalId] == _obj &&
+                  "CScene::DestroyObject(): something wrong with objects creation logic" );
 
-unsigned int CScene::EnumObjects(void) const
-{
-    return mObjectsCount;
+    if (mLocked == false && mWorld.IsLocked() == false)
+    {
+        DestroyObjectImpl(_obj);
+    }
+    else
+    {
+        _obj->mDead = true;
+    }
 }
 
 void CScene::DestroyObjects(void)
@@ -167,14 +174,25 @@ void CScene::DisconnectSubsystem(CSubsystem *_subsystem)
     LOG_WARN("CScene::RemSubsystem(): subsystem is not connected");
 }
 
-const CScene::SystemsT &CScene::GetSubsystems(void) const
+void CScene::DestroyObjectImpl(CSceneObject *_obj)
 {
-    return mSubsystems;
-}
+    b2Body* body = _obj->mBody;
+    _obj->mBody->SetActive(false);
+    _obj->mBody->SetUserData(NULL);
 
-unsigned int CScene::EnumSubsystems(void) const
-{
-    return mSubsystemsCount;
+    mObjectsCount--;
+    mObjects[_obj->mInternalId] = mObjects[mObjectsCount];
+    mObjects[mObjectsCount] = NULL;
+
+    if ( mObjects[_obj->mInternalId] != NULL )
+    {
+        mObjects[_obj->mInternalId]->mInternalId = _obj->mInternalId;
+    }
+
+    _obj->Release();
+    delete _obj;
+
+    mWorld.DestroyBody(body);
 }
 
 } // namespace drash
