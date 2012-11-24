@@ -114,23 +114,32 @@ T* CScene::CreateObject(const typename T::GeometryT &_geometry, const typename T
         return NULL;
     }
 
-    T* res = new T();
-
     b2BodyDef bdef;
-    res->mBody = mWorld.CreateBody(&bdef);    
+    b2Body *b = mWorld.CreateBody(&bdef);
 
-    if ( res->mBody == NULL || res->Init(_geometry, _params) == false )
+    if (b == nullptr)
     {
-        delete res;
-        return NULL;
+        LOG_ERR("CScene::CreateObject(): something wrong with box2d");
+        return nullptr;
     }
 
+    T* res = new T();
+    res->mBody = b;
     res->mBody->SetUserData(res);
     res->mScene = this;
     res->mInternalId = mObjectsCount;
 
+    if (res->Init(_geometry, _params) == false)
+    {
+        LOG_ERR("CScene::CreateObject(): object init failed");
+        mWorld.DestroyBody(b);
+        delete res;
+        return nullptr;
+    }
+
     mObjects[mObjectsCount] = res;
     mObjectsCount++;
+
     return res;
 }
 
