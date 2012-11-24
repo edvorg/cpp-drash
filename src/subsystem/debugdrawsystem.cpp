@@ -89,9 +89,37 @@ void CDebugDrawSystem::Draw() const
 
     const drash::CScene::ObjectsT &objects = GetScene()->GetObjects();
     unsigned int count = GetScene()->EnumObjects();
+    unsigned int objects_skipped = 0;
 
     for (unsigned int i=0; i<count; i++)
     {
+        /////////////////////////////////////////////
+        // frustrum culling
+        /////////////////////////////////////////////
+
+        CVec2 min(-0.5, -0.5);
+        CVec2 max(0.5, 0.5);
+        float d = fabs(objects[i]->GetZ().Get() - mActiveCam->GetZ().Get());
+
+        ScreenSpaceToWorldSpace(min, d);
+        ScreenSpaceToWorldSpace(max, d);
+
+        objects[i]->ComputeBoundingBox();
+        const b2AABB &aabb = objects[i]->GetBoundingBox();
+
+        if (aabb.upperBound.x < min.x ||
+            max.x < aabb.lowerBound.x ||
+            aabb.upperBound.y < min.y ||
+            max.y < aabb.lowerBound.y)
+        {
+            objects_skipped++;
+            continue;
+        }
+
+        ////////////////////////////////////////////
+        // drawing
+        ////////////////////////////////////////////
+
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glTranslatef(-mActiveCam->mPos.Get().x,
@@ -104,6 +132,9 @@ void CDebugDrawSystem::Draw() const
 
         objects[i]->DrawDebug();
     }
+
+    LOG_INFO("CDebugDrawSystem::Draw(): "<<count-objects_skipped<<" objects drawn");
+    LOG_INFO("CDebugDrawSystem::Draw(): "<<objects_skipped<<" objects skipped");
 }
 
 }// namespace drash
