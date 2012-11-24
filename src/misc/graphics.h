@@ -21,6 +21,9 @@ void DrawBody(const b2Vec2 *_vertices,
               float _depth,
               const b2Color &_color);
 
+void DrawCircle(float _rad,
+                float _r, float _g, float _b, float _a);
+
 }// namespace drash
 
 #endif // GRAPHICS_H

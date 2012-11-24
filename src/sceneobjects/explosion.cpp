@@ -1,6 +1,8 @@
 #include "explosion.h"
 
-#include <cscene.h>
+#include "../cscene.h"
+#include "../misc/graphics.h"
+
 #include <GL/gl.h>
 
 namespace drash
@@ -11,6 +13,12 @@ CExplosionParams::CExplosionParams():
     mLifeTime(1),
     mRadius(-1)
 {
+}
+
+void CExplosion::ComputeBoundingBox()
+{
+    mBoundingBox.lowerBound.Set(GetPos().Get().x - mParams.mRadius, GetPos().Get().y - mParams.mRadius);
+    mBoundingBox.upperBound.Set(GetPos().Get().x + mParams.mRadius, GetPos().Get().y + mParams.mRadius);
 }
 
 CExplosion::CExplosion():
@@ -64,39 +72,7 @@ void CExplosion::Step(double _dt)
 
 void CExplosion::DrawDebug() const
 {
-    float scale = (mParams.mLifeTime - mTime) / mParams.mLifeTime;
-
-    glMatrixMode(GL_MODELVIEW);
-    glScalef(scale, scale, scale);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    glDisable(GL_DEPTH_TEST);
-    glBegin(GL_TRIANGLE_STRIP);
-    static const unsigned int segments = 16;
-    static const double delta = 2.0 * M_PI / segments;
-    for (unsigned int i=0; i<segments+1; i++)
-    {
-        glColor4f(0, 1, 0, 0.5);
-        glVertex2f(0, 0);
-        glColor4f(0, 1, 0, 0.5);
-        glVertex2f(mParams.mRadius * cos(i*delta), mParams.mRadius * sin(i*delta));
-    }
-    glEnd();
-    glBegin(GL_LINES);
-    glColor4f(1, 0, 0, 0.5);
-    glVertex2f(-mParams.mRadius, 0);
-    glColor4f(1, 0, 0, 0.5);
-    glVertex2f(mParams.mRadius, 0);
-    glColor4f(1, 0, 0, 0.5);
-    glVertex2f(0, -mParams.mRadius);
-    glColor4f(1, 0, 0, 0.5);
-    glVertex2f(0, mParams.mRadius);
-    glEnd();
-    glEnable(GL_DEPTH_TEST);
-
-    glDisable(GL_BLEND);
+    DrawCircle(mParams.mRadius * (mParams.mLifeTime - mTime) / mParams.mLifeTime, 1, 0, 0, 0.5);
 }
 
 const CExplosionParams &CExplosion::GetParams() const

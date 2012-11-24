@@ -93,4 +93,27 @@ void DrawBody(const b2Vec2 *_vertices,
     glEnd();
 }
 
+void DrawCircle(float _rad,
+                float _r, float _g, float _b, float _a)
+{
+    glDisable(GL_CULL_FACE);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glBegin(GL_TRIANGLE_STRIP);
+    static const unsigned int segments = 16;
+    static const double delta = 2.0 * M_PI / segments;
+    for (unsigned int i=0; i<segments+1; i++)
+    {
+        glColor4f(_r, _g, _b, _a);
+        glVertex2f(0, 0);
+        glColor4f(_r, _g, _b, _a);
+        glVertex2f(_rad * cos(i*delta), _rad * sin(i*delta));
+    }
+    glEnd();
+
+    glDisable(GL_BLEND);
+}
+
 }// namespace drash

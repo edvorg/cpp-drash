@@ -27,6 +27,8 @@ public:
 
     typedef CExplosionParams ParamsT;
 
+    virtual void ComputeBoundingBox();
+
 protected:
     CExplosion(void);
 
