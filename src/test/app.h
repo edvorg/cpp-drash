@@ -17,6 +17,8 @@ class CScene;
 class CApp
 {
 public:
+    virtual ~CApp() {};
+
     virtual bool Init();
     virtual void Release();
     inline virtual void Step(double _dt);

@@ -25,16 +25,16 @@ bool EditorWindow::InitScene()
 {
     drash::CSceneParams params;
     params.mGravity.Set( 0.0f, -9.8f );
-    mTestApp = drash::StartApp("test1");
-    if (mTestApp == NULL) {
+    mApp = drash::StartApp("test1");
+    if (mApp == NULL) {
         return false;
     }
 
-    if (mTestApp->Init() == false) {
+    if (mApp->Init() == false) {
         return false;
     }
 
-    ui->mScene->SetTestApp(mTestApp);
+    ui->mScene->SetTestApp(mApp);
     return true;
 }
 
@@ -42,9 +42,9 @@ void EditorWindow::timerEvent(QTimerEvent *)
 {
     mTimer.Tick();
 
-    if (mTestApp != nullptr)
+    if (mApp != nullptr)
     {
-        mTestApp->Step(mTimer.GetDeltaTime());
+        mApp->Step(mTimer.GetDeltaTime());
     }
 
     ui->mScene->updateGL();

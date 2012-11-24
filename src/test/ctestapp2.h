@@ -2,13 +2,16 @@
 #ifndef CTESTAPP2_H
 #define CTESTAPP2_H
 
-#include "ctestapp.h"
+#include "app.h"
+
 namespace drash
 {
 
 class CTestApp2 : public CApp
 {
 public:
+    virtual ~CTestApp2() override {};
+
     virtual bool Init() override;
 };
 

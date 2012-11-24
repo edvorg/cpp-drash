@@ -3,7 +3,7 @@
 
 #include <QtOpenGL/QtOpenGL>
 #include "sceneobjects.h"
-#include "test/ctestapp.h"
+#include "test/app.h"
 #include "cscene.h"
 #include <QGLWidget>
 //class CVec2;

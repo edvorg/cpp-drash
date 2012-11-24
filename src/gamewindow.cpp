@@ -17,7 +17,6 @@ GameWindow::GameWindow(QWidget *parent) :
     QMainWindow(parent),
     mInitialized(false),
     ui(new Ui::GameWindow),
-    mTestApp(NULL),
     mSceneWidget(NULL)
 {
     ui->setupUi(this);
@@ -36,11 +35,11 @@ GameWindow::~GameWindow()
         return;
     }
 
-    if ( mTestApp )
+    if (mApp != nullptr)
     {
-        mTestApp->Release();
-        delete mTestApp;
-        mTestApp = NULL;
+        mApp->Release();
+        delete mApp;
+        mApp = nullptr;
     }
 
     delete ui;
@@ -57,15 +56,15 @@ bool GameWindow::Init( const GameWindowParams &_params )
         {
             if ( i+1 < _params.mArgv.size() )
             {
-                mTestApp = StartApp( _params.mArgv[i+1].c_str() );
+                mApp = StartApp( _params.mArgv[i+1].c_str() );
 
-                if ( mTestApp == NULL )
+                if (mApp == nullptr)
                 {
                     LOG_ERR("CApp::Init(): test app "<<_params.mArgv[i+1].c_str()<<" not found");
                     return false;
                 }
 
-                if ( mTestApp->Init() == false )
+                if (mApp->Init() == false)
                 {
                     return false;
                 }
@@ -80,7 +79,7 @@ bool GameWindow::Init( const GameWindowParams &_params )
         }
     }
 
-    mSceneWidget->SetTestApp(mTestApp);
+    mSceneWidget->SetTestApp(mApp);
 
     mInitialized = true;    
 
@@ -93,9 +92,9 @@ bool GameWindow::Init( const GameWindowParams &_params )
 void GameWindow::UpdateScene()
 {
     mTimer.Tick();
-    if (mTestApp != nullptr)
+    if (mApp != nullptr)
     {
-        mTestApp->Step(mTimer.GetDeltaTime());
+        mApp->Step(mTimer.GetDeltaTime());
     }
 
     mSceneWidget->updateGL();

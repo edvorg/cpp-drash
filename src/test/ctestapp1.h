@@ -2,7 +2,7 @@
 #ifndef CTESTAPP1_H
 #define CTESTAPP1_H
 
-#include "ctestapp.h"
+#include "app.h"
 
 namespace drash
 {
@@ -10,6 +10,8 @@ namespace drash
 class CTestApp1 : public CApp
 {
 public:
+    virtual ~CTestApp1() override {};
+
     virtual bool Init() override;
     virtual void Step(double _dt) override;
 

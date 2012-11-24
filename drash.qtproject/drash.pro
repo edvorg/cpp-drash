@@ -23,7 +23,6 @@ SOURCES += ../src/main.cpp\
     ../src/test/ctestapp3-drashtest1.cpp \
     ../src/test/ctestapp2.cpp \
     ../src/test/ctestapp1.cpp \
-    ../src/test/ctestapp.cpp \
     ../src/misc/math.cpp \
     ../src/misc/cvec2.cpp \
     ../src/diag/ctimer.cpp \
@@ -44,7 +43,8 @@ SOURCES += ../src/main.cpp\
     ../src/subsystem/templatesystem.cpp \
     ../src/physobserver.cpp \
     ../src/sceneobjects/figure.cpp \
-    ../src/subsystem/debugdrawsystem.cpp
+    ../src/subsystem/debugdrawsystem.cpp \
+    ../src/test/app.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -54,7 +54,6 @@ HEADERS  += ../src/gamewindow.h \
     ../src/test/ctestapp3-drashtest1.h \
     ../src/test/ctestapp2.h \
     ../src/test/ctestapp1.h \
-    ../src/test/ctestapp.h \
     ../src/misc/math.h \
     ../src/misc/cvec2.h \
     ../src/misc/canimatedparam.h \
@@ -77,7 +76,8 @@ HEADERS  += ../src/gamewindow.h \
     ../src/misc/graphics.h \
     ../src/physobserver.h \
     ../src/sceneobjects/figure.h \
-    ../src/subsystem/debugdrawsystem.h
+    ../src/subsystem/debugdrawsystem.h \
+    ../src/test/app.h
 
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui

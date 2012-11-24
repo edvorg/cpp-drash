@@ -2,7 +2,7 @@
 #define EDITORWINDOW_H
 
 #include <QMainWindow>
-#include "../test/ctestapp.h"
+#include "../test/app.h"
 #include "../test/test.h"
 #include "../diag/ctimer.h"
 

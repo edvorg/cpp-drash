@@ -1,7 +1,7 @@
 #ifndef TEST_H
 #define TEST_H
 
-#include "ctestapp.h"
+#include "app.h"
 
 namespace drash
 {
