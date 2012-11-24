@@ -10,7 +10,7 @@ void GenDrashBodyParams( CDrashBodyParams* _params , float _subset_size, unsigne
 
 bool CTestApp3::Init()
 {
-    if ( CTestApp::Init() == false )
+    if ( CApp::Init() == false )
     {
         return false;
     }
@@ -107,7 +107,7 @@ bool CTestApp3::Init()
 
 void CTestApp3::Step(double _dt)
 {
-    CTestApp::Step(_dt);
+    CApp::Step(_dt);
 
     if (GetPlayersSystem().EnumPlayers())
     {

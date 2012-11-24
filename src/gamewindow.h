@@ -38,7 +38,7 @@ public:
 private:
     bool mInitialized = false;
     Ui::GameWindow *ui = nullptr;
-    drash::CTestApp *mTestApp = nullptr;
+    drash::CApp *mApp = nullptr;
     SceneWidget *mSceneWidget = nullptr;
     QTimer timer;
     drash::CTimer mTimer;

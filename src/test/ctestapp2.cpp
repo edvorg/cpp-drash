@@ -7,7 +7,7 @@ namespace drash
 
 bool CTestApp2::Init()
 {
-    if ( CTestApp::Init() == false )
+    if ( CApp::Init() == false )
     {
         return false;
     }

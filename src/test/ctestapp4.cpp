@@ -7,7 +7,7 @@ namespace drash
 
 bool CTestApp4::Init()
 {
-    if (CTestApp::Init() == false)
+    if (CApp::Init() == false)
     {
         return false;
     }
@@ -50,7 +50,7 @@ bool CTestApp4::Init()
 
 void CTestApp4::Step(double _dt)
 {
-    CTestApp::Step(_dt);
+    CApp::Step(_dt);
 
     mTime += _dt;
 

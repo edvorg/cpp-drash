@@ -27,7 +27,7 @@ private slots:
 private:
     Ui::EditorWindow *ui;
     bool InitScene();
-    drash::CTestApp  *mTestApp;
+    drash::CApp  *mApp;
 
     void timerEvent(QTimerEvent *);
 

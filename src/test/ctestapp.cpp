@@ -3,7 +3,7 @@
 namespace drash
 {
 
-bool CTestApp::Init()
+bool CApp::Init()
 {
     CSceneParams params;
     params.mGravity.Set( 0, -9.8 );
@@ -28,7 +28,7 @@ bool CTestApp::Init()
     return true;
 }
 
-void CTestApp::Release()
+void CApp::Release()
 {
     mPlayersSystem.SetScene(nullptr);
     mExplosionSystem.SetScene(nullptr);

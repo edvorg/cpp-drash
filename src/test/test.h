@@ -6,7 +6,7 @@
 namespace drash
 {
 
-CTestApp *StartApp( const char *_name );
+CApp *StartApp( const char *_name );
 
 }// namespace drash
 

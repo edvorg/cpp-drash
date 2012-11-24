@@ -27,7 +27,7 @@ public:
     virtual void resizeGL( int _w, int _h ) override;
     virtual void paintGL() override;
 
-    void SetTestApp( drash::CTestApp *_app );
+    void SetTestApp( drash::CApp *_app );
 
     virtual void mousePressEvent( QMouseEvent * _event ) override;
     virtual void mouseMoveEvent(QMouseEvent *_event) override;
@@ -36,7 +36,7 @@ public:
     virtual void wheelEvent( QWheelEvent *_event ) override;
 
 protected:
-    drash::CTestApp *mTestApp = nullptr;
+    drash::CApp *mApp = nullptr;
     float mWidth = 1.0f;
     float mHeight = 1.0f;
     drash::CVec2 mCursorPos;

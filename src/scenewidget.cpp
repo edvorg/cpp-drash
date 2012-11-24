@@ -91,9 +91,9 @@ void SceneWidget::paintGL()
     swapBuffers();
 }
 
-void SceneWidget::SetTestApp( drash::CTestApp *_app )
+void SceneWidget::SetTestApp( drash::CApp *_app )
 {
-    mTestApp = _app;
+    mApp = _app;
 }
 
 void SceneWidget::mousePressEvent( QMouseEvent *_event )

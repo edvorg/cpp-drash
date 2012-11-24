@@ -14,7 +14,7 @@ namespace drash
 
 class CScene;
 
-class CTestApp
+class CApp
 {
 public:
     virtual bool Init();
@@ -37,37 +37,37 @@ private:
     CDebugDrawSystem mDebugDrawSystem;
 };
 
-inline void CTestApp::Step(double _dt)
+inline void CApp::Step(double _dt)
 {
     mScene.Step(_dt);
 }
 
-inline void CTestApp::Render()
+inline void CApp::Render()
 {
     mDebugDrawSystem.Draw();
 }
 
-inline CScene &CTestApp::GetScene()
+inline CScene &CApp::GetScene()
 {
     return mScene;
 }
 
-inline const CScene &CTestApp::GetScene() const
+inline const CScene &CApp::GetScene() const
 {
     return mScene;
 }
 
-inline CPlayersSystem &CTestApp::GetPlayersSystem()
+inline CPlayersSystem &CApp::GetPlayersSystem()
 {
     return mPlayersSystem;
 }
 
-inline CTemplateSystem &CTestApp::GetTemplateSystem()
+inline CTemplateSystem &CApp::GetTemplateSystem()
 {
     return mTemplateSystem;
 }
 
-inline CDebugDrawSystem &CTestApp::GetDebugDrawSystem()
+inline CDebugDrawSystem &CApp::GetDebugDrawSystem()
 {
     return mDebugDrawSystem;
 }

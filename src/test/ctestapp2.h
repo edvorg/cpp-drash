@@ -6,7 +6,7 @@
 namespace drash
 {
 
-class CTestApp2 : public CTestApp
+class CTestApp2 : public CApp
 {
 public:
     virtual bool Init() override;

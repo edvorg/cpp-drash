@@ -7,7 +7,7 @@ namespace drash
 
 bool CTestApp1::Init()
 {
-    if ( CTestApp::Init() == false )
+    if ( CApp::Init() == false )
     {
         return false;
     }
@@ -29,7 +29,7 @@ bool CTestApp1::Init()
 
 void CTestApp1::Step(double _dt)
 {
-    CTestApp::Step(_dt);
+    CApp::Step(_dt);
 
     mTime += _dt;
 
