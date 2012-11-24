@@ -38,4 +38,26 @@ void CApp::Release()
     mScene.Release();
 }
 
+void CApp::PushEvent(const CAppEvent &_event)
+{
+    if (_event.GetType() != EventUnknown)
+    {
+        mEvents.push_back(_event);
+    }
+}
+
+CAppEvent CApp::PopEvent()
+{
+    if (mEvents.size())
+    {
+        CAppEvent e(mEvents.back());
+        mEvents.pop_back();
+        return e;
+    }
+    else
+    {
+        return CAppEvent();
+    }
+}
+
 } // namespace drash

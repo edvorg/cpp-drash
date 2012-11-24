@@ -34,8 +34,8 @@ public:
     inline CTemplateSystem &GetTemplateSystem();
     inline CDebugDrawSystem &GetDebugDrawSystem();
 
-    inline void PushEvent(const CAppEvent &_event);
-    inline CAppEvent PopEvent();
+    void PushEvent(const CAppEvent &_event);
+    CAppEvent PopEvent();
 
 protected:
 
@@ -81,18 +81,6 @@ inline CTemplateSystem &CApp::GetTemplateSystem()
 inline CDebugDrawSystem &CApp::GetDebugDrawSystem()
 {
     return mDebugDrawSystem;
-}
-
-inline void CApp::PushEvent(const CAppEvent &_event)
-{
-    mEvents.push_back(_event);
-}
-
-inline CAppEvent CApp::PopEvent()
-{
-    CAppEvent e(mEvents.back());
-    mEvents.pop_back();
-    return e;
 }
 
 } // namespace drash

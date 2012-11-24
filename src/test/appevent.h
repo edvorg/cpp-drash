@@ -16,6 +16,11 @@ enum EventType : unsigned int
 enum EventKey : unsigned int
 {
     EventKeyUnknown = 0,
+    EventKeyW,
+    EventKeyA,
+    EventKeyS,
+    EventKeyD,
+    EventKeySpace,
 };
 
 class CAppEvent

@@ -109,6 +109,33 @@ void CTestApp3::Step(double _dt)
 {
     CApp::Step(_dt);
 
+    for (CAppEvent e=PopEvent(); e.GetType()!=EventUnknown; e=PopEvent())
+    {
+        if (e.GetType() == EventKeyboard)
+        {
+            switch (e.GetKey())
+            {
+            case EventKeyW:
+                GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveDeep ), 0 );
+                break;
+            case EventKeyA:
+                GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveLeft ), 0 );
+                break;
+            case EventKeyS:
+                GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveOut ), 0 );
+                break;
+            case EventKeyD:
+                GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveRight ), 0 );
+                break;
+            case EventKeySpace:
+                GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionJump ), 0 );
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
     if (GetPlayersSystem().EnumPlayers())
     {
         CPlayer *p = GetPlayersSystem().GetPlayers()[0];

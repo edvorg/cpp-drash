@@ -6,38 +6,8 @@
 namespace drash
 {
 
-CPlayerEvent::CPlayerEvent( const PlayerAction &_action, const CVec2 &_mousePos ):
-    mType(_action),
-    mMousePos(_mousePos)
-{
-}
-
-void CPlayerEvent::SetMousePos( const CVec2 &_pos )
-{
-    mMousePos = _pos;
-}
-
-CVec2 CPlayerEvent::GetMousePos() const
-{
-    return mMousePos;
-}
-
-const float CPlayer::mHeightJump = 10;
-
-CPlayerParams::CPlayerParams():
-    CSceneObjectParams(),
-    mSpeedJump(10),
-    mSpeedMoving(20),
-    mPointShoot(3,10)
-{
-
-}
-
-CPlayer::CPlayer():
-    CSceneObject(),
-    mJumpAllowed(false),
-    mMovingLeft(false),
-    mMovingRight(false)
+CPlayerEvent::CPlayerEvent(const PlayerAction &_action):
+    mType(_action)
 {
 }
 
@@ -51,97 +21,7 @@ bool CPlayer::Init(const GeometryT &_geometry, const CPlayer::ParamsT &_params )
     SetFixedRotation(true);
 
     mSpeedJump = _params.mSpeedJump;
-    mSpeedMoving = _params.mSpeedMoving;
-    mPointShoot = _params.mPointShoot;
     return true;
-}
-
-void CPlayer::Step( double _dt )
-{
-    CSceneObject::Step(_dt);
-
-    if (mJumpAllowed)
-    {
-        if (mMovingLeft)
-        {
-            MoveLeft();
-        }
-        else if (mMovingRight)
-        {
-            MoveRight();
-        }
-    }
-}
-
-void CPlayer::Jump()
-{
-    if (mJumpAllowed)
-	{
-        CVec2 v = GetBody()->GetLinearVelocity();
-        v.y = mSpeedJump;
-        SetLinearVelocity(v);
-    }
-}
-
-void CPlayer::MoveRight()
-{
-    CVec2 velocity = GetBody()->GetLinearVelocity();
-    velocity.x = mSpeedMoving;
-    SetLinearVelocity(velocity);
-}
-
-void CPlayer::MoveLeft()
-{
-    CVec2 velocity = GetBody()->GetLinearVelocity();
-    velocity.x = -mSpeedMoving;
-    SetLinearVelocity(velocity);
-}
-
-void CPlayer::FireNow( const CVec2 &_fireDirect )
-{
-}
-
-void CPlayer::onEvent( const CPlayerEvent &_event )
-{
-    switch ( _event.mType )
-	{
-        case CPlayerEvent::PlayerActionJump:
-			Jump();
-			break;
-
-        case CPlayerEvent::PlayerActionMoveLeft:
-            mMovingLeft = true;
-            break;
-
-        case CPlayerEvent::PlayerActionMoveRight:
-            mMovingRight = true;
-            break;
-
-        case CPlayerEvent::PlayerActionEndMoveLeft:
-            mMovingLeft = false;
-            break;
-
-        case CPlayerEvent::PlayerActionEndMoveRight:
-            mMovingRight = false;
-            break;
-
-        case CPlayerEvent::PlayerActionMoveDeep:
-            SetZTarget(GetZ().Get()-5, 0.5, AnimationBehaviorSingle);
-            SetActive(false);
-            SetActive(true);
-            break;
-
-
-        case CPlayerEvent::PlayerActionMoveOut:
-            SetZTarget(GetZ().Get()+5, 0.5, AnimationBehaviorSingle);
-            SetActive(false);
-            SetActive(true);
-            break;
-
-        case CPlayerEvent::PlayerActionFire:
-            FireNow( _event.GetMousePos() );
-            break;
-    }
 }
 
 void CPlayer::OnContactBegin( const CContact &_contact )
@@ -162,6 +42,41 @@ void CPlayer::OnContactEnd( const CContact &_contact )
 
 void CPlayer::OnBoom( const CExplosionParams &_boom )
 {
+}
+
+void CPlayer::onEvent( const CPlayerEvent &_event )
+{
+    switch ( _event.mType )
+    {
+        case CPlayerEvent::PlayerActionJump:
+            if (mJumpAllowed)
+            {
+                CVec2 v = GetBody()->GetLinearVelocity();
+                v.y = mSpeedJump;
+                SetLinearVelocity(v);
+            }
+            break;
+
+        case CPlayerEvent::PlayerActionMoveLeft:
+            ApplyLinearImpulse(CVec2(-10, 0), CVec2(0));
+            break;
+
+        case CPlayerEvent::PlayerActionMoveRight:
+            ApplyLinearImpulse(CVec2(10, 0), CVec2(0));
+            break;
+
+        case CPlayerEvent::PlayerActionMoveDeep:
+            SetZTarget(GetZ().Get()-5, 0.5, AnimationBehaviorSingle);
+            SetActive(false);
+            SetActive(true);
+            break;
+
+        case CPlayerEvent::PlayerActionMoveOut:
+            SetZTarget(GetZ().Get()+5, 0.5, AnimationBehaviorSingle);
+            SetActive(false);
+            SetActive(true);
+            break;
+    }
 }
 
 }// namespace drash

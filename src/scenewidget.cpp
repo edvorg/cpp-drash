@@ -1,8 +1,28 @@
 #include "scenewidget.h"
 
 #include "misc/cvec2.h"
+#include "test/appevent.h"
 
 using namespace drash;
+
+drash::EventKey ConvertKey(int _key)
+{
+    switch (_key)
+    {
+    case Qt::Key_W:
+        return drash::EventKeyW;
+    case Qt::Key_A:
+        return drash::EventKeyA;
+    case Qt::Key_S:
+        return drash::EventKeyS;
+    case Qt::Key_D:
+        return drash::EventKeyD;
+    case Qt::Key_Space:
+        return drash::EventKeySpace;
+    default:
+        return drash::EventKeyUnknown;
+    }
+}
 
 SceneWidget::SceneWidget(QWidget *parent) :
     QGLWidget(parent)
@@ -137,31 +157,6 @@ void SceneWidget::mouseMoveEvent(QMouseEvent *_event)
                                                 _event->y()));
 }
 
-void SceneWidget::keyReleaseEvent( QKeyEvent *_event )
-{
-    QGLWidget::keyPressEvent(_event);
-
-    if ( mApp == nullptr ||
-         mApp->GetDebugDrawSystem().GetActiveCam() == nullptr )
-    {
-        return;
-    }
-
-    switch ( _event->key() )
-    {
-    case Qt::Key_A:
-        mApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionEndMoveLeft, CVec2() ), 0 );
-        break;
-
-    case Qt::Key_D:
-        mApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionEndMoveRight, CVec2() ), 0 );
-        break;
-
-    default:
-        break;
-    }
-}
-
 void SceneWidget::keyPressEvent( QKeyEvent *_event )
 {
     QGLWidget::keyPressEvent(_event);
@@ -172,30 +167,7 @@ void SceneWidget::keyPressEvent( QKeyEvent *_event )
         return;
     }
 
-    switch ( _event->key() )
-    {
-    case Qt::Key_Space:
-        mApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionJump, CVec2() ), 0 );
-        break;
-    case Qt::Key_A:
-        mApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveLeft, CVec2() ), 0 );
-        break;
-
-    case Qt::Key_D:
-        mApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveRight, CVec2() ), 0 );
-        break;
-
-    case Qt::Key_W:
-        mApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveDeep, CVec2() ), 0 );
-        break;
-
-    case Qt::Key_S:
-        mApp->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveOut, CVec2() ), 0 );
-        break;
-
-    default:
-        break;
-    }
+    mApp->PushEvent(CAppEvent(EventKeyboard, ConvertKey(_event->key())));
 }
 
 void SceneWidget::wheelEvent( QWheelEvent *_event )

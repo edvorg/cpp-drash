@@ -16,30 +16,20 @@ public:
         PlayerActionMoveRight,
         PlayerActionMoveDeep,
         PlayerActionMoveOut,
-        PlayerActionEndMoveLeft,
-        PlayerActionEndMoveRight,
         PlayerActionJump,
-        PlayerActionFire
     };
 
-    CPlayerEvent( const PlayerAction & _action , const CVec2 &_mousePos );
-
+    CPlayerEvent(const PlayerAction & _action );
 
     PlayerAction mType;
-    void SetMousePos( const CVec2 &_pos );
-    CVec2 GetMousePos() const;
-
 private:
-    CVec2 mMousePos;
 };
 
 class CPlayerParams: public CSceneObjectParams
 {
 public:
-    float mSpeedJump;
-    float mSpeedMoving;
-    CVec2 mPointShoot;
-    CPlayerParams();
+    float mSpeedJump = 10;
+    float mSpeedMoving = 20;
 };
 
 class CPlayer: public CSceneObject
@@ -51,11 +41,7 @@ public:
     typedef CPlayerParams ParamsT;
 
 protected:
-    CPlayer();
-
     bool Init( const GeometryT &_geometry, const ParamsT &_params );
-
-    virtual void Step( double _dt ) override;
 
     virtual void OnContactBegin( const CContact &_contact ) override;
     virtual void OnContactPreSolve( const CContact &_contact ) override;
@@ -64,17 +50,10 @@ protected:
 
     void onEvent( const CPlayerEvent & _event );
 
-    void Jump();
-    void MoveRight();
-    void MoveLeft();
-    void FireNow( const CVec2 & _fireDirect );
+private:
     bool mJumpAllowed = false;
-    bool mMovingLeft = false;
-    bool mMovingRight = false;
     float mSpeedJump = 0;
-    float mSpeedMoving = 0;
-    CVec2 mPointShoot;
-    static const float mHeightJump;
+    constexpr static const float mHeightJump = 10;
 };
 
 }// namespace drash
