@@ -105,9 +105,9 @@ bool CTestApp3::Init()
     return true;
 }
 
-void CTestApp3::Update()
+void CTestApp3::Step(double _dt)
 {
-    CTestApp::Update();
+    CTestApp::Step(_dt);
 
     if (GetPlayersSystem().EnumPlayers())
     {

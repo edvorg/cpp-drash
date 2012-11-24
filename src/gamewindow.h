@@ -6,8 +6,10 @@
 #include "sceneobjects.h"
 #include "test/test.h"
 #include "scenewidget.h"
+#include "diag/ctimer.h"
 
-namespace Ui {
+namespace Ui
+{
 class GameWindow;
 }
 
@@ -39,6 +41,7 @@ private:
     drash::CTestApp *mTestApp;
     SceneWidget *mSceneWidget;
     QTimer timer;
+    drash::CTimer mTimer;
 };
 
 #endif // GAMEWINDOW_H

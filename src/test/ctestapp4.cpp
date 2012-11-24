@@ -5,10 +5,6 @@
 namespace drash
 {
 
-CTestApp4::CTestApp4()
-{
-}
-
 bool CTestApp4::Init()
 {
     if (CTestApp::Init() == false)
@@ -54,9 +50,9 @@ bool CTestApp4::Init()
     return true;
 }
 
-void CTestApp4::Update()
+void CTestApp4::Step(double _dt)
 {
-    CTestApp::Update();
+    CTestApp::Step(_dt);
 
     mTimer.Tick();
 

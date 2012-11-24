@@ -17,12 +17,9 @@ class CScene;
 class CTestApp
 {
 public:
-    CTestApp();
-    virtual ~CTestApp();
-
     virtual bool Init();
     virtual void Release();
-    virtual void Update();
+    virtual void Step(double _dt);
     virtual void Render();
 
     CScene &GetScene();
@@ -34,7 +31,6 @@ public:
 
 private:
     CScene mScene;
-    CTimer mTimer;
     CExplosionSystem mExplosionSystem;
     CPlayersSystem mPlayersSystem;
     CTemplateSystem mTemplateSystem;

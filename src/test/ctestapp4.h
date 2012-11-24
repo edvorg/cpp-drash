@@ -10,9 +10,8 @@ namespace drash
 class CTestApp4 : public CTestApp
 {
 public:
-    CTestApp4();
-    virtual bool Init();
-    virtual void Update();
+    virtual bool Init() override;
+    virtual void Step(double _dt) override;
 
 private:
     CTimer mTimer;

@@ -32,9 +32,9 @@ bool CTestApp1::Init()
     return true;
 }
 
-void CTestApp1::Update()
+void CTestApp1::Step(double _dt)
 {
-    CTestApp::Update();
+    CTestApp::Step(_dt);
 
     t.Tick();
     if ( t.GetFullTime() > 1 )

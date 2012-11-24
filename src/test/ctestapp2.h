@@ -9,7 +9,7 @@ namespace drash
 class CTestApp2 : public CTestApp
 {
 public:
-    virtual bool Init();
+    virtual bool Init() override;
 };
 
 

@@ -40,9 +40,13 @@ bool EditorWindow::InitScene()
 
 void EditorWindow::timerEvent(QTimerEvent *)
 {
-    if (mTestApp != NULL) {
-        mTestApp->Update();
+    mTimer.Tick();
+
+    if (mTestApp != nullptr)
+    {
+        mTestApp->Step(mTimer.GetDeltaTime());
     }
+
     ui->mScene->updateGL();
 }
 

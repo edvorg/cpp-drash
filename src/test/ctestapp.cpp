@@ -3,14 +3,6 @@
 namespace drash
 {
 
-CTestApp::CTestApp()
-{
-}
-
-CTestApp::~CTestApp()
-{
-}
-
 bool CTestApp::Init()
 {
     CSceneParams params;
@@ -33,8 +25,6 @@ bool CTestApp::Init()
         return false;
     }
 
-    mTimer.Reset(true);
-
     return true;
 }
 
@@ -48,10 +38,9 @@ void CTestApp::Release()
     mScene.Release();
 }
 
-void CTestApp::Update()
+void CTestApp::Step(double _dt)
 {
-    mTimer.Tick();
-    mScene.Step( mTimer.GetDeltaTime() );
+    mScene.Step(_dt);
 }
 
 void CTestApp::Render()

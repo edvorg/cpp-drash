@@ -4,8 +4,11 @@
 #include <QMainWindow>
 #include "../test/ctestapp.h"
 #include "../test/test.h"
-namespace Ui {
-class EditorWindow;
+#include "../diag/ctimer.h"
+
+namespace Ui
+{
+    class EditorWindow;
 }
 
 class EditorWindow : public QMainWindow
@@ -33,6 +36,7 @@ private:
     QAction *mQuit;
 private:
     void CreateActions();
+    drash::CTimer mTimer;
 };
 
 #endif // EDITORWINDOW_H

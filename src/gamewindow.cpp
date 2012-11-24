@@ -25,6 +25,8 @@ GameWindow::GameWindow(QWidget *parent) :
     setCentralWidget( mSceneWidget = new SceneWidget(this) );
 
     mSceneWidget->setFocus();
+
+    mTimer.Reset(true);
 }
 
 GameWindow::~GameWindow()
@@ -90,9 +92,10 @@ bool GameWindow::Init( const GameWindowParams &_params )
 
 void GameWindow::UpdateScene()
 {
-    if ( mTestApp != NULL )
+    mTimer.Tick();
+    if (mTestApp != nullptr)
     {
-        mTestApp->Update();
+        mTestApp->Step(mTimer.GetDeltaTime());
     }
 
     mSceneWidget->updateGL();
