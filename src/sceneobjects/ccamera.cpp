@@ -4,13 +4,7 @@
 namespace drash
 {
 
-CCameraParams::CCameraParams():
-    CSceneObjectParams()
-{
-}
-
-CCamera::CCamera():
-    CSceneObject()
+CCamera::CCamera()
 {
     SetZ(100);
 }

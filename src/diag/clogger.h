@@ -23,8 +23,8 @@ public:
 
 private:
     std::ofstream out;
-    std::ostream & mStream;
-    bool mOpened;
+    std::ostream &mStream;
+    bool mOpened = false;
 };
 
 #define LOG_ERR_PREFIX "[E]: "

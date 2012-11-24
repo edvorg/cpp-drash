@@ -34,10 +34,10 @@ public:
     bool GetVertices(b2Vec2ConstPtr *_arr_ptr) const;
     unsigned int EnumVertices() const;
 
-    float GetZ() const;
-    void SetZ(float _z);
-    float GetDepth() const;
-    void SetDepth(float _depth);
+    inline float GetZ() const;
+    inline void SetZ(float _z);
+    inline float GetDepth() const;
+    inline void SetDepth(float _depth);
 
 protected:
 private:
@@ -49,6 +49,26 @@ private:
     float mMass = 1;
     unsigned int mInternalId = 0;
 };
+
+inline float CFigure::GetZ() const
+{
+    return mZ;
+}
+
+inline void CFigure::SetZ(float _z)
+{
+    mZ = _z;
+}
+
+inline float CFigure::GetDepth() const
+{
+    return mDepth;
+}
+
+inline void CFigure::SetDepth(float _depth)
+{
+    mDepth = _depth;
+}
 
 }// namespace drash
 

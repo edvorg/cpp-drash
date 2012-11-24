@@ -14,16 +14,25 @@ namespace drash
 class CSubsystem
 {
 public:
-    CSubsystem();
     ~CSubsystem();
 
     void SetScene(CScene *_scene);
-    CScene *GetScene();
-    const CScene *GetScene() const;
+    inline CScene *GetScene();
+    inline const CScene *GetScene() const;
 
 private:
-    CScene *mScene;
+    CScene *mScene = nullptr;
 };
+
+inline CScene *CSubsystem::GetScene()
+{
+    return mScene;
+}
+
+inline const CScene *CSubsystem::GetScene() const
+{
+    return mScene;
+}
 
 }// namespace drash
 

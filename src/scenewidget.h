@@ -36,7 +36,7 @@ public:
     virtual void wheelEvent( QWheelEvent *_event ) override;
 
 protected:
-    drash::CTestApp *mTestApp;
+    drash::CTestApp *mTestApp = nullptr;
     float mWidth = 1.0f;
     float mHeight = 1.0f;
     drash::CVec2 mCursorPos;

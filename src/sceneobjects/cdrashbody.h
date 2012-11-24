@@ -37,9 +37,9 @@ protected:
     virtual void OnContactBegin( const CContact &_contact ) override;
 
 private:
-    int mCounter;
+    int mCounter = 0;
     CVec2 mLastVelocity;
-    float mLastAngularVelocity;
+    float mLastAngularVelocity = 0;
     ParamsT mParams;
     double mTime = 0;
     std::vector<CExplosionParams> mBoomParams;

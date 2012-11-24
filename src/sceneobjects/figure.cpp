@@ -38,26 +38,6 @@ unsigned int CFigure::EnumVertices() const
     return reinterpret_cast<b2PolygonShape*>(mFixture->GetShape())->GetVertexCount();
 }
 
-float CFigure::GetZ() const
-{
-    return mZ;
-}
-
-void CFigure::SetZ(float _z)
-{
-    mZ = _z;
-}
-
-float CFigure::GetDepth() const
-{
-    return mDepth;
-}
-
-void CFigure::SetDepth(float _depth)
-{
-    mDepth = _depth;
-}
-
 CFigure::CFigure()
 {
 }

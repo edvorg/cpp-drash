@@ -36,10 +36,10 @@ public:
     bool Init( const GameWindowParams &_params );
     
 private:
-    bool mInitialized;
-    Ui::GameWindow *ui;
-    drash::CTestApp *mTestApp;
-    SceneWidget *mSceneWidget;
+    bool mInitialized = false;
+    Ui::GameWindow *ui = nullptr;
+    drash::CTestApp *mTestApp = nullptr;
+    SceneWidget *mSceneWidget = nullptr;
     QTimer timer;
     drash::CTimer mTimer;
 };

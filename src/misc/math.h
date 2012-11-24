@@ -40,8 +40,8 @@ public:
     int GetMax() const { return b; }
 
 private:
-    int a;
-    int b;
+    int a = 0;
+    int b = 0;
 };
 
 inline bool CInterval::IsIntersects( const drash::CInterval &_interval ) const

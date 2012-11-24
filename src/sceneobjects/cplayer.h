@@ -68,14 +68,12 @@ protected:
     void MoveRight();
     void MoveLeft();
     void FireNow( const CVec2 & _fireDirect );
-    bool mJumpAllowed;
-    bool mMovingLeft;
-    bool mMovingRight;
-    float mSpeedJump;
-    float mSpeedMoving;
+    bool mJumpAllowed = false;
+    bool mMovingLeft = false;
+    bool mMovingRight = false;
+    float mSpeedJump = 0;
+    float mSpeedMoving = 0;
     CVec2 mPointShoot;
-
-
     static const float mHeightJump;
 };
 

@@ -12,12 +12,10 @@ class CPlayersSystem : public CSubsystem
 public:
     typedef CPlayer *CPlayerPtr;
 
-    CPlayersSystem();
-
     int AddPlayer(const CSceneObjectGeometry &_geometry, const CPlayerParams &_params);
     void RemPlayer(int _player);
-    const CPlayerPtr *GetPlayers();
-    unsigned int EnumPlayers() const;
+    inline const CPlayerPtr *GetPlayers();
+    inline unsigned int EnumPlayers() const;
 
     void OnPlayerEvent( const CPlayerEvent & _event, unsigned int _playerId );
 
@@ -25,8 +23,18 @@ public:
 
 private:
     CPlayerPtr mPlayers[mMaxPlayersCount];
-    unsigned mPlayersCount;
+    unsigned mPlayersCount = 0;
 };
+
+inline const CPlayersSystem::CPlayerPtr *CPlayersSystem::GetPlayers()
+{
+    return mPlayers;
+}
+
+inline unsigned int CPlayersSystem::EnumPlayers() const
+{
+    return mPlayersCount;
+}
 
 }// namespace drash
 

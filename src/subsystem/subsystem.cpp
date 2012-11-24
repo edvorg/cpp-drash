@@ -3,11 +3,6 @@
 namespace drash
 {
 
-CSubsystem::CSubsystem():
-    mScene(NULL)
-{
-}
-
 CSubsystem::~CSubsystem()
 {
     if (mScene != NULL)
@@ -32,16 +27,6 @@ void CSubsystem::SetScene(CScene *_scene)
 
     mScene = _scene;
     mScene->ConnectSubsystem(this);
-}
-
-CScene *CSubsystem::GetScene()
-{
-    return mScene;
-}
-
-const CScene *CSubsystem::GetScene() const
-{
-    return mScene;
 }
 
 }// namespace drash

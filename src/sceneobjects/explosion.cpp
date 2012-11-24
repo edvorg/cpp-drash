@@ -73,15 +73,5 @@ void CExplosion::DrawDebug() const
     DrawCircle(mParams.mRadius * (mParams.mLifeTime - mTime) / mParams.mLifeTime, 1, 0, 0, 0.5);
 }
 
-const CExplosionParams &CExplosion::GetParams() const
-{
-    return mParams;
-}
-
-float CExplosion::GetTime() const
-{
-    return mTime;
-}
-
 }// namespace drash
 

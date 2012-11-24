@@ -15,8 +15,8 @@ public:
     /// updates full time and delta time
     void Tick();
 
-    void SetPaused( bool _paused );
-    bool IsPaused() const;
+    inline void SetPaused( bool _paused );
+    inline bool IsPaused() const;
 
     /// time (seconds) from mStartTime
     double GetFullTime() const;
@@ -27,11 +27,21 @@ public:
 private:
     void Update();
 
-    unsigned long mStartTime;
-    unsigned long mPrevTime;
-    unsigned long mCurrTime;
-    bool mPaused;
+    unsigned long mStartTime = 0;
+    unsigned long mPrevTime = 0;
+    unsigned long mCurrTime = 0;
+    bool mPaused = true;
 };
+
+inline void CTimer::SetPaused( bool _paused )
+{
+    mPaused = _paused;
+}
+
+inline bool CTimer::IsPaused() const
+{
+    return mPaused;
+}
 
 } // namespace drash
 

@@ -5,11 +5,6 @@
 namespace drash
 {
 
-CPlayersSystem::CPlayersSystem():
-    mPlayersCount(0)
-{
-}
-
 int CPlayersSystem::AddPlayer(const CSceneObjectGeometry &_geometry, const CPlayerParams &_params)
 {
     if (GetScene() == NULL)
@@ -51,16 +46,6 @@ void CPlayersSystem::RemPlayer(int _player)
     }
 
     GetScene()->DestroyObject(mPlayers[_player]);
-}
-
-const CPlayersSystem::CPlayerPtr *CPlayersSystem::GetPlayers()
-{
-    return mPlayers;
-}
-
-unsigned int CPlayersSystem::EnumPlayers() const
-{
-    return mPlayersCount;
 }
 
 void CPlayersSystem::OnPlayerEvent( const CPlayerEvent &_event, unsigned int _playerId )

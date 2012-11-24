@@ -89,17 +89,17 @@ private:
     template < typename T >
     void DestroyObjectImpl( T* _obj );
 
-    bool mInitialized;
-    bool mLocked;
+    bool mInitialized = false;
+    bool mLocked = false;
 
     b2World mWorld;
     CPhysObserver mObserver;
 
     ObjectsT mObjects;
-    unsigned int mObjectsCount;
+    unsigned int mObjectsCount = 0;
 
     SystemsT mSubsystems;
-    unsigned int mSubsystemsCount;
+    unsigned int mSubsystemsCount = 0;
 };
 
 template < typename T >

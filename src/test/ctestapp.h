@@ -19,15 +19,15 @@ class CTestApp
 public:
     virtual bool Init();
     virtual void Release();
-    virtual void Step(double _dt);
-    virtual void Render();
+    inline virtual void Step(double _dt);
+    inline virtual void Render();
 
-    CScene &GetScene();
-    const CScene &GetScene() const;
+    inline CScene &GetScene();
+    inline const CScene &GetScene() const;
 
-    CPlayersSystem &GetPlayersSystem();
-    CTemplateSystem &GetTemplateSystem();
-    CDebugDrawSystem &GetDebugDrawSystem();
+    inline CPlayersSystem &GetPlayersSystem();
+    inline CTemplateSystem &GetTemplateSystem();
+    inline CDebugDrawSystem &GetDebugDrawSystem();
 
 private:
     CScene mScene;
@@ -36,6 +36,41 @@ private:
     CTemplateSystem mTemplateSystem;
     CDebugDrawSystem mDebugDrawSystem;
 };
+
+inline void CTestApp::Step(double _dt)
+{
+    mScene.Step(_dt);
+}
+
+inline void CTestApp::Render()
+{
+    mDebugDrawSystem.Draw();
+}
+
+inline CScene &CTestApp::GetScene()
+{
+    return mScene;
+}
+
+inline const CScene &CTestApp::GetScene() const
+{
+    return mScene;
+}
+
+inline CPlayersSystem &CTestApp::GetPlayersSystem()
+{
+    return mPlayersSystem;
+}
+
+inline CTemplateSystem &CTestApp::GetTemplateSystem()
+{
+    return mTemplateSystem;
+}
+
+inline CDebugDrawSystem &CTestApp::GetDebugDrawSystem()
+{
+    return mDebugDrawSystem;
+}
 
 } // namespace drash
 

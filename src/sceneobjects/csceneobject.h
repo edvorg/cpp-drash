@@ -111,8 +111,8 @@ protected:
 private:
     b2Body* mBody;
     CScene* mScene;
-    bool mDead;
-    int mInternalId;
+    bool mDead = false;
+    int mInternalId = 0;
     CAnimatedParam<CVec2> mPos;
     CAnimatedParam<float> mAngle;
     float mColor[3];

@@ -11,7 +11,6 @@ namespace drash
 class CCameraParams : public CSceneObjectParams
 {
 public:
-    CCameraParams();
 };
 
 class CCamera : public CSceneObject

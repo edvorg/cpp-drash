@@ -36,16 +36,6 @@ void CTimer::Tick()
     }
 }
 
-void CTimer::SetPaused( bool _paused )
-{
-    mPaused = _paused;
-}
-
-bool CTimer::IsPaused() const
-{
-    return mPaused;
-}
-
 double CTimer::GetFullTime() const
 {
     return ( mCurrTime - mStartTime ) / 1000000000.0;

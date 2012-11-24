@@ -40,26 +40,6 @@ void CDebugDrawSystem::DestroyCam(drash::CCamera *_cam)
     }
 }
 
-void CDebugDrawSystem::SetActiveCam(CCamera *_cam)
-{
-    mActiveCam = _cam;
-}
-
-CCamera *CDebugDrawSystem::GetActiveCam()
-{
-    return mActiveCam;
-}
-
-void CDebugDrawSystem::SetAspectRatio(float _ratio)
-{
-    mAspectRatio = _ratio;
-}
-
-float CDebugDrawSystem::GetAspectRatio() const
-{
-    return mAspectRatio;
-}
-
 bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const
 {
     if (mActiveCam == nullptr)

@@ -38,13 +38,23 @@ protected:
 
     virtual void DrawDebug() const override;
 
-    const CExplosionParams &GetParams() const;
-    float GetTime() const;
+    inline const CExplosionParams &GetParams() const;
+    inline float GetTime() const;
 
 private:
     CExplosionParams mParams;
-    double mTime;
+    double mTime = 0;
 };
+
+inline const CExplosionParams &CExplosion::GetParams() const
+{
+    return mParams;
+}
+
+inline float CExplosion::GetTime() const
+{
+    return mTime;
+}
 
 }// namespace drash
 

@@ -18,18 +18,16 @@ template <class T>
 class CAnimatedParam
 {
 public:
-
     CAnimatedParam();
-    ~CAnimatedParam();
 
     void Set( const T &_val );
     void SetTarget( const T &_target, double _time, const AnimationBehavior &_behavior );
 
-    const T &Get() const;
-    const T &GetTarget() const;
-    double GetTimeRemains() const;
+    inline const T &Get() const;
+    inline const T &GetTarget() const;
+    inline double GetTimeRemains() const;
 
-    bool IsTargetSet() const;
+    inline bool IsTargetSet() const;
 
     void Step( double _dt );
 
@@ -56,11 +54,6 @@ CAnimatedParam<T>::CAnimatedParam():
 }
 
 template <class T>
-CAnimatedParam<T>::~CAnimatedParam()
-{
-}
-
-template <class T>
 void CAnimatedParam<T>::Set( const T &_val )
 {
     mTargetSet = false;
@@ -79,25 +72,25 @@ void CAnimatedParam<T>::SetTarget( const T &_target , double _time , const Anima
 }
 
 template <class T>
-const T &CAnimatedParam<T>::Get() const
+inline const T &CAnimatedParam<T>::Get() const
 {
     return mValue;
 }
 
 template <class T>
-const T &CAnimatedParam<T>::GetTarget() const
+inline const T &CAnimatedParam<T>::GetTarget() const
 {
     return mTargetValue;
 }
 
 template <class T>
-double CAnimatedParam<T>::GetTimeRemains() const
+inline double CAnimatedParam<T>::GetTimeRemains() const
 {
     return mTimeFull - mTimeElapsed;
 }
 
 template <class T>
-bool CAnimatedParam<T>::IsTargetSet() const
+inline bool CAnimatedParam<T>::IsTargetSet() const
 {
     return mTargetSet;
 }
