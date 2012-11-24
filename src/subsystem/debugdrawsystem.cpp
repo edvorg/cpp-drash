@@ -75,7 +75,6 @@ void CDebugDrawSystem::Draw() const
 
     const drash::CScene::ObjectsT &objects = GetScene()->GetObjects();
     unsigned int count = GetScene()->EnumObjects();
-    unsigned int objects_skipped = 0;
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -102,7 +101,6 @@ void CDebugDrawSystem::Draw() const
             aabb.upperBound.y < min.y ||
             max.y < aabb.lowerBound.y)
         {
-            objects_skipped++;
             continue;
         }
 
@@ -125,9 +123,6 @@ void CDebugDrawSystem::Draw() const
 
         objects[i]->DrawDebug();
     }
-
-    LOG_INFO("CDebugDrawSystem::Draw(): "<<count-objects_skipped<<" objects drawn");
-    LOG_INFO("CDebugDrawSystem::Draw(): "<<objects_skipped<<" objects skipped");
 }
 
 }// namespace drash
