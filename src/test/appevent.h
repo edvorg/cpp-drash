@@ -28,6 +28,8 @@ enum EventButton : unsigned int
     EventButtonUnknown = 0,
     EventButtonLeft,
     EventButtonRight,
+    EventButtonWheelUp,
+    EventButtonWheelDown,
 };
 
 class CAppEvent

@@ -165,15 +165,16 @@ void SceneWidget::wheelEvent( QWheelEvent *_event )
 {
     QGLWidget::wheelEvent(_event);
 
-    if ( mApp == nullptr ||
-         mApp->GetDebugDrawSystem().GetActiveCam() == nullptr )
+    if (mApp == nullptr)
     {
         return;
     }
 
-    float pos = mApp->GetDebugDrawSystem().GetActiveCam()->GetZ().GetTarget();
-    pos += _event->delta() / 10.0f;
-    mApp->GetDebugDrawSystem().GetActiveCam()->SetZTarget( pos, 0.3, AnimationBehaviorSingle );
+    mApp->PushEvent(CAppEvent(EventMouse,
+                              _event->delta() > 0 ? EventButtonWheelUp : EventButtonWheelDown,
+                              _event->x(),
+                              _event->y()));
+
 }
 
 void SceneWidget::RemoveObjects()
