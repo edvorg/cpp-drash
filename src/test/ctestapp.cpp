@@ -45,6 +45,7 @@ void CTestApp::Step(double _dt)
 
 void CTestApp::Render()
 {
+    mDebugDrawSystem.Draw();
 }
 
 CScene &CTestApp::GetScene()

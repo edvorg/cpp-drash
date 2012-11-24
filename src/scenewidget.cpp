@@ -61,7 +61,6 @@ void SceneWidget::paintGL()
 
     if (mTestApp != nullptr)
     {
-        mTestApp->GetDebugDrawSystem().Draw();
         mTestApp->Render();
 
         glMatrixMode(GL_MODELVIEW);
