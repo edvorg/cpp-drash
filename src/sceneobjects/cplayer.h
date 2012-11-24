@@ -55,14 +55,14 @@ protected:
 
     bool Init( const GeometryT &_geometry, const ParamsT &_params );
 
-    virtual void Step( double _dt );
+    virtual void Step( double _dt ) override;
 
-    virtual void OnContactBegin( const CContact &_contact );
-    virtual void OnContactPreSolve( const CContact &_contact );
-    virtual void OnContactEnd( const CContact &_contact );
-    virtual void OnBoom( const CExplosionParams &_boom );
+    virtual void OnContactBegin( const CContact &_contact ) override;
+    virtual void OnContactPreSolve( const CContact &_contact ) override;
+    virtual void OnContactEnd( const CContact &_contact ) override;
+    virtual void OnBoom( const CExplosionParams &_boom ) override;
 
-    virtual void onEvent( const CPlayerEvent & _event );
+    void onEvent( const CPlayerEvent & _event );
 
     void Jump();
     void MoveRight();

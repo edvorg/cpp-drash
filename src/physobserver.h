@@ -11,10 +11,10 @@ class CPhysObserver : public b2ContactListener, public b2ContactFilter
 public:
     CPhysObserver();
 
-    virtual bool ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB);
-    virtual void BeginContact( b2Contact * _contact );
-    virtual void PreSolve( b2Contact* _contact, const b2Manifold* _oldManifold );
-    virtual void EndContact( b2Contact * _contact );
+    virtual bool ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB) override;
+    virtual void BeginContact( b2Contact * _contact ) override;
+    virtual void PreSolve( b2Contact* _contact, const b2Manifold* _oldManifold ) override;
+    virtual void EndContact( b2Contact * _contact ) override;
 };
 
 }

@@ -17,7 +17,7 @@ public:
 
     virtual ~EditorObject();
 
-    virtual void mousePressEvent( QMouseEvent * _event );
+    virtual void mousePressEvent( QMouseEvent * _event ) override;
 
     void StartBuildObject();
 

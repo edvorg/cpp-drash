@@ -25,16 +25,16 @@ public:
     /// taking into account depth (distance from camera to required layer) and activated camera position
     drash::CVec2 WidgetSpaceToWorldSpace(const drash::CVec2& _from, float _depth) const;
 
-    virtual void resizeGL( int _w, int _h );
-    virtual void paintGL();
+    virtual void resizeGL( int _w, int _h ) override;
+    virtual void paintGL() override;
 
     void SetTestApp( drash::CTestApp *_app );
 
-    virtual void mousePressEvent( QMouseEvent * _event );
-    virtual void mouseMoveEvent(QMouseEvent *_event);
-    virtual void keyReleaseEvent( QKeyEvent *_event );
-    virtual void keyPressEvent( QKeyEvent *_event );
-    virtual void wheelEvent( QWheelEvent *_event );
+    virtual void mousePressEvent( QMouseEvent * _event ) override;
+    virtual void mouseMoveEvent(QMouseEvent *_event) override;
+    virtual void keyReleaseEvent( QKeyEvent *_event ) override;
+    virtual void keyPressEvent( QKeyEvent *_event ) override;
+    virtual void wheelEvent( QWheelEvent *_event ) override;
 
 protected:
     constexpr static double mFov = 60.0;

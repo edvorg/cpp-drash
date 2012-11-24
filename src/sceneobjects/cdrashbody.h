@@ -33,9 +33,9 @@ protected:
 
     bool Init( const GeometryT &_geometry, const ParamsT &_params );
 
-    virtual void Step( double _dt );
+    virtual void Step( double _dt ) override;
 
-    virtual void OnContactBegin( const CContact &_contact );
+    virtual void OnContactBegin( const CContact &_contact ) override;
 
 private:
     int mCounter;

@@ -27,16 +27,16 @@ public:
 
     typedef CExplosionParams ParamsT;
 
-    virtual void ComputeBoundingBox();
+    virtual void ComputeBoundingBox() override;
 
 protected:
     CExplosion(void);
 
     bool Init( const GeometryT &_geometry, const ParamsT &_params );
 
-    virtual void Step( double _dt );
+    virtual void Step( double _dt ) override;
 
-    virtual void DrawDebug() const;
+    virtual void DrawDebug() const override;
 
     const CExplosionParams &GetParams() const;
     float GetTime() const;
