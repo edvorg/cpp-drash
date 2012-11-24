@@ -1,6 +1,8 @@
 #include "debugdrawsystem.h"
 
 #include <GL/gl.h>
+#include <GL/glu.h>
+#include "../misc/graphics.h"
 
 namespace drash
 {
@@ -91,6 +93,10 @@ void CDebugDrawSystem::Draw() const
     unsigned int count = GetScene()->EnumObjects();
     unsigned int objects_skipped = 0;
 
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective( mActiveCam->GetFov() * 180.0 / M_PI, mAspectRatio, 1.0f, 1000.0f );
+
     for (unsigned int i=0; i<count; i++)
     {
         /////////////////////////////////////////////
@@ -129,6 +135,9 @@ void CDebugDrawSystem::Draw() const
                      objects[i]->GetBody()->GetWorldCenter().y,
                      0);
         glRotatef( 180.0f / M_PI * objects[i]->GetBody()->GetAngle(), 0, 0, 1 );
+
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
 
         objects[i]->DrawDebug();
     }

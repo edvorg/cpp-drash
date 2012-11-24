@@ -1,7 +1,5 @@
 #include "cscene.h"
 #include "diag/clogger.h"
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include <subsystem/subsystem.h>
 
 namespace drash

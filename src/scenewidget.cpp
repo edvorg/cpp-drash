@@ -1,7 +1,6 @@
 #include "scenewidget.h"
 
 #include "misc/cvec2.h"
-#include <GL/glu.h>
 
 using namespace drash;
 
@@ -62,13 +61,6 @@ void SceneWidget::paintGL()
 
     if (mTestApp != nullptr)
     {
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        gluPerspective( mFov, mWidth / mHeight, 1.0f, 1000.0f );
-
         mTestApp->GetDebugDrawSystem().Draw();
         mTestApp->Render();
 

@@ -3,8 +3,6 @@
 #include "../cscene.h"
 #include "../misc/graphics.h"
 
-#include <GL/gl.h>
-
 namespace drash
 {
 

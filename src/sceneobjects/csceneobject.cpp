@@ -4,7 +4,6 @@
 #include "../diag/assert.h"
 #include "explosion.h"
 #include "../misc/graphics.h"
-#include <GL/gl.h>
 
 namespace drash
 {
@@ -139,8 +138,6 @@ void CSceneObject::OnBoom( const CExplosionParams &_boom )
 
 void CSceneObject::DrawDebug() const
 {
-    glCullFace(GL_BACK);
-    glEnable(GL_CULL_FACE);
     unsigned int j = 0;
     for ( b2Fixture *f = mBody->GetFixtureList(); f != NULL; f = f->GetNext() )
     {
