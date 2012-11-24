@@ -1,12 +1,9 @@
 #include "ctestapp1.h"
 
 #include "../cscene.h"
-#include "../diag/ctimer.h"
 
 namespace drash
 {
-
-CTimer t;
 
 bool CTestApp1::Init()
 {
@@ -14,8 +11,6 @@ bool CTestApp1::Init()
     {
         return false;
     }
-
-    t.Reset(true);
 
     CSceneObjectGeometry g;
     g.mFigures.resize(1);
@@ -36,8 +31,9 @@ void CTestApp1::Step(double _dt)
 {
     CTestApp::Step(_dt);
 
-    t.Tick();
-    if ( t.GetFullTime() > 1 )
+    mTime += _dt;
+
+    if (mTime > 1.0)
     {
         CSceneObjectGeometry g;
         g.mFigures.resize(1);
@@ -46,7 +42,7 @@ void CTestApp1::Step(double _dt)
         p.mPos.RandY(100, 200, 15);
         p.mPos.RandX(-50, 50, 15);
         GetScene().CreateObject<CSceneObject>(g, p);
-        t.Reset(true);
+        mTime = 0;
     }
 }
 

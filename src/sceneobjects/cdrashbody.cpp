@@ -31,7 +31,6 @@ bool CDrashBody::Init(const GeometryT &_geometry, const CDrashBody::ParamsT &_pa
     }
 
     mParams = _params;
-    mTimer.Reset(true);
 
     return true;
 }
@@ -81,7 +80,7 @@ void CDrashBody::OnContactBegin( const CContact &_contact )
 {
     CSceneObject::OnContactBegin(_contact);
 
-    if ( mCounter == 0 && mTimer.GetFullTime() > mParams.mDestroyDelay )
+    if ( mCounter == 0 && mTime > mParams.mDestroyDelay )
     {
         CVec2 vel = GetBody()->GetLinearVelocity();
         vel -= _contact.obj->GetBody()->GetLinearVelocity();

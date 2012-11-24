@@ -1,6 +1,5 @@
 #include "ctestapp2.h"
 
-#include "../diag/ctimer.h"
 #include "../cscene.h"
 
 namespace drash

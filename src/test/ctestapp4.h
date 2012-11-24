@@ -2,7 +2,6 @@
 #define CTESTAPP4_H
 
 #include "ctestapp.h"
-#include "../diag/ctimer.h"
 
 namespace drash
 {
@@ -14,7 +13,7 @@ public:
     virtual void Step(double _dt) override;
 
 private:
-    CTimer mTimer;
+    double mTime = 0;
 };
 
 }// namespace drash

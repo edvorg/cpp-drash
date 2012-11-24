@@ -45,8 +45,6 @@ bool CTestApp4::Init()
     p1.mDynamic = false;
     p1.mPos.y = -10;
 
-    mTimer.Reset(true);
-
     return true;
 }
 
@@ -54,9 +52,9 @@ void CTestApp4::Step(double _dt)
 {
     CTestApp::Step(_dt);
 
-    mTimer.Tick();
+    mTime += _dt;
 
-    if (mTimer.GetFullTime() >= 1.0)
+    if (mTime >= 1.0)
     {
         CSceneObjectParams params;
         params.mDynamic = true;
@@ -112,7 +110,7 @@ void CTestApp4::Step(double _dt)
             o->CreateFigure(f4);
         }
 
-        mTimer.Reset(true);
+        mTime = 0;
     }
 }
 

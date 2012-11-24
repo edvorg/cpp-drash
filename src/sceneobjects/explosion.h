@@ -43,7 +43,7 @@ protected:
 
 private:
     CExplosionParams mParams;
-    float mTime;
+    double mTime;
 };
 
 }// namespace drash

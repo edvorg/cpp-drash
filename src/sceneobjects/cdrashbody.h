@@ -5,7 +5,6 @@
 #include "csceneobject.h"
 #include "explosion.h"
 #include <vector>
-#include "../diag/ctimer.h"
 
 namespace drash
 {
@@ -42,7 +41,7 @@ private:
     CVec2 mLastVelocity;
     float mLastAngularVelocity;
     ParamsT mParams;
-    CTimer mTimer;
+    double mTime = 0;
     std::vector<CExplosionParams> mBoomParams;
 };
 

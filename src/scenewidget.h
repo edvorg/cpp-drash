@@ -2,7 +2,6 @@
 #define SCENEWIDGET_H
 
 #include <QtOpenGL/QtOpenGL>
-#include "diag/ctimer.h"
 #include "sceneobjects.h"
 #include "test/ctestapp.h"
 #include "cscene.h"
@@ -37,7 +36,6 @@ public:
     virtual void wheelEvent( QWheelEvent *_event ) override;
 
 protected:
-    constexpr static double mFov = 60.0;
     drash::CTestApp *mTestApp;
     float mWidth = 1.0f;
     float mHeight = 1.0f;

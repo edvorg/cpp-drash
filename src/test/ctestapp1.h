@@ -12,6 +12,9 @@ class CTestApp1 : public CTestApp
 public:
     virtual bool Init() override;
     virtual void Step(double _dt) override;
+
+private:
+    double mTime = 0;
 };
 
 } // namespace drash
