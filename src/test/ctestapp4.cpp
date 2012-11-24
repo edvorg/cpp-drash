@@ -48,7 +48,6 @@ bool CTestApp4::Init()
     CSceneObjectParams p1;
     p1.mDynamic = false;
     p1.mPos.y = -10;
-    auto o1 = GetTemplateSystem().CreateSceneObjectFromTemplate("ground", p1);
 
     mTimer.Reset(true);
 
