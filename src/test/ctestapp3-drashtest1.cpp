@@ -134,6 +134,18 @@ void CTestApp3::Step(double _dt)
                 break;
             }
         }
+        else if (e.GetType() == EventMouse)
+        {
+            CSceneObjectGeometry g;
+            CExplosionParams p;
+            p.mLifeTime = 1;
+            p.mStregth = (e.GetButton() == EventButtonLeft ? -5 : 5);
+            p.mRadius = 200;
+            p.mPos = e.GetPos();
+            auto cam = GetDebugDrawSystem().GetActiveCam();
+            GetDebugDrawSystem().ScreenSpaceToWorldSpace(p.mPos, -cam->GetZ().Get());
+            GetScene().CreateObject<CExplosion>(g, p);
+        }
     }
 
     if (GetPlayersSystem().EnumPlayers())

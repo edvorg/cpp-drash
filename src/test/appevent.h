@@ -23,21 +23,30 @@ enum EventKey : unsigned int
     EventKeySpace,
 };
 
+enum EventButton : unsigned int
+{
+    EventButtonUnknown = 0,
+    EventButtonLeft,
+    EventButtonRight,
+};
+
 class CAppEvent
 {
 public:
     CAppEvent();
     CAppEvent(const CAppEvent &_src);
     CAppEvent(EventType _type, EventKey _key);
-    CAppEvent(EventType _type, float _x, float _y);
+    CAppEvent(EventType _type, EventButton _button, float _x, float _y);
 
     inline EventType GetType() const;
     inline EventKey GetKey() const;
+    inline EventButton GetButton() const;
     inline const CVec2 &GetPos() const;
 
 private:
     EventType mType = EventUnknown;
     EventKey mKey = EventKeyUnknown;
+    EventButton mButton = EventButtonUnknown;
     CVec2 mPos = CVec2(0, 0);
 };
 
@@ -49,6 +58,11 @@ inline EventType CAppEvent::GetType() const
 inline EventKey CAppEvent::GetKey() const
 {
     return mKey;
+}
+
+inline EventButton CAppEvent::GetButton() const
+{
+    return mButton;
 }
 
 inline const CVec2 &CAppEvent::GetPos() const

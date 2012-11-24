@@ -24,6 +24,19 @@ drash::EventKey ConvertKey(int _key)
     }
 }
 
+drash::EventButton ConvertButton(Qt::MouseButton _button)
+{
+    switch (_button)
+    {
+    case Qt::LeftButton:
+        return drash::EventButtonLeft;
+    case Qt::RightButton:
+        return drash::EventButtonRight;
+    default:
+        return drash::EventButtonUnknown;
+    }
+}
+
 SceneWidget::SceneWidget(QWidget *parent) :
     QGLWidget(parent)
 {
@@ -119,35 +132,13 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
 {
     QGLWidget::mousePressEvent(_event);
 
-    switch ( _event->button() )
+    if (mApp == nullptr)
     {
-    case Qt::LeftButton:
-    {
-        if (mApp->GetDebugDrawSystem().GetActiveCam() == nullptr)
-		{
-			return;
-		}
-        CSceneObjectGeometry g;
-
-        CExplosionParams p;
-        p.mLifeTime = 1;
-        p.mStregth = -5;
-        p.mRadius = 200;
-        auto cam = mApp->GetDebugDrawSystem().GetActiveCam();
-        p.mPos = WidgetSpaceToWorldSpace(CVec2(_event->x(),
-                                               _event->y()),
-                                               -cam->GetZ().Get());
-        mApp->GetScene().CreateObject<CExplosion>(g, p);
-        break;
+        return;
     }
 
-    case Qt::RightButton:
-        QCoreApplication::quit();
-        break;
-
-    default:
-        break;
-    }
+    CVec2 p = WidgetSpaceToScreenSpace(CVec2(_event->x(), _event->y()));
+    mApp->PushEvent(CAppEvent(EventMouse, ConvertButton(_event->button()), p.x, p.y));
 }
 
 void SceneWidget::mouseMoveEvent(QMouseEvent *_event)
