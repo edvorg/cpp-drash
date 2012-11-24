@@ -30,7 +30,7 @@ unsigned int CFigure::EnumVertices() const
 {
     if (mFixture == nullptr ||
         mFixture->GetShape() == nullptr ||
-        mFixture->GetShape()->GetType() == b2Shape::e_polygon)
+        mFixture->GetShape()->GetType() != b2Shape::e_polygon)
     {
         return 0;
     }
