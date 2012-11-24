@@ -17,7 +17,7 @@ class CScene;
 class CApp
 {
 public:
-    virtual ~CApp() {};
+    virtual ~CApp() {}
 
     virtual bool Init();
     virtual void Release();

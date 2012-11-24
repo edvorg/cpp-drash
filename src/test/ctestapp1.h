@@ -10,7 +10,7 @@ namespace drash
 class CTestApp1 : public CApp
 {
 public:
-    virtual ~CTestApp1() override {};
+    virtual ~CTestApp1() override {}
 
     virtual bool Init() override;
     virtual void Step(double _dt) override;
