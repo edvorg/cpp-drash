@@ -307,4 +307,21 @@ void CSceneObject::DumpParams(CSceneObject::ParamsT &_params) const
     _params.mFixedRotation = mBody->IsFixedRotation();
 }
 
+void CSceneObject::ComputeBoundingBox()
+{
+    mBoundingBox.lowerBound = b2Vec2(FLT_MAX,FLT_MAX);
+    mBoundingBox.upperBound = b2Vec2(-FLT_MAX,-FLT_MAX);
+    b2Fixture* fixture = mBody->GetFixtureList();
+    while (fixture != NULL)
+    {
+        mBoundingBox.Combine(mBoundingBox, fixture->GetAABB(0));
+        fixture = fixture->GetNext();
+    }
+}
+
+const b2AABB &CSceneObject::GetBoundingBox() const
+{
+    return mBoundingBox;
+}
+
 } // namespace drash

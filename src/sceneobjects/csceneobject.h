@@ -88,6 +88,9 @@ public:
     void DumpGeometry(GeometryT &_geometry) const;
     void DumpParams(ParamsT &_params) const;
 
+    void ComputeBoundingBox();
+    const b2AABB &GetBoundingBox() const;
+
 protected:
     CSceneObject(void);
     virtual ~CSceneObject(void);
@@ -114,6 +117,7 @@ private:
     FiguresT mFigures;
     unsigned int mFiguresCount = 0;
     CAnimatedParam<float> mZ;
+    b2AABB mBoundingBox;
 };
 
 inline const b2Body *CSceneObject::GetBody() const
