@@ -26,9 +26,7 @@ bool CTestApp::Init()
     mTemplateSystem.SetScene(&mScene);
     mDebugDrawSystem.SetScene(&mScene);
 
-    CCameraParams p;
-    CCamera *cam = GetDebugDrawSystem().CreateCam(p);
-    GetDebugDrawSystem().SetActiveCam(cam);
+    CCamera *cam = GetDebugDrawSystem().CreateCam(CCameraParams(), true);
 
     if (cam == nullptr)
     {

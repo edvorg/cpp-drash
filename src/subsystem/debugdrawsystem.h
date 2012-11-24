@@ -11,7 +11,7 @@ namespace drash
 class CDebugDrawSystem : public CSubsystem
 {
 public:
-    CCamera *CreateCam(const CCameraParams &_params);
+    CCamera *CreateCam(const CCameraParams &_params, bool _set_active = false);
     void DestroyCam(CCamera *_cam);
     void SetActiveCam(CCamera *_cam);
     CCamera *GetActiveCam();

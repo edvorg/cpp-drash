@@ -7,7 +7,7 @@
 namespace drash
 {
 
-drash::CCamera *CDebugDrawSystem::CreateCam(const drash::CCameraParams &_params)
+drash::CCamera *CDebugDrawSystem::CreateCam(const drash::CCameraParams &_params, bool _set_active)
 {
     if (GetScene() == nullptr)
     {
@@ -16,6 +16,10 @@ drash::CCamera *CDebugDrawSystem::CreateCam(const drash::CCameraParams &_params)
 
     drash::CSceneObjectGeometry g;
     mCameras.push_back(GetScene()->CreateObject<CCamera>(g, _params));
+    if (_set_active)
+    {
+        SetActiveCam(mCameras.back());
+    }
     return mCameras.back();
 }
 
