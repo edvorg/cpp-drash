@@ -50,6 +50,10 @@ public:
     /// if no camera is activated does nothing and returns false
     bool ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const;
 
+    /// finds objects, visible at specified postion in screen space coordinates
+    /// returns nearest one
+    CSceneObject *FindObject(const CVec2 &_pos);
+
     void Draw() const;
 
 protected:
