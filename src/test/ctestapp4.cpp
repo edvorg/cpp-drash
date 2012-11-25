@@ -87,53 +87,6 @@ void CTestApp4::Step(double _dt)
 
         auto o = GetTemplateSystem().CreateSceneObjectFromTemplate(rand()%2 == 0 ? "name1" : "name2", params);
 
-        CFigureParams f1;
-        f1.mDepth = 1;
-        f1.mVertices.push_back(CVec2(0,0));
-        f1.mVertices.push_back(CVec2(2,0));
-        f1.mVertices.push_back(CVec2(2,2));
-        f1.mVertices.push_back(CVec2(0,2));
-        CFigureParams f2;
-        f2.mDepth = 1;
-        f2.mVertices.push_back(CVec2(-2,0));
-        f2.mVertices.push_back(CVec2(0,0));
-        f2.mVertices.push_back(CVec2(0,2));
-        f2.mVertices.push_back(CVec2(-2,2));
-        CFigureParams f3;
-        f3.mDepth = 1;
-        f3.mVertices.push_back(CVec2(0,-2));
-        f3.mVertices.push_back(CVec2(2,-2));
-        f3.mVertices.push_back(CVec2(2,0));
-        f3.mVertices.push_back(CVec2(0,0));
-        CFigureParams f4;
-        f4.mDepth = 1;
-        f4.mVertices.push_back(CVec2(-2,-2));
-        f4.mVertices.push_back(CVec2(0,-2));
-        f4.mVertices.push_back(CVec2(0,0));
-        f4.mVertices.push_back(CVec2(-2,0));
-
-        unsigned char r = rand() % 16;
-
-        if (r & 0x01)
-        {
-            o->CreateFigure(f1);
-        }
-
-        if (r & 0x02)
-        {
-            o->CreateFigure(f2);
-        }
-
-        if (r & 0x04)
-        {
-        o->CreateFigure(f3);
-        }
-
-        if (r & 0x08)
-        {
-            o->CreateFigure(f4);
-        }
-
         mTime = 0;
     }
 }
