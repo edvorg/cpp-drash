@@ -63,7 +63,7 @@ public:
     inline float GetDepth() const;
     inline void SetDepth(float _depth);
 
-    inline bool TestPoint(const CVec2 &_point);
+    bool TestPoint(const CVec2 &_point, float _z);
 
 protected:
 private:
@@ -94,11 +94,6 @@ inline float CFigure::GetDepth() const
 inline void CFigure::SetDepth(float _depth)
 {
     mDepth = _depth;
-}
-
-inline bool CFigure::TestPoint(const CVec2 &_point)
-{
-    return mFixture->TestPoint(_point);
 }
 
 }// namespace drash

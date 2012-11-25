@@ -24,6 +24,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "figure.h"
 
+#include "csceneobject.h"
+
 namespace drash
 {
 
@@ -60,6 +62,13 @@ unsigned int CFigure::EnumVertices() const
     }
 
     return reinterpret_cast<b2PolygonShape*>(mFixture->GetShape())->GetVertexCount();
+}
+
+bool CFigure::TestPoint(const CVec2 &_point, float _z)
+{
+    return mFixture->TestPoint(_point) &&
+           fabs(mZ + reinterpret_cast<CSceneObject*>(mFixture->GetUserData())->GetZ().Get() -
+                _z) <= mDepth;
 }
 
 CFigure::CFigure()

@@ -95,25 +95,15 @@ CSceneObject *CDebugDrawSystem::FindObject(const CVec2 &_pos)
     unsigned int count = GetScene()->EnumObjects();
 
     CSceneObject *res = nullptr;
-    int f = 0;
 
     for (unsigned int i=0; i<count; i++)
     {
         CVec2 world_pos = _pos;
         ScreenSpaceToWorldSpace(world_pos, objects[i]->GetZ().Get() - mActiveCam->GetZ().Get());
 
-        for (unsigned int j=0; j<objects[i]->EnumFigures(); j++)
+        if (objects[i]->TestPoint(world_pos, objects[i]->GetZ().Get()) == true)
         {
-            if (objects[i]->GetFigures()[j]->TestPoint(world_pos) == true)
-            {
-                res = objects[i];
-                f = 1;
-                break;
-            }
-        }
-
-        if (f)
-        {
+            res = objects[i];
             break;
         }
     }
@@ -130,13 +120,9 @@ CSceneObject *CDebugDrawSystem::FindObject(const CVec2 &_pos)
             CVec2 world_pos = _pos;
             ScreenSpaceToWorldSpace(world_pos, objects[i]->GetZ().Get() - mActiveCam->GetZ().Get());
 
-            for (unsigned int j=0; j<objects[i]->EnumFigures(); j++)
+            if (objects[i]->TestPoint(world_pos, objects[i]->GetZ().Get()) == true)
             {
-                if (objects[i]->GetFigures()[j]->TestPoint(world_pos) == true)
-                {
-                    res = objects[i];
-                    break;
-                }
+                res = objects[i];
             }
         }
     }

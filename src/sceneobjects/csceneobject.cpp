@@ -340,9 +340,15 @@ void CSceneObject::ComputeBoundingBox()
     }
 }
 
-const b2AABB &CSceneObject::GetBoundingBox() const
+bool CSceneObject::TestPoint(CVec2 _world_point, float _z) const
 {
-    return mBoundingBox;
+    for (unsigned int i=0; i<mFiguresCount; i++)
+    {
+        if (mFigures[i]->TestPoint(_world_point, _z))
+        {
+            return true;
+        }
+    }
 }
 
 } // namespace drash
