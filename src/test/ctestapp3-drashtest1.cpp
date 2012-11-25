@@ -182,10 +182,26 @@ void CTestApp3::Step(double _dt)
 			}
             else if (e.GetButton() == EventButtonRight)
             {
-                auto o = GetDebugDrawSystem().FindObject(e.GetPos());
-                if (o != nullptr)
+                static CSceneObject *o1 = nullptr;
+                static CSceneObject *o2 = nullptr;
+
+                if (o1 == nullptr)
                 {
-                    GetScene().DestroyObject(o);
+                    o1 = GetDebugDrawSystem().FindObject(e.GetPos());
+                }
+                else if (o2 == nullptr)
+                {
+                    o2 = GetDebugDrawSystem().FindObject(e.GetPos());
+                    if (o1 == o2)
+                    {
+                        o2 = nullptr;
+                    }
+                    else if (o2 != nullptr)
+                    {
+                        GetScene().CreateJoint(o1, o2, o1->GetPos().Get());
+                        o1 = nullptr;
+                        o2 = nullptr;
+                    }
                 }
             }
         }

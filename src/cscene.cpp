@@ -146,6 +146,30 @@ void CScene::DestroyObjects(void)
     }
 }
 
+CJoint *CScene::CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2, const CVec2 _anchor)
+{
+    b2WeldJointDef jdef;
+    jdef.Initialize(_obj1->mBody, _obj2->mBody, _anchor);
+
+    CJoint *res = new CJoint;
+    res->mJoint = mWorld.CreateJoint(&jdef);;
+    res->mJoint->SetUserData(res);
+    return res;
+}
+
+void CScene::DestroyJoint(CJoint *_joint)
+{
+    for (auto j=mWorld.GetJointList(); j!=nullptr; j=j->GetNext())
+    {
+        if (j->GetUserData() == _joint)
+        {
+            delete reinterpret_cast<CJoint*>(j->GetUserData());
+            mWorld.DestroyJoint(j);
+            return;
+        }
+    }
+}
+
 void CScene::ConnectSubsystem(CSubsystem *_subsystem)
 {
     if (_subsystem == NULL)

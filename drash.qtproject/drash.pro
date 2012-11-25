@@ -45,7 +45,8 @@ SOURCES += ../src/main.cpp\
     ../src/sceneobjects/figure.cpp \
     ../src/subsystem/debugdrawsystem.cpp \
     ../src/test/app.cpp \
-    ../src/test/appevent.cpp
+    ../src/test/appevent.cpp \
+    ../src/joints/joint.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -79,7 +80,8 @@ HEADERS  += ../src/gamewindow.h \
     ../src/sceneobjects/figure.h \
     ../src/subsystem/debugdrawsystem.h \
     ../src/test/app.h \
-    ../src/test/appevent.h
+    ../src/test/appevent.h \
+    ../src/joints/joint.h
 
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui
