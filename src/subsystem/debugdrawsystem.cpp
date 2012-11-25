@@ -95,6 +95,7 @@ CSceneObject *CDebugDrawSystem::FindObject(const CVec2 &_pos)
     unsigned int count = GetScene()->EnumObjects();
 
     CSceneObject *res = nullptr;
+    int f = 0;
 
     for (unsigned int i=0; i<count; i++)
     {
@@ -106,8 +107,14 @@ CSceneObject *CDebugDrawSystem::FindObject(const CVec2 &_pos)
             if (objects[i]->GetFigures()[j]->TestPoint(world_pos) == true)
             {
                 res = objects[i];
+                f = 1;
                 break;
             }
+        }
+
+        if (f)
+        {
+            break;
         }
     }
 
