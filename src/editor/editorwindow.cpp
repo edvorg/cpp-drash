@@ -36,6 +36,14 @@ EditorWindow::EditorWindow(QWidget *parent) :
     this->InitScene();
 
     this->startTimer(0);
+    this->ui->mTreeObjects->clear();
+    QTreeWidget *treeWidget = new QTreeWidget();
+    treeWidget->setColumnCount(1);
+    QList<QTreeWidgetItem *> items;
+    for (int i = 0; i < 10; ++i)
+        items.append(new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString("item: %1").arg(i))));
+    ui->mTreeObjects->insertTopLevelItems(0, items);
+    QTreeWidgetItem item;
 }
 
 
@@ -68,7 +76,7 @@ void EditorWindow::timerEvent(QTimerEvent *)
 
     if (mApp != nullptr)
     {
-        mApp->Step(mTimer.GetDeltaTime());
+        mApp->Step(0);
     }
 
     ui->mScene->updateGL();

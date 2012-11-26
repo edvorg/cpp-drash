@@ -45,8 +45,8 @@
        <widget class="QPushButton" name="pushButton">
         <property name="geometry">
          <rect>
-          <x>120</x>
-          <y>60</y>
+          <x>130</x>
+          <y>360</y>
           <width>92</width>
           <height>27</height>
          </rect>
@@ -58,8 +58,8 @@
        <widget class="QPushButton" name="pushButton_2">
         <property name="geometry">
          <rect>
-          <x>20</x>
-          <y>60</y>
+          <x>30</x>
+          <y>360</y>
           <width>92</width>
           <height>27</height>
          </rect>
@@ -67,6 +67,21 @@
         <property name="text">
          <string>Build</string>
         </property>
+       </widget>
+       <widget class="QTreeWidget" name="mTreeObjects">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>10</y>
+          <width>256</width>
+          <height>331</height>
+         </rect>
+        </property>
+        <column>
+         <property name="text">
+          <string notr="true">1</string>
+         </property>
+        </column>
        </widget>
       </widget>
       <widget class="QWidget" name="tab_2">

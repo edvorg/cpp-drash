@@ -33,6 +33,7 @@ EditorObject::EditorObject(QWidget *_parent):
     mMode = Edit;
     connect(this,SIGNAL(CreateNewObject()),
             this,SLOT(RemoveObjects()));
+
 }
 
 EditorObject::~EditorObject()
@@ -70,7 +71,7 @@ bool EditorObject::BuildNow(){
     sbg.mFigures[0].mRestitution = 0.0;
     sbg.mFigures[0].mVertices = mVertexs;
     CSceneObjectParams sbp;
-    sbp.mDynamic = false;
+    sbp.mDynamic = true;
     sbp.mAngle = 0;
     sbp.mPos.Set(0,0);
     mVertexs.clear();
