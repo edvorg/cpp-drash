@@ -38,8 +38,6 @@ namespace drash
 class CSubsystem
 {
 public:
-    ~CSubsystem();
-
     virtual bool Init() { return true; }
     virtual void Release() {}
 

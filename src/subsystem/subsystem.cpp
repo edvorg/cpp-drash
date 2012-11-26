@@ -27,24 +27,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
-CSubsystem::~CSubsystem()
-{
-    if (mScene != NULL)
-    {
-        mScene->DisconnectSubsystem(this);
-        mScene = NULL;
-    }
-}
-
 void CSubsystem::SetScene(CScene *_scene)
 {
-    if (mScene != NULL)
+    if (mScene != nullptr)
     {
         mScene->DisconnectSubsystem(this);
-        mScene = NULL;
+        mScene = nullptr;
     }
 
-    if (_scene == NULL)
+    if (_scene == nullptr)
     {
         return;
     }
