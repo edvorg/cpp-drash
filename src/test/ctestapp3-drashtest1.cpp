@@ -168,18 +168,42 @@ void CTestApp3::Step(double _dt)
                 pos += (e.GetButton() == EventButtonWheelUp ? 10.0f : -10.0f);
                 GetDebugDrawSystem().GetActiveCam()->SetZTarget( pos, 0.3, AnimationBehaviorSingle );
             }
-            else
+            else if (e.GetButton() == EventButtonLeft)
             {
                 CSceneObjectGeometry g;
                 CExplosionParams p;
                 p.mLifeTime = 1;
-                p.mStregth = (e.GetButton() == EventButtonLeft ? -5 : 5);
+                p.mStregth = -5;
                 p.mRadius = 200;
                 p.mPos = e.GetPos();
                 auto cam = GetDebugDrawSystem().GetActiveCam();
                 GetDebugDrawSystem().ScreenSpaceToWorldSpace(p.mPos, -cam->GetZ().Get());
                 GetScene().CreateObject<CExplosion>(g, p);
 			}
+            else if (e.GetButton() == EventButtonRight)
+            {
+                static CSceneObject *o1 = nullptr;
+                static CSceneObject *o2 = nullptr;
+
+                if (o1 == nullptr)
+                {
+                    o1 = GetDebugDrawSystem().FindObject(e.GetPos());
+                }
+                else if (o2 == nullptr)
+                {
+                    o2 = GetDebugDrawSystem().FindObject(e.GetPos());
+                    if (o1 == o2)
+                    {
+                        o2 = nullptr;
+                    }
+                    else if (o2 != nullptr)
+                    {
+                        GetScene().CreateJoint(o1, o2, o1->GetPos().Get());
+                        o1 = nullptr;
+                        o2 = nullptr;
+                    }
+                }
+            }
         }
     }
 

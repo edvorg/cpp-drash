@@ -113,7 +113,9 @@ public:
     void DumpParams(ParamsT &_params) const;
 
     virtual void ComputeBoundingBox();
-    const b2AABB &GetBoundingBox() const;
+    inline const b2AABB &GetBoundingBox() const;
+
+    bool TestPoint(CVec2 _world_point, float _z) const;
 
 protected:
     CSceneObject(void);
@@ -233,6 +235,11 @@ inline void CSceneObject::SetZTarget(float _target, double _time, const Animatio
 inline const CAnimatedParam<float> &CSceneObject::GetZ() const
 {
     return mZ;
+}
+
+inline const b2AABB &CSceneObject::GetBoundingBox() const
+{
+    return mBoundingBox;
 }
 
 } // namespace drash

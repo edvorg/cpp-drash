@@ -29,6 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "sceneobjects.h"
 #include "physobserver.h"
 #include "diag/assert.h"
+#include "joints/joint.h"
 
 namespace drash
 {
@@ -90,6 +91,12 @@ public:
 
     /// destroyes all objects
     void DestroyObjects(void);
+
+    // **************************************************
+    // * working with joints ****************************
+
+    CJoint *CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2, const CVec2 _anchor);
+    void DestroyJoint(CJoint *_joint);
 
     // **************************************************
     // * working with subsystems ************************

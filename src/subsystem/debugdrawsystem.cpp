@@ -89,6 +89,47 @@ bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const
     }
 }
 
+CSceneObject *CDebugDrawSystem::FindObject(const CVec2 &_pos)
+{
+    const drash::CScene::ObjectsT &objects = GetScene()->GetObjects();
+    unsigned int count = GetScene()->EnumObjects();
+
+    CSceneObject *res = nullptr;
+
+    for (unsigned int i=0; i<count; i++)
+    {
+        CVec2 world_pos = _pos;
+        ScreenSpaceToWorldSpace(world_pos, objects[i]->GetZ().Get() - mActiveCam->GetZ().Get());
+
+        if (objects[i]->TestPoint(world_pos, objects[i]->GetZ().Get()) == true)
+        {
+            res = objects[i];
+            break;
+        }
+    }
+
+    if (res != nullptr)
+    {
+        for (unsigned int i=0; i<count; i++)
+        {
+            if (objects[i]->GetZ().Get() < res->GetZ().Get())
+            {
+                continue;
+            }
+
+            CVec2 world_pos = _pos;
+            ScreenSpaceToWorldSpace(world_pos, objects[i]->GetZ().Get() - mActiveCam->GetZ().Get());
+
+            if (objects[i]->TestPoint(world_pos, objects[i]->GetZ().Get()) == true)
+            {
+                res = objects[i];
+            }
+        }
+    }
+
+    return res;
+}
+
 void CDebugDrawSystem::Draw() const
 {
     if (mActiveCam == nullptr)

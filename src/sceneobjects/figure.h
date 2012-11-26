@@ -63,6 +63,8 @@ public:
     inline float GetDepth() const;
     inline void SetDepth(float _depth);
 
+    bool TestPoint(const CVec2 &_point, float _z);
+
 protected:
 private:
     CFigure();
