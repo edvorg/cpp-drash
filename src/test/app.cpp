@@ -54,6 +54,11 @@ bool CApp::Init()
 
 void CApp::Release()
 {
+    mPlayersSystem.Release();
+    mExplosionSystem.Release();
+    mTemplateSystem.Release();
+    mDebugDrawSystem.Release();
+
     mPlayersSystem.SetScene(nullptr);
     mExplosionSystem.SetScene(nullptr);
     mTemplateSystem.SetScene(nullptr);

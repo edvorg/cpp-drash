@@ -133,12 +133,12 @@ bool EditorWindow::UpdateTreeObject()
     ui->mTreeObjects->clear();
     QList<QTreeWidgetItem*> list;
     CTemplateSystem tSys= mApp->GetTemplateSystem();
-    for (auto item = tSys.GetVector().begin();
-         item != tSys.GetVector().end() ; item++) {
+    for (auto item = tSys.GetTemplates().begin();
+         item != tSys.GetTemplates().end() ; item++) {
        QTreeWidgetItem *objectItem = new QTreeWidgetItem(ui->mTreeObjects,
-                                                      QStringList(QString::fromStdString((*item).mName)));
+                                                      QStringList(QString::fromStdString((*item)->mName)));
        ui->mTreeObjects->addTopLevelItem(objectItem);
-       const CSceneObjectTemplate &ii = *item;
+       const CSceneObjectTemplate &ii = **item;
        const CSceneObjectGeometry &geo = ii.mGeometry;
        const std::vector<CFigureParams> &mF = geo.mFigures;
        for (auto fig = mF.begin() ; fig != mF.end() ; fig++) {
