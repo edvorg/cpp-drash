@@ -33,6 +33,7 @@ void CTemplateSystem::Release()
     {
         delete *i;
     }
+    mSceneObjectTemplates.clear();
 }
 
 CSceneObjectTemplate *CTemplateSystem::CreateSceneObjectTemplate(const std::string &_name)
@@ -46,6 +47,19 @@ CSceneObjectTemplate *CTemplateSystem::CreateSceneObjectTemplate(const std::stri
         mSceneObjectTemplates.push_back(new CSceneObjectTemplate());
         mSceneObjectTemplates.back()->mName = _name;
         return mSceneObjectTemplates.back();
+    }
+}
+
+void CTemplateSystem::DestoySceneObjectTemplate(CSceneObjectTemplate *_t)
+{
+    for (auto i=mSceneObjectTemplates.begin(), i_e=mSceneObjectTemplates.end(); i!=i_e; i++)
+    {
+        if ((*i) == _t)
+        {
+            delete _t;
+            mSceneObjectTemplates.erase(i);
+            return;
+        }
     }
 }
 

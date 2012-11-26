@@ -52,6 +52,7 @@ public:
     /// template is just named collection of CSceneObject parameters
     /// we can use it to create many instances of one object at any time we wan
     CSceneObjectTemplate* CreateSceneObjectTemplate(const std::string &_name);
+    void DestoySceneObjectTemplate(CSceneObjectTemplate *_t);
     CSceneObject *CreateSceneObjectFromTemplate(const std::string &_name, const CSceneObjectParams &_params);
 
     const SceneObjectTemplatesT &GetTemplates() const;
