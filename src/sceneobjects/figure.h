@@ -45,7 +45,6 @@ public:
     std::vector<CVec2> mVertices;
 
     float mDepth = 1;
-    float mZ = 0;
 };
 
 class CFigure

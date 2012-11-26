@@ -226,7 +226,6 @@ CSceneObject::CFigurePtr CSceneObject::CreateFigure( const CFigureParams &_param
 
     figure->mFixture = f;
     figure->mMass = _params.mMass;
-    figure->mZ = _params.mZ;
     figure->mDepth = _params.mDepth;
     figure->mInternalId = mFiguresCount;
 
@@ -306,14 +305,12 @@ void CSceneObject::DumpGeometry(CSceneObject::GeometryT &_geometry) const
         }
 
         figure.mDepth = 1;
-        figure.mZ = 0;
 
         if (f->GetUserData() != nullptr)
         {
             CFigure *fg = reinterpret_cast<CFigure*>(f->GetUserData());
 
             figure.mDepth = fg->GetDepth();
-            figure.mZ = fg->GetZ();
         }
 
         _geometry.mFigures.push_back(std::move(figure));
