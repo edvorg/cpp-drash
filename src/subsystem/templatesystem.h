@@ -50,6 +50,9 @@ public:
     /// we can use it to create many instances of one object at any time we wan
     CSceneObjectTemplate* CreateSceneObjectTemplate(const std::string &_name);
     CSceneObject *CreateSceneObjectFromTemplate(const std::string &_name, const CSceneObjectParams &_params);
+
+    SceneObjectTemplatesT &GetVector();
+
 protected:
 private:
     SceneObjectTemplatesT mSceneObjectGeometries;

@@ -54,4 +54,9 @@ CSceneObject *CTemplateSystem::CreateSceneObjectFromTemplate(const std::string &
     return nullptr;
 }
 
+CTemplateSystem::SceneObjectTemplatesT &CTemplateSystem::GetVector()
+{
+    return this->mSceneObjectGeometries;
+}
+
 }// namespace drash

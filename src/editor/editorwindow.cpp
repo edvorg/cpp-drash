@@ -24,7 +24,14 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "editorwindow.h"
 #include "ui_editorwindow.h"
+#include "../cscene.h"
+#include <string>
 
+#include <QTreeWidgetItem>
+#include <QStringList>
+#include "../subsystem/templatesystem.h"
+//#include ""
+using namespace drash;
 
 EditorWindow::EditorWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -37,13 +44,43 @@ EditorWindow::EditorWindow(QWidget *parent) :
 
     this->startTimer(0);
     this->ui->mTreeObjects->clear();
-    QTreeWidget *treeWidget = new QTreeWidget();
-    treeWidget->setColumnCount(1);
-    QList<QTreeWidgetItem *> items;
-    for (int i = 0; i < 10; ++i)
-        items.append(new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString("item: %1").arg(i))));
-    ui->mTreeObjects->insertTopLevelItems(0, items);
-    QTreeWidgetItem item;
+//    QTreeWidget *treeWidget = new QTreeWidget();
+//    treeWidget->setColumnCount(1);
+//    QList<QTreeWidgetItem *> items; //= new QList<QTreeWidgetItem *>();
+//    for (int i = 0; i < 10; ++i){
+//        items.append(new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString("item: %1").arg(i))));
+//    }
+//    ui->mTreeObjects->insertTopLevelItems(0, items);
+//    QTreeWidgetItem* item = new QTreeWidgetItem(items[0],QStringList(QString("ABC")));
+    auto t = mApp->GetTemplateSystem().CreateSceneObjectTemplate("name1");
+    if (t != nullptr)
+    {
+        t->mGeometry.mFigures.resize(1);
+        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-2, -1));
+        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(2, -1));
+        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(1, 1));
+        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-1, 1));
+    }
+    t = mApp->GetTemplateSystem().CreateSceneObjectTemplate("name2");
+    if (t != nullptr)
+    {
+        t->mGeometry.mFigures.resize(1);
+        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(2, 1));
+        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-2, 1));
+        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-1, -1));
+        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(1, -1));
+    }
+    t = mApp->GetTemplateSystem().CreateSceneObjectTemplate("ground");
+    if (t != nullptr)
+    {
+        t->mGeometry.mFigures.resize(1);
+        t->mGeometry.mFigures[0].mDepth = 10;
+        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(50, 5));
+        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-50, 5));
+        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-50, -5));
+        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(50, -5));
+    }
+    UpdateTreeObject();
 }
 
 
@@ -89,6 +126,40 @@ void EditorWindow::CreateActions()
     this->addAction(mQuit);
     connect(mQuit,SIGNAL(triggered()),
             this,SLOT(close()));
+}
+
+bool EditorWindow::UpdateTreeObject()
+{
+    ui->mTreeObjects->clear();
+    QList<QTreeWidgetItem*> list;
+    CTemplateSystem tSys= mApp->GetTemplateSystem();
+    for (auto item = tSys.GetVector().begin();
+         item != tSys.GetVector().end() ; item++) {
+       QTreeWidgetItem *objectItem = new QTreeWidgetItem(ui->mTreeObjects,
+                                                      QStringList(QString::fromStdString((*item).mName)));
+       ui->mTreeObjects->addTopLevelItem(objectItem);
+       const CSceneObjectTemplate &ii = *item;
+       const CSceneObjectGeometry &geo = ii.mGeometry;
+       const std::vector<CFigureParams> &mF = geo.mFigures;
+       for (auto fig = mF.begin() ; fig != mF.end() ; fig++) {
+           CFigureParams par = *fig;
+           QString vecs("");
+           vecs.append("[");
+           for (int i = 0 ; i < par.mVertices.size() ; i++) {
+               if (i != 0) vecs.append(",");
+               vecs.append("(");
+               QString x = QString::number(par.mVertices[i].x);
+               vecs.append(x);
+               vecs.append(",");
+               QString y = QString::number(par.mVertices[i].y);
+               vecs.append(y);
+               vecs.append(")");
+           }
+           vecs.append("]");
+           QTreeWidgetItem *itemFig = new QTreeWidgetItem(objectItem,QStringList(vecs));
+       }
+    }
+
 }
 
 

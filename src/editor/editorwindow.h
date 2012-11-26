@@ -60,6 +60,7 @@ private:
     QAction *mQuit;
 private:
     void CreateActions();
+    bool UpdateTreeObject();
     drash::CTimer mTimer;
 };
 
