@@ -349,6 +349,8 @@ bool CSceneObject::TestPoint(CVec2 _world_point, float _z) const
             return true;
         }
     }
+
+    return false;
 }
 
 } // namespace drash
