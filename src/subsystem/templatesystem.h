@@ -36,7 +36,16 @@ class CSceneObjectTemplate
 {
 public:
     CSceneObjectGeometry mGeometry;
-    std::string mName;
+    std::string mName = "";
+protected:
+private:
+};
+
+class CDrashBodyTemplate
+{
+public:
+    CDrashBodyGeometry mGeometry;
+    std::string mName = "";
 protected:
 private:
 };
@@ -46,20 +55,30 @@ class CTemplateSystem : public CSubsystem
 public:
     typedef CSceneObjectTemplate *CSceneObjectTemplatePtr;
     typedef std::vector<CSceneObjectTemplatePtr> SceneObjectTemplatesT;
+    typedef CDrashBodyTemplate *CDrashBodyTemplatePtr;
+    typedef std::vector<CDrashBodyTemplatePtr> DrashBodyTemplatesT;
 
     virtual void Release() override;
 
-    /// template is just named collection of CSceneObject parameters
-    /// we can use it to create many instances of one object at any time we wan
+    /// template is just named CSceneObjectGeometry
+    /// we can use it to create many instances of one object at any time we want
     CSceneObjectTemplate* CreateSceneObjectTemplate(const std::string &_name);
     void DestoySceneObjectTemplate(CSceneObjectTemplate *_t);
     CSceneObject *CreateSceneObjectFromTemplate(const std::string &_name, const CSceneObjectParams &_params);
 
-    const SceneObjectTemplatesT &GetTemplates() const;
+    /// template is just named CDrashBodyGeometry
+    /// we can use it to create many instances of one object at any time we want
+    CDrashBodyTemplate* CreateDrashBodyTemplate(const std::string &_name);
+    void DestoyDrashBodyTemplate(CDrashBodyTemplate *_t);
+    CDrashBody *CreateDrashBodyFromTemplate(const std::string &_name, const CDrashBodyParams &_params);
+
+    const SceneObjectTemplatesT &GetSceneObjectTemplates() const;
+    const DrashBodyTemplatesT &GetDrashBodyTemplates() const;
 
 protected:
 private:
     SceneObjectTemplatesT mSceneObjectTemplates;
+    DrashBodyTemplatesT mDrashBodyTemplates;
 };
 
 }// namespace drash
