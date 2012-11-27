@@ -31,8 +31,9 @@ EditorObject::EditorObject(QWidget *_parent):
     mStartBuild(false)
 {
     mMode = Edit;
-    connect(this,SIGNAL(CreateNewObject()),
-            this,SLOT(RemoveObjects()));
+//    connect(this,SIGNAL(CreateNewObject()),
+//            this,SLOT(RemoveObjects()));
+
 
 }
 
@@ -41,7 +42,7 @@ EditorObject::~EditorObject()
 }
 
 void EditorObject::mousePressEvent(QMouseEvent *_event){
-    QWidget::mousePressEvent(_event);
+    //QWidget::mousePressEvent(_event);
     if (mStartBuild == true) {
         auto cam = mApp->GetDebugDrawSystem().GetActiveCam();
         CVec2 pos = this->WidgetSpaceToWorldSpace(CVec2(_event->x(),
@@ -49,6 +50,7 @@ void EditorObject::mousePressEvent(QMouseEvent *_event){
                                                         -cam->GetZ().Get());
 
         mVertexs.push_back(pos);
+        LOG_INFO(pos);
     }
 }
 
@@ -59,23 +61,30 @@ void EditorObject::StartBuildObject(){
     emit this->CreateNewObject();
 }
 
-bool EditorObject::BuildNow(){
+bool EditorObject::EndBuild(){
     if (mStartBuild == false ||
             mVertexs.empty()) {
         return false;
     }
     mStartBuild = false;
-    CSceneObjectGeometry sbg;
-    sbg.mFigures.resize(1);
-    sbg.mFigures[0].mDepth = 40;
-    sbg.mFigures[0].mRestitution = 0.0;
-    sbg.mFigures[0].mVertices = mVertexs;
-    CSceneObjectParams sbp;
-    sbp.mDynamic = true;
-    sbp.mAngle = 0;
-    sbp.mPos.Set(0,0);
+
+//    CSceneObjectGeometry sbg;
+//    sbg.mFigures.resize(1);
+//    sbg.mFigures[0].mDepth = 40;
+//    sbg.mFigures[0].mRestitution = 0.0;
+//    sbg.mFigures[0].mVertices = mVertexs;
+//    CSceneObjectParams sbp;
+//    sbp.mDynamic = true;
+//    sbp.mAngle = 0;
+//    sbp.mPos.Set(0,0);
+//    t->mGeometry.mFigures.resize(1);
+//    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(2, 1));
+//    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-2, 1));
+//    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-1, -1));
+//    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(1, -1));
+//    mApp->GetTemplateSystem().CreateSceneObjectTemplate();
     mVertexs.clear();
-    mApp->GetScene().CreateObject<CSceneObject>(sbg, sbp);
+    //mApp->GetScene().CreateObject<CSceneObject>(sbg, sbp);
 //    for (auto iter = mVertexs.begin() ; iter != mVertexs.end() ; iter++) {
 //    }
 //    sbp.mFigures[0].mVertices.push_back( CVec2( -300, -5 ) );
@@ -83,4 +92,16 @@ bool EditorObject::BuildNow(){
 //    sbp.mFigures[0].mVertices.push_back( CVec2( 300, 5 ) );
 //    sbp.mFigures[0].mVertices.push_back( CVec2( -300, 5 ) );
     return true;
+}
+
+const std::vector<CVec2> &EditorObject::GetVector() const
+{
+
+    return mVertexs;
+
+}
+
+void EditorObject::ChangeMode()
+{
+    mMode = (mMode == Create)? Simple: Create;
 }

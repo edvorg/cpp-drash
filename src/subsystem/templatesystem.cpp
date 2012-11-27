@@ -72,13 +72,26 @@ CSceneObject *CTemplateSystem::CreateSceneObjectFromTemplate(const std::string &
             return GetScene()->CreateObject<CSceneObject>((*i)->mGeometry, _params);
         }
     }
-
+    LOG_ERR("Object not found in CTemplateSystem");
     return nullptr;
 }
 
 const CTemplateSystem::SceneObjectTemplatesT &CTemplateSystem::GetTemplates() const
 {
     return this->mSceneObjectTemplates;
+}
+
+CSceneObjectTemplate *CTemplateSystem::FindTemplate(const std::string &_name)
+{
+    for (auto i=mSceneObjectTemplates.begin(), i_e=mSceneObjectTemplates.end(); i!=i_e; i++)
+    {
+        if ((*i)->mName == _name)
+        {
+            return *i;
+        }
+    }
+    LOG_ERR("Object not found in CTemplateSystem");
+    return nullptr;
 }
 
 }// namespace drash

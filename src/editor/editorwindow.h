@@ -29,11 +29,17 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../test/app.h"
 #include "../test/test.h"
 #include "../diag/ctimer.h"
+#include "ceditorapp.h"
+
 class QTreeWidgetItem;
+class QLabel;
+
 namespace Ui
 {
     class EditorWindow;
 }
+
+class QStatusBar;
 
 class EditorWindow : public QMainWindow
 {
@@ -52,20 +58,30 @@ private slots:
 
     void on_mBuildButton_clicked();
 
+    void on_mNewFigureButton_clicked();
+
 private:
     Ui::EditorWindow *ui;
     bool InitScene();
-    drash::CApp  *mApp;
+    drash::CEditorApp  *mApp;
 
     void timerEvent(QTimerEvent *);
 
     // Actions
 private:
     QAction *mQuit;
+
+    // GuiObjects
+private:
+    QLabel *mLabelOfStatusBar;
 private:
     void CreateActions();
     bool UpdateTreeObject();
     drash::CTimer mTimer;
+
+public:
+    void AddFigure(const std::vector<drash::CVec2> &_vertexs);
+
 };
 
 #endif // EDITORWINDOW_H

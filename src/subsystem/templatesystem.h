@@ -57,6 +57,8 @@ public:
 
     const SceneObjectTemplatesT &GetTemplates() const;
 
+    CSceneObjectTemplate * FindTemplate(const std::string & _name);
+
 protected:
 private:
     SceneObjectTemplatesT mSceneObjectTemplates;
