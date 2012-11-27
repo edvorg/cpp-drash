@@ -30,7 +30,6 @@ namespace drash
 
 CCamera::CCamera()
 {
-    SetZ(100);
 }
 
 bool CCamera::Init(const GeometryT &_geometry, const ParamsT &_params )
@@ -41,6 +40,8 @@ bool CCamera::Init(const GeometryT &_geometry, const ParamsT &_params )
     }
 
     SetDynamic(false);
+    mFov = _params.mFov;
+    mDepthOfView = _params.mDepthOfView;
 
     return true;
 }

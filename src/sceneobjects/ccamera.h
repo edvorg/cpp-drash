@@ -35,6 +35,8 @@ namespace drash
 class CCameraParams : public CSceneObjectParams
 {
 public:
+    float mFov = M_PI / 4.0f;
+    float mDepthOfView = 1000.0f;
 };
 
 class CCamera : public CSceneObject
@@ -47,13 +49,17 @@ public:
     inline void SetFov(float _fov);
     inline float GetFov() const;
 
+    inline void SetDepthOfView(float _depth);
+    inline float GetDepthOfView() const;
+
 protected:        
     CCamera( void );
 
     bool Init( const GeometryT &_geometry, const ParamsT &_params );
 
 private:
-    float mFov = M_PI / 3.0f;
+    float mFov = M_PI / 4.0f;
+    float mDepthOfView = 1000.0f;
 };
 
 inline void CCamera::SetFov(float _fov)
@@ -64,6 +70,16 @@ inline void CCamera::SetFov(float _fov)
 inline float CCamera::GetFov() const
 {
     return mFov;
+}
+
+inline void CCamera::SetDepthOfView(float _depth)
+{
+    mDepthOfView = fabs(_depth);
+}
+
+inline float CCamera::GetDepthOfView() const
+{
+    return mDepthOfView;
 }
 
 }// namespace drash

@@ -143,7 +143,7 @@ void CDebugDrawSystem::Draw() const
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective( mActiveCam->GetFov() * 180.0 / M_PI, mAspectRatio, 1.0f, 1000.0f );
+    gluPerspective(mActiveCam->GetFov() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView());
 
     for (unsigned int i=0; i<count; i++)
     {
