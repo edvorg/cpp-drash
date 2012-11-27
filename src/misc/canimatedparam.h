@@ -26,8 +26,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CANIMATEDPARAM_H
 #define CANIMATEDPARAM_H
 
-#include <cmath>
-
 namespace drash
 {
 
@@ -126,9 +124,9 @@ void CAnimatedParam<T>::Step( double _dt )
     {
         mTimeElapsed += _dt;
 
-        double k = std::min( mTimeFull, mTimeElapsed );
+        double k = drash::math::Min( mTimeFull, mTimeElapsed );
 
-        if ( std::fabs( mTimeFull - k ) < 0.000001 )
+        if ( drash::math::Abs( mTimeFull - k ) < 0.000001 )
         {
             if (mBehavior == AnimationBehaviorSingle)
             {

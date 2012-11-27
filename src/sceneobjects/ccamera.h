@@ -74,7 +74,7 @@ inline float CCamera::GetFov() const
 
 inline void CCamera::SetDepthOfView(float _depth)
 {
-    mDepthOfView = fabs(_depth);
+    mDepthOfView = drash::math::Abs(_depth);
 }
 
 inline float CCamera::GetDepthOfView() const

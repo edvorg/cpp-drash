@@ -153,7 +153,7 @@ void CDebugDrawSystem::Draw() const
 
         CVec2 min(-0.5, -0.5);
         CVec2 max(0.5, 0.5);
-        float d = fabs(objects[i]->GetZ().Get() - mActiveCam->GetZ().Get());
+        float d = drash::math::Abs(objects[i]->GetZ().Get() - mActiveCam->GetZ().Get());
 
         ScreenSpaceToWorldSpace(min, d);
         ScreenSpaceToWorldSpace(max, d);

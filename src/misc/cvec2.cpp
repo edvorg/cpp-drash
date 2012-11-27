@@ -23,6 +23,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include "cvec2.h"
+#include "math.h"
 
 namespace drash
 {
@@ -142,9 +143,9 @@ CVec2 &CVec2::operator /=( const b2Vec2 &_ver )
 
 bool CVec2::operator ==( const CVec2 &_var )
 {
-    if ( fabs(x - _var.x) < mAccuracy )
+    if ( drash::math::Abs(x - _var.x) < mAccuracy )
     {
-        if ( fabs(y - _var.y) < mAccuracy )
+        if ( drash::math::Abs(y - _var.y) < mAccuracy )
         {
             return true;
         }

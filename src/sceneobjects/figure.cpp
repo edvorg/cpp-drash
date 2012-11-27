@@ -67,8 +67,8 @@ unsigned int CFigure::EnumVertices() const
 bool CFigure::TestPoint(const CVec2 &_point, float _z)
 {
     return mFixture->TestPoint(_point) &&
-           fabs(mZ + reinterpret_cast<CSceneObject*>(mFixture->GetUserData())->GetZ().Get() -
-                _z) <= mDepth;
+           drash::math::Abs(mZ + reinterpret_cast<CSceneObject*>(mFixture->GetUserData())->GetZ().Get() -
+                            _z) <= mDepth;
 }
 
 CFigure::CFigure()

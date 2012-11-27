@@ -25,56 +25,38 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef MATH_H
 #define MATH_H
 
-#include <cmath>
-
 namespace drash
 {
 
-template< typename T >
-inline const T &max( const T &_a, const T &_b )
+namespace math
+{
+
+template<typename T>
+inline const T &Max(const T &_a, const T &_b)
 {
     return _a > _b ? _a : _b;
 }
 
-template< typename T >
-inline const T &min( const T &_a, const T &_b )
+template<typename T>
+inline const T &Min(const T &_a, const T &_b)
 {
     return _a < _b ? _a : _b;
 }
 
-template< typename T >
-inline const T &clamp( const T &_val, const T &_min, const T &_max )
+template<typename T>
+inline const T &Clamp(const T &_val, const T &_min, const T &_max)
 {
-    return max( min( _val, _max ), _min );
+    return Max( Min( _val, _max ), _min );
 }
 
-class CInterval
+template<typename T>
+inline T Abs(const T &_val)
 {
-public:
-    CInterval();
-    CInterval( const CInterval &_interval );
-    CInterval( float _a, float _b );
-
-    inline bool IsIntersects( const CInterval &_interval ) const;
-
-    CInterval &Set( int _a, int _b );
-    CInterval &Set( int _c );
-
-    int GetMin() const { return a; }
-    int GetMax() const { return b; }
-
-private:
-    int a = 0;
-    int b = 0;
-};
-
-inline bool CInterval::IsIntersects( const drash::CInterval &_interval ) const
-{
-    return ( _interval.a <= a && a <= _interval.b ) ||
-			( _interval.a <= b && b <= _interval.b ) ||
-			( a <= _interval.a && _interval.b <= b );
+    return _val < 0 ? -_val : _val;
 }
 
-}
+} // namespace math
+
+} // namespace drash
 
 #endif // MATH_H

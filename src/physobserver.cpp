@@ -52,7 +52,7 @@ bool CPhysObserver::ShouldCollide( b2Fixture *fixtureA, b2Fixture *fixtureB )
     float z1 = f1->GetZ() + o1->GetZ().Get();
     float z2 = f1->GetZ() + o2->GetZ().Get();
 
-    return fabs(z1 - z2) < (f1->GetDepth() * 0.5 + f2->GetDepth() * 0.5);
+    return drash::math::Abs(z1 - z2) < (f1->GetDepth() * 0.5 + f2->GetDepth() * 0.5);
 }
 
 void CPhysObserver::BeginContact( b2Contact * _contact )

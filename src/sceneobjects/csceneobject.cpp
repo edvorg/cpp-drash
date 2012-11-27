@@ -145,7 +145,7 @@ void CSceneObject::OnBoom( const CExplosionParams &_boom )
     CVec2 dir( GetBody()->GetWorldCenter() );
     dir -= _boom.mPos;
 
-    float k = std::min( dir.Length(), _boom.mStregth )/ _boom.mStregth;
+    float k = drash::math::Min( dir.Length(), _boom.mStregth )/ _boom.mStregth;
 
     dir.Normalize();
     dir *= k * _boom.mStregth;

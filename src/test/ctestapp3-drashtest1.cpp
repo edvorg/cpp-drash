@@ -118,7 +118,7 @@ bool CTestApp3::Init()
     dbp.mPos.Set( 0, 100 );
     dbp.mAngle = M_PI / 4;
 
-    CDrashBody *db = GetScene().CreateObject<CDrashBody>(b0->mGeometry, dbp);
+    GetScene().CreateObject<CDrashBody>(b0->mGeometry, dbp);
 
     CSceneObjectGeometry pg;
     pg.mFigures.resize(1);

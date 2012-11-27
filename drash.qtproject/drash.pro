@@ -23,7 +23,6 @@ SOURCES += ../src/main.cpp\
     ../src/test/ctestapp3-drashtest1.cpp \
     ../src/test/ctestapp2.cpp \
     ../src/test/ctestapp1.cpp \
-    ../src/misc/math.cpp \
     ../src/misc/cvec2.cpp \
     ../src/diag/ctimer.cpp \
     ../src/diag/clogger.cpp \
