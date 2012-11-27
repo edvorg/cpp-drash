@@ -48,6 +48,8 @@ void DrawBody(const b2Vec2 *_vertices,
 void DrawCircle(float _rad,
                 float _r, float _g, float _b, float _a);
 
+void DrawLine(const CVec2 &_p1, const CVec2 _p2, float _z, const b2Color &_color);
+
 }// namespace drash
 
 #endif // GRAPHICS_H
