@@ -42,51 +42,78 @@
        <attribute name="title">
         <string>Create Object</string>
        </attribute>
-       <widget class="QPushButton" name="mNewObjectButton">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>350</y>
-          <width>92</width>
-          <height>27</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>New Object</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="mBuildButton">
-        <property name="geometry">
-         <rect>
-          <x>160</x>
-          <y>370</y>
-          <width>92</width>
-          <height>27</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Build</string>
-        </property>
-       </widget>
-       <widget class="QTreeWidget" name="mTreeObjects">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>10</y>
-          <width>256</width>
-          <height>331</height>
-         </rect>
-        </property>
-        <column>
-         <property name="text">
-          <string notr="true">1</string>
-         </property>
-        </column>
-       </widget>
-       <zorder>mNewObjectButton</zorder>
-       <zorder>mBuildButton</zorder>
-       <zorder>mTreeObjects</zorder>
-       <zorder>mScene</zorder>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QTreeWidget" name="mTreeObjects">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>256</width>
+            <height>0</height>
+           </size>
+          </property>
+          <column>
+           <property name="text">
+            <string notr="true">1</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item>
+         <widget class="QWidget" name="widget" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>71</height>
+           </size>
+          </property>
+          <widget class="QPushButton" name="mNewFigureButton">
+           <property name="geometry">
+            <rect>
+             <x>150</x>
+             <y>10</y>
+             <width>92</width>
+             <height>27</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>New Figure</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="mBuildButton">
+           <property name="geometry">
+            <rect>
+             <x>70</x>
+             <y>40</y>
+             <width>92</width>
+             <height>27</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Build</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="mNewObjectButton">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>10</y>
+             <width>92</width>
+             <height>27</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>New Object</string>
+           </property>
+          </widget>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">

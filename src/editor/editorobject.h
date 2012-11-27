@@ -45,17 +45,19 @@ public:
 
     void StartBuildObject();
 
-    bool BuildNow();
+    bool EndBuild();
 
+    const std::vector<drash::CVec2> &GetVector()const;
+
+    void ChangeMode();
 signals:
     void CreateNewObject();
 
 private:
-    enum WorkMode{Edit, Create};
+    enum WorkMode{Edit, Create, Simple};
     bool mStartBuild;
     WorkMode mMode;
 //    bool mEditObject;
-
     std::vector<drash::CVec2> mVertexs;
 //private slots:
 //    void ClearScene();

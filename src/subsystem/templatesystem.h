@@ -75,6 +75,8 @@ public:
     const SceneObjectTemplatesT &GetSceneObjectTemplates() const;
     const DrashBodyTemplatesT &GetDrashBodyTemplates() const;
 
+    CSceneObjectTemplate * FindTemplate(const std::string & _name);
+
 protected:
 private:
     SceneObjectTemplatesT mSceneObjectTemplates;
