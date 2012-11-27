@@ -73,24 +73,52 @@ bool CTestApp3::Init()
     sbp.mPos.Set( 300, 300 );
     GetScene().CreateObject<CSceneObject>(sbg, sbp);
 
-    CSceneObjectGeometry dbg;
-    dbg.mFigures.resize(1);
-    dbg.mFigures[0].mDepth = 16;
-    dbg.mFigures[0].mVertices.push_back( CVec2( -10, -10 ) );
-    dbg.mFigures[0].mVertices.push_back( CVec2( 10, -10 ) );
-    dbg.mFigures[0].mVertices.push_back( CVec2( 10, 10 ) );
-    dbg.mFigures[0].mVertices.push_back( CVec2( -10, 10 ) );
+    CDrashBodyTemplate *b1 = GetTemplateSystem().CreateDrashBodyTemplate("box_small");
+    b1->mGeometry.mFigures.resize(1);
+    b1->mGeometry.mFigures[0].mDepth = 10;
+    b1->mGeometry.mFigures[0].mVertices.push_back( CVec2( -5, -5 ) );
+    b1->mGeometry.mFigures[0].mVertices.push_back( CVec2( 5, -5 ) );
+    b1->mGeometry.mFigures[0].mVertices.push_back( CVec2( 5, 5 ) );
+    b1->mGeometry.mFigures[0].mVertices.push_back( CVec2( -5, 5 ) );
+    CDrashBodyTemplate *b0 = GetTemplateSystem().CreateDrashBodyTemplate("box_big");
+    b0->mGeometry.mFigures.resize(1);
+    b0->mGeometry.mFigures[0].mDepth = 20;
+    b0->mGeometry.mFigures[0].mVertices.push_back( CVec2( -10, -10 ) );
+    b0->mGeometry.mFigures[0].mVertices.push_back( CVec2( 10, -10 ) );
+    b0->mGeometry.mFigures[0].mVertices.push_back( CVec2( 10, 10 ) );
+    b0->mGeometry.mFigures[0].mVertices.push_back( CVec2( -10, 10 ) );
+
+    b0->mGeometry.mDestructionChilds.resize(8);
+    b0->mGeometry.mDestructionChilds[0].mTemplate = b1;
+    b0->mGeometry.mDestructionChilds[0].mParams.mPos.Set(-5,-5);
+    b0->mGeometry.mDestructionChilds[0].mParams.mZ = 5;
+    b0->mGeometry.mDestructionChilds[1].mTemplate = b1;
+    b0->mGeometry.mDestructionChilds[1].mParams.mPos.Set(-5,5);
+    b0->mGeometry.mDestructionChilds[1].mParams.mZ = 5;
+    b0->mGeometry.mDestructionChilds[2].mTemplate = b1;
+    b0->mGeometry.mDestructionChilds[2].mParams.mPos.Set(5,5);
+    b0->mGeometry.mDestructionChilds[2].mParams.mZ = 5;
+    b0->mGeometry.mDestructionChilds[3].mTemplate = b1;
+    b0->mGeometry.mDestructionChilds[3].mParams.mPos.Set(5,-5);
+    b0->mGeometry.mDestructionChilds[3].mParams.mZ = 5;
+    b0->mGeometry.mDestructionChilds[4].mTemplate = b1;
+    b0->mGeometry.mDestructionChilds[4].mParams.mPos.Set(-5,-5);
+    b0->mGeometry.mDestructionChilds[4].mParams.mZ = -5;
+    b0->mGeometry.mDestructionChilds[5].mTemplate = b1;
+    b0->mGeometry.mDestructionChilds[5].mParams.mPos.Set(-5,5);
+    b0->mGeometry.mDestructionChilds[5].mParams.mZ = -5;
+    b0->mGeometry.mDestructionChilds[6].mTemplate = b1;
+    b0->mGeometry.mDestructionChilds[6].mParams.mPos.Set(5,5);
+    b0->mGeometry.mDestructionChilds[6].mParams.mZ = -5;
+    b0->mGeometry.mDestructionChilds[7].mTemplate = b1;
+    b0->mGeometry.mDestructionChilds[7].mParams.mPos.Set(5,-5);
+    b0->mGeometry.mDestructionChilds[7].mParams.mZ = -5;
+
     CDrashBodyParams dbp;
     dbp.mPos.Set( 0, 100 );
-    dbp.mAngle = - M_PI / 4;
-    dbp.mDestroyDelay = 0.5;
-    dbp.mDestroySpeed = 7.0f;
+    dbp.mAngle = M_PI / 4;
 
-    GenDrashBodyParams( &dbp, 5, 0, 2 );
-
-    CDrashBody *db = GetScene().CreateObject<CDrashBody>(dbg, dbp);
-    db->SetAngularVelocity(2);
-    db->SetLinearVelocity( CVec2(0, -20) );
+    CDrashBody *db = GetScene().CreateObject<CDrashBody>(b0->mGeometry, dbp);
 
     CSceneObjectGeometry pg;
     pg.mFigures.resize(1);

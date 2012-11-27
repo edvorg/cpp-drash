@@ -49,12 +49,11 @@ private:
 class CSceneObjectParams
 {
 public:
-    CSceneObjectParams();
-
-    bool mDynamic;
-    CVec2 mPos;
-    float mAngle;
-    bool mFixedRotation;
+    bool mDynamic = true;
+    CVec2 mPos = CVec2(0);
+    float mAngle = 0;
+    bool mFixedRotation = false;
+    float mZ = 0;
 };
 
 class CContact
@@ -108,9 +107,6 @@ public:
     inline void SetZ(float _z);
     inline void SetZTarget( float _target, double _time, const AnimationBehavior &_behavior );
     inline const CAnimatedParam<float> &GetZ() const;
-
-    void DumpGeometry(GeometryT &_geometry) const;
-    void DumpParams(ParamsT &_params) const;
 
     virtual void ComputeBoundingBox();
     inline const b2AABB &GetBoundingBox() const;

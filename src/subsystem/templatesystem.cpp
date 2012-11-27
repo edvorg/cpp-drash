@@ -76,7 +76,47 @@ CSceneObject *CTemplateSystem::CreateSceneObjectFromTemplate(const std::string &
     return nullptr;
 }
 
-const CTemplateSystem::SceneObjectTemplatesT &CTemplateSystem::GetTemplates() const
+CDrashBodyTemplate *CTemplateSystem::CreateDrashBodyTemplate(const std::string &_name)
+{
+    if (_name == "")
+    {
+        return nullptr;
+    }
+    else
+    {
+        mDrashBodyTemplates.push_back(new CDrashBodyTemplate());
+        mDrashBodyTemplates.back()->mName = _name;
+        return mDrashBodyTemplates.back();
+    }
+}
+
+void CTemplateSystem::DestoyDrashBodyTemplate(CDrashBodyTemplate *_t)
+{
+    for (auto i=mDrashBodyTemplates.begin(), i_e=mDrashBodyTemplates.end(); i!=i_e; i++)
+    {
+        if ((*i) == _t)
+        {
+            delete _t;
+            mDrashBodyTemplates.erase(i);
+            return;
+        }
+    }
+}
+
+CDrashBody *CTemplateSystem::CreateDrashBodyFromTemplate(const std::string &_name, const CDrashBodyParams &_params)
+{
+    for (auto i=mDrashBodyTemplates.begin(), i_e=mDrashBodyTemplates.end(); i!=i_e; i++)
+    {
+        if ((*i)->mName == _name)
+        {
+            return GetScene()->CreateObject<CDrashBody>((*i)->mGeometry, _params);
+        }
+    }
+
+    return nullptr;
+}
+
+const CTemplateSystem::SceneObjectTemplatesT &CTemplateSystem::GetSceneObjectTemplates() const
 {
     return this->mSceneObjectTemplates;
 }
@@ -92,6 +132,11 @@ CSceneObjectTemplate *CTemplateSystem::FindTemplate(const std::string &_name)
     }
     LOG_ERR("Object not found in CTemplateSystem");
     return nullptr;
+}
+
+const CTemplateSystem::DrashBodyTemplatesT &CTemplateSystem::GetDrashBodyTemplates() const
+{
+    return this->mDrashBodyTemplates;
 }
 
 }// namespace drash

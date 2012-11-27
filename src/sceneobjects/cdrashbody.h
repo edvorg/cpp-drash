@@ -27,21 +27,31 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define CDRASHBODY_H
 
 #include "csceneobject.h"
-#include "explosion.h"
 #include <vector>
 
 namespace drash
 {
 
+class CDrashBodyTemplate;
+
 class CDrashBodyParams : public CSceneObjectParams
 {
 public:
-    CDrashBodyParams();
+    double mDestroyDelay = 0;
+    float mDestroySpeed = 0;
+};
 
-    std::vector<CDrashBodyParams> mChilds;
-    CVec2 mLocalPos;
-    double mDestroyDelay;
-    float mDestroySpeed;
+class CDrashBodyChild
+{
+public:
+    const CDrashBodyTemplate *mTemplate = nullptr;
+    CDrashBodyParams mParams;
+};
+
+class CDrashBodyGeometry : public CSceneObjectGeometry
+{
+public:
+    std::vector<CDrashBodyChild> mDestructionChilds;
 };
 
 class CDrashBody : public CSceneObject
@@ -50,6 +60,7 @@ public:
     friend class CScene;
 
     typedef CDrashBodyParams ParamsT;
+    typedef CDrashBodyGeometry GeometryT;
 
 protected:
     CDrashBody();
@@ -62,11 +73,12 @@ protected:
 
 private:
     int mCounter = 0;
-    CVec2 mLastVelocity;
+    CVec2 mLastVelocity = CVec2(0);
     float mLastAngularVelocity = 0;
-    ParamsT mParams;
+    std::vector<CDrashBodyChild> mDestructionChilds;
+    double mDestroyDelay = 0;
+    float mDestroySpeed = 0;
     double mTime = 0;
-    std::vector<CExplosionParams> mBoomParams;
 };
 
 } // namespace drash

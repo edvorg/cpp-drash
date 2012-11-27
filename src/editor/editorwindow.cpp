@@ -114,8 +114,8 @@ bool EditorWindow::UpdateTreeObject()
     ui->mTreeObjects->clear();
     QList<QTreeWidgetItem*> list;
     CTemplateSystem tSys= mApp->GetTemplateSystem();
-    for (auto item = tSys.GetTemplates().begin();
-         item != tSys.GetTemplates().end() ; item++) {
+    for (auto item = tSys.GetSceneObjectTemplates().begin();
+         item != tSys.GetSceneObjectTemplates().end() ; item++) {
        QTreeWidgetItem *objectItem = new QTreeWidgetItem(ui->mTreeObjects,
                                                       QStringList(QString::fromStdString((*item)->mName)));
        ui->mTreeObjects->addTopLevelItem(objectItem);
