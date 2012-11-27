@@ -30,7 +30,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <QTreeWidgetItem>
 #include <QStringList>
 #include "../subsystem/templatesystem.h"
-//#include ""
+
 using namespace drash;
 
 EditorWindow::EditorWindow(QWidget *parent) :
@@ -44,6 +44,7 @@ EditorWindow::EditorWindow(QWidget *parent) :
 
     this->startTimer(0);
     this->ui->mTreeObjects->clear();
+    this->ui->mTreeObjects->setColumnCount(2);
 //    QTreeWidget *treeWidget = new QTreeWidget();
 //    treeWidget->setColumnCount(1);
 //    QList<QTreeWidgetItem *> items; //= new QList<QTreeWidgetItem *>();
@@ -81,6 +82,7 @@ EditorWindow::EditorWindow(QWidget *parent) :
         t->mGeometry.mFigures[0].mVertices.push_back(CVec2(50, -5));
     }
     UpdateTreeObject();
+    ui->mScene->RemoveObjects();
 }
 
 
@@ -156,6 +158,9 @@ bool EditorWindow::UpdateTreeObject()
                vecs.append(")");
            }
            vecs.append("]");
+//           QStringList l("aaa");
+////           l.append("aaa");
+//           l.append(vecs);
            QTreeWidgetItem *itemFig = new QTreeWidgetItem(objectItem,QStringList(vecs));
        }
     }
@@ -163,12 +168,32 @@ bool EditorWindow::UpdateTreeObject()
 }
 
 
-void EditorWindow::on_pushButton_clicked()
+//void EditorWindow::on_pushButton_clicked()
+//{
+//    this->ui->mScene->StartBuildObject();
+//}
+
+//void EditorWindow::on_pushButton_2_clicked()
+//{
+//    ui->mScene->BuildNow();
+//}
+
+void EditorWindow::on_mTreeObjects_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
-    this->ui->mScene->StartBuildObject();
+   CSceneParams params;
+   //std:string name = item->parent();
+   if (item->parent() == NULL) {
+       //mApp->GetScene().CreateObject<CSceneObject>();
+   }
 }
 
-void EditorWindow::on_pushButton_2_clicked()
+void EditorWindow::on_mNewObjectButton_clicked()
 {
-    ui->mScene->BuildNow();
+//    this->ui->mScene->StartBuildObject();
+
+}
+
+void EditorWindow::on_mBuildButton_clicked()
+{
+
 }

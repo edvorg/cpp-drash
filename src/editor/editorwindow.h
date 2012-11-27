@@ -29,7 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../test/app.h"
 #include "../test/test.h"
 #include "../diag/ctimer.h"
-
+class QTreeWidgetItem;
 namespace Ui
 {
     class EditorWindow;
@@ -44,9 +44,13 @@ public:
     ~EditorWindow();
     
 private slots:
-    void on_pushButton_clicked();
 
-    void on_pushButton_2_clicked();
+
+    void on_mTreeObjects_itemDoubleClicked(QTreeWidgetItem *item, int column);
+
+    void on_mNewObjectButton_clicked();
+
+    void on_mBuildButton_clicked();
 
 private:
     Ui::EditorWindow *ui;
