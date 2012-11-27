@@ -160,6 +160,7 @@ bool EditorWindow::UpdateTreeObject()
        }
     }
 
+    return true;
 }
 
 
