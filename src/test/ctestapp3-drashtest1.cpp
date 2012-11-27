@@ -242,53 +242,5 @@ void CTestApp3::Step(double _dt)
     }
 }
 
-void GenDrashBodyParams( CDrashBodyParams* _params, float _subset_size, unsigned int _level, unsigned int _levels )
-{
-//    if ( _level > _levels )
-//    {
-//        return;
-//    }
-
-//    for ( int i = 0; i < 8; i++ )
-//    {
-//        _params->mChilds.push_back( CDrashBodyParams() );
-
-//        _params->mChilds[i].mDestroyDelay = _params->mDestroyDelay;
-//        _params->mChilds[i].mDestroySpeed = _params->mDestroySpeed;
-
-//        _params->mChilds[i].mFigures.resize(1);
-//        _params->mChilds[i].mFigures[0].mVertices.push_back( CVec2( -_subset_size, -_subset_size ) );
-//        _params->mChilds[i].mFigures[0].mVertices.push_back( CVec2( _subset_size, -_subset_size ) );
-//        _params->mChilds[i].mFigures[0].mVertices.push_back( CVec2( _subset_size, _subset_size ) );
-//        _params->mChilds[i].mFigures[0].mVertices.push_back( CVec2( -_subset_size, _subset_size ) );
-//    }
-
-//    _params->mChilds[0].mLocalPos.Set( -_subset_size, _subset_size );
-//    _params->mChilds[1].mLocalPos.Set( _subset_size, _subset_size );
-//    _params->mChilds[2].mLocalPos.Set( _subset_size, -_subset_size );
-//    _params->mChilds[3].mLocalPos.Set( -_subset_size, -_subset_size );
-//    _params->mChilds[4].mLocalPos.Set( -_subset_size, _subset_size );
-//    _params->mChilds[5].mLocalPos.Set( _subset_size, _subset_size );
-//    _params->mChilds[6].mLocalPos.Set( _subset_size, -_subset_size );
-//    _params->mChilds[7].mLocalPos.Set( -_subset_size, -_subset_size );
-
-//    int a = _params->mFigures[0].mLayers.GetMin();
-//    int b = ( _params->mFigures[0].mLayers.GetMax() + _params->mFigures[0].mLayers.GetMin() ) / 2;
-//    int c = _params->mFigures[0].mLayers.GetMax();
-//    _params->mChilds[0].mFigures[0].mLayers.Set( a, b-1 );
-//    _params->mChilds[1].mFigures[0].mLayers.Set( a, b-1 );
-//    _params->mChilds[2].mFigures[0].mLayers.Set( a, b-1 );
-//    _params->mChilds[3].mFigures[0].mLayers.Set( a, b-1 );
-//    _params->mChilds[4].mFigures[0].mLayers.Set( b, c );
-//    _params->mChilds[5].mFigures[0].mLayers.Set( b, c );
-//    _params->mChilds[6].mFigures[0].mLayers.Set( b, c );
-//    _params->mChilds[7].mFigures[0].mLayers.Set( b, c );
-
-//    for ( int i = 0; i < 8; i++ )
-//    {
-//        GenDrashBodyParams( &_params->mChilds[i], _subset_size / 2.0f, _level + 1, _levels );
-//    }
-}
-
 } // namespace drash
 
