@@ -27,6 +27,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
+void CTemplateSystem::Release()
+{
+    for (auto i=mSceneObjectTemplates.begin(), i_e=mSceneObjectTemplates.end(); i!=i_e; i++)
+    {
+        delete *i;
+    }
+    mSceneObjectTemplates.clear();
+}
+
 CSceneObjectTemplate *CTemplateSystem::CreateSceneObjectTemplate(const std::string &_name)
 {
     if (_name == "")
@@ -35,28 +44,41 @@ CSceneObjectTemplate *CTemplateSystem::CreateSceneObjectTemplate(const std::stri
     }
     else
     {
-        mSceneObjectGeometries.push_back(CSceneObjectTemplate());
-        mSceneObjectGeometries.back().mName = _name;
-        return &mSceneObjectGeometries.back();
+        mSceneObjectTemplates.push_back(new CSceneObjectTemplate());
+        mSceneObjectTemplates.back()->mName = _name;
+        return mSceneObjectTemplates.back();
+    }
+}
+
+void CTemplateSystem::DestoySceneObjectTemplate(CSceneObjectTemplate *_t)
+{
+    for (auto i=mSceneObjectTemplates.begin(), i_e=mSceneObjectTemplates.end(); i!=i_e; i++)
+    {
+        if ((*i) == _t)
+        {
+            delete _t;
+            mSceneObjectTemplates.erase(i);
+            return;
+        }
     }
 }
 
 CSceneObject *CTemplateSystem::CreateSceneObjectFromTemplate(const std::string &_name, const CSceneObjectParams &_params)
 {
-    for (auto i=mSceneObjectGeometries.begin(), i_e=mSceneObjectGeometries.end(); i!=i_e; i++)
+    for (auto i=mSceneObjectTemplates.begin(), i_e=mSceneObjectTemplates.end(); i!=i_e; i++)
     {
-        if (i->mName == _name)
+        if ((*i)->mName == _name)
         {
-            return GetScene()->CreateObject<CSceneObject>(i->mGeometry, _params);
+            return GetScene()->CreateObject<CSceneObject>((*i)->mGeometry, _params);
         }
     }
 
     return nullptr;
 }
 
-CTemplateSystem::SceneObjectTemplatesT &CTemplateSystem::GetVector()
+const CTemplateSystem::SceneObjectTemplatesT &CTemplateSystem::GetTemplates() const
 {
-    return this->mSceneObjectGeometries;
+    return this->mSceneObjectTemplates;
 }
 
 }// namespace drash

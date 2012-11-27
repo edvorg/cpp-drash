@@ -38,7 +38,8 @@ namespace drash
 class CSubsystem
 {
 public:
-    ~CSubsystem();
+    virtual bool Init() { return true; }
+    virtual void Release() {}
 
     void SetScene(CScene *_scene);
     inline CScene *GetScene();

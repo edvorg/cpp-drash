@@ -44,18 +44,22 @@ private:
 class CTemplateSystem : public CSubsystem
 {
 public:
-    typedef std::vector<CSceneObjectTemplate> SceneObjectTemplatesT;
+    typedef CSceneObjectTemplate *CSceneObjectTemplatePtr;
+    typedef std::vector<CSceneObjectTemplatePtr> SceneObjectTemplatesT;
+
+    virtual void Release() override;
 
     /// template is just named collection of CSceneObject parameters
     /// we can use it to create many instances of one object at any time we wan
     CSceneObjectTemplate* CreateSceneObjectTemplate(const std::string &_name);
+    void DestoySceneObjectTemplate(CSceneObjectTemplate *_t);
     CSceneObject *CreateSceneObjectFromTemplate(const std::string &_name, const CSceneObjectParams &_params);
 
-    SceneObjectTemplatesT &GetVector();
+    const SceneObjectTemplatesT &GetTemplates() const;
 
 protected:
 private:
-    SceneObjectTemplatesT mSceneObjectGeometries;
+    SceneObjectTemplatesT mSceneObjectTemplates;
 };
 
 }// namespace drash
