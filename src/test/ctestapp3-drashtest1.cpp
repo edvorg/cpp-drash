@@ -152,6 +152,24 @@ bool CTestApp3::Init()
     platform->SetPosTarget( CVec2( 100, 50 ), 10, AnimationBehaviorBounce );
     platform->SetAngleTarget( M_PI / 18.0, 10, AnimationBehaviorBounce );
 
+    CSceneObjectTemplate *t1 = GetTemplateSystem().CreateSceneObjectTemplate("circle");
+    if (t1 != nullptr)
+    {
+        static const unsigned int segments = 16;
+        static const float d_angle = M_PI * 2.0 / static_cast<double>(segments);
+        static const float rad = 5;
+
+        t1->mGeometry.mFigures.resize(segments);
+        for (unsigned int i=0; i<segments; i++)
+        {
+            t1->mGeometry.mFigures[i].mVertices.push_back(CVec2(rad * cos(i * d_angle), rad * sin(i * d_angle)));
+            t1->mGeometry.mFigures[i].mVertices.push_back(CVec2(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
+            t1->mGeometry.mFigures[i].mVertices.push_back(CVec2(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
+            t1->mGeometry.mFigures[i].mVertices.push_back(CVec2(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
+            t1->mGeometry.mFigures[i].mDepth = rad * 0.5;
+        }
+    }
+
     GetDebugDrawSystem().GetActiveCam()->SetZTarget( 280, 1.0f, AnimationBehaviorSingle );
 
     return true;
@@ -239,6 +257,20 @@ void CTestApp3::Step(double _dt)
     {
         CPlayer *p = GetPlayersSystem().GetPlayers()[0];
         GetDebugDrawSystem().GetActiveCam()->SetPosTarget( p->GetBody()->GetWorldCenter(), 1.0, AnimationBehaviorSingle );
+    }
+
+    mTime += _dt;
+
+    if (mTime >= 1.0)
+    {
+        CSceneObjectParams params;
+        params.mDynamic = true;
+        params.mPos.RandX(-100, 100);
+        params.mPos.y = 100;
+
+        GetTemplateSystem().CreateSceneObjectFromTemplate("circle", params);
+
+        mTime = 0;
     }
 }
 

@@ -40,6 +40,7 @@ public:
     virtual void Step(double _dt) override;
 
 private:
+    double mTime = 0;
 };
 
 } // namespace drash

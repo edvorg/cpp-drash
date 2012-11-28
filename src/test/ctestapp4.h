@@ -36,10 +36,8 @@ public:
     virtual ~CTestApp4() override {}
 
     virtual bool Init() override;
-    virtual void Step(double _dt) override;
 
 private:
-    double mTime = 0;
 };
 
 }// namespace drash
