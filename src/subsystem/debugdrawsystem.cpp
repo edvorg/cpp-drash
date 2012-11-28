@@ -203,8 +203,9 @@ void CDebugDrawSystem::Draw() const
         glTranslatef(-mActiveCam->mPos.Get().x,
                      -mActiveCam->mPos.Get().y,
                      -mActiveCam->GetZ().Get());
-        glTranslatef(objects[i]->GetBody()->GetWorldCenter().x,
-                     objects[i]->GetBody()->GetWorldCenter().y,
+        CVec2 pos = objects[i]->GetBody()->GetWorldPoint(CVec2(0));
+        glTranslatef(pos.x,
+                     pos.y,
                      0);
         glRotatef( 180.0f / M_PI * objects[i]->GetBody()->GetAngle(), 0, 0, 1 );
 
