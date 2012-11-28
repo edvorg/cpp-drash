@@ -89,6 +89,31 @@ bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const
     }
 }
 
+bool CDebugDrawSystem::WorldSpaceToScreenSpace(CVec2 &_pos, float _depth) const
+{
+    if (mActiveCam == nullptr)
+    {
+        return false;
+    }
+    else
+    {
+//        TODO: optimize this
+        double fov = mActiveCam->GetFov();
+
+        double c = _depth / cos(fov / 2.0); // hypotenuse
+
+        double frame_height = 2.0 * sqrt( c*c - _depth*_depth );
+        double frame_width = frame_height * mAspectRatio;
+
+        _pos -= mActiveCam->GetPos().Get();
+
+        _pos.x /= frame_width;
+        _pos.y /= frame_height;
+
+        return true;
+    }
+}
+
 CSceneObject *CDebugDrawSystem::FindObject(const CVec2 &_pos)
 {
     const drash::CScene::ObjectsT &objects = GetScene()->GetObjects();
@@ -188,6 +213,25 @@ void CDebugDrawSystem::Draw() const
 
         objects[i]->DrawDebug();
     }
+}
+
+void CDebugDrawSystem::DrawLine(const CVec2 _p1, const CVec2 _p2, const b2Color &_col) const
+{
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-0.5, 0.5, -0.5, 0.5, 1, -1);
+
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+
+    glBegin(GL_LINES);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex2f(_p1.x, _p1.y);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex2f(_p2.x, _p2.y);
+    glEnd();
 }
 
 }// namespace drash
