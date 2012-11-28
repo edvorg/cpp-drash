@@ -44,6 +44,8 @@ bool CDrashBody::Init(const GeometryT &_geometry, const CDrashBody::ParamsT &_pa
     }
 
     mDestructionChilds = _geometry.mDestructionChilds;
+    mDestroyDelay = _params.mDestroyDelay;
+    mDestroySpeed = _params.mDestroySpeed;
 
     return true;
 }
