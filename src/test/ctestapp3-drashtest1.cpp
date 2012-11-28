@@ -228,25 +228,22 @@ void CTestApp3::Step(double _dt)
 			}
             else if (e.GetButton() == EventButtonRight)
             {
-                static CSceneObject *o1 = nullptr;
-                static CSceneObject *o2 = nullptr;
-
-                if (o1 == nullptr)
+                if (mO1 == nullptr)
                 {
-                    o1 = GetDebugDrawSystem().FindObject(e.GetPos());
+                    mO1 = GetDebugDrawSystem().FindObject(e.GetPos());
                 }
-                else if (o2 == nullptr)
+                else if (mO2 == nullptr)
                 {
-                    o2 = GetDebugDrawSystem().FindObject(e.GetPos());
-                    if (o1 == o2)
+                    mO2 = GetDebugDrawSystem().FindObject(e.GetPos());
+                    if (mO1 == mO2)
                     {
-                        o2 = nullptr;
+                        mO2 = nullptr;
                     }
-                    else if (o2 != nullptr)
+                    else if (mO2 != nullptr)
                     {
-                        GetScene().CreateJoint(o1, o2, o1->GetPos().Get());
-                        o1 = nullptr;
-                        o2 = nullptr;
+                        GetScene().CreateJoint(mO1, mO2, mO1->GetPos().Get());
+                        mO1 = nullptr;
+                        mO2 = nullptr;
                     }
                 }
             }
@@ -271,6 +268,28 @@ void CTestApp3::Step(double _dt)
         GetTemplateSystem().CreateSceneObjectFromTemplate("circle", params);
 
         mTime = 0;
+    }
+}
+
+void CTestApp3::Render()
+{
+    CApp::Render();
+
+    if (mO1 != nullptr)
+    {
+        mO1->ComputeBoundingBox();
+        const b2AABB &b = mO1->GetBoundingBox();
+        CVec2 upper = b.upperBound;
+        CVec2 lower = b.lowerBound;
+        GetDebugDrawSystem().WorldSpaceToScreenSpace(lower, mO1->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+        GetDebugDrawSystem().WorldSpaceToScreenSpace(upper, mO1->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+        b2Color col(1, 0, 0);
+        CVec2 tmp1(upper.x, lower.y);
+        CVec2 tmp2(lower.x, upper.y);
+        GetDebugDrawSystem().DrawLine(tmp1, upper, col);
+        GetDebugDrawSystem().DrawLine(tmp1, lower, col);
+        GetDebugDrawSystem().DrawLine(tmp2, upper, col);
+        GetDebugDrawSystem().DrawLine(tmp2, lower, col);
     }
 }
 

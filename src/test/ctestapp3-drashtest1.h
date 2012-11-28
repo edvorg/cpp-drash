@@ -38,9 +38,12 @@ public:
 
     virtual bool Init() override;
     virtual void Step(double _dt) override;
+    inline virtual void Render() override;
 
 private:
     double mTime = 0;
+    CSceneObject *mO1 = nullptr;
+    CSceneObject *mO2 = nullptr;
 };
 
 } // namespace drash
