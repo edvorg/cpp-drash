@@ -185,8 +185,3 @@ void SceneWidget::wheelEvent( QWheelEvent *_event )
                               _event->y()));
 
 }
-
-void SceneWidget::RemoveObjects()
-{
-    mApp->GetScene().DestroyObjects();
-}

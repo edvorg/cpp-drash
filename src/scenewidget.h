@@ -53,17 +53,15 @@ public:
 
     void SetTestApp( drash::CApp *_app );
 
+protected:
     virtual void mousePressEvent( QMouseEvent * _event ) override;
     virtual void mouseMoveEvent(QMouseEvent *_event) override;
     virtual void keyPressEvent( QKeyEvent *_event ) override;
     virtual void wheelEvent( QWheelEvent *_event ) override;
 
-protected:
     drash::CApp *mApp = nullptr;
     float mWidth = 1.0f;
     float mHeight = 1.0f;
-public slots:
-    void RemoveObjects();
 };
 
 #endif // SCENEWIDGET_H
