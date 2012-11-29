@@ -89,6 +89,13 @@ void CScene::Release(void)
         }
     }
 
+    while (mWorld.GetJointCount())
+    {
+        delete reinterpret_cast<CJoint*>(mWorld.GetJointList()->GetUserData());
+        mWorld.GetJointList()->SetUserData(nullptr);
+        mWorld.DestroyJoint(mWorld.GetJointList());
+    }
+
     mInitialized = false;
 }
 
