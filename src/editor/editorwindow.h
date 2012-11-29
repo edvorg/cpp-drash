@@ -67,6 +67,8 @@ private:
 
     void timerEvent(QTimerEvent *);
 
+    drash::CSceneObject * mCurrentObject = nullptr;
+
     // Actions
 private:
     QAction *mQuit;
@@ -77,6 +79,9 @@ private:
 private:
     void CreateActions();
     bool UpdateTreeObject();
+
+    void RemoveCurrentObject();
+
     drash::CTimer mTimer;
 
 public:

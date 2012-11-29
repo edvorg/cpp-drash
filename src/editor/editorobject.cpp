@@ -68,29 +68,7 @@ bool EditorObject::EndBuild(){
     }
     mStartBuild = false;
 
-//    CSceneObjectGeometry sbg;
-//    sbg.mFigures.resize(1);
-//    sbg.mFigures[0].mDepth = 40;
-//    sbg.mFigures[0].mRestitution = 0.0;
-//    sbg.mFigures[0].mVertices = mVertexs;
-//    CSceneObjectParams sbp;
-//    sbp.mDynamic = true;
-//    sbp.mAngle = 0;
-//    sbp.mPos.Set(0,0);
-//    t->mGeometry.mFigures.resize(1);
-//    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(2, 1));
-//    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-2, 1));
-//    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-1, -1));
-//    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(1, -1));
-//    mApp->GetTemplateSystem().CreateSceneObjectTemplate();
     mVertexs.clear();
-    //mApp->GetScene().CreateObject<CSceneObject>(sbg, sbp);
-//    for (auto iter = mVertexs.begin() ; iter != mVertexs.end() ; iter++) {
-//    }
-//    sbp.mFigures[0].mVertices.push_back( CVec2( -300, -5 ) );
-//    sbp.mFigures[0].mVertices.push_back( CVec2( 300, -5 ) );
-//    sbp.mFigures[0].mVertices.push_back( CVec2( 300, 5 ) );
-//    sbp.mFigures[0].mVertices.push_back( CVec2( -300, 5 ) );
     return true;
 }
 
