@@ -56,6 +56,8 @@ drash::EventButton ConvertButton(Qt::MouseButton _button)
         return drash::EventButtonLeft;
     case Qt::RightButton:
         return drash::EventButtonRight;
+    case Qt::MiddleButton:
+        return drash::EventButtonMiddle;
     default:
         return drash::EventButtonUnknown;
     }
@@ -118,30 +120,6 @@ void SceneWidget::paintGL()
     if (mApp != nullptr)
     {
         mApp->Render();
-
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(-0.5, 0.5, -0.5, 0.5, 1, -1);
-
-        glDisable(GL_DEPTH_TEST);
-
-        glPointSize(4);
-        glBegin(GL_POINTS);
-        glColor3f(1, 0, 0);
-        glVertex3f(mCursorPos.x, mCursorPos.y, -1);
-        glEnd();
-        glBegin(GL_LINES);
-        glColor3f(0, 1, 0);
-        glVertex3f(mCursorPos.x - 0.02, mCursorPos.y, -1);
-        glVertex3f(mCursorPos.x + 0.02, mCursorPos.y, -1);
-        glVertex3f(mCursorPos.x, mCursorPos.y - 0.02 * mApp->GetDebugDrawSystem().GetAspectRatio(), -1);
-        glVertex3f(mCursorPos.x, mCursorPos.y + 0.02 * mApp->GetDebugDrawSystem().GetAspectRatio(), -1);
-        glEnd();
-
-        glEnable(GL_DEPTH_TEST);
     }
 
     swapBuffers();
@@ -168,8 +146,15 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
 void SceneWidget::mouseMoveEvent(QMouseEvent *_event)
 {
     QGLWidget::mouseMoveEvent(_event);
-    mCursorPos = WidgetSpaceToScreenSpace(CVec2(_event->x(),
-                                                _event->y()));
+
+    if (mApp == nullptr)
+    {
+        return;
+    }
+
+    CVec2 pos = WidgetSpaceToScreenSpace(CVec2(_event->x(),
+                                               _event->y()));
+    mApp->SetCursorPos(pos);
 }
 
 void SceneWidget::keyPressEvent( QKeyEvent *_event )

@@ -62,7 +62,6 @@ protected:
     drash::CApp *mApp = nullptr;
     float mWidth = 1.0f;
     float mHeight = 1.0f;
-    drash::CVec2 mCursorPos;
 public slots:
     void RemoveObjects();
 };
