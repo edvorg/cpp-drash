@@ -54,12 +54,22 @@ public:
     inline CScene &GetScene();
     inline const CScene &GetScene() const;
 
+	inline CExplosionSystem &GetExplosionSystem();
     inline CPlayersSystem &GetPlayersSystem();
     inline CTemplateSystem &GetTemplateSystem();
     inline CDebugDrawSystem &GetDebugDrawSystem();
 
     void PushEvent(const CAppEvent &_event);
     CAppEvent PopEvent();
+
+    /// used to make CApp childs about mouse moving event
+    /// use this from your CApp back end (Qt, SDL, etc.)
+    /// we assume that _pos is coordinates in screen space (-0.5, -0.5) (0.5, 0.5)
+    inline void SetCursorPos(const CVec2 &_pos);
+
+    /// used by CApp childs for detection, where mouse cursor is
+    /// returns coordinates in screen space (-0.5, -0.5) (0.5, 0.5)
+    inline const CVec2 &GetCursorPos() const;
 
 protected:
 
@@ -70,6 +80,7 @@ private:
     CTemplateSystem mTemplateSystem;
     CDebugDrawSystem mDebugDrawSystem;
     std::list<CAppEvent> mEvents;
+    CVec2 mCursorPos = CVec2(0);
 };
 
 inline void CApp::Step(double _dt)
@@ -92,6 +103,11 @@ inline const CScene &CApp::GetScene() const
     return mScene;
 }
 
+inline CExplosionSystem &CApp::GetExplosionSystem()
+{
+    return mExplosionSystem;
+}
+
 inline CPlayersSystem &CApp::GetPlayersSystem()
 {
     return mPlayersSystem;
@@ -105,6 +121,16 @@ inline CTemplateSystem &CApp::GetTemplateSystem()
 inline CDebugDrawSystem &CApp::GetDebugDrawSystem()
 {
     return mDebugDrawSystem;
+}
+
+inline void CApp::SetCursorPos(const CVec2 &_pos)
+{
+    mCursorPos = _pos;
+}
+
+inline const CVec2 &CApp::GetCursorPos() const
+{
+    return mCursorPos;
 }
 
 } // namespace drash
