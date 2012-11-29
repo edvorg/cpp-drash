@@ -317,7 +317,11 @@ void CTestApp3::Step(double _dt)
                 }
                 else
                 {
-                    mMoveObject->SetLinearVelocity(CVec2(0));
+                    /// if our body is not dynamic. it wil never stop, until we make it's velocity module to 0
+                    if (mMoveObject->GetBody()->GetType() == b2_kinematicBody)
+                    {
+                        mMoveObject->SetLinearVelocity(CVec2(0));
+                    }
                     mMoveObject = nullptr;
                 }
             }
