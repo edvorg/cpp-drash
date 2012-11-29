@@ -83,7 +83,7 @@ bool EditorWindow::InitScene()
     if (mApp->Init() == false) {
         return false;
     }
-
+    mApp->GetDebugDrawSystem().GetActiveCam()->SetZ(100);
     ui->mScene->SetTestApp(mApp);
     return true;
 }
@@ -150,7 +150,7 @@ void EditorWindow::AddFigure(const std::vector<CVec2>& _vertexs)
     if (_vertexs.empty())
         return;
     std::string nameTemplate = ui->mTreeObjects->selectedItems().at(0)->text(0).toStdString();
-//    for (auto it = mApp->GetTemplateSystem().GetTemplates().b
+
     auto obj = mApp->GetTemplateSystem().FindTemplate(nameTemplate);
 
     CFigureParams param;
@@ -163,10 +163,14 @@ void EditorWindow::on_mTreeObjects_itemDoubleClicked(QTreeWidgetItem *item, int 
 {
 
    if (item->parent() == NULL) {
+       if (mCurrentObject != nullptr) {
+           mApp->GetScene().DestroyObject(mCurrentObject);
+           mCurrentObject = nullptr;
+       }
        CSceneObjectParams params;
        params.mPos.Set(0,0);
        qDebug() << "Object created";
-       mApp->GetTemplateSystem().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
+       mCurrentObject = mApp->GetTemplateSystem().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
    }
 }
 
@@ -188,5 +192,14 @@ void EditorWindow::on_mBuildButton_clicked()
 
 void EditorWindow::on_mNewFigureButton_clicked()
 {
+    RemoveCurrentObject();
     this->ui->mScene->StartBuildObject();
+}
+
+
+void EditorWindow::RemoveCurrentObject() {
+    if (mCurrentObject != nullptr) {
+        mApp->GetScene().DestroyObject(mCurrentObject);
+        mCurrentObject = nullptr;
+    }
 }
