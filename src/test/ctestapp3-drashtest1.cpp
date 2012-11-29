@@ -309,6 +309,29 @@ void CTestApp3::Step(double _dt)
                     }
                 }
             }
+            else if (e.GetButton() == EventButtonMiddle)
+            {
+                if (mMoveObject == nullptr)
+                {
+                    mMoveObject = GetDebugDrawSystem().FindObject(e.GetPos());
+                }
+                else
+                {
+                    mMoveObject->SetLinearVelocity(CVec2(0));
+                    mMoveObject = nullptr;
+                }
+            }
+        }
+    }
+
+    if (mMoveObject != nullptr)
+    {
+        CVec2 coords = GetCursorPos();
+        if (GetDebugDrawSystem().ScreenSpaceToWorldSpace(coords, mMoveObject->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get()))
+        {
+            coords -= mMoveObject->GetPos().Get();
+            coords *= 10;
+            mMoveObject->SetLinearVelocity(coords);
         }
     }
 
