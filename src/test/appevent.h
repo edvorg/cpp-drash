@@ -46,6 +46,9 @@ enum EventKey : unsigned int
     EventKeyD,
     EventKeySpace,
     EventKeyEscape,
+    EventKeyControl,
+    EventKeyShift,
+    EventKeyAlt,
 };
 
 enum EventButton : unsigned int

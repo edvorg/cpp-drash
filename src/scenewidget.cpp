@@ -45,6 +45,12 @@ drash::EventKey ConvertKey(int _key)
         return drash::EventKeySpace;
     case Qt::Key_Escape:
         return drash::EventKeyEscape;
+    case Qt::Key_Control:
+        return drash::EventKeyControl;
+    case Qt::Key_Shift:
+        return drash::EventKeyShift;
+    case Qt::Key_Alt:
+        return drash::EventKeyAlt;
     default:
         return drash::EventKeyUnknown;
     }
