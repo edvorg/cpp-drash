@@ -74,6 +74,8 @@ bool GameWindow::Init( const GameWindowParams &_params )
     CSceneParams params;
     params.mGravity.Set( 0.0f, -9.8f );
 
+    QString title = "drash";
+
     for ( unsigned int i=0; i<_params.mArgv.size(); i++ )
     {
         if ( _params.mArgv[i] == "--test" )
@@ -93,6 +95,9 @@ bool GameWindow::Init( const GameWindowParams &_params )
                     return false;
                 }
 
+                title += " - ";
+                title += _params.mArgv[i+1].c_str();
+
                 break;
             }
             else
@@ -106,6 +111,8 @@ bool GameWindow::Init( const GameWindowParams &_params )
     mSceneWidget->SetTestApp(mApp);
 
     mInitialized = true;    
+
+    this->setWindowTitle(title);
 
     timer.start(0);
     connect( &timer, SIGNAL( timeout() ), this, SLOT( UpdateScene() ) );
