@@ -89,8 +89,9 @@ HEADERS  += ../src/gamewindow.h \
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui
 
-LIBS += -L../3rd/Box2D/lib
-LIBS += -lBox2D -lGLU -lrt
+LIBS += -L../3rd/Box2D/lib -lBox2D
+
+unix:!macx: LIBS += -lrt -lGLU
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG

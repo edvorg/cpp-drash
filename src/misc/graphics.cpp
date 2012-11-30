@@ -24,7 +24,11 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "graphics.h"
 
+#ifdef __MACH__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 
 namespace drash
 {

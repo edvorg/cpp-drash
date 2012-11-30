@@ -24,8 +24,14 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "debugdrawsystem.h"
 
+#if defined(__MACH__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
 #include <GL/gl.h>
 #include <GL/glu.h>
+#endif
+
 #include "../misc/graphics.h"
 
 namespace drash

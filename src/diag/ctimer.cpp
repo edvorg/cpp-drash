@@ -27,6 +27,11 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <sys/time.h>
 #include "assert.h"
 
+#if defined(__MACH__)
+#include <mach/clock.h>
+#include <mach/mach.h>
+#endif
+
 namespace drash
 {
 
@@ -73,7 +78,19 @@ double CTimer::GetDeltaTime() const
 void CTimer::Update()
 {
     timespec ts;
-    clock_gettime( CLOCK_REALTIME, &ts );
+
+    #if defined(__MACH__) // OS X does not have clock_gettime, use clock_get_time
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    ts.tv_sec = mts.tv_sec;
+    ts.tv_nsec = mts.tv_nsec;
+    #else
+    clock_gettime(CLOCK_REALTIME, &ts);
+    #endif
+
     mCurrTime = ( ts.tv_sec * 1000000000 + ts.tv_nsec );
 
     DRASH_ASSERT( mCurrTime >= mPrevTime &&
