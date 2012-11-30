@@ -53,7 +53,6 @@ HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
     ../src/sceneobjects.h \
     ../src/cscene.h \
-    ../src/capp.h \
     ../src/test/ctestapp3-drashtest1.h \
     ../src/test/ctestapp2.h \
     ../src/test/ctestapp1.h \
