@@ -74,6 +74,10 @@ public:
     inline EventButton GetButton() const;
     inline const CVec2 &GetPos() const;
 
+    inline bool operator ==(const CAppEvent &_to) const;
+
+    void Dump() const;
+
 private:
     EventType mType = EventUnknown;
     EventKey mKey = EventKeyUnknown;
@@ -99,6 +103,11 @@ inline EventButton CAppEvent::GetButton() const
 inline const CVec2 &CAppEvent::GetPos() const
 {
     return mPos;
+}
+
+inline bool CAppEvent::operator ==(const CAppEvent &_to) const
+{
+    return mType == _to.mType && mKey == _to.mKey && mButton == _to.mButton;
 }
 
 } // namespace drash

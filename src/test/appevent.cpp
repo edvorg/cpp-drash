@@ -24,6 +24,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "appevent.h"
 
+#include "../diag/clogger.h"
+
 namespace drash
 {
 
@@ -56,6 +58,12 @@ CAppEvent::CAppEvent(EventType _type, EventButton _button, float _x, float _y)
         mButton = _button;
         mPos.Set(_x, _y);
     }
+}
+
+void CAppEvent::Dump() const
+{
+    LOG_INFO("CAppEvent dump: "<<(unsigned int)mType<<' '<<
+             (unsigned int)mKey<<' '<<(unsigned int)mButton<<' '<<mPos);
 }
 
 } // namespace drash
