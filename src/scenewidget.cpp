@@ -169,13 +169,30 @@ void SceneWidget::keyPressEvent( QKeyEvent *_event )
 {
     QGLWidget::keyPressEvent(_event);
 
-    if ( mApp == nullptr ||
-         mApp->GetDebugDrawSystem().GetActiveCam() == nullptr )
+    if (mApp == nullptr)
     {
         return;
     }
 
-    mApp->PushEvent(CAppEvent(EventKeyboard, ConvertKey(_event->key())));
+    if (_event->isAutoRepeat() == false)
+    {
+        mApp->GetEventSystem().PressEvent(CAppEvent(EventKeyboard, ConvertKey(_event->key())));
+    }
+}
+
+void SceneWidget::keyReleaseEvent(QKeyEvent *_event)
+{
+    QGLWidget::keyReleaseEvent(_event);
+
+    if (mApp == nullptr)
+    {
+        return;
+    }
+
+    if (_event->isAutoRepeat() == false)
+    {
+        mApp->GetEventSystem().ReleaseEvent(CAppEvent(EventKeyboard, ConvertKey(_event->key())));
+    }
 }
 
 void SceneWidget::wheelEvent( QWheelEvent *_event )

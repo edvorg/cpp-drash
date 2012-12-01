@@ -26,6 +26,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../cscene.h"
 
+#include "appeventprocessor.h"
+
 namespace drash
 {
 
@@ -35,6 +37,29 @@ bool CTestApp2::Init()
     {
         return false;
     }
+
+    GetDebugDrawSystem().GetActiveCam()->SetZ(100);
+
+    auto t = GetTemplateSystem().CreateSceneObjectTemplate("lambda_test");
+    t->mGeometry.mFigures.resize(1);
+    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-10, -10));
+    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(10, -10));
+    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(0, 10));
+    t->mGeometry.mFigures[0].mDepth = 3;
+
+    GetEventSystem().SetProcessor("C-S-f", CAppEventProcessor(
+    [this, t] ()
+    {
+        CSceneObjectParams p;
+        GetTemplateSystem().CreateSceneObjectFromTemplate("lambda_test", p);
+    },
+    [this] ()
+    {
+    },
+    [this] ()
+    {
+    }
+    ));
 
     CSceneObjectGeometry g;
     g.mFigures.resize(1);

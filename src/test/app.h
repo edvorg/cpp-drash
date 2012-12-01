@@ -32,6 +32,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../subsystem/playerssystem.h"
 #include "../subsystem/templatesystem.h"
 #include "../subsystem/debugdrawsystem.h"
+#include "appeventsystem.h"
 #include "appevent.h"
 
 #include <list>
@@ -48,12 +49,13 @@ public:
 
     virtual bool Init();
     virtual void Release();
-    inline virtual void Step(double _dt);
+    virtual void Step(double _dt);
     inline virtual void Render();
 
     inline CScene &GetScene();
     inline const CScene &GetScene() const;
 
+    inline CAppEventSystem &GetEventSystem();
 	inline CExplosionSystem &GetExplosionSystem();
     inline CPlayersSystem &GetPlayersSystem();
     inline CTemplateSystem &GetTemplateSystem();
@@ -74,6 +76,7 @@ public:
 protected:
 
 private:
+    CAppEventSystem mEventSystem;
     CScene mScene;
     CExplosionSystem mExplosionSystem;
     CPlayersSystem mPlayersSystem;
@@ -82,11 +85,6 @@ private:
     std::list<CAppEvent> mEvents;
     CVec2 mCursorPos = CVec2(0);
 };
-
-inline void CApp::Step(double _dt)
-{
-    mScene.Step(_dt);
-}
 
 inline void CApp::Render()
 {
@@ -101,6 +99,11 @@ inline CScene &CApp::GetScene()
 inline const CScene &CApp::GetScene() const
 {
     return mScene;
+}
+
+inline CAppEventSystem &CApp::GetEventSystem()
+{
+    return mEventSystem;
 }
 
 inline CExplosionSystem &CApp::GetExplosionSystem()

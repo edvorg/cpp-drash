@@ -57,6 +57,7 @@ protected:
     virtual void mousePressEvent( QMouseEvent * _event ) override;
     virtual void mouseMoveEvent(QMouseEvent *_event) override;
     virtual void keyPressEvent( QKeyEvent *_event ) override;
+    virtual void keyReleaseEvent(QKeyEvent *_event) override;
     virtual void wheelEvent( QWheelEvent *_event ) override;
 
     drash::CApp *mApp = nullptr;

@@ -67,6 +67,13 @@ void CApp::Release()
     mScene.Release();
 }
 
+void CApp::Step(double _dt)
+{
+    mEventSystem.Process();
+
+    mScene.Step(_dt);
+}
+
 void CApp::PushEvent(const CAppEvent &_event)
 {
     if (_event.GetType() != EventUnknown)
