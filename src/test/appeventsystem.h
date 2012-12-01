@@ -1,10 +1,12 @@
 #ifndef DRASH_APPEVENTSYSTEM_H
 #define DRASH_APPEVENTSYSTEM_H
 
+#include "appevent.h"
+#include <list>
+
 namespace drash
 {
 
-class CAppEvent;
 class CAppEventProcessor;
 
 class CAppEventSystem
@@ -19,6 +21,7 @@ public:
 
 protected:
 private:
+    std::list<CAppEvent> mEvents;
 };
 
 } // namespace drash
