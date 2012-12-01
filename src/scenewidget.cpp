@@ -148,7 +148,20 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
     }
 
     CVec2 p = WidgetSpaceToScreenSpace(CVec2(_event->x(), _event->y()));
-    mApp->PushEvent(CAppEvent(EventMouse, ConvertButton(_event->button()), p.x, p.y));
+    mApp->GetEventSystem().PressEvent(CAppEvent(EventMouse, ConvertButton(_event->button()), p.x, p.y));
+}
+
+void SceneWidget::mouseReleaseEvent(QMouseEvent *_event)
+{
+    QGLWidget::mouseReleaseEvent(_event);
+
+    if (mApp == nullptr)
+    {
+        return;
+    }
+
+    CVec2 p = WidgetSpaceToScreenSpace(CVec2(_event->x(), _event->y()));
+    mApp->GetEventSystem().ReleaseEvent(CAppEvent(EventMouse, ConvertButton(_event->button()), p.x, p.y));
 }
 
 void SceneWidget::mouseMoveEvent(QMouseEvent *_event)
