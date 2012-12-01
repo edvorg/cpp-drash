@@ -61,6 +61,8 @@ bool CTestApp2::Init()
     }
     ));
 
+    SetProcessors();
+
     CSceneObjectGeometry g;
     g.mFigures.resize(1);
     g.mFigures[0].mVertices.push_back( CVec2( -300.0f, 5.0f ) );
@@ -102,6 +104,40 @@ bool CTestApp2::Init()
     }
 
     return true;
+}
+
+void CTestApp2::SetProcessors()
+{
+    GetEventSystem().SetProcessor("LB", CAppEventProcessor(
+    [this] ()// key pressed
+    {
+        // choose object here
+        mSelectedObject = GetDebugDrawSystem().FindObject(GetCursorPos());
+    },
+    [] ()// key being pressed
+    {
+        // move object if choosen
+    },
+    [] ()// key released
+    {
+    }));
+
+    GetEventSystem().SetProcessor("LB C-d", CAppEventProcessor(
+    [this] () // control-d pressed after LB released
+    {
+        // delete object if choosen
+        if (mSelectedObject != nullptr)
+        {
+            GetScene().DestroyObject(mSelectedObject);
+            mSelectedObject = nullptr;
+        }
+    },
+    [] () // control-d is being pressed after LB released
+    {
+    },
+    [] () // control-d released after LB released
+    {
+    }));
 }
 
 }

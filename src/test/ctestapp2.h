@@ -37,6 +37,10 @@ public:
     virtual ~CTestApp2() override {}
 
     virtual bool Init() override;
+
+private:
+    void SetProcessors();
+    CSceneObject *mSelectedObject = nullptr;
 };
 
 
