@@ -13,6 +13,8 @@ public:
     constexpr static const unsigned int mCatchEventsCountLimit = 3;
 
     void AddEvent(const CAppEvent &_e);
+    void RemoveEvent(const CAppEvent &_e);
+    void Clear();
 
     bool operator ==(const CAppEventCombination &_src);
 private:
