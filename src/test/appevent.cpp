@@ -47,26 +47,63 @@ std::string CAppEvent::ToString() const
 {
     switch (this->mKey)
     {
-    case EventKeyA:
-        return std::string("a");
-    case EventKeyS:
-        return std::string("s");
+    case EventKeyQ:
+        return std::string("q");
+
     case EventKeyW:
         return std::string("w");
+
+    case EventKeyE:
+        return std::string("e");
+
+    case EventKeyR:
+        return std::string("r");
+
+    case EventKeyA:
+        return std::string("a");
+
+    case EventKeyS:
+        return std::string("s");
+
     case EventKeyD:
         return std::string("d");
+
     case EventKeyF:
         return std::string("f");
+
+    case EventKeyZ:
+        return std::string("z");
+
+    case EventKeyX:
+        return std::string("x");
+
+    case EventKeyC:
+        return std::string("c");
+
+    case EventKeyV:
+        return std::string("v");
+
     case EventKeyControl:
         return std::string("C");
+
     case EventKeyShift:
         return std::string("S");
-    case EventKeyLeft:
+
+    case EventKeyAlt:
+        return std::string("A");
+
+    case EventKeyMeta:
+        return std::string("M");
+
+    case EventKeyLeftButton:
         return std::string("LB");
-    case EventKeyRight:
+
+    case EventKeyRightButton:
         return std::string("RB");
-    case EventKeyMiddle:
+
+    case EventKeyMiddleButton:
         return std::string("MB");
+
     default:
         return std::string("<unknown key>");
     }
@@ -74,9 +111,21 @@ std::string CAppEvent::ToString() const
 
 void CAppEvent::FromString(const std::string &_str)
 {
-    if (_str == "w")
+    if (_str == "q")
+    {
+        this->mKey = EventKeyQ;
+    }
+    else if (_str == "w")
     {
         this->mKey = EventKeyW;
+    }
+    else if (_str == "e")
+    {
+        this->mKey = EventKeyE;
+    }
+    else if (_str == "r")
+    {
+        this->mKey = EventKeyR;
     }
     else if (_str == "a")
     {
@@ -94,6 +143,22 @@ void CAppEvent::FromString(const std::string &_str)
     {
         this->mKey = EventKeyF;
     }
+    else if (_str == "z")
+    {
+        this->mKey = EventKeyZ;
+    }
+    else if (_str == "x")
+    {
+        this->mKey = EventKeyX;
+    }
+    else if (_str == "c")
+    {
+        this->mKey = EventKeyC;
+    }
+    else if (_str == "v")
+    {
+        this->mKey = EventKeyV;
+    }
     else if (_str == "C")
     {
         this->mKey = EventKeyControl;
@@ -102,17 +167,25 @@ void CAppEvent::FromString(const std::string &_str)
     {
         this->mKey = EventKeyShift;
     }
+    else if (_str == "A")
+    {
+        this->mKey = EventKeyAlt;
+    }
+    else if (_str == "M")
+    {
+        this->mKey = EventKeyMeta;
+    }
     else if (_str == "LB")
     {
-        this->mKey = EventKeyLeft;
+        this->mKey = EventKeyLeftButton;
     }
     else if (_str == "RB")
     {
-        this->mKey = EventKeyRight;
+        this->mKey = EventKeyRightButton;
     }
     else if (_str == "MB")
     {
-        this->mKey = EventKeyMiddle;
+        this->mKey = EventKeyMiddleButton;
     }
     else
     {

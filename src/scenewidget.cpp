@@ -33,8 +33,14 @@ drash::EventKey ConvertKey(int _key)
 {
     switch (_key)
     {
+    case Qt::Key_Q:
+        return drash::EventKeyQ;
     case Qt::Key_W:
         return drash::EventKeyW;
+    case Qt::Key_E:
+        return drash::EventKeyE;
+    case Qt::Key_R:
+        return drash::EventKeyR;
     case Qt::Key_A:
         return drash::EventKeyA;
     case Qt::Key_S:
@@ -43,6 +49,14 @@ drash::EventKey ConvertKey(int _key)
         return drash::EventKeyD;
     case Qt::Key_F:
         return drash::EventKeyF;
+    case Qt::Key_Z:
+        return drash::EventKeyZ;
+    case Qt::Key_X:
+        return drash::EventKeyX;
+    case Qt::Key_C:
+        return drash::EventKeyC;
+    case Qt::Key_V:
+        return drash::EventKeyV;
     case Qt::Key_Space:
         return drash::EventKeySpace;
     case Qt::Key_Escape:
@@ -53,12 +67,14 @@ drash::EventKey ConvertKey(int _key)
         return drash::EventKeyShift;
     case Qt::Key_Alt:
         return drash::EventKeyAlt;
+    case Qt::Key_Meta:
+        return drash::EventKeyMeta;
     case Qt::LeftButton:
-        return drash::EventKeyLeft;
+        return drash::EventKeyLeftButton;
     case Qt::RightButton:
-        return drash::EventKeyRight;
+        return drash::EventKeyRightButton;
     case Qt::MiddleButton:
-        return drash::EventKeyMiddle;
+        return drash::EventKeyMiddleButton;
     default:
         return drash::EventKeyUnknown;
     }
