@@ -83,6 +83,12 @@ std::string CAppEvent::ToString() const
     case EventKeyV:
         return std::string("v");
 
+    case EventKeySpace:
+        return std::string("SPC");
+
+    case EventKeyEscape:
+        return std::string("ESC");
+
     case EventKeyControl:
         return std::string("C");
 
@@ -158,6 +164,14 @@ void CAppEvent::FromString(const std::string &_str)
     else if (_str == "v")
     {
         this->mKey = EventKeyV;
+    }
+    else if (_str == "SPC")
+    {
+        this->mKey = EventKeySpace;
+    }
+    else if (_str == "ESC")
+    {
+        this->mKey = EventKeyEscape;
     }
     else if (_str == "C")
     {
