@@ -64,6 +64,8 @@ public:
     void FromString(const std::string &_str);
 
     inline bool operator ==(const CAppEvent &_to) const;
+    inline bool operator !=(const CAppEvent &_to) const;
+    inline bool operator <(const CAppEvent &_to) const;
 
     void Dump() const;
 
@@ -79,6 +81,16 @@ inline EventKey CAppEvent::GetKey() const
 inline bool CAppEvent::operator ==(const CAppEvent &_to) const
 {
     return mKey == _to.mKey;
+}
+
+inline bool CAppEvent::operator !=(const CAppEvent &_to) const
+{
+    return mKey != _to.mKey;
+}
+
+inline bool CAppEvent::operator <(const CAppEvent &_to) const
+{
+    return (unsigned int)mKey < (unsigned int)_to.mKey;
 }
 
 } // namespace drash
