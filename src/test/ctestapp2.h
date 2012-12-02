@@ -26,7 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CTESTAPP2_H
 #define CTESTAPP2_H
 
-#include "app.h"
+#include "../app/app.h"
 
 namespace drash
 {

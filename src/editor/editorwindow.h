@@ -26,7 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define EDITORWINDOW_H
 
 #include <QMainWindow>
-#include "../test/app.h"
+#include "../app/app.h"
 #include "../test/test.h"
 #include "../diag/ctimer.h"
 #include "ceditorapp.h"

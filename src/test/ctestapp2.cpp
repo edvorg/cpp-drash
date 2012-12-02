@@ -26,7 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../cscene.h"
 
-#include "appeventprocessor.h"
+#include "../app/appeventprocessor.h"
 
 namespace drash
 {

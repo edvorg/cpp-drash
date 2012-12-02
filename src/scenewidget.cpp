@@ -25,7 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "scenewidget.h"
 
 #include "misc/cvec2.h"
-#include "test/appevent.h"
+#include "app/appevent.h"
 
 using namespace drash;
 
@@ -156,7 +156,6 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
         return;
     }
 
-    CVec2 p = WidgetSpaceToScreenSpace(CVec2(_event->x(), _event->y()));
     mApp->GetEventSystem().PressEvent(CAppEvent(ConvertKey(_event->button())));
 }
 
@@ -169,7 +168,6 @@ void SceneWidget::mouseReleaseEvent(QMouseEvent *_event)
         return;
     }
 
-    CVec2 p = WidgetSpaceToScreenSpace(CVec2(_event->x(), _event->y()));
     mApp->GetEventSystem().ReleaseEvent(CAppEvent(ConvertKey(_event->button())));
 }
 

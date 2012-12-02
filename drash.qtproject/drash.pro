@@ -43,14 +43,14 @@ SOURCES += ../src/main.cpp\
     ../src/physobserver.cpp \
     ../src/sceneobjects/figure.cpp \
     ../src/subsystem/debugdrawsystem.cpp \
-    ../src/test/app.cpp \
-    ../src/test/appevent.cpp \
+    ../src/app/app.cpp \
+    ../src/app/appevent.cpp \
     ../src/editor/sceneeditor.cpp\
    ../src/joints/joint.cpp \
     ../src/editor/ceditorapp.cpp \
-    ../src/test/appeventsystem.cpp \
-    ../src/test/appeventprocessor.cpp \
-    ../src/test/appeventcombination.cpp
+    ../src/app/appeventsystem.cpp \
+    ../src/app/appeventprocessor.cpp \
+    ../src/app/appeventcombination.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -82,14 +82,14 @@ HEADERS  += ../src/gamewindow.h \
     ../src/physobserver.h \
     ../src/sceneobjects/figure.h \
     ../src/subsystem/debugdrawsystem.h \
-    ../src/test/app.h \
-    ../src/test/appevent.h \
+    ../src/app/app.h \
+    ../src/app/appevent.h \
     ../src/editor/sceneeditor.h \
     ../src/joints/joint.h \
     ../src/editor/ceditorapp.h \
-    ../src/test/appeventsystem.h \
-    ../src/test/appeventprocessor.h \
-    ../src/test/appeventcombination.h
+    ../src/app/appeventsystem.h \
+    ../src/app/appeventprocessor.h \
+    ../src/app/appeventcombination.h
 
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui

@@ -1,7 +1,8 @@
 #ifndef CEDITORAPP_H
 #define CEDITORAPP_H
 
-#include "../test/app.h"
+#include "../app/app.h"
+
 namespace drash {
 
 enum StateEditObject{

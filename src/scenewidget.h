@@ -27,10 +27,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QtOpenGL/QtOpenGL>
 #include "sceneobjects.h"
-#include "test/app.h"
+#include "app/app.h"
 #include "cscene.h"
 #include <QGLWidget>
-//class CVec2;
 
 class SceneWidget : public QGLWidget
 {
