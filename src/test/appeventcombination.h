@@ -14,6 +14,7 @@ public:
 
     void AddEvent(const CAppEvent &_e);
     void RemoveEvent(const CAppEvent &_e);
+    inline unsigned int GetEventsCount() const;
     void Clear();
 
     bool operator ==(const CAppEventCombination &_src);
@@ -21,6 +22,11 @@ private:
 protected:
     std::vector<CAppEvent> mCatchEvents;
 };
+
+inline unsigned int CAppEventCombination::GetEventsCount() const
+{
+    return mCatchEvents.size();
+}
 
 } // namespace drash
 
