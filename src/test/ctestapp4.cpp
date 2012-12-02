@@ -29,12 +29,29 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
+void PressCallback()
+{
+    LOG_INFO("control pressed");
+}
+
+void PressingCallback()
+{
+    LOG_INFO("control pressing");
+}
+
+void ReleaseCallback()
+{
+    LOG_INFO("control released");
+}
+
 bool CTestApp4::Init()
 {
     if (CApp::Init() == false)
     {
         return false;
     }
+
+    GetEventSystem().SetProcessor("C", CAppEventProcessor(PressCallback, PressingCallback, ReleaseCallback));
 
     GetDebugDrawSystem().GetActiveCam()->SetZ(100);
 
