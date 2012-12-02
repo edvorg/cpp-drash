@@ -38,7 +38,7 @@ bool CTestApp2::Init()
         return false;
     }
 
-    GetDebugDrawSystem().GetActiveCam()->SetZ(100);
+    GetDebugDrawSystem().GetActiveCam()->SetZ(300);
 
     auto t = GetTemplateSystem().CreateSceneObjectTemplate("lambda_test");
     t->mGeometry.mFigures.resize(1);
@@ -114,9 +114,15 @@ void CTestApp2::SetProcessors()
         // choose object here
         mSelectedObject = GetDebugDrawSystem().FindObject(GetCursorPos());
     },
-    [] ()// key being pressed
+    [this] ()// key being pressed
     {
         // move object if choosen
+        if (mSelectedObject != nullptr)
+        {
+            CVec2 pos = GetCursorPos();
+            GetDebugDrawSystem().ScreenSpaceToWorldSpace(pos, mSelectedObject->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+            mSelectedObject->SetPos(pos);
+        }
     },
     [] ()// key released
     {
