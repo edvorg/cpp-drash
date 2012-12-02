@@ -76,7 +76,7 @@ void CApp::Step(double _dt)
 
 void CApp::PushEvent(const CAppEvent &_event)
 {
-    if (_event.GetType() != EventUnknown)
+    if (_event.GetKey() != EventKeyUnknown)
     {
         mEvents.push_back(_event);
     }

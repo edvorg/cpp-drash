@@ -26,16 +26,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define DRASH_APPEVENT_H
 
 #include "../misc/cvec2.h"
+#include <string>
 
 namespace drash
 {
-
-enum EventType : unsigned int
-{
-    EventUnknown = 0,
-    EventMouse = 1,
-    EventKeyboard = 2,
-};
 
 enum EventKey : unsigned int
 {
@@ -44,21 +38,17 @@ enum EventKey : unsigned int
     EventKeyA,
     EventKeyS,
     EventKeyD,
+    EventKeyF,
     EventKeySpace,
     EventKeyEscape,
     EventKeyControl,
     EventKeyShift,
     EventKeyAlt,
-};
-
-enum EventButton : unsigned int
-{
-    EventButtonUnknown = 0,
-    EventButtonLeft,
-    EventButtonRight,
-    EventButtonMiddle,
-    EventButtonWheelUp,
-    EventButtonWheelDown,
+    EventKeyLeft,
+    EventKeyRight,
+    EventKeyMiddle,
+    EventKeyWheelUp,
+    EventKeyWheelDown,
 };
 
 class CAppEvent
@@ -66,48 +56,29 @@ class CAppEvent
 public:
     CAppEvent();
     CAppEvent(const CAppEvent &_src);
-    CAppEvent(EventType _type, EventKey _key);
-    CAppEvent(EventType _type, EventButton _button, float _x, float _y);
+    CAppEvent(EventKey _key);
 
-    inline EventType GetType() const;
     inline EventKey GetKey() const;
-    inline EventButton GetButton() const;
-    inline const CVec2 &GetPos() const;
+
+    std::string ToString() const;
+    void FromString(const std::string &_str);
 
     inline bool operator ==(const CAppEvent &_to) const;
 
     void Dump() const;
 
 private:
-    EventType mType = EventUnknown;
     EventKey mKey = EventKeyUnknown;
-    EventButton mButton = EventButtonUnknown;
-    CVec2 mPos = CVec2(0, 0);
 };
-
-inline EventType CAppEvent::GetType() const
-{
-    return mType;
-}
 
 inline EventKey CAppEvent::GetKey() const
 {
     return mKey;
 }
 
-inline EventButton CAppEvent::GetButton() const
-{
-    return mButton;
-}
-
-inline const CVec2 &CAppEvent::GetPos() const
-{
-    return mPos;
-}
-
 inline bool CAppEvent::operator ==(const CAppEvent &_to) const
 {
-    return mType == _to.mType && mKey == _to.mKey && mButton == _to.mButton;
+    return mKey == _to.mKey;
 }
 
 } // namespace drash

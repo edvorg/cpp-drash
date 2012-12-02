@@ -34,36 +34,84 @@ CAppEvent::CAppEvent()
 }
 
 CAppEvent::CAppEvent(const CAppEvent &_src):
-    mType(_src.mType),
-    mKey(_src.mKey),
-    mButton(_src.mButton),
-    mPos(_src.mPos)
+    mKey(_src.mKey)
 {
 }
 
-CAppEvent::CAppEvent(EventType _type, EventKey _key)
+CAppEvent::CAppEvent(EventKey _key):
+    mKey(_key)
 {
-    if (_type == EventKeyboard)
+}
+
+std::string CAppEvent::ToString() const
+{
+    if (this->mKey == EventKeyD)
     {
-        mType = _type;
-        mKey = _key;
+        return std::string("d");
     }
+    else if (this->mKey == EventKeyF)
+    {
+        return std::string("f");
+    }
+    else if (this->mKey == EventKeyControl)
+    {
+        return std::string("C");
+    }
+    else if (this->mKey == EventKeyShift)
+    {
+        return std::string("S");
+    }
+    else if (this->mKey == EventKeyLeft)
+    {
+        return std::string("LB");
+    }
+    else if (this->mKey == EventKeyRight)
+    {
+        return std::string("RB");
+    }
+    else if (this->mKey == EventKeyMiddle)
+    {
+        return std::string("MB");
+    }
+
+    return std::string("");
 }
 
-CAppEvent::CAppEvent(EventType _type, EventButton _button, float _x, float _y)
+void CAppEvent::FromString(const std::string &_str)
 {
-    if (_type == EventMouse)
+    if (_str == "d")
     {
-        mType = _type;
-        mButton = _button;
-        mPos.Set(_x, _y);
+        this->mKey = EventKeyD;
+    }
+    else if (_str == "f")
+    {
+        this->mKey = EventKeyF;
+    }
+    else if (_str == "C")
+    {
+        this->mKey = EventKeyControl;
+    }
+    else if (_str == "S")
+    {
+        this->mKey = EventKeyShift;
+    }
+    else if (_str == "LB")
+    {
+        this->mKey = EventKeyLeft;
+    }
+    else if (_str == "RB")
+    {
+        this->mKey = EventKeyRight;
+    }
+    else if (_str == "MB")
+    {
+        this->mKey = EventKeyMiddle;
     }
 }
 
 void CAppEvent::Dump() const
 {
-    LOG_INFO("CAppEvent dump: "<<(unsigned int)mType<<' '<<
-             (unsigned int)mKey<<' '<<(unsigned int)mButton<<' '<<mPos);
+    LOG_INFO("CAppEvent dump: "<<(unsigned int)mKey);
 }
 
 } // namespace drash

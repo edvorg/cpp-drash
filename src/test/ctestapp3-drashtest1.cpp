@@ -241,6 +241,7 @@ void CTestApp3::Step(double _dt)
 {
     CApp::Step(_dt);
 
+    /*
     for (CAppEvent e=PopEvent(); e.GetType()!=EventUnknown; e=PopEvent())
     {
         if (e.GetType() == EventKeyboard)
@@ -327,6 +328,7 @@ void CTestApp3::Step(double _dt)
             }
         }
     }
+    */
 
     if (mMoveObject != nullptr)
     {
