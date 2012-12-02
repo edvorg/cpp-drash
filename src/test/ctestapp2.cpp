@@ -51,6 +51,8 @@ bool CTestApp2::Init()
     [this, t] ()
     {
         CSceneObjectParams p;
+        p.mPos = GetCursorPos();
+        GetDebugDrawSystem().ScreenSpaceToWorldSpace(p.mPos, -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
         GetTemplateSystem().CreateSceneObjectFromTemplate("lambda_test", p);
     },
     [this] ()
