@@ -146,6 +146,18 @@ void CTestApp2::SetProcessors()
     [] () // control-d released after LB released
     {
     }));
+
+    GetEventSystem().SetProcessor("C-x C-c", CAppEventProcessor(
+    [this] ()// key pressed
+    {
+        this->Quit();
+    },
+    [this] ()// key being pressed
+    {
+    },
+    [] ()// key released
+    {
+    }));
 }
 
 }

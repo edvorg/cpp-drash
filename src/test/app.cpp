@@ -36,6 +36,8 @@ bool CApp::Init()
     CSceneParams params;
     params.mGravity.Set( 0, -9.8 );
 
+	mQuit = true;
+
     if ( mScene.Init(params) == false )
     {
         return false;
@@ -52,6 +54,8 @@ bool CApp::Init()
     {
         return false;
     }
+
+    mQuit = false;
 
     return true;
 }
@@ -73,6 +77,13 @@ void CApp::Release()
 
 void CApp::Step(double _dt)
 {
+    if (mQuit)
+    {
+        this->Release();
+        mQuitHandler();
+        return;
+    }
+
     mEventSystem.Process();
 
     mScene.Step(_dt);

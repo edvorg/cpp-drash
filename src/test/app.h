@@ -53,6 +53,9 @@ public:
     virtual void Step(double _dt);
     inline virtual void Render();
 
+    inline void Quit();
+    inline void SetQuitHandler(std::function<void ()> _handler);
+
     inline CScene &GetScene();
     inline const CScene &GetScene() const;
 
@@ -85,11 +88,23 @@ private:
     CDebugDrawSystem mDebugDrawSystem;
     std::list<CAppEvent> mEvents;
     CVec2 mCursorPos = CVec2(0);
+    std::function<void ()> mQuitHandler = [] () {};
+    bool mQuit = false;
 };
 
 inline void CApp::Render()
 {
     mDebugDrawSystem.Draw();
+}
+
+inline void CApp::Quit()
+{
+    mQuit = true;
+}
+
+inline void CApp::SetQuitHandler(std::function<void ()> _handler)
+{
+    mQuitHandler = _handler;
 }
 
 inline CScene &CApp::GetScene()

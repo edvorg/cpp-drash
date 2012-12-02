@@ -98,6 +98,11 @@ bool GameWindow::Init( const GameWindowParams &_params )
                 title += " - ";
                 title += _params.mArgv[i+1].c_str();
 
+                mApp->SetQuitHandler([] ()
+                {
+                    QApplication::quit();
+                });
+
                 break;
             }
             else
