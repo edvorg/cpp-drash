@@ -2,17 +2,33 @@
 #define DRASH_APPEVENTSYSTEM_H
 
 #include "appevent.h"
+#include "appeventprocessor.h"
+#include "appeventcombination.h"
 #include <list>
 
 namespace drash
 {
 
-class CAppEventProcessor;
+class CAppEventCombinationTree
+{
+public:
+    friend class CAppEventSystem;
+
+    CAppEventCombinationTree();
+
+protected:
+private:
+    CAppEventProcessor mProcessor;
+    CAppEventCombination mCombination;
+    std::list<CAppEventCombinationTree> mChilds;
+};
 
 class CAppEventSystem
 {
 public:
-    void SetProcessor(const char *_combination, const CAppEventProcessor &_processor);
+    CAppEventSystem();
+
+    void SetProcessor(const char *_combinations, const CAppEventProcessor &_processor);
 
     void Process();
 
@@ -21,7 +37,9 @@ public:
 
 protected:
 private:
-    std::list<CAppEvent> mEvents;
+    CAppEventCombination mCurrentCombination;
+    CAppEventCombinationTree mTree;
+    CAppEventCombinationTree *mCurrentNode = nullptr;
 };
 
 } // namespace drash

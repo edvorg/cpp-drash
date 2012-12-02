@@ -45,6 +45,7 @@ class CScene;
 class CApp
 {
 public:
+    CApp();
     virtual ~CApp() {}
 
     virtual bool Init();

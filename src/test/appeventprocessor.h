@@ -11,6 +11,7 @@ class CAppEventProcessor
 public:
     typedef std::function<void ()> FuncT;
 
+    CAppEventProcessor();
     CAppEventProcessor(const FuncT &_begin_pressing,
                        const FuncT &_pressing,
                        const FuncT &_end_pressing);
@@ -21,7 +22,6 @@ public:
     inline void EndPressing();
 protected:
 private:
-    CAppEventProcessor();
 
     FuncT mBeginPressing = [] () {};
     FuncT mPressing = [] () {};

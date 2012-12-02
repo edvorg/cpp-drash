@@ -27,6 +27,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
+CApp::CApp()
+{
+}
+
 bool CApp::Init()
 {
     CSceneParams params;
