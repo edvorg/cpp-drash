@@ -26,14 +26,12 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CTESTAPP_H
 #define CTESTAPP_H
 
-#include "../sceneobjects.h"
 #include "../cscene.h"
 #include "../subsystem/explosionsystem.h"
 #include "../subsystem/playerssystem.h"
 #include "../subsystem/templatesystem.h"
 #include "../subsystem/debugdrawsystem.h"
 #include "appeventsystem.h"
-#include "appevent.h"
 
 #include <list>
 
@@ -65,9 +63,6 @@ public:
     inline CTemplateSystem &GetTemplateSystem();
     inline CDebugDrawSystem &GetDebugDrawSystem();
 
-    void PushEvent(const CAppEvent &_event);
-    CAppEvent PopEvent();
-
     /// used to make CApp childs about mouse moving event
     /// use this from your CApp back end (Qt, SDL, etc.)
     /// we assume that _pos is coordinates in screen space (-0.5, -0.5) (0.5, 0.5)
@@ -81,13 +76,15 @@ protected:
 
 private:
     CAppEventSystem mEventSystem;
+    CVec2 mCursorPos = CVec2(0);
+
     CScene mScene;
+
     CExplosionSystem mExplosionSystem;
     CPlayersSystem mPlayersSystem;
     CTemplateSystem mTemplateSystem;
     CDebugDrawSystem mDebugDrawSystem;
-    std::list<CAppEvent> mEvents;
-    CVec2 mCursorPos = CVec2(0);
+
     std::function<void ()> mQuitHandler = [] () {};
     bool mQuit = false;
 };

@@ -226,5 +226,6 @@ void SceneWidget::wheelEvent( QWheelEvent *_event )
         return;
     }
 
-    mApp->PushEvent(CAppEvent(_event->delta() > 0 ? EventKeyWheelUp : EventKeyWheelDown));
+    mApp->GetEventSystem().PressEvent(CAppEvent(_event->delta() > 0 ? EventKeyWheelUp : EventKeyWheelDown));
+    mApp->GetEventSystem().ReleaseEvent(CAppEvent(_event->delta() > 0 ? EventKeyWheelUp : EventKeyWheelDown));
 }

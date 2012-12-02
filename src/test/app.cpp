@@ -89,26 +89,4 @@ void CApp::Step(double _dt)
     mScene.Step(_dt);
 }
 
-void CApp::PushEvent(const CAppEvent &_event)
-{
-    if (_event.GetKey() != EventKeyUnknown)
-    {
-        mEvents.push_back(_event);
-    }
-}
-
-CAppEvent CApp::PopEvent()
-{
-    if (mEvents.size())
-    {
-        CAppEvent e(mEvents.back());
-        mEvents.pop_back();
-        return e;
-    }
-    else
-    {
-        return CAppEvent();
-    }
-}
-
 } // namespace drash
