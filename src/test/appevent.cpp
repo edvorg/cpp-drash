@@ -45,41 +45,48 @@ CAppEvent::CAppEvent(EventKey _key):
 
 std::string CAppEvent::ToString() const
 {
-    if (this->mKey == EventKeyD)
+    switch (this->mKey)
     {
+    case EventKeyA:
+        return std::string("a");
+    case EventKeyS:
+        return std::string("s");
+    case EventKeyW:
+        return std::string("w");
+    case EventKeyD:
         return std::string("d");
-    }
-    else if (this->mKey == EventKeyF)
-    {
+    case EventKeyF:
         return std::string("f");
-    }
-    else if (this->mKey == EventKeyControl)
-    {
+    case EventKeyControl:
         return std::string("C");
-    }
-    else if (this->mKey == EventKeyShift)
-    {
+    case EventKeyShift:
         return std::string("S");
-    }
-    else if (this->mKey == EventKeyLeft)
-    {
+    case EventKeyLeft:
         return std::string("LB");
-    }
-    else if (this->mKey == EventKeyRight)
-    {
+    case EventKeyRight:
         return std::string("RB");
-    }
-    else if (this->mKey == EventKeyMiddle)
-    {
+    case EventKeyMiddle:
         return std::string("MB");
+    default:
+        return std::string("<unknown key>");
     }
-
-    return std::string("");
 }
 
 void CAppEvent::FromString(const std::string &_str)
 {
-    if (_str == "d")
+    if (_str == "w")
+    {
+        this->mKey = EventKeyW;
+    }
+    else if (_str == "a")
+    {
+        this->mKey = EventKeyA;
+    }
+    else if (_str == "s")
+    {
+        this->mKey = EventKeyS;
+    }
+    else if (_str == "d")
     {
         this->mKey = EventKeyD;
     }
@@ -106,6 +113,10 @@ void CAppEvent::FromString(const std::string &_str)
     else if (_str == "MB")
     {
         this->mKey = EventKeyMiddle;
+    }
+    else
+    {
+        this->mKey = EventKeyUnknown;
     }
 }
 
