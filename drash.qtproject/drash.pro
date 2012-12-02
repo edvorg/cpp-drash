@@ -49,7 +49,8 @@ SOURCES += ../src/main.cpp\
    ../src/joints/joint.cpp \
     ../src/editor/ceditorapp.cpp \
     ../src/test/appeventsystem.cpp \
-    ../src/test/appeventprocessor.cpp
+    ../src/test/appeventprocessor.cpp \
+    ../src/test/appeventcombination.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -87,7 +88,8 @@ HEADERS  += ../src/gamewindow.h \
     ../src/joints/joint.h \
     ../src/editor/ceditorapp.h \
     ../src/test/appeventsystem.h \
-    ../src/test/appeventprocessor.h
+    ../src/test/appeventprocessor.h \
+    ../src/test/appeventcombination.h
 
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui
