@@ -40,29 +40,6 @@ bool CTestApp2::Init()
 
     GetDebugDrawSystem().GetActiveCam()->SetZ(300);
 
-    auto t = GetTemplateSystem().CreateSceneObjectTemplate("lambda_test");
-    t->mGeometry.mFigures.resize(1);
-    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-10, -10));
-    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(10, -10));
-    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(0, 10));
-    t->mGeometry.mFigures[0].mDepth = 3;
-
-    GetEventSystem().SetProcessor("C-S-f", CAppEventProcessor(
-    [this, t] ()
-    {
-        CSceneObjectParams p;
-        p.mPos = GetCursorPos();
-        GetDebugDrawSystem().ScreenSpaceToWorldSpace(p.mPos, -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
-        GetTemplateSystem().CreateSceneObjectFromTemplate("lambda_test", p);
-    },
-    [this] ()
-    {
-    },
-    [this] ()
-    {
-    }
-    ));
-
     SetProcessors();
 
     CSceneObjectGeometry g;
@@ -109,14 +86,34 @@ bool CTestApp2::Init()
 }
 
 void CTestApp2::SetProcessors()
-{
+{    
+    auto t = GetTemplateSystem().CreateSceneObjectTemplate("lambda_test");
+    t->mGeometry.mFigures.resize(1);
+    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-10, -10));
+    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(10, -10));
+    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(0, 10));
+    t->mGeometry.mFigures[0].mDepth = 3;
+
+
+
+    GetEventSystem().SetProcessor("C-S-f", CAppEventProcessor(
+    [this, t] ()
+    {
+        CSceneObjectParams p;
+        p.mPos = GetCursorPos();
+        GetDebugDrawSystem().ScreenSpaceToWorldSpace(p.mPos, -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+        GetTemplateSystem().CreateSceneObjectFromTemplate("lambda_test", p);
+    }));
+
+
+
     GetEventSystem().SetProcessor("LB", CAppEventProcessor(
-    [this] ()// key pressed
+    [this] ()// left mouse button pressed
     {
         // choose object here
         mSelectedObject = GetDebugDrawSystem().FindObject(GetCursorPos());
     },
-    [this] ()// key being pressed
+    [this] ()// left mouse button is being pressed
     {
         // move object if choosen
         if (mSelectedObject != nullptr)
@@ -125,10 +122,9 @@ void CTestApp2::SetProcessors()
             GetDebugDrawSystem().ScreenSpaceToWorldSpace(pos, mSelectedObject->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
             mSelectedObject->SetPos(pos);
         }
-    },
-    [] ()// key released
-    {
     }));
+
+
 
     GetEventSystem().SetProcessor("LB C-d", CAppEventProcessor(
     [this] () // control-d pressed after LB released
@@ -139,24 +135,14 @@ void CTestApp2::SetProcessors()
             GetScene().DestroyObject(mSelectedObject);
             mSelectedObject = nullptr;
         }
-    },
-    [] () // control-d is being pressed after LB released
-    {
-    },
-    [] () // control-d released after LB released
-    {
     }));
 
+
+
     GetEventSystem().SetProcessor("C-x C-c", CAppEventProcessor(
-    [this] ()// key pressed
+    [this] ()// key pressed. emacs like :)
     {
         this->Quit();
-    },
-    [this] ()// key being pressed
-    {
-    },
-    [] ()// key released
-    {
     }));
 }
 

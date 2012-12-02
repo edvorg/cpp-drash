@@ -13,8 +13,8 @@ public:
 
     CAppEventProcessor();
     CAppEventProcessor(const FuncT &_begin_pressing,
-                       const FuncT &_pressing,
-                       const FuncT &_end_pressing);
+                       const FuncT &_pressing = [] () {},
+                       const FuncT &_end_pressing = [] () {});
     CAppEventProcessor(const CAppEventProcessor &_src);
 
     inline void BeginPressing();
