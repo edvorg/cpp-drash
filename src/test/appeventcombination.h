@@ -17,7 +17,9 @@ public:
     inline unsigned int GetEventsCount() const;
     void Clear();
 
-    bool operator ==(const CAppEventCombination &_src);
+    bool ContainsEvent(const CAppEvent &_e) const;
+
+    bool operator ==(const CAppEventCombination &_src) const;
 private:
 protected:
     std::vector<CAppEvent> mCatchEvents;

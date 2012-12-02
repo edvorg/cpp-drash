@@ -34,7 +34,12 @@ void CAppEventCombination::Clear()
     mCatchEvents.clear();
 }
 
-bool CAppEventCombination::operator ==(const CAppEventCombination &_src)
+bool CAppEventCombination::ContainsEvent(const CAppEvent &_e) const
+{
+    return std::find(mCatchEvents.begin(), mCatchEvents.end(), _e) != mCatchEvents.end();
+}
+
+bool CAppEventCombination::operator ==(const CAppEventCombination &_src) const
 {
     if (mCatchEvents.size() != _src.mCatchEvents.size())
     {
