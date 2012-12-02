@@ -74,16 +74,69 @@ void CAppEventSystem::SetProcessor(const char *_combinations, const CAppEventPro
 
 void CAppEventSystem::Process()
 {
+    if (mCombinationLock == true)
+    {
+        mCurrentNode->mProcessor.Pressing();
+    }
 }
 
 void CAppEventSystem::PressEvent(const CAppEvent &_event)
 {
+    if (mCombinationLock == true)
+    {
+        return;
+    }
+
+    LOG_INFO("pressed "<<_event.ToString().c_str());
     mCurrentCombination.AddEvent(_event);
+
+    bool right_way = false;
+
+    for (auto i = mCurrentNode->mChilds.begin(); i != mCurrentNode->mChilds.end(); i++)
+    {
+        if (i->mCombination == mCurrentCombination)
+        {
+            i->mProcessor.BeginPressing();
+            mCurrentNode = &*i;
+            mCombinationLock = true;
+            return;
+        }
+        else if (i->mCombination.ContainsEvent(_event))
+        {
+            right_way = true;
+        }
+    }
+
+    if (!right_way)
+    {
+        mCurrentNode = &mTree;
+        for (auto i = mCurrentNode->mChilds.begin(); i != mCurrentNode->mChilds.end(); i++)
+        {
+            if (i->mCombination == mCurrentCombination)
+            {
+                i->mProcessor.BeginPressing();
+                mCurrentNode = &*i;
+                mCombinationLock = true;
+                return;
+            }
+        }
+    }
 }
 
 void CAppEventSystem::ReleaseEvent(const CAppEvent &_event)
 {
+    LOG_INFO("released "<<_event.ToString().c_str());
     mCurrentCombination.RemoveEvent(_event);
+
+    if (mCurrentCombination.GetEventsCount() == 0)
+    {
+        mCurrentNode->mProcessor.EndPressing();
+        if (mCurrentNode->mChilds.size() == 0)
+        {
+            mCurrentNode = &mTree;
+        }
+        mCombinationLock = false;
+    }
 }
 
 } // namespace drash

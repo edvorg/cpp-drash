@@ -39,7 +39,8 @@ protected:
 private:
     CAppEventCombination mCurrentCombination;
     CAppEventCombinationTree mTree;
-    CAppEventCombinationTree *mCurrentNode = nullptr;
+    CAppEventCombinationTree *mCurrentNode = &mTree;
+    bool mCombinationLock = false;
 };
 
 } // namespace drash
