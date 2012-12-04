@@ -39,6 +39,36 @@ bool CAppEventCombination::ContainsEvent(const CAppEvent &_e) const
     return std::find(mCatchEvents.begin(), mCatchEvents.end(), _e) != mCatchEvents.end();
 }
 
+bool CAppEventCombination::ContainsCombination(const CAppEventCombination &_c) const
+{
+    bool res = false;
+
+    for (unsigned int i = 0; i < mCatchEvents.size(); i++)
+    {
+        if (mCatchEvents[i] == *_c.mCatchEvents.begin())
+        {
+            if (i + _c.mCatchEvents.size() <= mCatchEvents.size())
+            {
+                res = true;
+                i++;
+
+                for (unsigned int j = 1; j < _c.mCatchEvents.size(); j++, i++)
+                {
+                    if (mCatchEvents[i] != _c.mCatchEvents[j])
+                    {
+                        res = false;
+                        break;
+                    }
+                }
+            }
+
+            break;
+        }
+    }
+
+    return res;
+}
+
 bool CAppEventCombination::operator ==(const CAppEventCombination &_src) const
 {
     if (mCatchEvents.size() != _src.mCatchEvents.size())
@@ -46,7 +76,15 @@ bool CAppEventCombination::operator ==(const CAppEventCombination &_src) const
         return false;
     }
 
-    for (unsigned int i = 0; i < mCatchEvents.size(); i++)
+    unsigned int last_elem = mCatchEvents.size()-1;
+
+    if (mCatchEvents[0] != _src.mCatchEvents[0] ||
+        mCatchEvents[last_elem] != _src.mCatchEvents[last_elem])
+    {
+        return false;
+    }
+
+    for (unsigned int i = 1; i < last_elem; i++)
     {
         if (mCatchEvents[i] != _src.mCatchEvents[i])
         {
@@ -55,6 +93,11 @@ bool CAppEventCombination::operator ==(const CAppEventCombination &_src) const
     }
 
     return true;
+}
+
+bool CAppEventCombination::operator !=(const CAppEventCombination &_src) const
+{
+    return !(*this == _src);
 }
 
 } // namespace drash

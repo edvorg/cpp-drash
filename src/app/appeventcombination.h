@@ -18,8 +18,10 @@ public:
     void Clear();
 
     bool ContainsEvent(const CAppEvent &_e) const;
+    bool ContainsCombination(const CAppEventCombination &_c) const;
 
     bool operator ==(const CAppEventCombination &_src) const;
+    bool operator !=(const CAppEventCombination &_src) const;
 private:
 protected:
     std::vector<CAppEvent> mCatchEvents;
