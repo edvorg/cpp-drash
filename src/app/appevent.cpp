@@ -110,6 +110,12 @@ std::string CAppEvent::ToString() const
     case EventKeyMiddleButton:
         return std::string("MB");
 
+    case EventKeyWheelUp:
+        return std::string("WHUP");
+
+    case EventKeyWheelDown:
+        return std::string("WHDN");
+
     default:
         return std::string("<unknown key>");
     }
@@ -200,6 +206,14 @@ void CAppEvent::FromString(const std::string &_str)
     else if (_str == "MB")
     {
         this->mKey = EventKeyMiddleButton;
+    }    
+    else if (_str == "WHUP")
+    {
+        this->mKey = EventKeyWheelUp;
+    }
+    else if (_str == "WHDN")
+    {
+        this->mKey = EventKeyWheelDown;
     }
     else
     {
