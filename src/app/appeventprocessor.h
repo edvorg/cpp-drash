@@ -10,12 +10,8 @@ class CAppEventProcessor
 {
 public:
     typedef std::function<void ()> FuncT;
-    typedef void (*CallbackT)();
 
     CAppEventProcessor();
-    CAppEventProcessor(CallbackT _event_begin,
-                       CallbackT _event,
-                       CallbackT _event_end);
     CAppEventProcessor(const FuncT &_begin_pressing,
                        const FuncT &_pressing = [] () {},
                        const FuncT &_end_pressing = [] () {});
@@ -30,24 +26,21 @@ private:
     FuncT mBeginPressing = [] () {};
     FuncT mPressing = [] () {};
     FuncT mEndPressing = [] () {};
-    CallbackT mEventBeginCallback = nullptr;
-    CallbackT mEventCallback = nullptr;
-    CallbackT mEventEndCallback = nullptr;
 };
 
 inline void CAppEventProcessor::BeginPressing()
 {
-    mEventBeginCallback == nullptr ? mBeginPressing() : mEventBeginCallback();
+    mBeginPressing();
 }
 
 inline void CAppEventProcessor::Pressing()
 {
-    mEventCallback == nullptr ? mPressing() : mEventCallback();
+    mPressing();
 }
 
 inline void CAppEventProcessor::EndPressing()
 {
-    mEventEndCallback == nullptr ? mEndPressing() : mEventEndCallback();
+    mEndPressing();
 }
 
 } // namespace drash

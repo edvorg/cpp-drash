@@ -7,13 +7,6 @@ CAppEventProcessor::CAppEventProcessor()
 {
 }
 
-CAppEventProcessor::CAppEventProcessor(CAppEventProcessor::CallbackT _event_begin, CAppEventProcessor::CallbackT _event, CAppEventProcessor::CallbackT _event_end):
-    mEventBeginCallback(_event_begin),
-    mEventCallback(_event),
-    mEventEndCallback(_event_end)
-{
-}
-
 CAppEventProcessor::CAppEventProcessor(const CAppEventProcessor::FuncT &_begin_pressing,
                                        const CAppEventProcessor::FuncT &_pressing,
                                        const CAppEventProcessor::FuncT &_end_pressing):

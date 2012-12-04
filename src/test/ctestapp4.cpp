@@ -25,24 +25,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctestapp4.h"
 
 #include <sceneobjects.h>
+#include "app/appeventprocessor.h"
 
 namespace drash
 {
-
-void PressCallback()
-{
-    LOG_INFO("control pressed");
-}
-
-void PressingCallback()
-{
-    LOG_INFO("control pressing");
-}
-
-void ReleaseCallback()
-{
-    LOG_INFO("control released");
-}
 
 bool CTestApp4::Init()
 {
@@ -51,7 +37,88 @@ bool CTestApp4::Init()
         return false;
     }
 
-    GetEventSystem().SetProcessor("C", CAppEventProcessor(PressCallback, PressingCallback, ReleaseCallback));
+    GetEventSystem().SetProcessor("C-x C-c", CAppEventProcessor(
+    [] ()
+    {
+      LOG_INFO("C-x C-c pressed");
+    },
+    [] () {},
+    [] ()
+    {
+      LOG_INFO("C-x C-c released");
+    }
+    ));
+
+    GetEventSystem().SetProcessor("C-x C-s", CAppEventProcessor(
+    [] ()
+    {
+        LOG_INFO("C-x C-s pressed");
+    },
+    [] () {},
+    [] ()
+    {
+        LOG_INFO("C-x C-s released");
+    }
+    ));
+
+    GetEventSystem().SetProcessor("C-s", CAppEventProcessor(
+    [] ()
+    {
+        LOG_INFO("C-s pressed");
+    },
+    [] () {},
+    [] ()
+    {
+        LOG_INFO("C-s released");
+    }
+    ));
+
+    GetEventSystem().SetProcessor("C-s C-d", CAppEventProcessor(
+    [] ()
+    {
+        LOG_INFO("C-s C-d pressed");
+    },
+    [] () {},
+    [] ()
+    {
+        LOG_INFO("C-s C-d released");
+    }
+    ));
+
+    GetEventSystem().SetProcessor("C-f", CAppEventProcessor(
+    [] ()
+    {
+        LOG_INFO("C-f pressed");
+    },
+    [] () {},
+    [] ()
+    {
+        LOG_INFO("C-f release");
+    }));
+
+    GetEventSystem().SetProcessor("f", CAppEventProcessor(
+    [] ()
+    {
+        LOG_INFO("f pressed");
+    },
+    [] () {},
+    [] ()
+    {
+        LOG_INFO("f released");
+    }
+    ));
+
+    GetEventSystem().SetProcessor("w", CAppEventProcessor(
+    [] ()
+    {
+        LOG_INFO("w pressed");
+    },
+    [] () {},
+    [] ()
+    {
+        LOG_INFO("w released");
+    }
+    ));
 
     GetDebugDrawSystem().GetActiveCam()->SetZ(100);
 
