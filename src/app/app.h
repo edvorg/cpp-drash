@@ -49,7 +49,7 @@ public:
     virtual bool Init();
     virtual void Release();
     virtual void Step(double _dt);
-    inline virtual void Render();
+    virtual void Render();
 
     inline void Quit();
     inline void SetQuitHandler(std::function<void ()> _handler);
@@ -88,11 +88,6 @@ private:
     std::function<void ()> mQuitHandler = [] () {};
     bool mQuit = false;
 };
-
-inline void CApp::Render()
-{
-    mDebugDrawSystem.Draw();
-}
 
 inline void CApp::Quit()
 {
