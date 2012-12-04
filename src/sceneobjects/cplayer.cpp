@@ -82,11 +82,11 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
             break;
 
         case CPlayerEvent::PlayerActionMoveLeft:
-            ApplyLinearImpulse(CVec2(-10, 0), CVec2(0));
+            SetLinearVelocity(CVec2(-10, 0));
             break;
 
         case CPlayerEvent::PlayerActionMoveRight:
-            ApplyLinearImpulse(CVec2(10, 0), CVec2(0));
+            SetLinearVelocity(CVec2(10, 0));
             break;
 
         case CPlayerEvent::PlayerActionMoveDeep:

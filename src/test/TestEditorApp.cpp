@@ -110,6 +110,12 @@ void CTestEditorApp::SetProcessors()
         }
     }));
 
+    GetEventSystem().SetProcessor("C-b C-d", CAppEventProcessor(
+    [this] ()
+    {
+        DetachCurrentObject();
+    }));
+
     GetEventSystem().SetProcessor("C-x C-c", CAppEventProcessor(
     [this] ()
     {
@@ -159,6 +165,15 @@ void CTestEditorApp::CreateTemplate()
     {
         GetScene().DestroyObject(mCurrentObject);
         this->mCurrentObject = nullptr;
+    }
+}
+
+void CTestEditorApp::DetachCurrentObject()
+{
+    if (mState == StateNormal && mCurrentObject != nullptr)
+    {
+        mCurrentObject->SetDynamic(true);
+        mCurrentObject = nullptr;
     }
 }
 

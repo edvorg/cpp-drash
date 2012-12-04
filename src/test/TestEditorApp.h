@@ -50,6 +50,7 @@ private:
     void CreateFigure();
     void CompleteFigure();
     void CreateTemplate();
+    void DetachCurrentObject();
 
     double mTime = 0;
 
