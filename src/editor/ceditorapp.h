@@ -6,6 +6,12 @@
 namespace drash {
 
 
+enum State {
+    BuildState,
+    MoveState,
+    Simple
+};
+
 class CObjectEditorApp : public CApp
 {
 public:
@@ -19,27 +25,45 @@ public:
 
     inline bool IsStartBuild()const;
 
-    bool BuildObject(std::string _objectName);
+    bool BuildFigure(const std::string &_objectName);
 
-    void AddNewObjectToTemplate(std::string _name);
+    void AddNewObjectToTemplate(const std::string &_name);
+
+    void ShowObject(const std::string &_name);
+
+    inline void SetCurrentTemplateName(const std::string & _name);
+
+    inline void SetTreeRefreshHandler(const std::function<void ()> &_han);
 private:
 
     std::vector<drash::CVec2> mVertexs;
 
     void SetProcessor();
 
-
     bool ValidateFigure();
 
-    bool mBuildStart;
+    CSceneObject *mCurrentObject = nullptr;
 
-    CSceneObject *mCurrentObject;
+    State mState = Simple;
+
+    void RemoveCurrentObject();
+
+    std::string mCurrentTemplateName = "";
+
+    std::function<void ()> mTreeRefreshHandler = [] () {};
 };
 
-bool CObjectEditorApp::IsStartBuild()const {
-    return mBuildStart;
+inline bool CObjectEditorApp::IsStartBuild()const {
+    return mState == BuildState;
 }
 
+inline void CObjectEditorApp::SetCurrentTemplateName(const std::string &_name){
+    mCurrentTemplateName = _name;
+}
+
+inline void CObjectEditorApp::SetTreeRefreshHandler(const std::function<void ()> &_han) {
+    mTreeRefreshHandler = _han;
+}
 
 }// namespace drash
 #endif // CEDITORAPP_H
