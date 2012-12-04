@@ -74,50 +74,52 @@ void CAppEventSystem::SetProcessor(const char *_combinations, const CAppEventPro
 
 void CAppEventSystem::Process()
 {
-    if (mCombinationLock == true)
+    std::for_each(mCurrentCombinations.begin(), mCurrentCombinations.end(), [] (CAppEventCombinationTree *&t)
     {
-        mCurrentNode->mProcessor.Pressing();
-    }
+        t->mProcessor.Pressing();
+    });
 }
 
 void CAppEventSystem::PressEvent(const CAppEvent &_event)
 {
-    if (mCombinationLock == true)
+    mCurrentState.AddEvent(_event);
+
+    bool fallback = true;
+
+    // now we find key combination in current combination tree root
+    // if we pressed key, which is completely wrong, we set fallback flag to true
+
+    for (auto i = mCurrentRoot->mChilds.begin(); i != mCurrentRoot->mChilds.end(); i++)
     {
-        return;
-    }
-
-    LOG_INFO("pressed "<<_event.ToString().c_str());
-    mCurrentCombination.AddEvent(_event);
-
-    bool right_way = false;
-
-    for (auto i = mCurrentNode->mChilds.begin(); i != mCurrentNode->mChilds.end(); i++)
-    {
-        if (i->mCombination == mCurrentCombination)
+        // mOperationLock is used for fast determine, that node already in mCurrentCombinations list
+        if (i->mOperationLock == false && mCurrentState.ContainsCombination(i->mCombination))
         {
+            this->mCurrentCombinations.push_back(&*i);
+            i->mOperationLock = true;
             i->mProcessor.BeginPressing();
-            mCurrentNode = &*i;
-            mCombinationLock = true;
-            return;
+
+            fallback = false;
         }
-        else if (i->mCombination.ContainsEvent(_event))
+        else if (fallback == true && i->mCombination.ContainsEvent(_event) == true)
         {
-            right_way = true;
+            fallback = false;
         }
     }
 
-    if (!right_way)
+    // if pressed key is completely wrong and current tree node is not &mTree (root)
+    // try to process this key second time, using &mTree as current tree node
+
+    if (fallback == true && mCurrentRoot != &mTree)
     {
-        mCurrentNode = &mTree;
-        for (auto i = mCurrentNode->mChilds.begin(); i != mCurrentNode->mChilds.end(); i++)
+        mCurrentRoot = &mTree;
+
+        for (auto i = mCurrentRoot->mChilds.begin(); i != mCurrentRoot->mChilds.end(); i++)
         {
-            if (i->mCombination == mCurrentCombination)
+            if (i->mOperationLock == false && mCurrentState.ContainsCombination(i->mCombination))
             {
+                this->mCurrentCombinations.push_back(&*i);
+                i->mOperationLock = true;
                 i->mProcessor.BeginPressing();
-                mCurrentNode = &*i;
-                mCombinationLock = true;
-                return;
             }
         }
     }
@@ -125,17 +127,41 @@ void CAppEventSystem::PressEvent(const CAppEvent &_event)
 
 void CAppEventSystem::ReleaseEvent(const CAppEvent &_event)
 {
-    LOG_INFO("released "<<_event.ToString().c_str());
-    mCurrentCombination.RemoveEvent(_event);
+    mCurrentState.RemoveEvent(_event);
 
-    if (mCurrentCombination.GetEventsCount() == 0)
+    // find key combinations, thas is not intersect current events state
+
+    for (auto i = mCurrentCombinations.begin(); i != mCurrentCombinations.end();)
     {
-        mCurrentNode->mProcessor.EndPressing();
-        if (mCurrentNode->mChilds.size() == 0)
+        if (mCurrentState.ContainsCombination((*i)->mCombination) == false)
         {
-            mCurrentNode = &mTree;
+            // if this tree node's combination is last one to be removed, look for his childs
+
+            if (mCurrentCombinations.size() == 1)
+            {
+                if ((*i)->mChilds.size() != 0)
+                {
+                    // if it has any - try to process next combinations from this tree node
+
+                    mCurrentRoot = *i;
+                }
+                else
+                {
+                    // fall back to combinations tree root
+
+                    mCurrentRoot = &mTree;
+                }
+            }
+
+            // process end pressing end remove
+
+            (*i)->mOperationLock = false;
+            (*i)->mProcessor.EndPressing();
+            i = mCurrentCombinations.erase(i);
+            continue;
         }
-        mCombinationLock = false;
+
+        i++;
     }
 }
 

@@ -21,6 +21,7 @@ private:
     CAppEventProcessor mProcessor;
     CAppEventCombination mCombination;
     std::list<CAppEventCombinationTree> mChilds;
+    bool mOperationLock = false;
 };
 
 class CAppEventSystem
@@ -37,10 +38,10 @@ public:
 
 protected:
 private:
-    CAppEventCombination mCurrentCombination;
+    CAppEventCombination mCurrentState;
     CAppEventCombinationTree mTree;
-    CAppEventCombinationTree *mCurrentNode = &mTree;
-    bool mCombinationLock = false;
+    std::list<CAppEventCombinationTree*> mCurrentCombinations;
+    CAppEventCombinationTree *mCurrentRoot = &mTree;
 };
 
 } // namespace drash
