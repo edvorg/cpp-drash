@@ -89,4 +89,9 @@ void CApp::Step(double _dt)
     mScene.Step(_dt);
 }
 
+void CApp::Render()
+{
+    mDebugDrawSystem.Draw();
+}
+
 } // namespace drash

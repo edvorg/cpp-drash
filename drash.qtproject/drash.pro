@@ -22,7 +22,6 @@ SOURCES += ../src/main.cpp\
     ../src/cscene.cpp \
     ../src/test/ctestapp3-drashtest1.cpp \
     ../src/test/ctestapp2.cpp \
-    ../src/test/ctestapp1.cpp \
     ../src/misc/cvec2.cpp \
     ../src/diag/ctimer.cpp \
     ../src/diag/clogger.cpp \
@@ -49,7 +48,8 @@ SOURCES += ../src/main.cpp\
     ../src/editor/ceditorapp.cpp \
     ../src/app/appeventsystem.cpp \
     ../src/app/appeventprocessor.cpp \
-    ../src/app/appeventcombination.cpp
+    ../src/app/appeventcombination.cpp \
+    ../src/test/TestEditorApp.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -57,7 +57,6 @@ HEADERS  += ../src/gamewindow.h \
     ../src/cscene.h \
     ../src/test/ctestapp3-drashtest1.h \
     ../src/test/ctestapp2.h \
-    ../src/test/ctestapp1.h \
     ../src/misc/math.h \
     ../src/misc/cvec2.h \
     ../src/misc/canimatedparam.h \
@@ -87,7 +86,8 @@ HEADERS  += ../src/gamewindow.h \
     ../src/editor/ceditorapp.h \
     ../src/app/appeventsystem.h \
     ../src/app/appeventprocessor.h \
-    ../src/app/appeventcombination.h
+    ../src/app/appeventcombination.h \
+    ../src/test/TestEditorApp.h
 
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui

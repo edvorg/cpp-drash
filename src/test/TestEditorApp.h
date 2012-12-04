@@ -23,26 +23,43 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #pragma once
-#ifndef CTESTAPP1_H
-#define CTESTAPP1_H
+#ifndef TESTEDITORAPP_H
+#define TESTEDITORAPP_H
 
 #include "../app/app.h"
 
 namespace drash
 {
 
-class CTestApp1 : public CApp
+enum State
+{
+    StateNormal,
+    StateFigure
+};
+
+class CTestEditorApp : public CApp
 {
 public:
-    virtual ~CTestApp1() override {}
+    virtual ~CTestEditorApp() override {}
 
     virtual bool Init() override;
-    virtual void Step(double _dt) override;
+    virtual void Render() override;
 
 private:
+    void SetProcessors();
+    void CreateFigure();
+    void CompleteFigure();
+    void CreateTemplate();
+
     double mTime = 0;
+
+    std::vector<CVec2> mVertices;
+    unsigned int mTemplateCounter = 0;
+    CSceneObjectTemplate *mCurrentTemplate = nullptr;
+    State mState = StateNormal;
+    CSceneObject *mCurrentObject = nullptr;
 };
 
 } // namespace drash
 
-#endif // CTESTAPP1_H
+#endif // TESTEDITORAPP_H

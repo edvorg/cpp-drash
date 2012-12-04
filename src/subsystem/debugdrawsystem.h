@@ -72,7 +72,7 @@ public:
 	/// draws connected CScene instance's objects
     void Draw() const;
 
-    /// draws line giving screen space coordinates start and end points
+    /// draws line giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) start and end points
     /// and color
     void DrawLine(const CVec2 _p1, const CVec2 _p2, const b2Color &_col) const;
 
