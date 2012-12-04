@@ -34,7 +34,7 @@ void GenDrashBodyParams( CDrashBodyParams* _params , float _subset_size, unsigne
 
 bool CTestApp3::Init()
 {
-    if ( CApp::Init() == false )
+    if ( CTestEditorApp::Init() == false )
     {
         return false;
     }
@@ -239,7 +239,7 @@ bool CTestApp3::Init()
 
 void CTestApp3::Step(double _dt)
 {
-    CApp::Step(_dt);
+    CTestEditorApp::Step(_dt);
 
     /*
     for (CAppEvent e=PopEvent(); e.GetType()!=EventUnknown; e=PopEvent())
@@ -364,7 +364,7 @@ void CTestApp3::Step(double _dt)
 
 void CTestApp3::Render()
 {
-    CApp::Render();
+    CTestEditorApp::Render();
 
     if (mO1 != nullptr)
     {

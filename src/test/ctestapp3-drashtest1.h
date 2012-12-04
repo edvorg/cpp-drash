@@ -26,19 +26,19 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CTESTAPP3DRASHTEST_H
 #define CTESTAPP3DRASHTEST_H
 
-#include "../app/app.h"
+#include "TestEditorApp.h"
 
 namespace drash
 {
 
-class CTestApp3 : public CApp
+class CTestApp3 : public CTestEditorApp
 {
 public:
     virtual ~CTestApp3() override {}
 
     virtual bool Init() override;
     virtual void Step(double _dt) override;
-    inline virtual void Render() override;
+    virtual void Render() override;
 
 private:
     double mTime = 0;
