@@ -61,7 +61,7 @@ void CObjectEditorApp::Render()
 
 void CObjectEditorApp::StartBuild()
 {
-    mBuildStart = true;
+    mState = BuildState;
 }
 
 void CObjectEditorApp::SetProcessor()
@@ -70,14 +70,20 @@ void CObjectEditorApp::SetProcessor()
     [this] ()
     {
         //LOG_INFO("Click !!!");
-        if (mBuildStart == true) {
+        if (mState == BuildState) {
             mVertexs.push_back(GetCursorPos());
         }
     }
     ));
+    GetEventSystem().SetProcessor("RB",CAppEventProcessor(
+    [this] ()
+    {
+        BuildFigure(mCurrentTemplateName);
+    }
+    ));
 }
 
-bool CObjectEditorApp::BuildFigure(std::string _objectName)
+bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
 {
     if (mVertexs.size() < 3) {
         return false;
@@ -87,7 +93,7 @@ bool CObjectEditorApp::BuildFigure(std::string _objectName)
         return false;
     }
 
-    auto obj = GetTemplateSystem().FindTemplate(_objectName);
+    auto obj = GetTemplateSystem().FindTemplate                                  (_objectName);
     if (obj == nullptr) {
         return false;
     }
@@ -102,20 +108,23 @@ bool CObjectEditorApp::BuildFigure(std::string _objectName)
 
     ShowObject(_objectName);
 
-    mBuildStart = false;
+    mTreeRefreshHandler();
+
+    mState = Simple;
     mVertexs.clear();
     return true;
 }
 
-void CObjectEditorApp::AddNewObjectToTemplate(std::string _name)
+void CObjectEditorApp::AddNewObjectToTemplate(const std::string &_name)
 {
     GetTemplateSystem().CreateSceneObjectTemplate(_name);
     ShowObject(_name);
 }
 
-void CObjectEditorApp::ShowObject(std::string _name)
+void CObjectEditorApp::ShowObject(const std::string &_name)
 {
     RemoveCurrentObject();
+    SetCurrentTemplateName(_name);
     CSceneObjectParams params;
 //    params.mPos.Set(0);
     auto obj = GetTemplateSystem().CreateSceneObjectFromTemplate(_name,params);

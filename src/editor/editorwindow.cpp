@@ -51,6 +51,12 @@ EditorWindow::EditorWindow(QWidget *parent) :
     this->ui->mTreeObjects->clear();
     this->ui->mTreeObjects->setColumnCount(2);
     UpdateTreeObject();
+
+    mObjectApp->SetTreeRefreshHandler([this]()
+    {
+        this->UpdateTreeObject();
+    });
+
 }
 
 
@@ -141,6 +147,7 @@ void EditorWindow::AddFigure()
     std::string nameTemplate = ui->mTreeObjects->selectedItems().at(0)->text(0).toStdString();
 
     mObjectApp->BuildFigure(nameTemplate);
+    //this->UpdateTreeObject();
 }
 
 
@@ -162,7 +169,6 @@ void EditorWindow::on_mNewObjectButton_clicked()
 void EditorWindow::on_mBuildButton_clicked()
 {
     this->AddFigure();
-    this->UpdateTreeObject();
 }
 
 void EditorWindow::on_mNewFigureButton_clicked()
