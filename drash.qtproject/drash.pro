@@ -37,7 +37,6 @@ SOURCES += ../src/main.cpp\
     ../src/subsystem/explosionsystem.cpp \
     ../src/subsystem/playerssystem.cpp \
     ../src/editor/editorwindow.cpp \
-    ../src/editor/editorobject.cpp \
     ../src/misc/graphics.cpp \
     ../src/subsystem/templatesystem.cpp \
     ../src/physobserver.cpp \
@@ -76,7 +75,6 @@ HEADERS  += ../src/gamewindow.h \
     ../src/subsystem/explosionsystem.h \
     ../src/subsystem/playerssystem.h \
     ../src/editor/editorwindow.h \
-    ../src/editor/editorobject.h \
     ../src/subsystem/templatesystem.h \
     ../src/misc/graphics.h \
     ../src/physobserver.h \

@@ -123,7 +123,7 @@
      </widget>
     </item>
     <item>
-     <widget class="EditorObject" name="mScene" native="true">
+     <widget class="SceneWidget" name="mScene" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -153,9 +153,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>EditorObject</class>
+   <class>SceneWidget</class>
    <extends>QWidget</extends>
-   <header location="global">editor/editorobject.h</header>
+   <header>scenewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -67,24 +67,24 @@ EditorWindow::EditorWindow(QWidget *parent) :
 EditorWindow::~EditorWindow()
 {
     delete ui;
-    mApp->Release();
-    delete mApp;
+    mObjectApp->Release();
+    delete mObjectApp;
 }
 
 bool EditorWindow::InitScene()
 {
     drash::CSceneParams params;
     params.mGravity.Set( 0.0f, -9.8f );
-    mApp = new CEditorApp();
-    if (mApp == NULL) {
+    mObjectApp = new CObjectEditorApp();
+    if (mObjectApp == NULL) {
         return false;
     }
 
-    if (mApp->Init() == false) {
+    if (mObjectApp->Init() == false) {
         return false;
     }
-    mApp->GetDebugDrawSystem().GetActiveCam()->SetZ(100);
-    ui->mScene->SetTestApp(mApp);
+    mObjectApp->GetDebugDrawSystem().GetActiveCam()->SetZ(100);
+    ui->mScene->SetTestApp(mObjectApp);
     return true;
 }
 
@@ -92,9 +92,9 @@ void EditorWindow::timerEvent(QTimerEvent *)
 {
     mTimer.Tick();
 
-    if (mApp != nullptr)
+    if (mObjectApp != nullptr)
     {
-        mApp->Step(0);
+        mObjectApp->Step(0);
     }
 
     ui->mScene->updateGL();
@@ -113,7 +113,7 @@ bool EditorWindow::UpdateTreeObject()
 {
     ui->mTreeObjects->clear();
     QList<QTreeWidgetItem*> list;
-    CTemplateSystem tSys= mApp->GetTemplateSystem();
+    CTemplateSystem tSys= mObjectApp->GetTemplateSystem();
     for (auto item = tSys.GetSceneObjectTemplates().begin();
          item != tSys.GetSceneObjectTemplates().end() ; item++) {
        QTreeWidgetItem *objectItem = new QTreeWidgetItem(ui->mTreeObjects,
@@ -145,61 +145,68 @@ bool EditorWindow::UpdateTreeObject()
     return true;
 }
 
-void EditorWindow::AddFigure(const std::vector<CVec2>& _vertexs)
+void EditorWindow::AddFigure()
 {
-    if (_vertexs.empty())
-        return;
     std::string nameTemplate = ui->mTreeObjects->selectedItems().at(0)->text(0).toStdString();
 
-    auto obj = mApp->GetTemplateSystem().FindTemplate(nameTemplate);
-
-    CFigureParams param;
-    param.mVertices = _vertexs;
-    obj->mGeometry.mFigures.push_back(param);
+    mObjectApp->BuildObject(nameTemplate);
 }
 
 
 void EditorWindow::on_mTreeObjects_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
 
-   if (item->parent() == NULL) {
-       if (mCurrentObject != nullptr) {
-           mApp->GetScene().DestroyObject(mCurrentObject);
-           mCurrentObject = nullptr;
-       }
-       CSceneObjectParams params;
-       params.mPos.Set(0,0);
-       qDebug() << "Object created";
-       mCurrentObject = mApp->GetTemplateSystem().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
-   }
 }
 
 void EditorWindow::on_mNewObjectButton_clicked()
 {
-//    this->ui->mScene->StartBuildObject();
-//    this->ui->mScene->ChangeMode();
-
+    QString str_name("Object");
+    str_name +=QString::number(mObjectApp->GetTemplateSystem().GetSceneObjectTemplates().size()+1);
+    QTreeWidgetItem *newItem = new QTreeWidgetItem(ui->mTreeObjects,QStringList(str_name));
+    mObjectApp->AddNewObjectToTemplate(str_name.toStdString());
 }
 
 void EditorWindow::on_mBuildButton_clicked()
 {
-    this->AddFigure(ui->mScene->GetVector());
-    ui->mScene->EndBuild();
+    this->AddFigure();
     this->UpdateTreeObject();
-    //this->ui->mScene->ChangeMode();
-
 }
 
 void EditorWindow::on_mNewFigureButton_clicked()
 {
-    RemoveCurrentObject();
-    this->ui->mScene->StartBuildObject();
+    //RemoveCurrentObject();
+    mObjectApp->StartBuild();
 }
 
 
 void EditorWindow::RemoveCurrentObject() {
     if (mCurrentObject != nullptr) {
-        mApp->GetScene().DestroyObject(mCurrentObject);
+        mObjectApp->GetScene().DestroyObject(mCurrentObject);
         mCurrentObject = nullptr;
+    }
+}
+
+void EditorWindow::on_mTreeObjects_itemClicked(QTreeWidgetItem *item, int column)
+{
+
+}
+
+void EditorWindow::on_mTreeObjects_itemSelectionChanged()
+{
+    QTreeWidgetItem *item = nullptr;
+    if (ui->mTreeObjects->selectedItems().size() != 0) {
+        item = ui->mTreeObjects->selectedItems().at(0);
+    } else {
+        return;
+    }
+    if (item->parent() == NULL) {
+        if (mCurrentObject != nullptr) {
+            mObjectApp->GetScene().DestroyObject(mCurrentObject);
+            mCurrentObject = nullptr;
+        }
+        CSceneObjectParams params;
+        params.mPos.Set(0,0);
+        qDebug() << "Object created";
+        mCurrentObject = mObjectApp->GetTemplateSystem().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
     }
 }

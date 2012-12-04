@@ -5,23 +5,41 @@
 
 namespace drash {
 
-enum StateEditObject{
-    EditObject,
-    BuildingObject,
-    Simple,
-};
 
-class CEditorApp : public CApp
+class CObjectEditorApp : public CApp
 {
 public:
-    virtual ~CEditorApp() override {}
+    virtual ~CObjectEditorApp() override {}
 
     virtual bool Init() override;
     virtual void Step(double _dt) override;
     inline virtual void Render() override;
 
-    StateEditObject objectState = Simple;
+    void StartBuild();
+
+    inline bool IsStartBuild()const;
+
+    bool BuildObject(std::string _objectName);
+
+    void AddNewObjectToTemplate(std::string _name);
+private:
+
+    std::vector<drash::CVec2> mVertexs;
+
+    void SetProcessor();
+
+
+    bool ValidateFigure();
+
+    bool mBuildStart;
+
+    CSceneObject *mCurrentObject;
 };
+
+bool CObjectEditorApp::IsStartBuild()const {
+    return mBuildStart;
+}
+
 
 }// namespace drash
 #endif // CEDITORAPP_H

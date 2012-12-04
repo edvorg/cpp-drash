@@ -60,10 +60,14 @@ private slots:
 
     void on_mNewFigureButton_clicked();
 
+    void on_mTreeObjects_itemClicked(QTreeWidgetItem *item, int column);
+
+    void on_mTreeObjects_itemSelectionChanged();
+
 private:
     Ui::EditorWindow *ui;
     bool InitScene();
-    drash::CEditorApp  *mApp;
+    drash::CObjectEditorApp  *mObjectApp;
 
     void timerEvent(QTimerEvent *);
 
@@ -76,6 +80,7 @@ private:
     // GuiObjects
 private:
     QLabel *mLabelOfStatusBar;
+
 private:
     void CreateActions();
     bool UpdateTreeObject();
@@ -84,8 +89,8 @@ private:
 
     drash::CTimer mTimer;
 
+    void AddFigure();
 public:
-    void AddFigure(const std::vector<drash::CVec2> &_vertexs);
 
 };
 
