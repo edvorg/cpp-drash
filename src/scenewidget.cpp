@@ -156,6 +156,10 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
         return;
     }
 
+    CVec2 pos = WidgetSpaceToScreenSpace(CVec2(_event->x(),
+                                               _event->y()));
+    mApp->SetCursorPos(pos);
+
     mApp->GetEventSystem().PressEvent(CAppEvent(ConvertKey(_event->button())));
 }
 
