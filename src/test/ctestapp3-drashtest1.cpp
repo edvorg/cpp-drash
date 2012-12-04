@@ -39,6 +39,184 @@ bool CTestApp3::Init()
         return false;
     }
 
+    SetProcessors();
+
+    InitObjects();
+
+    GetDebugDrawSystem().GetActiveCam()->SetZTarget( 280, 1.0f, AnimationBehaviorSingle );
+
+    return true;
+}
+
+void CTestApp3::Step(double _dt)
+{
+    CTestEditorApp::Step(_dt);
+
+    if (mMoveObject != nullptr)
+    {
+        CVec2 coords = GetCursorPos();
+        if (GetDebugDrawSystem().ScreenSpaceToWorldSpace(coords, mMoveObject->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get()))
+        {
+            coords -= mMoveObject->GetPos().Get();
+            coords *= 10;
+            mMoveObject->SetLinearVelocity(coords);
+        }
+    }
+
+    if (GetPlayersSystem().EnumPlayers())
+    {
+        CPlayer *p = GetPlayersSystem().GetPlayers()[0];
+        GetDebugDrawSystem().GetActiveCam()->SetPosTarget( p->GetBody()->GetWorldCenter(), 1.0, AnimationBehaviorSingle );
+    }
+
+    mTime += _dt;
+
+    if (mTime >= 1.0)
+    {
+        CDrashBodyParams params;
+        params.mDynamic = true;
+        params.mPos.RandX(-100, 100);
+        params.mPos.y = 100;
+
+        GetTemplateSystem().CreateDrashBodyFromTemplate("circle", params);
+
+        mTime = 0;
+    }
+}
+
+void CTestApp3::Render()
+{
+    CTestEditorApp::Render();
+
+    if (mO1 != nullptr)
+    {
+        mO1->ComputeBoundingBox();
+        const b2AABB &b = mO1->GetBoundingBox();
+        CVec2 upper = b.upperBound;
+        CVec2 lower = b.lowerBound;
+        GetDebugDrawSystem().WorldSpaceToScreenSpace(lower, mO1->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+        GetDebugDrawSystem().WorldSpaceToScreenSpace(upper, mO1->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+        b2Color col(1, 0, 0);
+        CVec2 tmp1(upper.x, lower.y);
+        CVec2 tmp2(lower.x, upper.y);
+        GetDebugDrawSystem().DrawLine(tmp1, upper, col);
+        GetDebugDrawSystem().DrawLine(tmp1, lower, col);
+        GetDebugDrawSystem().DrawLine(tmp2, upper, col);
+        GetDebugDrawSystem().DrawLine(tmp2, lower, col);
+    }
+}
+
+void CTestApp3::SetProcessors()
+{
+    GetEventSystem().SetProcessor("w", CAppEventProcessor(
+    [] () {},
+    [this] ()
+    {
+        this->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveDeep ), 0 );
+    }));
+
+    GetEventSystem().SetProcessor("a", CAppEventProcessor(
+    [] () {},
+    [this] ()
+    {
+        this->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveLeft ), 0 );
+    }));
+
+    GetEventSystem().SetProcessor("s", CAppEventProcessor(
+    [] () {},
+    [this] ()
+    {
+        this->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveOut ), 0 );
+    }));
+
+    GetEventSystem().SetProcessor("d", CAppEventProcessor(
+    [] () {},
+    [this] ()
+    {
+        this->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveRight ), 0 );
+    }));
+
+    GetEventSystem().SetProcessor("SPC", CAppEventProcessor(
+    [] () {},
+    [this] ()
+    {
+        this->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionJump ), 0 );
+    }));
+
+    GetEventSystem().SetProcessor("LB", CAppEventProcessor(
+    [this] ()
+    {
+        CSceneObjectGeometry g;
+        CExplosionParams p;
+        p.mLifeTime = 1;
+        p.mStregth = -5;
+        p.mRadius = 200;
+        p.mPos = GetCursorPos();
+        auto cam = GetDebugDrawSystem().GetActiveCam();
+        GetDebugDrawSystem().ScreenSpaceToWorldSpace(p.mPos, -cam->GetZ().Get());
+        GetScene().CreateObject<CExplosion>(g, p);
+    }));
+
+    GetEventSystem().SetProcessor("RB", CAppEventProcessor(
+    [this] ()
+    {
+        if (mO1 == nullptr)
+        {
+            mO1 = GetDebugDrawSystem().FindObject(GetCursorPos());
+        }
+        else if (mO2 == nullptr)
+        {
+            mO2 = GetDebugDrawSystem().FindObject(GetCursorPos());
+            if (mO1 == mO2)
+            {
+                mO2 = nullptr;
+            }
+            else if (mO2 != nullptr)
+            {
+                GetScene().CreateJoint(mO1, mO2, mO1->GetPos().Get());
+                mO1 = nullptr;
+                mO2 = nullptr;
+            }
+        }
+    }));
+
+    GetEventSystem().SetProcessor("MB", CAppEventProcessor(
+    [this] ()
+    {
+        if (mMoveObject == nullptr)
+        {
+            mMoveObject = GetDebugDrawSystem().FindObject(GetCursorPos());
+        }
+        else
+        {
+            /// if our body is not dynamic. it wil never stop, until we make it's velocity module to 0
+            if (mMoveObject->GetBody()->GetType() == b2_kinematicBody)
+            {
+                mMoveObject->SetLinearVelocity(CVec2(0));
+            }
+            mMoveObject = nullptr;
+        }
+    }));
+
+    GetEventSystem().SetProcessor("WHUP", CAppEventProcessor(
+    [this] ()
+    {
+        float pos = GetDebugDrawSystem().GetActiveCam()->GetZ().GetTarget();
+        pos += 10.0f;
+        GetDebugDrawSystem().GetActiveCam()->SetZTarget( pos, 0.3, AnimationBehaviorSingle );
+    }));
+
+    GetEventSystem().SetProcessor("WHDN", CAppEventProcessor(
+    [this] ()
+    {
+        float pos = GetDebugDrawSystem().GetActiveCam()->GetZ().GetTarget();
+        pos -= 10.0f;
+        GetDebugDrawSystem().GetActiveCam()->SetZTarget( pos, 0.3, AnimationBehaviorSingle );
+    }));
+}
+
+void CTestApp3::InitObjects()
+{
     CSceneObjectGeometry sbg;
     sbg.mFigures.resize(1);
     sbg.mFigures[0].mDepth = 40;
@@ -230,157 +408,6 @@ bool CTestApp3::Init()
         t1->mGeometry.mDestructionChilds[1].mTemplate = t3;
         t1->mGeometry.mDestructionChilds[2].mTemplate = t4;
         t1->mGeometry.mDestructionChilds[3].mTemplate = t5;
-    }
-
-    GetDebugDrawSystem().GetActiveCam()->SetZTarget( 280, 1.0f, AnimationBehaviorSingle );
-
-    return true;
-}
-
-void CTestApp3::Step(double _dt)
-{
-    CTestEditorApp::Step(_dt);
-
-    /*
-    for (CAppEvent e=PopEvent(); e.GetType()!=EventUnknown; e=PopEvent())
-    {
-        if (e.GetType() == EventKeyboard)
-        {
-            switch (e.GetKey())
-            {
-            case EventKeyW:
-                GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveDeep ), 0 );
-                break;
-            case EventKeyA:
-                GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveLeft ), 0 );
-                break;
-            case EventKeyS:
-                GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveOut ), 0 );
-                break;
-            case EventKeyD:
-                GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveRight ), 0 );
-                break;
-            case EventKeySpace:
-                GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionJump ), 0 );
-                break;
-            default:
-                break;
-            }
-        }
-        else if (e.GetType() == EventMouse)
-        {
-            if ((e.GetButton() == EventButtonWheelUp ||
-				 e.GetButton() == EventButtonWheelDown) &&
-				 GetDebugDrawSystem().GetActiveCam() != nullptr)
-            {
-                float pos = GetDebugDrawSystem().GetActiveCam()->GetZ().GetTarget();
-                pos += (e.GetButton() == EventButtonWheelUp ? 10.0f : -10.0f);
-                GetDebugDrawSystem().GetActiveCam()->SetZTarget( pos, 0.3, AnimationBehaviorSingle );
-            }
-            else if (e.GetButton() == EventButtonLeft)
-            {
-                CSceneObjectGeometry g;
-                CExplosionParams p;
-                p.mLifeTime = 1;
-                p.mStregth = -5;
-                p.mRadius = 200;
-                p.mPos = e.GetPos();
-                auto cam = GetDebugDrawSystem().GetActiveCam();
-                GetDebugDrawSystem().ScreenSpaceToWorldSpace(p.mPos, -cam->GetZ().Get());
-                GetScene().CreateObject<CExplosion>(g, p);
-			}
-            else if (e.GetButton() == EventButtonRight)
-            {
-                if (mO1 == nullptr)
-                {
-                    mO1 = GetDebugDrawSystem().FindObject(e.GetPos());
-                }
-                else if (mO2 == nullptr)
-                {
-                    mO2 = GetDebugDrawSystem().FindObject(e.GetPos());
-                    if (mO1 == mO2)
-                    {
-                        mO2 = nullptr;
-                    }
-                    else if (mO2 != nullptr)
-                    {
-                        GetScene().CreateJoint(mO1, mO2, mO1->GetPos().Get());
-                        mO1 = nullptr;
-                        mO2 = nullptr;
-                    }
-                }
-            }
-            else if (e.GetButton() == EventButtonMiddle)
-            {
-                if (mMoveObject == nullptr)
-                {
-                    mMoveObject = GetDebugDrawSystem().FindObject(e.GetPos());
-                }
-                else
-                {
-                    /// if our body is not dynamic. it wil never stop, until we make it's velocity module to 0
-                    if (mMoveObject->GetBody()->GetType() == b2_kinematicBody)
-                    {
-                        mMoveObject->SetLinearVelocity(CVec2(0));
-                    }
-                    mMoveObject = nullptr;
-                }
-            }
-        }
-    }
-    */
-
-    if (mMoveObject != nullptr)
-    {
-        CVec2 coords = GetCursorPos();
-        if (GetDebugDrawSystem().ScreenSpaceToWorldSpace(coords, mMoveObject->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get()))
-        {
-            coords -= mMoveObject->GetPos().Get();
-            coords *= 10;
-            mMoveObject->SetLinearVelocity(coords);
-        }
-    }
-
-    if (GetPlayersSystem().EnumPlayers())
-    {
-        CPlayer *p = GetPlayersSystem().GetPlayers()[0];
-        GetDebugDrawSystem().GetActiveCam()->SetPosTarget( p->GetBody()->GetWorldCenter(), 1.0, AnimationBehaviorSingle );
-    }
-
-    mTime += _dt;
-
-    if (mTime >= 1.0)
-    {
-        CDrashBodyParams params;
-        params.mDynamic = true;
-        params.mPos.RandX(-100, 100);
-        params.mPos.y = 100;
-
-        GetTemplateSystem().CreateDrashBodyFromTemplate("circle", params);
-
-        mTime = 0;
-    }
-}
-
-void CTestApp3::Render()
-{
-    CTestEditorApp::Render();
-
-    if (mO1 != nullptr)
-    {
-        mO1->ComputeBoundingBox();
-        const b2AABB &b = mO1->GetBoundingBox();
-        CVec2 upper = b.upperBound;
-        CVec2 lower = b.lowerBound;
-        GetDebugDrawSystem().WorldSpaceToScreenSpace(lower, mO1->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
-        GetDebugDrawSystem().WorldSpaceToScreenSpace(upper, mO1->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
-        b2Color col(1, 0, 0);
-        CVec2 tmp1(upper.x, lower.y);
-        CVec2 tmp2(lower.x, upper.y);
-        GetDebugDrawSystem().DrawLine(tmp1, upper, col);
-        GetDebugDrawSystem().DrawLine(tmp1, lower, col);
-        GetDebugDrawSystem().DrawLine(tmp2, upper, col);
-        GetDebugDrawSystem().DrawLine(tmp2, lower, col);
     }
 }
 
