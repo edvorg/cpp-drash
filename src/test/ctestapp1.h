@@ -47,6 +47,9 @@ public:
 
 private:
     void SetProcessors();
+    void CreateFigure();
+    void CompleteFigure();
+    void CreateTemplate();
 
     double mTime = 0;
 

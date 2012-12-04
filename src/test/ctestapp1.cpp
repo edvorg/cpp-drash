@@ -58,6 +58,7 @@ void CTestApp1::Render()
             GetDebugDrawSystem().DrawLine(mVertices[i], mVertices[i+1], b2Color(0, 1, 0));
         }
         GetDebugDrawSystem().DrawLine(mVertices[mVertices.size()-1], GetCursorPos(), b2Color(0, 1, 0));
+        GetDebugDrawSystem().DrawLine(mVertices[0], GetCursorPos(), b2Color(0, 1, 0));
     }
 }
 
@@ -72,21 +73,22 @@ void CTestApp1::SetProcessors()
         }
     }));
 
+    GetEventSystem().SetProcessor("RB", CAppEventProcessor(
+    [this] ()
+    {
+        if (mState == StateFigure)
+        {
+            CompleteFigure();
+            mState = StateNormal;
+        }
+    }));
+
     GetEventSystem().SetProcessor("C-b C-b", CAppEventProcessor(
     [this] ()
     {
         if (mState == StateNormal)
         {
-            std::ostringstream is;
-            is<<"new_template_"<<(mTemplateCounter++);
-
-            this->mCurrentTemplate = GetTemplateSystem().CreateSceneObjectTemplate(is.str().c_str());
-
-            if (mCurrentObject != nullptr)
-            {
-                GetScene().DestroyObject(mCurrentObject);
-                this->mCurrentObject = nullptr;
-            }
+            CreateTemplate();
         }
     }));
 
@@ -97,38 +99,67 @@ void CTestApp1::SetProcessors()
         {
             if (mCurrentTemplate != nullptr)
             {
+                CreateFigure();
                 mState = StateFigure;
-                mCurrentTemplate->mGeometry.mFigures.resize(mCurrentTemplate->mGeometry.mFigures.size()+1);
             }
         }
         else if (mState == StateFigure)
         {
-            if (mCurrentTemplate != nullptr)
-            {
-                mCurrentTemplate->mGeometry.mFigures.back().mVertices = mVertices;
-
-                for (auto i = mCurrentTemplate->mGeometry.mFigures.back().mVertices.begin();
-                     i != mCurrentTemplate->mGeometry.mFigures.back().mVertices.end(); i++)
-                {
-                    GetDebugDrawSystem().ScreenSpaceToWorldSpace(*i, -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
-                }
-
-                if (mCurrentObject != nullptr)
-                {
-                    GetScene().DestroyObject(mCurrentObject);
-                    this->mCurrentObject = nullptr;
-                }
-
-                CSceneObjectParams p;
-                p.mDynamic = false;
-                mCurrentObject = GetTemplateSystem().CreateSceneObjectFromTemplate(mCurrentTemplate->mName.c_str(), p);
-
-                mVertices.clear();
-            }
-
+            CompleteFigure();
             mState = StateNormal;
         }
     }));
+
+    GetEventSystem().SetProcessor("C-x C-c", CAppEventProcessor(
+    [this] ()
+    {
+        this->Quit();
+    }));
+}
+
+void CTestApp1::CreateFigure()
+{
+    mCurrentTemplate->mGeometry.mFigures.resize(mCurrentTemplate->mGeometry.mFigures.size()+1);
+}
+
+void CTestApp1::CompleteFigure()
+{
+    if (mCurrentTemplate != nullptr)
+    {
+        mCurrentTemplate->mGeometry.mFigures.back().mVertices = mVertices;
+
+        for (auto i = mCurrentTemplate->mGeometry.mFigures.back().mVertices.begin();
+             i != mCurrentTemplate->mGeometry.mFigures.back().mVertices.end(); i++)
+        {
+            GetDebugDrawSystem().ScreenSpaceToWorldSpace(*i, -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+        }
+
+        if (mCurrentObject != nullptr)
+        {
+            GetScene().DestroyObject(mCurrentObject);
+            this->mCurrentObject = nullptr;
+        }
+
+        CSceneObjectParams p;
+        p.mDynamic = false;
+        mCurrentObject = GetTemplateSystem().CreateSceneObjectFromTemplate(mCurrentTemplate->mName.c_str(), p);
+
+        mVertices.clear();
+    }
+}
+
+void CTestApp1::CreateTemplate()
+{
+    std::ostringstream is;
+    is<<"new_template_"<<(mTemplateCounter++);
+
+    this->mCurrentTemplate = GetTemplateSystem().CreateSceneObjectTemplate(is.str().c_str());
+
+    if (mCurrentObject != nullptr)
+    {
+        GetScene().DestroyObject(mCurrentObject);
+        this->mCurrentObject = nullptr;
+    }
 }
 
 } // namespace drash
