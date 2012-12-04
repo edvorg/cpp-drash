@@ -69,9 +69,9 @@ private:
     bool InitScene();
     drash::CObjectEditorApp  *mObjectApp;
 
-    void timerEvent(QTimerEvent *);
+    void timerEvent(QTimerEvent *) override;
 
-    drash::CSceneObject * mCurrentObject = nullptr;
+    //drash::CSceneObject * mCurrentObject = nullptr;
 
     // Actions
 private:
@@ -84,8 +84,6 @@ private:
 private:
     void CreateActions();
     bool UpdateTreeObject();
-
-    void RemoveCurrentObject();
 
     drash::CTimer mTimer;
 

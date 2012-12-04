@@ -77,7 +77,7 @@ void CObjectEditorApp::SetProcessor()
     ));
 }
 
-bool CObjectEditorApp::BuildObject(std::string _objectName)
+bool CObjectEditorApp::BuildFigure(std::string _objectName)
 {
     if (mVertexs.size() < 3) {
         return false;
@@ -100,6 +100,8 @@ bool CObjectEditorApp::BuildObject(std::string _objectName)
     param.mVertices = mVertexs;
     obj->mGeometry.mFigures.push_back(param);
 
+    ShowObject(_objectName);
+
     mBuildStart = false;
     mVertexs.clear();
     return true;
@@ -108,6 +110,16 @@ bool CObjectEditorApp::BuildObject(std::string _objectName)
 void CObjectEditorApp::AddNewObjectToTemplate(std::string _name)
 {
     GetTemplateSystem().CreateSceneObjectTemplate(_name);
+    ShowObject(_name);
+}
+
+void CObjectEditorApp::ShowObject(std::string _name)
+{
+    RemoveCurrentObject();
+    CSceneObjectParams params;
+//    params.mPos.Set(0);
+    auto obj = GetTemplateSystem().CreateSceneObjectFromTemplate(_name,params);
+    mCurrentObject = obj;
 }
 
 
@@ -115,6 +127,14 @@ void CObjectEditorApp::AddNewObjectToTemplate(std::string _name)
 bool CObjectEditorApp::ValidateFigure()
 {
     return true;
+}
+
+void CObjectEditorApp::RemoveCurrentObject()
+{
+    if (mCurrentObject != nullptr) {
+        GetScene().DestroyObject(mCurrentObject);
+        mCurrentObject = nullptr;
+    }
 }
 
 

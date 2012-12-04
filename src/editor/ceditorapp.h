@@ -19,9 +19,11 @@ public:
 
     inline bool IsStartBuild()const;
 
-    bool BuildObject(std::string _objectName);
+    bool BuildFigure(std::string _objectName);
 
     void AddNewObjectToTemplate(std::string _name);
+
+    void ShowObject(std::string _name);
 private:
 
     std::vector<drash::CVec2> mVertexs;
@@ -33,10 +35,12 @@ private:
 
     bool mBuildStart;
 
-    CSceneObject *mCurrentObject;
+    CSceneObject *mCurrentObject = nullptr;
+
+    void RemoveCurrentObject();
 };
 
-bool CObjectEditorApp::IsStartBuild()const {
+inline bool CObjectEditorApp::IsStartBuild()const {
     return mBuildStart;
 }
 
