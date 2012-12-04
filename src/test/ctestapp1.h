@@ -31,16 +31,30 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
+enum State
+{
+    StateNormal,
+    StateFigure
+};
+
 class CTestApp1 : public CApp
 {
 public:
     virtual ~CTestApp1() override {}
 
     virtual bool Init() override;
-    virtual void Step(double _dt) override;
+    virtual void Render() override;
 
 private:
+    void SetProcessors();
+
     double mTime = 0;
+
+    std::vector<CVec2> mVertices;
+    unsigned int mTemplateCounter = 0;
+    CSceneObjectTemplate *mCurrentTemplate = nullptr;
+    State mState = StateNormal;
+    CSceneObject *mCurrentObject = nullptr;
 };
 
 } // namespace drash

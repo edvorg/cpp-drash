@@ -25,9 +25,13 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctestapp1.h"
 
 #include "../cscene.h"
+#include "app/appeventprocessor.h"
+
+#include <sstream>
 
 namespace drash
 {
+
 
 bool CTestApp1::Init()
 {
@@ -36,38 +40,95 @@ bool CTestApp1::Init()
         return false;
     }
 
-    CSceneObjectGeometry g;
-    g.mFigures.resize(1);
-    g.mFigures[0].mDepth = 5;
-    g.mFigures[0].mVertices.push_back( CVec2( -100.0f, 5.0f ) );
-    g.mFigures[0].mVertices.push_back( CVec2( -100.0f, -5.0f ) );
-    g.mFigures[0].mVertices.push_back( CVec2( 100.0f, -5.0f ) );
-    g.mFigures[0].mVertices.push_back( CVec2( 100.0f, 5.0f ) );
-    CSceneObjectParams p;
-    p.mPos.y = -25;
-    p.mDynamic = false;
-    GetScene().CreateObject<CSceneObject>(g, p);
+    GetDebugDrawSystem().GetActiveCam()->SetZ(100);
+
+    SetProcessors();
 
     return true;
 }
 
-void CTestApp1::Step(double _dt)
+void CTestApp1::Render()
 {
-    CApp::Step(_dt);
+    CApp::Render();
 
-    mTime += _dt;
-
-    if (mTime > 1.0)
+    if (mVertices.size())
     {
-        CSceneObjectGeometry g;
-        g.mFigures.resize(1);
-        g.mFigures[0].mDepth = 5;
-        CDrashBodyParams p;
-        p.mPos.RandY(100, 200, 15);
-        p.mPos.RandX(-50, 50, 15);
-        GetScene().CreateObject<CSceneObject>(g, p);
-        mTime = 0;
+        for (int i = 0; i < mVertices.size() - 1; i++)
+        {
+            GetDebugDrawSystem().DrawLine(mVertices[i], mVertices[i+1], b2Color(0, 1, 0));
+        }
+        GetDebugDrawSystem().DrawLine(mVertices[mVertices.size()-1], GetCursorPos(), b2Color(0, 1, 0));
     }
+}
+
+void CTestApp1::SetProcessors()
+{
+    GetEventSystem().SetProcessor("LB", CAppEventProcessor(
+    [this] ()
+    {
+        if (mState == StateFigure)
+        {
+            mVertices.push_back(GetCursorPos());
+        }
+    }));
+
+    GetEventSystem().SetProcessor("C-b C-b", CAppEventProcessor(
+    [this] ()
+    {
+        if (mState == StateNormal)
+        {
+            std::ostringstream is;
+            is<<"new_template_"<<(mTemplateCounter++);
+
+            this->mCurrentTemplate = GetTemplateSystem().CreateSceneObjectTemplate(is.str().c_str());
+
+            if (mCurrentObject != nullptr)
+            {
+                GetScene().DestroyObject(mCurrentObject);
+                this->mCurrentObject = nullptr;
+            }
+        }
+    }));
+
+    GetEventSystem().SetProcessor("C-b C-f", CAppEventProcessor(
+    [this] ()
+    {
+        if (mState == StateNormal)
+        {
+            if (mCurrentTemplate != nullptr)
+            {
+                mState = StateFigure;
+                mCurrentTemplate->mGeometry.mFigures.resize(mCurrentTemplate->mGeometry.mFigures.size()+1);
+            }
+        }
+        else if (mState == StateFigure)
+        {
+            if (mCurrentTemplate != nullptr)
+            {
+                mCurrentTemplate->mGeometry.mFigures.back().mVertices = mVertices;
+
+                for (auto i = mCurrentTemplate->mGeometry.mFigures.back().mVertices.begin();
+                     i != mCurrentTemplate->mGeometry.mFigures.back().mVertices.end(); i++)
+                {
+                    GetDebugDrawSystem().ScreenSpaceToWorldSpace(*i, -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+                }
+
+                if (mCurrentObject != nullptr)
+                {
+                    GetScene().DestroyObject(mCurrentObject);
+                    this->mCurrentObject = nullptr;
+                }
+
+                CSceneObjectParams p;
+                p.mDynamic = false;
+                mCurrentObject = GetTemplateSystem().CreateSceneObjectFromTemplate(mCurrentTemplate->mName.c_str(), p);
+
+                mVertices.clear();
+            }
+
+            mState = StateNormal;
+        }
+    }));
 }
 
 } // namespace drash
