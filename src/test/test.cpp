@@ -24,7 +24,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "test.h"
 
-#include "ctestapp1.h"
+#include "TestEditorApp.h"
 #include "ctestapp2.h"
 #include "ctestapp3-drashtest1.h"
 #include "ctestapp4.h"
