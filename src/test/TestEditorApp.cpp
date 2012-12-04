@@ -22,7 +22,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "ctestapp1.h"
+#include "TestEditorApp.h"
 
 #include "../cscene.h"
 #include "app/appeventprocessor.h"
@@ -33,7 +33,7 @@ namespace drash
 {
 
 
-bool CTestApp1::Init()
+bool CTestEditorApp::Init()
 {
     if ( CApp::Init() == false )
     {
@@ -47,13 +47,13 @@ bool CTestApp1::Init()
     return true;
 }
 
-void CTestApp1::Render()
+void CTestEditorApp::Render()
 {
     CApp::Render();
 
     if (mVertices.size())
     {
-        for (int i = 0; i < mVertices.size() - 1; i++)
+        for (int i = 0; i < (int)mVertices.size() - 1; i++)
         {
             GetDebugDrawSystem().DrawLine(mVertices[i], mVertices[i+1], b2Color(0, 1, 0));
         }
@@ -62,7 +62,7 @@ void CTestApp1::Render()
     }
 }
 
-void CTestApp1::SetProcessors()
+void CTestEditorApp::SetProcessors()
 {
     GetEventSystem().SetProcessor("LB", CAppEventProcessor(
     [this] ()
@@ -117,12 +117,12 @@ void CTestApp1::SetProcessors()
     }));
 }
 
-void CTestApp1::CreateFigure()
+void CTestEditorApp::CreateFigure()
 {
     mCurrentTemplate->mGeometry.mFigures.resize(mCurrentTemplate->mGeometry.mFigures.size()+1);
 }
 
-void CTestApp1::CompleteFigure()
+void CTestEditorApp::CompleteFigure()
 {
     if (mCurrentTemplate != nullptr)
     {
@@ -148,7 +148,7 @@ void CTestApp1::CompleteFigure()
     }
 }
 
-void CTestApp1::CreateTemplate()
+void CTestEditorApp::CreateTemplate()
 {
     std::ostringstream is;
     is<<"new_template_"<<(mTemplateCounter++);
