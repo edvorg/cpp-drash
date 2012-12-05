@@ -31,22 +31,27 @@ void CTemplateSystem::Release()
 {
     for (auto i=mSceneObjectTemplates.begin(), i_e=mSceneObjectTemplates.end(); i!=i_e; i++)
     {
-        delete *i;
+        delete i->second;
     }
     mSceneObjectTemplates.clear();
 }
 
 CSceneObjectTemplate *CTemplateSystem::CreateSceneObjectTemplate(const std::string &_name)
 {
-    if (_name == "")
+    if (_name == "" || FindTemplate(_name) != nullptr)
     {
         return nullptr;
     }
     else
     {
-        mSceneObjectTemplates.push_back(new CSceneObjectTemplate());
-        mSceneObjectTemplates.back()->mName = _name;
-        return mSceneObjectTemplates.back();
+        std::pair<std::string, CSceneObjectTemplate*> elem;
+        elem.second = new CSceneObjectTemplate();
+        elem.first = _name;
+        mSceneObjectTemplates.insert(elem);
+        return elem.second;
+        //mSceneObjectTemplates.push_back(new CSceneObjectTemplate());
+        //mSceneObjectTemplates.back()->mName = _name;
+        //return mSceneObjectTemplates.back();
     }
 }
 
@@ -54,28 +59,50 @@ void CTemplateSystem::DestoySceneObjectTemplate(CSceneObjectTemplate *_t)
 {
     for (auto i=mSceneObjectTemplates.begin(), i_e=mSceneObjectTemplates.end(); i!=i_e; i++)
     {
-        if ((*i) == _t)
+        if (i->second == _t)
         {
             delete _t;
             mSceneObjectTemplates.erase(i);
             return;
         }
     }
+//    auto obj = mSceneObjectTemplates.find()
 }
 
 CSceneObject *CTemplateSystem::CreateSceneObjectFromTemplate(const std::string &_name, const CSceneObjectParams &_params)
 {
-    for (auto i=mSceneObjectTemplates.begin(), i_e=mSceneObjectTemplates.end(); i!=i_e; i++)
-    {
-        if ((*i)->mName == _name)
-        {
-            return GetScene()->CreateObject<CSceneObject>((*i)->mGeometry, _params);
-        }
+//    for (auto i=mSceneObjectTemplates.begin(), i_e=mSceneObjectTemplates.end(); i!=i_e; i++)
+//    {
+//        if ((*i)->mName == _name)
+//        {
+//            return GetScene()->CreateObject<CSceneObject>((*i)->mGeometry, _params);
+//        }
+//    }
+    auto iter = mSceneObjectTemplates.find(_name);
+    if (iter == mSceneObjectTemplates.end()) {
+        LOG_ERR("Object not found in CTemplateSystem");
+        return nullptr;
     }
-    LOG_ERR("Object not found in CTemplateSystem");
-    return nullptr;
+    return GetScene()->CreateObject<CSceneObject>(iter->second->mGeometry, _params);
 }
 
+CSceneObjectTemplate *CTemplateSystem::FindTemplate(const std::string &_name)
+{
+//    for (auto i=mSceneObjectTemplates.begin(), i_e=mSceneObjectTemplates.end(); i!=i_e; i++)
+//    {
+//        if ((*i)->mName == _name)
+//        {
+//            return *i;
+//        }
+//    }
+    auto iter = mSceneObjectTemplates.find(_name);
+    if (iter == mSceneObjectTemplates.end()) {
+        LOG_ERR("Object not found in CTemplateSystem");
+        return nullptr;
+    } else {
+        return iter->second;
+    }
+}
 CDrashBodyTemplate *CTemplateSystem::CreateDrashBodyTemplate(const std::string &_name)
 {
     if (_name == "")
@@ -121,17 +148,19 @@ const CTemplateSystem::SceneObjectTemplatesT &CTemplateSystem::GetSceneObjectTem
     return this->mSceneObjectTemplates;
 }
 
-CSceneObjectTemplate *CTemplateSystem::FindTemplate(const std::string &_name)
+
+void CTemplateSystem::RenameTemplate(const std::string &_oldName, const std::string &_newName)
 {
-    for (auto i=mSceneObjectTemplates.begin(), i_e=mSceneObjectTemplates.end(); i!=i_e; i++)
-    {
-        if ((*i)->mName == _name)
-        {
-            return *i;
-        }
+    auto iter = mSceneObjectTemplates.find(_oldName);
+
+    if (iter == mSceneObjectTemplates.end()) {
+        return;
     }
-    LOG_ERR("Object not found in CTemplateSystem");
-    return nullptr;
+
+    std::pair<std::string,CSceneObjectTemplate*> buff = *iter;
+    mSceneObjectTemplates.erase(iter);
+    buff.first = _newName;
+    mSceneObjectTemplates.insert(buff);
 }
 
 const CTemplateSystem::DrashBodyTemplatesT &CTemplateSystem::GetDrashBodyTemplates() const

@@ -28,6 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "subsystem.h"
 #include "../sceneobjects.h"
 #include <vector>
+#include <map>
 
 namespace drash
 {
@@ -36,7 +37,7 @@ class CSceneObjectTemplate
 {
 public:
     CSceneObjectGeometry mGeometry;
-    std::string mName = "";
+//    std::string mName = "";
 protected:
 private:
 };
@@ -46,6 +47,7 @@ class CDrashBodyTemplate
 public:
     CDrashBodyGeometry mGeometry;
     std::string mName = "";
+
 protected:
 private:
 };
@@ -54,9 +56,11 @@ class CTemplateSystem : public CSubsystem
 {
 public:
     typedef CSceneObjectTemplate *CSceneObjectTemplatePtr;
-    typedef std::vector<CSceneObjectTemplatePtr> SceneObjectTemplatesT;
+//    typedef std::vector<CSceneObjectTemplatePtr> SceneObjectTemplatesT;
     typedef CDrashBodyTemplate *CDrashBodyTemplatePtr;
     typedef std::vector<CDrashBodyTemplatePtr> DrashBodyTemplatesT;
+
+    typedef std::map<std::string,CSceneObjectTemplate*> SceneObjectTemplatesT;
 
     virtual void Release() override;
 
@@ -76,6 +80,8 @@ public:
     const DrashBodyTemplatesT &GetDrashBodyTemplates() const;
 
     CSceneObjectTemplate * FindTemplate(const std::string & _name);
+
+    void RenameTemplate(const std::string &_oldName, const std::string &_newName);
 
 protected:
 private:
