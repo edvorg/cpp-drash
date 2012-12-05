@@ -27,30 +27,24 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "subsystem.h"
 #include "../sceneobjects.h"
-#include <vector>
+//#include <vector>
 #include <map>
 
 namespace drash
 {
 
-class CDrashBodyTemplate
-{
-public:
-    CDrashBodyGeometry mGeometry;
-    std::string mName = "";
-
-protected:
-private:
-};
-
 class CTemplateSystem : public CSubsystem
 {
 public:
-    typedef CDrashBodyTemplate *CDrashBodyTemplatePtr;
-    typedef std::vector<CDrashBodyTemplatePtr> DrashBodyTemplatesT;
+//    typedef CDrashBodyTemplate *CDrashBodyTemplatePtr;
+//    typedef std::vector<CDrashBodyTemplatePtr> DrashBodyTemplatesT;
+
+
+    typedef std::map<std::string, CDrashBodyGeometry*> DrashBodyTemplatesT;
+    typedef std::pair<std::string,CDrashBodyGeometry*> MapDrashBodyItem;
 
     typedef std::map<std::string,CSceneObjectGeometry*> SceneObjectTemplatesT;
-    typedef std::pair<std::string,CSceneObjectGeometry*> MapItem;
+    typedef std::pair<std::string,CSceneObjectGeometry*> MapSceneObjectItem;
     virtual void Release() override;
 
     /// template is just named CSceneObjectGeometry
@@ -62,8 +56,9 @@ public:
 
     /// template is just named CDrashBodyGeometry
     /// we can use it to create many instances of one object at any time we want
-    CDrashBodyTemplate* CreateDrashBodyTemplate(const std::string &_name);
-    void DestoyDrashBodyTemplate(CDrashBodyTemplate *_t);
+    CDrashBodyGeometry* CreateDrashBodyTemplate(const std::string &_name);
+    void DestoyDrashBodyTemplate(CDrashBodyGeometry *_t);
+    void RemoveDrashBodyTemplate(const std::string &_name);
     CDrashBody *CreateDrashBodyFromTemplate(const std::string &_name, const CDrashBodyParams &_params);
 
     const SceneObjectTemplatesT &GetSceneObjectTemplates() const;

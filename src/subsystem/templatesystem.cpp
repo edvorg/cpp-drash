@@ -34,6 +34,11 @@ void CTemplateSystem::Release()
         delete i->second;
     }
     mSceneObjectTemplates.clear();
+    for (auto i=mDrashBodyTemplates.begin(), i_e=mDrashBodyTemplates.end(); i!=i_e; i++)
+    {
+        delete i->second;
+    }
+    mDrashBodyTemplates.clear();
 }
 
 CSceneObjectGeometry *CTemplateSystem::CreateSceneObjectTemplate(const std::string &_name)
@@ -48,7 +53,7 @@ CSceneObjectGeometry *CTemplateSystem::CreateSceneObjectTemplate(const std::stri
             LOG_ERR("Template " << _name.c_str() << " exists in TemplateSystem");
             return nullptr;
         }
-        MapItem elem;
+        MapSceneObjectItem elem;
         elem.second = new CSceneObjectGeometry();
         elem.first = _name;
         mSceneObjectTemplates.insert(elem);
@@ -111,7 +116,8 @@ CSceneObjectGeometry *CTemplateSystem::FindTemplate(const std::string &_name)
     }
 
 }
-CDrashBodyTemplate *CTemplateSystem::CreateDrashBodyTemplate(const std::string &_name)
+
+CDrashBodyGeometry *CTemplateSystem::CreateDrashBodyTemplate(const std::string &_name)
 {
     if (_name == "")
     {
@@ -119,17 +125,23 @@ CDrashBodyTemplate *CTemplateSystem::CreateDrashBodyTemplate(const std::string &
     }
     else
     {
-        mDrashBodyTemplates.push_back(new CDrashBodyTemplate());
-        mDrashBodyTemplates.back()->mName = _name;
-        return mDrashBodyTemplates.back();
+        if (mDrashBodyTemplates.find(_name) != mDrashBodyTemplates.end()) {
+            LOG_ERR("Template " << _name.c_str() << " exists in TemplateSystem");
+            return nullptr;
+        }
+        MapDrashBodyItem elem;
+        elem.second = new CDrashBodyGeometry();
+        elem.first = _name;
+        mDrashBodyTemplates.insert(elem);
+        return elem.second;
     }
 }
 
-void CTemplateSystem::DestoyDrashBodyTemplate(CDrashBodyTemplate *_t)
+void CTemplateSystem::DestoyDrashBodyTemplate(CDrashBodyGeometry *_t)
 {
     for (auto i=mDrashBodyTemplates.begin(), i_e=mDrashBodyTemplates.end(); i!=i_e; i++)
     {
-        if ((*i) == _t)
+        if (i->second == _t)
         {
             delete _t;
             mDrashBodyTemplates.erase(i);
@@ -138,17 +150,24 @@ void CTemplateSystem::DestoyDrashBodyTemplate(CDrashBodyTemplate *_t)
     }
 }
 
+void CTemplateSystem::RemoveDrashBodyTemplate(const std::string &_name)
+{
+    auto iter = mDrashBodyTemplates.find(_name);
+    if (iter == mDrashBodyTemplates.end()) {
+        return;
+    }
+    delete iter->second;
+    mDrashBodyTemplates.erase(iter);
+}
+
 CDrashBody *CTemplateSystem::CreateDrashBodyFromTemplate(const std::string &_name, const CDrashBodyParams &_params)
 {
-    for (auto i=mDrashBodyTemplates.begin(), i_e=mDrashBodyTemplates.end(); i!=i_e; i++)
-    {
-        if ((*i)->mName == _name)
-        {
-            return GetScene()->CreateObject<CDrashBody>((*i)->mGeometry, _params);
-        }
+    auto iter = mDrashBodyTemplates.find(_name);
+    if (iter == mDrashBodyTemplates.end()) {
+        LOG_ERR("Object" << _name.c_str() << "not found in CTemplateSystem");
+        return nullptr;
     }
-
-    return nullptr;
+    return GetScene()->CreateObject<CDrashBody>(*(iter->second), _params);
 }
 
 const CTemplateSystem::SceneObjectTemplatesT &CTemplateSystem::GetSceneObjectTemplates() const
@@ -165,7 +184,7 @@ void CTemplateSystem::RenameTemplate(const std::string &_oldName, const std::str
         return;
     }
 
-    MapItem buff = *iter;
+    MapSceneObjectItem buff = *iter;
     mSceneObjectTemplates.erase(iter);
     buff.first = _newName;
     mSceneObjectTemplates.insert(buff);

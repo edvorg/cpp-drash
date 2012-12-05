@@ -251,52 +251,52 @@ void CTestApp3::InitObjects()
     sbp.mPos.Set( 300, 300 );
     GetScene().CreateObject<CSceneObject>(sbg, sbp);
 
-    CDrashBodyTemplate *b1 = GetTemplateSystem().CreateDrashBodyTemplate("box_small");
-    b1->mGeometry.mFigures.resize(1);
-    b1->mGeometry.mFigures[0].mDepth = 10;
-    b1->mGeometry.mFigures[0].mVertices.push_back( CVec2( -5, -5 ) );
-    b1->mGeometry.mFigures[0].mVertices.push_back( CVec2( 5, -5 ) );
-    b1->mGeometry.mFigures[0].mVertices.push_back( CVec2( 5, 5 ) );
-    b1->mGeometry.mFigures[0].mVertices.push_back( CVec2( -5, 5 ) );
-    CDrashBodyTemplate *b0 = GetTemplateSystem().CreateDrashBodyTemplate("box_big");
-    b0->mGeometry.mFigures.resize(1);
-    b0->mGeometry.mFigures[0].mDepth = 20;
-    b0->mGeometry.mFigures[0].mVertices.push_back( CVec2( -10, -10 ) );
-    b0->mGeometry.mFigures[0].mVertices.push_back( CVec2( 10, -10 ) );
-    b0->mGeometry.mFigures[0].mVertices.push_back( CVec2( 10, 10 ) );
-    b0->mGeometry.mFigures[0].mVertices.push_back( CVec2( -10, 10 ) );
+    CDrashBodyGeometry *b1 = GetTemplateSystem().CreateDrashBodyTemplate("box_small");
+    b1->mFigures.resize(1);
+    b1->mFigures[0].mDepth = 10;
+    b1->mFigures[0].mVertices.push_back( CVec2( -5, -5 ) );
+    b1->mFigures[0].mVertices.push_back( CVec2( 5, -5 ) );
+    b1->mFigures[0].mVertices.push_back( CVec2( 5, 5 ) );
+    b1->mFigures[0].mVertices.push_back( CVec2( -5, 5 ) );
+    CDrashBodyGeometry *b0 = GetTemplateSystem().CreateDrashBodyTemplate("box_big");
+    b0->mFigures.resize(1);
+    b0->mFigures[0].mDepth = 20;
+    b0->mFigures[0].mVertices.push_back( CVec2( -10, -10 ) );
+    b0->mFigures[0].mVertices.push_back( CVec2( 10, -10 ) );
+    b0->mFigures[0].mVertices.push_back( CVec2( 10, 10 ) );
+    b0->mFigures[0].mVertices.push_back( CVec2( -10, 10 ) );
 
-    b0->mGeometry.mDestructionChilds.resize(8);
-    b0->mGeometry.mDestructionChilds[0].mTemplate = b1;
-    b0->mGeometry.mDestructionChilds[0].mParams.mPos.Set(-5,-5);
-    b0->mGeometry.mDestructionChilds[0].mParams.mZ = 5;
-    b0->mGeometry.mDestructionChilds[1].mTemplate = b1;
-    b0->mGeometry.mDestructionChilds[1].mParams.mPos.Set(-5,5);
-    b0->mGeometry.mDestructionChilds[1].mParams.mZ = 5;
-    b0->mGeometry.mDestructionChilds[2].mTemplate = b1;
-    b0->mGeometry.mDestructionChilds[2].mParams.mPos.Set(5,5);
-    b0->mGeometry.mDestructionChilds[2].mParams.mZ = 5;
-    b0->mGeometry.mDestructionChilds[3].mTemplate = b1;
-    b0->mGeometry.mDestructionChilds[3].mParams.mPos.Set(5,-5);
-    b0->mGeometry.mDestructionChilds[3].mParams.mZ = 5;
-    b0->mGeometry.mDestructionChilds[4].mTemplate = b1;
-    b0->mGeometry.mDestructionChilds[4].mParams.mPos.Set(-5,-5);
-    b0->mGeometry.mDestructionChilds[4].mParams.mZ = -5;
-    b0->mGeometry.mDestructionChilds[5].mTemplate = b1;
-    b0->mGeometry.mDestructionChilds[5].mParams.mPos.Set(-5,5);
-    b0->mGeometry.mDestructionChilds[5].mParams.mZ = -5;
-    b0->mGeometry.mDestructionChilds[6].mTemplate = b1;
-    b0->mGeometry.mDestructionChilds[6].mParams.mPos.Set(5,5);
-    b0->mGeometry.mDestructionChilds[6].mParams.mZ = -5;
-    b0->mGeometry.mDestructionChilds[7].mTemplate = b1;
-    b0->mGeometry.mDestructionChilds[7].mParams.mPos.Set(5,-5);
-    b0->mGeometry.mDestructionChilds[7].mParams.mZ = -5;
+    b0->mDestructionChilds.resize(8);
+    b0->mDestructionChilds[0].mTemplate = b1;
+    b0->mDestructionChilds[0].mParams.mPos.Set(-5,-5);
+    b0->mDestructionChilds[0].mParams.mZ = 5;
+    b0->mDestructionChilds[1].mTemplate = b1;
+    b0->mDestructionChilds[1].mParams.mPos.Set(-5,5);
+    b0->mDestructionChilds[1].mParams.mZ = 5;
+    b0->mDestructionChilds[2].mTemplate = b1;
+    b0->mDestructionChilds[2].mParams.mPos.Set(5,5);
+    b0->mDestructionChilds[2].mParams.mZ = 5;
+    b0->mDestructionChilds[3].mTemplate = b1;
+    b0->mDestructionChilds[3].mParams.mPos.Set(5,-5);
+    b0->mDestructionChilds[3].mParams.mZ = 5;
+    b0->mDestructionChilds[4].mTemplate = b1;
+    b0->mDestructionChilds[4].mParams.mPos.Set(-5,-5);
+    b0->mDestructionChilds[4].mParams.mZ = -5;
+    b0->mDestructionChilds[5].mTemplate = b1;
+    b0->mDestructionChilds[5].mParams.mPos.Set(-5,5);
+    b0->mDestructionChilds[5].mParams.mZ = -5;
+    b0->mDestructionChilds[6].mTemplate = b1;
+    b0->mDestructionChilds[6].mParams.mPos.Set(5,5);
+    b0->mDestructionChilds[6].mParams.mZ = -5;
+    b0->mDestructionChilds[7].mTemplate = b1;
+    b0->mDestructionChilds[7].mParams.mPos.Set(5,-5);
+    b0->mDestructionChilds[7].mParams.mZ = -5;
 
     CDrashBodyParams dbp;
     dbp.mPos.Set( 0, 100 );
     dbp.mAngle = M_PI / 4;
 
-    GetScene().CreateObject<CDrashBody>(b0->mGeometry, dbp);
+    GetScene().CreateObject<CDrashBody>(*b0, dbp);
 
     CSceneObjectGeometry pg;
     pg.mFigures.resize(1);
@@ -334,80 +334,80 @@ void CTestApp3::InitObjects()
     static const float d_angle = M_PI * 2.0 / static_cast<double>(segments);
     static const float rad = 5;
 
-    CDrashBodyTemplate *t2 = GetTemplateSystem().CreateDrashBodyTemplate("circle_div_1");
+    CDrashBodyGeometry *t2 = GetTemplateSystem().CreateDrashBodyTemplate("circle_div_1");
     if (t2 != nullptr)
     {
-        t2->mGeometry.mFigures.resize(4);
+        t2->mFigures.resize(4);
         for (unsigned int i=0; i<4; i++)
         {
-            t2->mGeometry.mFigures[i].mVertices.push_back(CVec2(rad * cos(i * d_angle), rad * sin(i * d_angle)));
-            t2->mGeometry.mFigures[i].mVertices.push_back(CVec2(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
-            t2->mGeometry.mFigures[i].mVertices.push_back(CVec2(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
-            t2->mGeometry.mFigures[i].mVertices.push_back(CVec2(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
-            t2->mGeometry.mFigures[i].mDepth = rad * 0.5;
+            t2->mFigures[i].mVertices.push_back(CVec2(rad * cos(i * d_angle), rad * sin(i * d_angle)));
+            t2->mFigures[i].mVertices.push_back(CVec2(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
+            t2->mFigures[i].mVertices.push_back(CVec2(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
+            t2->mFigures[i].mVertices.push_back(CVec2(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
+            t2->mFigures[i].mDepth = rad * 0.5;
         }
     }
 
-    CDrashBodyTemplate *t3 = GetTemplateSystem().CreateDrashBodyTemplate("circle_div_2");
+    CDrashBodyGeometry *t3 = GetTemplateSystem().CreateDrashBodyTemplate("circle_div_2");
     if (t3 != nullptr)
     {
-        t3->mGeometry.mFigures.resize(4);
+        t3->mFigures.resize(4);
         for (unsigned int i=4; i<8; i++)
         {
-            t3->mGeometry.mFigures[i-4].mVertices.push_back(CVec2(rad * cos(i * d_angle), rad * sin(i * d_angle)));
-            t3->mGeometry.mFigures[i-4].mVertices.push_back(CVec2(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
-            t3->mGeometry.mFigures[i-4].mVertices.push_back(CVec2(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
-            t3->mGeometry.mFigures[i-4].mVertices.push_back(CVec2(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
-            t3->mGeometry.mFigures[i-4].mDepth = rad * 0.5;
+            t3->mFigures[i-4].mVertices.push_back(CVec2(rad * cos(i * d_angle), rad * sin(i * d_angle)));
+            t3->mFigures[i-4].mVertices.push_back(CVec2(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
+            t3->mFigures[i-4].mVertices.push_back(CVec2(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
+            t3->mFigures[i-4].mVertices.push_back(CVec2(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
+            t3->mFigures[i-4].mDepth = rad * 0.5;
         }
     }
 
-    CDrashBodyTemplate *t4 = GetTemplateSystem().CreateDrashBodyTemplate("circle_div_3");
+    CDrashBodyGeometry *t4 = GetTemplateSystem().CreateDrashBodyTemplate("circle_div_3");
     if (t4 != nullptr)
     {
-        t4->mGeometry.mFigures.resize(4);
+        t4->mFigures.resize(4);
         for (unsigned int i=8; i<12; i++)
         {
-            t4->mGeometry.mFigures[i-8].mVertices.push_back(CVec2(rad * cos(i * d_angle), rad * sin(i * d_angle)));
-            t4->mGeometry.mFigures[i-8].mVertices.push_back(CVec2(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
-            t4->mGeometry.mFigures[i-8].mVertices.push_back(CVec2(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
-            t4->mGeometry.mFigures[i-8].mVertices.push_back(CVec2(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
-            t4->mGeometry.mFigures[i-8].mDepth = rad * 0.5;
+            t4->mFigures[i-8].mVertices.push_back(CVec2(rad * cos(i * d_angle), rad * sin(i * d_angle)));
+            t4->mFigures[i-8].mVertices.push_back(CVec2(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
+            t4->mFigures[i-8].mVertices.push_back(CVec2(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
+            t4->mFigures[i-8].mVertices.push_back(CVec2(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
+            t4->mFigures[i-8].mDepth = rad * 0.5;
         }
     }
 
-    CDrashBodyTemplate *t5 = GetTemplateSystem().CreateDrashBodyTemplate("circle_div_4");
+    CDrashBodyGeometry *t5 = GetTemplateSystem().CreateDrashBodyTemplate("circle_div_4");
     if (t5 != nullptr)
     {
-        t5->mGeometry.mFigures.resize(4);
+        t5->mFigures.resize(4);
         for (unsigned int i=12; i<16; i++)
         {
-            t5->mGeometry.mFigures[i-12].mVertices.push_back(CVec2(rad * cos(i * d_angle), rad * sin(i * d_angle)));
-            t5->mGeometry.mFigures[i-12].mVertices.push_back(CVec2(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
-            t5->mGeometry.mFigures[i-12].mVertices.push_back(CVec2(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
-            t5->mGeometry.mFigures[i-12].mVertices.push_back(CVec2(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
-            t5->mGeometry.mFigures[i-12].mDepth = rad * 0.5;
+            t5->mFigures[i-12].mVertices.push_back(CVec2(rad * cos(i * d_angle), rad * sin(i * d_angle)));
+            t5->mFigures[i-12].mVertices.push_back(CVec2(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
+            t5->mFigures[i-12].mVertices.push_back(CVec2(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
+            t5->mFigures[i-12].mVertices.push_back(CVec2(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
+            t5->mFigures[i-12].mDepth = rad * 0.5;
         }
     }
 
-    CDrashBodyTemplate *t1 = GetTemplateSystem().CreateDrashBodyTemplate("circle");
+    CDrashBodyGeometry *t1 = GetTemplateSystem().CreateDrashBodyTemplate("circle");
     if (t1 != nullptr)
     {
-        t1->mGeometry.mFigures.resize(segments);
+        t1->mFigures.resize(segments);
         for (unsigned int i=0; i<segments; i++)
         {
-            t1->mGeometry.mFigures[i].mVertices.push_back(CVec2(rad * cos(i * d_angle), rad * sin(i * d_angle)));
-            t1->mGeometry.mFigures[i].mVertices.push_back(CVec2(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
-            t1->mGeometry.mFigures[i].mVertices.push_back(CVec2(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
-            t1->mGeometry.mFigures[i].mVertices.push_back(CVec2(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
-            t1->mGeometry.mFigures[i].mDepth = rad * 0.5;
+            t1->mFigures[i].mVertices.push_back(CVec2(rad * cos(i * d_angle), rad * sin(i * d_angle)));
+            t1->mFigures[i].mVertices.push_back(CVec2(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
+            t1->mFigures[i].mVertices.push_back(CVec2(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
+            t1->mFigures[i].mVertices.push_back(CVec2(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
+            t1->mFigures[i].mDepth = rad * 0.5;
         }
 
-        t1->mGeometry.mDestructionChilds.resize(4);
-        t1->mGeometry.mDestructionChilds[0].mTemplate = t2;
-        t1->mGeometry.mDestructionChilds[1].mTemplate = t3;
-        t1->mGeometry.mDestructionChilds[2].mTemplate = t4;
-        t1->mGeometry.mDestructionChilds[3].mTemplate = t5;
+        t1->mDestructionChilds.resize(4);
+        t1->mDestructionChilds[0].mTemplate = t2;
+        t1->mDestructionChilds[1].mTemplate = t3;
+        t1->mDestructionChilds[2].mTemplate = t4;
+        t1->mDestructionChilds[3].mTemplate = t5;
     }
 }
 
