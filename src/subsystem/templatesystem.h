@@ -33,15 +33,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
-//class CSceneObjectTemplate
-//{
-//public:
-//    CSceneObjectGeometry mGeometry;
-////    std::string mName = "";
-//protected:
-//private:
-//};
-
 class CDrashBodyTemplate
 {
 public:
@@ -55,8 +46,6 @@ private:
 class CTemplateSystem : public CSubsystem
 {
 public:
-    //typedef CSceneObjectTemplate *CSceneObjectTemplatePtr;
-//    typedef std::vector<CSceneObjectTemplatePtr> SceneObjectTemplatesT;
     typedef CDrashBodyTemplate *CDrashBodyTemplatePtr;
     typedef std::vector<CDrashBodyTemplatePtr> DrashBodyTemplatesT;
 

@@ -56,10 +56,9 @@ private:
 
     std::vector<CVec2> mVertices;
     unsigned int mTemplateCounter = 0;
-//    CSceneObjectTemplate *mCurrentTemplate = nullptr;
+    CSceneObjectGeometry *mCurrentTemplate = nullptr;
     State mState = StateNormal;
     CSceneObject *mCurrentObject = nullptr;
-    std::string mCurrentTemplateName = "";
 };
 
 } // namespace drash

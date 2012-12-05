@@ -97,7 +97,7 @@ void CTestEditorApp::SetProcessors()
     {
         if (mState == StateNormal)
         {
-            if (mCurrentTemplateName != "")
+            if (mCurrentTemplate != nullptr)
             {
                 CreateFigure();
                 mState = StateFigure;
@@ -125,16 +125,14 @@ void CTestEditorApp::SetProcessors()
 
 void CTestEditorApp::CreateFigure()
 {
-    CSceneObjectGeometry *CurrentTemplate = GetTemplateSystem().FindTemplate(mCurrentTemplateName);
-    if ( CurrentTemplate != nullptr )
+    if ( mCurrentTemplate != nullptr )
     {
-        CurrentTemplate->mFigures.resize(CurrentTemplate->mFigures.size()+1);
+        mCurrentTemplate->mFigures.resize(mCurrentTemplate->mFigures.size()+1);
     }
 }
 
 void CTestEditorApp::CompleteFigure()
 {
-    CSceneObjectGeometry *mCurrentTemplate = GetTemplateSystem().FindTemplate(mCurrentTemplateName);
     if (mCurrentTemplate != nullptr)
     {
         mCurrentTemplate->mFigures.back().mVertices = mVertices;
@@ -153,8 +151,7 @@ void CTestEditorApp::CompleteFigure()
 
         CSceneObjectParams p;
         p.mDynamic = false;
-        mCurrentObject = GetTemplateSystem().CreateSceneObjectFromTemplate(mCurrentTemplateName.c_str(), p);
-
+        mCurrentObject = GetScene().CreateObject<CSceneObject>(*mCurrentTemplate,p);
         mVertices.clear();
     }
 }
@@ -164,9 +161,7 @@ void CTestEditorApp::CreateTemplate()
     std::ostringstream is;
     is<<"new_template_"<<(mTemplateCounter++);
 
-//    SCurrentTemplate = GetTemplateSystem().CreateSceneObjectTemplate(is.str().c_str());
-    GetTemplateSystem().CreateSceneObjectTemplate(is.str().c_str());
-    mCurrentTemplateName = is.str();
+    mCurrentTemplate = GetTemplateSystem().CreateSceneObjectTemplate(is.str().c_str());
     if (mCurrentObject != nullptr)
     {
         GetScene().DestroyObject(mCurrentObject);
