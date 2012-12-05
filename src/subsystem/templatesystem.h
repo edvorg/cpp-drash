@@ -33,14 +33,14 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
-class CSceneObjectTemplate
-{
-public:
-    CSceneObjectGeometry mGeometry;
-//    std::string mName = "";
-protected:
-private:
-};
+//class CSceneObjectTemplate
+//{
+//public:
+//    CSceneObjectGeometry mGeometry;
+////    std::string mName = "";
+//protected:
+//private:
+//};
 
 class CDrashBodyTemplate
 {
@@ -55,19 +55,20 @@ private:
 class CTemplateSystem : public CSubsystem
 {
 public:
-    typedef CSceneObjectTemplate *CSceneObjectTemplatePtr;
+    //typedef CSceneObjectTemplate *CSceneObjectTemplatePtr;
 //    typedef std::vector<CSceneObjectTemplatePtr> SceneObjectTemplatesT;
     typedef CDrashBodyTemplate *CDrashBodyTemplatePtr;
     typedef std::vector<CDrashBodyTemplatePtr> DrashBodyTemplatesT;
 
-    typedef std::map<std::string,CSceneObjectTemplate*> SceneObjectTemplatesT;
-
+    typedef std::map<std::string,CSceneObjectGeometry*> SceneObjectTemplatesT;
+    typedef std::pair<std::string,CSceneObjectGeometry*> MapItem;
     virtual void Release() override;
 
     /// template is just named CSceneObjectGeometry
     /// we can use it to create many instances of one object at any time we want
-    CSceneObjectTemplate* CreateSceneObjectTemplate(const std::string &_name);
-    void DestoySceneObjectTemplate(CSceneObjectTemplate *_t);
+    CSceneObjectGeometry* CreateSceneObjectTemplate(const std::string &_name);
+    void DestoySceneObjectTemplate(CSceneObjectGeometry *_t);
+    void RemoveSceneObjectTemplate(const std::string &_name);
     CSceneObject *CreateSceneObjectFromTemplate(const std::string &_name, const CSceneObjectParams &_params);
 
     /// template is just named CDrashBodyGeometry
@@ -79,7 +80,7 @@ public:
     const SceneObjectTemplatesT &GetSceneObjectTemplates() const;
     const DrashBodyTemplatesT &GetDrashBodyTemplates() const;
 
-    CSceneObjectTemplate * FindTemplate(const std::string & _name);
+    CSceneObjectGeometry * FindTemplate(const std::string & _name);
 
     void RenameTemplate(const std::string &_oldName, const std::string &_newName);
 

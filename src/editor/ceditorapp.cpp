@@ -35,30 +35,30 @@ bool CObjectEditorApp::Init()
     auto t = GetTemplateSystem().CreateSceneObjectTemplate("name1");
     if (t != nullptr)
     {
-        t->mGeometry.mFigures.resize(1);
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-2, -1));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(2, -1));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(1, 1));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-1, 1));
+        t->mFigures.resize(1);
+        t->mFigures[0].mVertices.push_back(CVec2(-2, -1));
+        t->mFigures[0].mVertices.push_back(CVec2(2, -1));
+        t->mFigures[0].mVertices.push_back(CVec2(1, 1));
+        t->mFigures[0].mVertices.push_back(CVec2(-1, 1));
     }
     t = GetTemplateSystem().CreateSceneObjectTemplate("name2");
     if (t != nullptr)
     {
-        t->mGeometry.mFigures.resize(1);
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(2, 1));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-2, 1));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-1, -1));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(1, -1));
+        t->mFigures.resize(1);
+        t->mFigures[0].mVertices.push_back(CVec2(2, 1));
+        t->mFigures[0].mVertices.push_back(CVec2(-2, 1));
+        t->mFigures[0].mVertices.push_back(CVec2(-1, -1));
+        t->mFigures[0].mVertices.push_back(CVec2(1, -1));
     }
     t = GetTemplateSystem().CreateSceneObjectTemplate("ground");
     if (t != nullptr)
     {
-        t->mGeometry.mFigures.resize(1);
-        t->mGeometry.mFigures[0].mDepth = 10;
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(50, 5));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-50, 5));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-50, -5));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(50, -5));
+        t->mFigures.resize(1);
+        t->mFigures[0].mDepth = 10;
+        t->mFigures[0].mVertices.push_back(CVec2(50, 5));
+        t->mFigures[0].mVertices.push_back(CVec2(-50, 5));
+        t->mFigures[0].mVertices.push_back(CVec2(-50, -5));
+        t->mFigures[0].mVertices.push_back(CVec2(50, -5));
     }
     SetProcessor();
 
@@ -126,7 +126,7 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
                  -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
     });
     param.mVertices = mVertexs;
-    obj->mGeometry.mFigures.push_back(param);
+    obj->mFigures.push_back(param);
 
     ShowObject(_objectName);
 

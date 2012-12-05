@@ -125,22 +125,22 @@ void CTestEditorApp::SetProcessors()
 
 void CTestEditorApp::CreateFigure()
 {
-    CSceneObjectTemplate *CurrentTemplate = GetTemplateSystem().FindTemplate(mCurrentTemplateName);
+    CSceneObjectGeometry *CurrentTemplate = GetTemplateSystem().FindTemplate(mCurrentTemplateName);
     if ( CurrentTemplate != nullptr )
     {
-        CurrentTemplate->mGeometry.mFigures.resize(CurrentTemplate->mGeometry.mFigures.size()+1);
+        CurrentTemplate->mFigures.resize(CurrentTemplate->mFigures.size()+1);
     }
 }
 
 void CTestEditorApp::CompleteFigure()
 {
-    CSceneObjectTemplate *mCurrentTemplate = GetTemplateSystem().FindTemplate(mCurrentTemplateName);
+    CSceneObjectGeometry *mCurrentTemplate = GetTemplateSystem().FindTemplate(mCurrentTemplateName);
     if (mCurrentTemplate != nullptr)
     {
-        mCurrentTemplate->mGeometry.mFigures.back().mVertices = mVertices;
+        mCurrentTemplate->mFigures.back().mVertices = mVertices;
 
-        for (auto i = mCurrentTemplate->mGeometry.mFigures.back().mVertices.begin();
-             i != mCurrentTemplate->mGeometry.mFigures.back().mVertices.end(); i++)
+        for (auto i = mCurrentTemplate->mFigures.back().mVertices.begin();
+             i != mCurrentTemplate->mFigures.back().mVertices.end(); i++)
         {
             GetDebugDrawSystem().ScreenSpaceToWorldSpace(*i, -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
         }

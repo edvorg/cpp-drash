@@ -57,6 +57,9 @@
             <height>0</height>
            </size>
           </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectItems</enum>
+          </property>
           <column>
            <property name="text">
             <string notr="true">1</string>
