@@ -45,6 +45,9 @@ GameWindow::GameWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    mStatusLabel = new QLabel(QString(""));
+    ui->statusBar->addWidget(mStatusLabel);
+
     setCentralWidget( mSceneWidget = new SceneWidget(this) );
 
     mSceneWidget->setFocus();
@@ -134,6 +137,8 @@ void GameWindow::UpdateScene()
     {
         mApp->Step(mTimer.GetDeltaTime());
     }
+
+    mStatusLabel->setText(QString(drash::CLogger::Tail().c_str()));
 
     mSceneWidget->updateGL();
 }

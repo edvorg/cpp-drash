@@ -66,6 +66,7 @@ private:
     SceneWidget *mSceneWidget = nullptr;
     QTimer timer;
     drash::CTimer mTimer;
+    QLabel *mStatusLabel = nullptr;
 };
 
 #endif // GAMEWINDOW_H
