@@ -34,6 +34,10 @@ namespace drash
 enum EventKey : unsigned int
 {
     EventKeyUnknown = 0,
+    EventKeyControl,
+    EventKeyShift,
+    EventKeyAlt,
+    EventKeyMeta,
     EventKeyQ,
     EventKeyW,
     EventKeyE,
@@ -48,10 +52,6 @@ enum EventKey : unsigned int
     EventKeyV,
     EventKeySpace,
     EventKeyEscape,
-    EventKeyControl,
-    EventKeyShift,
-    EventKeyAlt,
-    EventKeyMeta,
     EventKeyLeftButton,
     EventKeyRightButton,
     EventKeyMiddleButton,

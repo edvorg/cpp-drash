@@ -22,6 +22,8 @@ public:
 
     bool operator ==(const CAppEventCombination &_src) const;
     bool operator !=(const CAppEventCombination &_src) const;
+
+    friend CLogger &operator <<(CLogger &_logger, const CAppEventCombination &_c);
 private:
 protected:
     std::vector<CAppEvent> mCatchEvents;

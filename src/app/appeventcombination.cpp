@@ -100,4 +100,23 @@ bool CAppEventCombination::operator !=(const CAppEventCombination &_src) const
     return !(*this == _src);
 }
 
+CLogger &operator <<(CLogger &_logger, const CAppEventCombination &_c)
+{
+    auto i = _c.mCatchEvents.begin();
+
+    if (i != _c.mCatchEvents.end())
+    {
+        _logger<<i->ToString().c_str();
+        i++;
+
+        while (i != _c.mCatchEvents.end())
+        {
+            _logger<<'-'<<i->ToString().c_str();
+            i++;
+        }
+    }
+
+    return _logger;
+}
+
 } // namespace drash
