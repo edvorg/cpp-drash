@@ -4,7 +4,9 @@
 #include "appevent.h"
 #include "appeventprocessor.h"
 #include "appeventcombination.h"
+#include <string>
 #include <list>
+#include <map>
 
 namespace drash
 {
@@ -29,6 +31,8 @@ class CAppEventSystem
 public:
     CAppEventSystem();
 
+    static bool ValidateModeName(const std::string &_name);
+    bool SetMode(const std::string &_name);
     void SetProcessor(const char *_combinations, const CAppEventProcessor &_processor);
 
     void Process();
@@ -38,10 +42,31 @@ public:
 
 protected:
 private:
+    /// contains all current events
+    /// PressEvent invokation adds event to mCurrentState
+    /// ReleaseEvent invokation removes event from mCurrentState
     CAppEventCombination mCurrentState;
-    CAppEventCombinationTree mTree;
+
+    /// contains combinations being processed
     std::list<CAppEventCombinationTree*> mCurrentCombinations;
-    CAppEventCombinationTree *mCurrentRoot = &mTree;
+
+
+    /// name of mode currently in use. mode is just name for one combinations tree.
+    /// the reason for using of modes is processor conflicts when we need to bind
+    /// more than one CAppEventProcessor instances to the same combination
+    /// but execute only one instance at time
+    std::string mCurrentMode = "";
+
+    /// combination trees for each mode
+    std::map<std::string, CAppEventCombinationTree> mTrees;
+
+    /// root of current mode tree
+    CAppEventCombinationTree *mCurrentModeRoot = nullptr;
+
+    /// start point for searching of combinations to process
+    CAppEventCombinationTree *mCurrentNode = nullptr;
+
+    bool mModeChanged = false;
 };
 
 } // namespace drash
