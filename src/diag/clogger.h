@@ -28,6 +28,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <fstream>
 #include <iostream>
+#include <sstream>
+
 namespace drash
 {
 
@@ -45,10 +47,14 @@ public:
     CLogger& operator<<( float _v );
     CLogger& operator<<( double _v );
 
+    static const std::string &Tail();
+
 private:
     std::ofstream out;
     std::ostream &mStream;
     bool mOpened = false;
+
+    static std::ostringstream mTailStream;
 };
 
 #define LOG_ERR_PREFIX "[E]: "

@@ -42,12 +42,17 @@ public:
 	}
 } starter;
 
+std::ostringstream CLogger::mTailStream;
+
 CLogger::CLogger( ostream &_stream ):
     mStream(_stream)
 {
     out.open( "./drash.log", ios_base::app );
 
     mOpened = out.is_open();
+
+    mTailStream.str("");
+    mTailStream.clear();
 }
 
 CLogger::~CLogger(void)
@@ -66,6 +71,7 @@ CLogger& CLogger::operator<<( char _c )
 	{
         out<<_c;
         mStream<<_c;
+        mTailStream<<_c;
 	}
 	return (*this);
 }
@@ -76,6 +82,7 @@ CLogger& CLogger::operator<<( const char* _str )
 	{
         out<<_str;
         mStream<<_str;
+        mTailStream<<_str;
 	}
 	return (*this);
 }
@@ -86,6 +93,7 @@ CLogger& CLogger::operator<<( int _v )
 	{
         out<<_v;
         mStream<<_v;
+        mTailStream<<_v;
 	}
 	return (*this);
 }
@@ -97,6 +105,7 @@ CLogger& CLogger::operator<<( unsigned int _v )
 	{
         out<<_v;
         mStream<<_v;
+        mTailStream<<_v;
     }
     return (*this);
 }
@@ -107,6 +116,7 @@ CLogger& CLogger::operator<<( long _v )
     {
         out<<_v;
         mStream<<_v;
+        mTailStream<<_v;
     }
     return (*this);
 }
@@ -118,6 +128,7 @@ CLogger& CLogger::operator<<( unsigned long _v )
     {
         out<<_v;
         mStream<<_v;
+        mTailStream<<_v;
     }
     return (*this);
 }
@@ -128,6 +139,7 @@ CLogger& CLogger::operator<<( float _v )
 	{
         out<<_v;
         mStream<<_v;
+        mTailStream<<_v;
 	}
     return (*this);
 }
@@ -138,8 +150,14 @@ CLogger &CLogger::operator <<(double _v)
     {
         out<<_v;
         mStream<<_v;
+        mTailStream<<_v;
     }
     return (*this);
+}
+
+const string &CLogger::Tail()
+{
+    return mTailStream.str();
 }
 
 } // namespace drash
