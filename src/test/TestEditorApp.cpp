@@ -64,73 +64,58 @@ void CTestEditorApp::Render()
 
 void CTestEditorApp::SetProcessors()
 {
+    ////////////////////////////////////////////////////////////////////////
+
+    GetEventSystem().SetMode(std::string("editor_figure_creation_mode"));
+
     GetEventSystem().SetProcessor("LB", CAppEventProcessor(
     [this] ()
     {
-        if (mState == StateFigure)
-        {
-            mVertices.push_back(GetCursorPos());
-        }
+        mVertices.push_back(GetCursorPos());
     }));
 
     GetEventSystem().SetProcessor("RB", CAppEventProcessor(
     [this] ()
     {
-        if (mState == StateFigure)
-        {
-            CompleteFigure();
-            mState = StateNormal;
-        }
+        CompleteFigure();
     }));
 
-    GetEventSystem().SetProcessor("C-b C-b", CAppEventProcessor(
+    ////////////////////////////////////////////////////////////////////////
+
+    GetEventSystem().SetMode(std::string("editor_mode"));
+
+    GetEventSystem().SetProcessor("C-c C-c", CAppEventProcessor(
     [this] ()
     {
-        if (mState == StateNormal)
-        {
-            CreateTemplate();
-        }
+        CreateTemplate();
     }));
 
-    GetEventSystem().SetProcessor("C-b C-f", CAppEventProcessor(
+    GetEventSystem().SetProcessor("C-c C-f", CAppEventProcessor(
     [this] ()
     {
-        if (mState == StateNormal)
-        {
-            if (mCurrentTemplate != nullptr)
-            {
-                CreateFigure();
-                mState = StateFigure;
-            }
-        }
-        else if (mState == StateFigure)
-        {
-            CompleteFigure();
-            mState = StateNormal;
-        }
+        CreateFigure();
     }));
 
-    GetEventSystem().SetProcessor("C-b C-d", CAppEventProcessor(
+    GetEventSystem().SetProcessor("C-c C-d", CAppEventProcessor(
     [this] ()
     {
         DetachCurrentObject();
-    }));
-
-    GetEventSystem().SetProcessor("C-x C-c", CAppEventProcessor(
-    [this] ()
-    {
-        this->Quit();
     }));
 }
 
 void CTestEditorApp::CreateFigure()
 {
-    mCurrentTemplate->mGeometry.mFigures.resize(mCurrentTemplate->mGeometry.mFigures.size()+1);
+    if (mCurrentTemplate != nullptr)
+    {
+        mCurrentTemplate->mGeometry.mFigures.resize(mCurrentTemplate->mGeometry.mFigures.size()+1);
+
+        GetEventSystem().SetMode(std::string("editor_figure_creation_mode"));
+    }
 }
 
 void CTestEditorApp::CompleteFigure()
 {
-    if (mCurrentTemplate != nullptr)
+    if (mCurrentTemplate != nullptr && mVertices.size() >= 3)
     {
         mCurrentTemplate->mGeometry.mFigures.back().mVertices = mVertices;
 
@@ -151,6 +136,8 @@ void CTestEditorApp::CompleteFigure()
         mCurrentObject = GetTemplateSystem().CreateSceneObjectFromTemplate(mCurrentTemplate->mName.c_str(), p);
 
         mVertices.clear();
+
+        GetEventSystem().SetMode(std::string("editor_mode"));
     }
 }
 
@@ -170,7 +157,7 @@ void CTestEditorApp::CreateTemplate()
 
 void CTestEditorApp::DetachCurrentObject()
 {
-    if (mState == StateNormal && mCurrentObject != nullptr)
+    if (mCurrentObject != nullptr)
     {
         mCurrentObject->SetDynamic(true);
         mCurrentObject = nullptr;
