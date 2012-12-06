@@ -108,6 +108,24 @@ void CTestApp3::Render()
 
 void CTestApp3::SetProcessors()
 {
+    GetEventSystem().SetMode("editor_mode");
+
+    GetEventSystem().SetProcessor("C-x", CAppEventProcessor(
+    [] () {},
+    [this] ()
+    {
+        GetEventSystem().SetMode("test3");
+    }));
+
+    GetEventSystem().SetMode("test3");
+
+    GetEventSystem().SetProcessor("C-x", CAppEventProcessor(
+    [] () {},
+    [this] ()
+    {
+        GetEventSystem().SetMode("editor_mode");
+    }));
+
     GetEventSystem().SetProcessor("w", CAppEventProcessor(
     [] () {},
     [this] ()
