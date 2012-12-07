@@ -43,7 +43,7 @@ public:
     inline void SetActiveCam(CCamera *_cam);
 
     /// returns acticvated cam
-    inline CCamera *GetActiveCam();
+    inline CCamera *GetActiveCam() const;
 
     /// aspect ratio is window width in pixels divided on widow height
     /// you should use correct value for using coordinates conversion methods
@@ -88,7 +88,7 @@ inline void CDebugDrawSystem::SetActiveCam(CCamera *_cam)
     mActiveCam = _cam;
 }
 
-inline CCamera *CDebugDrawSystem::GetActiveCam()
+inline CCamera *CDebugDrawSystem::GetActiveCam() const
 {
     return mActiveCam;
 }

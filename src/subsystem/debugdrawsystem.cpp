@@ -123,6 +123,68 @@ bool CDebugDrawSystem::WorldSpaceToScreenSpace(CVec2 &_pos, float _depth) const
 CFigure *CDebugDrawSystem::FindFigure(const CVec2 &_pos) const
 {
     CFigure *res = nullptr;
+
+    unsigned int i = 0;
+    bool brk = false;
+    float z_nearest = 0;
+
+    for (i = 0; i < GetScene()->EnumObjects(); i++)
+    {
+        CSceneObject *cur_obj = GetScene()->GetObjects()[i];
+
+        for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++)
+        {
+            CFigure *cur_fgr = cur_obj->GetFigures()[j];
+
+            float z = cur_obj->GetZ().Get() + cur_fgr->GetZ() - GetActiveCam()->GetZ().Get();
+            CVec2 pos = _pos;
+            ScreenSpaceToWorldSpace(pos, z);
+
+            if (cur_fgr->mFixture->TestPoint(pos))
+            {
+                res = cur_fgr;
+                z_nearest = z;
+                brk = true;
+            }
+
+            if (brk == true)
+            {
+                break;
+            }
+        }
+
+        if (brk == true)
+        {
+            break;
+        }
+    }
+
+    for (i; i < GetScene()->EnumObjects(); i++)
+    {
+        CSceneObject *cur_obj = GetScene()->GetObjects()[i];
+
+        for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++)
+        {
+            CFigure *cur_fgr = cur_obj->GetFigures()[j];
+
+            float z = cur_obj->GetZ().Get() + cur_fgr->GetZ() - GetActiveCam()->GetZ().Get();
+
+            if (z < z_nearest)
+            {
+                continue;
+            }
+
+            CVec2 pos = _pos;
+            ScreenSpaceToWorldSpace(pos, z);
+
+            if (cur_fgr->mFixture->TestPoint(pos))
+            {
+                res = cur_fgr;
+                z_nearest = z;
+            }
+        }
+    }
+
     return res;
 }
 

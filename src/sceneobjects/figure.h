@@ -53,6 +53,7 @@ class CFigure
 {
 public:
     friend class CSceneObject;
+    friend class CDebugDrawSystem;
 
     inline CSceneObject *GetSceneObject() const;
 
