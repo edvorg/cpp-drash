@@ -67,7 +67,7 @@ public:
 
     /// finds objects, visible at specified postion in screen space coordinates
     /// returns nearest one
-    CSceneObject *FindObject(const CVec2 &_pos);
+    CFigure *FindFigure(const CVec2 &_pos) const;
 
 	/// draws connected CScene instance's objects
     void Draw() const;

@@ -183,7 +183,7 @@ void CSceneObject::DrawDebug() const
     }
 }
 
-CSceneObject::CFigurePtr CSceneObject::CreateFigure( const CFigureParams &_params )
+CFigure *CSceneObject::CreateFigure(const CFigureParams &_params)
 {
     if (mFiguresCount >= mFiguresCountLimit)
     {
@@ -284,19 +284,6 @@ void CSceneObject::ComputeBoundingBox()
         mBoundingBox.Combine(mBoundingBox, fixture->GetAABB(0));
         fixture = fixture->GetNext();
     }
-}
-
-bool CSceneObject::TestPoint(CVec2 _world_point, float _z) const
-{
-    for (unsigned int i=0; i<mFiguresCount; i++)
-    {
-        if (mFigures[i]->TestPoint(_world_point, _z))
-        {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 } // namespace drash

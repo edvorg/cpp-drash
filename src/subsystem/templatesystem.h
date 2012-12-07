@@ -36,10 +36,6 @@ namespace drash
 class CTemplateSystem : public CSubsystem
 {
 public:
-//    typedef CDrashBodyTemplate *CDrashBodyTemplatePtr;
-//    typedef std::vector<CDrashBodyTemplatePtr> DrashBodyTemplatesT;
-
-
     typedef std::map<std::string, CDrashBodyGeometry*> DrashBodyTemplatesT;
     typedef std::pair<std::string,CDrashBodyGeometry*> MapDrashBodyItem;
 

@@ -111,7 +111,12 @@ void CTestApp2::SetProcessors()
     [this] ()// left mouse button pressed
     {
         // choose object here
-        mSelectedObject = GetDebugDrawSystem().FindObject(GetCursorPos());
+		mSelectedObject = nullptr;
+        CFigure *f = GetDebugDrawSystem().FindFigure(GetCursorPos());
+        if (f != nullptr)
+		{
+			mSelectedObject = f->GetSceneObject();
+		}
     },
     [this] ()// left mouse button is being pressed
     {

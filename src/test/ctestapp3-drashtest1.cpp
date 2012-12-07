@@ -180,11 +180,20 @@ void CTestApp3::SetProcessors()
     {
         if (mO1 == nullptr)
         {
-            mO1 = GetDebugDrawSystem().FindObject(GetCursorPos());
+            CFigure *f = GetDebugDrawSystem().FindFigure(GetCursorPos());
+            if (f != nullptr)
+            {
+                mO1 = f->GetSceneObject();
+            }
         }
         else if (mO2 == nullptr)
         {
-            mO2 = GetDebugDrawSystem().FindObject(GetCursorPos());
+            CFigure *f = GetDebugDrawSystem().FindFigure(GetCursorPos());
+            if (f != nullptr)
+            {
+                mO2 = f->GetSceneObject();
+            }
+
             if (mO1 == mO2)
             {
                 mO2 = nullptr;
@@ -203,7 +212,11 @@ void CTestApp3::SetProcessors()
     {
         if (mMoveObject == nullptr)
         {
-            mMoveObject = GetDebugDrawSystem().FindObject(GetCursorPos());
+            CFigure *f = GetDebugDrawSystem().FindFigure(GetCursorPos());
+            if (f != nullptr)
+            {
+                mMoveObject = f->GetSceneObject();
+            }
         }
         else
         {

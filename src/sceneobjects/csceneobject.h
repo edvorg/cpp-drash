@@ -76,8 +76,6 @@ public:
 
     typedef CSceneObjectGeometry GeometryT;
     typedef CSceneObjectParams ParamsT;
-    typedef CFigure *CFigurePtr;
-    typedef CFigurePtr FiguresT[mFiguresCountLimit];
 
     inline const b2Body* GetBody(void) const;
 
@@ -86,9 +84,9 @@ public:
 
     inline void SetDynamic( bool _dynamic );
 
-    CFigurePtr CreateFigure( const CFigureParams &_params );
+    CFigure *CreateFigure(const CFigureParams &_params);
     void DestroyFigure(CFigure *_figure);
-    inline const FiguresT &GetFigures();
+    inline CFigure * const *GetFigures();
     inline unsigned int EnumFigures() const;
 
     inline void ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos );
@@ -110,8 +108,6 @@ public:
 
     virtual void ComputeBoundingBox();
     inline const b2AABB &GetBoundingBox() const;
-
-    bool TestPoint(CVec2 _world_point, float _z) const;
 
 protected:
     CSceneObject(void);
@@ -138,7 +134,7 @@ private:
     CAnimatedParam<CVec2> mPos;
     CAnimatedParam<float> mAngle;
     float mColor[3];
-    FiguresT mFigures;
+    CFigure *mFigures[mFiguresCountLimit];
     unsigned int mFiguresCount = 0;
     CAnimatedParam<float> mZ;
 };
@@ -163,7 +159,7 @@ inline void CSceneObject::SetDynamic( bool _dynamic )
     mBody->SetType( _dynamic ? b2_dynamicBody : b2_kinematicBody );
 }
 
-inline const CSceneObject::FiguresT &CSceneObject::GetFigures()
+inline CFigure * const *CSceneObject::GetFigures()
 {
     return mFigures;
 }

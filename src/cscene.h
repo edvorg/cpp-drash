@@ -54,14 +54,6 @@ public:
     static const unsigned int mSubsystemsCountLimit = 5;
 
     // **************************************************
-    // * supporting types *******************************
-
-    typedef CSceneObject *CSceneObjectPtr;
-    typedef CSceneObjectPtr ObjectsT[mObjectsCountLimit];
-    typedef CSubsystem *CSubsystemPtr;
-    typedef CSubsystemPtr SystemsT[mSubsystemsCountLimit];
-
-    // **************************************************
     // * main routines **********************************
 
     CScene(void);
@@ -84,7 +76,7 @@ public:
 
     void DestroyObject(CSceneObject *_obj);
 
-    inline const ObjectsT &GetObjects(void) const;
+    inline CSceneObject * const * GetObjects(void) const;
 
     /// returns total objects count
     inline unsigned int EnumObjects(void) const;
@@ -108,7 +100,7 @@ public:
     /// as we made disconnect _subsystem, we lose pointer to this CScene instance
     void DisconnectSubsystem(CSubsystem *_subsystem);
 
-    inline const SystemsT &GetSubsystems(void) const;
+    inline CSubsystem * const * GetSubsystems(void) const;
 
     /// returns total connected subsystems count
     inline unsigned int EnumSubsystems(void) const;
@@ -123,10 +115,10 @@ private:
     b2World mWorld;
     CPhysObserver mObserver;
 
-    ObjectsT mObjects;
+    CSceneObject *mObjects[mObjectsCountLimit];
     unsigned int mObjectsCount = 0;
 
-    SystemsT mSubsystems;
+    CSubsystem *mSubsystems[mSubsystemsCountLimit];
     unsigned int mSubsystemsCount = 0;
 };
 
@@ -174,7 +166,7 @@ T* CScene::CreateObject(const typename T::GeometryT &_geometry, const typename T
     return res;
 }
 
-inline const CScene::ObjectsT &CScene::GetObjects(void) const
+inline CSceneObject * const * CScene::GetObjects(void) const
 {
     return mObjects;
 }
@@ -184,7 +176,7 @@ inline unsigned int CScene::EnumObjects(void) const
     return mObjectsCount;
 }
 
-inline const CScene::SystemsT &CScene::GetSubsystems(void) const
+inline CSubsystem * const * CScene::GetSubsystems(void) const
 {
     return mSubsystems;
 }
