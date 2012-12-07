@@ -84,19 +84,19 @@ void CTestEditorApp::SetProcessors()
 
     GetEventSystem().SetMode(std::string("editor_mode"));
 
-    GetEventSystem().SetProcessor("C-c C-c", CAppEventProcessor(
+    GetEventSystem().SetProcessor("C-c", CAppEventProcessor(
     [this] ()
     {
         CreateTemplate();
     }));
 
-    GetEventSystem().SetProcessor("C-c C-f", CAppEventProcessor(
+    GetEventSystem().SetProcessor("C-f", CAppEventProcessor(
     [this] ()
     {
         CreateFigure();
     }));
 
-    GetEventSystem().SetProcessor("C-c C-d", CAppEventProcessor(
+    GetEventSystem().SetProcessor("C-d", CAppEventProcessor(
     [this] ()
     {
         DetachCurrentObject();
