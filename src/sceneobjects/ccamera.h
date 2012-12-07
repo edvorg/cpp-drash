@@ -27,7 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define COBJECTCAMERA_H
 
 #include "csceneobject.h"
-#include "../misc/canimatedparam.h"
+#include "../misc/animatedparam.h"
 
 namespace drash
 {

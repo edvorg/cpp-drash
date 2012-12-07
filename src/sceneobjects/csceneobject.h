@@ -28,7 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <Box2D/Box2D.h>
 #include "figure.h"
-#include "../misc/canimatedparam.h"
+#include "../misc/animatedparam.h"
 
 namespace drash
 {

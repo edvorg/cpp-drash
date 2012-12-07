@@ -107,7 +107,7 @@ void CSceneObject::Step( double _dt )
         }
         else
         {
-            mPos.Set( mBody->GetWorldCenter() );
+            mPos.Set( mBody->GetWorldPoint(CVec2(0)) );
         }
 
         if ( mAngle.IsTargetSet() )
@@ -123,7 +123,7 @@ void CSceneObject::Step( double _dt )
     }
     else if ( mBody->GetType() == b2_dynamicBody )
     {
-        mPos.Set( mBody->GetWorldCenter() );
+        mPos.Set( mBody->GetWorldPoint(CVec2(0)) );
         mAngle.Set( mBody->GetAngle() );
     }
 }
@@ -142,7 +142,7 @@ void CSceneObject::OnContactEnd( const CContact &_contact )
 
 void CSceneObject::OnBoom( const CExplosionParams &_boom )
 {
-    CVec2 dir( GetBody()->GetWorldCenter() );
+    CVec2 dir( GetBody()->GetWorldPoint(CVec2(0)) );
     dir -= _boom.mPos;
 
     float k = drash::math::Min( dir.Length(), _boom.mStregth )/ _boom.mStregth;
@@ -270,7 +270,7 @@ void CSceneObject::SetPos(const CVec2 &_pos)
 
 void CSceneObject::SetAngle(float _angle)
 {
-    mBody->SetTransform( mBody->GetWorldCenter(), _angle );
+    mBody->SetTransform( mBody->GetWorldPoint(CVec2(0)), _angle );
     mAngle.Set(_angle);
 }
 

@@ -66,7 +66,7 @@ void CTestApp3::Step(double _dt)
     if (GetPlayersSystem().EnumPlayers())
     {
         CPlayer *p = GetPlayersSystem().GetPlayers()[0];
-        GetDebugDrawSystem().GetActiveCam()->SetPosTarget( p->GetBody()->GetWorldCenter(), 1.0, AnimationBehaviorSingle );
+        GetDebugDrawSystem().GetActiveCam()->SetPosTarget( p->GetBody()->GetWorldPoint(CVec2(0)), 1.0, AnimationBehaviorSingle );
     }
 
     mTime += _dt;
