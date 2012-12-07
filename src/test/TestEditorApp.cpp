@@ -107,7 +107,7 @@ void CTestEditorApp::CreateFigure()
 {
     if (mCurrentTemplate != nullptr)
     {
-        mCurrentTemplate->mGeometry.mFigures.resize(mCurrentTemplate->mGeometry.mFigures.size()+1);
+        mCurrentTemplate->mFigures.resize(mCurrentTemplate->mFigures.size()+1);
 
         GetEventSystem().SetMode(std::string("editor_figure_creation_mode"));
     }
@@ -117,10 +117,10 @@ void CTestEditorApp::CompleteFigure()
 {
     if (mCurrentTemplate != nullptr && mVertices.size() >= 3)
     {
-        mCurrentTemplate->mGeometry.mFigures.back().mVertices = mVertices;
+        mCurrentTemplate->mFigures.back().mVertices = mVertices;
 
-        for (auto i = mCurrentTemplate->mGeometry.mFigures.back().mVertices.begin();
-             i != mCurrentTemplate->mGeometry.mFigures.back().mVertices.end(); i++)
+        for (auto i = mCurrentTemplate->mFigures.back().mVertices.begin();
+             i != mCurrentTemplate->mFigures.back().mVertices.end(); i++)
         {
             GetDebugDrawSystem().ScreenSpaceToWorldSpace(*i, -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
         }
@@ -133,7 +133,7 @@ void CTestEditorApp::CompleteFigure()
 
         CSceneObjectParams p;
         p.mDynamic = false;
-        mCurrentObject = GetTemplateSystem().CreateSceneObjectFromTemplate(mCurrentTemplate->mName.c_str(), p);
+        mCurrentObject = GetScene().CreateObject<CSceneObject>(*mCurrentTemplate, p);
 
         mVertices.clear();
 

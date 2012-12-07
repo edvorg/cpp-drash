@@ -50,7 +50,7 @@ private:
 
     std::vector<CVec2> mVertices;
     unsigned int mTemplateCounter = 0;
-    CSceneObjectTemplate *mCurrentTemplate = nullptr;
+    CSceneObjectGeometry *mCurrentTemplate = nullptr;
     CSceneObject *mCurrentObject = nullptr;
 };
 

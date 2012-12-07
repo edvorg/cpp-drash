@@ -1,3 +1,27 @@
+// DRASH_LICENSE_BEGIN
+/*
+
+drash GPL Source Code
+Copyright (C) 2012 Edward Knyshov, Yuriy Shatilin.
+
+This file is part of the drash GPL Source Code (drash Source Code).
+
+drash Source Code is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+drash Source Code is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+// DRASH_LICENSE_END
+
 #include "ceditorapp.h"
 
 namespace drash {
@@ -11,30 +35,30 @@ bool CObjectEditorApp::Init()
     auto t = GetTemplateSystem().CreateSceneObjectTemplate("name1");
     if (t != nullptr)
     {
-        t->mGeometry.mFigures.resize(1);
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-2, -1));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(2, -1));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(1, 1));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-1, 1));
+        t->mFigures.resize(1);
+        t->mFigures[0].mVertices.push_back(CVec2(-2, -1));
+        t->mFigures[0].mVertices.push_back(CVec2(2, -1));
+        t->mFigures[0].mVertices.push_back(CVec2(1, 1));
+        t->mFigures[0].mVertices.push_back(CVec2(-1, 1));
     }
     t = GetTemplateSystem().CreateSceneObjectTemplate("name2");
     if (t != nullptr)
     {
-        t->mGeometry.mFigures.resize(1);
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(2, 1));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-2, 1));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-1, -1));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(1, -1));
+        t->mFigures.resize(1);
+        t->mFigures[0].mVertices.push_back(CVec2(2, 1));
+        t->mFigures[0].mVertices.push_back(CVec2(-2, 1));
+        t->mFigures[0].mVertices.push_back(CVec2(-1, -1));
+        t->mFigures[0].mVertices.push_back(CVec2(1, -1));
     }
     t = GetTemplateSystem().CreateSceneObjectTemplate("ground");
     if (t != nullptr)
     {
-        t->mGeometry.mFigures.resize(1);
-        t->mGeometry.mFigures[0].mDepth = 10;
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(50, 5));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-50, 5));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-50, -5));
-        t->mGeometry.mFigures[0].mVertices.push_back(CVec2(50, -5));
+        t->mFigures.resize(1);
+        t->mFigures[0].mDepth = 10;
+        t->mFigures[0].mVertices.push_back(CVec2(50, 5));
+        t->mFigures[0].mVertices.push_back(CVec2(-50, 5));
+        t->mFigures[0].mVertices.push_back(CVec2(-50, -5));
+        t->mFigures[0].mVertices.push_back(CVec2(50, -5));
     }
     SetProcessor();
 
@@ -55,8 +79,6 @@ void CObjectEditorApp::Render()
         }
         GetDebugDrawSystem().DrawLine(mVertexs[mVertexs.size() -1 ],GetCursorPos(),b2Color(0,255,0));
     }
-//    GetDebugDrawSystem().DrawLine();
-
 }
 
 void CObjectEditorApp::StartBuild()
@@ -93,7 +115,7 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
         return false;
     }
 
-    auto obj = GetTemplateSystem().FindTemplate                                  (_objectName);
+    auto obj = GetTemplateSystem().FindTemplate(_objectName);
     if (obj == nullptr) {
         return false;
     }
@@ -104,7 +126,7 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
                  -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
     });
     param.mVertices = mVertexs;
-    obj->mGeometry.mFigures.push_back(param);
+    obj->mFigures.push_back(param);
 
     ShowObject(_objectName);
 

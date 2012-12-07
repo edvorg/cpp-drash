@@ -88,11 +88,11 @@ bool CTestApp2::Init()
 void CTestApp2::SetProcessors()
 {    
     auto t = GetTemplateSystem().CreateSceneObjectTemplate("lambda_test");
-    t->mGeometry.mFigures.resize(1);
-    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(-10, -10));
-    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(10, -10));
-    t->mGeometry.mFigures[0].mVertices.push_back(CVec2(0, 10));
-    t->mGeometry.mFigures[0].mDepth = 3;
+    t->mFigures.resize(1);
+    t->mFigures[0].mVertices.push_back(CVec2(-10, -10));
+    t->mFigures[0].mVertices.push_back(CVec2(10, -10));
+    t->mFigures[0].mVertices.push_back(CVec2(0, 10));
+    t->mFigures[0].mDepth = 3;
 
 
 

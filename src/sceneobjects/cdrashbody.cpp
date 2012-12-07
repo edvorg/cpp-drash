@@ -66,7 +66,7 @@ void CDrashBody::Step( double _dt )
             i->mParams.mAngle += GetBody()->GetAngle();
             i->mParams.mZ += GetZ().Get();
 
-            CDrashBody *db = GetScene()->CreateObject<CDrashBody>(i->mTemplate->mGeometry, i->mParams);
+            CDrashBody *db = GetScene()->CreateObject<CDrashBody>(*(i->mTemplate), i->mParams);
 
             if (db == nullptr)
             {

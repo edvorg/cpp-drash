@@ -114,10 +114,10 @@ bool EditorWindow::UpdateTreeObject()
     for (auto item = tSys.GetSceneObjectTemplates().begin();
          item != tSys.GetSceneObjectTemplates().end() ; item++) {
        QTreeWidgetItem *objectItem = new QTreeWidgetItem(ui->mTreeObjects,
-                                                      QStringList(QString::fromStdString((*item)->mName)));
+                                                      QStringList(QString::fromStdString(item->first)));
        ui->mTreeObjects->addTopLevelItem(objectItem);
-       const CSceneObjectTemplate &ii = **item;
-       const CSceneObjectGeometry &geo = ii.mGeometry;
+//       const CSceneObjectGeometry &ii = *(item->second);
+       const CSceneObjectGeometry &geo = *(item->second);
        const std::vector<CFigureParams> &mF = geo.mFigures;
        for (auto fig = mF.begin() ; fig != mF.end() ; fig++) {
            CFigureParams par = *fig;
@@ -162,6 +162,7 @@ void EditorWindow::on_mNewObjectButton_clicked()
     str_name +=QString::number(mObjectApp->GetTemplateSystem().GetSceneObjectTemplates().size()+1);
     QTreeWidgetItem *newItem = new QTreeWidgetItem(ui->mTreeObjects,QStringList(str_name));
     newItem->setSelected(true);
+//    ui->mTreeObjects->SetS
     mObjectApp->AddNewObjectToTemplate(str_name.toStdString());
 
 }

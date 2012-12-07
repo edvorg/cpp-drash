@@ -32,7 +32,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
-class CDrashBodyTemplate;
+//class CDrashBodyTemplate;
 
 class CDrashBodyParams : public CSceneObjectParams
 {
@@ -41,10 +41,12 @@ public:
     float mDestroySpeed = 0;
 };
 
+class CDrashBodyGeometry;
+
 class CDrashBodyChild
 {
 public:
-    const CDrashBodyTemplate *mTemplate = nullptr;
+    const CDrashBodyGeometry *mTemplate = nullptr;
     CDrashBodyParams mParams;
 };
 
