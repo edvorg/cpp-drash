@@ -159,7 +159,7 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2 &_pos) const
         }
     }
 
-    for (i; i < GetScene()->EnumObjects(); i++)
+    for (; i < GetScene()->EnumObjects(); i++)
     {
         CSceneObject *cur_obj = GetScene()->GetObjects()[i];
 
@@ -236,11 +236,11 @@ void CDebugDrawSystem::Draw() const
         glTranslatef(-mActiveCam->mPos.Get().x,
                      -mActiveCam->mPos.Get().y,
                      -mActiveCam->GetZ().Get());
-        CVec2 pos = objects[i]->GetBody()->GetWorldPoint(CVec2(0));
+        CVec2 pos = objects[i]->GetPos().Get();
         glTranslatef(pos.x,
                      pos.y,
                      0);
-        glRotatef( 180.0f / M_PI * objects[i]->GetBody()->GetAngle(), 0, 0, 1 );
+        glRotatef( 180.0f / M_PI * objects[i]->GetAngle().Get(), 0, 0, 1 );
 
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);

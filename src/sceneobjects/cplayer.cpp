@@ -75,7 +75,7 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
         case CPlayerEvent::PlayerActionJump:
             if (mJumpAllowed)
             {
-                CVec2 v = GetBody()->GetLinearVelocity();
+                CVec2 v = GetLinearVelocity();
                 v.y = mSpeedJump;
                 SetLinearVelocity(v);
             }

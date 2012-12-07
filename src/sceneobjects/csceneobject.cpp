@@ -142,7 +142,7 @@ void CSceneObject::OnContactEnd( const CContact &_contact )
 
 void CSceneObject::OnBoom( const CExplosionParams &_boom )
 {
-    CVec2 dir( GetBody()->GetWorldPoint(CVec2(0)) );
+    CVec2 dir(GetPos().Get());
     dir -= _boom.mPos;
 
     float k = drash::math::Min( dir.Length(), _boom.mStregth )/ _boom.mStregth;

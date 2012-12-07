@@ -66,7 +66,7 @@ void CTestApp3::Step(double _dt)
     if (GetPlayersSystem().EnumPlayers())
     {
         CPlayer *p = GetPlayersSystem().GetPlayers()[0];
-        GetDebugDrawSystem().GetActiveCam()->SetPosTarget( p->GetBody()->GetWorldPoint(CVec2(0)), 1.0, AnimationBehaviorSingle );
+        GetDebugDrawSystem().GetActiveCam()->SetPosTarget(p->GetPos().Get(), 1.0, AnimationBehaviorSingle );
     }
 
     mTime += _dt;
@@ -221,7 +221,7 @@ void CTestApp3::SetProcessors()
         else
         {
             /// if our body is not dynamic. it wil never stop, until we make it's velocity module to 0
-            if (mMoveObject->GetBody()->GetType() == b2_kinematicBody)
+            if (mMoveObject->IsDynamic() == false)
             {
                 mMoveObject->SetLinearVelocity(CVec2(0));
             }

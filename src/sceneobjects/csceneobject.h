@@ -77,12 +77,11 @@ public:
     typedef CSceneObjectGeometry GeometryT;
     typedef CSceneObjectParams ParamsT;
 
-    inline const b2Body* GetBody(void) const;
-
     inline CScene *GetScene();
     inline const CScene *GetScene() const;
 
-    inline void SetDynamic( bool _dynamic );
+    inline void SetDynamic(bool _dynamic);
+    inline bool IsDynamic() const;
 
     CFigure *CreateFigure(const CFigureParams &_params);
     void DestroyFigure(CFigure *_figure);
@@ -90,10 +89,14 @@ public:
     inline unsigned int EnumFigures() const;
 
     inline void ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos );
-    inline void SetLinearVelocity( const CVec2 &_vel );
-    inline void SetAngularVelocity( float _vel );
+    inline void SetLinearVelocity(const CVec2 &_vel);
+    inline CVec2 GetLinearVelocity() const;
+    inline void SetAngularVelocity(float _vel);
+    inline float GetAngularVelocity() const;
     inline void SetFixedRotation( bool _fixed );
     inline void SetActive( bool _active );
+
+    inline CVec2 GetWorldPoint(const CVec2 &_local_point) const;
 
     void SetPos( const CVec2 &_pos );
     inline void SetPosTarget( const CVec2 &_target, double _time, const AnimationBehavior &_behavior );
@@ -139,11 +142,6 @@ private:
     CAnimatedParam<float> mZ;
 };
 
-inline const b2Body *CSceneObject::GetBody() const
-{
-    return mBody;
-}
-
 inline CScene *CSceneObject::GetScene()
 {
     return mScene;
@@ -157,6 +155,11 @@ inline const CScene *CSceneObject::GetScene() const
 inline void CSceneObject::SetDynamic( bool _dynamic )
 {
     mBody->SetType( _dynamic ? b2_dynamicBody : b2_kinematicBody );
+}
+
+inline bool CSceneObject::IsDynamic() const
+{
+    return mBody->GetType() == b2_dynamicBody ? true : false;
 }
 
 inline CFigure * const *CSceneObject::GetFigures()
@@ -174,14 +177,24 @@ inline void CSceneObject::ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_p
     mBody->ApplyLinearImpulse( _dir, _pos );
 }
 
-inline void CSceneObject::SetLinearVelocity( const CVec2 &_vel )
+inline void CSceneObject::SetLinearVelocity(const CVec2 &_vel)
 {
     mBody->SetLinearVelocity(_vel);
 }
 
-inline void CSceneObject::SetAngularVelocity( float _vel )
+inline CVec2 CSceneObject::GetLinearVelocity() const
+{
+    return mBody->GetLinearVelocity();
+}
+
+inline void CSceneObject::SetAngularVelocity(float _vel)
 {
     mBody->SetAngularVelocity(_vel);
+}
+
+float CSceneObject::GetAngularVelocity() const
+{
+    return mBody->GetAngularVelocity();
 }
 
 inline void CSceneObject::SetFixedRotation( bool _fixed )
@@ -192,6 +205,11 @@ inline void CSceneObject::SetFixedRotation( bool _fixed )
 inline void CSceneObject::SetActive( bool _active )
 {
     mBody->SetActive(_active);
+}
+
+CVec2 CSceneObject::GetWorldPoint(const CVec2 &_local_point) const
+{
+    return mBody->GetWorldPoint(_local_point);
 }
 
 inline void CSceneObject::SetPosTarget( const CVec2 &_target, double _time, const AnimationBehavior &_behavior )
