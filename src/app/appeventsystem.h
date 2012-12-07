@@ -42,6 +42,8 @@ public:
 
 protected:
 private:
+    int PressEventImpl(const CAppEvent &_event);
+
     /// contains all current events
     /// PressEvent invokation adds event to mCurrentState
     /// ReleaseEvent invokation removes event from mCurrentState
