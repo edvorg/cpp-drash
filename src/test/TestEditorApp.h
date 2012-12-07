@@ -45,6 +45,8 @@ private:
     void CompleteFigure();
     void CreateTemplate();
     void DetachCurrentObject();
+    void ChooseFigure();
+    void MoveFigure();
 
     double mTime = 0;
 
@@ -52,6 +54,8 @@ private:
     unsigned int mTemplateCounter = 0;
     CSceneObjectGeometry *mCurrentTemplate = nullptr;
     CSceneObject *mCurrentObject = nullptr;
+    CFigure *mCurrentFigure = nullptr;
+    CVec2 mLastCursorPos;
 };
 
 } // namespace drash
