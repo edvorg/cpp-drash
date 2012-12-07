@@ -57,6 +57,7 @@ public:
 
     inline CSceneObject *GetSceneObject() const;
 
+    void SetVertices(const CVec2 *_vertices, unsigned int _count);
     const b2Vec2 *GetVertices() const;
     unsigned int EnumVertices() const;
 

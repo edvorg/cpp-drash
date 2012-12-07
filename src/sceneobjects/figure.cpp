@@ -33,6 +33,19 @@ CFigureParams::CFigureParams()
 {
 }
 
+void CFigure::SetVertices(const CVec2 *_vertices, unsigned int _count)
+{
+    if (mFixture == nullptr ||
+        mFixture->GetShape() == nullptr ||
+        mFixture->GetShape()->GetType() != b2Shape::e_polygon)
+    {
+        return;
+    }
+
+    reinterpret_cast<b2PolygonShape*>(mFixture->GetShape())->Set(_vertices, _count);
+    mFixture->GetBody()->ResetMassData();
+}
+
 const b2Vec2 *CFigure::GetVertices() const
 {
     if (mFixture == nullptr ||
