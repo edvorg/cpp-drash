@@ -82,6 +82,12 @@ void CTestEditorApp::SetProcessors()
         GetEventSystem().SetMode(std::string("editor_mode"));
     }));
 
+    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
+    [this] ()
+    {
+        this->Quit();
+    }));
+
     ////////////////////////////////////////////////////////////////////////
 
     GetEventSystem().SetMode(std::string("editor_figure_creation_mode"));
@@ -96,6 +102,12 @@ void CTestEditorApp::SetProcessors()
     [this] ()
     {
         CompleteFigure();
+    }));
+
+    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
+    [this] ()
+    {
+        this->Quit();
     }));
 
     ////////////////////////////////////////////////////////////////////////
@@ -124,6 +136,12 @@ void CTestEditorApp::SetProcessors()
     [this] ()
     {
         ChooseFigure();
+    }));
+
+    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
+    [this] ()
+    {
+        this->Quit();
     }));
 }
 

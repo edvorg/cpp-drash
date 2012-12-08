@@ -218,7 +218,11 @@ void CTestApp3::SetProcessors()
                 mMoveObject = f->GetSceneObject();
             }
         }
-        else
+    },
+    [] () {},
+    [this] ()
+    {
+        if (mMoveObject != nullptr)
         {
             /// if our body is not dynamic. it wil never stop, until we make it's velocity module to 0
             if (mMoveObject->IsDynamic() == false)
@@ -243,6 +247,12 @@ void CTestApp3::SetProcessors()
         float pos = GetDebugDrawSystem().GetActiveCam()->GetZ().GetTarget();
         pos -= 10.0f;
         GetDebugDrawSystem().GetActiveCam()->GetZ().SetTarget(pos, 0.3, AnimationBehaviorSingle);
+    }));
+
+    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
+    [this] ()
+    {
+        this->Quit();
     }));
 }
 
