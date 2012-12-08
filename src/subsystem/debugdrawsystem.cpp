@@ -268,4 +268,23 @@ void CDebugDrawSystem::DrawLine(const CVec2 _p1, const CVec2 _p2, const b2Color 
     glEnd();
 }
 
+void CDebugDrawSystem::DrawPoint(const CVec2 _p, float _size, const b2Color &_col) const
+{
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-0.5, 0.5, -0.5, 0.5, 1, -1);
+
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+
+    glPointSize(_size);
+
+    glBegin(GL_POINTS);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex2f(_p.x, _p.y);
+    glEnd();
+}
+
 }// namespace drash

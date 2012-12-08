@@ -76,6 +76,9 @@ public:
     /// and color
     void DrawLine(const CVec2 _p1, const CVec2 _p2, const b2Color &_col) const;
 
+    /// draws point giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
+    void DrawPoint(const CVec2 _p, float _size, const b2Color &_col) const;
+
 protected:
 private:
     CCamera *mActiveCam = nullptr;
