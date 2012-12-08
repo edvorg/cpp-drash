@@ -38,7 +38,7 @@ bool CTestApp2::Init()
         return false;
     }
 
-    GetDebugDrawSystem().GetActiveCam()->SetZ(300);
+    GetDebugDrawSystem().GetActiveCam()->GetZ().Set(300);
 
     SetProcessors();
 
@@ -125,7 +125,7 @@ void CTestApp2::SetProcessors()
         {
             CVec2 pos = GetCursorPos();
             GetDebugDrawSystem().ScreenSpaceToWorldSpace(pos, mSelectedObject->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
-            mSelectedObject->SetPos(pos);
+            mSelectedObject->GetPos().Set(pos);
         }
     }));
 

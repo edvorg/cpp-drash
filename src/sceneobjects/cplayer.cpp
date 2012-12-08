@@ -90,13 +90,13 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
             break;
 
         case CPlayerEvent::PlayerActionMoveDeep:
-            SetZTarget(GetZ().Get()-5, 0.5, AnimationBehaviorSingle);
+            GetZ().SetTarget(GetZ().Get()-5, 0.5, AnimationBehaviorSingle);
             SetActive(false);
             SetActive(true);
             break;
 
         case CPlayerEvent::PlayerActionMoveOut:
-            SetZTarget(GetZ().Get()+5, 0.5, AnimationBehaviorSingle);
+            GetZ().SetTarget(GetZ().Get()+5, 0.5, AnimationBehaviorSingle);
             SetActive(false);
             SetActive(true);
             break;

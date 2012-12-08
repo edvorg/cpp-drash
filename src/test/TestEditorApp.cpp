@@ -40,7 +40,7 @@ bool CTestEditorApp::Init()
         return false;
     }
 
-    GetDebugDrawSystem().GetActiveCam()->SetZ(100);
+    GetDebugDrawSystem().GetActiveCam()->GetZ().Set(100);
 
     SetProcessors();
 

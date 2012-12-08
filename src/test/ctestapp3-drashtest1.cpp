@@ -43,7 +43,7 @@ bool CTestApp3::Init()
 
     InitObjects();
 
-    GetDebugDrawSystem().GetActiveCam()->SetZTarget( 280, 1.0f, AnimationBehaviorSingle );
+    GetDebugDrawSystem().GetActiveCam()->GetZ().SetTarget(280, 1.0f, AnimationBehaviorSingle);
 
     return true;
 }
@@ -66,7 +66,7 @@ void CTestApp3::Step(double _dt)
     if (GetPlayersSystem().EnumPlayers())
     {
         CPlayer *p = GetPlayersSystem().GetPlayers()[0];
-        GetDebugDrawSystem().GetActiveCam()->SetPosTarget(p->GetPos().Get(), 1.0, AnimationBehaviorSingle );
+        GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(p->GetPos().Get(), 1.0, AnimationBehaviorSingle );
     }
 
     mTime += _dt;
@@ -234,7 +234,7 @@ void CTestApp3::SetProcessors()
     {
         float pos = GetDebugDrawSystem().GetActiveCam()->GetZ().GetTarget();
         pos += 10.0f;
-        GetDebugDrawSystem().GetActiveCam()->SetZTarget( pos, 0.3, AnimationBehaviorSingle );
+        GetDebugDrawSystem().GetActiveCam()->GetZ().SetTarget(pos, 0.3, AnimationBehaviorSingle);
     }));
 
     GetEventSystem().SetProcessor("WHDN", CAppEventProcessor(
@@ -242,7 +242,7 @@ void CTestApp3::SetProcessors()
     {
         float pos = GetDebugDrawSystem().GetActiveCam()->GetZ().GetTarget();
         pos -= 10.0f;
-        GetDebugDrawSystem().GetActiveCam()->SetZTarget( pos, 0.3, AnimationBehaviorSingle );
+        GetDebugDrawSystem().GetActiveCam()->GetZ().SetTarget(pos, 0.3, AnimationBehaviorSingle);
     }));
 }
 
@@ -357,9 +357,9 @@ void CTestApp3::InitObjects()
     platform_params.mDynamic = false;
 
     CSceneObject *platform = GetScene().CreateObject<CSceneObject>(platform_geometry, platform_params);
-    platform->SetPos( CVec2( -100, 50 ) );
-    platform->SetPosTarget( CVec2( 100, 50 ), 10, AnimationBehaviorBounce );
-    platform->SetAngleTarget( M_PI / 18.0, 10, AnimationBehaviorBounce );
+    platform->GetPos().Set(CVec2(-100, 50));
+    platform->GetPos().SetTarget(CVec2(100, 50), 10, AnimationBehaviorBounce);
+    platform->GetAngle().SetTarget(M_PI / 18.0, 10, AnimationBehaviorBounce);
 
     static const unsigned int segments = 16;
     static const float d_angle = M_PI * 2.0 / static_cast<double>(segments);

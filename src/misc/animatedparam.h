@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define CANIMATEDPARAM_H
 
 #include "../diag/clogger.h"
+#include <functional>
 
 namespace drash
 {
@@ -43,6 +44,7 @@ class CAnimatedParam
 {
 public:
     CAnimatedParam();
+    CAnimatedParam(std::function<void (const T&)> _sync_handler);
 
     void Set( const T &_val );
     void SetTarget( const T &_target, double _time, const AnimationBehavior &_behavior );
@@ -59,21 +61,21 @@ private:
     T mValue;
     T mFromValue;
     T mTargetValue;
-    double mTimeElapsed;
-    double mTimeFull;
-    bool mTargetSet;
-    AnimationBehavior mBehavior;
+    double mTimeElapsed = 0;
+    double mTimeFull = 0;
+    bool mTargetSet = false;
+    AnimationBehavior mBehavior = AnimationBehaviorSingle;
+    std::function<void (const T&)> mSyncHandler = [] (const T&) {};
 };
 
 template <class T>
-CAnimatedParam<T>::CAnimatedParam():
-    mValue(),
-    mFromValue(),
-    mTargetValue(),
-    mTimeElapsed(0.0),
-    mTimeFull(0.0),
-    mTargetSet(false),
-    mBehavior(AnimationBehaviorSingle)
+CAnimatedParam<T>::CAnimatedParam()
+{
+}
+
+template <class T>
+CAnimatedParam<T>::CAnimatedParam(std::function<void (const T&)> _sync_handler):
+    mSyncHandler(_sync_handler)
 {
 }
 
@@ -82,6 +84,7 @@ void CAnimatedParam<T>::Set( const T &_val )
 {
     mTargetSet = false;
     mValue = _val;
+    mSyncHandler(mValue);
 }
 
 template <class T>

@@ -33,14 +33,18 @@ namespace drash
 {
 
 CSceneObject::CSceneObject(void):
-    mBody(NULL),
-    mScene(NULL),
-    mDead(false),
-    mInternalId(-1)
+    mPos([this] (const CVec2 &_new_value)
+    {
+        mBody->SetTransform(_new_value, mBody->GetAngle());
+    }),
+    mAngle([this] (const float &_new_value)
+    {
+        mBody->SetTransform(mBody->GetWorldPoint(CVec2(0)), _new_value);
+    })
 {
-    mColor[0] = Randf( 0.15f, 0.8f, 0.01f );
-    mColor[1] = Randf( 0.15f, 0.8f, 0.01f );
-    mColor[2] = Randf( 0.15f, 0.8f, 0.01f );
+    mColor[0] = Randf(0.35f, 0.9f, 0.01f);
+    mColor[1] = Randf( 0.35f, 0.9f, 0.01f);
+    mColor[2] = Randf(0.35f, 0.9f, 0.01f);
 }
 
 CSceneObject::~CSceneObject(void)
@@ -260,18 +264,6 @@ void CSceneObject::DestroyFigure(CFigure *_figure)
     }
 
     delete _figure;
-}
-
-void CSceneObject::SetPos(const CVec2 &_pos)
-{
-    mBody->SetTransform( _pos, mBody->GetAngle() );
-    mPos.Set(_pos);
-}
-
-void CSceneObject::SetAngle(float _angle)
-{
-    mBody->SetTransform( mBody->GetWorldPoint(CVec2(0)), _angle );
-    mAngle.Set(_angle);
 }
 
 void CSceneObject::ComputeBoundingBox()
