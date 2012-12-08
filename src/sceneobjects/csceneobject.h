@@ -85,7 +85,7 @@ public:
 
     CFigure *CreateFigure(const CFigureParams &_params);
     void DestroyFigure(CFigure *_figure);
-    inline CFigure * const *GetFigures();
+    inline CFigure * const *GetFigures() const;
     inline unsigned int EnumFigures() const;
 
     inline void ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos );
@@ -111,6 +111,8 @@ public:
 
     virtual void ComputeBoundingBox();
     inline const b2AABB &GetBoundingBox() const;
+
+    friend CLogger &operator <<(CLogger &_logger, const CSceneObject &_object);
 
 protected:
     CSceneObject(void);
@@ -162,7 +164,7 @@ inline bool CSceneObject::IsDynamic() const
     return mBody->GetType() == b2_dynamicBody ? true : false;
 }
 
-inline CFigure * const *CSceneObject::GetFigures()
+inline CFigure * const *CSceneObject::GetFigures() const
 {
     return mFigures;
 }

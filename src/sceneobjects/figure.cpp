@@ -70,6 +70,20 @@ unsigned int CFigure::EnumVertices() const
     return reinterpret_cast<b2PolygonShape*>(mFixture->GetShape())->GetVertexCount();
 }
 
+CLogger &operator <<(CLogger &_logger, const CFigure &_figure)
+{
+    if (_figure.EnumVertices())
+    {
+        _logger<<'{';
+        for (unsigned int i = 0; i < _figure.EnumVertices(); i++)
+        {
+            _logger<<_figure.GetVertices()[i]<<' ';
+        }
+        _logger<<"} depth: "<<_figure.mDepth<<" local_z: "<<_figure.mZ;
+    }
+    return _logger;
+}
+
 CFigure::CFigure()
 {
 }

@@ -29,6 +29,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
+class CLogger;
+
 class CTimer
 {
 public:
@@ -47,6 +49,8 @@ public:
 
     /// time (seconds) spent between last two Tick() invokations
     double GetDeltaTime() const;
+
+    friend CLogger &operator <<(CLogger &_logger, const CTimer &_timer);
 
 private:
     void Update();

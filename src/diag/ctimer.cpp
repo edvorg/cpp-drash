@@ -75,6 +75,12 @@ double CTimer::GetDeltaTime() const
     return ( mCurrTime - mPrevTime ) / 1000000000.0;
 }
 
+CLogger &operator <<(CLogger &_logger, const CTimer &_timer)
+{
+    _logger<<"t: "<<_timer.GetFullTime()<<" dt: "<<_timer.GetDeltaTime();
+    return _logger;
+}
+
 void CTimer::Update()
 {
     timespec ts;

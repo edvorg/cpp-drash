@@ -286,4 +286,14 @@ void CSceneObject::ComputeBoundingBox()
     }
 }
 
+CLogger &operator <<(CLogger &_logger, const CSceneObject &_object)
+{
+    _logger<<"pos: "<<_object.mPos<<" angle: "<<_object.mAngle<<" world_z: "<<_object.mZ<<'\n';
+    for (unsigned int i = 0; i < _object.EnumFigures(); i++)
+    {
+        _logger<<*_object.GetFigures()[i]<<'\b';
+    }
+    return _logger;
+}
+
 } // namespace drash

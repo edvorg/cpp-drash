@@ -66,6 +66,8 @@ public:
     inline float GetDepth() const;
     inline void SetDepth(float _depth);
 
+    friend CLogger &operator <<(CLogger &_logger, const CFigure &_figure);
+
 protected:
 private:
     CFigure();

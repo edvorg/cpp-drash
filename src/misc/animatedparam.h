@@ -26,6 +26,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CANIMATEDPARAM_H
 #define CANIMATEDPARAM_H
 
+#include "../diag/clogger.h"
+
 namespace drash
 {
 
@@ -154,6 +156,21 @@ void CAnimatedParam<T>::Step( double _dt )
             mValue += mFromValue;
         }
     }
+}
+
+template <class T>
+CLogger &operator <<(CLogger &_logger, const CAnimatedParam<T> &_param)
+{
+    _logger<<"val: "<<_param.Get()<<" target: ";
+    if (_param.IsTargetSet())
+    {
+        _logger<<_param.GetTarget();
+    }
+    else
+    {
+        _logger<<"none";
+    };
+    return _logger;
 }
 
 } // namespace drash
