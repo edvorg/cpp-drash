@@ -160,7 +160,7 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
                                                _event->y()));
     mApp->SetCursorPos(pos);
 
-    mApp->GetEventSystem().PressEvent(CAppEvent(ConvertKey(_event->button())));
+    mApp->GetEventSystem().BeginEvent(CAppEvent(ConvertKey(_event->button())));
 }
 
 void SceneWidget::mouseReleaseEvent(QMouseEvent *_event)
@@ -172,7 +172,7 @@ void SceneWidget::mouseReleaseEvent(QMouseEvent *_event)
         return;
     }
 
-    mApp->GetEventSystem().ReleaseEvent(CAppEvent(ConvertKey(_event->button())));
+    mApp->GetEventSystem().EndEvent(CAppEvent(ConvertKey(_event->button())));
 }
 
 void SceneWidget::mouseMoveEvent(QMouseEvent *_event)
@@ -200,7 +200,7 @@ void SceneWidget::keyPressEvent( QKeyEvent *_event )
 
     if (_event->isAutoRepeat() == false)
     {
-        mApp->GetEventSystem().PressEvent(CAppEvent(ConvertKey(_event->key())));
+        mApp->GetEventSystem().BeginEvent(CAppEvent(ConvertKey(_event->key())));
     }
 }
 
@@ -215,7 +215,7 @@ void SceneWidget::keyReleaseEvent(QKeyEvent *_event)
 
     if (_event->isAutoRepeat() == false)
     {
-        mApp->GetEventSystem().ReleaseEvent(CAppEvent(ConvertKey(_event->key())));
+        mApp->GetEventSystem().EndEvent(CAppEvent(ConvertKey(_event->key())));
     }
 }
 
@@ -228,6 +228,6 @@ void SceneWidget::wheelEvent( QWheelEvent *_event )
         return;
     }
 
-    mApp->GetEventSystem().PressEvent(CAppEvent(_event->delta() > 0 ? EventKeyWheelUp : EventKeyWheelDown));
-    mApp->GetEventSystem().ReleaseEvent(CAppEvent(_event->delta() > 0 ? EventKeyWheelUp : EventKeyWheelDown));
+    mApp->GetEventSystem().BeginEvent(CAppEvent(_event->delta() > 0 ? EventKeyWheelUp : EventKeyWheelDown));
+    mApp->GetEventSystem().EndEvent(CAppEvent(_event->delta() > 0 ? EventKeyWheelUp : EventKeyWheelDown));
 }

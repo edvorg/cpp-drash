@@ -11,6 +11,11 @@
 namespace drash
 {
 
+#define STATE_NORMAL 0x01
+#define STATE_BEGIN 0x02
+#define STATE_PROCESSING 0x04
+#define STATE_END 0x08
+
 class CAppEventCombinationTree
 {
 public:
@@ -23,7 +28,7 @@ private:
     CAppEventProcessor mProcessor;
     CAppEventCombination mCombination;
     std::list<CAppEventCombinationTree> mChilds;
-    bool mOperationLock = false;
+    int mState = STATE_NORMAL;
 };
 
 class CAppEventSystem
@@ -37,16 +42,16 @@ public:
 
     void Process();
 
-    void PressEvent(const CAppEvent &_event);
-    void ReleaseEvent(const CAppEvent &_event);
+    void BeginEvent(const CAppEvent &_event);
+    void EndEvent(const CAppEvent &_event);
 
 protected:
 private:
     int PressEventImpl(const CAppEvent &_event);
 
     /// contains all current events
-    /// PressEvent invokation adds event to mCurrentState
-    /// ReleaseEvent invokation removes event from mCurrentState
+    /// BeginEvent invokation adds event to mCurrentState
+    /// EndEvent invokation removes event from mCurrentState
     CAppEventCombination mCurrentState;
 
     /// contains combinations being processed
@@ -67,8 +72,6 @@ private:
 
     /// start point for searching of combinations to process
     CAppEventCombinationTree *mCurrentNode = nullptr;
-
-    bool mModeChanged = false;
 };
 
 } // namespace drash
