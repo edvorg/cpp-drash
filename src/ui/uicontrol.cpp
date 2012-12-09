@@ -3,8 +3,4 @@
 namespace drash
 {
 
-CUIControl::CUIControl()
-{
-}
-
 } // namespace drash
