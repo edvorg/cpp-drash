@@ -9,6 +9,8 @@ namespace drash
 class CUIControl final
 {
 public:
+    friend class CUISystem;
+
     CUIControl() = default;
     CUIControl(const CUIControl &) = delete;
     CUIControl(CUIControl &&) = delete;

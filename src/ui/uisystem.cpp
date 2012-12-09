@@ -30,4 +30,19 @@ CUIControl *CUISystem::CreateControl()
     return mControls[mControlsCount++] = new CUIControl;
 }
 
+void CUISystem::DestroyControl(CUIControl *_control)
+{
+    for (unsigned int i = 0; i < mControlsCount; i++)
+    {
+        if (mControls[i] == _control)
+        {
+            _control->mDestroyHandler();
+            delete _control;
+            mControls[i] = nullptr;
+            mControlsCount--;
+            return;
+        }
+    }
+}
+
 } // namespace drash

@@ -21,6 +21,7 @@ public:
     void Release();
 
     CUIControl *CreateControl();
+    void DestroyControl(CUIControl *_control);
 
 private:
     CUIControl *mControls[mControlsCountLimit];
