@@ -31,7 +31,6 @@ SOURCES += ../src/main.cpp\
     ../src/sceneobjects/ccamera.cpp \
     ../src/sceneobjects/explosion.cpp \
     ../src/test/test.cpp \
-    ../src/test/ctestapp4.cpp \
     ../src/subsystem/subsystem.cpp \
     ../src/subsystem/explosionsystem.cpp \
     ../src/subsystem/playerssystem.cpp \
@@ -51,7 +50,8 @@ SOURCES += ../src/main.cpp\
     ../src/app/appeventcombination.cpp \
     ../src/test/TestEditorApp.cpp \
     ../src/ui/uisystem.cpp \
-    ../src/ui/uicontrol.cpp
+    ../src/ui/uicontrol.cpp \
+    ../src/test/test4.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -71,7 +71,6 @@ HEADERS  += ../src/gamewindow.h \
     ../src/sceneobjects/explosion.h \
     ../src/test/test.h \
     ../src/diag/assert.h \
-    ../src/test/ctestapp4.h \
     ../src/subsystem/subsystem.h \
     ../src/subsystem/explosionsystem.h \
     ../src/subsystem/playerssystem.h \
@@ -91,7 +90,8 @@ HEADERS  += ../src/gamewindow.h \
     ../src/app/appeventcombination.h \
     ../src/test/TestEditorApp.h \
     ../src/ui/uisystem.h \
-    ../src/ui/uicontrol.h
+    ../src/ui/uicontrol.h \
+    ../src/test/test4.h
 
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui
