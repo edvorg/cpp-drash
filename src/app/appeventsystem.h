@@ -36,6 +36,9 @@ class CAppEventSystem
 public:
     CAppEventSystem();
 
+    bool Init();
+    void Release();
+
     static bool ValidateModeName(const std::string &_name);
     bool SetMode(const std::string &_name);
     void SetProcessor(const char *_combinations, const CAppEventProcessor &_processor);
