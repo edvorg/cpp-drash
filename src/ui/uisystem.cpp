@@ -1,6 +1,7 @@
 #include "uisystem.h"
 
 #include "uicontrol.h"
+#include "uiwidget.h"
 
 namespace drash
 {
@@ -18,6 +19,25 @@ void CUISystem::Release()
         mControls[i] = nullptr;
     }
     mControlsCount = 0;
+}
+
+bool CUISystem::ConnectWidget(CUIWidget &_widget)
+{
+    if (_widget.mControl != nullptr)
+    {
+        this->DisconnectWidget(_widget);
+    }
+
+    _widget.mControl = this->CreateControl();
+    _widget.SetControlHandlers();
+
+    return _widget.mControl != nullptr;
+}
+
+void CUISystem::DisconnectWidget(CUIWidget &_widget)
+{
+    DestroyControl(_widget.mControl);
+    _widget.mControl = nullptr;
 }
 
 CUIControl *CUISystem::CreateControl()

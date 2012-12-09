@@ -5,6 +5,7 @@ namespace drash
 {
 
 class CUIControl;
+class CUIWidget;
 
 class CUISystem final
 {
@@ -20,10 +21,14 @@ public:
     bool Init();
     void Release();
 
+    bool ConnectWidget(CUIWidget &_widget);
+    void DisconnectWidget(CUIWidget &_widget);
+
+protected:
+private:
     CUIControl *CreateControl();
     void DestroyControl(CUIControl *_control);
 
-private:
     CUIControl *mControls[mControlsCountLimit];
     unsigned int mControlsCount = 0;
 };
