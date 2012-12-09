@@ -43,6 +43,8 @@ bool CApp::Init()
         return false;
     }
 
+    mUISystem.Init();
+
     mExplosionSystem.SetScene(&mScene);
     mPlayersSystem.SetScene(&mScene);
     mTemplateSystem.SetScene(&mScene);
@@ -62,6 +64,7 @@ bool CApp::Init()
 
 void CApp::Release()
 {
+    mUISystem.Release();
     mPlayersSystem.Release();
     mExplosionSystem.Release();
     mTemplateSystem.Release();

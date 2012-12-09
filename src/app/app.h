@@ -32,6 +32,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../subsystem/templatesystem.h"
 #include "../subsystem/debugdrawsystem.h"
 #include "appeventsystem.h"
+#include "../ui/uisystem.h"
 
 #include <list>
 
@@ -62,6 +63,7 @@ public:
     inline CPlayersSystem &GetPlayersSystem();
     inline CTemplateSystem &GetTemplateSystem();
     inline CDebugDrawSystem &GetDebugDrawSystem();
+    inline CUISystem &GetUISystem();
 
     /// used to make CApp childs about mouse moving event
     /// use this from your CApp back end (Qt, SDL, etc.)
@@ -84,6 +86,7 @@ private:
     CPlayersSystem mPlayersSystem;
     CTemplateSystem mTemplateSystem;
     CDebugDrawSystem mDebugDrawSystem;
+    CUISystem mUISystem;
 
     std::function<void ()> mQuitHandler = [] () {};
     bool mQuit = false;
@@ -132,6 +135,11 @@ inline CTemplateSystem &CApp::GetTemplateSystem()
 inline CDebugDrawSystem &CApp::GetDebugDrawSystem()
 {
     return mDebugDrawSystem;
+}
+
+inline CUISystem &CApp::GetUISystem()
+{
+    return mUISystem;
 }
 
 inline void CApp::SetCursorPos(const CVec2 &_pos)
