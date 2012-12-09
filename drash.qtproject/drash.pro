@@ -49,7 +49,9 @@ SOURCES += ../src/main.cpp\
     ../src/app/appeventsystem.cpp \
     ../src/app/appeventprocessor.cpp \
     ../src/app/appeventcombination.cpp \
-    ../src/test/TestEditorApp.cpp
+    ../src/test/TestEditorApp.cpp \
+    ../src/ui/uisystem.cpp \
+    ../src/ui/uicontrol.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -87,7 +89,9 @@ HEADERS  += ../src/gamewindow.h \
     ../src/app/appeventsystem.h \
     ../src/app/appeventprocessor.h \
     ../src/app/appeventcombination.h \
-    ../src/test/TestEditorApp.h
+    ../src/test/TestEditorApp.h \
+    ../src/ui/uisystem.h \
+    ../src/ui/uicontrol.h
 
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui
