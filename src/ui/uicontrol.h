@@ -19,11 +19,13 @@ public:
 
     inline void SetDestroyHandler(const std::function<void ()> &_handler);
     inline void SetPressHandler(const std::function<void ()> &_handler);
+    inline void SetDrawHandler(const std::function<void ()> &_handler);
 
 protected:
 private:
     std::function<void ()> mDestroyHandler = [] () {};
     std::function<void ()> mPressHandler = [] () {};
+    std::function<void ()> mDrawHandler = [] () {};
 };
 
 inline void CUIControl::SetDestroyHandler(const std::function<void ()> &_handler)
@@ -34,6 +36,11 @@ inline void CUIControl::SetDestroyHandler(const std::function<void ()> &_handler
 inline void CUIControl::SetPressHandler(const std::function<void ()> &_handler)
 {
     mPressHandler = _handler;
+}
+
+inline void CUIControl::SetDrawHandler(const std::function<void ()> &_handler)
+{
+    mDrawHandler = _handler;
 }
 
 } // namespace drash
