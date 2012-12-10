@@ -23,10 +23,17 @@ public:
     CUIControl *CreateControl();
     void DestroyControl(CUIControl *_control);
 
+    void SetAspectRatio(float _ratio);
+    void SetWidth(unsigned int _width);
+
 protected:
 private:
     CUIControl *mControls[mControlsCountLimit];
     unsigned int mControlsCount = 0;
+
+    float mAspectRatio = 1;
+    unsigned int mWidth = 1024;
+    unsigned int mHeight = 768;
 };
 
 } // namespace drash

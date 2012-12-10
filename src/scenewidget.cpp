@@ -124,6 +124,7 @@ void SceneWidget::resizeGL( int _w, int _h )
     if (mApp != nullptr)
     {
         mApp->GetDebugDrawSystem().SetAspectRatio(mWidth / mHeight);
+        mApp->GetUISystem().SetAspectRatio(mWidth / mHeight);
     }
 }
 

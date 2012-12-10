@@ -45,4 +45,16 @@ void CUISystem::DestroyControl(CUIControl *_control)
     }
 }
 
+void CUISystem::SetAspectRatio(float _ratio)
+{
+    mAspectRatio = _ratio;
+    SetWidth(mWidth);
+}
+
+void CUISystem::SetWidth(unsigned int _width)
+{
+    mWidth = _width;
+    mHeight = mWidth / mAspectRatio;
+}
+
 } // namespace drash
