@@ -34,6 +34,7 @@ void CTemplateSystem::Release()
         delete i->second;
     }
     mSceneObjectTemplates.clear();
+
     for (auto i=mDrashBodyTemplates.begin(), i_e=mDrashBodyTemplates.end(); i!=i_e; i++)
     {
         delete i->second;

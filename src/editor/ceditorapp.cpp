@@ -92,11 +92,62 @@ void CObjectEditorApp::SetProcessor()
     [this] ()
     {
         //LOG_INFO("Click !!!");
-        if (mState == BuildState) {
-            mVertexs.push_back(GetCursorPos());
+        switch (mState) {
+            case BuildState:
+                mVertexs.push_back(GetCursorPos());
+                break;
+            case MoveState:
+                mOldPositon = GetCursorPos();
+
+                mSelectedFigure = SelectFigure(mOldPositon);
+
+                GetDebugDrawSystem().ScreenSpaceToWorldSpace(mOldPositon,
+                                      -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+                if (mSelectedFigure == nullptr) LOG_INFO("NOOOO");
+                break;
+            case Simple:
+                mSelectedFigure = nullptr;
+                break;
+        }
+    },
+    [this] ()
+    {
+        if (mSelectedFigure != nullptr && mState == MoveState) {
+            LOG_INFO("Move figure now");
+            //LOG_INFO("Move figure now");
+            CVec2 position = GetCursorPos();
+            GetDebugDrawSystem().ScreenSpaceToWorldSpace(position,
+                                  -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+            float disX = position.x - mOldPositon.x;
+            float disY = position.y - mOldPositon.y;
+            mOldPositon = position;
+            //mSelectedFigure->MoveToDistance(disX,disY);
+        }
+    },
+    [this] ()
+    {
+        if (mState = MoveState) {
+            mSelectedFigure = nullptr;
         }
     }
     ));
+    /*
+     *    [this] ()// left mouse button pressed
+    {
+        // choose object here
+        mSelectedObject = GetDebugDrawSystem().FindObject(GetCursorPos());
+    },
+    [this] ()// left mouse button is being pressed
+    {
+        // move object if choosen
+        if (mSelectedObject != nullptr)
+        {
+            CVec2 pos = GetCursorPos();
+            GetDebugDrawSystem().ScreenSpaceToWorldSpace(pos, mSelectedObject->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+            mSelectedObject->SetPos(pos);
+        }
+    }));
+     */
     GetEventSystem().SetProcessor("RB",CAppEventProcessor(
     [this] ()
     {
@@ -134,6 +185,7 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
 
     mState = Simple;
     mVertexs.clear();
+
     return true;
 }
 
@@ -166,6 +218,17 @@ void CObjectEditorApp::RemoveCurrentObject()
         GetScene().DestroyObject(mCurrentObject);
         mCurrentObject = nullptr;
     }
+}
+
+CFigure *CObjectEditorApp::SelectFigure(const CVec2 &_pos)
+{
+//    CSceneObject *selectedObject = GetDebugDrawSystem().FindObject(_pos);
+    if (mCurrentObject != nullptr) {
+        return nullptr;
+        //return mCurrentObject->FindFigure(_pos,mCurrentObject->GetZ().Get());
+    }
+
+    return nullptr;
 }
 
 

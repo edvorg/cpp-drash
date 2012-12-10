@@ -58,28 +58,43 @@ public:
     inline void SetCurrentTemplateName(const std::string & _name);
 
     inline void SetTreeRefreshHandler(const std::function<void ()> &_han);
-private:
 
-    std::vector<drash::CVec2> mVertexs;
+    inline void ActiveMoveMode();
+private:
 
     void SetProcessor();
 
     bool ValidateFigure();
 
+    void RemoveCurrentObject();
+
+    CFigure * SelectFigure(const CVec2 &_pos);
+
+private:
     CSceneObject *mCurrentObject = nullptr;
 
     State mState = Simple;
 
-    void RemoveCurrentObject();
 
     std::string mCurrentTemplateName = "";
 
     std::function<void ()> mTreeRefreshHandler = [] () {};
 
+    std::vector<drash::CVec2> mVertexs;
+
+    CFigure *mSelectedFigure = nullptr;
+
+    float mMoveDistance = 0.0f;
+
+    CVec2 mOldPositon = CVec2(0);
 };
 
 inline bool CObjectEditorApp::IsStartBuild()const {
     return mState == BuildState;
+}
+
+inline void CObjectEditorApp::ActiveMoveMode() {
+    mState = MoveState;
 }
 
 inline void CObjectEditorApp::SetCurrentTemplateName(const std::string &_name){
