@@ -160,6 +160,10 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
     CVec2 pos = WidgetSpaceToScreenSpace(CVec2(_event->x(),
                                                _event->y()));
     mApp->SetCursorPos(pos);
+    unsigned int x = 0;
+    unsigned int y = 0;
+    mApp->GetUISystem().ScreenSpaceToUISpace(pos, x, y);
+    mApp->GetUISystem().SetCursorPos(x, y);
 
     mApp->GetEventSystem().BeginEvent(CAppEvent(ConvertKey(_event->button())));
 }
@@ -188,6 +192,10 @@ void SceneWidget::mouseMoveEvent(QMouseEvent *_event)
     CVec2 pos = WidgetSpaceToScreenSpace(CVec2(_event->x(),
                                                _event->y()));
     mApp->SetCursorPos(pos);
+    unsigned int x = 0;
+    unsigned int y = 0;
+    mApp->GetUISystem().ScreenSpaceToUISpace(pos, x, y);
+    mApp->GetUISystem().SetCursorPos(x, y);
 }
 
 void SceneWidget::keyPressEvent( QKeyEvent *_event )
