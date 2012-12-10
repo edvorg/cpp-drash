@@ -64,6 +64,9 @@ private slots:
 
     void on_mTreeObjects_itemSelectionChanged();
 
+    void on_ActiveMoveButton_clicked();
+
+    void Remove_Object();
 private:
     Ui::EditorWindow *ui;
     bool InitScene();
@@ -76,7 +79,7 @@ private:
     // Actions
 private:
     QAction *mQuit;
-
+    QAction *mRemoveAction;
     // GuiObjects
 private:
     QLabel *mLabelOfStatusBar;

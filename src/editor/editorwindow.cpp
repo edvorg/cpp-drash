@@ -104,6 +104,12 @@ void EditorWindow::CreateActions()
     this->addAction(mQuit);
     connect(mQuit,SIGNAL(triggered()),
             this,SLOT(close()));
+
+    mRemoveAction = new QAction("Remove Object", this);
+    mRemoveAction->setShortcut(tr("Ctrl+D"));
+    ui->toolBar->addAction(mRemoveAction);
+    connect(mRemoveAction,SIGNAL(triggered()),
+            this, SLOT(Remove_Object()));
 }
 
 bool EditorWindow::UpdateTreeObject()
@@ -193,6 +199,28 @@ void EditorWindow::on_mTreeObjects_itemSelectionChanged()
     if (item->parent() == NULL) {
         qDebug() << "Object created";
         mObjectApp->ShowObject(item->text(0).toStdString());
+        //mCurrentObject = mObjectApp->GetTemplateSystem().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
+    }
+}
+
+void EditorWindow::on_ActiveMoveButton_clicked()
+{
+    mObjectApp->ActiveMoveMode();
+}
+
+void EditorWindow::Remove_Object()
+{
+    QTreeWidgetItem *item = nullptr;
+    if (ui->mTreeObjects->selectedItems().size() != 0) {
+        item = ui->mTreeObjects->selectedItems().at(0);
+    } else {
+        return;
+    }
+    if (item->parent() == NULL) {
+        //qDebug() << "Object created";
+        mObjectApp->GetTemplateSystem().RemoveSceneObjectTemplate(item->text(0).toStdString());
+        UpdateTreeObject();
+        //mObjectApp->ShowObject(item->text(0).toStdString());
         //mCurrentObject = mObjectApp->GetTemplateSystem().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
     }
 }
