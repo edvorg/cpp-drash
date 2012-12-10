@@ -30,6 +30,10 @@ public:
     bool ScreenSpaceToUISpace(const CVec2 &_from, unsigned int &_x, unsigned int &_y);
     bool UISpaceToScreenSpace(unsigned int _x, unsigned int _y, CVec2 &_v);
 
+    void SetCursorPos(unsigned int _x, unsigned int _y);
+    inline unsigned int GetCursorPosX() const;
+    inline unsigned int GetCursorPosY() const;
+
 protected:
 private:
     CUIControl *mControls[mControlsCountLimit];
@@ -38,7 +42,20 @@ private:
     float mAspectRatio = 1;
     unsigned int mWidth = 1024;
     unsigned int mHeight = 768;
+
+    unsigned int mCursorX = 0;
+    unsigned int mCursorY = 0;
 };
+
+inline unsigned int CUISystem::GetCursorPosX() const
+{
+    return mCursorX;
+}
+
+inline unsigned int CUISystem::GetCursorPosY() const
+{
+    return mCursorY;
+}
 
 } // namespace drash
 

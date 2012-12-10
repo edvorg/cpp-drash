@@ -75,4 +75,10 @@ bool CUISystem::UISpaceToScreenSpace(unsigned int _x, unsigned int _y, CVec2 &_v
     return true;
 }
 
+void CUISystem::SetCursorPos(unsigned int _x, unsigned int _y)
+{
+    mCursorX = drash::math::Clamp<unsigned int>(_x, 0, mWidth);
+    mCursorY = drash::math::Clamp<unsigned int>(_y, 0, mHeight);
+}
+
 } // namespace drash
