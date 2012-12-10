@@ -10,12 +10,16 @@ namespace test
 
 CTest4::CTest4()
 {
-    GetUISystem().ConnectWidget(mTestWidget1);
+    mTestButton1.Connect(&GetUISystem());
+    mTestButton1.SetClickHandler([] ()
+    {
+        LOG_INFO("click");
+    });
 }
 
 void CTest4::Release()
 {
-    GetUISystem().DisconnectWidget(mTestWidget1);
+    mTestButton1.Disconnect();
 }
 
 } // namespace test

@@ -2,7 +2,7 @@
 #define DRASH_TEST_TEST4_H
 
 #include "../app/app.h"
-#include "../ui/uiwidget.h"
+#include "../ui/uibutton.h"
 
 namespace drash
 {
@@ -19,7 +19,7 @@ public:
     virtual void Release() override;
 
 private:
-    CUIWidget mTestWidget1;
+    CUIButton mTestButton1;
 };
 
 } // namespace test

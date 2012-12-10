@@ -52,7 +52,8 @@ SOURCES += ../src/main.cpp\
     ../src/ui/uisystem.cpp \
     ../src/ui/uicontrol.cpp \
     ../src/test/test4.cpp \
-    ../src/ui/uiwidget.cpp
+    ../src/ui/uiwidget.cpp \
+    ../src/ui/uibutton.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -93,7 +94,8 @@ HEADERS  += ../src/gamewindow.h \
     ../src/ui/uisystem.h \
     ../src/ui/uicontrol.h \
     ../src/test/test4.h \
-    ../src/ui/uiwidget.h
+    ../src/ui/uiwidget.h \
+    ../src/ui/uibutton.h
 
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui

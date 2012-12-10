@@ -1,34 +1,62 @@
 #include "uiwidget.h"
 
+#include "uisystem.h"
 #include "uicontrol.h"
 
 namespace drash
 {
 
-void CUIWidget::SetControlHandlers()
+CUIWidget::~CUIWidget()
 {
-    if (mControl != nullptr)
+    this->Disconnect();
+}
+
+void CUIWidget::Connect(CUISystem *_system)
+{
+    mUISystem = _system;
+    mUIControl = mUISystem->CreateControl();
+    mUIControl->SetDestroyHandler([this] ()
     {
-        mControl->SetDestroyHandler([this] ()
-        {
-            this->mControl = nullptr;
-        });
+        this->Disconnect();
+    });
+}
+
+void CUIWidget::Disconnect()
+{
+    if (mUIControl != nullptr)
+    {
+        mUISystem->DestroyControl(mUIControl);
+        mUISystem = nullptr;
+        mUIControl = nullptr;
     }
+}
+
+CUISystem *CUIWidget::GetUISystem() const
+{
+    return mUISystem;
 }
 
 void CUIWidget::SetPressHandler(const std::function<void ()> &_handler)
 {
-    if (mControl != nullptr)
+    if (mUIControl != nullptr)
     {
-        mControl->SetPressHandler(_handler);
+        mUIControl->SetPressHandler(_handler);
+    }
+}
+
+void CUIWidget::SetReleaseHandler(const std::function<void ()> &_handler)
+{
+    if (mUIControl != nullptr)
+    {
+        mUIControl->SetReleaseHandler(_handler);
     }
 }
 
 void CUIWidget::SetDrawHandler(const std::function<void ()> &_handler)
 {
-    if (mControl != nullptr)
+    if (mUIControl != nullptr)
     {
-        mControl->SetDrawHandler(_handler);
+        mUIControl->SetDrawHandler(_handler);
     }
 }
 
