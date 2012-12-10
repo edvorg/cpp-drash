@@ -60,4 +60,60 @@ void CUIWidget::SetDrawHandler(const std::function<void ()> &_handler)
     }
 }
 
+void CUIWidget::SetPos(unsigned int _x, unsigned int _y)
+{
+    if (mUIControl != nullptr)
+    {
+        mUIControl->SetPos(_x, _y);
+    }
+}
+
+void CUIWidget::SetSize(unsigned int _w, unsigned int _h)
+{
+    if (mUIControl != nullptr)
+    {
+        mUIControl->SetSize(_w, _h);
+    }
+}
+
+unsigned int CUIWidget::GetX() const
+{
+    if (mUIControl)
+    {
+        return mUIControl->GetX();
+    }
+
+    return 0;
+}
+
+unsigned int CUIWidget::GetY() const
+{
+    if (mUIControl)
+    {
+        return mUIControl->GetY();
+    }
+
+    return 0;
+}
+
+unsigned int CUIWidget::GetWidth() const
+{
+    if (mUIControl)
+    {
+        return mUIControl->GetWidth();
+    }
+
+    return 0;
+}
+
+unsigned int CUIWidget::GetHeight() const
+{
+    if (mUIControl)
+    {
+        return mUIControl->GetHeight();
+    }
+
+    return 0;
+}
+
 } // namespace drash

@@ -28,6 +28,13 @@ public:
     virtual void SetReleaseHandler(const std::function<void ()> &_handler) final;
     virtual void SetDrawHandler(const std::function<void ()> &_handler) final;
 
+    virtual void SetPos(unsigned int _x, unsigned int _y) final;
+    virtual void SetSize(unsigned int _w, unsigned int _h) final;
+    virtual unsigned int GetX() const final;
+    virtual unsigned int GetY() const final;
+    virtual unsigned int GetWidth() const final;
+    virtual unsigned int GetHeight() const final;
+
 protected:
 private:
     CUIControl *mUIControl = nullptr;
