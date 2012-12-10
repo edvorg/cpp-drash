@@ -47,7 +47,7 @@ public:
     CLogger& operator<<( float _v );
     CLogger& operator<<( double _v );
 
-    static const std::string &Tail();
+    static const std::string Tail();
 
 private:
     std::ofstream out;

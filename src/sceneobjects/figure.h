@@ -32,14 +32,16 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
+class CSceneObject;
+
 class CFigureParams
 {
 public:
     CFigureParams();
 
-    float mFriction;
-    float mRestitution;
-    float mMass;
+    float mFriction = 1;
+    float mRestitution = 0;
+    float mMass = 1;
 
     /// if size of mVertices is NULL, creates a box with (1, 1) dimentions
     std::vector<CVec2> mVertices;
@@ -51,10 +53,12 @@ class CFigure
 {
 public:
     friend class CSceneObject;
+    friend class CDebugDrawSystem;
 
-    typedef const b2Vec2 *b2Vec2ConstPtr;
+    inline CSceneObject *GetSceneObject() const;
 
-    bool GetVertices(b2Vec2ConstPtr *_arr_ptr) const;
+    void SetVertices(const CVec2 *_vertices, unsigned int _count);
+    const b2Vec2 *GetVertices() const;
     unsigned int EnumVertices() const;
 
     inline float GetZ() const;
@@ -62,7 +66,7 @@ public:
     inline float GetDepth() const;
     inline void SetDepth(float _depth);
 
-    bool TestPoint(const CVec2 &_point, float _z);
+    friend CLogger &operator <<(CLogger &_logger, const CFigure &_figure);
 
 protected:
 private:
@@ -74,6 +78,11 @@ private:
     float mMass = 1;
     unsigned int mInternalId = 0;
 };
+
+inline CSceneObject *CFigure::GetSceneObject() const
+{
+    return reinterpret_cast<CSceneObject*>(mFixture->GetBody()->GetUserData());
+}
 
 inline float CFigure::GetZ() const
 {

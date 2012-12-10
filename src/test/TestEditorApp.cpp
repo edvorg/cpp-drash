@@ -40,7 +40,7 @@ bool CTestEditorApp::Init()
         return false;
     }
 
-    GetDebugDrawSystem().GetActiveCam()->SetZ(100);
+    GetDebugDrawSystem().GetActiveCam()->GetZ().Set(100);
 
     SetProcessors();
 
@@ -63,7 +63,31 @@ void CTestEditorApp::Render()
 }
 
 void CTestEditorApp::SetProcessors()
-{
+{    
+    GetEventSystem().SetMode("editor_figure_modify_mode");
+
+    GetEventSystem().SetProcessor("LB", CAppEventProcessor(
+    [this] ()
+    {
+        mLastCursorPos = GetCursorPos();
+    },
+    [this] ()
+    {
+        MoveFigure();
+    }));
+
+    GetEventSystem().SetProcessor("RB", CAppEventProcessor(
+    [this] ()
+    {
+        GetEventSystem().SetMode(std::string("editor_mode"));
+    }));
+
+    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
+    [this] ()
+    {
+        this->Quit();
+    }));
+
     ////////////////////////////////////////////////////////////////////////
 
     GetEventSystem().SetMode(std::string("editor_figure_creation_mode"));
@@ -80,26 +104,44 @@ void CTestEditorApp::SetProcessors()
         CompleteFigure();
     }));
 
+    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
+    [this] ()
+    {
+        this->Quit();
+    }));
+
     ////////////////////////////////////////////////////////////////////////
 
     GetEventSystem().SetMode(std::string("editor_mode"));
 
-    GetEventSystem().SetProcessor("C-c C-c", CAppEventProcessor(
+    GetEventSystem().SetProcessor("C-c", CAppEventProcessor(
     [this] ()
     {
         CreateTemplate();
     }));
 
-    GetEventSystem().SetProcessor("C-c C-f", CAppEventProcessor(
+    GetEventSystem().SetProcessor("C-f", CAppEventProcessor(
     [this] ()
     {
         CreateFigure();
     }));
 
-    GetEventSystem().SetProcessor("C-c C-d", CAppEventProcessor(
+    GetEventSystem().SetProcessor("C-d", CAppEventProcessor(
     [this] ()
     {
         DetachCurrentObject();
+    }));
+
+    GetEventSystem().SetProcessor("LB", CAppEventProcessor(
+    [this] ()
+    {
+        ChooseFigure();
+    }));
+
+    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
+    [this] ()
+    {
+        this->Quit();
     }));
 }
 
@@ -161,6 +203,57 @@ void CTestEditorApp::DetachCurrentObject()
     {
         mCurrentObject->SetDynamic(true);
         mCurrentObject = nullptr;
+    }
+}
+
+void CTestEditorApp::ChooseFigure()
+{
+    if (mCurrentObject != nullptr)
+    {
+        CFigure *f = GetDebugDrawSystem().FindFigure(GetCursorPos());
+
+        if (f == nullptr || f->GetSceneObject() != mCurrentObject)
+        {
+            return;
+        }
+
+        mCurrentFigure = f;
+
+        GetEventSystem().SetMode("editor_figure_modify_mode");
+    }
+}
+
+void CTestEditorApp::MoveFigure()
+{
+    CVec2 pos = GetCursorPos();
+    pos -= mLastCursorPos;
+
+    if (pos.Length() < 0.1)
+    {
+        return;
+    }
+
+    if (drash::math::Abs(pos.x) > drash::math::Abs(pos.y))
+    {
+        const b2Vec2* v = mCurrentFigure->GetVertices();
+        CVec2* new_vertices = new CVec2[mCurrentFigure->EnumVertices()];
+        for (unsigned int i = 0; i < mCurrentFigure->EnumVertices(); i++)
+        {
+            new_vertices[i] = v[i];
+            new_vertices[i].x += pos.x;
+        }
+        mCurrentFigure->SetVertices(new_vertices, mCurrentFigure->EnumVertices());
+    }
+    else
+    {
+        const b2Vec2* v = mCurrentFigure->GetVertices();
+        CVec2* new_vertices = new CVec2[mCurrentFigure->EnumVertices()];
+        for (unsigned int i = 0; i < mCurrentFigure->EnumVertices(); i++)
+        {
+            new_vertices[i] = v[i];
+            new_vertices[i].y += pos.y;
+        }
+        mCurrentFigure->SetVertices(new_vertices, mCurrentFigure->EnumVertices());
     }
 }
 

@@ -29,27 +29,33 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
-CFigureParams::CFigureParams():
-    mFriction(1),
-    mRestitution(0),
-    mMass(1),
-    mVertices()
+CFigureParams::CFigureParams()
 {
 }
 
-bool CFigure::GetVertices(CFigure::b2Vec2ConstPtr *_arr_ptr) const
+void CFigure::SetVertices(const CVec2 *_vertices, unsigned int _count)
 {
     if (mFixture == nullptr ||
         mFixture->GetShape() == nullptr ||
-        mFixture->GetShape()->GetType() != b2Shape::e_polygon ||
-        reinterpret_cast<b2PolygonShape*>(mFixture->GetShape())->GetVertexCount() <= 0)
+        mFixture->GetShape()->GetType() != b2Shape::e_polygon)
     {
-        *_arr_ptr = nullptr;
-        return false;
+        return;
     }
 
-    *_arr_ptr = &(reinterpret_cast<b2PolygonShape*>(mFixture->GetShape())->GetVertex(0));
-    return true;
+    reinterpret_cast<b2PolygonShape*>(mFixture->GetShape())->Set(_vertices, _count);
+    mFixture->GetBody()->ResetMassData();
+}
+
+const b2Vec2 *CFigure::GetVertices() const
+{
+    if (mFixture == nullptr ||
+        mFixture->GetShape() == nullptr ||
+        mFixture->GetShape()->GetType() != b2Shape::e_polygon)
+    {
+        return nullptr;
+    }
+
+    return reinterpret_cast<b2PolygonShape*>(mFixture->GetShape())->m_vertices;
 }
 
 unsigned int CFigure::EnumVertices() const
@@ -64,11 +70,18 @@ unsigned int CFigure::EnumVertices() const
     return reinterpret_cast<b2PolygonShape*>(mFixture->GetShape())->GetVertexCount();
 }
 
-bool CFigure::TestPoint(const CVec2 &_point, float _z)
+CLogger &operator <<(CLogger &_logger, const CFigure &_figure)
 {
-    return mFixture->TestPoint(_point) &&
-           drash::math::Abs(mZ + reinterpret_cast<CSceneObject*>(mFixture->GetUserData())->GetZ().Get() -
-                            _z) <= mDepth;
+    if (_figure.EnumVertices())
+    {
+        _logger<<'{';
+        for (unsigned int i = 0; i < _figure.EnumVertices(); i++)
+        {
+            _logger<<_figure.GetVertices()[i]<<' ';
+        }
+        _logger<<"} depth: "<<_figure.mDepth<<" local_z: "<<_figure.mZ;
+    }
+    return _logger;
 }
 
 CFigure::CFigure()

@@ -41,11 +41,8 @@ bool CAppEventSystem::SetMode(const std::string &_name)
 
     for (auto i = mCurrentCombinations.begin(); i != mCurrentCombinations.end(); i++)
     {
-        (*i)->mOperationLock = false;
+        (*i)->mState |= STATE_END;
     }
-    mCurrentCombinations.clear();
-
-    mModeChanged = true;
 
     LOG_INFO("mode changed: "<<_name.c_str());
 
@@ -120,82 +117,61 @@ void CAppEventSystem::SetProcessor(const char *_combinations, const CAppEventPro
 
 void CAppEventSystem::Process()
 {
-    for (auto i = mCurrentCombinations.begin(); i != mCurrentCombinations.end(); i++)
+    for (auto i = mCurrentCombinations.begin(); i != mCurrentCombinations.end();)
     {
-        (*i)->mProcessor.Pressing();
+        CAppEventCombinationTree *c = *i;
 
-        if (mModeChanged == true)
+        if (c->mState & STATE_BEGIN)
         {
-            mModeChanged = false;
-            return;
+            c->mState ^= STATE_BEGIN;
+            c->mState |= STATE_PROCESSING;
+            c->mProcessor.Begin();
         }
+
+        if (c->mState & STATE_END)
+        {
+            c->mProcessor.End();
+            c->mState = STATE_NORMAL;
+            i = mCurrentCombinations.erase(i);
+            continue;
+        }
+
+        if (c->mState & STATE_PROCESSING)
+        {
+            c->mProcessor.Processing();
+        }
+
+        i++;
     }
 }
 
-void CAppEventSystem::PressEvent(const CAppEvent &_event)
+void CAppEventSystem::BeginEvent(const CAppEvent &_event)
 {
     mCurrentState.AddEvent(_event);
 
-    bool fallback = true;
-
     // now we find key combination in current combination tree root
-    // if we pressed key, which is completely wrong, we set fallback flag to true
+    // if we pressed key, which is completely wrong, we set res flag to true
 
-    for (auto i = mCurrentNode->mChilds.begin(); i != mCurrentNode->mChilds.end(); i++)
-    {
-        // mOperationLock is used for fast determine, that node already in mCurrentCombinations list
-        if (i->mOperationLock == false && mCurrentState.ContainsCombination(i->mCombination))
-        {
-            fallback = false;
-
-            this->mCurrentCombinations.push_back(&*i);
-            i->mOperationLock = true;
-            i->mProcessor.BeginPressing();
-
-            if (mModeChanged == true)
-            {
-                mModeChanged = false;
-                return;
-            }
-        }
-        else if (fallback == true && i->mCombination.ContainsEvent(_event) == true)
-        {
-            fallback = false;
-        }
-    }
+    int res = PressEventImpl(_event);
 
     // if pressed key is completely wrong and current tree node is not &mTree (root)
     // try to process this key second time, using &mTree as current tree node
 
-    if (fallback == true && mCurrentNode != mCurrentModeRoot)
+    if (res == 0 && mCurrentNode != mCurrentModeRoot)
     {
         mCurrentNode = mCurrentModeRoot;
 
-        for (auto i = mCurrentNode->mChilds.begin(); i != mCurrentNode->mChilds.end(); i++)
-        {
-            if (i->mOperationLock == false && mCurrentState.ContainsCombination(i->mCombination))
-            {
-                this->mCurrentCombinations.push_back(&*i);
-                i->mOperationLock = true;
-                i->mProcessor.BeginPressing();
-
-                if (mModeChanged == true)
-                {
-                    mModeChanged = false;
-                    return;
-                }
-            }
-        }
+        PressEventImpl(_event);
     }
 }
 
-void CAppEventSystem::ReleaseEvent(const CAppEvent &_event)
+void CAppEventSystem::EndEvent(const CAppEvent &_event)
 {
     mCurrentState.RemoveEvent(_event);
 
     // find key combinations, thas is not intersect current events state
 
-    for (auto i = mCurrentCombinations.begin(); i != mCurrentCombinations.end();)
+    for (auto i = mCurrentCombinations.begin(); i != mCurrentCombinations.end(); i++)
     {
         if (mCurrentState.ContainsCombination((*i)->mCombination) == false)
         {
@@ -217,23 +193,31 @@ void CAppEventSystem::ReleaseEvent(const CAppEvent &_event)
                 }
             }
 
-            // process end pressing end remove
-
-            (*i)->mOperationLock = false;
-            (*i)->mProcessor.EndPressing();
-
-            if (mModeChanged == true)
-            {
-                mModeChanged = false;
-                return;
-            }
-
-            i = mCurrentCombinations.erase(i);
-            continue;
+            (*i)->mState |= STATE_END;
         }
-
-        i++;
     }
+}
+
+int CAppEventSystem::PressEventImpl(const CAppEvent &_event)
+{
+    int res = 0;
+
+    for (auto i = mCurrentNode->mChilds.begin(); i != mCurrentNode->mChilds.end(); i++)
+    {       // mOperationLock is used for fast determine, that node already in mCurrentCombinations list
+        if (i->mState == STATE_NORMAL && mCurrentState.ContainsCombination(i->mCombination))
+        {
+            res = 1;
+
+            i->mState = STATE_BEGIN;
+            this->mCurrentCombinations.push_back(&*i);
+        }
+        else if (res == 0 && i->mCombination.ContainsEvent(_event) == true)
+        {
+            res = 1;
+        }
+    }
+
+    return res;
 }
 
 } // namespace drash

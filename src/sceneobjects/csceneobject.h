@@ -28,7 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <Box2D/Box2D.h>
 #include "figure.h"
-#include "../misc/canimatedparam.h"
+#include "../misc/animatedparam.h"
 
 namespace drash
 {
@@ -76,42 +76,34 @@ public:
 
     typedef CSceneObjectGeometry GeometryT;
     typedef CSceneObjectParams ParamsT;
-    typedef CFigure *CFigurePtr;
-    typedef CFigurePtr FiguresT[mFiguresCountLimit];
-
-    inline const b2Body* GetBody(void) const;
 
     inline CScene *GetScene();
     inline const CScene *GetScene() const;
 
-    inline void SetDynamic( bool _dynamic );
-
-    CFigurePtr CreateFigure( const CFigureParams &_params );
+    CFigure *CreateFigure(const CFigureParams &_params);
     void DestroyFigure(CFigure *_figure);
-    inline const FiguresT &GetFigures();
+    inline CFigure * const *GetFigures() const;
     inline unsigned int EnumFigures() const;
 
+    inline void SetDynamic(bool _dynamic);
+    inline bool IsDynamic() const;
     inline void ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos );
-    inline void SetLinearVelocity( const CVec2 &_vel );
-    inline void SetAngularVelocity( float _vel );
+    inline void SetLinearVelocity(const CVec2 &_vel);
+    inline CVec2 GetLinearVelocity() const;
+    inline void SetAngularVelocity(float _vel);
+    inline float GetAngularVelocity() const;
     inline void SetFixedRotation( bool _fixed );
     inline void SetActive( bool _active );
+    inline CVec2 GetWorldPoint(const CVec2 &_local_point) const;
 
-    void SetPos( const CVec2 &_pos );
-    inline void SetPosTarget( const CVec2 &_target, double _time, const AnimationBehavior &_behavior );
-    inline const CAnimatedParam<CVec2> &GetPos() const;
-    void SetAngle( float _angle );
-    inline void SetAngleTarget( float _target, double _time, const AnimationBehavior &_behavior );
-    inline const CAnimatedParam<float> &GetAngle() const;
-
-    inline void SetZ(float _z);
-    inline void SetZTarget( float _target, double _time, const AnimationBehavior &_behavior );
-    inline const CAnimatedParam<float> &GetZ() const;
+    inline CAnimatedParam<CVec2> &GetPos();
+    inline CAnimatedParam<float> &GetAngle();
+    inline CAnimatedParam<float> &GetZ();
 
     virtual void ComputeBoundingBox();
     inline const b2AABB &GetBoundingBox() const;
 
-    bool TestPoint(CVec2 _world_point, float _z) const;
+    friend CLogger &operator <<(CLogger &_logger, const CSceneObject &_object);
 
 protected:
     CSceneObject(void);
@@ -131,22 +123,17 @@ protected:
     b2AABB mBoundingBox;
 
 private:
-    b2Body* mBody;
-    CScene* mScene;
+    b2Body* mBody = nullptr;
+    CScene* mScene = nullptr;
     bool mDead = false;
-    int mInternalId = 0;
+    int mInternalId = -1;
     CAnimatedParam<CVec2> mPos;
     CAnimatedParam<float> mAngle;
     float mColor[3];
-    FiguresT mFigures;
+    CFigure *mFigures[mFiguresCountLimit];
     unsigned int mFiguresCount = 0;
     CAnimatedParam<float> mZ;
 };
-
-inline const b2Body *CSceneObject::GetBody() const
-{
-    return mBody;
-}
 
 inline CScene *CSceneObject::GetScene()
 {
@@ -163,7 +150,12 @@ inline void CSceneObject::SetDynamic( bool _dynamic )
     mBody->SetType( _dynamic ? b2_dynamicBody : b2_kinematicBody );
 }
 
-inline const CSceneObject::FiguresT &CSceneObject::GetFigures()
+inline bool CSceneObject::IsDynamic() const
+{
+    return mBody->GetType() == b2_dynamicBody ? true : false;
+}
+
+inline CFigure * const *CSceneObject::GetFigures() const
 {
     return mFigures;
 }
@@ -178,14 +170,24 @@ inline void CSceneObject::ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_p
     mBody->ApplyLinearImpulse( _dir, _pos );
 }
 
-inline void CSceneObject::SetLinearVelocity( const CVec2 &_vel )
+inline void CSceneObject::SetLinearVelocity(const CVec2 &_vel)
 {
     mBody->SetLinearVelocity(_vel);
 }
 
-inline void CSceneObject::SetAngularVelocity( float _vel )
+inline CVec2 CSceneObject::GetLinearVelocity() const
+{
+    return mBody->GetLinearVelocity();
+}
+
+inline void CSceneObject::SetAngularVelocity(float _vel)
 {
     mBody->SetAngularVelocity(_vel);
+}
+
+float CSceneObject::GetAngularVelocity() const
+{
+    return mBody->GetAngularVelocity();
 }
 
 inline void CSceneObject::SetFixedRotation( bool _fixed )
@@ -198,37 +200,22 @@ inline void CSceneObject::SetActive( bool _active )
     mBody->SetActive(_active);
 }
 
-inline void CSceneObject::SetPosTarget( const CVec2 &_target, double _time, const AnimationBehavior &_behavior )
+CVec2 CSceneObject::GetWorldPoint(const CVec2 &_local_point) const
 {
-    mPos.SetTarget( _target, _time, _behavior );
+    return mBody->GetWorldPoint(_local_point);
 }
 
-inline const CAnimatedParam<CVec2> &CSceneObject::GetPos() const
+inline CAnimatedParam<CVec2> &CSceneObject::GetPos()
 {
     return mPos;
 }
 
-inline void CSceneObject::SetAngleTarget( float _target, double _time, const AnimationBehavior &_behavior )
-{
-    mAngle.SetTarget( _target, _time, _behavior );
-}
-
-inline const CAnimatedParam<float> &CSceneObject::GetAngle() const
+inline CAnimatedParam<float> &CSceneObject::GetAngle()
 {
     return mAngle;
 }
 
-inline void CSceneObject::SetZ(float _z)
-{
-    mZ.Set(_z);
-}
-
-inline void CSceneObject::SetZTarget(float _target, double _time, const AnimationBehavior &_behavior)
-{
-    mZ.SetTarget( _target, _time, _behavior );
-}
-
-inline const CAnimatedParam<float> &CSceneObject::GetZ() const
+inline CAnimatedParam<float> &CSceneObject::GetZ()
 {
     return mZ;
 }

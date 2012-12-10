@@ -144,17 +144,4 @@ void DrawCircle(float _rad,
     glDisable(GL_BLEND);
 }
 
-void DrawLine(const CVec2 &_p1, const CVec2 _p2, float _z, const b2Color &_color)
-{
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    glBegin(GL_LINES);
-    glColor3f(_color.r, _color.g, _color.b);
-    glVertex3f(_p1.x, _p1.y, _z);
-    glColor3f(_color.r, _color.g, _color.b);
-    glVertex3f(_p2.x, _p2.y, _z);
-    glEnd();
-}
-
 }// namespace drash

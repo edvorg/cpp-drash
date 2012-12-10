@@ -12,35 +12,35 @@ public:
     typedef std::function<void ()> FuncT;
 
     CAppEventProcessor();
-    CAppEventProcessor(const FuncT &_begin_pressing,
-                       const FuncT &_pressing = [] () {},
-                       const FuncT &_end_pressing = [] () {});
+    CAppEventProcessor(const FuncT &_begin,
+                       const FuncT &_processing = [] () {},
+                       const FuncT &_end = [] () {});
     CAppEventProcessor(const CAppEventProcessor &_src);
 
-    inline void BeginPressing();
-    inline void Pressing();
-    inline void EndPressing();
+    inline void Begin();
+    inline void Processing();
+    inline void End();
 protected:
 private:
 
-    FuncT mBeginPressing = [] () {};
-    FuncT mPressing = [] () {};
-    FuncT mEndPressing = [] () {};
+    FuncT mBegin = [] () {};
+    FuncT mProcessing = [] () {};
+    FuncT mEnd = [] () {};
 };
 
-inline void CAppEventProcessor::BeginPressing()
+inline void CAppEventProcessor::Begin()
 {
-    mBeginPressing();
+    mBegin();
 }
 
-inline void CAppEventProcessor::Pressing()
+inline void CAppEventProcessor::Processing()
 {
-    mPressing();
+    mProcessing();
 }
 
-inline void CAppEventProcessor::EndPressing()
+inline void CAppEventProcessor::End()
 {
-    mEndPressing();
+    mEnd();
 }
 
 } // namespace drash

@@ -155,7 +155,7 @@ CLogger &CLogger::operator <<(double _v)
     return (*this);
 }
 
-const string &CLogger::Tail()
+const string CLogger::Tail()
 {
     return mTailStream.str();
 }

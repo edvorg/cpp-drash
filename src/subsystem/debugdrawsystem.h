@@ -43,7 +43,7 @@ public:
     inline void SetActiveCam(CCamera *_cam);
 
     /// returns acticvated cam
-    inline CCamera *GetActiveCam();
+    inline CCamera *GetActiveCam() const;
 
     /// aspect ratio is window width in pixels divided on widow height
     /// you should use correct value for using coordinates conversion methods
@@ -67,7 +67,7 @@ public:
 
     /// finds objects, visible at specified postion in screen space coordinates
     /// returns nearest one
-    CSceneObject *FindObject(const CVec2 &_pos);
+    CFigure *FindFigure(const CVec2 &_pos) const;
 
 	/// draws connected CScene instance's objects
     void Draw() const;
@@ -75,6 +75,9 @@ public:
     /// draws line giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) start and end points
     /// and color
     void DrawLine(const CVec2 _p1, const CVec2 _p2, const b2Color &_col) const;
+
+    /// draws point giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
+    void DrawPoint(const CVec2 _p, float _size, const b2Color &_col) const;
 
 protected:
 private:
@@ -88,7 +91,7 @@ inline void CDebugDrawSystem::SetActiveCam(CCamera *_cam)
     mActiveCam = _cam;
 }
 
-inline CCamera *CDebugDrawSystem::GetActiveCam()
+inline CCamera *CDebugDrawSystem::GetActiveCam() const
 {
     return mActiveCam;
 }

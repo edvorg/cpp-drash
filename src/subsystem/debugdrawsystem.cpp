@@ -120,40 +120,67 @@ bool CDebugDrawSystem::WorldSpaceToScreenSpace(CVec2 &_pos, float _depth) const
     }
 }
 
-CSceneObject *CDebugDrawSystem::FindObject(const CVec2 &_pos)
+CFigure *CDebugDrawSystem::FindFigure(const CVec2 &_pos) const
 {
-    const drash::CScene::ObjectsT &objects = GetScene()->GetObjects();
-    unsigned int count = GetScene()->EnumObjects();
+    CFigure *res = nullptr;
 
-    CSceneObject *res = nullptr;
+    unsigned int i = 0;
+    bool brk = false;
+    float z_nearest = 0;
 
-    for (unsigned int i=0; i<count; i++)
+    for (i = 0; i < GetScene()->EnumObjects(); i++)
     {
-        CVec2 world_pos = _pos;
-        ScreenSpaceToWorldSpace(world_pos, objects[i]->GetZ().Get() - mActiveCam->GetZ().Get());
+        CSceneObject *cur_obj = GetScene()->GetObjects()[i];
 
-        if (objects[i]->TestPoint(world_pos, objects[i]->GetZ().Get()) == true)
+        for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++)
         {
-            res = objects[i];
+            CFigure *cur_fgr = cur_obj->GetFigures()[j];
+
+            float z = cur_obj->GetZ().Get() + cur_fgr->GetZ() - GetActiveCam()->GetZ().Get();
+            CVec2 pos = _pos;
+            ScreenSpaceToWorldSpace(pos, z);
+
+            if (cur_fgr->mFixture->TestPoint(pos))
+            {
+                res = cur_fgr;
+                z_nearest = z;
+                brk = true;
+            }
+
+            if (brk == true)
+            {
+                break;
+            }
+        }
+
+        if (brk == true)
+        {
             break;
         }
     }
 
-    if (res != nullptr)
+    for (; i < GetScene()->EnumObjects(); i++)
     {
-        for (unsigned int i=0; i<count; i++)
+        CSceneObject *cur_obj = GetScene()->GetObjects()[i];
+
+        for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++)
         {
-            if (objects[i]->GetZ().Get() < res->GetZ().Get())
+            CFigure *cur_fgr = cur_obj->GetFigures()[j];
+
+            float z = cur_obj->GetZ().Get() + cur_fgr->GetZ() - GetActiveCam()->GetZ().Get();
+
+            if (z < z_nearest)
             {
                 continue;
             }
 
-            CVec2 world_pos = _pos;
-            ScreenSpaceToWorldSpace(world_pos, objects[i]->GetZ().Get() - mActiveCam->GetZ().Get());
+            CVec2 pos = _pos;
+            ScreenSpaceToWorldSpace(pos, z);
 
-            if (objects[i]->TestPoint(world_pos, objects[i]->GetZ().Get()) == true)
+            if (cur_fgr->mFixture->TestPoint(pos))
             {
-                res = objects[i];
+                res = cur_fgr;
+                z_nearest = z;
             }
         }
     }
@@ -169,7 +196,7 @@ void CDebugDrawSystem::Draw() const
         return;
     }
 
-    const drash::CScene::ObjectsT &objects = GetScene()->GetObjects();
+    CSceneObject * const * objects = GetScene()->GetObjects();
     unsigned int count = GetScene()->EnumObjects();
 
     glMatrixMode(GL_PROJECTION);
@@ -209,11 +236,11 @@ void CDebugDrawSystem::Draw() const
         glTranslatef(-mActiveCam->mPos.Get().x,
                      -mActiveCam->mPos.Get().y,
                      -mActiveCam->GetZ().Get());
-        CVec2 pos = objects[i]->GetBody()->GetWorldPoint(CVec2(0));
+        CVec2 pos = objects[i]->GetPos().Get();
         glTranslatef(pos.x,
                      pos.y,
                      0);
-        glRotatef( 180.0f / M_PI * objects[i]->GetBody()->GetAngle(), 0, 0, 1 );
+        glRotatef( 180.0f / M_PI * objects[i]->GetAngle().Get(), 0, 0, 1 );
 
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
@@ -238,6 +265,25 @@ void CDebugDrawSystem::DrawLine(const CVec2 _p1, const CVec2 _p2, const b2Color 
     glVertex2f(_p1.x, _p1.y);
     glColor3f(_col.r, _col.g, _col.b);
     glVertex2f(_p2.x, _p2.y);
+    glEnd();
+}
+
+void CDebugDrawSystem::DrawPoint(const CVec2 _p, float _size, const b2Color &_col) const
+{
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-0.5, 0.5, -0.5, 0.5, 1, -1);
+
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+
+    glPointSize(_size);
+
+    glBegin(GL_POINTS);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex2f(_p.x, _p.y);
     glEnd();
 }
 

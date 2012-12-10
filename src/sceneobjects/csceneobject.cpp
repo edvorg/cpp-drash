@@ -33,14 +33,18 @@ namespace drash
 {
 
 CSceneObject::CSceneObject(void):
-    mBody(NULL),
-    mScene(NULL),
-    mDead(false),
-    mInternalId(-1)
+    mPos([this] (const CVec2 &_new_value)
+    {
+        mBody->SetTransform(_new_value, mBody->GetAngle());
+    }),
+    mAngle([this] (const float &_new_value)
+    {
+        mBody->SetTransform(mBody->GetWorldPoint(CVec2(0)), _new_value);
+    })
 {
-    mColor[0] = Randf( 0.15f, 0.8f, 0.01f );
-    mColor[1] = Randf( 0.15f, 0.8f, 0.01f );
-    mColor[2] = Randf( 0.15f, 0.8f, 0.01f );
+    mColor[0] = Randf(0.35f, 0.9f, 0.01f);
+    mColor[1] = Randf( 0.35f, 0.9f, 0.01f);
+    mColor[2] = Randf(0.35f, 0.9f, 0.01f);
 }
 
 CSceneObject::~CSceneObject(void)
@@ -107,7 +111,7 @@ void CSceneObject::Step( double _dt )
         }
         else
         {
-            mPos.Set( mBody->GetWorldCenter() );
+            mPos.Set( mBody->GetWorldPoint(CVec2(0)) );
         }
 
         if ( mAngle.IsTargetSet() )
@@ -123,7 +127,7 @@ void CSceneObject::Step( double _dt )
     }
     else if ( mBody->GetType() == b2_dynamicBody )
     {
-        mPos.Set( mBody->GetWorldCenter() );
+        mPos.Set( mBody->GetWorldPoint(CVec2(0)) );
         mAngle.Set( mBody->GetAngle() );
     }
 }
@@ -142,7 +146,7 @@ void CSceneObject::OnContactEnd( const CContact &_contact )
 
 void CSceneObject::OnBoom( const CExplosionParams &_boom )
 {
-    CVec2 dir( GetBody()->GetWorldCenter() );
+    CVec2 dir(GetPos().Get());
     dir -= _boom.mPos;
 
     float k = drash::math::Min( dir.Length(), _boom.mStregth )/ _boom.mStregth;
@@ -183,7 +187,7 @@ void CSceneObject::DrawDebug() const
     }
 }
 
-CSceneObject::CFigurePtr CSceneObject::CreateFigure( const CFigureParams &_params )
+CFigure *CSceneObject::CreateFigure(const CFigureParams &_params)
 {
     if (mFiguresCount >= mFiguresCountLimit)
     {
@@ -262,18 +266,6 @@ void CSceneObject::DestroyFigure(CFigure *_figure)
     delete _figure;
 }
 
-void CSceneObject::SetPos(const CVec2 &_pos)
-{
-    mBody->SetTransform( _pos, mBody->GetAngle() );
-    mPos.Set(_pos);
-}
-
-void CSceneObject::SetAngle(float _angle)
-{
-    mBody->SetTransform( mBody->GetWorldCenter(), _angle );
-    mAngle.Set(_angle);
-}
-
 void CSceneObject::ComputeBoundingBox()
 {
     mBoundingBox.lowerBound = b2Vec2(FLT_MAX,FLT_MAX);
@@ -286,17 +278,14 @@ void CSceneObject::ComputeBoundingBox()
     }
 }
 
-bool CSceneObject::TestPoint(CVec2 _world_point, float _z) const
+CLogger &operator <<(CLogger &_logger, const CSceneObject &_object)
 {
-    for (unsigned int i=0; i<mFiguresCount; i++)
+    _logger<<"pos: "<<_object.mPos<<" angle: "<<_object.mAngle<<" world_z: "<<_object.mZ<<'\n';
+    for (unsigned int i = 0; i < _object.EnumFigures(); i++)
     {
-        if (mFigures[i]->TestPoint(_world_point, _z))
-        {
-            return true;
-        }
+        _logger<<*_object.GetFigures()[i]<<'\b';
     }
-
-    return false;
+    return _logger;
 }
 
 } // namespace drash

@@ -7,19 +7,19 @@ CAppEventProcessor::CAppEventProcessor()
 {
 }
 
-CAppEventProcessor::CAppEventProcessor(const CAppEventProcessor::FuncT &_begin_pressing,
-                                       const CAppEventProcessor::FuncT &_pressing,
-                                       const CAppEventProcessor::FuncT &_end_pressing):
-    mBeginPressing(_begin_pressing),
-    mPressing(_pressing),
-    mEndPressing(_end_pressing)
+CAppEventProcessor::CAppEventProcessor(const CAppEventProcessor::FuncT &_begin,
+                                       const CAppEventProcessor::FuncT &_processing,
+                                       const CAppEventProcessor::FuncT &_end):
+    mBegin(_begin),
+    mProcessing(_processing),
+    mEnd(_end)
 {
 }
 
 CAppEventProcessor::CAppEventProcessor(const CAppEventProcessor &_src):
-    mBeginPressing(_src.mBeginPressing),
-    mPressing(_src.mPressing),
-    mEndPressing(_src.mEndPressing)
+    mBegin(_src.mBegin),
+    mProcessing(_src.mProcessing),
+    mEnd(_src.mEnd)
 {
 }
 

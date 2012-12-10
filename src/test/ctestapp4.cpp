@@ -120,7 +120,7 @@ bool CTestApp4::Init()
     }
     ));
 
-    GetDebugDrawSystem().GetActiveCam()->SetZ(100);
+    GetDebugDrawSystem().GetActiveCam()->GetZ().Set(100);
 
     return true;
 }
