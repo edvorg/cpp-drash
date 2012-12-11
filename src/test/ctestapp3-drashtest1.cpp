@@ -87,17 +87,6 @@ void CTestApp3::Step(double _dt)
 {
     CTestEditorApp::Step(_dt);
 
-    if (mMoveObject != nullptr)
-    {
-        CVec2 coords = GetCursorPos();
-        if (GetDebugDrawSystem().ScreenSpaceToWorldSpace(coords, mMoveObject->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get()))
-        {
-            coords -= mMoveObject->GetPos().Get();
-            coords *= 10;
-            mMoveObject->SetLinearVelocity(coords);
-        }
-    }
-
     if (GetPlayersSystem().EnumPlayers())
     {
         CPlayer *p = GetPlayersSystem().GetPlayers()[0];
@@ -254,7 +243,19 @@ void CTestApp3::SetProcessors()
             }
         }
     },
-    [] () {},
+    [this] ()
+    {
+        if (mMoveObject != nullptr)
+        {
+            CVec2 coords = GetCursorPos();
+            if (GetDebugDrawSystem().ScreenSpaceToWorldSpace(coords, mMoveObject->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get()))
+            {
+                coords -= mMoveObject->GetPos().Get();
+                coords *= 10;
+                mMoveObject->SetLinearVelocity(coords);
+            }
+        }
+    },
     [this] ()
     {
         if (mMoveObject != nullptr)
