@@ -7,6 +7,9 @@
 namespace drash
 {
 
+namespace ui
+{
+
 using namespace drash::math;
 
 void CUISlider::Connect(CUISystem *_system)
@@ -125,5 +128,7 @@ float CUISlider::GetMax() const
 {
     return mMax;
 }
+
+} // namepsace ui
 
 } // namespace drash

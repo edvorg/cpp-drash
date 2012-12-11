@@ -6,6 +6,9 @@
 namespace drash
 {
 
+namespace ui
+{
+
 class CUISlider : public CUIWidget
 {
 public:
@@ -40,6 +43,8 @@ private:
     unsigned int mSliderWidth = 20;
     std::function<void (float _value)> mValueHandler = [] (float) {};
 };
+
+} // namepsace ui
 
 } // namespace drash
 

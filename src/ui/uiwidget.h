@@ -6,6 +6,9 @@
 namespace drash
 {
 
+namespace ui
+{
+
 class CUIControl;
 class CUISystem;
 
@@ -41,6 +44,8 @@ private:
     CUIControl *mUIControl = nullptr;
     CUISystem *mUISystem = nullptr;
 };
+
+} // namepsace ui
 
 } // namespace drash
 

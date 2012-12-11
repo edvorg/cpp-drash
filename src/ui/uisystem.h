@@ -6,6 +6,10 @@ namespace drash
 
 class CDebugDrawSystem;
 class CVec2;
+
+namespace ui
+{
+
 class CUIControl;
 
 class CUISystem final
@@ -75,6 +79,8 @@ inline CDebugDrawSystem *CUISystem::GetDebugDrawSystem() const
 {
     return mDebugDrawSystem;
 }
+
+} // namepsace ui
 
 } // namespace drash
 

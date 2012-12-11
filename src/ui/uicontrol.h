@@ -6,6 +6,9 @@
 namespace drash
 {
 
+namespace ui
+{
+
 class CUIControl final
 {
 public:
@@ -88,6 +91,8 @@ inline unsigned int CUIControl::GetHeight() const
 {
     return mHeight;
 }
+
+} // namepsace ui
 
 } // namespace drash
 

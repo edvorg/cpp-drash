@@ -8,6 +8,9 @@
 namespace drash
 {
 
+namespace ui
+{
+
 void CUIButton::Connect(CUISystem *_system)
 {
     CUIWidget::Connect(_system);
@@ -74,5 +77,7 @@ void CUIButton::SetClickHandler(const std::function<void ()> &_handler)
 {
     mClickHandler = _handler;
 }
+
+} // namepsace ui
 
 } // namespace drash

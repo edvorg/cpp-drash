@@ -6,6 +6,9 @@
 namespace drash
 {
 
+namespace ui
+{
+
 class CUIButton : public CUIWidget
 {
 public:
@@ -25,6 +28,8 @@ private:
     bool mPressed = false;
     float mTime = 0;
 };
+
+} // namepsace ui
 
 } // namespace drash
 

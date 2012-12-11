@@ -63,7 +63,7 @@ public:
     inline CPlayersSystem &GetPlayersSystem();
     inline CTemplateSystem &GetTemplateSystem();
     inline CDebugDrawSystem &GetDebugDrawSystem();
-    inline CUISystem &GetUISystem();
+    inline ui::CUISystem &GetUISystem();
 
     /// used to make CApp childs about mouse moving event
     /// use this from your CApp back end (Qt, SDL, etc.)
@@ -86,7 +86,7 @@ private:
     CPlayersSystem mPlayersSystem;
     CTemplateSystem mTemplateSystem;
     CDebugDrawSystem mDebugDrawSystem;
-    CUISystem mUISystem;
+    ui::CUISystem mUISystem;
 
     std::function<void ()> mQuitHandler = [] () {};
     bool mQuit = false;
@@ -137,7 +137,7 @@ inline CDebugDrawSystem &CApp::GetDebugDrawSystem()
     return mDebugDrawSystem;
 }
 
-inline CUISystem &CApp::GetUISystem()
+inline ui::CUISystem &CApp::GetUISystem()
 {
     return mUISystem;
 }

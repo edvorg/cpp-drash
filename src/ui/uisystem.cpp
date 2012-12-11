@@ -6,6 +6,9 @@
 namespace drash
 {
 
+namespace ui
+{
+
 bool CUISystem::Init()
 {
     return true;
@@ -124,5 +127,7 @@ void CUISystem::DebugDraw() const
         mControls[i]->mDrawHandler();
     }
 }
+
+} // namepsace ui
 
 } // namespace drash

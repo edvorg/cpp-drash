@@ -52,12 +52,12 @@ private:
     CSceneObject *mMoveObject = nullptr;
 
     // gravity in y axis
-    CUISlider mSlider1;
+    ui::CUISlider mSlider1;
     // gravity in x axis
-    CUISlider mSlider2;
+    ui::CUISlider mSlider2;
 
     // creates objct at random position from geometry of template system (if it has any).
-    CUIButton mButton1;
+    ui::CUIButton mButton1;
 };
 
 } // namespace drash

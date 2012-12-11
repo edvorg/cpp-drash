@@ -6,6 +6,9 @@
 namespace drash
 {
 
+namespace ui
+{
+
 CUIWidget::~CUIWidget()
 {
     this->Disconnect();
@@ -124,5 +127,7 @@ unsigned int CUIWidget::GetHeight() const
 
     return 0;
 }
+
+} // namepsace ui
 
 } // namespace drash

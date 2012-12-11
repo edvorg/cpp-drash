@@ -20,9 +20,9 @@ public:
     virtual void Release() override;
 
 private:
-    CUIButton mTestButton1;
-    CUIButton mTestButton2;
-    CUISlider mTestSlider1;
+    ui::CUIButton mTestButton1;
+    ui::CUIButton mTestButton2;
+    ui::CUISlider mTestSlider1;
 };
 
 } // namespace test
