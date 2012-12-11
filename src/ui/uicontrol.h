@@ -23,10 +23,10 @@ public:
     inline void SetStepHandler(const std::function<void (double _dt)> &_handler);
     inline void SetDrawHandler(const std::function<void ()> &_handler);
 
-    void SetPos(unsigned int _x, unsigned int _y);
+    void SetPos(int _x, int _y);
     void SetSize(unsigned int _w, unsigned int _h);
-    inline unsigned int GetX() const;
-    inline unsigned int GetY() const;
+    inline int GetX() const;
+    inline int GetY() const;
     inline unsigned int GetWidth() const;
     inline unsigned int GetHeight() const;
 
@@ -35,11 +35,11 @@ private:
     std::function<void ()> mDestroyHandler = [] () {};
     std::function<void ()> mPressHandler = [] () {};
     std::function<void ()> mReleaseHandler = [] () {};
-    std::function<void (double _dt)> mStepHandler = [] (double _dt) {};
+    std::function<void (double)> mStepHandler = [] (double) {};
     std::function<void ()> mDrawHandler = [] () {};
 
-    unsigned int mX = 0;
-    unsigned int mY = 0;
+    int mX = 0;
+    int mY = 0;
     unsigned int mWidth = 100;
     unsigned int mHeight = 20;
 };
@@ -69,12 +69,12 @@ inline void CUIControl::SetDrawHandler(const std::function<void ()> &_handler)
     mDrawHandler = _handler;
 }
 
-inline unsigned int CUIControl::GetX() const
+inline int CUIControl::GetX() const
 {
     return mX;
 }
 
-inline unsigned int CUIControl::GetY() const
+inline int CUIControl::GetY() const
 {
     return mY;
 }

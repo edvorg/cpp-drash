@@ -27,8 +27,8 @@ void CUISlider::Connect(CUISystem *_system)
     {
         if (mPressed == true)
         {
-            int hw = mSliderWidth / 2.0f;
-            int local_x = static_cast<int>(GetUISystem()->GetCursorPosX()) - static_cast<int>(GetX());
+            int hw = mSliderWidth / 2;
+            int local_x = GetUISystem()->GetCursorPosX() - GetX();
             local_x = drash::math::Clamp<int>(local_x, hw, (int)GetWidth() - hw) - hw;
             SetPercent((float)local_x / ((float)GetWidth() - (float)mSliderWidth));
             mValueHandler(mValue);

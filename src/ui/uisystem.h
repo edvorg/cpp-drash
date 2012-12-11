@@ -28,12 +28,12 @@ public:
     void SetAspectRatio(float _ratio);
     void SetWidth(unsigned int _width);
 
-    bool ScreenSpaceToUISpace(const CVec2 &_from, unsigned int &_x, unsigned int &_y);
-    bool UISpaceToScreenSpace(unsigned int _x, unsigned int _y, CVec2 &_v);
+    bool ScreenSpaceToUISpace(const CVec2 &_from, int &_x, int &_y);
+    bool UISpaceToScreenSpace(int _x, int _y, CVec2 &_v);
 
-    void SetCursorPos(unsigned int _x, unsigned int _y);
-    inline unsigned int GetCursorPosX() const;
-    inline unsigned int GetCursorPosY() const;
+    void SetCursorPos(int _x, int _y);
+    inline int GetCursorPosX() const;
+    inline int GetCursorPosY() const;
 
     void BeginEvent();
     void EndEvent();
@@ -53,20 +53,20 @@ private:
     unsigned int mWidth = 1024;
     unsigned int mHeight = 768;
 
-    unsigned int mCursorX = 0;
-    unsigned int mCursorY = 0;
+    int mCursorX = 0;
+    int mCursorY = 0;
 
     CUIControl *mPressedControl = nullptr;
 
     CDebugDrawSystem *mDebugDrawSystem = nullptr;
 };
 
-inline unsigned int CUISystem::GetCursorPosX() const
+inline int CUISystem::GetCursorPosX() const
 {
     return mCursorX;
 }
 
-inline unsigned int CUISystem::GetCursorPosY() const
+inline int CUISystem::GetCursorPosY() const
 {
     return mCursorY;
 }

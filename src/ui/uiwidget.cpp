@@ -69,7 +69,7 @@ void CUIWidget::SetDrawHandler(const std::function<void ()> &_handler)
     }
 }
 
-void CUIWidget::SetPos(unsigned int _x, unsigned int _y)
+void CUIWidget::SetPos(int _x, int _y)
 {
     if (mUIControl != nullptr)
     {
@@ -85,7 +85,7 @@ void CUIWidget::SetSize(unsigned int _w, unsigned int _h)
     }
 }
 
-unsigned int CUIWidget::GetX() const
+int CUIWidget::GetX() const
 {
     if (mUIControl)
     {
@@ -95,7 +95,7 @@ unsigned int CUIWidget::GetX() const
     return 0;
 }
 
-unsigned int CUIWidget::GetY() const
+int CUIWidget::GetY() const
 {
     if (mUIControl)
     {

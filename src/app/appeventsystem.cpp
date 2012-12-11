@@ -15,8 +15,13 @@ bool CAppEventSystem::Init()
 {
     if (mCurrentMode == "")
     {
-        SetMode(std::string("normal"));
+        if (SetMode(std::string("normal")) == false)
+        {
+            return false;
+        }
     }
+
+    return true;
 }
 
 void CAppEventSystem::Release()

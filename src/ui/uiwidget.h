@@ -29,10 +29,10 @@ public:
     void SetStepHandler(const std::function<void (double _dt)> &_handler);
     void SetDrawHandler(const std::function<void ()> &_handler);
 
-    void SetPos(unsigned int _x, unsigned int _y);
+    void SetPos(int _x, int _y);
     void SetSize(unsigned int _w, unsigned int _h);
-    unsigned int GetX() const;
-    unsigned int GetY() const;
+    int GetX() const;
+    int GetY() const;
     unsigned int GetWidth() const;
     unsigned int GetHeight() const;
 

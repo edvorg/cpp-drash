@@ -3,7 +3,7 @@
 namespace drash
 {
 
-void CUIControl::SetPos(unsigned int _x, unsigned int _y)
+void CUIControl::SetPos(int _x, int _y)
 {
     mX = _x;
     mY = _y;

@@ -14,11 +14,11 @@ void CUIButton::Connect(CUISystem *_system)
 
     SetStepHandler([this] (double _dt)
     {
-        int local_x = static_cast<int>(GetUISystem()->GetCursorPosX()) - GetX();
-        int local_y = static_cast<int>(GetUISystem()->GetCursorPosY()) - GetY();
+        int local_x = GetUISystem()->GetCursorPosX() - GetX();
+        int local_y = GetUISystem()->GetCursorPosY() - GetY();
 
-        if (0 <= local_x && local_x <= GetWidth() &&
-            0 <= local_y && local_y <= GetHeight())
+        if (0 <= local_x && local_x <= static_cast<int>(GetWidth()) &&
+            0 <= local_y && local_y <= static_cast<int>(GetHeight()))
         {
             mTime += _dt * 2.0f;
         }
@@ -58,11 +58,11 @@ void CUIButton::Connect(CUISystem *_system)
         {
             mPressed = false;
 
-            int local_x = static_cast<int>(GetUISystem()->GetCursorPosX()) - GetX();
-            int local_y = static_cast<int>(GetUISystem()->GetCursorPosY()) - GetY();
+            int local_x = GetUISystem()->GetCursorPosX() - GetX();
+            int local_y = GetUISystem()->GetCursorPosY() - GetY();
 
-            if (0 <= local_x && local_x <= GetWidth() &&
-                0 <= local_y && local_y <= GetHeight())
+            if (0 <= local_x && local_x <= static_cast<int>(GetWidth()) &&
+                0 <= local_y && local_y <= static_cast<int>(GetHeight()))
             {
                 mClickHandler();
             }
