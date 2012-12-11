@@ -20,20 +20,21 @@ public:
     virtual ~CUIWidget();
 
     virtual void Connect(CUISystem *_system);
-    virtual void Disconnect() final;
+    virtual void Disconnect();
 
-    virtual CUISystem *GetUISystem() const final;
+    CUISystem *GetUISystem() const;
 
-    virtual void SetPressHandler(const std::function<void ()> &_handler) final;
-    virtual void SetReleaseHandler(const std::function<void ()> &_handler) final;
-    virtual void SetDrawHandler(const std::function<void ()> &_handler) final;
+    void SetPressHandler(const std::function<void ()> &_handler);
+    void SetReleaseHandler(const std::function<void ()> &_handler);
+    void SetStepHandler(const std::function<void (double _dt)> &_handler);
+    void SetDrawHandler(const std::function<void ()> &_handler);
 
-    virtual void SetPos(unsigned int _x, unsigned int _y) final;
-    virtual void SetSize(unsigned int _w, unsigned int _h) final;
-    virtual unsigned int GetX() const final;
-    virtual unsigned int GetY() const final;
-    virtual unsigned int GetWidth() const final;
-    virtual unsigned int GetHeight() const final;
+    void SetPos(unsigned int _x, unsigned int _y);
+    void SetSize(unsigned int _w, unsigned int _h);
+    unsigned int GetX() const;
+    unsigned int GetY() const;
+    unsigned int GetWidth() const;
+    unsigned int GetHeight() const;
 
 protected:
 private:

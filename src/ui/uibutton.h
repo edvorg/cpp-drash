@@ -23,6 +23,7 @@ protected:
 private:
     std::function<void ()> mClickHandler = [] () {};
     bool mPressed = false;
+    float mTime = 0;
 };
 
 } // namespace drash

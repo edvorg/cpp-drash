@@ -53,6 +53,14 @@ void CUIWidget::SetReleaseHandler(const std::function<void ()> &_handler)
     }
 }
 
+void CUIWidget::SetStepHandler(const std::function<void (double)> &_handler)
+{
+    if (mUIControl != nullptr)
+    {
+        mUIControl->SetStepHandler(_handler);
+    }
+}
+
 void CUIWidget::SetDrawHandler(const std::function<void ()> &_handler)
 {
     if (mUIControl != nullptr)

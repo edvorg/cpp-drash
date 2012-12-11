@@ -20,6 +20,7 @@ public:
     inline void SetDestroyHandler(const std::function<void ()> &_handler);
     inline void SetPressHandler(const std::function<void ()> &_handler);
     inline void SetReleaseHandler(const std::function<void ()> &_handler);
+    inline void SetStepHandler(const std::function<void (double _dt)> &_handler);
     inline void SetDrawHandler(const std::function<void ()> &_handler);
 
     void SetPos(unsigned int _x, unsigned int _y);
@@ -34,6 +35,7 @@ private:
     std::function<void ()> mDestroyHandler = [] () {};
     std::function<void ()> mPressHandler = [] () {};
     std::function<void ()> mReleaseHandler = [] () {};
+    std::function<void (double _dt)> mStepHandler = [] (double _dt) {};
     std::function<void ()> mDrawHandler = [] () {};
 
     unsigned int mX = 0;
@@ -55,6 +57,11 @@ inline void CUIControl::SetPressHandler(const std::function<void ()> &_handler)
 inline void CUIControl::SetReleaseHandler(const std::function<void ()> &_handler)
 {
     mReleaseHandler = _handler;
+}
+
+inline void CUIControl::SetStepHandler(const std::function<void (double _dt)> &_handler)
+{
+    mStepHandler = _handler;
 }
 
 inline void CUIControl::SetDrawHandler(const std::function<void ()> &_handler)

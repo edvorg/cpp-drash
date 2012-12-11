@@ -91,6 +91,7 @@ void CApp::Step(double _dt)
     }
 
     mEventSystem.Process();
+    mUISystem.Step(_dt);
 
     mScene.Step(_dt);
 }

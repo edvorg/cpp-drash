@@ -41,6 +41,7 @@ public:
     void SetDebugDrawSystem(CDebugDrawSystem *_system);
     inline CDebugDrawSystem *GetDebugDrawSystem() const;
 
+    void Step(double _dt);
     void DebugDraw() const;
 
 protected:
