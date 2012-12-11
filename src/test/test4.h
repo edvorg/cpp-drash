@@ -3,6 +3,7 @@
 
 #include "../app/app.h"
 #include "../ui/uibutton.h"
+#include "../ui/uislider.h"
 
 namespace drash
 {
@@ -21,6 +22,7 @@ public:
 private:
     CUIButton mTestButton1;
     CUIButton mTestButton2;
+    CUISlider mTestSlider1;
 };
 
 } // namespace test

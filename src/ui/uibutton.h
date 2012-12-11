@@ -17,7 +17,7 @@ public:
 
     virtual void Connect(CUISystem *_system) override;
 
-    virtual void SetClickHandler(const std::function<void ()> &_handler) final;
+    void SetClickHandler(const std::function<void ()> &_handler);
 
 protected:
 private:
