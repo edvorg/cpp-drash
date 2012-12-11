@@ -78,7 +78,7 @@
           <widget class="QPushButton" name="mNewFigureButton">
            <property name="geometry">
             <rect>
-             <x>150</x>
+             <x>110</x>
              <y>10</y>
              <width>92</width>
              <height>27</height>
@@ -91,7 +91,7 @@
           <widget class="QPushButton" name="mBuildButton">
            <property name="geometry">
             <rect>
-             <x>70</x>
+             <x>10</x>
              <y>40</y>
              <width>92</width>
              <height>27</height>
@@ -112,6 +112,19 @@
            </property>
            <property name="text">
             <string>New Object</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="ActiveMoveButton">
+           <property name="geometry">
+            <rect>
+             <x>110</x>
+             <y>40</y>
+             <width>92</width>
+             <height>27</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Move Figure</string>
            </property>
           </widget>
          </widget>
@@ -152,6 +165,17 @@
      <height>25</height>
     </rect>
    </property>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
   </widget>
  </widget>
  <customwidgets>

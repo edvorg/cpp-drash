@@ -64,6 +64,11 @@ private slots:
 
     void on_mTreeObjects_itemSelectionChanged();
 
+    void on_ActiveMoveButton_clicked();
+
+    void Remove_Object();
+
+    void SaveObject();
 private:
     Ui::EditorWindow *ui;
     bool InitScene();
@@ -76,13 +81,15 @@ private:
     // Actions
 private:
     QAction *mQuit;
-
+    QAction *mRemoveAction;
+    QAction *mSaveAction;
     // GuiObjects
 private:
     QLabel *mLabelOfStatusBar;
 
 private:
     void CreateActions();
+
     bool UpdateTreeObject();
 
     drash::CTimer mTimer;

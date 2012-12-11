@@ -91,16 +91,56 @@ void CObjectEditorApp::SetProcessor()
     GetEventSystem().SetProcessor("LB", CAppEventProcessor(
     [this] ()
     {
-        //LOG_INFO("Click !!!");
-        if (mState == BuildState) {
-            mVertexs.push_back(GetCursorPos());
+        LOG_INFO("Click !!!");
+        switch (mState) {
+            case BuildState:
+                mVertexs.push_back(GetCursorPos());
+                break;
+            case MoveState:
+                mOldPositon = GetCursorPos();
+
+                mSelectedFigure = SelectFigure(mOldPositon);
+
+                GetDebugDrawSystem().ScreenSpaceToWorldSpace(mOldPositon,
+                                      -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+
+                if (mSelectedFigure == nullptr)
+                    LOG_INFO("NOOOO");
+
+                break;
+            case Simple:
+                mSelectedFigure = nullptr;
+                break;
+        }
+    },
+    [this] ()
+    {
+        if (mSelectedFigure != nullptr && mState == MoveState) {
+            LOG_INFO("Move figure now");
+            //LOG_INFO("Move figure now");
+            MoveFigure();
+        }
+    },
+    [this] ()
+    {
+        if (mState == MoveState) {
+            mSelectedFigure = nullptr;
         }
     }
     ));
+
     GetEventSystem().SetProcessor("RB",CAppEventProcessor(
     [this] ()
     {
-        BuildFigure(mCurrentTemplateName);
+        switch (mState) {
+            case BuildState:
+                BuildFigure(mCurrentTemplateName);
+                break;
+            case MoveState:
+                break;
+            case Simple:
+                break;
+        }
     }
     ));
 }
@@ -134,6 +174,7 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
 
     mState = Simple;
     mVertexs.clear();
+
     return true;
 }
 
@@ -166,6 +207,68 @@ void CObjectEditorApp::RemoveCurrentObject()
         GetScene().DestroyObject(mCurrentObject);
         mCurrentObject = nullptr;
     }
+}
+
+CFigure *CObjectEditorApp::SelectFigure(const CVec2 &_pos)
+{
+    if (mCurrentObject != nullptr) {
+        return GetDebugDrawSystem().FindFigure(_pos);
+    }
+
+    return nullptr;
+}
+
+void CObjectEditorApp::MoveFigure()
+{
+    if (mSelectedFigure == nullptr) {
+        return;
+    }
+
+    CVec2 pos = GetCursorPos();
+    const b2Vec2* v = mSelectedFigure->GetVertices();
+    CVec2* new_vertices = new CVec2[mSelectedFigure->EnumVertices()];
+    for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++)
+    {
+        new_vertices[i] = v[i];
+        new_vertices[i].x += pos.x;
+        new_vertices[i].y += pos.y;
+    }
+    mSelectedFigure->SetVertices(new_vertices, mSelectedFigure->EnumVertices());
+
+//    if (drash::math::Abs(pos.x) > drash::math::Abs(pos.y)) {
+
+//        const b2Vec2* v = mSelectedFigure->GetVertices();
+//        CVec2* new_vertices = new CVec2[mSelectedFigure->EnumVertices()];
+//        for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++)
+//        {
+//            new_vertices[i] = v[i];
+//            new_vertices[i].x += pos.x;
+//        }
+//        mSelectedFigure->SetVertices(new_vertices, mSelectedFigure->EnumVertices());
+
+//    } else {
+//        const b2Vec2* v = mSelectedFigure->GetVertices();
+//        CVec2* new_vertices = new CVec2[mSelectedFigure->EnumVertices()];
+//        for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++)
+//        {
+//            new_vertices[i] = v[i];
+//            new_vertices[i].y += pos.y;
+//        }
+//        mSelectedFigure->SetVertices(new_vertices, mSelectedFigure->EnumVertices());
+    //    }
+}
+
+void CObjectEditorApp::SaveCurrentObject()
+{
+    if (mCurrentObject == nullptr) {
+        return;
+    }
+
+//    GetTemplateSystem().DestoySceneObjectTemplate(mCurrentObject);
+
+    GetTemplateSystem().ChangeGeometry( mCurrentObject->GetGeometry(), mCurrentTemplateName );
+
+    ShowObject(mCurrentTemplateName);
 }
 
 

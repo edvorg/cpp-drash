@@ -65,7 +65,7 @@ public:
     inline void SetZ(float _z);
     inline float GetDepth() const;
     inline void SetDepth(float _depth);
-
+    inline float GetFriction()const;
     friend CLogger &operator <<(CLogger &_logger, const CFigure &_figure);
 
 protected:
@@ -79,8 +79,14 @@ private:
     unsigned int mInternalId = 0;
 };
 
+inline float CFigure::GetFriction() const
+{
+    return mFixture->GetFriction();
+}
+
 inline CSceneObject *CFigure::GetSceneObject() const
 {
+
     return reinterpret_cast<CSceneObject*>(mFixture->GetBody()->GetUserData());
 }
 

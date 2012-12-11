@@ -34,6 +34,7 @@ void CTemplateSystem::Release()
         delete i->second;
     }
     mSceneObjectTemplates.clear();
+
     for (auto i=mDrashBodyTemplates.begin(), i_e=mDrashBodyTemplates.end(); i!=i_e; i++)
     {
         delete i->second;
@@ -85,6 +86,17 @@ void CTemplateSystem::RemoveSceneObjectTemplate(const std::string &_name)
     {
         delete iter->second;
         mSceneObjectTemplates.erase(iter);
+    }
+}
+
+void CTemplateSystem::ChangeGeometry(CSceneObjectGeometry *_t, const std::string &_name)
+{
+    auto iter = mSceneObjectTemplates.find(_name);
+    if (iter != mSceneObjectTemplates.end()) {
+        delete iter->second;
+        iter->second = _t;
+    } else {
+        LOG_ERR("Template " << _name.c_str() << " not found in TemplateSystem");
     }
 }
 
