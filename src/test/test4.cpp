@@ -28,7 +28,7 @@ CTest4::CTest4()
     });
 
     mTestButton2.SetPos(350, 100);
-    mTestButton2.SetSize(200, 30);
+    mTestButton2.SetSize(30, 30);
 }
 
 void CTest4::Release()
