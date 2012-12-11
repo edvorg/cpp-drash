@@ -45,6 +45,41 @@ bool CTestApp3::Init()
 
     GetDebugDrawSystem().GetActiveCam()->GetZ().SetTarget(280, 1.0f, AnimationBehaviorSingle);
 
+    mSlider1.Connect(&GetUISystem());
+    mSlider1.SetPos(10, 10);
+    mSlider1.SetSize(100, 20);
+    mSlider1.SetMin(-50);
+    mSlider1.SetMax(50);
+    mSlider1.SetValue(0);
+    mSlider1.SetValueHandler([this] (float _value)
+    {
+        GetScene().SetGravity(CVec2(_value, mSlider2.GetValue()));
+    });
+
+    mSlider2.Connect(&GetUISystem());
+    mSlider2.SetPos(10, 40);
+    mSlider2.SetSize(100, 20);
+    mSlider2.SetMin(-50);
+    mSlider2.SetMax(50);
+    mSlider2.SetValue(-9.8);
+    mSlider2.SetValueHandler([this] (float _value)
+    {
+        GetScene().SetGravity(CVec2(mSlider1.GetValue(), _value));
+    });
+
+    mButton1.Connect(&GetUISystem());
+    mButton1.SetPos(10, 70);
+    mButton1.SetSize(100, 20);
+    mButton1.SetClickHandler([this] ()
+    {
+        CDrashBodyParams params;
+        params.mDynamic = true;
+        params.mPos.RandX(-100, 100);
+        params.mPos.y = 200;
+
+        GetTemplateSystem().CreateDrashBodyFromTemplate("box_big", params);
+    });
+
     return true;
 }
 

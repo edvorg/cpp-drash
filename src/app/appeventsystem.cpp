@@ -11,6 +11,18 @@ CAppEventSystem::CAppEventSystem()
 {
 }
 
+bool CAppEventSystem::Init()
+{
+    if (mCurrentMode == "")
+    {
+        SetMode(std::string("normal"));
+    }
+}
+
+void CAppEventSystem::Release()
+{
+}
+
 bool CAppEventSystem::ValidateModeName(const std::string &_name)
 {
     return std::find(_name.begin(), _name.end(), ' ') == _name.end();
@@ -51,11 +63,6 @@ bool CAppEventSystem::SetMode(const std::string &_name)
 
 void CAppEventSystem::SetProcessor(const char *_combinations, const CAppEventProcessor &_processor)
 {
-    if (mCurrentMode == "")
-    {
-        SetMode(std::string("normal"));
-    }
-
     using std::list;
     using std::string;
     using std::for_each;

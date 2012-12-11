@@ -124,6 +124,7 @@ void SceneWidget::resizeGL( int _w, int _h )
     if (mApp != nullptr)
     {
         mApp->GetDebugDrawSystem().SetAspectRatio(mWidth / mHeight);
+        mApp->GetUISystem().SetAspectRatio(mWidth / mHeight);
     }
 }
 
@@ -159,8 +160,13 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
     CVec2 pos = WidgetSpaceToScreenSpace(CVec2(_event->x(),
                                                _event->y()));
     mApp->SetCursorPos(pos);
+    unsigned int x = 0;
+    unsigned int y = 0;
+    mApp->GetUISystem().ScreenSpaceToUISpace(pos, x, y);
+    mApp->GetUISystem().SetCursorPos(x, y);
 
     mApp->GetEventSystem().BeginEvent(CAppEvent(ConvertKey(_event->button())));
+    mApp->GetUISystem().BeginEvent();
 }
 
 void SceneWidget::mouseReleaseEvent(QMouseEvent *_event)
@@ -173,6 +179,7 @@ void SceneWidget::mouseReleaseEvent(QMouseEvent *_event)
     }
 
     mApp->GetEventSystem().EndEvent(CAppEvent(ConvertKey(_event->button())));
+    mApp->GetUISystem().EndEvent();
 }
 
 void SceneWidget::mouseMoveEvent(QMouseEvent *_event)
@@ -187,6 +194,10 @@ void SceneWidget::mouseMoveEvent(QMouseEvent *_event)
     CVec2 pos = WidgetSpaceToScreenSpace(CVec2(_event->x(),
                                                _event->y()));
     mApp->SetCursorPos(pos);
+    unsigned int x = 0;
+    unsigned int y = 0;
+    mApp->GetUISystem().ScreenSpaceToUISpace(pos, x, y);
+    mApp->GetUISystem().SetCursorPos(x, y);
 }
 
 void SceneWidget::keyPressEvent( QKeyEvent *_event )

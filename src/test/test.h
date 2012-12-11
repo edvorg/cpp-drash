@@ -30,7 +30,12 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
+namespace test
+{
+
 CApp *StartApp( const char *_name );
+
+} // namespace test
 
 }// namespace drash
 

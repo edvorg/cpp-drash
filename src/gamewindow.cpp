@@ -85,7 +85,7 @@ bool GameWindow::Init( const GameWindowParams &_params )
         {
             if ( i+1 < _params.mArgv.size() )
             {
-                mApp = StartApp( _params.mArgv[i+1].c_str() );
+                mApp = test::StartApp( _params.mArgv[i+1].c_str() );
 
                 if (mApp == nullptr)
                 {

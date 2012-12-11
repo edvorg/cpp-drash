@@ -43,10 +43,14 @@ bool CApp::Init()
         return false;
     }
 
+    mEventSystem.Init();
+    mUISystem.Init();
+
     mExplosionSystem.SetScene(&mScene);
     mPlayersSystem.SetScene(&mScene);
     mTemplateSystem.SetScene(&mScene);
     mDebugDrawSystem.SetScene(&mScene);
+    mUISystem.SetDebugDrawSystem(&mDebugDrawSystem);
 
     CCamera *cam = GetDebugDrawSystem().CreateCam(CCameraParams(), true);
 
@@ -62,6 +66,8 @@ bool CApp::Init()
 
 void CApp::Release()
 {
+    mUISystem.Release();
+    mEventSystem.Release();
     mPlayersSystem.Release();
     mExplosionSystem.Release();
     mTemplateSystem.Release();
@@ -85,6 +91,7 @@ void CApp::Step(double _dt)
     }
 
     mEventSystem.Process();
+    mUISystem.Step(_dt);
 
     mScene.Step(_dt);
 }
@@ -92,6 +99,7 @@ void CApp::Step(double _dt)
 void CApp::Render()
 {
     mDebugDrawSystem.Draw();
+    mUISystem.DebugDraw();
 }
 
 } // namespace drash
