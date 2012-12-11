@@ -91,7 +91,7 @@ void CObjectEditorApp::SetProcessor()
     GetEventSystem().SetProcessor("LB", CAppEventProcessor(
     [this] ()
     {
-        //LOG_INFO("Click !!!");
+        LOG_INFO("Click !!!");
         switch (mState) {
             case BuildState:
                 mVertexs.push_back(GetCursorPos());
@@ -103,7 +103,10 @@ void CObjectEditorApp::SetProcessor()
 
                 GetDebugDrawSystem().ScreenSpaceToWorldSpace(mOldPositon,
                                       -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
-                if (mSelectedFigure == nullptr) LOG_INFO("NOOOO");
+
+                if (mSelectedFigure == nullptr)
+                    LOG_INFO("NOOOO");
+
                 break;
             case Simple:
                 mSelectedFigure = nullptr;
@@ -115,43 +118,29 @@ void CObjectEditorApp::SetProcessor()
         if (mSelectedFigure != nullptr && mState == MoveState) {
             LOG_INFO("Move figure now");
             //LOG_INFO("Move figure now");
-            CVec2 position = GetCursorPos();
-            GetDebugDrawSystem().ScreenSpaceToWorldSpace(position,
-                                  -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
-            float disX = position.x - mOldPositon.x;
-            float disY = position.y - mOldPositon.y;
-            mOldPositon = position;
-            //mSelectedFigure->MoveToDistance(disX,disY);
+            MoveFigure();
         }
     },
     [this] ()
     {
-        if (mState = MoveState) {
+        if (mState == MoveState) {
             mSelectedFigure = nullptr;
         }
     }
     ));
-    /*
-     *    [this] ()// left mouse button pressed
-    {
-        // choose object here
-        mSelectedObject = GetDebugDrawSystem().FindObject(GetCursorPos());
-    },
-    [this] ()// left mouse button is being pressed
-    {
-        // move object if choosen
-        if (mSelectedObject != nullptr)
-        {
-            CVec2 pos = GetCursorPos();
-            GetDebugDrawSystem().ScreenSpaceToWorldSpace(pos, mSelectedObject->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
-            mSelectedObject->SetPos(pos);
-        }
-    }));
-     */
+
     GetEventSystem().SetProcessor("RB",CAppEventProcessor(
     [this] ()
     {
-        BuildFigure(mCurrentTemplateName);
+        switch (mState) {
+            case BuildState:
+                BuildFigure(mCurrentTemplateName);
+                break;
+            case MoveState:
+                break;
+            case Simple:
+                break;
+        }
     }
     ));
 }
@@ -222,13 +211,64 @@ void CObjectEditorApp::RemoveCurrentObject()
 
 CFigure *CObjectEditorApp::SelectFigure(const CVec2 &_pos)
 {
-//    CSceneObject *selectedObject = GetDebugDrawSystem().FindObject(_pos);
     if (mCurrentObject != nullptr) {
-        return nullptr;
-        //return mCurrentObject->FindFigure(_pos,mCurrentObject->GetZ().Get());
+        return GetDebugDrawSystem().FindFigure(_pos);
     }
 
     return nullptr;
+}
+
+void CObjectEditorApp::MoveFigure()
+{
+    if (mSelectedFigure == nullptr) {
+        return;
+    }
+
+    CVec2 pos = GetCursorPos();
+    const b2Vec2* v = mSelectedFigure->GetVertices();
+    CVec2* new_vertices = new CVec2[mSelectedFigure->EnumVertices()];
+    for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++)
+    {
+        new_vertices[i] = v[i];
+        new_vertices[i].x += pos.x;
+        new_vertices[i].y += pos.y;
+    }
+    mSelectedFigure->SetVertices(new_vertices, mSelectedFigure->EnumVertices());
+
+//    if (drash::math::Abs(pos.x) > drash::math::Abs(pos.y)) {
+
+//        const b2Vec2* v = mSelectedFigure->GetVertices();
+//        CVec2* new_vertices = new CVec2[mSelectedFigure->EnumVertices()];
+//        for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++)
+//        {
+//            new_vertices[i] = v[i];
+//            new_vertices[i].x += pos.x;
+//        }
+//        mSelectedFigure->SetVertices(new_vertices, mSelectedFigure->EnumVertices());
+
+//    } else {
+//        const b2Vec2* v = mSelectedFigure->GetVertices();
+//        CVec2* new_vertices = new CVec2[mSelectedFigure->EnumVertices()];
+//        for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++)
+//        {
+//            new_vertices[i] = v[i];
+//            new_vertices[i].y += pos.y;
+//        }
+//        mSelectedFigure->SetVertices(new_vertices, mSelectedFigure->EnumVertices());
+    //    }
+}
+
+void CObjectEditorApp::SaveCurrentObject()
+{
+    if (mCurrentObject == nullptr) {
+        return;
+    }
+
+//    GetTemplateSystem().DestoySceneObjectTemplate(mCurrentObject);
+
+    GetTemplateSystem().ChangeGeometry( mCurrentObject->GetGeometry(), mCurrentTemplateName );
+
+    ShowObject(mCurrentTemplateName);
 }
 
 

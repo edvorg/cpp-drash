@@ -288,4 +288,24 @@ CLogger &operator <<(CLogger &_logger, const CSceneObject &_object)
     return _logger;
 }
 
+CSceneObjectGeometry *CSceneObject::GetGeometry() const
+{
+    CSceneObjectGeometry *geo = new CSceneObjectGeometry();
+    std::vector<CFigureParams> res;
+    for (int i = 0 ; i < mFiguresCount ; i++) {
+        CFigureParams buff;
+        CFigure* fig = mFigures[i];
+        buff.mDepth = fig->GetDepth();
+        buff.mFriction = fig->GetFriction();
+        buff.mMass = fig->mMass;
+        buff.mRestitution = fig->mFixture->GetRestitution();
+        for (int i = 0 , count = fig->EnumVertices() ; i < count ; i++) {
+            buff.mVertices.push_back(fig->GetVertices()[i]);
+        }
+        res.push_back(buff);
+    }
+    geo->mFigures = res;
+    return geo;
+}
+
 } // namespace drash

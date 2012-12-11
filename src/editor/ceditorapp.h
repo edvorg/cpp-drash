@@ -60,6 +60,8 @@ public:
     inline void SetTreeRefreshHandler(const std::function<void ()> &_han);
 
     inline void ActiveMoveMode();
+
+    void SaveCurrentObject();
 private:
 
     void SetProcessor();
@@ -70,11 +72,12 @@ private:
 
     CFigure * SelectFigure(const CVec2 &_pos);
 
+    void MoveFigure();
+
 private:
     CSceneObject *mCurrentObject = nullptr;
 
     State mState = Simple;
-
 
     std::string mCurrentTemplateName = "";
 
@@ -84,9 +87,8 @@ private:
 
     CFigure *mSelectedFigure = nullptr;
 
-    float mMoveDistance = 0.0f;
-
     CVec2 mOldPositon = CVec2(0);
+
 };
 
 inline bool CObjectEditorApp::IsStartBuild()const {

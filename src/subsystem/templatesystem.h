@@ -48,6 +48,7 @@ public:
     CSceneObjectGeometry* CreateSceneObjectTemplate(const std::string &_name);
     void DestoySceneObjectTemplate(CSceneObjectGeometry *_t);
     void RemoveSceneObjectTemplate(const std::string &_name);
+    void ChangeGeometry(CSceneObjectGeometry *_t, const std::string &_name);
     CSceneObject *CreateSceneObjectFromTemplate(const std::string &_name, const CSceneObjectParams &_params);
 
     /// template is just named CDrashBodyGeometry

@@ -45,7 +45,10 @@ EditorWindow::EditorWindow(QWidget *parent) :
     this->statusBar()->addWidget(mLabelOfStatusBar);
 
     this->setWindowTitle("DRASH Editor");
-    this->InitScene();
+
+    if (this->InitScene()) {
+        close();
+    }
 
     this->startTimer(0);
     this->ui->mTreeObjects->clear();
@@ -58,8 +61,6 @@ EditorWindow::EditorWindow(QWidget *parent) :
     });
 
 }
-
-
 
 EditorWindow::~EditorWindow()
 {
@@ -110,6 +111,19 @@ void EditorWindow::CreateActions()
     ui->toolBar->addAction(mRemoveAction);
     connect(mRemoveAction,SIGNAL(triggered()),
             this, SLOT(Remove_Object()));
+
+    mSaveAction = new QAction("Save Object", this);
+    mSaveAction->setShortcut(tr("Ctrl+S"));
+    ui->toolBar->addAction(mSaveAction);
+    connect(mSaveAction, SIGNAL(triggered()),
+            this,SLOT(SaveObject()));
+}
+
+void EditorWindow::SaveObject()
+{
+    mObjectApp->SaveCurrentObject();
+
+    UpdateTreeObject();
 }
 
 bool EditorWindow::UpdateTreeObject()
