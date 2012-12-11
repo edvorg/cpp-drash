@@ -28,6 +28,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "TestEditorApp.h"
 
+#include "../ui/uislider.h"
+#include "../ui/uibutton.h"
+
 namespace drash
 {
 
@@ -47,6 +50,14 @@ private:
     CSceneObject *mO1 = nullptr;
     CSceneObject *mO2 = nullptr;
     CSceneObject *mMoveObject = nullptr;
+
+    // gravity in y axis
+    CUISlider mSlider1;
+    // gravity in x axis
+    CUISlider mSlider2;
+
+    // creates objct at random position from geometry of template system (if it has any).
+    CUIButton mButton1;
 };
 
 } // namespace drash
