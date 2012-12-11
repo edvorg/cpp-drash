@@ -50,6 +50,7 @@ bool CApp::Init()
     mPlayersSystem.SetScene(&mScene);
     mTemplateSystem.SetScene(&mScene);
     mDebugDrawSystem.SetScene(&mScene);
+    mUISystem.SetDebugDrawSystem(&mDebugDrawSystem);
 
     CCamera *cam = GetDebugDrawSystem().CreateCam(CCameraParams(), true);
 
@@ -97,6 +98,7 @@ void CApp::Step(double _dt)
 void CApp::Render()
 {
     mDebugDrawSystem.Draw();
+    mUISystem.DebugDraw();
 }
 
 } // namespace drash

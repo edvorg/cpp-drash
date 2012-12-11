@@ -166,6 +166,7 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
     mApp->GetUISystem().SetCursorPos(x, y);
 
     mApp->GetEventSystem().BeginEvent(CAppEvent(ConvertKey(_event->button())));
+    mApp->GetUISystem().BeginEvent();
 }
 
 void SceneWidget::mouseReleaseEvent(QMouseEvent *_event)
@@ -178,6 +179,7 @@ void SceneWidget::mouseReleaseEvent(QMouseEvent *_event)
     }
 
     mApp->GetEventSystem().EndEvent(CAppEvent(ConvertKey(_event->button())));
+    mApp->GetUISystem().EndEvent();
 }
 
 void SceneWidget::mouseMoveEvent(QMouseEvent *_event)

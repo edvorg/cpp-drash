@@ -20,6 +20,7 @@ public:
 
 private:
     CUIButton mTestButton1;
+    CUIButton mTestButton2;
 };
 
 } // namespace test

@@ -17,7 +17,8 @@ void CUIWidget::Connect(CUISystem *_system)
     mUIControl = mUISystem->CreateControl();
     mUIControl->SetDestroyHandler([this] ()
     {
-        this->Disconnect();
+        mUIControl = nullptr;
+        mUISystem = nullptr;
     });
 }
 

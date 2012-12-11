@@ -81,4 +81,43 @@ void CUISystem::SetCursorPos(unsigned int _x, unsigned int _y)
     mCursorY = drash::math::Clamp<unsigned int>(_y, 0, mHeight);
 }
 
+void CUISystem::BeginEvent()
+{
+    for (unsigned int i = 0; i < mControlsCount; i++)
+    {
+        int local_x = static_cast<int>(GetCursorPosX()) - mControls[i]->GetX();
+        int local_y = static_cast<int>(GetCursorPosY()) - mControls[i]->GetY();
+
+        if (0 <= local_x && local_x <= mControls[i]->GetWidth() &&
+            0 <= local_y && local_y <= mControls[i]->GetHeight())
+        {
+            mPressedControl = mControls[i];
+            mPressedControl->mPressHandler();
+            break;
+        }
+    }
+}
+
+void CUISystem::EndEvent()
+{
+    if (mPressedControl != nullptr)
+    {
+        mPressedControl->mReleaseHandler();
+        mPressedControl = nullptr;
+    }
+}
+
+void CUISystem::SetDebugDrawSystem(CDebugDrawSystem *_system)
+{
+    mDebugDrawSystem = _system;
+}
+
+void CUISystem::DebugDraw() const
+{
+    for (unsigned int i = 0; i < mControlsCount; i++)
+    {
+        mControls[i]->mDrawHandler();
+    }
+}
+
 } // namespace drash

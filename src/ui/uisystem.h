@@ -4,6 +4,7 @@
 namespace drash
 {
 
+class CDebugDrawSystem;
 class CVec2;
 class CUIControl;
 
@@ -34,6 +35,14 @@ public:
     inline unsigned int GetCursorPosX() const;
     inline unsigned int GetCursorPosY() const;
 
+    void BeginEvent();
+    void EndEvent();
+
+    void SetDebugDrawSystem(CDebugDrawSystem *_system);
+    inline CDebugDrawSystem *GetDebugDrawSystem() const;
+
+    void DebugDraw() const;
+
 protected:
 private:
     CUIControl *mControls[mControlsCountLimit];
@@ -45,6 +54,10 @@ private:
 
     unsigned int mCursorX = 0;
     unsigned int mCursorY = 0;
+
+    CUIControl *mPressedControl = nullptr;
+
+    CDebugDrawSystem *mDebugDrawSystem = nullptr;
 };
 
 inline unsigned int CUISystem::GetCursorPosX() const
@@ -55,6 +68,11 @@ inline unsigned int CUISystem::GetCursorPosX() const
 inline unsigned int CUISystem::GetCursorPosY() const
 {
     return mCursorY;
+}
+
+inline CDebugDrawSystem *CUISystem::GetDebugDrawSystem() const
+{
+    return mDebugDrawSystem;
 }
 
 } // namespace drash
