@@ -43,10 +43,6 @@ public:
     /// to screen space (-0.5, -0.5)..(0.5, 0.5)
     drash::CVec2 WidgetSpaceToScreenSpace(const drash::CVec2& _from) const;
 
-    /// converts coordinates from window space (0,0)..(mWidth, mHeight) to world space
-    /// taking into account depth (distance from camera to required layer) and activated camera position
-    drash::CVec2 WidgetSpaceToWorldSpace(const drash::CVec2& _from, float _depth) const;
-
     virtual void resizeGL( int _w, int _h ) override;
     virtual void paintGL() override;
 

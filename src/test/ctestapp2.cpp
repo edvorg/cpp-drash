@@ -101,7 +101,7 @@ void CTestApp2::SetProcessors()
     {
         CSceneObjectParams p;
         p.mPos = GetCursorPos();
-        GetDebugDrawSystem().ScreenSpaceToWorldSpace(p.mPos, -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+        GetDebugDrawSystem().ScreenSpaceToWorldSpace(p.mPos, GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
         GetTemplateSystem().CreateSceneObjectFromTemplate("lambda_test", p);
     }));
 
@@ -124,7 +124,7 @@ void CTestApp2::SetProcessors()
         if (mSelectedObject != nullptr)
         {
             CVec2 pos = GetCursorPos();
-            GetDebugDrawSystem().ScreenSpaceToWorldSpace(pos, mSelectedObject->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+            GetDebugDrawSystem().ScreenSpaceToWorldSpace(pos, - mSelectedObject->GetZ().Get() + GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
             mSelectedObject->GetPos().Set(pos);
         }
     }));

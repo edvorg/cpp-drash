@@ -102,7 +102,7 @@ void CObjectEditorApp::SetProcessor()
                 mSelectedFigure = SelectFigure(mOldPositon);
 
                 GetDebugDrawSystem().ScreenSpaceToWorldSpace(mOldPositon,
-                                      -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+                                      GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
 
                 if (mSelectedFigure == nullptr)
                     LOG_INFO("NOOOO");
@@ -163,7 +163,7 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
     std::for_each(mVertexs.begin() , mVertexs.end() , [this] (CVec2 &v)
     {
         GetDebugDrawSystem().ScreenSpaceToWorldSpace(v,
-                 -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+                 GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
     });
     param.mVertices = mVertexs;
     obj->mFigures.push_back(param);

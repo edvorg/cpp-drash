@@ -104,14 +104,6 @@ CVec2 SceneWidget::WidgetSpaceToScreenSpace(const CVec2 &_from) const
     return res;
 }
 
-CVec2 SceneWidget::WidgetSpaceToWorldSpace(const CVec2 &_from, float _depth) const
-{
-    CVec2 res = WidgetSpaceToScreenSpace(_from);
-    mApp->GetDebugDrawSystem().ScreenSpaceToWorldSpace(res, _depth);
-
-    return res;
-}
-
 void SceneWidget::resizeGL( int _w, int _h )
 {
     QGLWidget::resizeGL( _w, _h );

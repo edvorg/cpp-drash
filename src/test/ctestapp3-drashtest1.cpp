@@ -118,8 +118,8 @@ void CTestApp3::Render()
         const b2AABB &b = mO1->GetBoundingBox();
         CVec2 upper = b.upperBound;
         CVec2 lower = b.lowerBound;
-        GetDebugDrawSystem().WorldSpaceToScreenSpace(lower, mO1->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
-        GetDebugDrawSystem().WorldSpaceToScreenSpace(upper, mO1->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+        GetDebugDrawSystem().WorldSpaceToScreenSpace(lower, - mO1->GetZ().Get() + GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+        GetDebugDrawSystem().WorldSpaceToScreenSpace(upper, - mO1->GetZ().Get() + GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
         b2Color col(1, 0, 0);
         CVec2 tmp1(upper.x, lower.y);
         CVec2 tmp2(lower.x, upper.y);
@@ -195,7 +195,7 @@ void CTestApp3::SetProcessors()
         p.mRadius = 200;
         p.mPos = GetCursorPos();
         auto cam = GetDebugDrawSystem().GetActiveCam();
-        GetDebugDrawSystem().ScreenSpaceToWorldSpace(p.mPos, -cam->GetZ().Get());
+        GetDebugDrawSystem().ScreenSpaceToWorldSpace(p.mPos, cam->GetZ().Get());
         GetScene().CreateObject<CExplosion>(g, p);
     }));
 
@@ -248,7 +248,7 @@ void CTestApp3::SetProcessors()
         if (mMoveObject != nullptr)
         {
             CVec2 coords = GetCursorPos();
-            if (GetDebugDrawSystem().ScreenSpaceToWorldSpace(coords, mMoveObject->GetZ().Get() - GetDebugDrawSystem().GetActiveCam()->GetZ().Get()))
+            if (GetDebugDrawSystem().ScreenSpaceToWorldSpace(coords, - mMoveObject->GetZ().Get() + GetDebugDrawSystem().GetActiveCam()->GetZ().Get()))
             {
                 coords -= mMoveObject->GetPos().Get();
                 coords *= 10;

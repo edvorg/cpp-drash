@@ -136,7 +136,7 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2 &_pos) const
         {
             CFigure *cur_fgr = cur_obj->GetFigures()[j];
 
-            float z = cur_obj->GetZ().Get() + cur_fgr->GetZ() - GetActiveCam()->GetZ().Get();
+            float z = - cur_obj->GetZ().Get() - cur_fgr->GetZ() + GetActiveCam()->GetZ().Get();
             CVec2 pos = _pos;
             ScreenSpaceToWorldSpace(pos, z);
 
@@ -167,9 +167,9 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2 &_pos) const
         {
             CFigure *cur_fgr = cur_obj->GetFigures()[j];
 
-            float z = cur_obj->GetZ().Get() + cur_fgr->GetZ() - GetActiveCam()->GetZ().Get();
+            float z = - cur_obj->GetZ().Get() - cur_fgr->GetZ() + GetActiveCam()->GetZ().Get();
 
-            if (z < z_nearest)
+            if (z > z_nearest)
             {
                 continue;
             }
@@ -211,7 +211,7 @@ void CDebugDrawSystem::Draw() const
 
         CVec2 min(-0.5, -0.5);
         CVec2 max(0.5, 0.5);
-        float d = drash::math::Abs(objects[i]->GetZ().Get() - mActiveCam->GetZ().Get());
+        float d = - objects[i]->GetZ().Get() + mActiveCam->GetZ().Get();
 
         ScreenSpaceToWorldSpace(min, d);
         ScreenSpaceToWorldSpace(max, d);

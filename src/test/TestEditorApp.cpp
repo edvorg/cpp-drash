@@ -164,7 +164,7 @@ void CTestEditorApp::CompleteFigure()
         for (auto i = mCurrentTemplate->mFigures.back().mVertices.begin();
              i != mCurrentTemplate->mFigures.back().mVertices.end(); i++)
         {
-            GetDebugDrawSystem().ScreenSpaceToWorldSpace(*i, -GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+            GetDebugDrawSystem().ScreenSpaceToWorldSpace(*i, GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
         }
 
         if (mCurrentObject != nullptr)
