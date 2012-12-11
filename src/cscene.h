@@ -105,6 +105,8 @@ public:
     /// returns total connected subsystems count
     inline unsigned int EnumSubsystems(void) const;
 
+    void SetGravity(const CVec2 &_g);
+
 protected:
 private:
     void DestroyObjectImpl(CSceneObject *_obj);

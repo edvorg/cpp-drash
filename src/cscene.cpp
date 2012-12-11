@@ -229,6 +229,11 @@ void CScene::DisconnectSubsystem(CSubsystem *_subsystem)
     LOG_WARN("CScene::RemSubsystem(): subsystem is not connected");
 }
 
+void CScene::SetGravity(const CVec2 &_g)
+{
+    mWorld.SetGravity(_g);
+}
+
 void CScene::DestroyObjectImpl(CSceneObject *_obj)
 {
     b2Body* body = _obj->mBody;
