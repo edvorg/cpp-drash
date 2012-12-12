@@ -126,14 +126,33 @@ protected:
 private:
     b2Body* mBody = nullptr;
     CScene* mScene = nullptr;
+
+    //////////////////////////////////////////////////////
+    /// values, changed only be owning system (CScene) ///
+
+    /// if flag is true, object will be destoyed with next CScene::Step() invokation
     bool mDead = false;
+
+    /// id. just for perfomance
     int mInternalId = -1;
-    CAnimatedParam<CVec2> mPos;
-    CAnimatedParam<float> mAngle;
-    float mColor[3];
+
+    //////////////////////////////////////////////
+    /// figures factory //////////////////////////
+
     CFigure *mFigures[mFiguresCountLimit];
     unsigned int mFiguresCount = 0;
+
+    /// world space postition in physics world
+    CAnimatedParam<CVec2> mPos;
+
+    /// z position. used 3d rendering
     CAnimatedParam<float> mZ;
+
+    /// rotation angle in radians
+    CAnimatedParam<float> mAngle;
+
+    /// color, used for debug rendering. will be removed
+    float mColor[3];
 };
 
 inline CScene *CSceneObject::GetScene()
