@@ -33,7 +33,7 @@ CPhysObserver::CPhysObserver()
 {
 }
 
-bool CPhysObserver::ShouldCollide( b2Fixture *fixtureA, b2Fixture *fixtureB )
+bool CPhysObserver::ShouldCollide(b2Fixture *fixtureA, b2Fixture *fixtureB)
 {
     if (fixtureA->GetUserData() == nullptr ||
 		fixtureB->GetUserData() == nullptr ||
@@ -55,131 +55,71 @@ bool CPhysObserver::ShouldCollide( b2Fixture *fixtureA, b2Fixture *fixtureB )
     return drash::math::Abs(z1 - z2) < (f1->GetDepth() * 0.5 + f2->GetDepth() * 0.5);
 }
 
-void CPhysObserver::BeginContact( b2Contact * _contact )
+void CPhysObserver::BeginContact(b2Contact * _contact)
 {
-    CSceneObject *obj1 = reinterpret_cast<CSceneObject*>(
-                _contact->GetFixtureA()->GetBody()->GetUserData() );
+    CFigure *f1 = reinterpret_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
+    CFigure *f2 = reinterpret_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
 
-    CSceneObject *obj2 = reinterpret_cast<CSceneObject*>(
-                _contact->GetFixtureB()->GetBody()->GetUserData() );
-
-    if ( obj1 == NULL || obj2 == NULL )
+    if ( f1 == NULL || f2 == NULL )
     {
         LOG_WARN( "CContactListener::BeginContact(): "
-                  "can not get pointer for one of objects. Skipping" );
+                  "can not get pointer for one of figures. Skipping" );
         return;
     }
 
-    if ( obj1 == obj2 )
+    if ( f1 == f2 || f1->GetSceneObject() == f2->GetSceneObject() )
     {
         LOG_WARN( "CContactListener::BeginContact(): "
-                  "object A is equals to object B. Skipping" );
+                  "it's seems that pair of figures is part of same object" );
         return;
     }
 
-    b2WorldManifold m;
-    _contact->GetWorldManifold(&m);
-
-    CContact c;
-    c.mPointCount = _contact->GetManifold()->pointCount;
-
-    for ( unsigned int i=0; i<c.mPointCount; i++ )
-    {
-        c.mPoints[i] = obj1->mBody->GetLocalPoint( m.points[i] );
-    }
-    c.obj = obj2;
-    obj1->OnContactBegin(c);
-
-    for ( unsigned int i=0; i<c.mPointCount; i++ )
-    {
-        c.mPoints[i] = obj2->mBody->GetLocalPoint( m.points[i] );
-    }
-    c.obj = obj1;
-    obj2->OnContactBegin(c);
+    f1->GetSceneObject()->OnContactBegin(f2);
+    f2->GetSceneObject()->OnContactBegin(f1);
 }
 
 void CPhysObserver::PreSolve(b2Contact *_contact, const b2Manifold *)
 {
-    CSceneObject *obj1 = reinterpret_cast<CSceneObject*>(
-                _contact->GetFixtureA()->GetBody()->GetUserData() );
+    CFigure *f1 = reinterpret_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
+    CFigure *f2 = reinterpret_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
 
-    CSceneObject *obj2 = reinterpret_cast<CSceneObject*>(
-                _contact->GetFixtureB()->GetBody()->GetUserData() );
-
-    if ( obj1 == NULL || obj2 == NULL )
+    if ( f1 == NULL || f2 == NULL )
     {
         LOG_WARN( "CContactListener::BeginContact(): "
-                  "can not get pointer for one of objects. Skipping" );
+                  "can not get pointer for one of figures. Skipping" );
         return;
     }
 
-    if ( obj1 == obj2 )
+    if ( f1 == f2 || f1->GetSceneObject() == f2->GetSceneObject() )
     {
         LOG_WARN( "CContactListener::BeginContact(): "
-                  "object A is equals to object B. Skipping" );
+                  "it's seems that pair of figures is part of same object" );
         return;
     }
 
-    b2WorldManifold m;
-    _contact->GetWorldManifold(&m);
-
-    CContact c;
-    c.mPointCount = _contact->GetManifold()->pointCount;
-
-    for ( unsigned int i=0; i<c.mPointCount; i++ )
-    {
-        c.mPoints[i] = obj1->mBody->GetLocalPoint( m.points[i] );
-    }
-    c.obj = obj2;
-    obj1->OnContactPreSolve(c);
-
-    for ( unsigned int i=0; i<c.mPointCount; i++ )
-    {
-        c.mPoints[i] = obj2->mBody->GetLocalPoint( m.points[i] );
-    }
-    c.obj = obj1;
-    obj2->OnContactPreSolve(c);
+    f1->GetSceneObject()->OnContactPreSolve(f2);
+    f2->GetSceneObject()->OnContactPreSolve(f1);
 }
 
-void CPhysObserver::EndContact( b2Contact *_contact )
+void CPhysObserver::EndContact(b2Contact *_contact)
 {
-    CSceneObject *obj1 = reinterpret_cast<CSceneObject*>(
-                         _contact->GetFixtureA()->GetBody()->GetUserData() );
+    CFigure *f1 = reinterpret_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
+    CFigure *f2 = reinterpret_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
 
-    CSceneObject *obj2 = reinterpret_cast<CSceneObject*>(
-                         _contact->GetFixtureB()->GetBody()->GetUserData() );
-
-    if ( obj1 == NULL || obj2 == NULL )
+    if ( f1 == NULL || f2 == NULL )
     {
         LOG_WARN( "CContactListener::BeginContact(): "
-                  "one of objects has NULL user data pointer (CSceneObject)" );
+                  "can not get pointer for one of figures. Skipping" );
         return;
     }
 
-    if ( obj1 == obj2 )
+    if ( f1 == f2 || f1->GetSceneObject() == f2->GetSceneObject() )
     {
         LOG_WARN( "CContactListener::BeginContact(): "
-                  "object A is equals to object B. Skipping" );
+                  "it's seems that pair of figures is part of same object" );
         return;
     }
 
-    b2WorldManifold m;
-    _contact->GetWorldManifold(&m);
-
-    CContact c;
-    c.mPointCount = _contact->GetManifold()->pointCount;
-
-    for ( unsigned int i = 0; i < c.mPointCount; i++ )
-    {
-        c.mPoints[i] = obj1->mBody->GetLocalPoint( m.points[i] );
-    }
-    c.obj = obj2;
-    obj1->OnContactEnd(c);
-
-    for ( unsigned int i = 0; i < c.mPointCount; i++ )
-    {
-        c.mPoints[i] = obj2->mBody->GetLocalPoint( m.points[i] );
-    }
-    c.obj = obj1;
-    obj2->OnContactEnd(c);
+    f1->GetSceneObject()->OnContactEnd(f2);
+    f2->GetSceneObject()->OnContactEnd(f1);
 }

@@ -56,14 +56,6 @@ public:
     float mZ = 0;
 };
 
-class CContact
-{
-public:
-    CVec2 mPoints[b2_maxManifoldPoints];
-    unsigned int mPointCount;
-    CSceneObject *obj;
-};
-
 class CSceneObject
 {
 public:
@@ -115,9 +107,9 @@ protected:
 
     virtual void Step( double _dt );
 
-    virtual void OnContactBegin(const CContact &);
-    virtual void OnContactPreSolve(const CContact &);
-    virtual void OnContactEnd(const CContact &);
+    virtual void OnContactBegin(const CFigure *);
+    virtual void OnContactPreSolve(const CFigure *);
+    virtual void OnContactEnd(const CFigure *);
     virtual void OnBoom( const CExplosionParams &_boom );
     virtual void DrawDebug() const;
 

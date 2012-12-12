@@ -132,15 +132,15 @@ void CSceneObject::Step( double _dt )
     }
 }
 
-void CSceneObject::OnContactBegin(const CContact &)
+void CSceneObject::OnContactBegin(const CFigure *)
 {
 }
 
-void CSceneObject::OnContactPreSolve(const CContact &)
+void CSceneObject::OnContactPreSolve(const CFigure *)
 {
 }
 
-void CSceneObject::OnContactEnd(const CContact &)
+void CSceneObject::OnContactEnd(const CFigure *)
 {
 }
 
@@ -292,7 +292,7 @@ CSceneObjectGeometry *CSceneObject::GetGeometry() const
 {
     CSceneObjectGeometry *geo = new CSceneObjectGeometry();
     std::vector<CFigureParams> res;
-    for (int i = 0 ; i < mFiguresCount ; i++) {
+    for (unsigned int i = 0 ; i < mFiguresCount ; i++) {
         CFigureParams buff;
         CFigure* fig = mFigures[i];
         buff.mDepth = fig->GetDepth();

@@ -71,7 +71,7 @@ protected:
 
     virtual void Step( double _dt ) override;
 
-    virtual void OnContactBegin( const CContact &_contact ) override;
+    virtual void OnContactBegin(const CFigure *_figure) override;
 
 private:
     int mCounter = 0;
