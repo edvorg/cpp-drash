@@ -48,7 +48,7 @@ bool CPlayer::Init(const GeometryT &_geometry, const CPlayer::ParamsT &_params )
     return true;
 }
 
-void CPlayer::OnContactBegin( const CContact &_contact )
+void CPlayer::OnContactBegin(const CContact &)
 {
 }
 
@@ -64,7 +64,7 @@ void CPlayer::OnContactEnd( const CContact &_contact )
     mJumpAllowed = false;
 }
 
-void CPlayer::OnBoom( const CExplosionParams &_boom )
+void CPlayer::OnBoom(const CExplosionParams &)
 {
 }
 

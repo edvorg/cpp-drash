@@ -132,15 +132,15 @@ void CSceneObject::Step( double _dt )
     }
 }
 
-void CSceneObject::OnContactBegin( const CContact &_contact )
+void CSceneObject::OnContactBegin(const CContact &)
 {
 }
 
-void CSceneObject::OnContactPreSolve( const CContact &_contact )
+void CSceneObject::OnContactPreSolve(const CContact &)
 {
 }
 
-void CSceneObject::OnContactEnd( const CContact &_contact )
+void CSceneObject::OnContactEnd(const CContact &)
 {
 }
 
@@ -235,7 +235,7 @@ CFigure *CSceneObject::CreateFigure(const CFigureParams &_params)
 
 void CSceneObject::DestroyFigure(CFigure *_figure)
 {
-    if (_figure->mInternalId >= mFiguresCountLimit ||
+    if (_figure->mInternalId >= static_cast<int>(mFiguresCountLimit) ||
         mFigures[_figure->mInternalId] != _figure)
     {
         LOG_ERR("CSceneObject::DestroyFigure(): something wrong with figures creation logic");
@@ -252,7 +252,7 @@ void CSceneObject::DestroyFigure(CFigure *_figure)
         LOG_WARN("CSceneObject::DestroyFigure(): empty figure destoyed");
     }
 
-    if (_figure->mInternalId < --mFiguresCount)
+    if (static_cast<unsigned int>(_figure->mInternalId) < --mFiguresCount)
     {
         mFigures[_figure->mInternalId] = mFigures[mFiguresCount];
         mFigures[_figure->mInternalId]->mInternalId = _figure->mInternalId;

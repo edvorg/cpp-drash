@@ -98,7 +98,7 @@ void CPhysObserver::BeginContact( b2Contact * _contact )
     obj2->OnContactBegin(c);
 }
 
-void CPhysObserver::PreSolve( b2Contact *_contact, const b2Manifold *_oldManifold )
+void CPhysObserver::PreSolve(b2Contact *_contact, const b2Manifold *)
 {
     CSceneObject *obj1 = reinterpret_cast<CSceneObject*>(
                 _contact->GetFixtureA()->GetBody()->GetUserData() );

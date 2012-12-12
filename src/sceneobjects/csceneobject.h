@@ -115,9 +115,9 @@ protected:
 
     virtual void Step( double _dt );
 
-    virtual void OnContactBegin( const CContact &_contact );
-    virtual void OnContactPreSolve( const CContact &_contact );
-    virtual void OnContactEnd( const CContact &_contact );
+    virtual void OnContactBegin(const CContact &);
+    virtual void OnContactPreSolve(const CContact &);
+    virtual void OnContactEnd(const CContact &);
     virtual void OnBoom( const CExplosionParams &_boom );
     virtual void DrawDebug() const;
 
