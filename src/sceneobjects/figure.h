@@ -76,7 +76,7 @@ private:
     float mZ = 0;
     float mDepth = 1;
     float mMass = 1;
-    unsigned int mInternalId = 0;
+    int mInternalId = -1;
 };
 
 inline float CFigure::GetFriction() const
