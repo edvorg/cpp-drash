@@ -41,6 +41,7 @@ class CSceneObjectGeometry
 {
 public:
     std::vector<CFigureParams> mFigures;
+    std::vector<std::vector<unsigned int>> mDestructionGraph;
 
 protected:
 private:
