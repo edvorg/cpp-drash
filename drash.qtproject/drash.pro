@@ -55,7 +55,8 @@ SOURCES += ../src/main.cpp\
     ../src/ui/uiwidget.cpp \
     ../src/ui/uibutton.cpp \
     ../src/ui/uislider.cpp \
-    ../src/sceneobjects/destructiongraph.cpp
+    ../src/sceneobjects/destructiongraph.cpp \
+    ../src/test/test5.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -99,7 +100,8 @@ HEADERS  += ../src/gamewindow.h \
     ../src/ui/uiwidget.h \
     ../src/ui/uibutton.h \
     ../src/ui/uislider.h \
-    ../src/sceneobjects/destructiongraph.h
+    ../src/sceneobjects/destructiongraph.h \
+    ../src/test/test5.h
 
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui

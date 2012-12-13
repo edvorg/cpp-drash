@@ -28,6 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctestapp2.h"
 #include "ctestapp3-drashtest1.h"
 #include "test4.h"
+#include "test5.h"
 
 namespace drash
 {
@@ -41,7 +42,8 @@ CApp *StartApp( const char *_name )
     if ( strcmp(_name, "test_editor" ) == 0 ) return new CTestEditorApp();
     if ( strcmp(_name, "test2") == 0) return new CTestApp2();
     if ( strcmp(_name, "test3") == 0) return new CTestApp3();
-    if ( strcmp(_name, "test4") == 0) return new test::CTest4;
+    if ( strcmp(_name, "test4") == 0) return new drash::test::CTest4;
+    if ( strcmp(_name, "test5") == 0) return new drash::test::CTest5;
     return NULL;
 }
 
