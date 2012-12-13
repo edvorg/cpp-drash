@@ -132,15 +132,15 @@ void CSceneObject::Step( double _dt )
     }
 }
 
-void CSceneObject::OnContactBegin(const CFigure *)
+void CSceneObject::OnContactBegin(const CFigure *, const CFigure *)
 {
 }
 
-void CSceneObject::OnContactPreSolve(const CFigure *)
+void CSceneObject::OnContactPreSolve(const CFigure *, const CFigure *)
 {
 }
 
-void CSceneObject::OnContactEnd(const CFigure *)
+void CSceneObject::OnContactEnd(const CFigure *, const CFigure *)
 {
 }
 

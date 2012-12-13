@@ -67,9 +67,9 @@ public:
 protected:
     bool Init( const GeometryT &_geometry, const ParamsT &_params );
 
-    virtual void OnContactBegin(const CFigure *) override;
-    virtual void OnContactPreSolve(const CFigure *_figure) override;
-    virtual void OnContactEnd(const CFigure *_figure) override;
+    virtual void OnContactBegin(const CFigure *, const CFigure *) override;
+    virtual void OnContactPreSolve(const CFigure *_f1, const CFigure *_f2) override;
+    virtual void OnContactEnd(const CFigure *_f1, const CFigure *_f2) override;
     virtual void OnBoom(const CExplosionParams &) override;
 
     void onEvent( const CPlayerEvent & _event );

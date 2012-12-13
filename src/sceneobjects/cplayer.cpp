@@ -48,19 +48,19 @@ bool CPlayer::Init(const GeometryT &_geometry, const CPlayer::ParamsT &_params )
     return true;
 }
 
-void CPlayer::OnContactBegin(const CFigure *)
+void CPlayer::OnContactBegin(const CFigure *, const CFigure *)
 {
 }
 
-void CPlayer::OnContactPreSolve(const CFigure *_figure)
+void CPlayer::OnContactPreSolve(const CFigure *_f1, const CFigure *_f2)
 {
-    CSceneObject::OnContactBegin(_figure);
+    CSceneObject::OnContactBegin(_f1, _f2);
     mJumpAllowed = true;
 }
 
-void CPlayer::OnContactEnd(const CFigure *_figure)
+void CPlayer::OnContactEnd(const CFigure *_f1, const CFigure *_f2)
 {
-    CSceneObject::OnContactEnd(_figure);
+    CSceneObject::OnContactEnd(_f1, _f2);
     mJumpAllowed = false;
 }
 

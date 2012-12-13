@@ -82,14 +82,14 @@ void CDrashBody::Step( double _dt )
     }
 }
 
-void CDrashBody::OnContactBegin(const CFigure *_figure)
+void CDrashBody::OnContactBegin(const CFigure *_f1, const CFigure *_f2)
 {
-    CSceneObject::OnContactBegin(_figure);
+    CSceneObject::OnContactBegin(_f1, _f2);
 
     if (mCounter == 0 && mTime > mDestroyDelay && mDestructionChilds.size())
     {
         CVec2 vel = GetLinearVelocity();
-        vel -= _figure->GetSceneObject()->GetLinearVelocity();
+        vel -= _f1->GetSceneObject()->GetLinearVelocity();
 
         if (vel.Length() > mDestroySpeed)
         {

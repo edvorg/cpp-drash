@@ -74,8 +74,8 @@ void CPhysObserver::BeginContact(b2Contact * _contact)
         return;
     }
 
-    f1->GetSceneObject()->OnContactBegin(f2);
-    f2->GetSceneObject()->OnContactBegin(f1);
+    f1->GetSceneObject()->OnContactBegin(f1, f2);
+    f2->GetSceneObject()->OnContactBegin(f2, f1);
 }
 
 void CPhysObserver::PreSolve(b2Contact *_contact, const b2Manifold *)
@@ -97,8 +97,8 @@ void CPhysObserver::PreSolve(b2Contact *_contact, const b2Manifold *)
         return;
     }
 
-    f1->GetSceneObject()->OnContactPreSolve(f2);
-    f2->GetSceneObject()->OnContactPreSolve(f1);
+    f1->GetSceneObject()->OnContactPreSolve(f1, f2);
+    f2->GetSceneObject()->OnContactPreSolve(f2, f1);
 }
 
 void CPhysObserver::EndContact(b2Contact *_contact)
@@ -120,6 +120,6 @@ void CPhysObserver::EndContact(b2Contact *_contact)
         return;
     }
 
-    f1->GetSceneObject()->OnContactEnd(f2);
-    f2->GetSceneObject()->OnContactEnd(f1);
+    f1->GetSceneObject()->OnContactEnd(f1, f2);
+    f2->GetSceneObject()->OnContactEnd(f2, f1);
 }

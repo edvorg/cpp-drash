@@ -108,9 +108,9 @@ protected:
 
     virtual void Step( double _dt );
 
-    virtual void OnContactBegin(const CFigure *);
-    virtual void OnContactPreSolve(const CFigure *);
-    virtual void OnContactEnd(const CFigure *);
+    virtual void OnContactBegin(const CFigure *, const CFigure *);
+    virtual void OnContactPreSolve(const CFigure *, const CFigure *);
+    virtual void OnContactEnd(const CFigure *, const CFigure *);
     virtual void OnBoom( const CExplosionParams &_boom );
     virtual void DrawDebug() const;
 
