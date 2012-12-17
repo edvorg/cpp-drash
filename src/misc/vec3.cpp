@@ -3,8 +3,4 @@
 namespace drash
 {
 
-CVec3::CVec3()
-{
-}
-
 } // namespace drash
