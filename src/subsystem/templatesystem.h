@@ -41,6 +41,9 @@ public:
 
     typedef std::map<std::string,CSceneObjectGeometry*> SceneObjectTemplatesT;
     typedef std::pair<std::string,CSceneObjectGeometry*> MapSceneObjectItem;
+
+    virtual bool Init() override;
+    virtual void Step(double) override;
     virtual void Release() override;
 
     /// template is just named CSceneObjectGeometry

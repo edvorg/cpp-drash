@@ -23,6 +23,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include "app.h"
+#include "../debugdrawsystem/camera.h"
 
 namespace drash
 {
@@ -33,18 +34,20 @@ CApp::CApp()
 
 bool CApp::Init()
 {
+    mQuit = true;
+
     CSceneParams params;
     params.mGravity.Set( 0, -9.8 );
 
-	mQuit = true;
-
-    if ( mScene.Init(params) == false )
+    if (mScene.Init(params) == false ||
+        mExplosionSystem.Init() == false ||
+        mPlayersSystem.Init() == false ||
+        mTemplateSystem.Init() == false ||
+        mDebugDrawSystem.Init() == false ||
+        mUISystem.Init() == false)
     {
         return false;
     }
-
-    mEventSystem.Init();
-    mUISystem.Init();
 
     mExplosionSystem.SetScene(&mScene);
     mPlayersSystem.SetScene(&mScene);
@@ -64,23 +67,6 @@ bool CApp::Init()
     return true;
 }
 
-void CApp::Release()
-{
-    mUISystem.Release();
-    mEventSystem.Release();
-    mPlayersSystem.Release();
-    mExplosionSystem.Release();
-    mTemplateSystem.Release();
-    mDebugDrawSystem.Release();
-
-    mPlayersSystem.SetScene(nullptr);
-    mExplosionSystem.SetScene(nullptr);
-    mTemplateSystem.SetScene(nullptr);
-    mDebugDrawSystem.SetScene(nullptr);
-
-    mScene.Release();
-}
-
 void CApp::Step(double _dt)
 {
     if (mQuit)
@@ -91,9 +77,29 @@ void CApp::Step(double _dt)
     }
 
     mEventSystem.Process();
-    mUISystem.Step(_dt);
-
     mScene.Step(_dt);
+    mExplosionSystem.Step(_dt);
+    mPlayersSystem.Step(_dt);
+    mTemplateSystem.Step(_dt);
+    mDebugDrawSystem.Step(_dt);
+    mUISystem.Step(_dt);
+}
+
+void CApp::Release()
+{
+    mExplosionSystem.SetScene(nullptr);
+    mPlayersSystem.SetScene(nullptr);
+    mTemplateSystem.SetScene(nullptr);
+    mDebugDrawSystem.SetScene(nullptr);
+    mUISystem.SetDebugDrawSystem(nullptr);
+
+    mEventSystem.Release();
+    mScene.Release();
+    mExplosionSystem.Release();
+    mPlayersSystem.Release();
+    mTemplateSystem.Release();
+    mDebugDrawSystem.Release();
+    mUISystem.Release();
 }
 
 void CApp::Render()

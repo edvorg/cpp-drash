@@ -87,7 +87,7 @@ public:
     // **************************************************
     // * working with joints ****************************
 
-    CJoint *CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2, const CVec2 _anchor);
+    CJoint *CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2, const CVec3f _anchor);
     void DestroyJoint(CJoint *_joint);
 
     // **************************************************

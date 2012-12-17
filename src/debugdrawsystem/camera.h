@@ -26,25 +26,29 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef COBJECTCAMERA_H
 #define COBJECTCAMERA_H
 
-#include "csceneobject.h"
 #include "../misc/animatedparam.h"
+#include "../misc/vec3.h"
 
 namespace drash
 {
 
-class CCameraParams : public CSceneObjectParams
+class CCameraParams
 {
 public:
+    CVec3f mPos;
     float mFov = M_PI / 4.0f;
     float mDepthOfView = 1000.0f;
 };
 
-class CCamera : public CSceneObject
+class CCamera
 {
 public:
-    friend class CScene;
+    friend class CDebugDrawSystem;
 
-    typedef CCameraParams ParamsT;
+    inline void SetOrtho(bool _ortho);
+    inline bool IsOrtho() const;
+    inline void SetOrthoWidth(float _width);
+    inline float GetOrthoWidth() const;
 
     inline void SetFov(float _fov);
     inline float GetFov() const;
@@ -52,15 +56,42 @@ public:
     inline void SetDepthOfView(float _depth);
     inline float GetDepthOfView() const;
 
-protected:        
-    CCamera( void );
+    inline CAnimatedParam<CVec3f> &GetPos();
 
-    bool Init( const GeometryT &_geometry, const ParamsT &_params );
+protected:        
+    CCamera(void) = default;
+
+    bool Init(const CCameraParams &_params);
+
+    void Step(double _dt);
 
 private:
+    bool mOrtho = false;
+    float mOrthoWidth = 1.0f;
     float mFov = M_PI / 4.0f;
     float mDepthOfView = 1000.0f;
+    CAnimatedParam<CVec3f> mPos;
 };
+
+inline void CCamera::SetOrtho(bool _ortho)
+{
+    mOrtho = _ortho;
+}
+
+bool CCamera::IsOrtho() const
+{
+    return mOrtho;
+}
+
+inline void CCamera::SetOrthoWidth(float _width)
+{
+    mOrthoWidth = _width;
+}
+
+inline float CCamera::GetOrthoWidth() const
+{
+    return mOrthoWidth;
+}
 
 inline void CCamera::SetFov(float _fov)
 {
@@ -80,6 +111,11 @@ inline void CCamera::SetDepthOfView(float _depth)
 inline float CCamera::GetDepthOfView() const
 {
     return mDepthOfView;
+}
+
+inline CAnimatedParam<CVec3f> &CCamera::GetPos()
+{
+    return mPos;
 }
 
 }// namespace drash

@@ -32,38 +32,69 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <GL/glu.h>
 #endif
 
+#include "camera.h"
 #include "../misc/graphics.h"
 
 namespace drash
 {
 
+bool CDebugDrawSystem::Init()
+{
+    return true;
+}
+
+void CDebugDrawSystem::Step(double _dt)
+{
+    for (auto i = mCameras.begin(); i != mCameras.end(); i++)
+    {
+        (*i)->Step(_dt);
+    }
+}
+
+void CDebugDrawSystem::Release()
+{
+	mActiveCam = nullptr;
+
+    for (auto i=mCameras.begin(); i!=mCameras.end(); i++)
+    {
+            delete *i;
+    }
+
+	mCameras.clear();
+}
+
 drash::CCamera *CDebugDrawSystem::CreateCam(const drash::CCameraParams &_params, bool _set_active)
 {
-    if (GetScene() == nullptr)
+    CCamera *res = new CCamera;
+
+    if (res->Init(_params) == false)
     {
+        delete res;
         return nullptr;
     }
 
-    drash::CSceneObjectGeometry g;
-    mCameras.push_back(GetScene()->CreateObject<CCamera>(g, _params));
+    mCameras.push_back(res);
+
     if (_set_active)
     {
-        SetActiveCam(mCameras.back());
+        SetActiveCam(res);
     }
-    return mCameras.back();
+
+    return res;
 }
 
 void CDebugDrawSystem::DestroyCam(drash::CCamera *_cam)
 {
+    if (_cam == mActiveCam)
+    {
+        mActiveCam = nullptr;
+    }
+
     for (auto i=mCameras.begin(); i!=mCameras.end(); i++)
     {
         if (*i == _cam)
         {
-            if (GetScene() != nullptr)
-            {
-                GetScene()->DestroyObject(_cam);
-            }
-
+            delete *i;
             mCameras.erase(i);
             return;
         }
@@ -78,18 +109,28 @@ bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const
     }
     else
     {
-//        TODO: optimize this
-        double fov = mActiveCam->GetFov();
+        if (mActiveCam->IsOrtho() == false)
+        {
+            // TODO: optimize this
+            double fov = mActiveCam->GetFov();
 
-        double c = _depth / cos(fov / 2.0); // hypotenuse
+            double c = _depth / cos(fov / 2.0); // hypotenuse
 
-        double frame_height = 2.0 * sqrt( c*c - _depth*_depth );
-        double frame_width = frame_height * mAspectRatio;
+            double frame_height = 2.0 * sqrt( c*c - _depth*_depth );
+            double frame_width = frame_height * mAspectRatio;
 
-        _pos.x *= frame_width;
-        _pos.y *= frame_height;
+            _pos.x *= frame_width;
+            _pos.y *= frame_height;
 
-        _pos += mActiveCam->GetPos().Get();
+            _pos += mActiveCam->GetPos().Get().Vec2();
+        }
+        else
+        {
+            _pos.x *= GetActiveCam()->GetOrthoWidth();
+            _pos.y *= GetActiveCam()->GetOrthoWidth() / mAspectRatio;
+
+            _pos += mActiveCam->GetPos().Get().Vec2();
+        }
 
         return true;
     }
@@ -103,18 +144,28 @@ bool CDebugDrawSystem::WorldSpaceToScreenSpace(CVec2 &_pos, float _depth) const
     }
     else
     {
-//        TODO: optimize this
-        double fov = mActiveCam->GetFov();
+        if (mActiveCam->IsOrtho() == false)
+        {
+            // TODO: optimize this
+            double fov = mActiveCam->GetFov();
 
-        double c = _depth / cos(fov / 2.0); // hypotenuse
+            double c = _depth / cos(fov / 2.0); // hypotenuse
 
-        double frame_height = 2.0 * sqrt( c*c - _depth*_depth );
-        double frame_width = frame_height * mAspectRatio;
+            double frame_height = 2.0 * sqrt( c*c - _depth*_depth );
+            double frame_width = frame_height * mAspectRatio;
 
-        _pos -= mActiveCam->GetPos().Get();
+            _pos -= mActiveCam->GetPos().Get().Vec2();
 
-        _pos.x /= frame_width;
-        _pos.y /= frame_height;
+            _pos.x /= frame_width;
+            _pos.y /= frame_height;
+        }
+        else
+        {
+            _pos -= mActiveCam->GetPos().Get().Vec2();
+
+            _pos.x /= GetActiveCam()->GetOrthoWidth();
+            _pos.y /= GetActiveCam()->GetOrthoWidth() / mAspectRatio;
+        }
 
         return true;
     }
@@ -136,7 +187,7 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2 &_pos) const
         {
             CFigure *cur_fgr = cur_obj->GetFigures()[j];
 
-            float z = - cur_obj->GetZ().Get() - cur_fgr->GetZ() + GetActiveCam()->GetZ().Get();
+            float z = - cur_obj->GetPos().Get().mZ - cur_fgr->GetZ() + GetActiveCam()->GetPos().Get().mZ;
             CVec2 pos = _pos;
             ScreenSpaceToWorldSpace(pos, z);
 
@@ -167,7 +218,7 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2 &_pos) const
         {
             CFigure *cur_fgr = cur_obj->GetFigures()[j];
 
-            float z = - cur_obj->GetZ().Get() - cur_fgr->GetZ() + GetActiveCam()->GetZ().Get();
+            float z = - cur_obj->GetPos().Get().mZ - cur_fgr->GetZ() + GetActiveCam()->GetPos().Get().mZ;
 
             if (z > z_nearest)
             {
@@ -201,7 +252,20 @@ void CDebugDrawSystem::Draw() const
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(mActiveCam->GetFov() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView());
+
+    if (mActiveCam->mOrtho == false)
+    {
+        gluPerspective(mActiveCam->GetFov() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView());
+    }
+    else
+    {
+        float mhw = mActiveCam->GetOrthoWidth() * 0.5f;
+        float mhh = mhw / mAspectRatio;
+        glOrtho(-mhw, mhw,
+                -mhh, mhh,
+                mActiveCam->GetPos().Get().mZ,
+                mActiveCam->GetPos().Get().mZ - math::Abs(mActiveCam->GetDepthOfView()));
+    }
 
     for (unsigned int i=0; i<count; i++)
     {
@@ -211,7 +275,7 @@ void CDebugDrawSystem::Draw() const
 
         CVec2 min(-0.5, -0.5);
         CVec2 max(0.5, 0.5);
-        float d = - objects[i]->GetZ().Get() + mActiveCam->GetZ().Get();
+        float d = - objects[i]->GetPos().Get().mZ + mActiveCam->GetPos().Get().mZ;
 
         ScreenSpaceToWorldSpace(min, d);
         ScreenSpaceToWorldSpace(max, d);
@@ -233,10 +297,10 @@ void CDebugDrawSystem::Draw() const
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        glTranslatef(-mActiveCam->mPos.Get().x,
-                     -mActiveCam->mPos.Get().y,
-                     -mActiveCam->GetZ().Get());
-        CVec2 pos = objects[i]->GetPos().Get();
+        glTranslatef(-mActiveCam->mPos.Get().mX,
+                     -mActiveCam->mPos.Get().mY,
+                     -mActiveCam->mPos.Get().mZ);
+        CVec2 pos = objects[i]->GetPos().Get().Vec2();
         glTranslatef(pos.x,
                      pos.y,
                      0);

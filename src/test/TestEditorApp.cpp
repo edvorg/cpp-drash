@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../cscene.h"
 #include "app/appeventprocessor.h"
+#include "../debugdrawsystem/camera.h"
 
 #include <sstream>
 
@@ -40,7 +41,7 @@ bool CTestEditorApp::Init()
         return false;
     }
 
-    GetDebugDrawSystem().GetActiveCam()->GetZ().Set(100);
+    GetDebugDrawSystem().GetActiveCam()->GetPos().Set(CVec3f(0, 0, 100));
 
     SetProcessors();
 
@@ -164,7 +165,7 @@ void CTestEditorApp::CompleteFigure()
         for (auto i = mCurrentTemplate->mFigures.back().mVertices.begin();
              i != mCurrentTemplate->mFigures.back().mVertices.end(); i++)
         {
-            GetDebugDrawSystem().ScreenSpaceToWorldSpace(*i, GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+            GetDebugDrawSystem().ScreenSpaceToWorldSpace(*i, GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
         }
 
         if (mCurrentObject != nullptr)

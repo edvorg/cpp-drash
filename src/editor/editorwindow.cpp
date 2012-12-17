@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../cscene.h"
 #include "../subsystem/templatesystem.h"
 #include "../misc/cvec2.h"
+#include "../debugdrawsystem/camera.h"
 
 #include <vector>
 #include <string>
@@ -81,7 +82,7 @@ bool EditorWindow::InitScene()
     if (mObjectApp->Init() == false) {
         return false;
     }
-    mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetZ().Set(100);
+    mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetPos().Set(CVec3f(0, 0, 100));
     ui->mScene->SetTestApp(mObjectApp);
     return true;
 }

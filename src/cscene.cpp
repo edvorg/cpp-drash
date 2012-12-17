@@ -153,10 +153,10 @@ void CScene::DestroyObjects(void)
     }
 }
 
-CJoint *CScene::CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2, const CVec2 _anchor)
+CJoint *CScene::CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2, const CVec3f _anchor)
 {
     b2WeldJointDef jdef;
-    jdef.Initialize(_obj1->mBody, _obj2->mBody, _anchor);
+    jdef.Initialize(_obj1->mBody, _obj2->mBody, _anchor.Vec2());
 
     CJoint *res = new CJoint;
     res->mJoint = mWorld.CreateJoint(&jdef);;

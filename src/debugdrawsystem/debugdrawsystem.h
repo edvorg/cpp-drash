@@ -25,16 +25,22 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DEBUGDRAWSYSTEM_H
 #define DEBUGDRAWSYSTEM_H
 
-#include "subsystem.h"
-#include "../sceneobjects.h"
+#include "subsystem/subsystem.h"
 #include <vector>
 
 namespace drash
 {
 
+class CCameraParams;
+class CCamera;
+
 class CDebugDrawSystem : public CSubsystem
 {
 public:
+    virtual bool Init() override;
+    virtual void Step(double _dt) override;
+    virtual void Release() override;
+
     /// if _set_active is true, calls SetActiveCam() with created cam as param
     CCamera *CreateCam(const CCameraParams &_params, bool _set_active = false);
     void DestroyCam(CCamera *_cam);

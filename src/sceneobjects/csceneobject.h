@@ -29,6 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <Box2D/Box2D.h>
 #include "figure.h"
 #include "../misc/animatedparam.h"
+#include "../misc/vec3.h"
 
 namespace drash
 {
@@ -51,10 +52,9 @@ class CSceneObjectParams
 {
 public:
     bool mDynamic = true;
-    CVec2 mPos = CVec2(0);
+    CVec3f mPos;
     float mAngle = 0;
     bool mFixedRotation = false;
-    float mZ = 0;
 };
 
 class CSceneObject
@@ -89,9 +89,8 @@ public:
     inline void SetActive( bool _active );
     inline CVec2 GetWorldPoint(const CVec2 &_local_point) const;
 
-    inline CAnimatedParam<CVec2> &GetPos();
+    inline CAnimatedParam<CVec3f> &GetPos();
     inline CAnimatedParam<float> &GetAngle();
-    inline CAnimatedParam<float> &GetZ();
 
     virtual void ComputeBoundingBox();
     inline const b2AABB &GetBoundingBox() const;
@@ -106,7 +105,7 @@ protected:
     bool Init( const GeometryT &_geometry, const ParamsT &_params );
     virtual void Release(void);
 
-    virtual void Step( double _dt );
+    virtual void Step(double _dt);
 
     virtual void OnContactBegin(const CFigure *, const CFigure *);
     virtual void OnContactPreSolve(const CFigure *, const CFigure *);
@@ -136,10 +135,7 @@ private:
     unsigned int mFiguresCount = 0;
 
     /// world space postition in physics world
-    CAnimatedParam<CVec2> mPos;
-
-    /// z position. used 3d rendering
-    CAnimatedParam<float> mZ;
+    CAnimatedParam<CVec3f> mPos;
 
     /// rotation angle in radians
     CAnimatedParam<float> mAngle;
@@ -218,7 +214,7 @@ CVec2 CSceneObject::GetWorldPoint(const CVec2 &_local_point) const
     return mBody->GetWorldPoint(_local_point);
 }
 
-inline CAnimatedParam<CVec2> &CSceneObject::GetPos()
+inline CAnimatedParam<CVec3f> &CSceneObject::GetPos()
 {
     return mPos;
 }
@@ -226,11 +222,6 @@ inline CAnimatedParam<CVec2> &CSceneObject::GetPos()
 inline CAnimatedParam<float> &CSceneObject::GetAngle()
 {
     return mAngle;
-}
-
-inline CAnimatedParam<float> &CSceneObject::GetZ()
-{
-    return mZ;
 }
 
 inline const b2AABB &CSceneObject::GetBoundingBox() const

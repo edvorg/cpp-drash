@@ -30,7 +30,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../subsystem/explosionsystem.h"
 #include "../subsystem/playerssystem.h"
 #include "../subsystem/templatesystem.h"
-#include "../subsystem/debugdrawsystem.h"
+#include "../debugdrawsystem/debugdrawsystem.h"
 #include "appeventsystem.h"
 #include "../ui/uisystem.h"
 

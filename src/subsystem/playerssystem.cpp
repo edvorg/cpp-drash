@@ -29,6 +29,19 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
+bool CPlayersSystem::Init()
+{
+    return true;
+}
+
+void CPlayersSystem::Step(double)
+{
+}
+
+void CPlayersSystem::Release()
+{
+}
+
 int CPlayersSystem::AddPlayer(const CSceneObjectGeometry &_geometry, const CPlayerParams &_params)
 {
     if (GetScene() == NULL)

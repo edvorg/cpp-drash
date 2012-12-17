@@ -25,8 +25,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctestapp2.h"
 
 #include "../cscene.h"
-
 #include "../app/appeventprocessor.h"
+#include "../debugdrawsystem/camera.h"
 
 namespace drash
 {
@@ -38,7 +38,7 @@ bool CTestApp2::Init()
         return false;
     }
 
-    GetDebugDrawSystem().GetActiveCam()->GetZ().Set(300);
+    GetDebugDrawSystem().GetActiveCam()->GetPos().Set(CVec3f(0, 0, 300));
 
     SetProcessors();
 
@@ -50,7 +50,7 @@ bool CTestApp2::Init()
     g.mFigures[0].mVertices.push_back( CVec2( 300.0f, 5.0f ) );
     g.mFigures[0].mDepth = 5;
     CSceneObjectParams p;
-    p.mPos.y = -25;
+    p.mPos.mY = -25;
     p.mDynamic = false;
     GetScene().CreateObject<CSceneObject>(g, p);
 
@@ -62,7 +62,7 @@ bool CTestApp2::Init()
     player_geometry.mFigures[0].mVertices.push_back( CVec2( -2, 5 ) );
     player_geometry.mFigures[0].mDepth = 1;
     CPlayerParams player;
-    player.mPos.Set( 0, -20 );
+    player.mPos.Set(0, -20, 0);
     GetPlayersSystem().AddPlayer(player_geometry, player);
 
     CSceneObjectGeometry tg;
@@ -75,11 +75,11 @@ bool CTestApp2::Init()
     tg.mFigures[0].mMass = 1;
     tg.mFigures[0].mDepth = 1;
     CSceneObjectParams targetForFire;
-    targetForFire.mPos.Set( -20, 0 );
+    targetForFire.mPos.Set(-20, 0, 0);
     for (int i = 0 ; i < 10 ; i++)
     {
         GetScene().CreateObject<CSceneObject>(tg, targetForFire);
-        targetForFire.mPos.Set( -20, 20 + i*20 );
+        targetForFire.mPos.Set(-20, 20 + i*20, 0);
     }
 
     return true;
@@ -100,8 +100,9 @@ void CTestApp2::SetProcessors()
     [this, t] ()
     {
         CSceneObjectParams p;
-        p.mPos = GetCursorPos();
-        GetDebugDrawSystem().ScreenSpaceToWorldSpace(p.mPos, GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+        CVec2 tmp = GetCursorPos();
+        GetDebugDrawSystem().ScreenSpaceToWorldSpace(tmp, GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
+        p.mPos.Set(tmp, 0);
         GetTemplateSystem().CreateSceneObjectFromTemplate("lambda_test", p);
     }));
 
@@ -124,8 +125,8 @@ void CTestApp2::SetProcessors()
         if (mSelectedObject != nullptr)
         {
             CVec2 pos = GetCursorPos();
-            GetDebugDrawSystem().ScreenSpaceToWorldSpace(pos, - mSelectedObject->GetZ().Get() + GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
-            mSelectedObject->GetPos().Set(pos);
+            GetDebugDrawSystem().ScreenSpaceToWorldSpace(pos, - mSelectedObject->GetPos().Get().mZ + GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
+            mSelectedObject->GetPos().Set(CVec3f(pos, mSelectedObject->GetPos().Get().mZ));
         }
     }));
 

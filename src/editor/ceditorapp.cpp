@@ -24,6 +24,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ceditorapp.h"
 
+#include "../debugdrawsystem/camera.h"
+
 namespace drash {
 
 bool CObjectEditorApp::Init()
@@ -102,7 +104,7 @@ void CObjectEditorApp::SetProcessor()
                 mSelectedFigure = SelectFigure(mOldPositon);
 
                 GetDebugDrawSystem().ScreenSpaceToWorldSpace(mOldPositon,
-                                      GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+                                      GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
 
                 if (mSelectedFigure == nullptr)
                     LOG_INFO("NOOOO");
@@ -163,7 +165,7 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
     std::for_each(mVertexs.begin() , mVertexs.end() , [this] (CVec2 &v)
     {
         GetDebugDrawSystem().ScreenSpaceToWorldSpace(v,
-                 GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+                 GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
     });
     param.mVertices = mVertexs;
     obj->mFigures.push_back(param);

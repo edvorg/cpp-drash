@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../cscene.h"
 #include "../sceneobjects.h"
+#include "../debugdrawsystem/camera.h"
 
 namespace drash
 {
@@ -43,7 +44,8 @@ bool CTestApp3::Init()
 
     InitObjects();
 
-    GetDebugDrawSystem().GetActiveCam()->GetZ().SetTarget(280, 1.0f, AnimationBehaviorSingle);
+    auto c = GetDebugDrawSystem().GetActiveCam();
+    c->GetPos().SetTarget(CVec3f(0, 0, 280), 1.0f, AnimationBehaviorSingle);
 
     mSlider1.Connect(&GetUISystem());
     mSlider1.SetPos(10, 10);
@@ -74,8 +76,8 @@ bool CTestApp3::Init()
     {
         CDrashBodyParams params;
         params.mDynamic = true;
-        params.mPos.RandX(-100, 100);
-        params.mPos.y = 200;
+        params.mPos.mX = Randf(-100, 100);
+        params.mPos.mY = 200;
 
         GetTemplateSystem().CreateDrashBodyFromTemplate("box_big", params);
     });
@@ -87,10 +89,11 @@ void CTestApp3::Step(double _dt)
 {
     CTestEditorApp::Step(_dt);
 
-    if (GetPlayersSystem().EnumPlayers())
+    if (GetPlayersSystem().EnumPlayers() && GetDebugDrawSystem().GetActiveCam() != nullptr)
     {
         CPlayer *p = GetPlayersSystem().GetPlayers()[0];
-        GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(p->GetPos().Get(), 1.0, AnimationBehaviorSingle );
+		auto c = GetDebugDrawSystem().GetActiveCam();
+        c->GetPos().SetTarget(CVec3f(p->GetPos().Get().Vec2(), c->GetPos().GetTarget().mZ), 1.0, AnimationBehaviorSingle );
     }
 
     mTime += _dt;
@@ -99,8 +102,8 @@ void CTestApp3::Step(double _dt)
     {
         CDrashBodyParams params;
         params.mDynamic = true;
-        params.mPos.RandX(-100, 100);
-        params.mPos.y = 100;
+        params.mPos.mX = Randf(-100, 100);
+        params.mPos.mY = 100;
 
         GetTemplateSystem().CreateDrashBodyFromTemplate("circle", params);
 
@@ -118,8 +121,8 @@ void CTestApp3::Render()
         const b2AABB &b = mO1->GetBoundingBox();
         CVec2 upper = b.upperBound;
         CVec2 lower = b.lowerBound;
-        GetDebugDrawSystem().WorldSpaceToScreenSpace(lower, - mO1->GetZ().Get() + GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
-        GetDebugDrawSystem().WorldSpaceToScreenSpace(upper, - mO1->GetZ().Get() + GetDebugDrawSystem().GetActiveCam()->GetZ().Get());
+        GetDebugDrawSystem().WorldSpaceToScreenSpace(lower, - mO1->GetPos().Get().mZ + GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
+        GetDebugDrawSystem().WorldSpaceToScreenSpace(upper, - mO1->GetPos().Get().mZ + GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
         b2Color col(1, 0, 0);
         CVec2 tmp1(upper.x, lower.y);
         CVec2 tmp2(lower.x, upper.y);
@@ -193,9 +196,11 @@ void CTestApp3::SetProcessors()
         p.mLifeTime = 1;
         p.mStregth = -5;
         p.mRadius = 200;
-        p.mPos = GetCursorPos();
+        CVec2 tmp = GetCursorPos();
         auto cam = GetDebugDrawSystem().GetActiveCam();
-        GetDebugDrawSystem().ScreenSpaceToWorldSpace(p.mPos, cam->GetZ().Get());
+        GetDebugDrawSystem().ScreenSpaceToWorldSpace(tmp, cam->GetPos().Get().mZ);
+        p.mPos.mX = tmp.x;
+        p.mPos.mY = tmp.y;
         GetScene().CreateObject<CExplosion>(g, p);
     }));
 
@@ -248,9 +253,9 @@ void CTestApp3::SetProcessors()
         if (mMoveObject != nullptr)
         {
             CVec2 coords = GetCursorPos();
-            if (GetDebugDrawSystem().ScreenSpaceToWorldSpace(coords, - mMoveObject->GetZ().Get() + GetDebugDrawSystem().GetActiveCam()->GetZ().Get()))
+            if (GetDebugDrawSystem().ScreenSpaceToWorldSpace(coords, - mMoveObject->GetPos().Get().mZ + GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ))
             {
-                coords -= mMoveObject->GetPos().Get();
+                coords -= mMoveObject->GetPos().Get().Vec2();
                 coords *= 10;
                 mMoveObject->SetLinearVelocity(coords);
             }
@@ -272,17 +277,17 @@ void CTestApp3::SetProcessors()
     GetEventSystem().SetProcessor("WHUP", CAppEventProcessor(
     [this] ()
     {
-        float pos = GetDebugDrawSystem().GetActiveCam()->GetZ().GetTarget();
-        pos += 10.0f;
-        GetDebugDrawSystem().GetActiveCam()->GetZ().SetTarget(pos, 0.3, AnimationBehaviorSingle);
+        CVec3f pos = GetDebugDrawSystem().GetActiveCam()->GetPos().GetTarget();
+        pos.mZ += 10.0f;
+        GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimationBehaviorSingle);
     }));
 
     GetEventSystem().SetProcessor("WHDN", CAppEventProcessor(
     [this] ()
     {
-        float pos = GetDebugDrawSystem().GetActiveCam()->GetZ().GetTarget();
-        pos -= 10.0f;
-        GetDebugDrawSystem().GetActiveCam()->GetZ().SetTarget(pos, 0.3, AnimationBehaviorSingle);
+        CVec3f pos = GetDebugDrawSystem().GetActiveCam()->GetPos().GetTarget();
+        pos.mZ -= 10.0f;
+        GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimationBehaviorSingle);
     }));
 
     GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
@@ -307,7 +312,7 @@ void CTestApp3::InitObjects()
     sbp.mAngle = 0;
     GetScene().CreateObject<CSceneObject>(sbg, sbp);
 
-    sbp.mPos.Set( 0, 600 );
+    sbp.mPos.Set(0, 600, 0);
     GetScene().CreateObject<CSceneObject>(sbg, sbp);
 
     sbg.mFigures[0].mVertices.clear();
@@ -316,7 +321,7 @@ void CTestApp3::InitObjects()
     sbg.mFigures[0].mVertices.push_back( CVec2( 5, -300 ) );
     sbg.mFigures[0].mVertices.push_back( CVec2( 5, 300 ) );
     sbg.mFigures[0].mVertices.push_back( CVec2( -5, 300 ) );
-    sbp.mPos.Set( -300, 300 );
+    sbp.mPos.Set(-300, 300, 0);
     GetScene().CreateObject<CSceneObject>(sbg, sbp);
 
     sbg.mFigures[0].mVertices.clear();
@@ -325,7 +330,7 @@ void CTestApp3::InitObjects()
     sbg.mFigures[0].mVertices.push_back( CVec2( 5, -300 ) );
     sbg.mFigures[0].mVertices.push_back( CVec2( 5, 300 ) );
     sbg.mFigures[0].mVertices.push_back( CVec2( -5, 300 ) );
-    sbp.mPos.Set( 300, 300 );
+    sbp.mPos.Set(300, 300, 0);
     GetScene().CreateObject<CSceneObject>(sbg, sbp);
 
     CDrashBodyGeometry *b1 = GetTemplateSystem().CreateDrashBodyTemplate("box_small");
@@ -345,32 +350,24 @@ void CTestApp3::InitObjects()
 
     b0->mDestructionChilds.resize(8);
     b0->mDestructionChilds[0].mTemplate = b1;
-    b0->mDestructionChilds[0].mParams.mPos.Set(-5,-5);
-    b0->mDestructionChilds[0].mParams.mZ = 5;
+    b0->mDestructionChilds[0].mParams.mPos.Set(-5, -5, 5);
     b0->mDestructionChilds[1].mTemplate = b1;
-    b0->mDestructionChilds[1].mParams.mPos.Set(-5,5);
-    b0->mDestructionChilds[1].mParams.mZ = 5;
+    b0->mDestructionChilds[1].mParams.mPos.Set(-5, 5, 5);
     b0->mDestructionChilds[2].mTemplate = b1;
-    b0->mDestructionChilds[2].mParams.mPos.Set(5,5);
-    b0->mDestructionChilds[2].mParams.mZ = 5;
+    b0->mDestructionChilds[2].mParams.mPos.Set(5, 5, 5);
     b0->mDestructionChilds[3].mTemplate = b1;
-    b0->mDestructionChilds[3].mParams.mPos.Set(5,-5);
-    b0->mDestructionChilds[3].mParams.mZ = 5;
+    b0->mDestructionChilds[3].mParams.mPos.Set(5, -5, 5);
     b0->mDestructionChilds[4].mTemplate = b1;
-    b0->mDestructionChilds[4].mParams.mPos.Set(-5,-5);
-    b0->mDestructionChilds[4].mParams.mZ = -5;
+    b0->mDestructionChilds[4].mParams.mPos.Set(-5, -5, -5);
     b0->mDestructionChilds[5].mTemplate = b1;
-    b0->mDestructionChilds[5].mParams.mPos.Set(-5,5);
-    b0->mDestructionChilds[5].mParams.mZ = -5;
+    b0->mDestructionChilds[5].mParams.mPos.Set(-5, 5, -5);
     b0->mDestructionChilds[6].mTemplate = b1;
-    b0->mDestructionChilds[6].mParams.mPos.Set(5,5);
-    b0->mDestructionChilds[6].mParams.mZ = -5;
+    b0->mDestructionChilds[6].mParams.mPos.Set(5, 5, -5);
     b0->mDestructionChilds[7].mTemplate = b1;
-    b0->mDestructionChilds[7].mParams.mPos.Set(5,-5);
-    b0->mDestructionChilds[7].mParams.mZ = -5;
+    b0->mDestructionChilds[7].mParams.mPos.Set(5, -5, -5);
 
     CDrashBodyParams dbp;
-    dbp.mPos.Set( 0, 100 );
+    dbp.mPos.Set(0, 100, 0);
     dbp.mAngle = M_PI / 4;
 
     GetScene().CreateObject<CDrashBody>(*b0, dbp);
@@ -379,14 +376,14 @@ void CTestApp3::InitObjects()
     pg.mFigures.resize(1);
     pg.mFigures[0].mMass = 3;
     CSceneObjectParams pp;
-    pp.mPos.Set( -200, 100 );
+    pp.mPos.Set(-200, 100, 0);
     GetScene().CreateObject<CSceneObject>(pg, pp)->SetLinearVelocity( CVec2( 200, 0 ) );
 
     CSceneObjectGeometry ppg;
     ppg.mFigures.resize(1);
     ppg.mFigures[0].mDepth = 2;
     CPlayerParams ppp;
-    ppp.mPos.Set( 0, 10 );
+    ppp.mPos.Set(0, 10, 0);
     GetPlayersSystem().AddPlayer(ppg, ppp);
 
     CSceneObjectGeometry platform_geometry;
@@ -398,13 +395,13 @@ void CTestApp3::InitObjects()
     platform_geometry.mFigures[0].mVertices.push_back( CVec2( 100, 5 ) );
     platform_geometry.mFigures[0].mVertices.push_back( CVec2( -100, 5 ) );
     CSceneObject::ParamsT platform_params;
-    platform_params.mPos.Set( 0, 50 );
+    platform_params.mPos.Set(0, 50, 0);
     platform_params.mAngle = -M_PI / 18.0;
     platform_params.mDynamic = false;
 
     CSceneObject *platform = GetScene().CreateObject<CSceneObject>(platform_geometry, platform_params);
-    platform->GetPos().Set(CVec2(-100, 50));
-    platform->GetPos().SetTarget(CVec2(100, 50), 10, AnimationBehaviorBounce);
+    platform->GetPos().Set(CVec3f(-100, 50, 0));
+    platform->GetPos().SetTarget(CVec3f(100, 50, 0), 10, AnimationBehaviorBounce);
     platform->GetAngle().SetTarget(M_PI / 18.0, 10, AnimationBehaviorBounce);
 
     static const unsigned int segments = 16;

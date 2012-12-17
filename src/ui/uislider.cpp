@@ -1,7 +1,7 @@
 #include "uislider.h"
 
 #include "uisystem.h"
-#include "../subsystem/debugdrawsystem.h"
+#include "../debugdrawsystem/debugdrawsystem.h"
 #include "../misc/math.h"
 
 namespace drash

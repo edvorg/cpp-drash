@@ -3,7 +3,7 @@
 #include "uisystem.h"
 #include "../misc/cvec2.h"
 #include "../misc/math.h"
-#include "../subsystem/debugdrawsystem.h"
+#include "../debugdrawsystem/debugdrawsystem.h"
 
 namespace drash
 {

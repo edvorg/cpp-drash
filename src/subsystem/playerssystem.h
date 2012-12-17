@@ -34,6 +34,10 @@ namespace drash
 class CPlayersSystem : public CSubsystem
 {
 public:
+    virtual bool Init() override;
+    virtual void Step(double) override;
+    virtual void Release() override;
+
     int AddPlayer(const CSceneObjectGeometry &_geometry, const CPlayerParams &_params);
     void RemPlayer(int _player);
     inline CPlayer * const * GetPlayers();
