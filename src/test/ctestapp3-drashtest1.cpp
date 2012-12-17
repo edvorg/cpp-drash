@@ -89,7 +89,7 @@ void CTestApp3::Step(double _dt)
 {
     CTestEditorApp::Step(_dt);
 
-    if (GetPlayersSystem().EnumPlayers())
+    if (GetPlayersSystem().EnumPlayers() && GetDebugDrawSystem().GetActiveCam() != nullptr)
     {
         CPlayer *p = GetPlayersSystem().GetPlayers()[0];
 		auto c = GetDebugDrawSystem().GetActiveCam();
