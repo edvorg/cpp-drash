@@ -33,9 +33,9 @@ namespace drash
 {
 
 CSceneObject::CSceneObject(void):
-    mPos([this] (const CVec2 &_new_value)
+    mPos([this] (const CVec3f &_new_value)
     {
-        mBody->SetTransform(_new_value, mBody->GetAngle());
+        mBody->SetTransform(_new_value.Vec2(), mBody->GetAngle());
     }),
     mAngle([this] (const float &_new_value)
     {
@@ -61,9 +61,8 @@ bool CSceneObject::Init(const GeometryT &_geometry, const CSceneObject::ParamsT 
 
     mPos.Set(_params.mPos);
     mAngle.Set(_params.mAngle);
-    mZ.Set(_params.mZ);
 
-    mBody->SetTransform( _params.mPos, _params.mAngle );
+    mBody->SetTransform(_params.mPos.Vec2(), _params.mAngle);
     mBody->SetActive(true);
     mBody->SetAwake(true);
     mBody->SetSleepingAllowed(true);
@@ -95,40 +94,30 @@ void CSceneObject::Release()
     }
 }
 
-void CSceneObject::Step( double _dt )
+void CSceneObject::Step(double _dt)
 {
-    mZ.Step(_dt);
-
-    if ( mBody->GetType() == b2_kinematicBody )
+    if (mPos.IsTargetSet())
     {
-        if ( mPos.IsTargetSet() )
-        {
-            mPos.Step(_dt);
-            CVec2 lv = mPos.GetTarget();
-            lv -= mPos.Get();
-            lv /= mPos.GetTimeRemains();
-            mBody->SetLinearVelocity(lv);
-        }
-        else
-        {
-            mPos.Set( mBody->GetWorldPoint(CVec2(0)) );
-        }
-
-        if ( mAngle.IsTargetSet() )
-        {
-            mAngle.Step(_dt);
-            float av = ( mAngle.GetTarget() - mAngle.Get() ) / mAngle.GetTimeRemains();
-            mBody->SetAngularVelocity(av);
-        }
-        else
-        {
-            mAngle.Set( mBody->GetAngle() );
-        }
+        mPos.Step(_dt);
+        CVec2 lv = mPos.GetTarget().Vec2();
+        lv -= mPos.Get().Vec2();
+        lv /= mPos.GetTimeRemains();
+        mBody->SetLinearVelocity(lv);
     }
-    else if ( mBody->GetType() == b2_dynamicBody )
+    else
     {
-        mPos.Set( mBody->GetWorldPoint(CVec2(0)) );
-        mAngle.Set( mBody->GetAngle() );
+        mPos.Set(CVec3f(mBody->GetWorldPoint(CVec2(0)), mPos.Get().mZ));
+    }
+
+    if (mAngle.IsTargetSet())
+    {
+        mAngle.Step(_dt);
+        float av = (mAngle.GetTarget() - mAngle.Get()) / mAngle.GetTimeRemains();
+        mBody->SetAngularVelocity(av);
+    }
+    else
+    {
+        mAngle.Set(mBody->GetAngle());
     }
 }
 
@@ -146,15 +135,15 @@ void CSceneObject::OnContactEnd(const CFigure *, const CFigure *)
 
 void CSceneObject::OnBoom( const CExplosionParams &_boom )
 {
-    CVec2 dir(GetPos().Get());
-    dir -= _boom.mPos;
+    CVec2 dir(GetPos().Get().Vec2());
+    dir -= _boom.mPos.Vec2();
 
     float k = drash::math::Min( dir.Length(), _boom.mStregth )/ _boom.mStregth;
 
     dir.Normalize();
     dir *= k * _boom.mStregth;
 
-    ApplyLinearImpulse( dir, mPos.Get() );
+    ApplyLinearImpulse(dir, mPos.Get().Vec2());
 }
 
 void CSceneObject::DrawDebug() const
@@ -180,7 +169,7 @@ void CSceneObject::DrawDebug() const
                     local_z = fg->GetZ();
                 }
 
-                DrawBody(s->m_vertices, s->GetVertexCount(), mZ.Get()+local_z, depth, diffuse);
+                DrawBody(s->m_vertices, s->GetVertexCount(), mPos.Get().mZ+local_z, depth, diffuse);
             }
         }
         j++;
@@ -280,7 +269,7 @@ void CSceneObject::ComputeBoundingBox()
 
 CLogger &operator <<(CLogger &_logger, const CSceneObject &_object)
 {
-    _logger<<"pos: "<<_object.mPos<<" angle: "<<_object.mAngle<<" world_z: "<<_object.mZ<<'\n';
+    _logger<<"pos: "<<_object.mPos<<" angle: "<<_object.mAngle<<'\n';
     for (unsigned int i = 0; i < _object.EnumFigures(); i++)
     {
         _logger<<*_object.GetFigures()[i]<<'\b';

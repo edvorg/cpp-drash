@@ -89,7 +89,7 @@ bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const
         _pos.x *= frame_width;
         _pos.y *= frame_height;
 
-        _pos += mActiveCam->GetPos().Get();
+        _pos += mActiveCam->GetPos().Get().Vec2();
 
         return true;
     }
@@ -111,7 +111,7 @@ bool CDebugDrawSystem::WorldSpaceToScreenSpace(CVec2 &_pos, float _depth) const
         double frame_height = 2.0 * sqrt( c*c - _depth*_depth );
         double frame_width = frame_height * mAspectRatio;
 
-        _pos -= mActiveCam->GetPos().Get();
+        _pos -= mActiveCam->GetPos().Get().Vec2();
 
         _pos.x /= frame_width;
         _pos.y /= frame_height;
@@ -136,7 +136,7 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2 &_pos) const
         {
             CFigure *cur_fgr = cur_obj->GetFigures()[j];
 
-            float z = - cur_obj->GetZ().Get() - cur_fgr->GetZ() + GetActiveCam()->GetZ().Get();
+            float z = - cur_obj->GetPos().Get().mZ - cur_fgr->GetZ() + GetActiveCam()->GetPos().Get().mZ;
             CVec2 pos = _pos;
             ScreenSpaceToWorldSpace(pos, z);
 
@@ -167,7 +167,7 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2 &_pos) const
         {
             CFigure *cur_fgr = cur_obj->GetFigures()[j];
 
-            float z = - cur_obj->GetZ().Get() - cur_fgr->GetZ() + GetActiveCam()->GetZ().Get();
+            float z = - cur_obj->GetPos().Get().mZ - cur_fgr->GetZ() + GetActiveCam()->GetPos().Get().mZ;
 
             if (z > z_nearest)
             {
@@ -211,7 +211,7 @@ void CDebugDrawSystem::Draw() const
 
         CVec2 min(-0.5, -0.5);
         CVec2 max(0.5, 0.5);
-        float d = - objects[i]->GetZ().Get() + mActiveCam->GetZ().Get();
+        float d = - objects[i]->GetPos().Get().mZ + mActiveCam->GetPos().Get().mZ;
 
         ScreenSpaceToWorldSpace(min, d);
         ScreenSpaceToWorldSpace(max, d);
@@ -233,10 +233,10 @@ void CDebugDrawSystem::Draw() const
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        glTranslatef(-mActiveCam->mPos.Get().x,
-                     -mActiveCam->mPos.Get().y,
-                     -mActiveCam->GetZ().Get());
-        CVec2 pos = objects[i]->GetPos().Get();
+        glTranslatef(-mActiveCam->mPos.Get().mX,
+                     -mActiveCam->mPos.Get().mY,
+                     -mActiveCam->mPos.Get().mZ);
+        CVec2 pos = objects[i]->GetPos().Get().Vec2();
         glTranslatef(pos.x,
                      pos.y,
                      0);

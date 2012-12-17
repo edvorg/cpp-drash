@@ -89,16 +89,14 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
             SetLinearVelocity(CVec2(10, 0));
             break;
 
+		// TODO: fix bug with crosslayer animation
+
         case CPlayerEvent::PlayerActionMoveDeep:
-            GetZ().SetTarget(GetZ().Get()-5, 0.5, AnimationBehaviorSingle);
-            SetActive(false);
-            SetActive(true);
+            GetPos().SetTarget(GetPos().GetTarget() - CVec3f(0, 0, 0.5), 0.5, AnimationBehaviorSingle);
             break;
 
         case CPlayerEvent::PlayerActionMoveOut:
-            GetZ().SetTarget(GetZ().Get()+5, 0.5, AnimationBehaviorSingle);
-            SetActive(false);
-            SetActive(true);
+            GetPos().SetTarget(GetPos().GetTarget() + CVec3f(0, 0, 0.5), 0.5, AnimationBehaviorSingle);
             break;
     }
 }

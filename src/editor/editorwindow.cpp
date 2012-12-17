@@ -81,7 +81,7 @@ bool EditorWindow::InitScene()
     if (mObjectApp->Init() == false) {
         return false;
     }
-    mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetZ().Set(100);
+    mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetPos().Set(CVec3f(0, 0, 100));
     ui->mScene->SetTestApp(mObjectApp);
     return true;
 }

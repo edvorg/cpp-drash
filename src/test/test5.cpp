@@ -14,8 +14,7 @@ bool CTest5::Init()
     }
 
     CCamera *cam = GetDebugDrawSystem().GetActiveCam();
-    cam->GetZ().Set(50);
-    cam->GetPos().Set(CVec2(0, 10));
+    cam->GetPos().Set(CVec3f(0, 10, 50));
 
     ////////////////
     /// platform ///

@@ -49,8 +49,8 @@ bool CPhysObserver::ShouldCollide(b2Fixture *fixtureA, b2Fixture *fixtureB)
     CFigure *f1 = reinterpret_cast<CFigure*>( fixtureA->GetUserData() );
     CFigure *f2 = reinterpret_cast<CFigure*>( fixtureB->GetUserData() );
 
-    float z1 = f1->GetZ() + o1->GetZ().Get();
-    float z2 = f1->GetZ() + o2->GetZ().Get();
+    float z1 = f1->GetZ() + o1->GetPos().Get().mZ;
+    float z2 = f1->GetZ() + o2->GetPos().Get().mZ;
 
     return drash::math::Abs(z1 - z2) < (f1->GetDepth() * 0.5 + f2->GetDepth() * 0.5);
 }
