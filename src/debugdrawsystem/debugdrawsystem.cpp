@@ -109,18 +109,28 @@ bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const
     }
     else
     {
-//        TODO: optimize this
-        double fov = mActiveCam->GetFov();
+        if (mActiveCam->IsOrtho() == false)
+        {
+            // TODO: optimize this
+            double fov = mActiveCam->GetFov();
 
-        double c = _depth / cos(fov / 2.0); // hypotenuse
+            double c = _depth / cos(fov / 2.0); // hypotenuse
 
-        double frame_height = 2.0 * sqrt( c*c - _depth*_depth );
-        double frame_width = frame_height * mAspectRatio;
+            double frame_height = 2.0 * sqrt( c*c - _depth*_depth );
+            double frame_width = frame_height * mAspectRatio;
 
-        _pos.x *= frame_width;
-        _pos.y *= frame_height;
+            _pos.x *= frame_width;
+            _pos.y *= frame_height;
 
-        _pos += mActiveCam->GetPos().Get().Vec2();
+            _pos += mActiveCam->GetPos().Get().Vec2();
+        }
+        else
+        {
+            _pos.x *= GetActiveCam()->GetOrthoWidth();
+            _pos.y *= GetActiveCam()->GetOrthoWidth() / mAspectRatio;
+
+            _pos += mActiveCam->GetPos().Get().Vec2();
+        }
 
         return true;
     }
@@ -134,18 +144,28 @@ bool CDebugDrawSystem::WorldSpaceToScreenSpace(CVec2 &_pos, float _depth) const
     }
     else
     {
-//        TODO: optimize this
-        double fov = mActiveCam->GetFov();
+        if (mActiveCam->IsOrtho() == false)
+        {
+            // TODO: optimize this
+            double fov = mActiveCam->GetFov();
 
-        double c = _depth / cos(fov / 2.0); // hypotenuse
+            double c = _depth / cos(fov / 2.0); // hypotenuse
 
-        double frame_height = 2.0 * sqrt( c*c - _depth*_depth );
-        double frame_width = frame_height * mAspectRatio;
+            double frame_height = 2.0 * sqrt( c*c - _depth*_depth );
+            double frame_width = frame_height * mAspectRatio;
 
-        _pos -= mActiveCam->GetPos().Get().Vec2();
+            _pos -= mActiveCam->GetPos().Get().Vec2();
 
-        _pos.x /= frame_width;
-        _pos.y /= frame_height;
+            _pos.x /= frame_width;
+            _pos.y /= frame_height;
+        }
+        else
+        {
+            _pos -= mActiveCam->GetPos().Get().Vec2();
+
+            _pos.x /= GetActiveCam()->GetOrthoWidth();
+            _pos.y /= GetActiveCam()->GetOrthoWidth() / mAspectRatio;
+        }
 
         return true;
     }
@@ -232,7 +252,20 @@ void CDebugDrawSystem::Draw() const
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(mActiveCam->GetFov() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView());
+
+    if (mActiveCam->mOrtho == false)
+    {
+        gluPerspective(mActiveCam->GetFov() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView());
+    }
+    else
+    {
+        float mhw = mActiveCam->GetOrthoWidth() * 0.5f;
+        float mhh = mhw / mAspectRatio;
+        glOrtho(-mhw, mhw,
+                -mhh, mhh,
+                mActiveCam->GetPos().Get().mZ,
+                mActiveCam->GetPos().Get().mZ - math::Abs(mActiveCam->GetDepthOfView()));
+    }
 
     for (unsigned int i=0; i<count; i++)
     {

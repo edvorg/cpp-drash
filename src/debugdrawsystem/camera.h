@@ -45,6 +45,11 @@ class CCamera
 public:
     friend class CDebugDrawSystem;
 
+    inline void SetOrtho(bool _ortho);
+    inline bool IsOrtho() const;
+    inline void SetOrthoWidth(float _width);
+    inline float GetOrthoWidth() const;
+
     inline void SetFov(float _fov);
     inline float GetFov() const;
 
@@ -61,10 +66,32 @@ protected:
     void Step(double _dt);
 
 private:
+    bool mOrtho = false;
+    float mOrthoWidth = 1.0f;
     float mFov = M_PI / 4.0f;
     float mDepthOfView = 1000.0f;
     CAnimatedParam<CVec3f> mPos;
 };
+
+inline void CCamera::SetOrtho(bool _ortho)
+{
+    mOrtho = _ortho;
+}
+
+bool CCamera::IsOrtho() const
+{
+    return mOrtho;
+}
+
+inline void CCamera::SetOrthoWidth(float _width)
+{
+    mOrthoWidth = _width;
+}
+
+inline float CCamera::GetOrthoWidth() const
+{
+    return mOrthoWidth;
+}
 
 inline void CCamera::SetFov(float _fov)
 {
