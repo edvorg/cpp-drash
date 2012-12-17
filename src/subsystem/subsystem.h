@@ -38,8 +38,9 @@ namespace drash
 class CSubsystem
 {
 public:
-    virtual bool Init() { return true; }
-    virtual void Release() {}
+    virtual bool Init() = 0;
+    virtual void Step(double _dt) = 0;
+    virtual void Release() = 0;
 
     void SetScene(CScene *_scene);
     inline CScene *GetScene();

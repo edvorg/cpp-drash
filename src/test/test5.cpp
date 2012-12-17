@@ -1,5 +1,7 @@
 #include "test5.h"
 
+#include "../debugdrawsystem/camera.h"
+
 namespace drash
 {
 

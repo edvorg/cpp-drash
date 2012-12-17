@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../cscene.h"
 #include "app/appeventprocessor.h"
+#include "../debugdrawsystem/camera.h"
 
 #include <sstream>
 

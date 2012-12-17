@@ -22,28 +22,23 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "ccamera.h"
-#include "explosion.h"
+#include "camera.h"
 
 namespace drash
 {
 
-CCamera::CCamera()
+bool CCamera::Init(const CCameraParams &_params)
 {
-}
-
-bool CCamera::Init(const GeometryT &_geometry, const ParamsT &_params )
-{
-    if ( !CSceneObject::Init(_geometry, _params) )
-    {
-        return false;
-    }
-
-    SetDynamic(false);
     mFov = _params.mFov;
     mDepthOfView = _params.mDepthOfView;
+    mPos.Set(_params.mPos);
 
     return true;
+}
+
+void CCamera::Step(double _dt)
+{
+    mPos.Step(_dt);
 }
 
 }// namespace drash

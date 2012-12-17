@@ -26,25 +26,24 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef COBJECTCAMERA_H
 #define COBJECTCAMERA_H
 
-#include "csceneobject.h"
 #include "../misc/animatedparam.h"
+#include "../misc/vec3.h"
 
 namespace drash
 {
 
-class CCameraParams : public CSceneObjectParams
+class CCameraParams
 {
 public:
+    CVec3f mPos;
     float mFov = M_PI / 4.0f;
     float mDepthOfView = 1000.0f;
 };
 
-class CCamera : public CSceneObject
+class CCamera
 {
 public:
-    friend class CScene;
-
-    typedef CCameraParams ParamsT;
+    friend class CDebugDrawSystem;
 
     inline void SetFov(float _fov);
     inline float GetFov() const;
@@ -52,14 +51,19 @@ public:
     inline void SetDepthOfView(float _depth);
     inline float GetDepthOfView() const;
 
-protected:        
-    CCamera( void );
+    inline CAnimatedParam<CVec3f> &GetPos();
 
-    bool Init( const GeometryT &_geometry, const ParamsT &_params );
+protected:        
+    CCamera(void) = default;
+
+    bool Init(const CCameraParams &_params);
+
+    void Step(double _dt);
 
 private:
     float mFov = M_PI / 4.0f;
     float mDepthOfView = 1000.0f;
+    CAnimatedParam<CVec3f> mPos;
 };
 
 inline void CCamera::SetFov(float _fov)
@@ -80,6 +84,11 @@ inline void CCamera::SetDepthOfView(float _depth)
 inline float CCamera::GetDepthOfView() const
 {
     return mDepthOfView;
+}
+
+inline CAnimatedParam<CVec3f> &CCamera::GetPos()
+{
+    return mPos;
 }
 
 }// namespace drash

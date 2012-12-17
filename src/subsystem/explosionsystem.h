@@ -32,8 +32,12 @@ namespace drash
 
 class CExplosionSystem : public CSubsystem
 {
-public:
-    CExplosionSystem();
+public:    
+    CExplosionSystem() = default;
+
+    virtual bool Init() override;
+    virtual void Step(double) override;
+    virtual void Release() override;
 };
 
 }// namespace drash

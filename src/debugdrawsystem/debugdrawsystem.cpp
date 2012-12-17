@@ -32,38 +32,69 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <GL/glu.h>
 #endif
 
+#include "camera.h"
 #include "../misc/graphics.h"
 
 namespace drash
 {
 
+bool CDebugDrawSystem::Init()
+{
+    return true;
+}
+
+void CDebugDrawSystem::Step(double _dt)
+{
+    for (auto i = mCameras.begin(); i != mCameras.end(); i++)
+    {
+        (*i)->Step(_dt);
+    }
+}
+
+void CDebugDrawSystem::Release()
+{
+	mActiveCam = nullptr;
+
+    for (auto i=mCameras.begin(); i!=mCameras.end(); i++)
+    {
+            delete *i;
+    }
+
+	mCameras.clear();
+}
+
 drash::CCamera *CDebugDrawSystem::CreateCam(const drash::CCameraParams &_params, bool _set_active)
 {
-    if (GetScene() == nullptr)
+    CCamera *res = new CCamera;
+
+    if (res->Init(_params) == false)
     {
+        delete res;
         return nullptr;
     }
 
-    drash::CSceneObjectGeometry g;
-    mCameras.push_back(GetScene()->CreateObject<CCamera>(g, _params));
+    mCameras.push_back(res);
+
     if (_set_active)
     {
-        SetActiveCam(mCameras.back());
+        SetActiveCam(res);
     }
-    return mCameras.back();
+
+    return res;
 }
 
 void CDebugDrawSystem::DestroyCam(drash::CCamera *_cam)
 {
+    if (_cam == mActiveCam)
+    {
+        mActiveCam = nullptr;
+    }
+
     for (auto i=mCameras.begin(); i!=mCameras.end(); i++)
     {
         if (*i == _cam)
         {
-            if (GetScene() != nullptr)
-            {
-                GetScene()->DestroyObject(_cam);
-            }
-
+            delete *i;
             mCameras.erase(i);
             return;
         }

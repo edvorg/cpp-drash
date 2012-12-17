@@ -25,8 +25,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctestapp2.h"
 
 #include "../cscene.h"
-
 #include "../app/appeventprocessor.h"
+#include "../debugdrawsystem/camera.h"
 
 namespace drash
 {

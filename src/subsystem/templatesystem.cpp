@@ -27,6 +27,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
+bool CTemplateSystem::Init()
+{
+    return true;
+}
+
+void CTemplateSystem::Step(double)
+{
+}
+
 void CTemplateSystem::Release()
 {
     for (auto i=mSceneObjectTemplates.begin(), i_e=mSceneObjectTemplates.end(); i!=i_e; i++)

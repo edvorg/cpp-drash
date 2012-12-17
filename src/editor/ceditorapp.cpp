@@ -24,6 +24,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ceditorapp.h"
 
+#include "../debugdrawsystem/camera.h"
+
 namespace drash {
 
 bool CObjectEditorApp::Init()

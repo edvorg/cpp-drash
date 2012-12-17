@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../cscene.h"
 #include "../subsystem/templatesystem.h"
 #include "../misc/cvec2.h"
+#include "../debugdrawsystem/camera.h"
 
 #include <vector>
 #include <string>

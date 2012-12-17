@@ -28,7 +28,7 @@ SOURCES += ../src/main.cpp\
     ../src/sceneobjects/csceneobject.cpp \
     ../src/sceneobjects/cplayer.cpp \
     ../src/sceneobjects/cdrashbody.cpp \
-    ../src/sceneobjects/ccamera.cpp \
+    ../src/debugdrawsystem/camera.cpp \
     ../src/sceneobjects/explosion.cpp \
     ../src/test/test.cpp \
     ../src/subsystem/subsystem.cpp \
@@ -39,7 +39,7 @@ SOURCES += ../src/main.cpp\
     ../src/subsystem/templatesystem.cpp \
     ../src/physobserver.cpp \
     ../src/sceneobjects/figure.cpp \
-    ../src/subsystem/debugdrawsystem.cpp \
+    ../src/debugdrawsystem/debugdrawsystem.cpp \
     ../src/app/app.cpp \
     ../src/app/appevent.cpp \
     ../src/editor/sceneeditor.cpp\
@@ -73,7 +73,7 @@ HEADERS  += ../src/gamewindow.h \
     ../src/sceneobjects/csceneobject.h \
     ../src/sceneobjects/cplayer.h \
     ../src/sceneobjects/cdrashbody.h \
-    ../src/sceneobjects/ccamera.h \
+    ../src/debugdrawsystem/camera.h \
     ../src/sceneobjects/explosion.h \
     ../src/test/test.h \
     ../src/diag/assert.h \
@@ -85,7 +85,7 @@ HEADERS  += ../src/gamewindow.h \
     ../src/misc/graphics.h \
     ../src/physobserver.h \
     ../src/sceneobjects/figure.h \
-    ../src/subsystem/debugdrawsystem.h \
+    ../src/debugdrawsystem/debugdrawsystem.h \
     ../src/app/app.h \
     ../src/app/appevent.h \
     ../src/editor/sceneeditor.h \
