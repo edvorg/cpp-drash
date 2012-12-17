@@ -1,6 +1,8 @@
 #ifndef DRASH_VEC3_H
 #define DRASH_VEC3_H
 
+#include "cvec2.h"
+
 namespace drash
 {
 
@@ -9,11 +11,27 @@ class CVec3
 {
 public:
     CVec3() = default;
-    CVec3(const CVec3 &_src);
+    CVec3(const CVec2 &_xy, const T &_z);
+    CVec3(const CVec3 &_xyz);
     CVec3(const T &_xyz);
     CVec3(const T &_x, const T &_y, const T &_z);
 
+    /// setters. just syntax sugare
+
+    CVec3 &Set(const CVec2 &_xy, const T &_z);
     CVec3 &Set(const T &_x, const T &_y, const T &_z);
+
+    /// misc
+
+    CVec2 Vec2() const;
+
+    /// operators
+
+    CVec3 &operator =(const CVec3 &_v);
+    CVec3 &operator +=(const CVec3 &_v);
+    CVec3 &operator -=(const CVec3 &_v);
+    CVec3 &operator *=(const CVec3 &_v);
+    CVec3 &operator /=(const CVec3 &_v);
 
     T mX = static_cast<T>(DEF_VAL);
     T mY = static_cast<T>(DEF_VAL);
@@ -29,14 +47,43 @@ typedef CVec3<float, 0> CVec3f;
 typedef CVec3<int, 0> CVec3i;
 typedef CVec3<unsigned int, 0> CVec3ui;
 
+/// some global functions
+
+template<typename T, const int DEF_VAL>
+CVec3<T, DEF_VAL> operator +(const CVec3<T, DEF_VAL> &_v1, const CVec3<T, DEF_VAL> &_v2)
+{
+    return CVec3<T, DEF_VAL>(_v1.mX + _v2.mX, _v1.mY + _v2.mY, _v1.mZ + _v2.mZ);
+}
+
+template<typename T, const int DEF_VAL>
+CVec3<T, DEF_VAL> operator -(const CVec3<T, DEF_VAL> &_v1, const CVec3<T, DEF_VAL> &_v2)
+{
+    return CVec3<T, DEF_VAL>(_v1.mX - _v2.mX, _v1.mY - _v2.mY, _v1.mZ - _v2.mZ);
+}
+
+template<typename T, const int DEF_VAL>
+CLogger &operator<<(CLogger& _logger, const CVec3<T, DEF_VAL> &_v)
+{
+    _logger<<'('<<_v.mX<<"; "<<_v.mY<<"; "<<_v.mZ<<')';
+    return _logger;
+}
+
 /// //////////////////// ///
 /// CVec3 implementation ///
 
 template<typename T, const int DEF_VAL>
-CVec3<T, DEF_VAL>::CVec3(const CVec3 &_src):
-    mX(_src.mX),
-    mY(_src.mY),
-    mZ(_src.mZ)
+CVec3<T, DEF_VAL>::CVec3(const CVec2 &_xy, const T &_z):
+    mX(_xy.x),
+    mY(_xy.y),
+    mZ(_z)
+{
+}
+
+template<typename T, const int DEF_VAL>
+CVec3<T, DEF_VAL>::CVec3(const CVec3 &_xyz):
+    mX(_xyz.mX),
+    mY(_xyz.mY),
+    mZ(_xyz.mZ)
 {
 }
 
@@ -57,11 +104,71 @@ CVec3<T, DEF_VAL>::CVec3(const T &_x, const T &_y, const T &_z):
 }
 
 template<typename T, const int DEF_VAL>
+CVec3<T, DEF_VAL> &CVec3<T, DEF_VAL>::Set(const CVec2 &_xy, const T &_z)
+{
+    mX = _xy.x;
+    mY = _xy.y;
+    mZ = _z;
+    return *this;
+}
+
+template<typename T, const int DEF_VAL>
 CVec3<T, DEF_VAL> &CVec3<T, DEF_VAL>::Set(const T &_x, const T &_y, const T &_z)
 {
     mX = _x;
     mY = _y;
     mZ = _z;
+    return *this;
+}
+
+template<typename T, const int DEF_VAL>
+CVec2 CVec3<T, DEF_VAL>::Vec2() const
+{
+    return CVec2(mX, mY);
+}
+
+template<typename T, const int DEF_VAL>
+CVec3<T, DEF_VAL> &CVec3<T, DEF_VAL>::operator =(const CVec3 &_v)
+{
+    mX = _v.mX;
+    mY = _v.mY;
+    mZ = _v.mZ;
+    return *this;
+}
+
+template<typename T, const int DEF_VAL>
+CVec3<T, DEF_VAL> &CVec3<T, DEF_VAL>::operator +=(const CVec3 &_v)
+{
+    mX += _v.mX;
+    mY += _v.mY;
+    mZ += _v.mZ;
+    return *this;
+}
+
+template<typename T, const int DEF_VAL>
+CVec3<T, DEF_VAL> &CVec3<T, DEF_VAL>::operator -=(const CVec3 &_v)
+{
+    mX -= _v.mX;
+    mY -= _v.mY;
+    mZ -= _v.mZ;
+    return *this;
+}
+
+template<typename T, const int DEF_VAL>
+CVec3<T, DEF_VAL> &CVec3<T, DEF_VAL>::operator *=(const CVec3 &_v)
+{
+    mX *= _v.mX;
+    mY *= _v.mY;
+    mZ *= _v.mZ;
+    return *this;
+}
+
+template<typename T, const int DEF_VAL>
+CVec3<T, DEF_VAL> &CVec3<T, DEF_VAL>::operator /=(const CVec3 &_v)
+{
+    mX /= _v.mX;
+    mY /= _v.mY;
+    mZ /= _v.mZ;
     return *this;
 }
 
