@@ -297,6 +297,9 @@ void CDebugDrawSystem::Draw() const
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
+        glRotatef(mActiveCam->GetRotation().Get().mX, 1, 0, 0);
+        glRotatef(mActiveCam->GetRotation().Get().mY, 0, 1, 0);
+        glRotatef(mActiveCam->GetRotation().Get().mZ, 0, 0, 1);
         glTranslatef(-mActiveCam->mPos.Get().mX,
                      -mActiveCam->mPos.Get().mY,
                      -mActiveCam->mPos.Get().mZ);
