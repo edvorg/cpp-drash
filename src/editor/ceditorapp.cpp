@@ -164,9 +164,11 @@ void CObjectEditorApp::SetProcessors()
     {
         if (mState == MoveState) {
             mSelectedFigure = nullptr;
+            SaveCurrentObject();
         }
         if (mState == StretchState) {
             mSelectedFigure = nullptr;
+            SaveCurrentObject();
             mVertexIndex = -1;
         }
     }
@@ -215,9 +217,7 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
 
     mTreeRefreshHandler();
 
-    mState = MoveState;
-    mVertexs.clear();
-
+    ActiveMoveMode();
     return true;
 }
 
@@ -276,6 +276,7 @@ void CObjectEditorApp::MoveFigure()
         new_vertices[i].y += pos.y;
     }
     mSelectedFigure->SetVertices(new_vertices, mSelectedFigure->EnumVertices());
+    delete[] new_vertices;
 }
 
 void CObjectEditorApp::StretchFigure()
@@ -283,7 +284,7 @@ void CObjectEditorApp::StretchFigure()
     if (mVertexIndex == -1) {
         return;
     }
-    CVec2 ver[mSelectedFigure->EnumVertices()];
+    CVec2 *ver = new CVec2[mSelectedFigure->EnumVertices()];
     for (int i = 0 ; i < mSelectedFigure->EnumVertices() ; i++) {
         if (i == mVertexIndex) {
             CVec2 posCur = GetCursorPos();
@@ -297,6 +298,7 @@ void CObjectEditorApp::StretchFigure()
         }
     }
     mSelectedFigure->SetVertices(ver,mSelectedFigure->EnumVertices());
+    delete[] ver;
 }
 
 void CObjectEditorApp::ChangeMode()
@@ -306,7 +308,6 @@ void CObjectEditorApp::ChangeMode()
 
 void CObjectEditorApp::SelectVertex()
 {
-    CVec2 posCur = GetCursorPos();
     for (unsigned int i = 0 ; i < mCurrentObject->EnumFigures() ; i++ ) {
         CFigure *figure = mCurrentObject->GetFigures()[i];
         for (unsigned int j = 0 ; j < figure->EnumVertices() ; j++) {
@@ -336,8 +337,6 @@ void CObjectEditorApp::SaveCurrentObject()
     if (mCurrentObject == nullptr) {
         return;
     }
-
-//    GetTemplateSystem().DestoySceneObjectTemplate(mCurrentObject);
 
     GetTemplateSystem().ChangeGeometry( mCurrentObject->GetGeometry(), mCurrentTemplateName );
 
