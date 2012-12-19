@@ -23,7 +23,10 @@ public:
 
     /// misc
 
-    CVec2 Vec2() const;
+    inline T LengthSquared() const;
+    inline T Length() const;
+    CVec3 &Normalize();
+    inline CVec2 Vec2() const;
 
     /// operators
 
@@ -122,7 +125,29 @@ CVec3<T, DEF_VAL> &CVec3<T, DEF_VAL>::Set(const T &_x, const T &_y, const T &_z)
 }
 
 template<typename T, const int DEF_VAL>
-CVec2 CVec3<T, DEF_VAL>::Vec2() const
+inline T CVec3<T, DEF_VAL>::LengthSquared() const
+{
+    return mX * mX + mY * mY + mZ * mZ;
+}
+
+template<typename T, const int DEF_VAL>
+inline T CVec3<T, DEF_VAL>::Length() const
+{
+    return sqrt(mX * mX + mY * mY + mZ * mZ);
+}
+
+template<typename T, const int DEF_VAL>
+CVec3<T, DEF_VAL> &CVec3<T, DEF_VAL>::Normalize()
+{
+    T len = this->Length();
+    mX /= len;
+    mY /= len;
+    mZ /= len;
+    return *this;
+}
+
+template<typename T, const int DEF_VAL>
+inline CVec2 CVec3<T, DEF_VAL>::Vec2() const
 {
     return CVec2(mX, mY);
 }
