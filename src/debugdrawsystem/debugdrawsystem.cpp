@@ -112,7 +112,7 @@ bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const
         if (mActiveCam->IsOrtho() == false)
         {
             // TODO: optimize this
-            double fov = mActiveCam->GetFov();
+            double fov = mActiveCam->GetFov().Get();
 
             double c = _depth / cos(fov / 2.0); // hypotenuse
 
@@ -126,8 +126,8 @@ bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const
         }
         else
         {
-            _pos.x *= GetActiveCam()->GetOrthoWidth();
-            _pos.y *= GetActiveCam()->GetOrthoWidth() / mAspectRatio;
+            _pos.x *= GetActiveCam()->GetOrthoWidth().Get();
+            _pos.y *= GetActiveCam()->GetOrthoWidth().Get() / mAspectRatio;
 
             _pos += mActiveCam->GetPos().Get().Vec2();
         }
@@ -147,7 +147,7 @@ bool CDebugDrawSystem::WorldSpaceToScreenSpace(CVec2 &_pos, float _depth) const
         if (mActiveCam->IsOrtho() == false)
         {
             // TODO: optimize this
-            double fov = mActiveCam->GetFov();
+            double fov = mActiveCam->GetFov().Get();
 
             double c = _depth / cos(fov / 2.0); // hypotenuse
 
@@ -163,8 +163,8 @@ bool CDebugDrawSystem::WorldSpaceToScreenSpace(CVec2 &_pos, float _depth) const
         {
             _pos -= mActiveCam->GetPos().Get().Vec2();
 
-            _pos.x /= GetActiveCam()->GetOrthoWidth();
-            _pos.y /= GetActiveCam()->GetOrthoWidth() / mAspectRatio;
+            _pos.x /= GetActiveCam()->GetOrthoWidth().Get();
+            _pos.y /= GetActiveCam()->GetOrthoWidth().Get() / mAspectRatio;
         }
 
         return true;
@@ -255,16 +255,16 @@ void CDebugDrawSystem::Draw() const
 
     if (mActiveCam->mOrtho == false)
     {
-        gluPerspective(mActiveCam->GetFov() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView());
+        gluPerspective(mActiveCam->GetFov().Get() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView().Get());
     }
     else
     {
-        float mhw = mActiveCam->GetOrthoWidth() * 0.5f;
+        float mhw = mActiveCam->GetOrthoWidth().Get() * 0.5f;
         float mhh = mhw / mAspectRatio;
         glOrtho(-mhw, mhw,
                 -mhh, mhh,
                 mActiveCam->GetPos().Get().mZ,
-                mActiveCam->GetPos().Get().mZ - math::Abs(mActiveCam->GetDepthOfView()));
+                mActiveCam->GetPos().Get().mZ - math::Abs(mActiveCam->GetDepthOfView().Get()));
     }
 
     for (unsigned int i=0; i<count; i++)
@@ -297,6 +297,9 @@ void CDebugDrawSystem::Draw() const
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
+        glRotatef(mActiveCam->GetRotation().Get().mX, 1, 0, 0);
+        glRotatef(mActiveCam->GetRotation().Get().mY, 0, 1, 0);
+        glRotatef(mActiveCam->GetRotation().Get().mZ, 0, 0, 1);
         glTranslatef(-mActiveCam->mPos.Get().mX,
                      -mActiveCam->mPos.Get().mY,
                      -mActiveCam->mPos.Get().mZ);

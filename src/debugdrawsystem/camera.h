@@ -35,9 +35,12 @@ namespace drash
 class CCameraParams
 {
 public:
-    CVec3f mPos;
+    bool mOrtho = false;
+    float mOrthoWidth = 1.0f;
     float mFov = M_PI / 4.0f;
     float mDepthOfView = 1000.0f;
+    CVec3f mPos;
+    CVec3f mRotation;
 };
 
 class CCamera
@@ -47,16 +50,12 @@ public:
 
     inline void SetOrtho(bool _ortho);
     inline bool IsOrtho() const;
-    inline void SetOrthoWidth(float _width);
-    inline float GetOrthoWidth() const;
 
-    inline void SetFov(float _fov);
-    inline float GetFov() const;
-
-    inline void SetDepthOfView(float _depth);
-    inline float GetDepthOfView() const;
-
+    inline CAnimatedParam<float> &GetOrthoWidth();
+    inline CAnimatedParam<float> &GetFov();
+    inline CAnimatedParam<float> &GetDepthOfView();
     inline CAnimatedParam<CVec3f> &GetPos();
+    inline CAnimatedParam<CVec3f> &GetRotation();
 
 protected:        
     CCamera(void) = default;
@@ -67,10 +66,11 @@ protected:
 
 private:
     bool mOrtho = false;
-    float mOrthoWidth = 1.0f;
-    float mFov = M_PI / 4.0f;
-    float mDepthOfView = 1000.0f;
+    CAnimatedParam<float> mOrthoWidth;
+    CAnimatedParam<float> mFov;
+    CAnimatedParam<float> mDepthOfView;
     CAnimatedParam<CVec3f> mPos;
+    CAnimatedParam<CVec3f> mRotation;
 };
 
 inline void CCamera::SetOrtho(bool _ortho)
@@ -78,37 +78,22 @@ inline void CCamera::SetOrtho(bool _ortho)
     mOrtho = _ortho;
 }
 
-bool CCamera::IsOrtho() const
+inline bool CCamera::IsOrtho() const
 {
     return mOrtho;
 }
 
-inline void CCamera::SetOrthoWidth(float _width)
-{
-    mOrthoWidth = _width;
-}
-
-inline float CCamera::GetOrthoWidth() const
+inline CAnimatedParam<float> &CCamera::GetOrthoWidth()
 {
     return mOrthoWidth;
 }
 
-inline void CCamera::SetFov(float _fov)
-{
-    mFov = _fov;
-}
-
-inline float CCamera::GetFov() const
+inline CAnimatedParam<float> &CCamera::GetFov()
 {
     return mFov;
 }
 
-inline void CCamera::SetDepthOfView(float _depth)
-{
-    mDepthOfView = drash::math::Abs(_depth);
-}
-
-inline float CCamera::GetDepthOfView() const
+inline CAnimatedParam<float> &CCamera::GetDepthOfView()
 {
     return mDepthOfView;
 }
@@ -116,6 +101,11 @@ inline float CCamera::GetDepthOfView() const
 inline CAnimatedParam<CVec3f> &CCamera::GetPos()
 {
     return mPos;
+}
+
+inline CAnimatedParam<CVec3f> &CCamera::GetRotation()
+{
+    return mRotation;
 }
 
 }// namespace drash

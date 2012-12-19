@@ -29,16 +29,22 @@ namespace drash
 
 bool CCamera::Init(const CCameraParams &_params)
 {
-    mFov = _params.mFov;
-    mDepthOfView = _params.mDepthOfView;
+    mOrthoWidth.Set(_params.mOrthoWidth);
+    mFov.Set(_params.mFov);
+    mDepthOfView.Set(_params.mDepthOfView);
     mPos.Set(_params.mPos);
+    mRotation.Set(_params.mRotation);
 
     return true;
 }
 
 void CCamera::Step(double _dt)
 {
+    mOrthoWidth.Step(_dt);
+    mFov.Step(_dt);
+    mDepthOfView.Step(_dt);
     mPos.Step(_dt);
+    mRotation.Step(_dt);
 }
 
 }// namespace drash
