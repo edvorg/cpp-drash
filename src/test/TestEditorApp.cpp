@@ -244,6 +244,7 @@ void CTestEditorApp::MoveFigure()
             new_vertices[i].x += pos.x;
         }
         mCurrentFigure->SetVertices(new_vertices, mCurrentFigure->EnumVertices());
+        delete [] new_vertices;
     }
     else
     {
