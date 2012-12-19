@@ -37,11 +37,12 @@ using namespace drash;
 
 EditorWindow::EditorWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::EditorWindow)
+    ui(new Ui::EditorWindow),
+    mModeActions(parent)
 {
     ui->setupUi(this);
     CreateActions();
-
+    mModeActions.setExclusive(true);
     mLabelOfStatusBar = new QLabel("Editor Object");
     this->statusBar()->addWidget(mLabelOfStatusBar);
 
@@ -99,6 +100,30 @@ void EditorWindow::timerEvent(QTimerEvent *)
     ui->mScene->updateGL();
 }
 
+void EditorWindow::CreateNewObject()
+{
+    QString str_name("Object");
+    str_name +=QString::number(mObjectApp->GetTemplateSystem().GetSceneObjectTemplates().size()+1);
+    QTreeWidgetItem *newItem = new QTreeWidgetItem(ui->mTreeObjects,QStringList(str_name));
+    newItem->setSelected(true);
+    mObjectApp->AddNewObjectToTemplate(str_name.toStdString());
+}
+
+void EditorWindow::AddNewFigure()
+{
+    if (mNewFigureAction->isChecked()){
+        mObjectApp->StartBuild();
+    }
+}
+
+void EditorWindow::MoveAtive()
+{
+    if (mMoveActiveAction->isChecked()) {
+        qDebug() << "Move";
+        mObjectApp->ActiveMoveMode();
+    }
+}
+
 void EditorWindow::CreateActions()
 {
     mQuit = new QAction("Quit",this);
@@ -106,18 +131,44 @@ void EditorWindow::CreateActions()
     this->addAction(mQuit);
     connect(mQuit,SIGNAL(triggered()),
             this,SLOT(close()));
+    QList<QAction*> listActions;
+
+    mNewObjectAction = new QAction("New SceneObject", this);
+    mNewObjectAction->setShortcut(tr("Ctrl+N"));
+    listActions << mNewObjectAction;
+    connect(mNewObjectAction,SIGNAL(triggered()),
+            this,SLOT(CreateNewObject()));
+
+    mNewFigureAction = new QAction("Build new Figure", this);
+    mNewFigureAction->setShortcut(tr("Ctrl+F"));
+    mNewFigureAction->setCheckable(true);
+    listActions << mNewFigureAction;
+    connect(mNewFigureAction,SIGNAL(changed()),
+            this, SLOT(AddNewFigure()));
+    mModeActions.addAction(mNewFigureAction);
+
+    mMoveActiveAction = new QAction("Move Figure", this);
+    mMoveActiveAction->setCheckable(true);
+    mMoveActiveAction->setShortcut(tr("Ctrl+M"));
+    listActions << mMoveActiveAction;
+    connect(mMoveActiveAction,SIGNAL(changed()),
+            this,SLOT(MoveAtive()));
+    mModeActions.addAction(mMoveActiveAction);
+
+    ui->toolBar->addActions(listActions);
 
     mRemoveAction = new QAction("Remove Object", this);
     mRemoveAction->setShortcut(tr("Ctrl+D"));
     ui->toolBar->addAction(mRemoveAction);
     connect(mRemoveAction,SIGNAL(triggered()),
             this, SLOT(Remove_Object()));
-
     mSaveAction = new QAction("Save Object", this);
     mSaveAction->setShortcut(tr("Ctrl+S"));
     ui->toolBar->addAction(mSaveAction);
     connect(mSaveAction, SIGNAL(triggered()),
             this,SLOT(SaveObject()));
+
+
 }
 
 void EditorWindow::SaveObject()
@@ -159,7 +210,7 @@ bool EditorWindow::UpdateTreeObject()
            new QTreeWidgetItem(objectItem,QStringList(vecs));
        }
     }
-
+    mMoveActiveAction->setChecked(true);
     return true;
 }
 
@@ -168,34 +219,12 @@ void EditorWindow::AddFigure()
     std::string nameTemplate = ui->mTreeObjects->selectedItems().at(0)->text(0).toStdString();
 
     mObjectApp->BuildFigure(nameTemplate);
-    //this->UpdateTreeObject();
 }
 
 
 void EditorWindow::on_mTreeObjects_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
 
-}
-
-void EditorWindow::on_mNewObjectButton_clicked()
-{
-    QString str_name("Object");
-    str_name +=QString::number(mObjectApp->GetTemplateSystem().GetSceneObjectTemplates().size()+1);
-    QTreeWidgetItem *newItem = new QTreeWidgetItem(ui->mTreeObjects,QStringList(str_name));
-    newItem->setSelected(true);
-//    ui->mTreeObjects->SetS
-    mObjectApp->AddNewObjectToTemplate(str_name.toStdString());
-
-}
-
-void EditorWindow::on_mBuildButton_clicked()
-{
-    this->AddFigure();
-}
-
-void EditorWindow::on_mNewFigureButton_clicked()
-{
-    mObjectApp->StartBuild();
 }
 
 void EditorWindow::on_mTreeObjects_itemClicked(QTreeWidgetItem *item, int column)
@@ -216,11 +245,6 @@ void EditorWindow::on_mTreeObjects_itemSelectionChanged()
         mObjectApp->ShowObject(item->text(0).toStdString());
         //mCurrentObject = mObjectApp->GetTemplateSystem().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
     }
-}
-
-void EditorWindow::on_ActiveMoveButton_clicked()
-{
-    mObjectApp->ActiveMoveMode();
 }
 
 void EditorWindow::Remove_Object()
