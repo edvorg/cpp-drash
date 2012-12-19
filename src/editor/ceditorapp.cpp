@@ -62,7 +62,7 @@ bool CObjectEditorApp::Init()
         t->mFigures[0].mVertices.push_back(CVec2(-50, -5));
         t->mFigures[0].mVertices.push_back(CVec2(50, -5));
     }
-    SetProcessor();
+    SetProcessors();
 
     return true;
 }
@@ -75,11 +75,12 @@ void CObjectEditorApp::Step(double _dt)
 void CObjectEditorApp::Render()
 {
     CApp::Render();
-    if (mVertexs.size() != 0) {
+    if (mVertexs.size() != 0 && mState == BuildState) {
         for (unsigned int i = 1 ; i < mVertexs.size() ; i++) {
             GetDebugDrawSystem().DrawLine(mVertexs[i-1],mVertexs[i],b2Color(0,255,0));
         }
         GetDebugDrawSystem().DrawLine(mVertexs[mVertexs.size() -1 ],GetCursorPos(),b2Color(0,255,0));
+        GetDebugDrawSystem().DrawLine(mVertexs[0],GetCursorPos(),b2Color(0,255,0));
     }
 }
 
@@ -88,28 +89,31 @@ void CObjectEditorApp::StartBuild()
     mState = BuildState;
 }
 
-void CObjectEditorApp::SetProcessor()
+void CObjectEditorApp::SetProcessors()
 {
     GetEventSystem().SetProcessor("LB", CAppEventProcessor(
     [this] ()
     {
-        LOG_INFO("Click !!!");
-        switch (mState) {
-            case BuildState:
-                mVertexs.push_back(GetCursorPos());
+        LOG_INFO("Click !!! " << mState);
+        switch ( mState ) {
+            case BuildState:{
+                if (mCurrentObject != nullptr)
+                    mVertexs.push_back(GetCursorPos());
                 break;
-            case MoveState:
+            }
+            case MoveState:{
                 mOldPositon = GetCursorPos();
 
                 mSelectedFigure = SelectFigure(mOldPositon);
 
-                GetDebugDrawSystem().ScreenSpaceToWorldSpace(mOldPositon,
-                                      GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
+                //GetDebugDrawSystem().ScreenSpaceToWorldSpace(mOldPositon,
+                //                      GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
 
                 if (mSelectedFigure == nullptr)
                     LOG_INFO("NOOOO");
 
                 break;
+            }
             case Simple:
                 mSelectedFigure = nullptr;
                 break;
@@ -119,7 +123,6 @@ void CObjectEditorApp::SetProcessor()
     {
         if (mSelectedFigure != nullptr && mState == MoveState) {
             LOG_INFO("Move figure now");
-            //LOG_INFO("Move figure now");
             MoveFigure();
         }
     },
@@ -149,7 +152,7 @@ void CObjectEditorApp::SetProcessor()
 
 bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
 {
-    if (mVertexs.size() < 3) {
+    if (mVertexs.size() < 3 || mCurrentObject == nullptr) {
         return false;
     }
     if (ValidateFigure() == false) {
@@ -174,7 +177,7 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
 
     mTreeRefreshHandler();
 
-    mState = Simple;
+    mState = MoveState;
     mVertexs.clear();
 
     return true;
@@ -191,7 +194,6 @@ void CObjectEditorApp::ShowObject(const std::string &_name)
     RemoveCurrentObject();
     SetCurrentTemplateName(_name);
     CSceneObjectParams params;
-//    params.mPos.Set(0);
     auto obj = GetTemplateSystem().CreateSceneObjectFromTemplate(_name,params);
     mCurrentObject = obj;
 }

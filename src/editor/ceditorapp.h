@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define CEDITORAPP_H
 
 #include "../app/app.h"
+#include <QDebug>
 
 namespace drash {
 
@@ -64,7 +65,7 @@ public:
     void SaveCurrentObject();
 private:
 
-    void SetProcessor();
+    void SetProcessors();
 
     bool ValidateFigure();
 
@@ -97,6 +98,7 @@ inline bool CObjectEditorApp::IsStartBuild()const {
 
 inline void CObjectEditorApp::ActiveMoveMode() {
     mState = MoveState;
+    qDebug() << mState;
 }
 
 inline void CObjectEditorApp::SetCurrentTemplateName(const std::string &_name){

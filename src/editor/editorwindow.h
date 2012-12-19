@@ -30,6 +30,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../test/test.h"
 #include "../diag/ctimer.h"
 #include "ceditorapp.h"
+#include <QActionGroup>
 
 class QTreeWidgetItem;
 class QLabel;
@@ -51,20 +52,11 @@ public:
     
 private slots:
 
-
     void on_mTreeObjects_itemDoubleClicked(QTreeWidgetItem *item, int column);
-
-    void on_mNewObjectButton_clicked();
-
-    void on_mBuildButton_clicked();
-
-    void on_mNewFigureButton_clicked();
 
     void on_mTreeObjects_itemClicked(QTreeWidgetItem *item, int column);
 
     void on_mTreeObjects_itemSelectionChanged();
-
-    void on_ActiveMoveButton_clicked();
 
     void Remove_Object();
 
@@ -83,6 +75,17 @@ private:
     QAction *mQuit;
     QAction *mRemoveAction;
     QAction *mSaveAction;
+    QAction *mMoveActiveAction;
+    QAction *mNewFigureAction;
+    QAction *mNewObjectAction;
+
+
+    QActionGroup mModeActions;
+    // Slots for Actions
+private slots:
+    void CreateNewObject();
+    void AddNewFigure();
+    void MoveAtive();
     // GuiObjects
 private:
     QLabel *mLabelOfStatusBar;
