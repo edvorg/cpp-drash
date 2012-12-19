@@ -76,16 +76,19 @@ private:
     QAction *mRemoveAction;
     QAction *mSaveAction;
     QAction *mMoveActiveAction;
+    QAction *mStretchActiveAction;
     QAction *mNewFigureAction;
     QAction *mNewObjectAction;
 
 
     QActionGroup mModeActions;
+
     // Slots for Actions
 private slots:
     void CreateNewObject();
     void AddNewFigure();
-    void MoveAtive();
+    void MoveActive();
+    void StretchActive();
     // GuiObjects
 private:
     QLabel *mLabelOfStatusBar;
