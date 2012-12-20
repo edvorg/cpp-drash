@@ -58,7 +58,8 @@ SOURCES += ../src/main.cpp\
     ../src/sceneobjects/destructiongraph.cpp \
     ../src/test/test5.cpp \
     ../src/misc/vec3.cpp \
-    ../src/misc/plane.cpp
+    ../src/misc/plane.cpp \
+    ../src/misc/ray.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -105,7 +106,8 @@ HEADERS  += ../src/gamewindow.h \
     ../src/sceneobjects/destructiongraph.h \
     ../src/test/test5.h \
     ../src/misc/vec3.h \
-    ../src/misc/plane.h
+    ../src/misc/plane.h \
+    ../src/misc/ray.h
 
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui
