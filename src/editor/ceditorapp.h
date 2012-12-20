@@ -67,6 +67,7 @@ public:
 
     void SaveCurrentObject();
 private:
+    float GetCurDepth();
 
     void SetProcessors();
 
@@ -95,6 +96,8 @@ private:
     std::vector<drash::CVec2> mVertexs;
 
     CFigure *mSelectedFigure = nullptr;
+
+    CVec2 mOldPositionCursor = CVec2(0);
 
 //    bool StetchBegin = false;
     CVec2 mCurrentFigureVertex;

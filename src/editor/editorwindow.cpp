@@ -85,9 +85,10 @@ bool EditorWindow::InitScene()
     }
     mObjectApp->GetDebugDrawSystem().GetActiveCam()->SetOrtho(true);
     mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetOrthoWidth().Set(120);
-//    mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetPos().Set(CVec3f(0, 20, 100));
-//    mObjectApp->GetDebugDrawSystem().GetActiveCam()->SetOrtho();
+    //mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetPos().Set(CVec3f(0, 20, 100));
+    //mObjectApp->GetDebugDrawSystem().GetActiveCam()->SetOrtho();
     ui->mScene->SetTestApp(mObjectApp);
+    mCurrentApp = mObjectApp;
     return true;
 }
 
@@ -133,6 +134,25 @@ void EditorWindow::StretchActive()
     }
 }
 
+void EditorWindow::ZoomUp()
+{
+    if (mCurrentApp != nullptr){
+        qDebug() << "Zoom up!";
+        CVec3f pos = mCurrentApp->GetDebugDrawSystem().GetActiveCam()->GetPos().GetTarget();
+        pos.mZ += 10.0f;
+        mCurrentApp->GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimationBehaviorSingle);
+    }
+}
+
+void EditorWindow::ZoomDown()
+{
+    if (mCurrentApp != nullptr){
+        CVec3f pos = mCurrentApp->GetDebugDrawSystem().GetActiveCam()->GetPos().GetTarget();
+        pos.mZ -= 10.0f;
+        mCurrentApp->GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimationBehaviorSingle);
+    }
+}
+
 void EditorWindow::CreateActions()
 {
     mQuit = new QAction("Quit",this);
@@ -171,6 +191,19 @@ void EditorWindow::CreateActions()
     connect(mStretchActiveAction, SIGNAL(changed()),
             this,SLOT(StretchActive()));
     mModeActions.addAction(mStretchActiveAction);
+
+    mZoomUpAction = new QAction("+", this);
+    mZoomUpAction->setShortcut(tr("Ctrl+="));
+    listActions << mZoomUpAction;
+    connect(mZoomUpAction,SIGNAL(triggered()),
+            this,SLOT(ZoomUp()));
+
+    mZoomDownAction = new QAction("-",this);
+    mZoomDownAction->setShortcut(tr("Ctrl+-"));
+    listActions << mZoomDownAction;
+    connect(mZoomDownAction,SIGNAL(triggered()),
+            this,SLOT(ZoomDown()));
+
     ui->toolBar->addActions(listActions);
 
     mRemoveAction = new QAction("Remove Object", this);
@@ -178,11 +211,12 @@ void EditorWindow::CreateActions()
     ui->toolBar->addAction(mRemoveAction);
     connect(mRemoveAction,SIGNAL(triggered()),
             this, SLOT(Remove_Object()));
-    mSaveAction = new QAction("Save Object", this);
-    mSaveAction->setShortcut(tr("Ctrl+S"));
-    ui->toolBar->addAction(mSaveAction);
-    connect(mSaveAction, SIGNAL(triggered()),
-            this,SLOT(SaveObject()));
+
+//    mSaveAction = new QAction("Save Object", this);
+//    mSaveAction->setShortcut(tr("Ctrl+S"));
+//    ui->toolBar->addAction(mSaveAction);
+//    connect(mSaveAction, SIGNAL(triggered()),
+//            this,SLOT(SaveObject()));
 
 
 }
