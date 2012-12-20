@@ -34,6 +34,7 @@ namespace drash {
 enum State {
     BuildState,
     MoveState,
+    StretchState,
     Simple
 };
 
@@ -62,8 +63,11 @@ public:
 
     inline void ActiveMoveMode();
 
+    void ActiveStretchMode();
+
     void SaveCurrentObject();
 private:
+    float GetCurDepth();
 
     void SetProcessors();
 
@@ -75,6 +79,11 @@ private:
 
     void MoveFigure();
 
+    void StretchFigure();
+
+    void ChangeMode();
+
+    void SelectVertex();
 private:
     CSceneObject *mCurrentObject = nullptr;
 
@@ -88,8 +97,12 @@ private:
 
     CFigure *mSelectedFigure = nullptr;
 
-    CVec2 mOldPositon = CVec2(0);
+    CVec2 mOldPositionCursor = CVec2(0);
 
+//    bool StetchBegin = false;
+    CVec2 mCurrentFigureVertex;
+
+    int mVertexIndex = -1;
 };
 
 inline bool CObjectEditorApp::IsStartBuild()const {
@@ -98,8 +111,10 @@ inline bool CObjectEditorApp::IsStartBuild()const {
 
 inline void CObjectEditorApp::ActiveMoveMode() {
     mState = MoveState;
-    qDebug() << mState;
+    ChangeMode();
 }
+
+
 
 inline void CObjectEditorApp::SetCurrentTemplateName(const std::string &_name){
     mCurrentTemplateName = _name;

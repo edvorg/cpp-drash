@@ -64,7 +64,9 @@ private slots:
 private:
     Ui::EditorWindow *ui;
     bool InitScene();
-    drash::CObjectEditorApp  *mObjectApp;
+    drash::CObjectEditorApp  *mObjectApp = nullptr;
+
+    drash::CApp * mCurrentApp = nullptr;
 
     void timerEvent(QTimerEvent *) override;
 
@@ -76,16 +78,22 @@ private:
     QAction *mRemoveAction;
     QAction *mSaveAction;
     QAction *mMoveActiveAction;
+    QAction *mStretchActiveAction;
     QAction *mNewFigureAction;
     QAction *mNewObjectAction;
-
+    QAction *mZoomUpAction;
+    QAction *mZoomDownAction;
 
     QActionGroup mModeActions;
+
     // Slots for Actions
 private slots:
     void CreateNewObject();
     void AddNewFigure();
-    void MoveAtive();
+    void MoveActive();
+    void StretchActive();
+    void ZoomUp();
+    void ZoomDown();
     // GuiObjects
 private:
     QLabel *mLabelOfStatusBar;

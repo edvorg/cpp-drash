@@ -82,11 +82,40 @@ void CObjectEditorApp::Render()
         GetDebugDrawSystem().DrawLine(mVertexs[mVertexs.size() -1 ],GetCursorPos(),b2Color(0,255,0));
         GetDebugDrawSystem().DrawLine(mVertexs[0],GetCursorPos(),b2Color(0,255,0));
     }
+    if (mState == StretchState) {
+//        qDebug() << "THIS!!!";
+//        for (auto iter = mFigurePoints.begin() ; iter != mFigurePoints.end() ; iter++){
+//            CVec2 position = **iter;
+//            float depth = drash::math::Abs(mCurrentObject->GetPos().Get().mZ
+//                        -GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
+//            GetDebugDrawSystem().WorldSpaceToScreenSpace(position,depth);
+////                qDebug() << position.x << " " << position.y;
+//            GetDebugDrawSystem().DrawPoint(position,10,b2Color(255,155,0));
+//        }
+        for (unsigned int i = 0 ; i < mCurrentObject->EnumFigures() ; i++ ) {
+            CFigure *figure = mCurrentObject->GetFigures()[i];
+            for (unsigned int j = 0 ; j < figure->EnumVertices() ; j++) {
+                CVec2 position = figure->GetVertices()[j];
+                b2Color color(255,155,0);
+//                qDebug() << position.x << " " << position.y <<" "<<posC.x <<" "<<posC.y;
+
+                float depth = drash::math::Abs(mCurrentObject->GetPos().Get().mZ
+                            -GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
+                GetDebugDrawSystem().WorldSpaceToScreenSpace(position,depth);
+                if (drash::math::Abs(position.x -GetCursorPos().x) <= 0.01f &&
+                        drash::math::Abs(position.y -GetCursorPos().y) <= 0.01f) {
+                    color.Set(255,0,0);
+                }
+                GetDebugDrawSystem().DrawPoint(position,10.0f,color);
+            }
+        }
+    }
 }
 
 void CObjectEditorApp::StartBuild()
 {
     mState = BuildState;
+    ChangeMode();
 }
 
 void CObjectEditorApp::SetProcessors()
@@ -102,16 +131,18 @@ void CObjectEditorApp::SetProcessors()
                 break;
             }
             case MoveState:{
-                mOldPositon = GetCursorPos();
-
-                mSelectedFigure = SelectFigure(mOldPositon);
-
-                //GetDebugDrawSystem().ScreenSpaceToWorldSpace(mOldPositon,
-                //                      GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
-
+                mOldPositionCursor = GetCursorPos();
+                mSelectedFigure = SelectFigure(mOldPositionCursor);
+                GetDebugDrawSystem().ScreenSpaceToWorldSpace(mOldPositionCursor, GetCurDepth());
                 if (mSelectedFigure == nullptr)
                     LOG_INFO("NOOOO");
 
+                break;
+            }
+            case StretchState:{
+                //mCurrentFigureVertex = GetCursorPos();
+                SelectVertex();
+                //StretchFigure();
                 break;
             }
             case Simple:
@@ -125,11 +156,20 @@ void CObjectEditorApp::SetProcessors()
             LOG_INFO("Move figure now");
             MoveFigure();
         }
+        if (mState == StretchState) {
+            StretchFigure();
+        }
     },
     [this] ()
     {
         if (mState == MoveState) {
             mSelectedFigure = nullptr;
+            SaveCurrentObject();
+        }
+        if (mState == StretchState) {
+            mSelectedFigure = nullptr;
+            SaveCurrentObject();
+            mVertexIndex = -1;
         }
     }
     ));
@@ -142,6 +182,8 @@ void CObjectEditorApp::SetProcessors()
                 BuildFigure(mCurrentTemplateName);
                 break;
             case MoveState:
+                break;
+            case StretchState:
                 break;
             case Simple:
                 break;
@@ -177,9 +219,7 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
 
     mTreeRefreshHandler();
 
-    mState = MoveState;
-    mVertexs.clear();
-
+    ActiveMoveMode();
     return true;
 }
 
@@ -229,37 +269,74 @@ void CObjectEditorApp::MoveFigure()
     }
 
     CVec2 pos = GetCursorPos();
+    GetDebugDrawSystem().ScreenSpaceToWorldSpace(pos,GetCurDepth());
+    float disX = pos.x - mOldPositionCursor.x;
+    float disY = pos.y - mOldPositionCursor.y;
+    mOldPositionCursor = pos;
     const b2Vec2* v = mSelectedFigure->GetVertices();
     CVec2* new_vertices = new CVec2[mSelectedFigure->EnumVertices()];
     for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++)
     {
         new_vertices[i] = v[i];
-        new_vertices[i].x += pos.x;
-        new_vertices[i].y += pos.y;
+        new_vertices[i].x += disX;
+        new_vertices[i].y += disY;
     }
+
     mSelectedFigure->SetVertices(new_vertices, mSelectedFigure->EnumVertices());
+    delete[] new_vertices;
+}
 
-//    if (drash::math::Abs(pos.x) > drash::math::Abs(pos.y)) {
+void CObjectEditorApp::StretchFigure()
+{
+    if (mVertexIndex == -1) {
+        return;
+    }
+    CVec2 *ver = new CVec2[mSelectedFigure->EnumVertices()];
+    for (unsigned int i = 0 ; i < mSelectedFigure->EnumVertices() ; i++) {
+        if (i == (unsigned int)mVertexIndex) {
+            CVec2 posCur = GetCursorPos();
+            qDebug() << posCur.x << " " << posCur.y;
+            float depth = drash::math::Abs(mCurrentObject->GetPos().Get().mZ
+                        -GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
+            GetDebugDrawSystem().ScreenSpaceToWorldSpace(posCur,depth);
+            ver[i].Set(posCur.x,posCur.y);
+        } else {
+            ver[i] = mSelectedFigure->GetVertices()[i];
+        }
+    }
+    mSelectedFigure->SetVertices(ver,mSelectedFigure->EnumVertices());
+    delete[] ver;
+}
 
-//        const b2Vec2* v = mSelectedFigure->GetVertices();
-//        CVec2* new_vertices = new CVec2[mSelectedFigure->EnumVertices()];
-//        for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++)
-//        {
-//            new_vertices[i] = v[i];
-//            new_vertices[i].x += pos.x;
-//        }
-//        mSelectedFigure->SetVertices(new_vertices, mSelectedFigure->EnumVertices());
+void CObjectEditorApp::ChangeMode()
+{
+    mVertexs.clear();
+}
 
-//    } else {
-//        const b2Vec2* v = mSelectedFigure->GetVertices();
-//        CVec2* new_vertices = new CVec2[mSelectedFigure->EnumVertices()];
-//        for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++)
-//        {
-//            new_vertices[i] = v[i];
-//            new_vertices[i].y += pos.y;
-//        }
-//        mSelectedFigure->SetVertices(new_vertices, mSelectedFigure->EnumVertices());
-    //    }
+void CObjectEditorApp::SelectVertex()
+{
+    for (unsigned int i = 0 ; i < mCurrentObject->EnumFigures() ; i++ ) {
+        CFigure *figure = mCurrentObject->GetFigures()[i];
+        for (unsigned int j = 0 ; j < figure->EnumVertices() ; j++) {
+            CVec2 position = figure->GetVertices()[j];
+            float depth = drash::math::Abs(mCurrentObject->GetPos().Get().mZ
+               -GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
+            GetDebugDrawSystem().WorldSpaceToScreenSpace(position,depth);
+            if (drash::math::Abs(position.x -GetCursorPos().x) <= 0.01f &&
+                    drash::math::Abs(position.y -GetCursorPos().y) <= 0.01f) {
+                mCurrentFigureVertex = position;
+                mVertexIndex = j;
+                mSelectedFigure = figure;
+                break;
+            }
+        }
+    }
+}
+
+void CObjectEditorApp::ActiveStretchMode()
+{
+    mState = StretchState;
+    ChangeMode();
 }
 
 void CObjectEditorApp::SaveCurrentObject()
@@ -268,11 +345,16 @@ void CObjectEditorApp::SaveCurrentObject()
         return;
     }
 
-//    GetTemplateSystem().DestoySceneObjectTemplate(mCurrentObject);
-
     GetTemplateSystem().ChangeGeometry( mCurrentObject->GetGeometry(), mCurrentTemplateName );
 
     ShowObject(mCurrentTemplateName);
+}
+
+float CObjectEditorApp::GetCurDepth()
+{
+    float depth = drash::math::Abs(mCurrentObject->GetPos().Get().mZ
+       -GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
+    return depth;
 }
 
 
