@@ -281,6 +281,7 @@ void CObjectEditorApp::MoveFigure()
         new_vertices[i].x += disX;
         new_vertices[i].y += disY;
     }
+
     mSelectedFigure->SetVertices(new_vertices, mSelectedFigure->EnumVertices());
     delete[] new_vertices;
 }
