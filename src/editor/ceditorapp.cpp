@@ -137,6 +137,12 @@ void CObjectEditorApp::SetProcessors()
                 if (mSelectedFigure == nullptr)
                     LOG_INFO("NOOOO");
 
+                CVec2 mMoveStartClick = GetCursorPos();
+                GetDebugDrawSystem().ScreenSpaceToWorldSpace(mMoveStartClick,
+                                                             -GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ +
+                                                             mSelectedFigure->GetSceneObject()->GetPos().Get().mZ +
+                                                             mSelectedFigure->GetZ());
+
                 break;
             }
             case StretchState:{
@@ -266,15 +272,23 @@ void CObjectEditorApp::MoveFigure()
         return;
     }
 
-    CVec2 pos = GetCursorPos();
+    CVec2 new_pos = GetCursorPos();
+    GetDebugDrawSystem().ScreenSpaceToWorldSpace(new_pos,
+                                                 - GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ +
+                                                 mSelectedFigure->GetSceneObject()->GetPos().Get().mZ +
+                                                 mSelectedFigure->GetZ());
+
     const b2Vec2* v = mSelectedFigure->GetVertices();
     CVec2* new_vertices = new CVec2[mSelectedFigure->EnumVertices()];
     for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++)
     {
         new_vertices[i] = v[i];
-        new_vertices[i].x += pos.x;
-        new_vertices[i].y += pos.y;
+        new_vertices[i].x += new_pos.x - mMoveStartClick.x;
+        new_vertices[i].y += new_pos.y - mMoveStartClick.y;
     }
+
+    mMoveStartClick = new_pos;
+
     mSelectedFigure->SetVertices(new_vertices, mSelectedFigure->EnumVertices());
     delete[] new_vertices;
 }

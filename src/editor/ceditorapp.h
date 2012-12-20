@@ -100,6 +100,8 @@ private:
     CVec2 mCurrentFigureVertex;
 
     int mVertexIndex = -1;
+
+    CVec2 mMoveStartClick = CVec2(0);
 };
 
 inline bool CObjectEditorApp::IsStartBuild()const {
