@@ -20,9 +20,19 @@ void CPlane::SetNormal(const CVec3f &_normal)
     ComputeD();
 }
 
-int CPlane::CastRay(const CVec3f &, CVec3f &) const
+void CPlane::CastRay(const CRay &_ray, CVec3f &_result) const
 {
-    return false;
+    float tmp = (mNormal.mX * _ray.GetPoint().mX +
+                 mNormal.mY * _ray.GetPoint().mY +
+                 mNormal.mZ * _ray.GetPoint().mZ +
+                 mD) /
+                (_ray.GetDirection().mX * mNormal.mZ+
+                 _ray.GetDirection().mY * mNormal.mY +
+                 _ray.GetDirection().mZ * mNormal.mZ);
+
+    _result.mX = _ray.GetPoint().mX - _ray.GetDirection().mX * tmp;
+    _result.mY = _ray.GetPoint().mY - _ray.GetDirection().mY * tmp;
+    _result.mZ = _ray.GetPoint().mZ - _ray.GetDirection().mZ * tmp;
 }
 
 void CPlane::ComputeD()

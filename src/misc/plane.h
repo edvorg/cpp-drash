@@ -2,6 +2,7 @@
 #define DRASH_PLANE_H
 
 #include "vec3.h"
+#include "ray.h"
 
 namespace drash
 {
@@ -16,7 +17,7 @@ public:
     void SetNormal(const CVec3f &_normal);
     inline const CVec3f &GetNormal() const;
 
-    int CastRay(const CVec3f &, CVec3f &) const;
+    void CastRay(const CRay &_ray, CVec3f &_result) const;
 
 private:
     void ComputeD();
