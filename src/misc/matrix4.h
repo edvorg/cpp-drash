@@ -38,6 +38,9 @@ private:
 };
 
 CMatrix4f &MatrixMultiply(const CMatrix4f &_m1, const CMatrix4f &_m2, CMatrix4f &_result);
+CMatrix4f &MatrixRotationX(CMatrix4f &_m, float _angle);
+CMatrix4f &MatrixRotationY(CMatrix4f &_m, float _angle);
+CMatrix4f &MatrixRotationZ(CMatrix4f &_m, float _angle);
 
 } // namespace drash
 

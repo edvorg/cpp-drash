@@ -1,9 +1,23 @@
 #include "matrix4.h"
 
 #include <cstring>
+#include <cmath>
 
 namespace drash
 {
+
+CMatrix4f &CMatrix4f::Zero()
+{
+    memset(mData, 0, sizeof(float) * mElemsCount);
+    return *this;
+}
+
+CMatrix4f &CMatrix4f::Identity()
+{
+    Zero();
+    mData[m00] = mData[m11] = mData[m22] = mData[m33] = 1;
+    return *this;
+}
 
 CMatrix4f &MatrixMultiply(const CMatrix4f &_m1, const CMatrix4f &_m2, CMatrix4f &_result)
 {
@@ -98,17 +112,44 @@ CMatrix4f &MatrixMultiply(const CMatrix4f &_m1, const CMatrix4f &_m2, CMatrix4f 
     return _result;
 }
 
-CMatrix4f &CMatrix4f::Zero()
+CMatrix4f &MatrixRotationX(CMatrix4f &_m, float _angle)
 {
-    memset(mData, 0, sizeof(float) * mElemsCount);
-    return *this;
+    float c = cos(_angle);
+    float s = sin(_angle);
+
+    _m.Identity();
+    _m.mData[_m.m11] = _m.mData[_m.m22] = c;
+    _m.mData[_m.m21] = s;
+    _m.mData[_m.m12] = -s;
+
+    return _m;
 }
 
-CMatrix4f &CMatrix4f::Identity()
+CMatrix4f &MatrixRotationY(CMatrix4f &_m, float _angle)
 {
-    Zero();
-    mData[m00] = mData[m11] = mData[m22] = mData[m33] = 1;
-    return *this;
+    float c = cos(_angle);
+    float s = sin(_angle);
+
+    _m.Identity();
+    _m.mData[_m.m00] = _m.mData[_m.m22] = c;
+    _m.mData[_m.m02] = s;
+    _m.mData[_m.m20] = -s;
+
+    return _m;
+}
+
+CMatrix4f &MatrixRotationZ(CMatrix4f &_m, float _angle)
+{
+    float c = cos(_angle);
+    float s = sin(_angle);
+
+    _m.Identity();
+    _m.mData[_m.m00] = _m.mData[_m.m11] = c;
+    _m.mData[_m.m10] = s;
+    _m.mData[_m.m01] = -s;
+
+
+    return _m;
 }
 
 } // namespace drash
