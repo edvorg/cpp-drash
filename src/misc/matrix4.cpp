@@ -1,5 +1,7 @@
 #include "matrix4.h"
 
+#include <cstring>
+
 namespace drash
 {
 
@@ -94,6 +96,19 @@ CMatrix4f &MatrixMultiply(const CMatrix4f &_m1, const CMatrix4f &_m2, CMatrix4f 
 
 
     return _result;
+}
+
+CMatrix4f &CMatrix4f::Zero()
+{
+    memset(mData, 0, sizeof(float) * mElemsCount);
+    return *this;
+}
+
+CMatrix4f &CMatrix4f::Identity()
+{
+    Zero();
+    mData[m00] = mData[m11] = mData[m22] = mData[m33] = 1;
+    return *this;
 }
 
 } // namespace drash

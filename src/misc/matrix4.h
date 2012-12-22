@@ -29,6 +29,9 @@ public:
 
     CMatrix4f() = default;
 
+    CMatrix4f &Zero();
+    CMatrix4f &Identity();
+
     float mData[mElemsCount];
 protected:
 private:
