@@ -50,12 +50,12 @@ private:
 
     double mTime = 0;
 
-    std::vector<CVec2> mVertices;
+    std::vector<CVec2f> mVertices;
     unsigned int mTemplateCounter = 0;
     CSceneObjectGeometry *mCurrentTemplate = nullptr;
     CSceneObject *mCurrentObject = nullptr;
     CFigure *mCurrentFigure = nullptr;
-    CVec2 mLastCursorPos;
+    CVec2f mLastCursorPos;
 };
 
 } // namespace drash

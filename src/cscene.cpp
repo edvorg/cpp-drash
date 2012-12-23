@@ -62,7 +62,7 @@ bool CScene::Init( const CSceneParams &_params )
     mWorld.SetContactListener(&mObserver);
     mWorld.SetAllowSleeping(true);
     mWorld.SetContinuousPhysics(false);
-    mWorld.SetGravity( _params.mGravity );
+    mWorld.SetGravity(CVec2ToB2Vec2(_params.mGravity));
 
     mInitialized = true;
     return true;
@@ -153,10 +153,10 @@ void CScene::DestroyObjects(void)
     }
 }
 
-CJoint *CScene::CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2, const CVec3f _anchor)
+CJoint *CScene::CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2, const CVec3f &_anchor)
 {
     b2WeldJointDef jdef;
-    jdef.Initialize(_obj1->mBody, _obj2->mBody, _anchor.Vec2());
+    jdef.Initialize(_obj1->mBody, _obj2->mBody, CVec2ToB2Vec2(_anchor.Vec2()));
 
     CJoint *res = new CJoint;
     res->mJoint = mWorld.CreateJoint(&jdef);;
@@ -229,9 +229,9 @@ void CScene::DisconnectSubsystem(CSubsystem *_subsystem)
     LOG_WARN("CScene::RemSubsystem(): subsystem is not connected");
 }
 
-void CScene::SetGravity(const CVec2 &_g)
+void CScene::SetGravity(const CVec2f &_g)
 {
-    mWorld.SetGravity(_g);
+    mWorld.SetGravity(CVec2ToB2Vec2(_g));
 }
 
 void CScene::DestroyObjectImpl(CSceneObject *_obj)

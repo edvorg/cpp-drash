@@ -44,10 +44,10 @@ bool CTestApp2::Init()
 
     CSceneObjectGeometry g;
     g.mFigures.resize(1);
-    g.mFigures[0].mVertices.push_back( CVec2( -300.0f, 5.0f ) );
-    g.mFigures[0].mVertices.push_back( CVec2( -300.0f, -5.0f ) );
-    g.mFigures[0].mVertices.push_back( CVec2( 300.0f, -5.0f ) );
-    g.mFigures[0].mVertices.push_back( CVec2( 300.0f, 5.0f ) );
+    g.mFigures[0].mVertices.push_back( CVec2f( -300.0f, 5.0f ) );
+    g.mFigures[0].mVertices.push_back( CVec2f( -300.0f, -5.0f ) );
+    g.mFigures[0].mVertices.push_back( CVec2f( 300.0f, -5.0f ) );
+    g.mFigures[0].mVertices.push_back( CVec2f( 300.0f, 5.0f ) );
     g.mFigures[0].mDepth = 5;
     CSceneObjectParams p;
     p.mPos.mY = -25;
@@ -56,10 +56,10 @@ bool CTestApp2::Init()
 
     CSceneObjectGeometry player_geometry;
     player_geometry.mFigures.resize(1);
-    player_geometry.mFigures[0].mVertices.push_back( CVec2( -2, -5 ) );
-    player_geometry.mFigures[0].mVertices.push_back( CVec2( 2, -5 ) );
-    player_geometry.mFigures[0].mVertices.push_back( CVec2( 2, 5 ) );
-    player_geometry.mFigures[0].mVertices.push_back( CVec2( -2, 5 ) );
+    player_geometry.mFigures[0].mVertices.push_back( CVec2f( -2, -5 ) );
+    player_geometry.mFigures[0].mVertices.push_back( CVec2f( 2, -5 ) );
+    player_geometry.mFigures[0].mVertices.push_back( CVec2f( 2, 5 ) );
+    player_geometry.mFigures[0].mVertices.push_back( CVec2f( -2, 5 ) );
     player_geometry.mFigures[0].mDepth = 1;
     CPlayerParams player;
     player.mPos.Set(0, -20, 0);
@@ -67,10 +67,10 @@ bool CTestApp2::Init()
 
     CSceneObjectGeometry tg;
     tg.mFigures.resize(1);
-    tg.mFigures[0].mVertices.push_back( CVec2( -10, -5 ) );
-    tg.mFigures[0].mVertices.push_back( CVec2( 10, -5 ) );
-    tg.mFigures[0].mVertices.push_back( CVec2( 10, 5 ) );
-    tg.mFigures[0].mVertices.push_back( CVec2( -10, 5 ) );
+    tg.mFigures[0].mVertices.push_back( CVec2f( -10, -5 ) );
+    tg.mFigures[0].mVertices.push_back( CVec2f( 10, -5 ) );
+    tg.mFigures[0].mVertices.push_back( CVec2f( 10, 5 ) );
+    tg.mFigures[0].mVertices.push_back( CVec2f( -10, 5 ) );
     tg.mFigures[0].mFriction = 0.5;
     tg.mFigures[0].mMass = 1;
     tg.mFigures[0].mDepth = 1;
@@ -89,9 +89,9 @@ void CTestApp2::SetProcessors()
 {    
     auto t = GetTemplateSystem().CreateSceneObjectTemplate("lambda_test");
     t->mFigures.resize(1);
-    t->mFigures[0].mVertices.push_back(CVec2(-10, -10));
-    t->mFigures[0].mVertices.push_back(CVec2(10, -10));
-    t->mFigures[0].mVertices.push_back(CVec2(0, 10));
+    t->mFigures[0].mVertices.push_back(CVec2f(-10, -10));
+    t->mFigures[0].mVertices.push_back(CVec2f(10, -10));
+    t->mFigures[0].mVertices.push_back(CVec2f(0, 10));
     t->mFigures[0].mDepth = 3;
 
 
@@ -100,7 +100,7 @@ void CTestApp2::SetProcessors()
     [this, t] ()
     {
         CSceneObjectParams p;
-        CVec2 tmp = GetCursorPos();
+        CVec2f tmp = GetCursorPos();
         GetDebugDrawSystem().ScreenSpaceToWorldSpace(tmp, GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
         p.mPos.Set(tmp, 0);
         GetTemplateSystem().CreateSceneObjectFromTemplate("lambda_test", p);
@@ -124,7 +124,7 @@ void CTestApp2::SetProcessors()
         // move object if choosen
         if (mSelectedObject != nullptr)
         {
-            CVec2 pos = GetCursorPos();
+            CVec2f pos = GetCursorPos();
             GetDebugDrawSystem().ScreenSpaceToWorldSpace(pos, - mSelectedObject->GetPos().Get().mZ + GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
             mSelectedObject->GetPos().Set(CVec3f(pos, mSelectedObject->GetPos().Get().mZ));
         }

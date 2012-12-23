@@ -25,7 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include "cvec2.h"
+#include "vec2.h"
 #include "math.h"
 
 namespace drash
@@ -33,13 +33,13 @@ namespace drash
 
 extern const float g_LayerWidth;
 
-void DrawBodySide(const b2Vec2 &_v1,
-              const b2Vec2 &_v2,
+void DrawBodySide(const CVec2f &_v1,
+              const CVec2f &_v2,
               float _z,
               float _depth,
               const b2Color &_diffuse );
 
-void DrawBody(const b2Vec2 *_vertices,
+void DrawBody(const CVec2f *_vertices,
               unsigned int _count,
               float _z,
               float _depth,

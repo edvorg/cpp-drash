@@ -70,33 +70,44 @@ void CPlayer::OnBoom(const CExplosionParams &)
 
 void CPlayer::onEvent( const CPlayerEvent &_event )
 {
+    CVec3f new_target;
+    auto move = [&new_target, this] (const CVec3f &_dir)
+    {
+        if (GetPos().IsTargetSet())
+        {
+            new_target = GetPos().GetTarget();
+        }
+        else
+        {
+            new_target = GetPos().Get();
+		}
+        new_target += _dir;
+        GetPos().SetTarget(new_target, 0.5, AnimationBehaviorSingle);
+    };
+
     switch ( _event.mType )
     {
         case CPlayerEvent::PlayerActionJump:
             if (mJumpAllowed)
             {
-                CVec2 v = GetLinearVelocity();
-                v.y = mSpeedJump;
-                SetLinearVelocity(v);
+                move(CVec3f(0, mSpeedJump, 0));
             }
             break;
 
         case CPlayerEvent::PlayerActionMoveLeft:
-            SetLinearVelocity(CVec2(-10, 0));
+            move(CVec3f(-1, 0, 0));
             break;
 
         case CPlayerEvent::PlayerActionMoveRight:
-            SetLinearVelocity(CVec2(10, 0));
+            move(CVec3f(1, 0, 0));
             break;
 
-		// TODO: fix bug with crosslayer animation
-
         case CPlayerEvent::PlayerActionMoveDeep:
-            GetPos().SetTarget(GetPos().GetTarget() - CVec3f(0, 0, 0.5), 0.5, AnimationBehaviorSingle);
+            move(CVec3f(0, 0, -5));
             break;
 
         case CPlayerEvent::PlayerActionMoveOut:
-            GetPos().SetTarget(GetPos().GetTarget() + CVec3f(0, 0, 0.5), 0.5, AnimationBehaviorSingle);
+            move(CVec3f(0, 0, 5));
             break;
     }
 }

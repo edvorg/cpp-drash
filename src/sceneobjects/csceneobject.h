@@ -80,14 +80,14 @@ public:
 
     inline void SetDynamic(bool _dynamic);
     inline bool IsDynamic() const;
-    inline void ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos );
-    inline void SetLinearVelocity(const CVec2 &_vel);
-    inline CVec2 GetLinearVelocity() const;
+    inline void ApplyLinearImpulse( const CVec2f &_dir, const CVec2f &_pos );
+    inline void SetLinearVelocity(const CVec2f &_vel);
+    inline CVec2f GetLinearVelocity() const;
     inline void SetAngularVelocity(float _vel);
     inline float GetAngularVelocity() const;
     inline void SetFixedRotation( bool _fixed );
     inline void SetActive( bool _active );
-    inline CVec2 GetWorldPoint(const CVec2 &_local_point) const;
+    inline CVec2f GetWorldPoint(const CVec2f &_local_point) const;
 
     inline CAnimatedParam<CVec3f> &GetPos();
     inline CAnimatedParam<float> &GetAngle();
@@ -174,19 +174,19 @@ inline unsigned int CSceneObject::EnumFigures() const
     return mFiguresCount;
 }
 
-inline void CSceneObject::ApplyLinearImpulse( const CVec2 &_dir, const CVec2 &_pos )
+inline void CSceneObject::ApplyLinearImpulse( const CVec2f &_dir, const CVec2f &_pos )
 {
-    mBody->ApplyLinearImpulse( _dir, _pos );
+    mBody->ApplyLinearImpulse(CVec2ToB2Vec2(_dir), CVec2ToB2Vec2(_pos));
 }
 
-inline void CSceneObject::SetLinearVelocity(const CVec2 &_vel)
+inline void CSceneObject::SetLinearVelocity(const CVec2f &_vel)
 {
-    mBody->SetLinearVelocity(_vel);
+    mBody->SetLinearVelocity(CVec2ToB2Vec2(_vel));
 }
 
-inline CVec2 CSceneObject::GetLinearVelocity() const
+inline CVec2f CSceneObject::GetLinearVelocity() const
 {
-    return mBody->GetLinearVelocity();
+    return B2Vec2ToCVec2(mBody->GetLinearVelocity());
 }
 
 inline void CSceneObject::SetAngularVelocity(float _vel)
@@ -209,9 +209,9 @@ inline void CSceneObject::SetActive( bool _active )
     mBody->SetActive(_active);
 }
 
-CVec2 CSceneObject::GetWorldPoint(const CVec2 &_local_point) const
+CVec2f CSceneObject::GetWorldPoint(const CVec2f &_local_point) const
 {
-    return mBody->GetWorldPoint(_local_point);
+    return B2Vec2ToCVec2(mBody->GetWorldPoint(CVec2ToB2Vec2(_local_point)));
 }
 
 inline CAnimatedParam<CVec3f> &CSceneObject::GetPos()

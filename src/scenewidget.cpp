@@ -24,7 +24,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "scenewidget.h"
 
-#include "misc/cvec2.h"
+#include "misc/vec2.h"
 #include "app/appevent.h"
 
 using namespace drash;
@@ -90,16 +90,16 @@ SceneWidget::~SceneWidget()
 {
 }
 
-CVec2 SceneWidget::WidgetSpaceToScreenSpace(const CVec2 &_from) const
+CVec2f SceneWidget::WidgetSpaceToScreenSpace(const CVec2f &_from) const
 {
-    CVec2 res = _from;
+    CVec2f res = _from;
 
-    res.x /= mWidth;
-    res.y /= mHeight;
+    res.mX /= mWidth;
+    res.mY /= mHeight;
 
-    res.x -= 0.5;
-    res.y -= 0.5;
-    res.y *= -1;
+    res.mX -= 0.5;
+    res.mY -= 0.5;
+    res.mY *= -1;
 
     return res;
 }
@@ -149,7 +149,7 @@ void SceneWidget::mousePressEvent( QMouseEvent *_event )
         return;
     }
 
-    CVec2 pos = WidgetSpaceToScreenSpace(CVec2(_event->x(),
+    CVec2f pos = WidgetSpaceToScreenSpace(CVec2f(_event->x(),
                                                _event->y()));
     mApp->SetCursorPos(pos);
     int x = 0;
@@ -183,7 +183,7 @@ void SceneWidget::mouseMoveEvent(QMouseEvent *_event)
         return;
     }
 
-    CVec2 pos = WidgetSpaceToScreenSpace(CVec2(_event->x(),
+    CVec2f pos = WidgetSpaceToScreenSpace(CVec2f(_event->x(),
                                                _event->y()));
     mApp->SetCursorPos(pos);
     int x = 0;

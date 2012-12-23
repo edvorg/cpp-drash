@@ -1,11 +1,12 @@
 #ifndef DRASH_UISYSTEM_H
 #define DRASH_UISYSTEM_H
 
+#include "../misc/vec2.h"
+
 namespace drash
 {
 
 class CDebugDrawSystem;
-class CVec2;
 
 namespace ui
 {
@@ -32,8 +33,8 @@ public:
     void SetAspectRatio(float _ratio);
     void SetWidth(unsigned int _width);
 
-    bool ScreenSpaceToUISpace(const CVec2 &_from, int &_x, int &_y);
-    bool UISpaceToScreenSpace(int _x, int _y, CVec2 &_v);
+    bool ScreenSpaceToUISpace(const CVec2f &_from, int &_x, int &_y);
+    bool UISpaceToScreenSpace(int _x, int _y, CVec2f &_v);
 
     void SetCursorPos(int _x, int _y);
     inline int GetCursorPosX() const;

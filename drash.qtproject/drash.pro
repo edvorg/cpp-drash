@@ -22,7 +22,6 @@ SOURCES += ../src/main.cpp\
     ../src/cscene.cpp \
     ../src/test/ctestapp3-drashtest1.cpp \
     ../src/test/ctestapp2.cpp \
-    ../src/misc/cvec2.cpp \
     ../src/diag/ctimer.cpp \
     ../src/diag/clogger.cpp \
     ../src/sceneobjects/csceneobject.cpp \
@@ -59,7 +58,10 @@ SOURCES += ../src/main.cpp\
     ../src/test/test5.cpp \
     ../src/misc/vec3.cpp \
     ../src/misc/plane.cpp \
-    ../src/misc/ray.cpp
+    ../src/misc/ray.cpp \
+    ../src/misc/matrix4.cpp \
+    ../src/misc/vec4.cpp \
+    ../src/misc/vec2.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -68,7 +70,6 @@ HEADERS  += ../src/gamewindow.h \
     ../src/test/ctestapp3-drashtest1.h \
     ../src/test/ctestapp2.h \
     ../src/misc/math.h \
-    ../src/misc/cvec2.h \
     ../src/misc/animatedparam.h \
     ../src/diag/ctimer.h \
     ../src/diag/clogger.h \
@@ -107,7 +108,10 @@ HEADERS  += ../src/gamewindow.h \
     ../src/test/test5.h \
     ../src/misc/vec3.h \
     ../src/misc/plane.h \
-    ../src/misc/ray.h
+    ../src/misc/ray.h \
+    ../src/misc/matrix4.h \
+    ../src/misc/vec4.h \
+    ../src/misc/vec2.h
 
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui

@@ -1,7 +1,7 @@
 #include "uisystem.h"
 
 #include "uicontrol.h"
-#include "../misc/cvec2.h"
+#include "../misc/vec2.h"
 
 namespace drash
 {
@@ -61,17 +61,17 @@ void CUISystem::SetWidth(unsigned int _width)
     mHeight = mWidth / mAspectRatio;
 }
 
-bool CUISystem::ScreenSpaceToUISpace(const CVec2 &_from, int &_x, int &_y)
+bool CUISystem::ScreenSpaceToUISpace(const CVec2f &_from, int &_x, int &_y)
 {
-    _x = (_from.x + 0.5f) * static_cast<float>(mWidth);
-    _y = (_from.y + 0.5f) * static_cast<float>(mHeight);
+    _x = (_from.mX + 0.5f) * static_cast<float>(mWidth);
+    _y = (_from.mY + 0.5f) * static_cast<float>(mHeight);
     return true;
 }
 
-bool CUISystem::UISpaceToScreenSpace(int _x, int _y, CVec2 &_v)
+bool CUISystem::UISpaceToScreenSpace(int _x, int _y, CVec2f &_v)
 {
-    _v.x = (static_cast<float>(_x) / static_cast<float>(mWidth)) - 0.5f;
-    _v.y = (static_cast<float>(_y) / static_cast<float>(mHeight)) - 0.5f;
+    _v.mX = (static_cast<float>(_x) / static_cast<float>(mWidth)) - 0.5f;
+    _v.mY = (static_cast<float>(_y) / static_cast<float>(mHeight)) - 0.5f;
     return true;
 }
 

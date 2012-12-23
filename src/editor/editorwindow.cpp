@@ -25,7 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "ui_editorwindow.h"
 #include "../cscene.h"
 #include "../subsystem/templatesystem.h"
-#include "../misc/cvec2.h"
+#include "../misc/vec2.h"
 #include "../debugdrawsystem/camera.h"
 
 #include <vector>
@@ -248,10 +248,10 @@ bool EditorWindow::UpdateTreeObject()
            for (unsigned int i = 0 ; i < par.mVertices.size() ; i++) {
                if (i != 0) vecs.append(",");
                vecs.append("(");
-               QString x = QString::number(par.mVertices[i].x);
+               QString x = QString::number(par.mVertices[i].mX);
                vecs.append(x);
                vecs.append(",");
-               QString y = QString::number(par.mVertices[i].y);
+               QString y = QString::number(par.mVertices[i].mY);
                vecs.append(y);
                vecs.append(")");
            }
