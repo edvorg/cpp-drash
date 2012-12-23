@@ -199,23 +199,27 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2f &_pos) const
 
         for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++)
         {
-//            CFigure *cur_fgr = cur_obj->GetFigures()[j];
+            CFigure *cur_fgr = cur_obj->GetFigures()[j];
 
-//            float z = - cur_obj->GetPos().Get().mZ - cur_fgr->GetZ() + GetActiveCam()->GetPos().Get().mZ;
-//            CVec2f pos = _pos;
-//            ScreenSpaceToWorldSpace(pos, z);
+            CPlane plane;
+            plane.SetNormal(CVec3f(0, 0, 1));
+            plane.SetPoint(CVec3f(0, 0, cur_obj->GetPos().Get().mZ + cur_fgr->GetZ()));
 
-//            if (cur_fgr->mFixture->TestPoint(CVec2ToB2Vec2(pos)))
-//            {
-//                res = cur_fgr;
-//                z_nearest = z;
-//                brk = true;
-//            }
+            CVec3f pos;
+            CastRay(_pos, plane, pos);
 
-//            if (brk == true)
-//            {
-//                break;
-//            }
+            if (cur_fgr->mFixture->TestPoint(CVec2ToB2Vec2(pos)))
+            {
+                res = cur_fgr;
+                pos -= mActiveCam->GetPos().Get();
+                z_nearest = pos.LengthSquared();
+                brk = true;
+            }
+
+            if (brk == true)
+            {
+                break;
+            }
         }
 
         if (brk == true)
@@ -232,21 +236,25 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2f &_pos) const
         {
             CFigure *cur_fgr = cur_obj->GetFigures()[j];
 
-            float z = - cur_obj->GetPos().Get().mZ - cur_fgr->GetZ() + GetActiveCam()->GetPos().Get().mZ;
+            CPlane plane;
+            plane.SetNormal(CVec3f(0, 0, 1));
+            plane.SetPoint(CVec3f(0, 0, cur_obj->GetPos().Get().mZ + cur_fgr->GetZ()));
 
-            if (z > z_nearest)
+            CVec3f pos;
+            CastRay(_pos, plane, pos);
+
+            if (cur_fgr->mFixture->TestPoint(CVec2ToB2Vec2(pos)))
             {
-                continue;
+                pos -= mActiveCam->GetPos().Get();
+
+                float z = pos.LengthSquared();
+
+                if (z_nearest > z)
+                {
+                    res = cur_fgr;
+                    z_nearest = z;
+                }
             }
-
-//            CVec2f pos = _pos;
-//            ScreenSpaceToWorldSpace(pos, z);
-
-//            if (cur_fgr->mFixture->TestPoint(CVec2ToB2Vec2(pos)))
-//            {
-//                res = cur_fgr;
-//                z_nearest = z;
-//            }
         }
     }
 
