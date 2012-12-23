@@ -33,6 +33,7 @@ namespace drash
 
 class CCameraParams;
 class CCamera;
+class CPlane;
 
 class CDebugDrawSystem : public CSubsystem
 {
@@ -70,6 +71,8 @@ public:
     /// and active camera position
     /// if no camera is activated does nothing and returns false
     bool WorldSpaceToScreenSpace(CVec2f &_pos, float _depth) const;
+
+    void CastRay(const CVec2f &_pos, const CPlane &_plane, CVec3f &_result) const;
 
     /// finds objects, visible at specified postion in screen space coordinates
     /// returns nearest one

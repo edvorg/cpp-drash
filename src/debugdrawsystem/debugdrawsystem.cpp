@@ -34,6 +34,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "camera.h"
 #include "../misc/graphics.h"
+#include "../misc/plane.h"
+#include "../misc/vec4.h"
+#include "../misc/matrix4.h"
 
 namespace drash
 {
@@ -169,6 +172,52 @@ bool CDebugDrawSystem::WorldSpaceToScreenSpace(CVec2f &_pos, float _depth) const
 
         return true;
     }
+}
+
+void CDebugDrawSystem::CastRay(const CVec2f &_pos, const CPlane &_plane, CVec3f &_result) const
+{
+    if (mActiveCam == nullptr)
+    {
+        return;
+    }
+
+    // TODO: optimize this
+    double fov = mActiveCam->GetFov().Get();
+
+    double c = 1.0 / cos(fov / 2.0); // hypotenuse
+
+    double frame_height = 2.0 * sqrt(c*c - 1.0);
+    double frame_width = frame_height * mAspectRatio;
+
+    CVec2f pos = _pos;
+
+    pos.mX *= frame_width;
+    pos.mY *= frame_height;
+
+    CVec4f dir(pos, -1, 1);
+
+    CMatrix4f m1;
+    MatrixRotationY(m1, mActiveCam->GetRotation().Get().mY);
+
+    CMatrix4f m2;
+    MatrixRotationX(m2, mActiveCam->GetRotation().Get().mX);
+
+    CMatrix4f m3;
+    MatrixRotationZ(m3, mActiveCam->GetRotation().Get().mZ);
+
+    CMatrix4f m21;
+    CMatrix4f m;
+
+    MatrixMultiply(m2, m1, m21);
+    MatrixMultiply(m21, m3, m);
+
+    CVec4f tmp;
+    MatrixMultiply(dir, m, tmp);
+
+    CRay r;
+    r.SetPoint(mActiveCam->GetPos().Get());
+    r.SetDirection(tmp);
+    _plane.CastRay(r, _result);
 }
 
 CFigure *CDebugDrawSystem::FindFigure(const CVec2f &_pos) const
@@ -346,8 +395,16 @@ void CDebugDrawSystem::DrawLine(const CVec3f _p1, const CVec3f _p2, const b2Colo
         return;
     }
 
+    constexpr static const double c = 180.0 / M_PI;
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    glRotatef(mActiveCam->GetRotation().Get().mX * c, 1, 0, 0);
+    glRotatef(mActiveCam->GetRotation().Get().mY * c, 0, 1, 0);
+    glRotatef(mActiveCam->GetRotation().Get().mZ * c, 0, 0, 1);
+    glTranslatef(-mActiveCam->mPos.Get().mX,
+                 -mActiveCam->mPos.Get().mY,
+                 -mActiveCam->mPos.Get().mZ);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(mActiveCam->GetFov().Get() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView().Get());
