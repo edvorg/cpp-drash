@@ -104,41 +104,6 @@ void CDebugDrawSystem::DestroyCam(drash::CCamera *_cam)
     }
 }
 
-bool CDebugDrawSystem::WorldSpaceToScreenSpace(CVec2f &_pos, float _depth) const
-{
-    if (mActiveCam == nullptr)
-    {
-        return false;
-    }
-    else
-    {
-        if (mActiveCam->IsOrtho() == false)
-        {
-            // TODO: optimize this
-            double fov = mActiveCam->GetFov().Get();
-
-            double c = _depth / cos(fov / 2.0); // hypotenuse
-
-            double frame_height = 2.0 * sqrt( c*c - _depth*_depth );
-            double frame_width = frame_height * mAspectRatio;
-
-            _pos -= mActiveCam->GetPos().Get().Vec2();
-
-            _pos.mX /= frame_width;
-            _pos.mY /= frame_height;
-        }
-        else
-        {
-            _pos -= mActiveCam->GetPos().Get().Vec2();
-
-            _pos.mX /= GetActiveCam()->GetOrthoWidth().Get();
-            _pos.mY /= GetActiveCam()->GetOrthoWidth().Get() / mAspectRatio;
-        }
-
-        return true;
-    }
-}
-
 void CDebugDrawSystem::CastRay(const CVec2f &_pos, const CPlane &_plane, CVec3f &_result) const
 {
     if (mActiveCam == nullptr)
@@ -486,7 +451,7 @@ void CDebugDrawSystem::DrawPoint(const CVec3f &_p, float _size, const b2Color &_
 
     glBegin(GL_POINTS);
     glColor3f(_col.r, _col.g, _col.b);
-    glVertex2f(_p.mX, _p.mY);
+    glVertex3f(_p.mX, _p.mY, _p.mZ);
     glEnd();
 }
 

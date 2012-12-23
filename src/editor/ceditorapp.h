@@ -103,6 +103,8 @@ private:
     CVec2f mCurrentFigureVertex;
 
     int mVertexIndex = -1;
+
+    bool mFrontSide = true;
 };
 
 inline bool CObjectEditorApp::IsStartBuild()const {
