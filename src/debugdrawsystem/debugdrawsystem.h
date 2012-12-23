@@ -59,12 +59,6 @@ public:
     /// aspect ratio is window width in pixels divided on widow height
     inline float GetAspectRatio() const;
 
-    /// converts coordinates from (-0.5,-0.5)..(0.5, 0.5) system with center at (0, 0)
-    /// to world coordinates taking into account depth (distance from camera to required layer)
-    /// and active camera position
-    /// if no camera is activated does nothing and returns false
-    bool ScreenSpaceToWorldSpace(CVec2f &_pos, float _depth) const;
-
     /// converts coordinates from world coordinates
     /// to (-0.5,-0.5)..(0.5, 0.5) system with center at (0, 0)
     /// taking into account depth (distance from camera to required layer)

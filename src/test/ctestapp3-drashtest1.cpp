@@ -256,13 +256,17 @@ void CTestApp3::SetProcessors()
     {
         if (mMoveObject != nullptr)
         {
-            CVec2f coords = GetCursorPos();
-            if (GetDebugDrawSystem().ScreenSpaceToWorldSpace(coords, - mMoveObject->GetPos().Get().mZ + GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ))
-            {
-                coords -= mMoveObject->GetPos().Get().Vec2();
-                coords *= 10;
-                mMoveObject->SetLinearVelocity(coords);
-            }
+            CPlane p;
+            p.SetNormal(CVec3f(0, 0, 1));
+            p.SetPoint(mMoveObject->GetPos().Get());
+
+            CVec3f pos;
+
+            GetDebugDrawSystem().CastRay(GetCursorPos(), p, pos);
+
+            pos -= mMoveObject->GetPos().Get();
+            pos *= 10;
+            mMoveObject->SetLinearVelocity(pos);
         }
     },
     [this] ()

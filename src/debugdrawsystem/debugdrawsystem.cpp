@@ -104,41 +104,6 @@ void CDebugDrawSystem::DestroyCam(drash::CCamera *_cam)
     }
 }
 
-bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2f &_pos, float _depth) const
-{
-    if (mActiveCam == nullptr)
-    {
-        return false;
-    }
-    else
-    {
-        if (mActiveCam->IsOrtho() == false)
-        {
-            // TODO: optimize this
-            double fov = mActiveCam->GetFov().Get();
-
-            double c = _depth / cos(fov / 2.0); // hypotenuse
-
-            double frame_height = 2.0 * sqrt( c*c - _depth*_depth );
-            double frame_width = frame_height * mAspectRatio;
-
-            _pos.mX *= frame_width;
-            _pos.mY *= frame_height;
-
-            _pos += mActiveCam->GetPos().Get().Vec2();
-        }
-        else
-        {
-            _pos.mX *= GetActiveCam()->GetOrthoWidth().Get();
-            _pos.mY *= GetActiveCam()->GetOrthoWidth().Get() / mAspectRatio;
-
-            _pos += mActiveCam->GetPos().Get().Vec2();
-        }
-
-        return true;
-    }
-}
-
 bool CDebugDrawSystem::WorldSpaceToScreenSpace(CVec2f &_pos, float _depth) const
 {
     if (mActiveCam == nullptr)
@@ -234,23 +199,23 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2f &_pos) const
 
         for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++)
         {
-            CFigure *cur_fgr = cur_obj->GetFigures()[j];
+//            CFigure *cur_fgr = cur_obj->GetFigures()[j];
 
-            float z = - cur_obj->GetPos().Get().mZ - cur_fgr->GetZ() + GetActiveCam()->GetPos().Get().mZ;
-            CVec2f pos = _pos;
-            ScreenSpaceToWorldSpace(pos, z);
+//            float z = - cur_obj->GetPos().Get().mZ - cur_fgr->GetZ() + GetActiveCam()->GetPos().Get().mZ;
+//            CVec2f pos = _pos;
+//            ScreenSpaceToWorldSpace(pos, z);
 
-            if (cur_fgr->mFixture->TestPoint(CVec2ToB2Vec2(pos)))
-            {
-                res = cur_fgr;
-                z_nearest = z;
-                brk = true;
-            }
+//            if (cur_fgr->mFixture->TestPoint(CVec2ToB2Vec2(pos)))
+//            {
+//                res = cur_fgr;
+//                z_nearest = z;
+//                brk = true;
+//            }
 
-            if (brk == true)
-            {
-                break;
-            }
+//            if (brk == true)
+//            {
+//                break;
+//            }
         }
 
         if (brk == true)
@@ -274,14 +239,14 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2f &_pos) const
                 continue;
             }
 
-            CVec2f pos = _pos;
-            ScreenSpaceToWorldSpace(pos, z);
+//            CVec2f pos = _pos;
+//            ScreenSpaceToWorldSpace(pos, z);
 
-            if (cur_fgr->mFixture->TestPoint(CVec2ToB2Vec2(pos)))
-            {
-                res = cur_fgr;
-                z_nearest = z;
-            }
+//            if (cur_fgr->mFixture->TestPoint(CVec2ToB2Vec2(pos)))
+//            {
+//                res = cur_fgr;
+//                z_nearest = z;
+//            }
         }
     }
 
