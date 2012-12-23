@@ -59,19 +59,6 @@ public:
     /// aspect ratio is window width in pixels divided on widow height
     inline float GetAspectRatio() const;
 
-    /// converts coordinates from (-0.5,-0.5)..(0.5, 0.5) system with center at (0, 0)
-    /// to world coordinates taking into account depth (distance from camera to required layer)
-    /// and active camera position
-    /// if no camera is activated does nothing and returns false
-    bool ScreenSpaceToWorldSpace(CVec2f &_pos, float _depth) const;
-
-    /// converts coordinates from world coordinates
-    /// to (-0.5,-0.5)..(0.5, 0.5) system with center at (0, 0)
-    /// taking into account depth (distance from camera to required layer)
-    /// and active camera position
-    /// if no camera is activated does nothing and returns false
-    bool WorldSpaceToScreenSpace(CVec2f &_pos, float _depth) const;
-
     void CastRay(const CVec2f &_pos, const CPlane &_plane, CVec3f &_result) const;
 
     /// finds objects, visible at specified postion in screen space coordinates
@@ -81,16 +68,25 @@ public:
 	/// draws connected CScene instance's objects
     void Draw() const;
 
+    /// draws triangle giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) and color
+    void DrawTriangle(const CVec2f &_p1, const CVec2f &_p2, const CVec2f &_p3, const b2Color &_col) const;
+
+    /// draws line giving world space coordinates and color
+    void DrawTriangle(const CVec3f &_p1, const CVec3f &_p2, const CVec3f &_p3, const b2Color &_col) const;
+
     /// draws line giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) start and end points
     /// and color
-    void DrawLine(const CVec2f _p1, const CVec2f _p2, const b2Color &_col) const;
+    void DrawLine(const CVec2f &_p1, const CVec2f &_p2, const b2Color &_col) const;
 
     /// draws line giving world space coordinates start and end points
     /// and color
-    void DrawLine(const CVec3f _p1, const CVec3f _p2, const b2Color &_col) const;
+    void DrawLine(const CVec3f &_p1, const CVec3f &_p2, const b2Color &_col) const;
 
     /// draws point giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
-    void DrawPoint(const CVec2f _p, float _size, const b2Color &_col) const;
+    void DrawPoint(const CVec2f &_p, float _size, const b2Color &_col) const;
+
+    /// draws point giving world space coordinates
+    void DrawPoint(const CVec3f &_p, float _size, const b2Color &_col) const;
 
 protected:
 private:

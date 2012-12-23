@@ -104,76 +104,6 @@ void CDebugDrawSystem::DestroyCam(drash::CCamera *_cam)
     }
 }
 
-bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2f &_pos, float _depth) const
-{
-    if (mActiveCam == nullptr)
-    {
-        return false;
-    }
-    else
-    {
-        if (mActiveCam->IsOrtho() == false)
-        {
-            // TODO: optimize this
-            double fov = mActiveCam->GetFov().Get();
-
-            double c = _depth / cos(fov / 2.0); // hypotenuse
-
-            double frame_height = 2.0 * sqrt( c*c - _depth*_depth );
-            double frame_width = frame_height * mAspectRatio;
-
-            _pos.mX *= frame_width;
-            _pos.mY *= frame_height;
-
-            _pos += mActiveCam->GetPos().Get().Vec2();
-        }
-        else
-        {
-            _pos.mX *= GetActiveCam()->GetOrthoWidth().Get();
-            _pos.mY *= GetActiveCam()->GetOrthoWidth().Get() / mAspectRatio;
-
-            _pos += mActiveCam->GetPos().Get().Vec2();
-        }
-
-        return true;
-    }
-}
-
-bool CDebugDrawSystem::WorldSpaceToScreenSpace(CVec2f &_pos, float _depth) const
-{
-    if (mActiveCam == nullptr)
-    {
-        return false;
-    }
-    else
-    {
-        if (mActiveCam->IsOrtho() == false)
-        {
-            // TODO: optimize this
-            double fov = mActiveCam->GetFov().Get();
-
-            double c = _depth / cos(fov / 2.0); // hypotenuse
-
-            double frame_height = 2.0 * sqrt( c*c - _depth*_depth );
-            double frame_width = frame_height * mAspectRatio;
-
-            _pos -= mActiveCam->GetPos().Get().Vec2();
-
-            _pos.mX /= frame_width;
-            _pos.mY /= frame_height;
-        }
-        else
-        {
-            _pos -= mActiveCam->GetPos().Get().Vec2();
-
-            _pos.mX /= GetActiveCam()->GetOrthoWidth().Get();
-            _pos.mY /= GetActiveCam()->GetOrthoWidth().Get() / mAspectRatio;
-        }
-
-        return true;
-    }
-}
-
 void CDebugDrawSystem::CastRay(const CVec2f &_pos, const CPlane &_plane, CVec3f &_result) const
 {
     if (mActiveCam == nullptr)
@@ -236,14 +166,18 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2f &_pos) const
         {
             CFigure *cur_fgr = cur_obj->GetFigures()[j];
 
-            float z = - cur_obj->GetPos().Get().mZ - cur_fgr->GetZ() + GetActiveCam()->GetPos().Get().mZ;
-            CVec2f pos = _pos;
-            ScreenSpaceToWorldSpace(pos, z);
+            CPlane plane;
+            plane.SetNormal(CVec3f(0, 0, 1));
+            plane.SetPoint(CVec3f(0, 0, cur_obj->GetPos().Get().mZ + cur_fgr->GetZ()));
+
+            CVec3f pos;
+            CastRay(_pos, plane, pos);
 
             if (cur_fgr->mFixture->TestPoint(CVec2ToB2Vec2(pos)))
             {
                 res = cur_fgr;
-                z_nearest = z;
+                pos -= mActiveCam->GetPos().Get();
+                z_nearest = pos.LengthSquared();
                 brk = true;
             }
 
@@ -267,20 +201,24 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2f &_pos) const
         {
             CFigure *cur_fgr = cur_obj->GetFigures()[j];
 
-            float z = - cur_obj->GetPos().Get().mZ - cur_fgr->GetZ() + GetActiveCam()->GetPos().Get().mZ;
+            CPlane plane;
+            plane.SetNormal(CVec3f(0, 0, 1));
+            plane.SetPoint(CVec3f(0, 0, cur_obj->GetPos().Get().mZ + cur_fgr->GetZ()));
 
-            if (z > z_nearest)
-            {
-                continue;
-            }
-
-            CVec2f pos = _pos;
-            ScreenSpaceToWorldSpace(pos, z);
+            CVec3f pos;
+            CastRay(_pos, plane, pos);
 
             if (cur_fgr->mFixture->TestPoint(CVec2ToB2Vec2(pos)))
             {
-                res = cur_fgr;
-                z_nearest = z;
+                pos -= mActiveCam->GetPos().Get();
+
+                float z = pos.LengthSquared();
+
+                if (z_nearest > z)
+                {
+                    res = cur_fgr;
+                    z_nearest = z;
+                }
             }
         }
     }
@@ -369,7 +307,7 @@ void CDebugDrawSystem::Draw() const
     }
 }
 
-void CDebugDrawSystem::DrawLine(const CVec2f _p1, const CVec2f _p2, const b2Color &_col) const
+void CDebugDrawSystem::DrawTriangle(const CVec2f &_p1, const CVec2f &_p2, const CVec2f &_p3, const b2Color &_col) const
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -380,15 +318,17 @@ void CDebugDrawSystem::DrawLine(const CVec2f _p1, const CVec2f _p2, const b2Colo
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
 
-    glBegin(GL_LINES);
+    glBegin(GL_TRIANGLES);
     glColor3f(_col.r, _col.g, _col.b);
     glVertex2f(_p1.mX, _p1.mY);
     glColor3f(_col.r, _col.g, _col.b);
     glVertex2f(_p2.mX, _p2.mY);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex2f(_p3.mX, _p3.mY);
     glEnd();
 }
 
-void CDebugDrawSystem::DrawLine(const CVec3f _p1, const CVec3f _p2, const b2Color &_col) const
+void CDebugDrawSystem::DrawTriangle(const CVec3f &_p1, const CVec3f &_p2, const CVec3f &_p3, const b2Color &_col) const
 {
     if (mActiveCam == nullptr)
     {
@@ -409,6 +349,24 @@ void CDebugDrawSystem::DrawLine(const CVec3f _p1, const CVec3f _p2, const b2Colo
     glLoadIdentity();
     gluPerspective(mActiveCam->GetFov().Get() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView().Get());
 
+    glBegin(GL_TRIANGLES);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex3f(_p1.mX, _p1.mY, _p1.mZ);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex3f(_p2.mX, _p2.mY, _p2.mZ);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex3f(_p3.mX, _p3.mY, _p3.mZ);
+    glEnd();
+}
+
+void CDebugDrawSystem::DrawLine(const CVec2f &_p1, const CVec2f &_p2, const b2Color &_col) const
+{
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-0.5, 0.5, -0.5, 0.5, 1, -1);
+
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
 
@@ -420,7 +378,36 @@ void CDebugDrawSystem::DrawLine(const CVec3f _p1, const CVec3f _p2, const b2Colo
     glEnd();
 }
 
-void CDebugDrawSystem::DrawPoint(const CVec2f _p, float _size, const b2Color &_col) const
+void CDebugDrawSystem::DrawLine(const CVec3f &_p1, const CVec3f &_p2, const b2Color &_col) const
+{
+    if (mActiveCam == nullptr)
+    {
+        return;
+    }
+
+    constexpr static const double c = 180.0 / M_PI;
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glRotatef(mActiveCam->GetRotation().Get().mX * c, 1, 0, 0);
+    glRotatef(mActiveCam->GetRotation().Get().mY * c, 0, 1, 0);
+    glRotatef(mActiveCam->GetRotation().Get().mZ * c, 0, 0, 1);
+    glTranslatef(-mActiveCam->mPos.Get().mX,
+                 -mActiveCam->mPos.Get().mY,
+                 -mActiveCam->mPos.Get().mZ);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(mActiveCam->GetFov().Get() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView().Get());
+
+    glBegin(GL_LINES);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex3f(_p1.mX, _p1.mY, _p1.mZ);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex3f(_p2.mX, _p2.mY, _p2.mZ);
+    glEnd();
+}
+
+void CDebugDrawSystem::DrawPoint(const CVec2f &_p, float _size, const b2Color &_col) const
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -436,6 +423,35 @@ void CDebugDrawSystem::DrawPoint(const CVec2f _p, float _size, const b2Color &_c
     glBegin(GL_POINTS);
     glColor3f(_col.r, _col.g, _col.b);
     glVertex2f(_p.mX, _p.mY);
+    glEnd();
+}
+
+void CDebugDrawSystem::DrawPoint(const CVec3f &_p, float _size, const b2Color &_col) const
+{
+    if (mActiveCam == nullptr)
+    {
+        return;
+    }
+
+    constexpr static const double c = 180.0 / M_PI;
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glRotatef(mActiveCam->GetRotation().Get().mX * c, 1, 0, 0);
+    glRotatef(mActiveCam->GetRotation().Get().mY * c, 0, 1, 0);
+    glRotatef(mActiveCam->GetRotation().Get().mZ * c, 0, 0, 1);
+    glTranslatef(-mActiveCam->mPos.Get().mX,
+                 -mActiveCam->mPos.Get().mY,
+                 -mActiveCam->mPos.Get().mZ);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(mActiveCam->GetFov().Get() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView().Get());
+
+    glPointSize(_size);
+
+    glBegin(GL_POINTS);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex3f(_p.mX, _p.mY, _p.mZ);
     glEnd();
 }
 

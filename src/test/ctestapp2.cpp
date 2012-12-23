@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../cscene.h"
 #include "../app/appeventprocessor.h"
 #include "../debugdrawsystem/camera.h"
+#include "./misc/plane.h"
 
 namespace drash
 {
@@ -99,10 +100,14 @@ void CTestApp2::SetProcessors()
     GetEventSystem().SetProcessor("C-S-f", CAppEventProcessor(
     [this, t] ()
     {
+        CPlane plane;
+        plane.SetPoint(CVec3f(0));
+        plane.SetNormal(CVec3f(0, 0, 1));
+
         CSceneObjectParams p;
-        CVec2f tmp = GetCursorPos();
-        GetDebugDrawSystem().ScreenSpaceToWorldSpace(tmp, GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
-        p.mPos.Set(tmp, 0);
+
+        GetDebugDrawSystem().CastRay(GetCursorPos(), plane, p.mPos);
+
         GetTemplateSystem().CreateSceneObjectFromTemplate("lambda_test", p);
     }));
 
@@ -124,9 +129,15 @@ void CTestApp2::SetProcessors()
         // move object if choosen
         if (mSelectedObject != nullptr)
         {
-            CVec2f pos = GetCursorPos();
-            GetDebugDrawSystem().ScreenSpaceToWorldSpace(pos, - mSelectedObject->GetPos().Get().mZ + GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
-            mSelectedObject->GetPos().Set(CVec3f(pos, mSelectedObject->GetPos().Get().mZ));
+              CPlane plane;
+              plane.SetPoint(CVec3f(mSelectedObject->GetPos().Get()));
+              plane.SetNormal(CVec3f(0, 0, 1));
+
+              CVec3f pos;
+
+              GetDebugDrawSystem().CastRay(GetCursorPos(), plane, pos);
+
+              mSelectedObject->GetPos().Set(pos);
         }
     }));
 

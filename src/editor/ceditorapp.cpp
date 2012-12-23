@@ -25,6 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "ceditorapp.h"
 
 #include "../debugdrawsystem/camera.h"
+#include "../misc/plane.h"
 
 namespace drash {
 
@@ -94,19 +95,45 @@ void CObjectEditorApp::Render()
 //        }
         for (unsigned int i = 0 ; i < mCurrentObject->EnumFigures() ; i++ ) {
             CFigure *figure = mCurrentObject->GetFigures()[i];
-            for (unsigned int j = 0 ; j < figure->EnumVertices() ; j++) {
-                CVec2f position = figure->GetVertices()[j];
-                b2Color color(255,155,0);
-//                qDebug() << position.x << " " << position.y <<" "<<posC.x <<" "<<posC.y;
+            for (unsigned int j = 0 ; j < figure->EnumVertices() ; j++)
+            {
+                CVec3f position(figure->GetVertices()[j], mCurrentObject->GetPos().Get().mZ + figure->GetZ() + figure->GetDepth() * 0.5f);
 
-                float depth = drash::math::Abs(mCurrentObject->GetPos().Get().mZ
-                            -GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
-                GetDebugDrawSystem().WorldSpaceToScreenSpace(position,depth);
-                if (drash::math::Abs(position.mX -GetCursorPos().mX) <= 0.01f &&
-                        drash::math::Abs(position.mY -GetCursorPos().mY) <= 0.01f) {
+                b2Color color(255,155,0);
+
+                CVec3f cursor_pos;
+
+                CPlane plane;
+                plane.SetNormal(CVec3f(0, 0, 1));
+                plane.SetPoint(position);
+
+                GetDebugDrawSystem().CastRay(GetCursorPos(), plane, cursor_pos);
+
+                if (drash::math::Abs(position.mX -cursor_pos.mX) <= 1 &&
+                        drash::math::Abs(position.mY -cursor_pos.mY) <= 1)
+                {
                     color.Set(255,0,0);
                 }
-                GetDebugDrawSystem().DrawPoint(position,10.0f,color);
+
+                GetDebugDrawSystem().DrawPoint(position, 10.0f, color);
+
+                //
+
+                color.Set(255,155,0);
+
+                position.mZ = mCurrentObject->GetPos().Get().mZ + figure->GetZ() - figure->GetDepth() * 0.5f;
+
+                plane.SetPoint(position);
+
+                GetDebugDrawSystem().CastRay(GetCursorPos(), plane, cursor_pos);
+
+                if (drash::math::Abs(position.mX -cursor_pos.mX) <= 1 &&
+                        drash::math::Abs(position.mY -cursor_pos.mY) <= 1)
+                {
+                    color.Set(255,0,0);
+                }
+
+                GetDebugDrawSystem().DrawPoint(position, 10.0f, color);
             }
         }
     }
@@ -131,9 +158,14 @@ void CObjectEditorApp::SetProcessors()
                 break;
             }
             case MoveState:{
-                mOldPositionCursor = GetCursorPos();
-                mSelectedFigure = SelectFigure(mOldPositionCursor);
-                GetDebugDrawSystem().ScreenSpaceToWorldSpace(mOldPositionCursor, GetCurDepth());
+                mSelectedFigure = SelectFigure(GetCursorPos());
+
+                CPlane plane;
+                plane.SetPoint(CVec3f(0, 0, 0));
+                plane.SetNormal(CVec3f(0, 0, 1));
+
+                GetDebugDrawSystem().CastRay(GetCursorPos(), plane, mOldPositionCursor);
+
                 if (mSelectedFigure == nullptr)
                     LOG_INFO("NOOOO");
 
@@ -209,8 +241,13 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
     CFigureParams param;
     std::for_each(mVertexs.begin() , mVertexs.end() , [this] (CVec2f &v)
     {
-        GetDebugDrawSystem().ScreenSpaceToWorldSpace(v,
-                 GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
+        CPlane plane;
+        plane.SetNormal(CVec3f(0, 0, 1));
+        plane.SetPoint(CVec3f(0, 0, 0));
+
+        CVec3f vv;
+        GetDebugDrawSystem().CastRay(v, plane, vv);
+        v = vv;
     });
     param.mVertices = mVertexs;
     obj->mFigures.push_back(param);
@@ -268,11 +305,19 @@ void CObjectEditorApp::MoveFigure()
         return;
     }
 
-    CVec2f pos = GetCursorPos();
-    GetDebugDrawSystem().ScreenSpaceToWorldSpace(pos,GetCurDepth());
+    CVec3f pos;
+
+    CPlane plane;
+    plane.SetNormal(CVec3f(0, 0, 1));
+    plane.SetPoint(CVec3f(0, 0, 0));
+
+    GetDebugDrawSystem().CastRay(GetCursorPos(), plane, pos);
+
     float disX = pos.mX - mOldPositionCursor.mX;
     float disY = pos.mY - mOldPositionCursor.mY;
+
     mOldPositionCursor = pos;
+
     const CVec2f* v = mSelectedFigure->GetVertices();
     CVec2f* new_vertices = new CVec2f[mSelectedFigure->EnumVertices()];
     for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++)
@@ -292,15 +337,27 @@ void CObjectEditorApp::StretchFigure()
         return;
     }
     CVec2f *ver = new CVec2f[mSelectedFigure->EnumVertices()];
-    for (unsigned int i = 0 ; i < mSelectedFigure->EnumVertices() ; i++) {
-        if (i == (unsigned int)mVertexIndex) {
+    for (unsigned int i = 0 ; i < mSelectedFigure->EnumVertices() ; i++)
+    {
+        if (i == (unsigned int)mVertexIndex)
+        {
             CVec2f posCur = GetCursorPos();
             qDebug() << posCur.mX << " " << posCur.mY;
-            float depth = drash::math::Abs(mCurrentObject->GetPos().Get().mZ
-                        -GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
-            GetDebugDrawSystem().ScreenSpaceToWorldSpace(posCur,depth);
-            ver[i].Set(posCur.mX,posCur.mY);
-        } else {
+
+            float tmp = mSelectedFigure->GetDepth() * 0.5;
+
+            CPlane plane;
+            plane.SetNormal(CVec3f(0, 0, 1));
+            plane.SetPoint(CVec3f(0, 0, mFrontSide ? tmp : -tmp));
+
+            CVec3f pos;
+
+            GetDebugDrawSystem().CastRay(posCur, plane, pos);
+
+            ver[i].Set(pos.mX,pos.mY);
+        }
+        else
+        {
             ver[i] = mSelectedFigure->GetVertices()[i];
         }
     }
@@ -315,19 +372,48 @@ void CObjectEditorApp::ChangeMode()
 
 void CObjectEditorApp::SelectVertex()
 {
-    for (unsigned int i = 0 ; i < mCurrentObject->EnumFigures() ; i++ ) {
+    for (unsigned int i = 0 ; i < mCurrentObject->EnumFigures() ; i++ )
+    {
         CFigure *figure = mCurrentObject->GetFigures()[i];
-        for (unsigned int j = 0 ; j < figure->EnumVertices() ; j++) {
-            CVec2f position = figure->GetVertices()[j];
-            float depth = drash::math::Abs(mCurrentObject->GetPos().Get().mZ
-               -GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
-            GetDebugDrawSystem().WorldSpaceToScreenSpace(position,depth);
-            if (drash::math::Abs(position.mX -GetCursorPos().mX) <= 0.01f &&
-                    drash::math::Abs(position.mY -GetCursorPos().mY) <= 0.01f) {
+
+        for (unsigned int j = 0 ; j < figure->EnumVertices() ; j++)
+        {
+            CVec3f position(figure->GetVertices()[j], mCurrentObject->GetPos().Get().mZ + figure->GetZ() + figure->GetDepth() * 0.5f);
+
+            CPlane plane;
+            plane.SetNormal(CVec3f(0, 0, 1));
+            plane.SetPoint(position);
+
+            CVec3f cursor_pos;
+
+            GetDebugDrawSystem().CastRay(GetCursorPos(), plane, cursor_pos);
+
+            if (drash::math::Abs(position.mX -cursor_pos.mX) <= 1.0f &&
+                    drash::math::Abs(position.mY -cursor_pos.mY) <= 1.0f)
+            {
                 mCurrentFigureVertex = position;
                 mVertexIndex = j;
                 mSelectedFigure = figure;
+                mFrontSide = true;
                 break;
+            }
+            else
+            {
+                position.mZ = mCurrentObject->GetPos().Get().mZ + figure->GetZ() - figure->GetDepth() * 0.5f;
+
+                plane.SetPoint(position);
+
+                GetDebugDrawSystem().CastRay(GetCursorPos(), plane, cursor_pos);
+
+                if (drash::math::Abs(position.mX -cursor_pos.mX) <= 1.0f &&
+                        drash::math::Abs(position.mY -cursor_pos.mY) <= 1.0f)
+                {
+                    mCurrentFigureVertex = position;
+                    mVertexIndex = j;
+                    mSelectedFigure = figure;
+                    mFrontSide = false;
+                    break;
+                }
             }
         }
     }

@@ -97,12 +97,14 @@ private:
 
     CFigure *mSelectedFigure = nullptr;
 
-    CVec2f mOldPositionCursor = CVec2f(0);
+    CVec3f mOldPositionCursor = CVec3f(0);
 
 //    bool StetchBegin = false;
     CVec2f mCurrentFigureVertex;
 
     int mVertexIndex = -1;
+
+    bool mFrontSide = true;
 };
 
 inline bool CObjectEditorApp::IsStartBuild()const {

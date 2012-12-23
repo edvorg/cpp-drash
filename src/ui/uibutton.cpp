@@ -44,6 +44,10 @@ void CUIButton::Connect(CUISystem *_system)
         GetUISystem()->UISpaceToScreenSpace(GetX(), GetY() + GetHeight(), p2);
         GetUISystem()->UISpaceToScreenSpace(GetX() + GetWidth(), GetY() + GetHeight(), p3);
         GetUISystem()->UISpaceToScreenSpace(GetX() + GetWidth(), GetY(), p4);
+
+        GetUISystem()->GetDebugDrawSystem()->DrawTriangle(p4, p2, p1, c);
+        GetUISystem()->GetDebugDrawSystem()->DrawTriangle(p3, p2, p4, c);
+
         GetUISystem()->GetDebugDrawSystem()->DrawLine(p1, p2, c);
         GetUISystem()->GetDebugDrawSystem()->DrawLine(p3, p2, c);
         GetUISystem()->GetDebugDrawSystem()->DrawLine(p3, p4, c);

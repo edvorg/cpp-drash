@@ -83,10 +83,10 @@ bool EditorWindow::InitScene()
     if (mObjectApp->Init() == false) {
         return false;
     }
-    mObjectApp->GetDebugDrawSystem().GetActiveCam()->SetOrtho(true);
-    mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetOrthoWidth().Set(120);
-    //mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetPos().Set(CVec3f(0, 20, 100));
-    //mObjectApp->GetDebugDrawSystem().GetActiveCam()->SetOrtho();
+//    mObjectApp->GetDebugDrawSystem().GetActiveCam()->SetOrtho(true);
+//    mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetOrthoWidth().Set(120);
+    mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetPos().Set(CVec3f(0, 50, 100));
+    mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetRotation().Set(CVec3f(M_PI / 6, 0, 0));
     ui->mScene->SetTestApp(mObjectApp);
     mCurrentApp = mObjectApp;
     return true;

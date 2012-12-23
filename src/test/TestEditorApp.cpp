@@ -30,6 +30,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <sstream>
 
+#include "../misc/plane.h"
+
 namespace drash
 {
 
@@ -165,7 +167,15 @@ void CTestEditorApp::CompleteFigure()
         for (auto i = mCurrentTemplate->mFigures.back().mVertices.begin();
              i != mCurrentTemplate->mFigures.back().mVertices.end(); i++)
         {
-            GetDebugDrawSystem().ScreenSpaceToWorldSpace(*i, GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
+            CPlane plane;
+            plane.SetNormal(CVec3f(0, 0, 1));
+            plane.SetPoint(CVec3f(0, 0, 0));
+
+            CVec3f pos;
+
+            GetDebugDrawSystem().CastRay(*i, plane, pos);
+
+            *i = pos;
         }
 
         if (mCurrentObject != nullptr)
