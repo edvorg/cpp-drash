@@ -86,6 +86,9 @@ public:
     /// draws point giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
     void DrawPoint(const CVec2f &_p, float _size, const b2Color &_col) const;
 
+    /// draws point giving world space coordinates
+    void DrawPoint(const CVec3f &_p, float _size, const b2Color &_col) const;
+
 protected:
 private:
     CCamera *mActiveCam = nullptr;
