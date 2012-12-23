@@ -1,7 +1,7 @@
 #include "uibutton.h"
 
 #include "uisystem.h"
-#include "../misc/cvec2.h"
+#include "../misc/vec2.h"
 #include "../misc/math.h"
 #include "../debugdrawsystem/debugdrawsystem.h"
 

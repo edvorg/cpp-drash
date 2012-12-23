@@ -22,7 +22,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "cvec2.h"
+#include "vec2.h"
 #include "math.h"
 
 namespace drash

@@ -27,7 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 #include "../misc/math.h"
-#include "../misc/cvec2.h"
+#include "../misc/vec2.h"
 
 namespace drash
 {

@@ -25,7 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include "cvec2.h"
+#include "vec2.h"
 #include "math.h"
 
 namespace drash

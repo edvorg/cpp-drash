@@ -1,7 +1,7 @@
 #ifndef DRASH_VEC3_H
 #define DRASH_VEC3_H
 
-#include "cvec2.h"
+#include "vec2.h"
 
 namespace drash
 {

@@ -1,7 +1,7 @@
 #include "uisystem.h"
 
 #include "uicontrol.h"
-#include "../misc/cvec2.h"
+#include "../misc/vec2.h"
 
 namespace drash
 {
