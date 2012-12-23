@@ -273,6 +273,7 @@ void CDebugDrawSystem::Draw() const
         // frustrum culling
         /////////////////////////////////////////////
 
+        /*
         CVec2f min(-0.5, -0.5);
         CVec2f max(0.5, 0.5);
         float d = - objects[i]->GetPos().Get().mZ + mActiveCam->GetPos().Get().mZ;
@@ -290,6 +291,7 @@ void CDebugDrawSystem::Draw() const
         {
             continue;
         }
+        */
 
         ////////////////////////////////////////////
         // drawing
