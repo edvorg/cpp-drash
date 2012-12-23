@@ -121,13 +121,11 @@ void CTestApp3::Render()
     {
         mO1->ComputeBoundingBox();
         const b2AABB &b = mO1->GetBoundingBox();
-        CVec2f upper(B2Vec2ToCVec2(b.upperBound));
-        CVec2f lower(B2Vec2ToCVec2(b.lowerBound));
-        GetDebugDrawSystem().WorldSpaceToScreenSpace(lower, - mO1->GetPos().Get().mZ + GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
-        GetDebugDrawSystem().WorldSpaceToScreenSpace(upper, - mO1->GetPos().Get().mZ + GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
+        CVec3f upper(B2Vec2ToCVec2(b.upperBound), mO1->GetPos().Get().mZ);
+        CVec3f lower(B2Vec2ToCVec2(b.lowerBound), mO1->GetPos().Get().mZ);
         b2Color col(1, 0, 0);
-        CVec2f tmp1(upper.mX, lower.mY);
-        CVec2f tmp2(lower.mX, upper.mY);
+        CVec3f tmp1(upper.mX, lower.mY, mO1->GetPos().Get().mZ);
+        CVec3f tmp2(lower.mX, upper.mY, mO1->GetPos().Get().mZ);
         GetDebugDrawSystem().DrawLine(tmp1, upper, col);
         GetDebugDrawSystem().DrawLine(tmp1, lower, col);
         GetDebugDrawSystem().DrawLine(tmp2, upper, col);

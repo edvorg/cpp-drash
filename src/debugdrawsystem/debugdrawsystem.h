@@ -77,14 +77,14 @@ public:
 
     /// draws line giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) start and end points
     /// and color
-    void DrawLine(const CVec2f _p1, const CVec2f _p2, const b2Color &_col) const;
+    void DrawLine(const CVec2f &_p1, const CVec2f &_p2, const b2Color &_col) const;
 
     /// draws line giving world space coordinates start and end points
     /// and color
-    void DrawLine(const CVec3f _p1, const CVec3f _p2, const b2Color &_col) const;
+    void DrawLine(const CVec3f &_p1, const CVec3f &_p2, const b2Color &_col) const;
 
     /// draws point giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
-    void DrawPoint(const CVec2f _p, float _size, const b2Color &_col) const;
+    void DrawPoint(const CVec2f &_p, float _size, const b2Color &_col) const;
 
 protected:
 private:

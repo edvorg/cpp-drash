@@ -342,7 +342,7 @@ void CDebugDrawSystem::Draw() const
     }
 }
 
-void CDebugDrawSystem::DrawLine(const CVec2f _p1, const CVec2f _p2, const b2Color &_col) const
+void CDebugDrawSystem::DrawLine(const CVec2f &_p1, const CVec2f &_p2, const b2Color &_col) const
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -361,7 +361,7 @@ void CDebugDrawSystem::DrawLine(const CVec2f _p1, const CVec2f _p2, const b2Colo
     glEnd();
 }
 
-void CDebugDrawSystem::DrawLine(const CVec3f _p1, const CVec3f _p2, const b2Color &_col) const
+void CDebugDrawSystem::DrawLine(const CVec3f &_p1, const CVec3f &_p2, const b2Color &_col) const
 {
     if (mActiveCam == nullptr)
     {
@@ -387,13 +387,13 @@ void CDebugDrawSystem::DrawLine(const CVec3f _p1, const CVec3f _p2, const b2Colo
 
     glBegin(GL_LINES);
     glColor3f(_col.r, _col.g, _col.b);
-    glVertex2f(_p1.mX, _p1.mY);
+    glVertex3f(_p1.mX, _p1.mY, _p1.mZ);
     glColor3f(_col.r, _col.g, _col.b);
-    glVertex2f(_p2.mX, _p2.mY);
+    glVertex3f(_p2.mX, _p2.mY, _p2.mZ);
     glEnd();
 }
 
-void CDebugDrawSystem::DrawPoint(const CVec2f _p, float _size, const b2Color &_col) const
+void CDebugDrawSystem::DrawPoint(const CVec2f &_p, float _size, const b2Color &_col) const
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
