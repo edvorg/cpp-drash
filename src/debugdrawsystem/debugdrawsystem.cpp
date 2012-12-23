@@ -342,6 +342,58 @@ void CDebugDrawSystem::Draw() const
     }
 }
 
+void CDebugDrawSystem::DrawTriangle(const CVec2f &_p1, const CVec2f &_p2, const CVec2f &_p3, const b2Color &_col) const
+{
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-0.5, 0.5, -0.5, 0.5, 1, -1);
+
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+
+    glBegin(GL_TRIANGLES);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex2f(_p1.mX, _p1.mY);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex2f(_p2.mX, _p2.mY);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex2f(_p3.mX, _p3.mY);
+    glEnd();
+}
+
+void CDebugDrawSystem::DrawTriangle(const CVec3f &_p1, const CVec3f &_p2, const CVec3f &_p3, const b2Color &_col) const
+{
+    if (mActiveCam == nullptr)
+    {
+        return;
+    }
+
+    constexpr static const double c = 180.0 / M_PI;
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glRotatef(mActiveCam->GetRotation().Get().mX * c, 1, 0, 0);
+    glRotatef(mActiveCam->GetRotation().Get().mY * c, 0, 1, 0);
+    glRotatef(mActiveCam->GetRotation().Get().mZ * c, 0, 0, 1);
+    glTranslatef(-mActiveCam->mPos.Get().mX,
+                 -mActiveCam->mPos.Get().mY,
+                 -mActiveCam->mPos.Get().mZ);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(mActiveCam->GetFov().Get() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView().Get());
+
+    glBegin(GL_TRIANGLES);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex3f(_p1.mX, _p1.mY, _p1.mZ);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex3f(_p2.mX, _p2.mY, _p2.mZ);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex3f(_p3.mX, _p3.mY, _p3.mZ);
+    glEnd();
+}
+
 void CDebugDrawSystem::DrawLine(const CVec2f &_p1, const CVec2f &_p2, const b2Color &_col) const
 {
     glMatrixMode(GL_MODELVIEW);

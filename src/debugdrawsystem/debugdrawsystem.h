@@ -75,6 +75,12 @@ public:
 	/// draws connected CScene instance's objects
     void Draw() const;
 
+    /// draws triangle giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) and color
+    void DrawTriangle(const CVec2f &_p1, const CVec2f &_p2, const CVec2f &_p3, const b2Color &_col) const;
+
+    /// draws line giving world space coordinates and color
+    void DrawTriangle(const CVec3f &_p1, const CVec3f &_p2, const CVec3f &_p3, const b2Color &_col) const;
+
     /// draws line giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) start and end points
     /// and color
     void DrawLine(const CVec2f &_p1, const CVec2f &_p2, const b2Color &_col) const;
