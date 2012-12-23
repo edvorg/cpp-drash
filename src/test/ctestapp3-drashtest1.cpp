@@ -46,7 +46,7 @@ bool CTestApp3::Init()
 
     auto c = GetDebugDrawSystem().GetActiveCam();
     c->GetPos().SetTarget(CVec3f(0, 0, 180), 1.0f, AnimationBehaviorSingle);
-    c->GetRotation().Set(CVec3f(30, 0, 0));
+    c->GetRotation().Set(CVec3f(M_PI / 6, 0, 0));
 
     mSlider1.Connect(&GetUISystem());
     mSlider1.SetPos(10, 10);
