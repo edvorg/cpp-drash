@@ -11,6 +11,8 @@ class CVec4 : public CVec3<T, DEF_VAL>
 {
 public:
     CVec4() = default;
+    CVec4(const CVec2<T, DEF_VAL> &_xy, const T &_z, const T &_w);
+    CVec4(const T &_x, const T &_y, const T &_z, const T &_w);
 
     /// setters. just syntax sugare
 
@@ -58,6 +60,24 @@ CLogger &operator<<(CLogger& _logger, const CVec4<T, DEF_VAL> &_v)
 
 /// //////////////////// ///
 /// CVec4 implementation ///
+
+template<typename T, const int DEF_VAL>
+CVec4<T, DEF_VAL>::CVec4(const CVec2<T, DEF_VAL> &_xy, const T &_z, const T &_w):
+    mW(_w)
+{
+    this->mX = _xy.mX;
+    this->mY = _xy.mY;
+    this->mZ = _z;
+}
+
+template<typename T, const int DEF_VAL>
+CVec4<T, DEF_VAL>::CVec4(const T &_x, const T &_y, const T &_z, const T &_w):
+    mW(_w)
+{
+    this->mX = _x;
+    this->mY = _y;
+    this->mZ = _z;
+}
 
 template<typename T, const int DEF_VAL>
 CVec4<T, DEF_VAL> &CVec4<T, DEF_VAL>::Set(const T &_x,
