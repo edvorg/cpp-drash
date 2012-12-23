@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../cscene.h"
 #include "../sceneobjects.h"
 #include "../debugdrawsystem/camera.h"
+#include "../misc/plane.h"
 
 namespace drash
 {
@@ -46,7 +47,7 @@ bool CTestApp3::Init()
 
     auto c = GetDebugDrawSystem().GetActiveCam();
     c->GetPos().SetTarget(CVec3f(0, 0, 180), 1.0f, AnimationBehaviorSingle);
-    c->GetRotation().Set(CVec3f(M_PI / 6, 0, 0));
+    c->GetRotation().Set(CVec3f(M_PI / 12, M_PI / 6, 0));
 
     mSlider1.Connect(&GetUISystem());
     mSlider1.SetPos(10, 10);
@@ -197,11 +198,13 @@ void CTestApp3::SetProcessors()
         p.mLifeTime = 1;
         p.mStregth = -5;
         p.mRadius = 200;
-        CVec2f tmp = GetCursorPos();
-        auto cam = GetDebugDrawSystem().GetActiveCam();
-        GetDebugDrawSystem().ScreenSpaceToWorldSpace(tmp, cam->GetPos().Get().mZ);
-        p.mPos.mX = tmp.mX;
-        p.mPos.mY = tmp.mY;
+
+        CPlane plane;
+        plane.SetNormal(CVec3f(0, 0, 1));
+        plane.SetPoint(CVec3f(0, 0, 0));
+
+        GetDebugDrawSystem().CastRay(GetCursorPos(), plane, p.mPos);
+
         GetScene().CreateObject<CExplosion>(g, p);
     }));
 
