@@ -335,6 +335,30 @@ void CDebugDrawSystem::DrawLine(const CVec2f _p1, const CVec2f _p2, const b2Colo
     glEnd();
 }
 
+void CDebugDrawSystem::DrawLine(const CVec3f _p1, const CVec3f _p2, const b2Color &_col) const
+{
+    if (mActiveCam == nullptr)
+    {
+        return;
+    }
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(mActiveCam->GetFov().Get() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView().Get());
+
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+
+    glBegin(GL_LINES);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex2f(_p1.mX, _p1.mY);
+    glColor3f(_col.r, _col.g, _col.b);
+    glVertex2f(_p2.mX, _p2.mY);
+    glEnd();
+}
+
 void CDebugDrawSystem::DrawPoint(const CVec2f _p, float _size, const b2Color &_col) const
 {
     glMatrixMode(GL_MODELVIEW);
