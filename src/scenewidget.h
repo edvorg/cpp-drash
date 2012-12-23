@@ -41,7 +41,7 @@ public:
 
     /// converts coordinates from window space (0,0)..(mWidth, mHeight)
     /// to screen space (-0.5, -0.5)..(0.5, 0.5)
-    drash::CVec2 WidgetSpaceToScreenSpace(const drash::CVec2& _from) const;
+    drash::CVec2f WidgetSpaceToScreenSpace(const drash::CVec2f& _from) const;
 
     virtual void resizeGL( int _w, int _h ) override;
     virtual void paintGL() override;

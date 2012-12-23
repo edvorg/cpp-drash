@@ -35,16 +35,16 @@ namespace drash
 CSceneObject::CSceneObject(void):
     mPos([this] (const CVec3f &_new_value)
     {
-        mBody->SetTransform(_new_value.Vec2(), mBody->GetAngle());
+        mBody->SetTransform(CVec2ToB2Vec2(_new_value), mBody->GetAngle());
     }),
     mAngle([this] (const float &_new_value)
     {
-        mBody->SetTransform(mBody->GetWorldPoint(CVec2(0)), _new_value);
+        mBody->SetTransform(mBody->GetWorldPoint(b2Vec2(0, 0)), _new_value);
     })
 {
-    mColor[0] = Randf(0.35f, 0.9f, 0.01f);
-    mColor[1] = Randf( 0.35f, 0.9f, 0.01f);
-    mColor[2] = Randf(0.35f, 0.9f, 0.01f);
+    mColor[0] = math::Rand<float>(0.35f, 0.9f, 0.01f);
+    mColor[1] = math::Rand<float>( 0.35f, 0.9f, 0.01f);
+    mColor[2] = math::Rand<float>(0.35f, 0.9f, 0.01f);
 }
 
 CSceneObject::~CSceneObject(void)
@@ -62,7 +62,7 @@ bool CSceneObject::Init(const GeometryT &_geometry, const CSceneObject::ParamsT 
     mPos.Set(_params.mPos);
     mAngle.Set(_params.mAngle);
 
-    mBody->SetTransform(_params.mPos.Vec2(), _params.mAngle);
+    mBody->SetTransform(CVec2ToB2Vec2(_params.mPos), _params.mAngle);
     mBody->SetActive(true);
     mBody->SetAwake(true);
     mBody->SetSleepingAllowed(true);
@@ -99,14 +99,14 @@ void CSceneObject::Step(double _dt)
     if (mPos.IsTargetSet())
     {
         mPos.Step(_dt);
-        CVec2 lv = mPos.GetTarget().Vec2();
+        CVec2f lv = mPos.GetTarget().Vec2();
         lv -= mPos.Get().Vec2();
         lv /= mPos.GetTimeRemains();
-        mBody->SetLinearVelocity(lv);
+        mBody->SetLinearVelocity(CVec2ToB2Vec2(lv));
     }
     else
     {
-        mPos.Set(CVec3f(mBody->GetWorldPoint(CVec2(0)), mPos.Get().mZ));
+        mPos.Set(CVec3f(B2Vec2ToCVec2(mBody->GetWorldPoint(b2Vec2(0, 0))), mPos.Get().mZ));
     }
 
     if (mAngle.IsTargetSet())
@@ -135,7 +135,7 @@ void CSceneObject::OnContactEnd(const CFigure *, const CFigure *)
 
 void CSceneObject::OnBoom( const CExplosionParams &_boom )
 {
-    CVec2 dir(GetPos().Get().Vec2());
+    CVec2f dir(GetPos().Get().Vec2());
     dir -= _boom.mPos.Vec2();
 
     float k = drash::math::Min( dir.Length(), _boom.mStregth )/ _boom.mStregth;
@@ -169,7 +169,7 @@ void CSceneObject::DrawDebug() const
                     local_z = fg->GetZ();
                 }
 
-                DrawBody(s->m_vertices, s->GetVertexCount(), mPos.Get().mZ+local_z, depth, diffuse);
+                DrawBody(&B2Vec2ToCVec2(*s->m_vertices), s->GetVertexCount(), mPos.Get().mZ+local_z, depth, diffuse);
             }
         }
         j++;
@@ -192,7 +192,7 @@ CFigure *CSceneObject::CreateFigure(const CFigureParams &_params)
     }
     else
     {
-        s.Set( &*_params.mVertices.begin(), _params.mVertices.size() );
+        s.Set( &CVec2ToB2Vec2(*_params.mVertices.begin()), _params.mVertices.size() );
     }
 
     b2MassData md;

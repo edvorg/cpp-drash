@@ -38,29 +38,29 @@ bool CObjectEditorApp::Init()
     if (t != nullptr)
     {
         t->mFigures.resize(1);
-        t->mFigures[0].mVertices.push_back(CVec2(-2, -1));
-        t->mFigures[0].mVertices.push_back(CVec2(2, -1));
-        t->mFigures[0].mVertices.push_back(CVec2(1, 1));
-        t->mFigures[0].mVertices.push_back(CVec2(-1, 1));
+        t->mFigures[0].mVertices.push_back(CVec2f(-2, -1));
+        t->mFigures[0].mVertices.push_back(CVec2f(2, -1));
+        t->mFigures[0].mVertices.push_back(CVec2f(1, 1));
+        t->mFigures[0].mVertices.push_back(CVec2f(-1, 1));
     }
     t = GetTemplateSystem().CreateSceneObjectTemplate("name2");
     if (t != nullptr)
     {
         t->mFigures.resize(1);
-        t->mFigures[0].mVertices.push_back(CVec2(2, 1));
-        t->mFigures[0].mVertices.push_back(CVec2(-2, 1));
-        t->mFigures[0].mVertices.push_back(CVec2(-1, -1));
-        t->mFigures[0].mVertices.push_back(CVec2(1, -1));
+        t->mFigures[0].mVertices.push_back(CVec2f(2, 1));
+        t->mFigures[0].mVertices.push_back(CVec2f(-2, 1));
+        t->mFigures[0].mVertices.push_back(CVec2f(-1, -1));
+        t->mFigures[0].mVertices.push_back(CVec2f(1, -1));
     }
     t = GetTemplateSystem().CreateSceneObjectTemplate("ground");
     if (t != nullptr)
     {
         t->mFigures.resize(1);
         t->mFigures[0].mDepth = 10;
-        t->mFigures[0].mVertices.push_back(CVec2(50, 5));
-        t->mFigures[0].mVertices.push_back(CVec2(-50, 5));
-        t->mFigures[0].mVertices.push_back(CVec2(-50, -5));
-        t->mFigures[0].mVertices.push_back(CVec2(50, -5));
+        t->mFigures[0].mVertices.push_back(CVec2f(50, 5));
+        t->mFigures[0].mVertices.push_back(CVec2f(-50, 5));
+        t->mFigures[0].mVertices.push_back(CVec2f(-50, -5));
+        t->mFigures[0].mVertices.push_back(CVec2f(50, -5));
     }
     SetProcessors();
 
@@ -85,7 +85,7 @@ void CObjectEditorApp::Render()
     if (mState == StretchState) {
 //        qDebug() << "THIS!!!";
 //        for (auto iter = mFigurePoints.begin() ; iter != mFigurePoints.end() ; iter++){
-//            CVec2 position = **iter;
+//            CVec2f position = **iter;
 //            float depth = drash::math::Abs(mCurrentObject->GetPos().Get().mZ
 //                        -GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
 //            GetDebugDrawSystem().WorldSpaceToScreenSpace(position,depth);
@@ -95,15 +95,15 @@ void CObjectEditorApp::Render()
         for (unsigned int i = 0 ; i < mCurrentObject->EnumFigures() ; i++ ) {
             CFigure *figure = mCurrentObject->GetFigures()[i];
             for (unsigned int j = 0 ; j < figure->EnumVertices() ; j++) {
-                CVec2 position = figure->GetVertices()[j];
+                CVec2f position = figure->GetVertices()[j];
                 b2Color color(255,155,0);
 //                qDebug() << position.x << " " << position.y <<" "<<posC.x <<" "<<posC.y;
 
                 float depth = drash::math::Abs(mCurrentObject->GetPos().Get().mZ
                             -GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
                 GetDebugDrawSystem().WorldSpaceToScreenSpace(position,depth);
-                if (drash::math::Abs(position.x -GetCursorPos().x) <= 0.01f &&
-                        drash::math::Abs(position.y -GetCursorPos().y) <= 0.01f) {
+                if (drash::math::Abs(position.mX -GetCursorPos().mX) <= 0.01f &&
+                        drash::math::Abs(position.mY -GetCursorPos().mY) <= 0.01f) {
                     color.Set(255,0,0);
                 }
                 GetDebugDrawSystem().DrawPoint(position,10.0f,color);
@@ -207,7 +207,7 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
         return false;
     }
     CFigureParams param;
-    std::for_each(mVertexs.begin() , mVertexs.end() , [this] (CVec2 &v)
+    std::for_each(mVertexs.begin() , mVertexs.end() , [this] (CVec2f &v)
     {
         GetDebugDrawSystem().ScreenSpaceToWorldSpace(v,
                  GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
@@ -253,7 +253,7 @@ void CObjectEditorApp::RemoveCurrentObject()
     }
 }
 
-CFigure *CObjectEditorApp::SelectFigure(const CVec2 &_pos)
+CFigure *CObjectEditorApp::SelectFigure(const CVec2f &_pos)
 {
     if (mCurrentObject != nullptr) {
         return GetDebugDrawSystem().FindFigure(_pos);
@@ -268,18 +268,18 @@ void CObjectEditorApp::MoveFigure()
         return;
     }
 
-    CVec2 pos = GetCursorPos();
+    CVec2f pos = GetCursorPos();
     GetDebugDrawSystem().ScreenSpaceToWorldSpace(pos,GetCurDepth());
-    float disX = pos.x - mOldPositionCursor.x;
-    float disY = pos.y - mOldPositionCursor.y;
+    float disX = pos.mX - mOldPositionCursor.mX;
+    float disY = pos.mY - mOldPositionCursor.mY;
     mOldPositionCursor = pos;
-    const b2Vec2* v = mSelectedFigure->GetVertices();
-    CVec2* new_vertices = new CVec2[mSelectedFigure->EnumVertices()];
+    const CVec2f* v = mSelectedFigure->GetVertices();
+    CVec2f* new_vertices = new CVec2f[mSelectedFigure->EnumVertices()];
     for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++)
     {
         new_vertices[i] = v[i];
-        new_vertices[i].x += disX;
-        new_vertices[i].y += disY;
+        new_vertices[i].mX += disX;
+        new_vertices[i].mY += disY;
     }
 
     mSelectedFigure->SetVertices(new_vertices, mSelectedFigure->EnumVertices());
@@ -291,15 +291,15 @@ void CObjectEditorApp::StretchFigure()
     if (mVertexIndex == -1) {
         return;
     }
-    CVec2 *ver = new CVec2[mSelectedFigure->EnumVertices()];
+    CVec2f *ver = new CVec2f[mSelectedFigure->EnumVertices()];
     for (unsigned int i = 0 ; i < mSelectedFigure->EnumVertices() ; i++) {
         if (i == (unsigned int)mVertexIndex) {
-            CVec2 posCur = GetCursorPos();
-            qDebug() << posCur.x << " " << posCur.y;
+            CVec2f posCur = GetCursorPos();
+            qDebug() << posCur.mX << " " << posCur.mY;
             float depth = drash::math::Abs(mCurrentObject->GetPos().Get().mZ
                         -GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
             GetDebugDrawSystem().ScreenSpaceToWorldSpace(posCur,depth);
-            ver[i].Set(posCur.x,posCur.y);
+            ver[i].Set(posCur.mX,posCur.mY);
         } else {
             ver[i] = mSelectedFigure->GetVertices()[i];
         }
@@ -318,12 +318,12 @@ void CObjectEditorApp::SelectVertex()
     for (unsigned int i = 0 ; i < mCurrentObject->EnumFigures() ; i++ ) {
         CFigure *figure = mCurrentObject->GetFigures()[i];
         for (unsigned int j = 0 ; j < figure->EnumVertices() ; j++) {
-            CVec2 position = figure->GetVertices()[j];
+            CVec2f position = figure->GetVertices()[j];
             float depth = drash::math::Abs(mCurrentObject->GetPos().Get().mZ
                -GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
             GetDebugDrawSystem().WorldSpaceToScreenSpace(position,depth);
-            if (drash::math::Abs(position.x -GetCursorPos().x) <= 0.01f &&
-                    drash::math::Abs(position.y -GetCursorPos().y) <= 0.01f) {
+            if (drash::math::Abs(position.mX -GetCursorPos().mX) <= 0.01f &&
+                    drash::math::Abs(position.mY -GetCursorPos().mY) <= 0.01f) {
                 mCurrentFigureVertex = position;
                 mVertexIndex = j;
                 mSelectedFigure = figure;

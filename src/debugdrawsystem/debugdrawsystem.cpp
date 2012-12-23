@@ -101,7 +101,7 @@ void CDebugDrawSystem::DestroyCam(drash::CCamera *_cam)
     }
 }
 
-bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const
+bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2f &_pos, float _depth) const
 {
     if (mActiveCam == nullptr)
     {
@@ -119,15 +119,15 @@ bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const
             double frame_height = 2.0 * sqrt( c*c - _depth*_depth );
             double frame_width = frame_height * mAspectRatio;
 
-            _pos.x *= frame_width;
-            _pos.y *= frame_height;
+            _pos.mX *= frame_width;
+            _pos.mY *= frame_height;
 
             _pos += mActiveCam->GetPos().Get().Vec2();
         }
         else
         {
-            _pos.x *= GetActiveCam()->GetOrthoWidth().Get();
-            _pos.y *= GetActiveCam()->GetOrthoWidth().Get() / mAspectRatio;
+            _pos.mX *= GetActiveCam()->GetOrthoWidth().Get();
+            _pos.mY *= GetActiveCam()->GetOrthoWidth().Get() / mAspectRatio;
 
             _pos += mActiveCam->GetPos().Get().Vec2();
         }
@@ -136,7 +136,7 @@ bool CDebugDrawSystem::ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const
     }
 }
 
-bool CDebugDrawSystem::WorldSpaceToScreenSpace(CVec2 &_pos, float _depth) const
+bool CDebugDrawSystem::WorldSpaceToScreenSpace(CVec2f &_pos, float _depth) const
 {
     if (mActiveCam == nullptr)
     {
@@ -156,22 +156,22 @@ bool CDebugDrawSystem::WorldSpaceToScreenSpace(CVec2 &_pos, float _depth) const
 
             _pos -= mActiveCam->GetPos().Get().Vec2();
 
-            _pos.x /= frame_width;
-            _pos.y /= frame_height;
+            _pos.mX /= frame_width;
+            _pos.mY /= frame_height;
         }
         else
         {
             _pos -= mActiveCam->GetPos().Get().Vec2();
 
-            _pos.x /= GetActiveCam()->GetOrthoWidth().Get();
-            _pos.y /= GetActiveCam()->GetOrthoWidth().Get() / mAspectRatio;
+            _pos.mX /= GetActiveCam()->GetOrthoWidth().Get();
+            _pos.mY /= GetActiveCam()->GetOrthoWidth().Get() / mAspectRatio;
         }
 
         return true;
     }
 }
 
-CFigure *CDebugDrawSystem::FindFigure(const CVec2 &_pos) const
+CFigure *CDebugDrawSystem::FindFigure(const CVec2f &_pos) const
 {
     CFigure *res = nullptr;
 
@@ -188,10 +188,10 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2 &_pos) const
             CFigure *cur_fgr = cur_obj->GetFigures()[j];
 
             float z = - cur_obj->GetPos().Get().mZ - cur_fgr->GetZ() + GetActiveCam()->GetPos().Get().mZ;
-            CVec2 pos = _pos;
+            CVec2f pos = _pos;
             ScreenSpaceToWorldSpace(pos, z);
 
-            if (cur_fgr->mFixture->TestPoint(pos))
+            if (cur_fgr->mFixture->TestPoint(CVec2ToB2Vec2(pos)))
             {
                 res = cur_fgr;
                 z_nearest = z;
@@ -225,10 +225,10 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2 &_pos) const
                 continue;
             }
 
-            CVec2 pos = _pos;
+            CVec2f pos = _pos;
             ScreenSpaceToWorldSpace(pos, z);
 
-            if (cur_fgr->mFixture->TestPoint(pos))
+            if (cur_fgr->mFixture->TestPoint(CVec2ToB2Vec2(pos)))
             {
                 res = cur_fgr;
                 z_nearest = z;
@@ -273,8 +273,8 @@ void CDebugDrawSystem::Draw() const
         // frustrum culling
         /////////////////////////////////////////////
 
-        CVec2 min(-0.5, -0.5);
-        CVec2 max(0.5, 0.5);
+        CVec2f min(-0.5, -0.5);
+        CVec2f max(0.5, 0.5);
         float d = - objects[i]->GetPos().Get().mZ + mActiveCam->GetPos().Get().mZ;
 
         ScreenSpaceToWorldSpace(min, d);
@@ -283,10 +283,10 @@ void CDebugDrawSystem::Draw() const
         objects[i]->ComputeBoundingBox();
         const b2AABB &aabb = objects[i]->GetBoundingBox();
 
-        if (aabb.upperBound.x < min.x ||
-            max.x < aabb.lowerBound.x ||
-            aabb.upperBound.y < min.y ||
-            max.y < aabb.lowerBound.y)
+        if (aabb.upperBound.x < min.mX ||
+            max.mX < aabb.lowerBound.x ||
+            aabb.upperBound.y < min.mY ||
+            max.mY < aabb.lowerBound.y)
         {
             continue;
         }
@@ -303,9 +303,9 @@ void CDebugDrawSystem::Draw() const
         glTranslatef(-mActiveCam->mPos.Get().mX,
                      -mActiveCam->mPos.Get().mY,
                      -mActiveCam->mPos.Get().mZ);
-        CVec2 pos = objects[i]->GetPos().Get().Vec2();
-        glTranslatef(pos.x,
-                     pos.y,
+        CVec2f pos = objects[i]->GetPos().Get().Vec2();
+        glTranslatef(pos.mX,
+                     pos.mY,
                      0);
         glRotatef( 180.0f / M_PI * objects[i]->GetAngle().Get(), 0, 0, 1 );
 
@@ -316,7 +316,7 @@ void CDebugDrawSystem::Draw() const
     }
 }
 
-void CDebugDrawSystem::DrawLine(const CVec2 _p1, const CVec2 _p2, const b2Color &_col) const
+void CDebugDrawSystem::DrawLine(const CVec2f _p1, const CVec2f _p2, const b2Color &_col) const
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -329,13 +329,13 @@ void CDebugDrawSystem::DrawLine(const CVec2 _p1, const CVec2 _p2, const b2Color 
 
     glBegin(GL_LINES);
     glColor3f(_col.r, _col.g, _col.b);
-    glVertex2f(_p1.x, _p1.y);
+    glVertex2f(_p1.mX, _p1.mY);
     glColor3f(_col.r, _col.g, _col.b);
-    glVertex2f(_p2.x, _p2.y);
+    glVertex2f(_p2.mX, _p2.mY);
     glEnd();
 }
 
-void CDebugDrawSystem::DrawPoint(const CVec2 _p, float _size, const b2Color &_col) const
+void CDebugDrawSystem::DrawPoint(const CVec2f _p, float _size, const b2Color &_col) const
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -350,7 +350,7 @@ void CDebugDrawSystem::DrawPoint(const CVec2 _p, float _size, const b2Color &_co
 
     glBegin(GL_POINTS);
     glColor3f(_col.r, _col.g, _col.b);
-    glVertex2f(_p.x, _p.y);
+    glVertex2f(_p.mX, _p.mY);
     glEnd();
 }
 

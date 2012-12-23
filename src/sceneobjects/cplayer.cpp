@@ -75,18 +75,18 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
         case CPlayerEvent::PlayerActionJump:
             if (mJumpAllowed)
             {
-                CVec2 v = GetLinearVelocity();
-                v.y = mSpeedJump;
+                CVec2f v = GetLinearVelocity();
+                v.mY = mSpeedJump;
                 SetLinearVelocity(v);
             }
             break;
 
         case CPlayerEvent::PlayerActionMoveLeft:
-            SetLinearVelocity(CVec2(-10, 0));
+            SetLinearVelocity(CVec2f(-10, 0));
             break;
 
         case CPlayerEvent::PlayerActionMoveRight:
-            SetLinearVelocity(CVec2(10, 0));
+            SetLinearVelocity(CVec2f(10, 0));
             break;
 
 		// TODO: fix bug with crosslayer animation

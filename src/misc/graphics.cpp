@@ -33,17 +33,17 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
-void DrawBodySide(const b2Vec2 &_v1,
-                  const b2Vec2 &_v2,
+void DrawBodySide(const CVec2f &_v1,
+                  const CVec2f &_v2,
                   float _z,
                   float _depth,
                   const b2Color &_diffuse )
 {
-    CVec2 dp = _v1 - _v2;
+    CVec2f dp = _v1 - _v2;
     dp.Normalize();
-    CVec2 localx(1, 0);
+    CVec2f localx(1, 0);
 
-    float dot = dp.x * localx.x + dp.y * localx.y;
+    float dot = dp.mX * localx.mX + dp.mY * localx.mY;
     dot += 2.0;
     dot /= 3.0f;
 
@@ -51,28 +51,28 @@ void DrawBodySide(const b2Vec2 &_v1,
                _diffuse.g * dot,
                _diffuse.b * dot );
 
-    glVertex3f( _v1.x,
-                _v1.y,
+    glVertex3f( _v1.mX,
+                _v1.mY,
                 _z + _depth / 2.0f );
-    glVertex3f( _v1.x,
-                _v1.y,
+    glVertex3f( _v1.mX,
+                _v1.mY,
                 _z - _depth / 2.0f );
-    glVertex3f( _v2.x,
-                _v2.y,
+    glVertex3f( _v2.mX,
+                _v2.mY,
                 _z + _depth / 2.0f );
 
-    glVertex3f( _v2.x,
-                _v2.y,
+    glVertex3f( _v2.mX,
+                _v2.mY,
                 _z + _depth / 2.0f );
-    glVertex3f( _v1.x,
-                _v1.y,
+    glVertex3f( _v1.mX,
+                _v1.mY,
                 _z - _depth / 2.0f );
-    glVertex3f( _v2.x,
-                _v2.y,
+    glVertex3f( _v2.mX,
+                _v2.mY,
                 _z - _depth / 2.0f );
 }
 
-void DrawBody(const b2Vec2 *_vertices,
+void DrawBody(const CVec2f *_vertices,
               unsigned int _count,
               float _z,
               float _depth,
@@ -86,8 +86,8 @@ void DrawBody(const b2Vec2 *_vertices,
                0.4 * _color.b );
     for ( unsigned int i = 0; i < _count; i++ )
     {
-        glVertex3f( _vertices[i].x,
-                    _vertices[i].y,
+        glVertex3f( _vertices[i].mX,
+                    _vertices[i].mY,
                     _z + _depth / 2.0f );
     }
     glEnd();
@@ -98,8 +98,8 @@ void DrawBody(const b2Vec2 *_vertices,
                0.4 * _color.b );
     for ( unsigned int i = 0; i < _count; i++ )
     {
-        glVertex3f( _vertices[i].x,
-                    _vertices[i].y,
+        glVertex3f( _vertices[i].mX,
+                    _vertices[i].mY,
                     _z - _depth / 2.0f );
     }
     glEnd();

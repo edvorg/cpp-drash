@@ -77,7 +77,7 @@ void CExplosion::Step(double _dt)
     {
         if (mParams.mRadius > 0.0f)
         {
-            CVec2 dist = GetScene()->GetObjects()[i]->GetPos().Get().Vec2();
+            CVec2f dist = GetScene()->GetObjects()[i]->GetPos().Get().Vec2();
             dist -= this->GetPos().Get().Vec2();
 
             if (dist.LengthSquared() <= mParams.mRadius * mParams.mRadius)

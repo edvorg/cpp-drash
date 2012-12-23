@@ -44,7 +44,7 @@ public:
     float mMass = 1;
 
     /// if size of mVertices is NULL, creates a box with (1, 1) dimentions
-    std::vector<CVec2> mVertices;
+    std::vector<CVec2f> mVertices;
 
     float mDepth = 1;
 };
@@ -57,8 +57,8 @@ public:
 
     inline CSceneObject *GetSceneObject() const;
 
-    void SetVertices(const CVec2 *_vertices, unsigned int _count);
-    const b2Vec2 *GetVertices() const;
+    void SetVertices(const CVec2f *_vertices, unsigned int _count);
+    const CVec2f *GetVertices() const;
     unsigned int EnumVertices() const;
 
     inline float GetZ() const;

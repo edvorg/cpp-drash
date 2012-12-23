@@ -56,7 +56,7 @@ bool CTestApp3::Init()
     mSlider1.SetValue(0);
     mSlider1.SetValueHandler([this] (float _value)
     {
-        GetScene().SetGravity(CVec2(_value, mSlider2.GetValue()));
+        GetScene().SetGravity(CVec2f(_value, mSlider2.GetValue()));
     });
 
     mSlider2.Connect(&GetUISystem());
@@ -67,7 +67,7 @@ bool CTestApp3::Init()
     mSlider2.SetValue(-9.8);
     mSlider2.SetValueHandler([this] (float _value)
     {
-        GetScene().SetGravity(CVec2(mSlider1.GetValue(), _value));
+        GetScene().SetGravity(CVec2f(mSlider1.GetValue(), _value));
     });
 
     mButton1.Connect(&GetUISystem());
@@ -77,7 +77,7 @@ bool CTestApp3::Init()
     {
         CDrashBodyParams params;
         params.mDynamic = true;
-        params.mPos.mX = Randf(-100, 100);
+        params.mPos.mX = math::Rand<float>(-100, 100, 1);
         params.mPos.mY = 200;
 
         GetTemplateSystem().CreateDrashBodyFromTemplate("box_big", params);
@@ -103,7 +103,7 @@ void CTestApp3::Step(double _dt)
     {
         CDrashBodyParams params;
         params.mDynamic = true;
-        params.mPos.mX = Randf(-100, 100);
+        params.mPos.mX = math::Rand<float>(-100, 100, 1);
         params.mPos.mY = 100;
 
         GetTemplateSystem().CreateDrashBodyFromTemplate("circle", params);
@@ -120,13 +120,13 @@ void CTestApp3::Render()
     {
         mO1->ComputeBoundingBox();
         const b2AABB &b = mO1->GetBoundingBox();
-        CVec2 upper = b.upperBound;
-        CVec2 lower = b.lowerBound;
+        CVec2f upper(B2Vec2ToCVec2(b.upperBound));
+        CVec2f lower(B2Vec2ToCVec2(b.lowerBound));
         GetDebugDrawSystem().WorldSpaceToScreenSpace(lower, - mO1->GetPos().Get().mZ + GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
         GetDebugDrawSystem().WorldSpaceToScreenSpace(upper, - mO1->GetPos().Get().mZ + GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
         b2Color col(1, 0, 0);
-        CVec2 tmp1(upper.x, lower.y);
-        CVec2 tmp2(lower.x, upper.y);
+        CVec2f tmp1(upper.mX, lower.mY);
+        CVec2f tmp2(lower.mX, upper.mY);
         GetDebugDrawSystem().DrawLine(tmp1, upper, col);
         GetDebugDrawSystem().DrawLine(tmp1, lower, col);
         GetDebugDrawSystem().DrawLine(tmp2, upper, col);
@@ -197,11 +197,11 @@ void CTestApp3::SetProcessors()
         p.mLifeTime = 1;
         p.mStregth = -5;
         p.mRadius = 200;
-        CVec2 tmp = GetCursorPos();
+        CVec2f tmp = GetCursorPos();
         auto cam = GetDebugDrawSystem().GetActiveCam();
         GetDebugDrawSystem().ScreenSpaceToWorldSpace(tmp, cam->GetPos().Get().mZ);
-        p.mPos.mX = tmp.x;
-        p.mPos.mY = tmp.y;
+        p.mPos.mX = tmp.mX;
+        p.mPos.mY = tmp.mY;
         GetScene().CreateObject<CExplosion>(g, p);
     }));
 
@@ -253,7 +253,7 @@ void CTestApp3::SetProcessors()
     {
         if (mMoveObject != nullptr)
         {
-            CVec2 coords = GetCursorPos();
+            CVec2f coords = GetCursorPos();
             if (GetDebugDrawSystem().ScreenSpaceToWorldSpace(coords, - mMoveObject->GetPos().Get().mZ + GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ))
             {
                 coords -= mMoveObject->GetPos().Get().Vec2();
@@ -269,7 +269,7 @@ void CTestApp3::SetProcessors()
             /// if our body is not dynamic. it wil never stop, until we make it's velocity module to 0
             if (mMoveObject->IsDynamic() == false)
             {
-                mMoveObject->SetLinearVelocity(CVec2(0));
+                mMoveObject->SetLinearVelocity(CVec2f(0));
             }
             mMoveObject = nullptr;
         }
@@ -304,10 +304,10 @@ void CTestApp3::InitObjects()
     sbg.mFigures.resize(1);
     sbg.mFigures[0].mDepth = 40;
     sbg.mFigures[0].mRestitution = 0.0;
-    sbg.mFigures[0].mVertices.push_back( CVec2( -300, -5 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2( 300, -5 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2( 300, 5 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2( -300, 5 ) );
+    sbg.mFigures[0].mVertices.push_back( CVec2f( -300, -5 ) );
+    sbg.mFigures[0].mVertices.push_back( CVec2f( 300, -5 ) );
+    sbg.mFigures[0].mVertices.push_back( CVec2f( 300, 5 ) );
+    sbg.mFigures[0].mVertices.push_back( CVec2f( -300, 5 ) );
     CSceneObjectParams sbp;
     sbp.mDynamic = false;
     sbp.mAngle = 0;
@@ -318,36 +318,36 @@ void CTestApp3::InitObjects()
 
     sbg.mFigures[0].mVertices.clear();
     sbg.mFigures.resize(1);
-    sbg.mFigures[0].mVertices.push_back( CVec2( -5, -300 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2( 5, -300 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2( 5, 300 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2( -5, 300 ) );
+    sbg.mFigures[0].mVertices.push_back( CVec2f( -5, -300 ) );
+    sbg.mFigures[0].mVertices.push_back( CVec2f( 5, -300 ) );
+    sbg.mFigures[0].mVertices.push_back( CVec2f( 5, 300 ) );
+    sbg.mFigures[0].mVertices.push_back( CVec2f( -5, 300 ) );
     sbp.mPos.Set(-300, 300, 0);
     GetScene().CreateObject<CSceneObject>(sbg, sbp);
 
     sbg.mFigures[0].mVertices.clear();
     sbg.mFigures.resize(1);
-    sbg.mFigures[0].mVertices.push_back( CVec2( -5, -300 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2( 5, -300 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2( 5, 300 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2( -5, 300 ) );
+    sbg.mFigures[0].mVertices.push_back( CVec2f( -5, -300 ) );
+    sbg.mFigures[0].mVertices.push_back( CVec2f( 5, -300 ) );
+    sbg.mFigures[0].mVertices.push_back( CVec2f( 5, 300 ) );
+    sbg.mFigures[0].mVertices.push_back( CVec2f( -5, 300 ) );
     sbp.mPos.Set(300, 300, 0);
     GetScene().CreateObject<CSceneObject>(sbg, sbp);
 
     CDrashBodyGeometry *b1 = GetTemplateSystem().CreateDrashBodyTemplate("box_small");
     b1->mFigures.resize(1);
     b1->mFigures[0].mDepth = 10;
-    b1->mFigures[0].mVertices.push_back( CVec2( -5, -5 ) );
-    b1->mFigures[0].mVertices.push_back( CVec2( 5, -5 ) );
-    b1->mFigures[0].mVertices.push_back( CVec2( 5, 5 ) );
-    b1->mFigures[0].mVertices.push_back( CVec2( -5, 5 ) );
+    b1->mFigures[0].mVertices.push_back( CVec2f( -5, -5 ) );
+    b1->mFigures[0].mVertices.push_back( CVec2f( 5, -5 ) );
+    b1->mFigures[0].mVertices.push_back( CVec2f( 5, 5 ) );
+    b1->mFigures[0].mVertices.push_back( CVec2f( -5, 5 ) );
     CDrashBodyGeometry *b0 = GetTemplateSystem().CreateDrashBodyTemplate("box_big");
     b0->mFigures.resize(1);
     b0->mFigures[0].mDepth = 20;
-    b0->mFigures[0].mVertices.push_back( CVec2( -10, -10 ) );
-    b0->mFigures[0].mVertices.push_back( CVec2( 10, -10 ) );
-    b0->mFigures[0].mVertices.push_back( CVec2( 10, 10 ) );
-    b0->mFigures[0].mVertices.push_back( CVec2( -10, 10 ) );
+    b0->mFigures[0].mVertices.push_back( CVec2f( -10, -10 ) );
+    b0->mFigures[0].mVertices.push_back( CVec2f( 10, -10 ) );
+    b0->mFigures[0].mVertices.push_back( CVec2f( 10, 10 ) );
+    b0->mFigures[0].mVertices.push_back( CVec2f( -10, 10 ) );
 
     b0->mDestructionChilds.resize(8);
     b0->mDestructionChilds[0].mTemplate = b1;
@@ -378,7 +378,7 @@ void CTestApp3::InitObjects()
     pg.mFigures[0].mMass = 3;
     CSceneObjectParams pp;
     pp.mPos.Set(-200, 100, 0);
-    GetScene().CreateObject<CSceneObject>(pg, pp)->SetLinearVelocity( CVec2( 200, 0 ) );
+    GetScene().CreateObject<CSceneObject>(pg, pp)->SetLinearVelocity( CVec2f( 200, 0 ) );
 
     CSceneObjectGeometry ppg;
     ppg.mFigures.resize(1);
@@ -391,10 +391,10 @@ void CTestApp3::InitObjects()
     platform_geometry.mFigures.resize(1);
     platform_geometry.mFigures[0].mDepth = 8;
     platform_geometry.mFigures[0].mFriction = 1.0;
-    platform_geometry.mFigures[0].mVertices.push_back( CVec2( -100, -5 ) );
-    platform_geometry.mFigures[0].mVertices.push_back( CVec2( 100, -5 ) );
-    platform_geometry.mFigures[0].mVertices.push_back( CVec2( 100, 5 ) );
-    platform_geometry.mFigures[0].mVertices.push_back( CVec2( -100, 5 ) );
+    platform_geometry.mFigures[0].mVertices.push_back( CVec2f( -100, -5 ) );
+    platform_geometry.mFigures[0].mVertices.push_back( CVec2f( 100, -5 ) );
+    platform_geometry.mFigures[0].mVertices.push_back( CVec2f( 100, 5 ) );
+    platform_geometry.mFigures[0].mVertices.push_back( CVec2f( -100, 5 ) );
     CSceneObject::ParamsT platform_params;
     platform_params.mPos.Set(0, 50, 0);
     platform_params.mAngle = -M_PI / 18.0;
@@ -415,10 +415,10 @@ void CTestApp3::InitObjects()
         t2->mFigures.resize(4);
         for (unsigned int i=0; i<4; i++)
         {
-            t2->mFigures[i].mVertices.push_back(CVec2(rad * cos(i * d_angle), rad * sin(i * d_angle)));
-            t2->mFigures[i].mVertices.push_back(CVec2(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
-            t2->mFigures[i].mVertices.push_back(CVec2(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
-            t2->mFigures[i].mVertices.push_back(CVec2(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
+            t2->mFigures[i].mVertices.push_back(CVec2f(rad * cos(i * d_angle), rad * sin(i * d_angle)));
+            t2->mFigures[i].mVertices.push_back(CVec2f(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
+            t2->mFigures[i].mVertices.push_back(CVec2f(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
+            t2->mFigures[i].mVertices.push_back(CVec2f(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
             t2->mFigures[i].mDepth = rad * 0.5;
         }
     }
@@ -429,10 +429,10 @@ void CTestApp3::InitObjects()
         t3->mFigures.resize(4);
         for (unsigned int i=4; i<8; i++)
         {
-            t3->mFigures[i-4].mVertices.push_back(CVec2(rad * cos(i * d_angle), rad * sin(i * d_angle)));
-            t3->mFigures[i-4].mVertices.push_back(CVec2(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
-            t3->mFigures[i-4].mVertices.push_back(CVec2(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
-            t3->mFigures[i-4].mVertices.push_back(CVec2(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
+            t3->mFigures[i-4].mVertices.push_back(CVec2f(rad * cos(i * d_angle), rad * sin(i * d_angle)));
+            t3->mFigures[i-4].mVertices.push_back(CVec2f(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
+            t3->mFigures[i-4].mVertices.push_back(CVec2f(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
+            t3->mFigures[i-4].mVertices.push_back(CVec2f(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
             t3->mFigures[i-4].mDepth = rad * 0.5;
         }
     }
@@ -443,10 +443,10 @@ void CTestApp3::InitObjects()
         t4->mFigures.resize(4);
         for (unsigned int i=8; i<12; i++)
         {
-            t4->mFigures[i-8].mVertices.push_back(CVec2(rad * cos(i * d_angle), rad * sin(i * d_angle)));
-            t4->mFigures[i-8].mVertices.push_back(CVec2(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
-            t4->mFigures[i-8].mVertices.push_back(CVec2(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
-            t4->mFigures[i-8].mVertices.push_back(CVec2(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
+            t4->mFigures[i-8].mVertices.push_back(CVec2f(rad * cos(i * d_angle), rad * sin(i * d_angle)));
+            t4->mFigures[i-8].mVertices.push_back(CVec2f(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
+            t4->mFigures[i-8].mVertices.push_back(CVec2f(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
+            t4->mFigures[i-8].mVertices.push_back(CVec2f(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
             t4->mFigures[i-8].mDepth = rad * 0.5;
         }
     }
@@ -457,10 +457,10 @@ void CTestApp3::InitObjects()
         t5->mFigures.resize(4);
         for (unsigned int i=12; i<16; i++)
         {
-            t5->mFigures[i-12].mVertices.push_back(CVec2(rad * cos(i * d_angle), rad * sin(i * d_angle)));
-            t5->mFigures[i-12].mVertices.push_back(CVec2(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
-            t5->mFigures[i-12].mVertices.push_back(CVec2(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
-            t5->mFigures[i-12].mVertices.push_back(CVec2(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
+            t5->mFigures[i-12].mVertices.push_back(CVec2f(rad * cos(i * d_angle), rad * sin(i * d_angle)));
+            t5->mFigures[i-12].mVertices.push_back(CVec2f(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
+            t5->mFigures[i-12].mVertices.push_back(CVec2f(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
+            t5->mFigures[i-12].mVertices.push_back(CVec2f(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
             t5->mFigures[i-12].mDepth = rad * 0.5;
         }
     }
@@ -471,10 +471,10 @@ void CTestApp3::InitObjects()
         t1->mFigures.resize(segments);
         for (unsigned int i=0; i<segments; i++)
         {
-            t1->mFigures[i].mVertices.push_back(CVec2(rad * cos(i * d_angle), rad * sin(i * d_angle)));
-            t1->mFigures[i].mVertices.push_back(CVec2(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
-            t1->mFigures[i].mVertices.push_back(CVec2(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
-            t1->mFigures[i].mVertices.push_back(CVec2(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
+            t1->mFigures[i].mVertices.push_back(CVec2f(rad * cos(i * d_angle), rad * sin(i * d_angle)));
+            t1->mFigures[i].mVertices.push_back(CVec2f(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
+            t1->mFigures[i].mVertices.push_back(CVec2f(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
+            t1->mFigures[i].mVertices.push_back(CVec2f(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
             t1->mFigures[i].mDepth = rad * 0.5;
         }
 

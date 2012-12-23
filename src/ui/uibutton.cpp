@@ -36,10 +36,10 @@ void CUIButton::Connect(CUISystem *_system)
     SetDrawHandler([this] ()
     {
         b2Color c(mPressed ? 0 : mTime, mPressed ? 0.0f : 1.0f - mTime, mPressed ? 1 : 0);
-        CVec2 p1;
-        CVec2 p2;
-        CVec2 p3;
-        CVec2 p4;
+        CVec2f p1;
+        CVec2f p2;
+        CVec2f p3;
+        CVec2f p4;
         GetUISystem()->UISpaceToScreenSpace(GetX(), GetY(), p1);
         GetUISystem()->UISpaceToScreenSpace(GetX(), GetY() + GetHeight(), p2);
         GetUISystem()->UISpaceToScreenSpace(GetX() + GetWidth(), GetY() + GetHeight(), p3);

@@ -68,17 +68,17 @@ public:
     /// used to make CApp childs about mouse moving event
     /// use this from your CApp back end (Qt, SDL, etc.)
     /// we assume that _pos is coordinates in screen space (-0.5, -0.5) (0.5, 0.5)
-    inline void SetCursorPos(const CVec2 &_pos);
+    inline void SetCursorPos(const CVec2f &_pos);
 
     /// used by CApp childs for detection, where mouse cursor is
     /// returns coordinates in screen space (-0.5, -0.5) (0.5, 0.5)
-    inline const CVec2 &GetCursorPos() const;
+    inline const CVec2f &GetCursorPos() const;
 
 protected:
 
 private:
     CAppEventSystem mEventSystem;
-    CVec2 mCursorPos = CVec2(0);
+    CVec2f mCursorPos = CVec2f(0);
 
     CScene mScene;
 
@@ -142,12 +142,12 @@ inline ui::CUISystem &CApp::GetUISystem()
     return mUISystem;
 }
 
-inline void CApp::SetCursorPos(const CVec2 &_pos)
+inline void CApp::SetCursorPos(const CVec2f &_pos)
 {
     mCursorPos = _pos;
 }
 
-inline const CVec2 &CApp::GetCursorPos() const
+inline const CVec2f &CApp::GetCursorPos() const
 {
     return mCursorPos;
 }

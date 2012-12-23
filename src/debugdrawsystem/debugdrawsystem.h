@@ -62,28 +62,28 @@ public:
     /// to world coordinates taking into account depth (distance from camera to required layer)
     /// and active camera position
     /// if no camera is activated does nothing and returns false
-    bool ScreenSpaceToWorldSpace(CVec2 &_pos, float _depth) const;
+    bool ScreenSpaceToWorldSpace(CVec2f &_pos, float _depth) const;
 
     /// converts coordinates from world coordinates
     /// to (-0.5,-0.5)..(0.5, 0.5) system with center at (0, 0)
     /// taking into account depth (distance from camera to required layer)
     /// and active camera position
     /// if no camera is activated does nothing and returns false
-    bool WorldSpaceToScreenSpace(CVec2 &_pos, float _depth) const;
+    bool WorldSpaceToScreenSpace(CVec2f &_pos, float _depth) const;
 
     /// finds objects, visible at specified postion in screen space coordinates
     /// returns nearest one
-    CFigure *FindFigure(const CVec2 &_pos) const;
+    CFigure *FindFigure(const CVec2f &_pos) const;
 
 	/// draws connected CScene instance's objects
     void Draw() const;
 
     /// draws line giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) start and end points
     /// and color
-    void DrawLine(const CVec2 _p1, const CVec2 _p2, const b2Color &_col) const;
+    void DrawLine(const CVec2f _p1, const CVec2f _p2, const b2Color &_col) const;
 
     /// draws point giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
-    void DrawPoint(const CVec2 _p, float _size, const b2Color &_col) const;
+    void DrawPoint(const CVec2f _p, float _size, const b2Color &_col) const;
 
 protected:
 private:

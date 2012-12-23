@@ -37,7 +37,7 @@ namespace drash
 class CSceneParams
 {
 public:
-    CVec2 mGravity;
+    CVec2f mGravity;
 };
 
 class CSubsystem;
@@ -87,7 +87,7 @@ public:
     // **************************************************
     // * working with joints ****************************
 
-    CJoint *CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2, const CVec3f _anchor);
+    CJoint *CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2, const CVec3f &_anchor);
     void DestroyJoint(CJoint *_joint);
 
     // **************************************************
@@ -105,7 +105,7 @@ public:
     /// returns total connected subsystems count
     inline unsigned int EnumSubsystems(void) const;
 
-    void SetGravity(const CVec2 &_g);
+    void SetGravity(const CVec2f &_g);
 
 protected:
 private:

@@ -75,7 +75,7 @@ private:
 
     void RemoveCurrentObject();
 
-    CFigure * SelectFigure(const CVec2 &_pos);
+    CFigure * SelectFigure(const CVec2f &_pos);
 
     void MoveFigure();
 
@@ -93,14 +93,14 @@ private:
 
     std::function<void ()> mTreeRefreshHandler = [] () {};
 
-    std::vector<drash::CVec2> mVertexs;
+    std::vector<drash::CVec2f> mVertexs;
 
     CFigure *mSelectedFigure = nullptr;
 
-    CVec2 mOldPositionCursor = CVec2(0);
+    CVec2f mOldPositionCursor = CVec2f(0);
 
 //    bool StetchBegin = false;
-    CVec2 mCurrentFigureVertex;
+    CVec2f mCurrentFigureVertex;
 
     int mVertexIndex = -1;
 };

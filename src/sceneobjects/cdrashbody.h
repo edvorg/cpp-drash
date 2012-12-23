@@ -75,7 +75,7 @@ protected:
 
 private:
     int mCounter = 0;
-    CVec2 mLastVelocity = CVec2(0);
+    CVec2f mLastVelocity = CVec2f(0);
     float mLastAngularVelocity = 0;
     std::vector<CDrashBodyChild> mDestructionChilds;
     double mDestroyDelay = 0;

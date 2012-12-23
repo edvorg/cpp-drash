@@ -25,6 +25,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef MATH_H
 #define MATH_H
 
+#include <cstdlib>
+
 namespace drash
 {
 
@@ -53,6 +55,15 @@ template<typename T>
 inline T Abs(const T &_val)
 {
     return _val < 0 ? -_val : _val;
+}
+
+template<typename T>
+T Rand(const T &_min, const T &_max, const T &_step)
+{
+    return ::rand() %
+           static_cast<int>( ( _max - _min ) / _step + 1 ) *
+           _step +
+           _min;
 }
 
 } // namespace math

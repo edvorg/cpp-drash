@@ -42,10 +42,10 @@ void CUISlider::Connect(CUISystem *_system)
     {
         b2Color c(1, 0, 0);
 
-        CVec2 p1;
-        CVec2 p2;
-        CVec2 p3;
-        CVec2 p4;
+        CVec2f p1;
+        CVec2f p2;
+        CVec2f p3;
+        CVec2f p4;
         GetUISystem()->UISpaceToScreenSpace(GetX(), GetY(), p1);
         GetUISystem()->UISpaceToScreenSpace(GetX(), GetY() + GetHeight(), p2);
         GetUISystem()->UISpaceToScreenSpace(GetX() + GetWidth(), GetY() + GetHeight(), p3);
@@ -57,10 +57,10 @@ void CUISlider::Connect(CUISystem *_system)
 
         const unsigned int l = GetWidth() - mSliderWidth;
 
-        CVec2 p5;
-        CVec2 p6;
-        CVec2 p7;
-        CVec2 p8;
+        CVec2f p5;
+        CVec2f p6;
+        CVec2f p7;
+        CVec2f p8;
         GetUISystem()->UISpaceToScreenSpace(GetX() + l * GetPercent(), GetY(), p5);
         GetUISystem()->UISpaceToScreenSpace(GetX() + l * GetPercent() + mSliderWidth, GetY(), p6);
         GetUISystem()->UISpaceToScreenSpace(GetX() + l * GetPercent() + mSliderWidth, GetY() + GetHeight(), p7);

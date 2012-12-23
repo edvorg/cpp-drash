@@ -226,7 +226,7 @@ void CTestEditorApp::ChooseFigure()
 
 void CTestEditorApp::MoveFigure()
 {
-    CVec2 pos = GetCursorPos();
+    CVec2f pos = GetCursorPos();
     pos -= mLastCursorPos;
 
     if (pos.Length() < 0.1)
@@ -234,26 +234,26 @@ void CTestEditorApp::MoveFigure()
         return;
     }
 
-    if (drash::math::Abs(pos.x) > drash::math::Abs(pos.y))
+    if (drash::math::Abs(pos.mX) > drash::math::Abs(pos.mY))
     {
-        const b2Vec2* v = mCurrentFigure->GetVertices();
-        CVec2* new_vertices = new CVec2[mCurrentFigure->EnumVertices()];
+        const CVec2f* v = mCurrentFigure->GetVertices();
+        CVec2f* new_vertices = new CVec2f[mCurrentFigure->EnumVertices()];
         for (unsigned int i = 0; i < mCurrentFigure->EnumVertices(); i++)
         {
             new_vertices[i] = v[i];
-            new_vertices[i].x += pos.x;
+            new_vertices[i].mX += pos.mX;
         }
         mCurrentFigure->SetVertices(new_vertices, mCurrentFigure->EnumVertices());
         delete [] new_vertices;
     }
     else
     {
-        const b2Vec2* v = mCurrentFigure->GetVertices();
-        CVec2* new_vertices = new CVec2[mCurrentFigure->EnumVertices()];
+        const CVec2f* v = mCurrentFigure->GetVertices();
+        CVec2f* new_vertices = new CVec2f[mCurrentFigure->EnumVertices()];
         for (unsigned int i = 0; i < mCurrentFigure->EnumVertices(); i++)
         {
             new_vertices[i] = v[i];
-            new_vertices[i].y += pos.y;
+            new_vertices[i].mY += pos.mY;
         }
         mCurrentFigure->SetVertices(new_vertices, mCurrentFigure->EnumVertices());
     }

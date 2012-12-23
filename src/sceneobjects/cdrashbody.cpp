@@ -87,7 +87,7 @@ void CDrashBody::OnContactBegin(const CFigure *_f1, const CFigure *_f2)
 
     if (mCounter == 0 && mTime > mDestroyDelay && mDestructionChilds.size())
     {
-        CVec2 vel = GetLinearVelocity();
+        CVec2f vel = GetLinearVelocity();
         vel -= _f2->GetSceneObject()->GetLinearVelocity();
 
         if (vel.Length() >= mDestroySpeed)
