@@ -69,6 +69,7 @@ CVec4<T, DEF_VAL> &CVec4<T, DEF_VAL>::Set(const T &_x,
     this->mY = _y;
     this->mZ = _z;
     this->mW = _w;
+    return *this;
 }
 
 template<typename T, const int DEF_VAL>
