@@ -28,8 +28,13 @@ namespace drash
 {
 
 CCamera::CCamera():
+    mPos([this] (const CVec3f &_new_pos)
+    {
+        ComputeMatrices();
+    }),
     mRotation([this] (const CVec2f &_new_rotation)
     {
+        ComputeMatrices();
     })
 {
 }
@@ -50,8 +55,35 @@ void CCamera::Step(double _dt)
     mOrthoWidth.Step(_dt);
     mFov.Step(_dt);
     mDepthOfView.Step(_dt);
-    mPos.Step(_dt);
-    mRotation.Step(_dt);
+
+    if (mPos.IsTargetSet())
+    {
+        mPos.Step(_dt);
+        ComputeMatrices();
+    }
+
+    if (mRotation.IsTargetSet())
+    {
+        mRotation.Step(_dt);
+        ComputeMatrices();
+    }
+}
+
+void CCamera::ComputeMatrices()
+{
+    CMatrix4f rotx;
+    MatrixRotationX(rotx, -mRotation.Get().mX);
+
+    CMatrix4f roty;
+    MatrixRotationY(roty, -mRotation.Get().mY);
+
+    MatrixMultiply(rotx, roty, mRotationMatrix);
+
+    CVec3f tv(-mPos.Get().mX, -mPos.Get().mY, -mPos.Get().mZ);
+    CMatrix4f tm;
+    MatrixTranslation(tm, tv);
+
+    MatrixMultiply(mRotationMatrix, tm, mViewMatrix);
 }
 
 }// namespace drash

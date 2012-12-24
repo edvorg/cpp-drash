@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "subsystem/subsystem.h"
 #include <vector>
+#include "../misc/matrix4.h"
 
 namespace drash
 {
@@ -93,6 +94,7 @@ private:
     CCamera *mActiveCam = nullptr;
     std::vector<CCamera*> mCameras;
     float mAspectRatio = 1;
+    CMatrix4f mViewMatrixTransposed;
 };
 
 inline void CDebugDrawSystem::SetActiveCam(CCamera *_cam)
