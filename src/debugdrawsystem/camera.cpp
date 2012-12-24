@@ -27,6 +27,73 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
+void CCamera::LookAt(const CVec3f &_point)
+{
+    CVec3f dir = _point;
+    dir -= mPos.Get();
+
+    CVec2f dirx(-dir.mZ, -dir.mX);
+    CVec2f diry(dirx.Length(), dir.mY);
+
+    dirx.Normalize();
+    diry.Normalize();
+
+    CVec3f rot;
+
+    rot.mY = acos(dirx.mX);
+    rot.mX = asin(diry.mY);
+
+    if (dirx.mY < 0)
+    {
+        rot.mY = -rot.mY;
+    }
+
+    mRotation.Set(rot);
+}
+
+void CCamera::Forward(float _distance)
+{
+    CVec4f z(0, 0, -1, 1);
+    CVec4f dir;
+    MatrixMultiply(z, GetRotationMatrix(), dir);
+
+    dir.Normalize();
+    dir.mX *= _distance;
+    dir.mY *= _distance;
+    dir.mZ *= _distance;
+    dir.mW *= _distance;
+
+    CVec3f new_pos(mPos.Get());
+    new_pos += dir;
+    mPos.Set(new_pos);
+}
+
+void CCamera::Strafe(float _distance)
+{
+    CVec3f up(0, 1, 0);
+    CVec4f z(0, 0, -1, 1);
+    CVec4f dir;
+    MatrixMultiply(z, GetRotationMatrix(), dir);
+
+    CVec3f strafe_dir;
+    Vec3Cross(up, dir, strafe_dir);
+
+    strafe_dir += mPos.Get();
+    mPos.Set(strafe_dir);
+}
+
+CCamera::CCamera():
+    mPos([this] (const CVec3f &_new_pos)
+    {
+        ComputeMatrices();
+    }),
+    mRotation([this] (const CVec2f &_new_rotation)
+    {
+        ComputeMatrices();
+    })
+{
+}
+
 bool CCamera::Init(const CCameraParams &_params)
 {
     mOrthoWidth.Set(_params.mOrthoWidth);
@@ -43,8 +110,35 @@ void CCamera::Step(double _dt)
     mOrthoWidth.Step(_dt);
     mFov.Step(_dt);
     mDepthOfView.Step(_dt);
-    mPos.Step(_dt);
-    mRotation.Step(_dt);
+
+    if (mPos.IsTargetSet())
+    {
+        mPos.Step(_dt);
+        ComputeMatrices();
+    }
+
+    if (mRotation.IsTargetSet())
+    {
+        mRotation.Step(_dt);
+        ComputeMatrices();
+    }
+}
+
+void CCamera::ComputeMatrices()
+{
+    CMatrix4f rotx;
+    MatrixRotationX(rotx, -mRotation.Get().mX);
+
+    CMatrix4f roty;
+    MatrixRotationY(roty, -mRotation.Get().mY);
+
+    MatrixMultiply(rotx, roty, mRotationMatrix);
+
+    CVec3f tv(-mPos.Get().mX, -mPos.Get().mY, -mPos.Get().mZ);
+    CMatrix4f tm;
+    MatrixTranslation(tm, tv);
+
+    MatrixMultiply(mRotationMatrix, tm, mViewMatrix);
 }
 
 }// namespace drash

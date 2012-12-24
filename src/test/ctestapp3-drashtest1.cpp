@@ -46,8 +46,8 @@ bool CTestApp3::Init()
     InitObjects();
 
     auto c = GetDebugDrawSystem().GetActiveCam();
-    c->GetPos().SetTarget(CVec3f(0, 0, 180), 1.0f, AnimationBehaviorSingle);
-    c->GetRotation().Set(CVec3f(M_PI / 12, M_PI / 6, 0));
+    c->GetPos().SetTarget(CVec3f(0, 50, 180), 1.0f, AnimationBehaviorSingle);
+    c->GetRotation().Set(CVec3f(-M_PI / 12, 0, 0));
 
     mSlider1.Connect(&GetUISystem());
     mSlider1.SetPos(CVec2i(10, 10));
@@ -94,8 +94,7 @@ void CTestApp3::Step(double _dt)
     if (GetPlayersSystem().EnumPlayers() && GetDebugDrawSystem().GetActiveCam() != nullptr)
     {
         CPlayer *p = GetPlayersSystem().GetPlayers()[0];
-		auto c = GetDebugDrawSystem().GetActiveCam();
-        c->GetPos().SetTarget(CVec3f(p->GetPos().Get().Vec2(), c->GetPos().GetTarget().mZ) + CVec3f(0, 100, 0), 1.0, AnimationBehaviorSingle );
+        GetDebugDrawSystem().GetActiveCam()->LookAt(p->GetPos().Get());
     }
 
     mTime += _dt;
@@ -300,6 +299,54 @@ void CTestApp3::SetProcessors()
     [this] ()
     {
         this->Quit();
+    }));
+
+    GetEventSystem().SetProcessor("e", CAppEventProcessor(
+    [this] ()
+    {
+    },
+    [this] ()
+    {
+        if (GetDebugDrawSystem().GetActiveCam() != nullptr)
+        {
+            GetDebugDrawSystem().GetActiveCam()->Forward(5);
+        }
+    }));
+
+    GetEventSystem().SetProcessor("q", CAppEventProcessor(
+    [this] ()
+    {
+    },
+    [this] ()
+    {
+        if (GetDebugDrawSystem().GetActiveCam() != nullptr)
+        {
+            GetDebugDrawSystem().GetActiveCam()->Forward(-5);
+        }
+    }));
+
+    GetEventSystem().SetProcessor("z", CAppEventProcessor(
+    [this] ()
+    {
+    },
+    [this] ()
+    {
+        if (GetDebugDrawSystem().GetActiveCam() != nullptr)
+        {
+            GetDebugDrawSystem().GetActiveCam()->Strafe(5);
+        }
+    }));
+
+    GetEventSystem().SetProcessor("c", CAppEventProcessor(
+    [this] ()
+    {
+    },
+    [this] ()
+    {
+        if (GetDebugDrawSystem().GetActiveCam() != nullptr)
+        {
+            GetDebugDrawSystem().GetActiveCam()->Strafe(-5);
+        }
     }));
 }
 

@@ -73,6 +73,15 @@ CLogger &operator<<(CLogger& _logger, const CVec3<T, DEF_VAL> &_v)
     return _logger;
 }
 
+template<typename T, const int DEF_VAL>
+CVec3<T, DEF_VAL> &Vec3Cross(const CVec3<T, DEF_VAL> &_v1, const CVec3<T, DEF_VAL> &_v2, CVec3<T, DEF_VAL> &_result)
+{
+    _result.mX = _v1.mY * _v2.mZ - _v1.mZ * _v2.mY;
+    _result.mY = _v1.mX * _v2.mZ - _v1.mZ * _v2.mX;
+    _result.mZ = _v1.mX * _v2.mY - _v1.mY * _v2.mX;
+    return _result;
+}
+
 /// //////////////////// ///
 /// CVec3 implementation ///
 
