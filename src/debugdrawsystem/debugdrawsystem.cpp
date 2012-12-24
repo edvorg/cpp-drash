@@ -110,6 +110,17 @@ void CDebugDrawSystem::DestroyCam(drash::CCamera *_cam)
     }
 }
 
+void CDebugDrawSystem::SetActiveCam(CCamera *_cam)
+{
+    mActiveCam = _cam;
+
+    if (mActiveCam != nullptr)
+    {
+        mViewMatrixTransposed = mActiveCam->GetViewMatrix();
+        mViewMatrixTransposed.Transpose();
+    }
+}
+
 void CDebugDrawSystem::CastRay(const CVec2f &_pos, const CPlane &_plane, CVec3f &_result) const
 {
     if (mActiveCam == nullptr)

@@ -48,7 +48,7 @@ public:
     void DestroyCam(CCamera *_cam);
 
     /// activates cam. Draw() will render objects, using parameter of activated cam
-    inline void SetActiveCam(CCamera *_cam);
+    void SetActiveCam(CCamera *_cam);
 
     /// returns acticvated cam
     inline CCamera *GetActiveCam() const;
@@ -96,11 +96,6 @@ private:
     float mAspectRatio = 1;
     CMatrix4f mViewMatrixTransposed;
 };
-
-inline void CDebugDrawSystem::SetActiveCam(CCamera *_cam)
-{
-    mActiveCam = _cam;
-}
 
 inline CCamera *CDebugDrawSystem::GetActiveCam() const
 {
