@@ -51,6 +51,23 @@ void CCamera::LookAt(const CVec3f &_point)
     mRotation.Set(rot);
 }
 
+void CCamera::Forward(float _distance)
+{
+    CVec4f z(0, 0, -1, 1);
+    CVec4f dir;
+    MatrixMultiply(z, GetRotationMatrix(), dir);
+
+    dir.Normalize();
+    dir.mX *= _distance;
+    dir.mY *= _distance;
+    dir.mZ *= _distance;
+    dir.mW *= _distance;
+
+    CVec3f new_pos(mPos.Get());
+    new_pos += dir;
+    mPos.Set(new_pos);
+}
+
 CCamera::CCamera():
     mPos([this] (const CVec3f &_new_pos)
     {
