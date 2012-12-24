@@ -58,6 +58,8 @@ public:
     inline CAnimatedParam<CVec3f> &GetPos();
     inline CAnimatedParam<CVec2f> &GetRotation();
 
+    void LookAt(const CVec3f &_point);
+
     inline const CMatrix4f &GetRotationMatrix() const;
     inline const CMatrix4f &GetViewMatrix() const;
 

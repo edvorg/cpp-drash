@@ -27,6 +27,30 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
+void CCamera::LookAt(const CVec3f &_point)
+{
+    CVec3f dir = _point;
+    dir -= mPos.Get();
+
+    CVec2f dirx(-dir.mZ, -dir.mX);
+    CVec2f diry(dirx.Length(), dir.mY);
+
+    dirx.Normalize();
+    diry.Normalize();
+
+    CVec3f rot;
+
+    rot.mY = acos(dirx.mX);
+    rot.mX = asin(diry.mY);
+
+    if (dirx.mY < 0)
+    {
+        rot.mY = -rot.mY;
+    }
+
+    mRotation.Set(rot);
+}
+
 CCamera::CCamera():
     mPos([this] (const CVec3f &_new_pos)
     {

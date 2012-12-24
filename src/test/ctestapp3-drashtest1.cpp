@@ -46,7 +46,7 @@ bool CTestApp3::Init()
     InitObjects();
 
     auto c = GetDebugDrawSystem().GetActiveCam();
-    c->GetPos().SetTarget(CVec3f(0, 0, 180), 1.0f, AnimationBehaviorSingle);
+    c->GetPos().SetTarget(CVec3f(0, 50, 180), 1.0f, AnimationBehaviorSingle);
     c->GetRotation().Set(CVec3f(-M_PI / 12, 0, 0));
 
     mSlider1.Connect(&GetUISystem());
@@ -94,8 +94,7 @@ void CTestApp3::Step(double _dt)
     if (GetPlayersSystem().EnumPlayers() && GetDebugDrawSystem().GetActiveCam() != nullptr)
     {
         CPlayer *p = GetPlayersSystem().GetPlayers()[0];
-		auto c = GetDebugDrawSystem().GetActiveCam();
-        c->GetPos().SetTarget(CVec3f(p->GetPos().Get().Vec2(), c->GetPos().GetTarget().mZ) + CVec3f(0, 100, 0), 1.0, AnimationBehaviorSingle );
+        GetDebugDrawSystem().GetActiveCam()->LookAt(p->GetPos().Get());
     }
 
     mTime += _dt;
