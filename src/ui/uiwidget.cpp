@@ -72,60 +72,44 @@ void CUIWidget::SetDrawHandler(const std::function<void ()> &_handler)
     }
 }
 
-void CUIWidget::SetPos(int _x, int _y)
+void CUIWidget::SetPos(const CVec2i &_pos)
 {
     if (mUIControl != nullptr)
     {
-        mUIControl->SetPos(_x, _y);
+        mUIControl->SetPos(_pos);
     }
 }
 
-void CUIWidget::SetSize(unsigned int _w, unsigned int _h)
+void CUIWidget::SetSize(const CVec2ui &_size)
 {
     if (mUIControl != nullptr)
     {
-        mUIControl->SetSize(_w, _h);
+        mUIControl->SetSize(_size);
     }
 }
 
-int CUIWidget::GetX() const
+const CVec2i CUIWidget::GetPos() const
 {
-    if (mUIControl)
+    if (mUIControl != nullptr)
     {
-        return mUIControl->GetX();
+        return mUIControl->GetPos();
     }
-
-    return 0;
+    else
+    {
+        return CVec2i(0);
+    }
 }
 
-int CUIWidget::GetY() const
+const CVec2ui CUIWidget::GetSize() const
 {
-    if (mUIControl)
+    if (mUIControl != nullptr)
     {
-        return mUIControl->GetY();
+        return mUIControl->GetSize();
     }
-
-    return 0;
-}
-
-unsigned int CUIWidget::GetWidth() const
-{
-    if (mUIControl)
+    else
     {
-        return mUIControl->GetWidth();
+        return CVec2ui(0);
     }
-
-    return 0;
-}
-
-unsigned int CUIWidget::GetHeight() const
-{
-    if (mUIControl)
-    {
-        return mUIControl->GetHeight();
-    }
-
-    return 0;
 }
 
 } // namepsace ui

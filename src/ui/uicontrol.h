@@ -2,6 +2,7 @@
 #define DRASH_UICONTROL_H
 
 #include <functional>
+#include "../misc/vec2.h"
 
 namespace drash
 {
@@ -26,12 +27,10 @@ public:
     inline void SetStepHandler(const std::function<void (double _dt)> &_handler);
     inline void SetDrawHandler(const std::function<void ()> &_handler);
 
-    void SetPos(int _x, int _y);
-    void SetSize(unsigned int _w, unsigned int _h);
-    inline int GetX() const;
-    inline int GetY() const;
-    inline unsigned int GetWidth() const;
-    inline unsigned int GetHeight() const;
+    inline void SetPos(const CVec2i &_pos);
+    inline void SetSize(const CVec2ui &_size);
+    inline const CVec2i &GetPos() const;
+    inline const CVec2ui &GetSize() const;
 
 protected:
 private:
@@ -41,10 +40,8 @@ private:
     std::function<void (double)> mStepHandler = [] (double) {};
     std::function<void ()> mDrawHandler = [] () {};
 
-    int mX = 0;
-    int mY = 0;
-    unsigned int mWidth = 100;
-    unsigned int mHeight = 20;
+    CVec2i mPos;
+    CVec2ui mSize;
 };
 
 inline void CUIControl::SetDestroyHandler(const std::function<void ()> &_handler)
@@ -72,24 +69,24 @@ inline void CUIControl::SetDrawHandler(const std::function<void ()> &_handler)
     mDrawHandler = _handler;
 }
 
-inline int CUIControl::GetX() const
+inline void CUIControl::SetPos(const CVec2i &_pos)
 {
-    return mX;
+    mPos = _pos;
 }
 
-inline int CUIControl::GetY() const
+inline void CUIControl::SetSize(const CVec2ui &_size)
 {
-    return mY;
+    mSize = _size;
 }
 
-inline unsigned int CUIControl::GetWidth() const
+inline const CVec2i &CUIControl::GetPos() const
 {
-    return mWidth;
+    return mPos;
 }
 
-inline unsigned int CUIControl::GetHeight() const
+inline const CVec2ui &CUIControl::GetSize() const
 {
-    return mHeight;
+    return mSize;
 }
 
 } // namepsace ui

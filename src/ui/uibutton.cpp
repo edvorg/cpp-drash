@@ -17,11 +17,11 @@ void CUIButton::Connect(CUISystem *_system)
 
     SetStepHandler([this] (double _dt)
     {
-        int local_x = GetUISystem()->GetCursorPosX() - GetX();
-        int local_y = GetUISystem()->GetCursorPosY() - GetY();
+        int local_x = GetUISystem()->GetCursorPosX() - GetPos().mX;
+        int local_y = GetUISystem()->GetCursorPosY() - GetPos().mY;
 
-        if (0 <= local_x && local_x <= static_cast<int>(GetWidth()) &&
-            0 <= local_y && local_y <= static_cast<int>(GetHeight()))
+        if (0 <= local_x && local_x <= static_cast<int>(GetSize().mX) &&
+            0 <= local_y && local_y <= static_cast<int>(GetSize().mY))
         {
             mTime += _dt * 2.0f;
         }
@@ -40,10 +40,11 @@ void CUIButton::Connect(CUISystem *_system)
         CVec2f p2;
         CVec2f p3;
         CVec2f p4;
-        GetUISystem()->UISpaceToScreenSpace(GetX(), GetY(), p1);
-        GetUISystem()->UISpaceToScreenSpace(GetX(), GetY() + GetHeight(), p2);
-        GetUISystem()->UISpaceToScreenSpace(GetX() + GetWidth(), GetY() + GetHeight(), p3);
-        GetUISystem()->UISpaceToScreenSpace(GetX() + GetWidth(), GetY(), p4);
+
+        GetUISystem()->UISpaceToScreenSpace(GetPos().mX, GetPos().mY, p1);
+        GetUISystem()->UISpaceToScreenSpace(GetPos().mX, GetPos().mY + GetSize().mY, p2);
+        GetUISystem()->UISpaceToScreenSpace(GetPos().mX + GetSize().mX, GetPos().mY + GetSize().mY, p3);
+        GetUISystem()->UISpaceToScreenSpace(GetPos().mX + GetSize().mX, GetPos().mY, p4);
 
         GetUISystem()->GetDebugDrawSystem()->DrawTriangle(p4, p2, p1, c);
         GetUISystem()->GetDebugDrawSystem()->DrawTriangle(p3, p2, p4, c);
@@ -65,11 +66,11 @@ void CUIButton::Connect(CUISystem *_system)
         {
             mPressed = false;
 
-            int local_x = GetUISystem()->GetCursorPosX() - GetX();
-            int local_y = GetUISystem()->GetCursorPosY() - GetY();
+            int local_x = GetUISystem()->GetCursorPosX() - GetPos().mX;
+            int local_y = GetUISystem()->GetCursorPosY() - GetPos().mY;
 
-            if (0 <= local_x && local_x <= static_cast<int>(GetWidth()) &&
-                0 <= local_y && local_y <= static_cast<int>(GetHeight()))
+            if (0 <= local_x && local_x <= static_cast<int>(GetSize().mX) &&
+                0 <= local_y && local_y <= static_cast<int>(GetSize().mY))
             {
                 mClickHandler();
             }

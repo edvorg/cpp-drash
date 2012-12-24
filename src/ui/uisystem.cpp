@@ -85,11 +85,11 @@ void CUISystem::BeginEvent()
 {
     for (unsigned int i = 0; i < mControlsCount; i++)
     {
-        int local_x = GetCursorPosX() - mControls[i]->GetX();
-        int local_y = GetCursorPosY() - mControls[i]->GetY();
+        int local_x = GetCursorPosX() - mControls[i]->GetPos().mX;
+        int local_y = GetCursorPosY() - mControls[i]->GetPos().mY;
 
-        if (0 <= local_x && local_x <= static_cast<int>(mControls[i]->GetWidth()) &&
-            0 <= local_y && local_y <= static_cast<int>(mControls[i]->GetHeight()))
+        if (0 <= local_x && local_x <= static_cast<int>(mControls[i]->GetSize().mX) &&
+            0 <= local_y && local_y <= static_cast<int>(mControls[i]->GetSize().mY))
         {
             mPressedControl = mControls[i];
             mPressedControl->mPressHandler();

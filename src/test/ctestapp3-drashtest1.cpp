@@ -50,8 +50,8 @@ bool CTestApp3::Init()
     c->GetRotation().Set(CVec3f(M_PI / 12, M_PI / 6, 0));
 
     mSlider1.Connect(&GetUISystem());
-    mSlider1.SetPos(10, 10);
-    mSlider1.SetSize(100, 20);
+    mSlider1.SetPos(CVec2i(10, 10));
+    mSlider1.SetSize(CVec2ui(100, 20));
     mSlider1.SetMin(-50);
     mSlider1.SetMax(50);
     mSlider1.SetValue(0);
@@ -61,8 +61,8 @@ bool CTestApp3::Init()
     });
 
     mSlider2.Connect(&GetUISystem());
-    mSlider2.SetPos(10, 40);
-    mSlider2.SetSize(100, 20);
+    mSlider2.SetPos(CVec2i(10, 40));
+    mSlider2.SetSize(CVec2ui(100, 20));
     mSlider2.SetMin(-50);
     mSlider2.SetMax(50);
     mSlider2.SetValue(-9.8);
@@ -72,8 +72,8 @@ bool CTestApp3::Init()
     });
 
     mButton1.Connect(&GetUISystem());
-    mButton1.SetPos(10, 70);
-    mButton1.SetSize(100, 20);
+    mButton1.SetPos(CVec2i(10, 70));
+    mButton1.SetSize(CVec2ui(100, 20));
     mButton1.SetClickHandler([this] ()
     {
         CDrashBodyParams params;

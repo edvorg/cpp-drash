@@ -17,8 +17,8 @@ CTest4::CTest4()
         LOG_INFO("click 1");
     });
 
-    mTestButton1.SetPos(100, 100);
-    mTestButton1.SetSize(200, 30);
+    mTestButton1.SetPos(CVec2i(100, 100));
+    mTestButton1.SetSize(CVec2ui(200, 30));
 
     mTestButton2.Connect(&GetUISystem());
 
@@ -27,13 +27,13 @@ CTest4::CTest4()
         LOG_INFO("click 2");
     });
 
-    mTestButton2.SetPos(350, 100);
-    mTestButton2.SetSize(30, 30);
+    mTestButton2.SetPos(CVec2i(350, 100));
+    mTestButton2.SetSize(CVec2ui(30, 30));
 
     mTestSlider1.Connect(&GetUISystem());
 
-    mTestSlider1.SetPos(430, 100);
-    mTestSlider1.SetSize(200, 30);
+    mTestSlider1.SetPos(CVec2i(430, 100));
+    mTestSlider1.SetSize(CVec2ui(200, 30));
 
     mTestSlider1.SetMin(-100);
     mTestSlider1.SetMax(200);

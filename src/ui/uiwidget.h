@@ -2,6 +2,7 @@
 #define DRASH_UIWIDGET_H
 
 #include <functional>
+#include "../misc/vec2.h"
 
 namespace drash
 {
@@ -32,12 +33,10 @@ public:
     void SetStepHandler(const std::function<void (double _dt)> &_handler);
     void SetDrawHandler(const std::function<void ()> &_handler);
 
-    void SetPos(int _x, int _y);
-    void SetSize(unsigned int _w, unsigned int _h);
-    int GetX() const;
-    int GetY() const;
-    unsigned int GetWidth() const;
-    unsigned int GetHeight() const;
+    void SetPos(const CVec2i &_pos);
+    void SetSize(const CVec2ui &_size);
+    const CVec2i GetPos() const;
+    const CVec2ui GetSize() const;
 
 protected:
 private:
