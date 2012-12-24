@@ -68,6 +68,20 @@ void CCamera::Forward(float _distance)
     mPos.Set(new_pos);
 }
 
+void CCamera::Strafe(float _distance)
+{
+    CVec3f up(0, 1, 0);
+    CVec4f z(0, 0, -1, 1);
+    CVec4f dir;
+    MatrixMultiply(z, GetRotationMatrix(), dir);
+
+    CVec3f strafe_dir;
+    Vec3Cross(up, dir, strafe_dir);
+
+    strafe_dir += mPos.Get();
+    mPos.Set(strafe_dir);
+}
+
 CCamera::CCamera():
     mPos([this] (const CVec3f &_new_pos)
     {

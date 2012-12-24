@@ -61,6 +61,7 @@ public:
     void LookAt(const CVec3f &_point);
 
     void Forward(float _distance);
+    void Strafe(float _distance);
 
     inline const CMatrix4f &GetRotationMatrix() const;
     inline const CMatrix4f &GetViewMatrix() const;

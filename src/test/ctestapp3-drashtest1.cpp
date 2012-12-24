@@ -324,6 +324,30 @@ void CTestApp3::SetProcessors()
             GetDebugDrawSystem().GetActiveCam()->Forward(-5);
         }
     }));
+
+    GetEventSystem().SetProcessor("z", CAppEventProcessor(
+    [this] ()
+    {
+    },
+    [this] ()
+    {
+        if (GetDebugDrawSystem().GetActiveCam() != nullptr)
+        {
+            GetDebugDrawSystem().GetActiveCam()->Strafe(5);
+        }
+    }));
+
+    GetEventSystem().SetProcessor("c", CAppEventProcessor(
+    [this] ()
+    {
+    },
+    [this] ()
+    {
+        if (GetDebugDrawSystem().GetActiveCam() != nullptr)
+        {
+            GetDebugDrawSystem().GetActiveCam()->Strafe(-5);
+        }
+    }));
 }
 
 void CTestApp3::InitObjects()
