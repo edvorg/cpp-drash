@@ -27,6 +27,13 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
+CCamera::CCamera():
+    mRotation([this] (const CVec2f &_new_rotation)
+    {
+    })
+{
+}
+
 bool CCamera::Init(const CCameraParams &_params)
 {
     mOrthoWidth.Set(_params.mOrthoWidth);

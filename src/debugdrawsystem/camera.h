@@ -55,10 +55,10 @@ public:
     inline CAnimatedParam<float> &GetFov();
     inline CAnimatedParam<float> &GetDepthOfView();
     inline CAnimatedParam<CVec3f> &GetPos();
-    inline CAnimatedParam<CVec3f> &GetRotation();
+    inline CAnimatedParam<CVec2f> &GetRotation();
 
 protected:        
-    CCamera(void) = default;
+    CCamera(void);
 
     bool Init(const CCameraParams &_params);
 
@@ -70,7 +70,7 @@ private:
     CAnimatedParam<float> mFov;
     CAnimatedParam<float> mDepthOfView;
     CAnimatedParam<CVec3f> mPos;
-    CAnimatedParam<CVec3f> mRotation;
+    CAnimatedParam<CVec2f> mRotation;
 };
 
 inline void CCamera::SetOrtho(bool _ortho)
@@ -103,7 +103,7 @@ inline CAnimatedParam<CVec3f> &CCamera::GetPos()
     return mPos;
 }
 
-inline CAnimatedParam<CVec3f> &CCamera::GetRotation()
+inline CAnimatedParam<CVec2f> &CCamera::GetRotation()
 {
     return mRotation;
 }
