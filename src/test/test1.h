@@ -57,8 +57,6 @@ private:
     unsigned int mTemplateCounter = 0;
     CSceneObjectGeometry *mCurrentTemplate = nullptr;
     CSceneObject *mCurrentObject = nullptr;
-    CFigure *mCurrentFigure = nullptr;
-    CVec2f mLastCursorPos;
 };
 
 } // namespace test

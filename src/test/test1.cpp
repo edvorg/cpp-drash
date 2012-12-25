@@ -70,34 +70,20 @@ void CTest1::Render()
 }
 
 void CTest1::SetProcessors()
-{    
-    GetEventSystem().SetMode("editor_figure_modify_mode");
+{
+    GetEventSystem().SetMode(std::string("editor_mode"));
 
-    GetEventSystem().SetProcessor("LB", CAppEventProcessor(
+    GetEventSystem().SetProcessor("C-c", CAppEventProcessor(
     [this] ()
     {
-        mLastCursorPos = GetCursorPos();
-    },
-    [this] ()
-    {
-        MoveFigure();
+        CreateTemplate();
     }));
 
-    GetEventSystem().SetProcessor("RB", CAppEventProcessor(
+    GetEventSystem().SetProcessor("C-d", CAppEventProcessor(
     [this] ()
     {
-        GetEventSystem().SetMode(std::string("editor_mode"));
+        DetachCurrentObject();
     }));
-
-    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
-    [this] ()
-    {
-        this->Quit();
-    }));
-
-    ////////////////////////////////////////////////////////////////////////
-
-    GetEventSystem().SetMode(std::string("editor_figure_creation_mode"));
 
     GetEventSystem().SetProcessor("LB", CAppEventProcessor(
     [this] ()
@@ -116,56 +102,14 @@ void CTest1::SetProcessors()
     {
         this->Quit();
     }));
-
-    ////////////////////////////////////////////////////////////////////////
-
-    GetEventSystem().SetMode(std::string("editor_mode"));
-
-    GetEventSystem().SetProcessor("C-c", CAppEventProcessor(
-    [this] ()
-    {
-        CreateTemplate();
-    }));
-
-    GetEventSystem().SetProcessor("C-f", CAppEventProcessor(
-    [this] ()
-    {
-        CreateFigure();
-    }));
-
-    GetEventSystem().SetProcessor("C-d", CAppEventProcessor(
-    [this] ()
-    {
-        DetachCurrentObject();
-    }));
-
-    GetEventSystem().SetProcessor("LB", CAppEventProcessor(
-    [this] ()
-    {
-        ChooseFigure();
-    }));
-
-    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
-    [this] ()
-    {
-        this->Quit();
-    }));
-}
-
-void CTest1::CreateFigure()
-{
-    if (mCurrentTemplate != nullptr)
-    {
-        mCurrentTemplate->mFigures.resize(mCurrentTemplate->mFigures.size()+1);
-
-        GetEventSystem().SetMode(std::string("editor_figure_creation_mode"));
-    }
 }
 
 void CTest1::CompleteFigure()
 {
     if (mCurrentTemplate != nullptr && mVertices.size() >= 3)
-    {
+    {        
+        mCurrentTemplate->mFigures.resize(mCurrentTemplate->mFigures.size()+1);
+
         mCurrentTemplate->mFigures.back().mVertices = mVertices;
 
         for (auto i = mCurrentTemplate->mFigures.back().mVertices.begin();
@@ -193,8 +137,6 @@ void CTest1::CompleteFigure()
         mCurrentObject = GetScene().CreateObject<CSceneObject>(*mCurrentTemplate, p);
 
         mVertices.clear();
-
-        GetEventSystem().SetMode(std::string("editor_mode"));
     }
 }
 
@@ -218,58 +160,6 @@ void CTest1::DetachCurrentObject()
     {
         mCurrentObject->SetDynamic(true);
         mCurrentObject = nullptr;
-    }
-}
-
-void CTest1::ChooseFigure()
-{
-    if (mCurrentObject != nullptr)
-    {
-        CFigure *f = GetDebugDrawSystem().FindFigure(GetCursorPos());
-
-        if (f == nullptr || f->GetSceneObject() != mCurrentObject)
-        {
-            return;
-        }
-
-        mCurrentFigure = f;
-
-        GetEventSystem().SetMode("editor_figure_modify_mode");
-    }
-}
-
-void CTest1::MoveFigure()
-{
-    CVec2f pos = GetCursorPos();
-    pos -= mLastCursorPos;
-
-    if (pos.Length() < 0.1)
-    {
-        return;
-    }
-
-    if (drash::math::Abs(pos.mX) > drash::math::Abs(pos.mY))
-    {
-        const CVec2f* v = mCurrentFigure->GetVertices();
-        CVec2f* new_vertices = new CVec2f[mCurrentFigure->EnumVertices()];
-        for (unsigned int i = 0; i < mCurrentFigure->EnumVertices(); i++)
-        {
-            new_vertices[i] = v[i];
-            new_vertices[i].mX += pos.mX;
-        }
-        mCurrentFigure->SetVertices(new_vertices, mCurrentFigure->EnumVertices());
-        delete [] new_vertices;
-    }
-    else
-    {
-        const CVec2f* v = mCurrentFigure->GetVertices();
-        CVec2f* new_vertices = new CVec2f[mCurrentFigure->EnumVertices()];
-        for (unsigned int i = 0; i < mCurrentFigure->EnumVertices(); i++)
-        {
-            new_vertices[i] = v[i];
-            new_vertices[i].mY += pos.mY;
-        }
-        mCurrentFigure->SetVertices(new_vertices, mCurrentFigure->EnumVertices());
     }
 }
 
