@@ -85,7 +85,7 @@ void CTest1::SetProcessors()
         DetachCurrentObject();
     }));
 
-    GetEventSystem().SetProcessor("LB", CAppEventProcessor(
+    GetEventSystem().SetProcessor("C-LB", CAppEventProcessor(
     [this] ()
     {
         mVertices.push_back(GetCursorPos());
