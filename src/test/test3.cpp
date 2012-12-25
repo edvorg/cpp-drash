@@ -253,16 +253,38 @@ void CTest3::SetProcessors()
     GetEventSystem().SetProcessor("WHUP", CAppEventProcessor(
     [this] ()
     {
-        CVec3f pos = GetDebugDrawSystem().GetActiveCam()->GetPos().GetTarget();
+        CVec3f pos;
+
+        if (GetDebugDrawSystem().GetActiveCam()->GetPos().IsTargetSet())
+        {
+            pos = GetDebugDrawSystem().GetActiveCam()->GetPos().GetTarget();
+        }
+        else
+        {
+            pos = GetDebugDrawSystem().GetActiveCam()->GetPos().Get();
+        }
+
         pos.mZ += 10.0f;
+
         GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimationBehaviorSingle);
     }));
 
     GetEventSystem().SetProcessor("WHDN", CAppEventProcessor(
     [this] ()
     {
-        CVec3f pos = GetDebugDrawSystem().GetActiveCam()->GetPos().GetTarget();
+        CVec3f pos;
+
+        if (GetDebugDrawSystem().GetActiveCam()->GetPos().IsTargetSet())
+        {
+            pos = GetDebugDrawSystem().GetActiveCam()->GetPos().GetTarget();
+        }
+        else
+        {
+            pos = GetDebugDrawSystem().GetActiveCam()->GetPos().Get();
+        }
+
         pos.mZ -= 10.0f;
+
         GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimationBehaviorSingle);
     }));
 
