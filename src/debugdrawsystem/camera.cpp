@@ -78,6 +78,10 @@ void CCamera::Strafe(float _distance)
     CVec3f strafe_dir;
     Vec3Cross(up, dir, strafe_dir);
 
+    strafe_dir.mX *= _distance;
+    strafe_dir.mY *= _distance;
+    strafe_dir.mZ *= _distance;
+
     strafe_dir += mPos.Get();
     mPos.Set(strafe_dir);
 }
