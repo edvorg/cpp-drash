@@ -42,7 +42,7 @@ public:
     float mRestitution = 0;
     float mMass = 1;
 
-    /// if size of mVertices is NULL, creates a box with (1, 1) dimentions
+    /// if size of mVertices is nullptr, creates a box with (1, 1) dimentions
     std::vector<CVec2f> mVertices;
 
     float mDepth = 1;

@@ -22,13 +22,13 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "TestEditorApp.h"
+#include "test1.h"
 
-#include "../cscene.h"
+#include "../scene.h"
 #include "app/appeventprocessor.h"
 #include "../debugdrawsystem/camera.h"
 #include "../sceneobjects/figure.h"
-#include "../sceneobjects/csceneobject.h"
+#include "../sceneobjects/sceneobject.h"
 
 #include <sstream>
 
@@ -37,8 +37,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
+namespace test
+{
 
-bool CTestEditorApp::Init()
+bool CTest1::Init()
 {
     if ( CApp::Init() == false )
     {
@@ -52,7 +54,7 @@ bool CTestEditorApp::Init()
     return true;
 }
 
-void CTestEditorApp::Render()
+void CTest1::Render()
 {
     CApp::Render();
 
@@ -67,7 +69,7 @@ void CTestEditorApp::Render()
     }
 }
 
-void CTestEditorApp::SetProcessors()
+void CTest1::SetProcessors()
 {    
     GetEventSystem().SetMode("editor_figure_modify_mode");
 
@@ -150,7 +152,7 @@ void CTestEditorApp::SetProcessors()
     }));
 }
 
-void CTestEditorApp::CreateFigure()
+void CTest1::CreateFigure()
 {
     if (mCurrentTemplate != nullptr)
     {
@@ -160,7 +162,7 @@ void CTestEditorApp::CreateFigure()
     }
 }
 
-void CTestEditorApp::CompleteFigure()
+void CTest1::CompleteFigure()
 {
     if (mCurrentTemplate != nullptr && mVertices.size() >= 3)
     {
@@ -196,7 +198,7 @@ void CTestEditorApp::CompleteFigure()
     }
 }
 
-void CTestEditorApp::CreateTemplate()
+void CTest1::CreateTemplate()
 {
     std::ostringstream is;
     is<<"new_template_"<<(mTemplateCounter++);
@@ -210,7 +212,7 @@ void CTestEditorApp::CreateTemplate()
     }
 }
 
-void CTestEditorApp::DetachCurrentObject()
+void CTest1::DetachCurrentObject()
 {
     if (mCurrentObject != nullptr)
     {
@@ -219,7 +221,7 @@ void CTestEditorApp::DetachCurrentObject()
     }
 }
 
-void CTestEditorApp::ChooseFigure()
+void CTest1::ChooseFigure()
 {
     if (mCurrentObject != nullptr)
     {
@@ -236,7 +238,7 @@ void CTestEditorApp::ChooseFigure()
     }
 }
 
-void CTestEditorApp::MoveFigure()
+void CTest1::MoveFigure()
 {
     CVec2f pos = GetCursorPos();
     pos -= mLastCursorPos;
@@ -270,5 +272,7 @@ void CTestEditorApp::MoveFigure()
         mCurrentFigure->SetVertices(new_vertices, mCurrentFigure->EnumVertices());
     }
 }
+
+} // namespace test
 
 } // namespace drash

@@ -45,7 +45,7 @@ GameWindow::GameWindow(QWidget *parent) :
     QMainWindow(parent),
     mInitialized(false),
     ui(new Ui::GameWindow),
-    mSceneWidget(NULL)
+    mSceneWidget(nullptr)
 {
     ui->setupUi(this);
 

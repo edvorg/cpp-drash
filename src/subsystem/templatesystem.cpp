@@ -24,9 +24,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "templatesystem.h"
 
-#include "../cscene.h"
+#include "../scene.h"
 #include "../sceneobjects/figure.h"
-#include "../sceneobjects/csceneobject.h"
+#include "../sceneobjects/sceneobject.h"
 
 namespace drash
 {

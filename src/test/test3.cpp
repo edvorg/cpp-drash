@@ -22,11 +22,11 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "ctestapp3-drashtest1.h"
+#include "test3.h"
 
-#include "../cscene.h"
+#include "../scene.h"
 #include "sceneobjects/explosion.h"
-#include "sceneobjects/cplayer.h"
+#include "sceneobjects/player.h"
 #include "sceneobjects/figure.h"
 
 #include "../debugdrawsystem/camera.h"
@@ -35,9 +35,12 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
-bool CTestApp3::Init()
+namespace test
 {
-    if ( CTestEditorApp::Init() == false )
+
+bool CTest3::Init()
+{
+    if ( CTest1::Init() == false )
     {
         return false;
     }
@@ -75,9 +78,9 @@ bool CTestApp3::Init()
     return true;
 }
 
-void CTestApp3::Step(double _dt)
+void CTest3::Step(double _dt)
 {
-    CTestEditorApp::Step(_dt);
+    CTest1::Step(_dt);
 
     if (GetPlayersSystem().EnumPlayers() && GetDebugDrawSystem().GetActiveCam() != nullptr)
     {
@@ -86,9 +89,9 @@ void CTestApp3::Step(double _dt)
     }
 }
 
-void CTestApp3::Render()
+void CTest3::Render()
 {
-    CTestEditorApp::Render();
+    CTest1::Render();
 
     if (mO1 != nullptr)
     {
@@ -106,7 +109,7 @@ void CTestApp3::Render()
     }
 }
 
-void CTestApp3::SetProcessors()
+void CTest3::SetProcessors()
 {
     GetEventSystem().SetMode("editor_mode");
 
@@ -324,7 +327,7 @@ void CTestApp3::SetProcessors()
     }));
 }
 
-void CTestApp3::InitObjects()
+void CTest3::InitObjects()
 {
     CSceneObjectGeometry sbg;
     sbg.mFigures.resize(1);
@@ -392,6 +395,8 @@ void CTestApp3::InitObjects()
     platform->GetPos().SetTarget(CVec3f(100, 50, 0), 10, AnimationBehaviorBounce);
     platform->GetAngle().SetTarget(M_PI / 18.0, 10, AnimationBehaviorBounce);
 }
+
+} // namespace test
 
 } // namespace drash
 

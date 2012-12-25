@@ -24,7 +24,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "physobserver.h"
 
-#include "sceneobjects/csceneobject.h"
+#include "sceneobjects/sceneobject.h"
 #include "sceneobjects/figure.h"
 
 namespace drash
@@ -61,7 +61,7 @@ void CPhysObserver::BeginContact(b2Contact * _contact)
     CFigure *f1 = reinterpret_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
     CFigure *f2 = reinterpret_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
 
-    if ( f1 == NULL || f2 == NULL )
+    if ( f1 == nullptr || f2 == nullptr )
     {
         LOG_WARN( "CContactListener::BeginContact(): "
                   "can not get pointer for one of figures. Skipping" );
@@ -84,7 +84,7 @@ void CPhysObserver::PreSolve(b2Contact *_contact, const b2Manifold *)
     CFigure *f1 = reinterpret_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
     CFigure *f2 = reinterpret_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
 
-    if ( f1 == NULL || f2 == NULL )
+    if ( f1 == nullptr || f2 == nullptr )
     {
         LOG_WARN( "CContactListener::BeginContact(): "
                   "can not get pointer for one of figures. Skipping" );
@@ -107,7 +107,7 @@ void CPhysObserver::EndContact(b2Contact *_contact)
     CFigure *f1 = reinterpret_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
     CFigure *f2 = reinterpret_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
 
-    if ( f1 == NULL || f2 == NULL )
+    if ( f1 == nullptr || f2 == nullptr )
     {
         LOG_WARN( "CContactListener::BeginContact(): "
                   "can not get pointer for one of figures. Skipping" );

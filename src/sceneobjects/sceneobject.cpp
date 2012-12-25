@@ -22,10 +22,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "csceneobject.h"
+#include "sceneobject.h"
 
 #include "figure.h"
-#include "../diag/clogger.h"
+#include "../diag/logger.h"
 #include "../diag/assert.h"
 #include "explosion.h"
 #include "../misc/graphics.h"
@@ -55,7 +55,7 @@ CSceneObject::~CSceneObject(void)
 
 bool CSceneObject::Init(const GeometryT &_geometry, const CSceneObject::ParamsT &_params )
 {
-    if ( mBody == NULL )
+    if ( mBody == nullptr )
     {
         return false;
     }
@@ -90,7 +90,7 @@ void CSceneObject::Release()
     while ( b2Fixture *f = mBody->GetFixtureList() )
     {
         delete reinterpret_cast<CFigure*>( f->GetUserData() );
-        f->SetUserData(NULL);
+        f->SetUserData(nullptr);
         mBody->DestroyFixture(f);
     }
 }
@@ -150,7 +150,7 @@ void CSceneObject::OnBoom( const CExplosionParams &_boom )
 void CSceneObject::DrawDebug() const
 {
     unsigned int j = 0;
-    for ( b2Fixture *f = mBody->GetFixtureList(); f != NULL; f = f->GetNext() )
+    for ( b2Fixture *f = mBody->GetFixtureList(); f != nullptr; f = f->GetNext() )
     {
         if ( f->GetShape()->GetType() == b2Shape::e_polygon )
         {
@@ -205,7 +205,7 @@ CFigure *CSceneObject::CreateFigure(const CFigureParams &_params)
     fdef.isSensor = false;
     fdef.restitution = _params.mRestitution;
     fdef.shape = &s;
-    fdef.userData = NULL;
+    fdef.userData = nullptr;
 
     b2Fixture *f = mBody->CreateFixture(&fdef);
 
@@ -261,7 +261,7 @@ void CSceneObject::ComputeBoundingBox()
     mBoundingBox.lowerBound = b2Vec2(FLT_MAX,FLT_MAX);
     mBoundingBox.upperBound = b2Vec2(-FLT_MAX,-FLT_MAX);
     b2Fixture* fixture = mBody->GetFixtureList();
-    while (fixture != NULL)
+    while (fixture != nullptr)
     {
         mBoundingBox.Combine(mBoundingBox, fixture->GetAABB(0));
         fixture = fixture->GetNext();

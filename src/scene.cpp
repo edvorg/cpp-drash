@@ -22,13 +22,13 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "cscene.h"
+#include "scene.h"
 
 #include "diag/assert.h"
-#include "diag/clogger.h"
+#include "diag/logger.h"
 #include <subsystem/subsystem.h>
 
-#include "sceneobjects/csceneobject.h"
+#include "sceneobjects/sceneobject.h"
 #include "joints/joint.h"
 
 namespace drash
@@ -184,7 +184,7 @@ void CScene::DestroyJoint(CJoint *_joint)
 
 void CScene::ConnectSubsystem(CSubsystem *_subsystem)
 {
-    if (_subsystem == NULL)
+    if (_subsystem == nullptr)
     {
         return;
     }
@@ -209,7 +209,7 @@ void CScene::ConnectSubsystem(CSubsystem *_subsystem)
 
 void CScene::DisconnectSubsystem(CSubsystem *_subsystem)
 {
-    if (_subsystem == NULL)
+    if (_subsystem == nullptr)
     {
         return;
     }
@@ -221,11 +221,11 @@ void CScene::DisconnectSubsystem(CSubsystem *_subsystem)
             if (mSubsystemsCount-- != 1)
             {
                 mSubsystems[i] = mSubsystems[mSubsystemsCount];
-                mSubsystems[mSubsystemsCount] = NULL;
+                mSubsystems[mSubsystemsCount] = nullptr;
             }
             else
             {
-                mSubsystems[0] = NULL;
+                mSubsystems[0] = nullptr;
             }
             return;
         }
@@ -243,13 +243,13 @@ void CScene::DestroyObjectImpl(CSceneObject *_obj)
 {
     b2Body* body = _obj->mBody;
     _obj->mBody->SetActive(false);
-    _obj->mBody->SetUserData(NULL);
+    _obj->mBody->SetUserData(nullptr);
 
     mObjectsCount--;
     mObjects[_obj->mInternalId] = mObjects[mObjectsCount];
-    mObjects[mObjectsCount] = NULL;
+    mObjects[mObjectsCount] = nullptr;
 
-    if ( mObjects[_obj->mInternalId] != NULL )
+    if ( mObjects[_obj->mInternalId] != nullptr )
     {
         mObjects[_obj->mInternalId]->mInternalId = _obj->mInternalId;
     }

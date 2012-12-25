@@ -132,13 +132,13 @@ T* CScene::CreateObject(const typename T::GeometryT &_geometry, const typename T
     if (mObjectsCount == mObjectsCountLimit)
 	{
         LOG_ERR("CScene::CreateObject(): Achieved maximum Amount of Objects in scene");
-        return NULL;
+        return nullptr;
     }
 
     if (mWorld.IsLocked())
     {
         LOG_ERR("CScene::CreateObject(): world is locked now");
-        return NULL;
+        return nullptr;
     }
 
     b2BodyDef bdef;

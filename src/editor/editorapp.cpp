@@ -22,14 +22,14 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "ceditorapp.h"
+#include "editorapp.h"
 
 #include <QDebug>
 
 #include "../debugdrawsystem/camera.h"
 #include "../misc/plane.h"
 #include "../sceneobjects/figure.h"
-#include "../sceneobjects/csceneobject.h"
+#include "../sceneobjects/sceneobject.h"
 
 namespace drash {
 

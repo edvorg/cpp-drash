@@ -2,7 +2,7 @@
 #define DRASH_VEC2_H
 
 #include <Box2D/Box2D.h>
-#include "../diag/clogger.h"
+#include "../diag/logger.h"
 
 namespace drash
 {

@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cstring>
 
-#include "../diag/clogger.h"
+#include "../diag/logger.h"
 
 namespace drash
 {

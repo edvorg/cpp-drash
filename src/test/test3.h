@@ -23,41 +23,45 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #pragma once
-#ifndef TESTEDITORAPP_H
-#define TESTEDITORAPP_H
+#ifndef CTESTAPP3DRASHTEST_H
+#define CTESTAPP3DRASHTEST_H
 
-#include "../app/app.h"
+#include "test1.h"
+
+#include "../ui/uislider.h"
+#include "../ui/uibutton.h"
 
 namespace drash
 {
 
-class CTestEditorApp : public CApp
+namespace test
+{
+
+class CTest3 : public CTest1
 {
 public:
-    virtual ~CTestEditorApp() override {}
+    virtual ~CTest3() override {}
 
     virtual bool Init() override;
+    virtual void Step(double _dt) override;
     virtual void Render() override;
 
 private:
     void SetProcessors();
-    void CreateFigure();
-    void CompleteFigure();
-    void CreateTemplate();
-    void DetachCurrentObject();
-    void ChooseFigure();
-    void MoveFigure();
-
+    void InitObjects();
     double mTime = 0;
+    CSceneObject *mO1 = nullptr;
+    CSceneObject *mO2 = nullptr;
+    CSceneObject *mMoveObject = nullptr;
 
-    std::vector<CVec2f> mVertices;
-    unsigned int mTemplateCounter = 0;
-    CSceneObjectGeometry *mCurrentTemplate = nullptr;
-    CSceneObject *mCurrentObject = nullptr;
-    CFigure *mCurrentFigure = nullptr;
-    CVec2f mLastCursorPos;
+    // gravity in y axis
+    ui::CUISlider mSlider1;
+    // gravity in x axis
+    ui::CUISlider mSlider2;
 };
+
+} // namespace test
 
 } // namespace drash
 
-#endif // TESTEDITORAPP_H
+#endif // CTESTAPP3DRASHTEST_H

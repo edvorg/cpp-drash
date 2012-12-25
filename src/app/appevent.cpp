@@ -24,7 +24,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "appevent.h"
 
-#include "../diag/clogger.h"
+#include "../diag/logger.h"
 
 namespace drash
 {

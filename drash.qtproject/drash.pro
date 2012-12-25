@@ -19,13 +19,6 @@ INCLUDEPATH += ../3rd/Box2D/include\
 SOURCES += ../src/main.cpp\
         ../src/gamewindow.cpp \
     ../src/scenewidget.cpp \
-    ../src/cscene.cpp \
-    ../src/test/ctestapp3-drashtest1.cpp \
-    ../src/test/ctestapp2.cpp \
-    ../src/diag/ctimer.cpp \
-    ../src/diag/clogger.cpp \
-    ../src/sceneobjects/csceneobject.cpp \
-    ../src/sceneobjects/cplayer.cpp \
     ../src/debugdrawsystem/camera.cpp \
     ../src/sceneobjects/explosion.cpp \
     ../src/test/test.cpp \
@@ -42,11 +35,9 @@ SOURCES += ../src/main.cpp\
     ../src/app/appevent.cpp \
     ../src/editor/sceneeditor.cpp\
    ../src/joints/joint.cpp \
-    ../src/editor/ceditorapp.cpp \
     ../src/app/appeventsystem.cpp \
     ../src/app/appeventprocessor.cpp \
     ../src/app/appeventcombination.cpp \
-    ../src/test/TestEditorApp.cpp \
     ../src/ui/uisystem.cpp \
     ../src/ui/uicontrol.cpp \
     ../src/test/test4.cpp \
@@ -60,19 +51,21 @@ SOURCES += ../src/main.cpp\
     ../src/misc/ray.cpp \
     ../src/misc/matrix4.cpp \
     ../src/misc/vec4.cpp \
-    ../src/misc/vec2.cpp
+    ../src/misc/vec2.cpp \
+    ../src/scene.cpp \
+    ../src/test/test3.cpp \
+    ../src/test/test2.cpp \
+    ../src/test/test1.cpp \
+    ../src/sceneobjects/sceneobject.cpp \
+    ../src/sceneobjects/player.cpp \
+    ../src/editor/editorapp.cpp \
+    ../src/diag/logger.cpp \
+    ../src/diag/timer.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
-    ../src/cscene.h \
-    ../src/test/ctestapp3-drashtest1.h \
-    ../src/test/ctestapp2.h \
     ../src/misc/math.h \
     ../src/misc/animatedparam.h \
-    ../src/diag/ctimer.h \
-    ../src/diag/clogger.h \
-    ../src/sceneobjects/csceneobject.h \
-    ../src/sceneobjects/cplayer.h \
     ../src/debugdrawsystem/camera.h \
     ../src/sceneobjects/explosion.h \
     ../src/test/test.h \
@@ -90,11 +83,9 @@ HEADERS  += ../src/gamewindow.h \
     ../src/app/appevent.h \
     ../src/editor/sceneeditor.h \
     ../src/joints/joint.h \
-    ../src/editor/ceditorapp.h \
     ../src/app/appeventsystem.h \
     ../src/app/appeventprocessor.h \
     ../src/app/appeventcombination.h \
-    ../src/test/TestEditorApp.h \
     ../src/ui/uisystem.h \
     ../src/ui/uicontrol.h \
     ../src/test/test4.h \
@@ -108,7 +99,16 @@ HEADERS  += ../src/gamewindow.h \
     ../src/misc/ray.h \
     ../src/misc/matrix4.h \
     ../src/misc/vec4.h \
-    ../src/misc/vec2.h
+    ../src/misc/vec2.h \
+    ../src/diag/logger.h \
+    ../src/diag/timer.h \
+    ../src/editor/editorapp.h \
+    ../src/sceneobjects/player.h \
+    ../src/sceneobjects/sceneobject.h \
+    ../src/test/test2.h \
+    ../src/test/test3.h \
+    ../src/scene.h \
+    ../src/test/test1.h
 
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui

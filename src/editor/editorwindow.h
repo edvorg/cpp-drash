@@ -26,7 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define EDITORWINDOW_H
 
 #include <QMainWindow>
-#include "../diag/ctimer.h"
+#include "../diag/timer.h"
 #include <QActionGroup>
 
 class QTreeWidgetItem;
