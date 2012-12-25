@@ -256,6 +256,7 @@ CFigure *CSceneObject::CreateFigure(const CFigureParams &_params)
     figure->mMass = _params.mMass;
     figure->mDepth = _params.mDepth;
     figure->mInternalId = mFiguresCount;
+    figure->mZ = _params.mZ;
 
     f->SetUserData(figure);
 
