@@ -81,12 +81,6 @@ bool CTest3::Init()
 void CTest3::Step(double _dt)
 {
     CTest1::Step(_dt);
-
-    if (GetPlayersSystem().EnumPlayers() && GetDebugDrawSystem().GetActiveCam() != nullptr)
-    {
-        CPlayer *p = GetPlayersSystem().GetPlayers()[0];
-        GetDebugDrawSystem().GetActiveCam()->LookAt(p->GetPos().Get());
-    }
 }
 
 void CTest3::Render()

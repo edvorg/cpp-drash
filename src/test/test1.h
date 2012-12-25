@@ -44,12 +44,9 @@ public:
 
 private:
     void SetProcessors();
-    void CreateFigure();
     void CompleteFigure();
     void CreateTemplate();
     void DetachCurrentObject();
-    void ChooseFigure();
-    void MoveFigure();
 
     double mTime = 0;
 
@@ -57,6 +54,8 @@ private:
     unsigned int mTemplateCounter = 0;
     CSceneObjectGeometry *mCurrentTemplate = nullptr;
     CSceneObject *mCurrentObject = nullptr;
+
+    CVec2f mCamRotFirstClick;
 };
 
 } // namespace test

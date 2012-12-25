@@ -97,6 +97,52 @@ void CTest1::SetProcessors()
         CompleteFigure();
     }));
 
+    GetEventSystem().SetProcessor("MB", CAppEventProcessor(
+    [this] ()
+    {
+        mCamRotFirstClick = GetCursorPos();
+    },
+    [this] ()
+    {
+        CVec2f new_pos = GetCursorPos();
+
+        CVec2f rot = GetDebugDrawSystem().GetActiveCam()->GetRotation().Get();
+        rot.mY -= new_pos.mX - mCamRotFirstClick.mX;
+        rot.mX += new_pos.mY - mCamRotFirstClick.mY;
+
+        GetDebugDrawSystem().GetActiveCam()->GetRotation().Set(rot);
+
+        mCamRotFirstClick = new_pos;
+    }));
+
+    GetEventSystem().SetProcessor("w", CAppEventProcessor(
+    [this] () {},
+    [this] ()
+    {
+        GetDebugDrawSystem().GetActiveCam()->Forward(5);
+    }));
+
+    GetEventSystem().SetProcessor("a", CAppEventProcessor(
+    [this] () {},
+    [this] ()
+    {
+        GetDebugDrawSystem().GetActiveCam()->Strafe(5);
+    }));
+
+    GetEventSystem().SetProcessor("s", CAppEventProcessor(
+    [this] () {},
+    [this] ()
+    {
+        GetDebugDrawSystem().GetActiveCam()->Forward(-5);
+    }));
+
+    GetEventSystem().SetProcessor("d", CAppEventProcessor(
+    [this] () {},
+    [this] ()
+    {
+        GetDebugDrawSystem().GetActiveCam()->Strafe(-5);
+    }));
+
     GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
     [this] ()
     {
