@@ -107,7 +107,7 @@ protected:
 
     virtual void Step(double _dt);
 
-    virtual void OnContactBegin(const CFigure *, const CFigure *);
+    virtual void OnContactBegin(const CFigure *_f1, const CFigure *_f2);
     virtual void OnContactPreSolve(const CFigure *, const CFigure *);
     virtual void OnContactEnd(const CFigure *, const CFigure *);
     virtual void OnBoom( const CExplosionParams &_boom );
@@ -142,6 +142,8 @@ private:
 
     /// color, used for debug rendering. will be removed
     float mColor[3];
+
+    float mLifeTime = 0.0f;
 };
 
 inline CScene *CSceneObject::GetScene()

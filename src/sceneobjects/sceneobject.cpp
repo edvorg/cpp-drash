@@ -29,6 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../diag/assert.h"
 #include "explosion.h"
 #include "../misc/graphics.h"
+#include "../scene.h"
 
 namespace drash
 {
@@ -97,6 +98,31 @@ void CSceneObject::Release()
 
 void CSceneObject::Step(double _dt)
 {
+    mLifeTime += _dt;
+
+    for (unsigned int i = 0; i < mFiguresCount; i++)
+    {
+        if (mFigures[i]->mDead == true)
+        {
+            CSceneObjectGeometry g;
+            g.mFigures.resize(1);
+            g.mFigures[0].mVertices.resize(mFigures[i]->EnumVertices());
+            memcpy(&*g.mFigures[0].mVertices.begin(), mFigures[i]->GetVertices(), sizeof(CVec2f) * mFigures[i]->EnumVertices());
+
+            CSceneObjectParams p;
+            p.mAngle = mAngle.Get();
+            p.mDynamic = true;
+            p.mFixedRotation = false;
+            p.mPos = mPos.Get();
+
+            GetScene()->CreateObject<CSceneObject>(g, p);
+
+            DestroyFigure(mFigures[i]);
+
+            break;
+        }
+    }
+
     if (mPos.IsTargetSet())
     {
         mPos.Step(_dt);
@@ -122,8 +148,23 @@ void CSceneObject::Step(double _dt)
     }
 }
 
-void CSceneObject::OnContactBegin(const CFigure *, const CFigure *)
+void CSceneObject::OnContactBegin(const CFigure *_f1, const CFigure *_f2)
 {
+    CVec3f speed(_f2->GetSceneObject()->GetLinearVelocity(), 0);
+    speed.Vec2() -= _f1->GetSceneObject()->GetLinearVelocity();
+
+    if (speed.LengthSquared() > 3000 && mLifeTime > 1 && mFiguresCount > 1)
+    {
+        for (unsigned int i = 0; i < mFiguresCount; i++)
+        {
+            if (mFigures[i] == _f1)
+            {
+                mFigures[i]->mDead = true;
+
+                return;
+            }
+        }
+    }
 }
 
 void CSceneObject::OnContactPreSolve(const CFigure *, const CFigure *)
