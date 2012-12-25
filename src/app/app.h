@@ -34,12 +34,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "appeventsystem.h"
 #include "../ui/uisystem.h"
 
-#include <list>
-
 namespace drash
 {
-
-class CScene;
 
 class CApp
 {

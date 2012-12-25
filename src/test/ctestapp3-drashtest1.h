@@ -55,9 +55,6 @@ private:
     ui::CUISlider mSlider1;
     // gravity in x axis
     ui::CUISlider mSlider2;
-
-    // creates objct at random position from geometry of template system (if it has any).
-    ui::CUIButton mButton1;
 };
 
 } // namespace drash

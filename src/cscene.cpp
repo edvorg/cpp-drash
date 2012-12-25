@@ -23,8 +23,13 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include "cscene.h"
+
+#include "diag/assert.h"
 #include "diag/clogger.h"
 #include <subsystem/subsystem.h>
+
+#include "sceneobjects/csceneobject.h"
+#include "joints/joint.h"
 
 namespace drash
 {

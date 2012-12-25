@@ -25,11 +25,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef PLAYERSSYSTEM_H
 #define PLAYERSSYSTEM_H
 
-#include <subsystem/subsystem.h>
-#include <sceneobjects/cplayer.h>
+#include "subsystem.h"
 
 namespace drash
 {
+
+class CSceneObjectGeometry;
+class CPlayerParams;
+class CPlayer;
+class CPlayerEvent;
 
 class CPlayersSystem : public CSubsystem
 {

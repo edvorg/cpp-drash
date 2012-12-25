@@ -1,5 +1,7 @@
 #include "plane.h"
 
+#include "ray.h"
+
 namespace drash
 {
 

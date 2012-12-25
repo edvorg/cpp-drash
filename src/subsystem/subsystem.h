@@ -25,10 +25,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SUBSYSTEM_H
 #define SUBSYSTEM_H
 
-#include <cscene.h>
-
 namespace drash
 {
+
+class CScene;
 
 /// As our CScene class writen for objects creation, deletion end connection,
 /// we need ability to extend CScene with different behaviors.

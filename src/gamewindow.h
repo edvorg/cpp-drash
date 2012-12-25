@@ -26,11 +26,16 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define GAMEWINDOW_H
 
 #include <QMainWindow>
-#include "cscene.h"
-#include "sceneobjects.h"
-#include "test/test.h"
-#include "scenewidget.h"
+#include <QTimer>
 #include "diag/ctimer.h"
+
+class SceneWidget;
+class QLabel;
+
+namespace drash
+{
+    class CApp;
+}
 
 namespace Ui
 {

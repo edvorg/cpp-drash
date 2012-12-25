@@ -28,6 +28,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../app/appeventprocessor.h"
 #include "../debugdrawsystem/camera.h"
 #include "./misc/plane.h"
+#include "../sceneobjects/csceneobject.h"
+#include "../sceneobjects/cplayer.h"
+#include "../sceneobjects/figure.h"
 
 namespace drash
 {

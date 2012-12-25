@@ -24,6 +24,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "csceneobject.h"
 
+#include "figure.h"
 #include "../diag/clogger.h"
 #include "../diag/assert.h"
 #include "explosion.h"

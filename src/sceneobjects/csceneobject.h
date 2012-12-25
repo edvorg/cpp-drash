@@ -27,7 +27,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define CSCENEOBJECT_H
 
 #include <Box2D/Box2D.h>
-#include "figure.h"
 #include "../misc/animatedparam.h"
 #include "../misc/vec3.h"
 
@@ -35,7 +34,8 @@ namespace drash
 {
 
 class CScene;
-class CSceneObject;
+class CFigureParams;
+class CFigure;
 class CExplosionParams;
 
 class CSceneObjectGeometry

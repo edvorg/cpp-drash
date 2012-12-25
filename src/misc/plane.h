@@ -2,10 +2,11 @@
 #define DRASH_PLANE_H
 
 #include "vec3.h"
-#include "ray.h"
 
 namespace drash
 {
+
+class CRay;
 
 class CPlane
 {

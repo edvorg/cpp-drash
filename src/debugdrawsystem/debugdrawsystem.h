@@ -35,6 +35,7 @@ namespace drash
 class CCameraParams;
 class CCamera;
 class CPlane;
+class CFigure;
 
 class CDebugDrawSystem : public CSubsystem
 {
@@ -55,7 +56,7 @@ public:
 
     /// aspect ratio is window width in pixels divided on widow height
     /// you should use correct value for using coordinates conversion methods
-    inline void SetAspectRatio(float _ratio);
+    void SetAspectRatio(float _ratio);
 
     /// aspect ratio is window width in pixels divided on widow height
     inline float GetAspectRatio() const;
@@ -100,11 +101,6 @@ private:
 inline CCamera *CDebugDrawSystem::GetActiveCam() const
 {
     return mActiveCam;
-}
-
-inline void CDebugDrawSystem::SetAspectRatio(float _ratio)
-{
-    mAspectRatio = (drash::math::Abs(_ratio) > 0.00001 ? _ratio : 1);
 }
 
 inline float CDebugDrawSystem::GetAspectRatio() const

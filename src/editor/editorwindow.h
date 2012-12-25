@@ -26,14 +26,17 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define EDITORWINDOW_H
 
 #include <QMainWindow>
-#include "../app/app.h"
-#include "../test/test.h"
 #include "../diag/ctimer.h"
-#include "ceditorapp.h"
 #include <QActionGroup>
 
 class QTreeWidgetItem;
 class QLabel;
+
+namespace drash
+{
+    class CObjectEditorApp;
+    class CApp;
+}
 
 namespace Ui
 {

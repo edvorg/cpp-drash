@@ -24,8 +24,12 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ceditorapp.h"
 
+#include <QDebug>
+
 #include "../debugdrawsystem/camera.h"
 #include "../misc/plane.h"
+#include "../sceneobjects/figure.h"
+#include "../sceneobjects/csceneobject.h"
 
 namespace drash {
 

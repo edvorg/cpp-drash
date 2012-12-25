@@ -35,8 +35,12 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "camera.h"
 #include "../misc/graphics.h"
 #include "../misc/plane.h"
+#include "../misc/ray.h"
 #include "../misc/vec4.h"
 #include "../misc/matrix4.h"
+#include "../sceneobjects/csceneobject.h"
+#include "../sceneobjects/figure.h"
+#include "../cscene.h"
 
 namespace drash
 {
@@ -119,6 +123,11 @@ void CDebugDrawSystem::SetActiveCam(CCamera *_cam)
         mViewMatrixTransposed = mActiveCam->GetViewMatrix();
         mViewMatrixTransposed.Transpose();
     }
+}
+
+void CDebugDrawSystem::SetAspectRatio(float _ratio)
+{
+    mAspectRatio = (drash::math::Abs(_ratio) > 0.00001 ? _ratio : 1);
 }
 
 void CDebugDrawSystem::CastRay(const CVec2f &_pos, const CPlane &_plane, CVec3f &_result) const

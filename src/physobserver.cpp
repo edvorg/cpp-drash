@@ -24,10 +24,11 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "physobserver.h"
 
-#include "misc/math.h"
-#include "sceneobjects.h"
+#include "sceneobjects/csceneobject.h"
+#include "sceneobjects/figure.h"
 
-using drash::CPhysObserver;
+namespace drash
+{
 
 CPhysObserver::CPhysObserver()
 {
@@ -123,3 +124,5 @@ void CPhysObserver::EndContact(b2Contact *_contact)
     f1->GetSceneObject()->OnContactEnd(f1, f2);
     f2->GetSceneObject()->OnContactEnd(f2, f1);
 }
+
+} // namespace drash

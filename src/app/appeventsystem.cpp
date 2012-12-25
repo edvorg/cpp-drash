@@ -1,5 +1,10 @@
 #include "appeventsystem.h"
 
+#include <algorithm>
+#include <cstring>
+
+#include "../diag/clogger.h"
+
 namespace drash
 {
 

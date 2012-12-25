@@ -25,10 +25,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef TEST_H
 #define TEST_H
 
-#include "../app/app.h"
-
 namespace drash
 {
+
+class CApp;
 
 namespace test
 {

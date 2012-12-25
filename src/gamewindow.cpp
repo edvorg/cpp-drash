@@ -24,6 +24,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "gamewindow.h"
 #include "ui_gamewindow.h"
+#include <QLabel>
+#include "scenewidget.h"
+#include "app/app.h"
+#include "test/test.h"
 
 using namespace drash;
 

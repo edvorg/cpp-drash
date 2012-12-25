@@ -26,7 +26,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define FIGURE_H
 
 #include <vector>
-#include "../misc/math.h"
 #include "../misc/vec2.h"
 
 namespace drash

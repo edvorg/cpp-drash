@@ -25,14 +25,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "ctestapp3-drashtest1.h"
 
 #include "../cscene.h"
-#include "../sceneobjects.h"
+#include "sceneobjects/explosion.h"
+#include "sceneobjects/cplayer.h"
+#include "sceneobjects/figure.h"
+
 #include "../debugdrawsystem/camera.h"
 #include "../misc/plane.h"
 
 namespace drash
 {
-
-void GenDrashBodyParams( CDrashBodyParams* _params , float _subset_size, unsigned int _level, unsigned int _levels );
 
 bool CTestApp3::Init()
 {
@@ -71,19 +72,6 @@ bool CTestApp3::Init()
         GetScene().SetGravity(CVec2f(mSlider1.GetValue(), _value));
     });
 
-    mButton1.Connect(&GetUISystem());
-    mButton1.SetPos(CVec2i(10, 70));
-    mButton1.SetSize(CVec2ui(100, 20));
-    mButton1.SetClickHandler([this] ()
-    {
-        CDrashBodyParams params;
-        params.mDynamic = true;
-        params.mPos.mX = math::Rand<float>(-100, 100, 1);
-        params.mPos.mY = 200;
-
-        GetTemplateSystem().CreateDrashBodyFromTemplate("box_big", params);
-    });
-
     return true;
 }
 
@@ -95,20 +83,6 @@ void CTestApp3::Step(double _dt)
     {
         CPlayer *p = GetPlayersSystem().GetPlayers()[0];
         GetDebugDrawSystem().GetActiveCam()->LookAt(p->GetPos().Get());
-    }
-
-    mTime += _dt;
-
-    if (mTime >= 1.0)
-    {
-        CDrashBodyParams params;
-        params.mDynamic = true;
-        params.mPos.mX = math::Rand<float>(-100, 100, 1);
-        params.mPos.mY = 100;
-
-        GetTemplateSystem().CreateDrashBodyFromTemplate("circle", params);
-
-        mTime = 0;
     }
 }
 
@@ -386,45 +360,6 @@ void CTestApp3::InitObjects()
     sbp.mPos.Set(300, 300, 0);
     GetScene().CreateObject<CSceneObject>(sbg, sbp);
 
-    CDrashBodyGeometry *b1 = GetTemplateSystem().CreateDrashBodyTemplate("box_small");
-    b1->mFigures.resize(1);
-    b1->mFigures[0].mDepth = 10;
-    b1->mFigures[0].mVertices.push_back( CVec2f( -5, -5 ) );
-    b1->mFigures[0].mVertices.push_back( CVec2f( 5, -5 ) );
-    b1->mFigures[0].mVertices.push_back( CVec2f( 5, 5 ) );
-    b1->mFigures[0].mVertices.push_back( CVec2f( -5, 5 ) );
-    CDrashBodyGeometry *b0 = GetTemplateSystem().CreateDrashBodyTemplate("box_big");
-    b0->mFigures.resize(1);
-    b0->mFigures[0].mDepth = 20;
-    b0->mFigures[0].mVertices.push_back( CVec2f( -10, -10 ) );
-    b0->mFigures[0].mVertices.push_back( CVec2f( 10, -10 ) );
-    b0->mFigures[0].mVertices.push_back( CVec2f( 10, 10 ) );
-    b0->mFigures[0].mVertices.push_back( CVec2f( -10, 10 ) );
-
-    b0->mDestructionChilds.resize(8);
-    b0->mDestructionChilds[0].mTemplate = b1;
-    b0->mDestructionChilds[0].mParams.mPos.Set(-5, -5, 5);
-    b0->mDestructionChilds[1].mTemplate = b1;
-    b0->mDestructionChilds[1].mParams.mPos.Set(-5, 5, 5);
-    b0->mDestructionChilds[2].mTemplate = b1;
-    b0->mDestructionChilds[2].mParams.mPos.Set(5, 5, 5);
-    b0->mDestructionChilds[3].mTemplate = b1;
-    b0->mDestructionChilds[3].mParams.mPos.Set(5, -5, 5);
-    b0->mDestructionChilds[4].mTemplate = b1;
-    b0->mDestructionChilds[4].mParams.mPos.Set(-5, -5, -5);
-    b0->mDestructionChilds[5].mTemplate = b1;
-    b0->mDestructionChilds[5].mParams.mPos.Set(-5, 5, -5);
-    b0->mDestructionChilds[6].mTemplate = b1;
-    b0->mDestructionChilds[6].mParams.mPos.Set(5, 5, -5);
-    b0->mDestructionChilds[7].mTemplate = b1;
-    b0->mDestructionChilds[7].mParams.mPos.Set(5, -5, -5);
-
-    CDrashBodyParams dbp;
-    dbp.mPos.Set(0, 100, 0);
-    dbp.mAngle = M_PI / 4;
-
-    GetScene().CreateObject<CDrashBody>(*b0, dbp);
-
     CSceneObjectGeometry pg;
     pg.mFigures.resize(1);
     pg.mFigures[0].mMass = 3;
@@ -456,86 +391,6 @@ void CTestApp3::InitObjects()
     platform->GetPos().Set(CVec3f(-100, 50, 0));
     platform->GetPos().SetTarget(CVec3f(100, 50, 0), 10, AnimationBehaviorBounce);
     platform->GetAngle().SetTarget(M_PI / 18.0, 10, AnimationBehaviorBounce);
-
-    static const unsigned int segments = 16;
-    static const float d_angle = M_PI * 2.0 / static_cast<double>(segments);
-    static const float rad = 5;
-
-    CDrashBodyGeometry *t2 = GetTemplateSystem().CreateDrashBodyTemplate("circle_div_1");
-    if (t2 != nullptr)
-    {
-        t2->mFigures.resize(4);
-        for (unsigned int i=0; i<4; i++)
-        {
-            t2->mFigures[i].mVertices.push_back(CVec2f(rad * cos(i * d_angle), rad * sin(i * d_angle)));
-            t2->mFigures[i].mVertices.push_back(CVec2f(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
-            t2->mFigures[i].mVertices.push_back(CVec2f(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
-            t2->mFigures[i].mVertices.push_back(CVec2f(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
-            t2->mFigures[i].mDepth = rad * 0.5;
-        }
-    }
-
-    CDrashBodyGeometry *t3 = GetTemplateSystem().CreateDrashBodyTemplate("circle_div_2");
-    if (t3 != nullptr)
-    {
-        t3->mFigures.resize(4);
-        for (unsigned int i=4; i<8; i++)
-        {
-            t3->mFigures[i-4].mVertices.push_back(CVec2f(rad * cos(i * d_angle), rad * sin(i * d_angle)));
-            t3->mFigures[i-4].mVertices.push_back(CVec2f(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
-            t3->mFigures[i-4].mVertices.push_back(CVec2f(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
-            t3->mFigures[i-4].mVertices.push_back(CVec2f(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
-            t3->mFigures[i-4].mDepth = rad * 0.5;
-        }
-    }
-
-    CDrashBodyGeometry *t4 = GetTemplateSystem().CreateDrashBodyTemplate("circle_div_3");
-    if (t4 != nullptr)
-    {
-        t4->mFigures.resize(4);
-        for (unsigned int i=8; i<12; i++)
-        {
-            t4->mFigures[i-8].mVertices.push_back(CVec2f(rad * cos(i * d_angle), rad * sin(i * d_angle)));
-            t4->mFigures[i-8].mVertices.push_back(CVec2f(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
-            t4->mFigures[i-8].mVertices.push_back(CVec2f(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
-            t4->mFigures[i-8].mVertices.push_back(CVec2f(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
-            t4->mFigures[i-8].mDepth = rad * 0.5;
-        }
-    }
-
-    CDrashBodyGeometry *t5 = GetTemplateSystem().CreateDrashBodyTemplate("circle_div_4");
-    if (t5 != nullptr)
-    {
-        t5->mFigures.resize(4);
-        for (unsigned int i=12; i<16; i++)
-        {
-            t5->mFigures[i-12].mVertices.push_back(CVec2f(rad * cos(i * d_angle), rad * sin(i * d_angle)));
-            t5->mFigures[i-12].mVertices.push_back(CVec2f(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
-            t5->mFigures[i-12].mVertices.push_back(CVec2f(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
-            t5->mFigures[i-12].mVertices.push_back(CVec2f(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
-            t5->mFigures[i-12].mDepth = rad * 0.5;
-        }
-    }
-
-    CDrashBodyGeometry *t1 = GetTemplateSystem().CreateDrashBodyTemplate("circle");
-    if (t1 != nullptr)
-    {
-        t1->mFigures.resize(segments);
-        for (unsigned int i=0; i<segments; i++)
-        {
-            t1->mFigures[i].mVertices.push_back(CVec2f(rad * cos(i * d_angle), rad * sin(i * d_angle)));
-            t1->mFigures[i].mVertices.push_back(CVec2f(rad * cos((i + 1) * d_angle), rad * sin((i + 1) * d_angle)));
-            t1->mFigures[i].mVertices.push_back(CVec2f(rad * 0.5 * cos((i + 1) * d_angle), rad * 0.5 * sin((i + 1) * d_angle)));
-            t1->mFigures[i].mVertices.push_back(CVec2f(rad * 0.5 * cos(i * d_angle), rad * 0.5 * sin(i * d_angle)));
-            t1->mFigures[i].mDepth = rad * 0.5;
-        }
-
-        t1->mDestructionChilds.resize(4);
-        t1->mDestructionChilds[0].mTemplate = t2;
-        t1->mDestructionChilds[1].mTemplate = t3;
-        t1->mDestructionChilds[2].mTemplate = t4;
-        t1->mDestructionChilds[3].mTemplate = t5;
-    }
 }
 
 } // namespace drash

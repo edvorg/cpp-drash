@@ -26,7 +26,6 @@ SOURCES += ../src/main.cpp\
     ../src/diag/clogger.cpp \
     ../src/sceneobjects/csceneobject.cpp \
     ../src/sceneobjects/cplayer.cpp \
-    ../src/sceneobjects/cdrashbody.cpp \
     ../src/debugdrawsystem/camera.cpp \
     ../src/sceneobjects/explosion.cpp \
     ../src/test/test.cpp \
@@ -65,7 +64,6 @@ SOURCES += ../src/main.cpp\
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
-    ../src/sceneobjects.h \
     ../src/cscene.h \
     ../src/test/ctestapp3-drashtest1.h \
     ../src/test/ctestapp2.h \
@@ -75,7 +73,6 @@ HEADERS  += ../src/gamewindow.h \
     ../src/diag/clogger.h \
     ../src/sceneobjects/csceneobject.h \
     ../src/sceneobjects/cplayer.h \
-    ../src/sceneobjects/cdrashbody.h \
     ../src/debugdrawsystem/camera.h \
     ../src/sceneobjects/explosion.h \
     ../src/test/test.h \

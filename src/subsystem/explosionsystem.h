@@ -25,7 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef EXPLOSIONSYSTEM_H
 #define EXPLOSIONSYSTEM_H
 
-#include <subsystem/subsystem.h>
+#include "subsystem.h"
 
 namespace drash
 {

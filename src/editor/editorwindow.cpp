@@ -21,17 +21,26 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 // DRASH_LICENSE_END
+
 #include "editorwindow.h"
 #include "ui_editorwindow.h"
+
+#include <QTreeWidgetItem>
+#include <QStringList>
+#include <QLabel>
+#include <QStatusBar>
+#include <QDebug>
+
 #include "../cscene.h"
+#include "../sceneobjects/figure.h"
+#include "../sceneobjects/csceneobject.h"
 #include "../subsystem/templatesystem.h"
 #include "../misc/vec2.h"
 #include "../debugdrawsystem/camera.h"
+#include "ceditorapp.h"
 
 #include <vector>
 #include <string>
-#include <QTreeWidgetItem>
-#include <QStringList>
 
 using namespace drash;
 

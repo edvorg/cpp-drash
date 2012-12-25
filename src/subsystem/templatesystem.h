@@ -26,19 +26,19 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define TEMPLATESYSTEM_H
 
 #include "subsystem.h"
-#include "../sceneobjects.h"
-//#include <vector>
 #include <map>
+#include <string>
 
 namespace drash
 {
 
+class CSceneObjectGeometry;
+class CSceneObjectParams;
+class CSceneObject;
+
 class CTemplateSystem : public CSubsystem
 {
 public:
-    typedef std::map<std::string, CDrashBodyGeometry*> DrashBodyTemplatesT;
-    typedef std::pair<std::string,CDrashBodyGeometry*> MapDrashBodyItem;
-
     typedef std::map<std::string,CSceneObjectGeometry*> SceneObjectTemplatesT;
     typedef std::pair<std::string,CSceneObjectGeometry*> MapSceneObjectItem;
 
@@ -54,15 +54,7 @@ public:
     void ChangeGeometry(CSceneObjectGeometry *_t, const std::string &_name);
     CSceneObject *CreateSceneObjectFromTemplate(const std::string &_name, const CSceneObjectParams &_params);
 
-    /// template is just named CDrashBodyGeometry
-    /// we can use it to create many instances of one object at any time we want
-    CDrashBodyGeometry* CreateDrashBodyTemplate(const std::string &_name);
-    void DestoyDrashBodyTemplate(CDrashBodyGeometry *_t);
-    void RemoveDrashBodyTemplate(const std::string &_name);
-    CDrashBody *CreateDrashBodyFromTemplate(const std::string &_name, const CDrashBodyParams &_params);
-
     const SceneObjectTemplatesT &GetSceneObjectTemplates() const;
-    const DrashBodyTemplatesT &GetDrashBodyTemplates() const;
 
     CSceneObjectGeometry * FindTemplate(const std::string & _name);
 
@@ -71,7 +63,6 @@ public:
 protected:
 private:
     SceneObjectTemplatesT mSceneObjectTemplates;
-    DrashBodyTemplatesT mDrashBodyTemplates;
 };
 
 }// namespace drash

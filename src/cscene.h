@@ -26,13 +26,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CSCENE_H
 #define CSCENE_H
 
-#include "sceneobjects.h"
 #include "physobserver.h"
-#include "diag/assert.h"
-#include "joints/joint.h"
+#include "misc/vec2.h"
+#include "misc/vec3.h"
 
 namespace drash
 {
+
+class CSceneObject;
+class CJoint;
 
 class CSceneParams
 {

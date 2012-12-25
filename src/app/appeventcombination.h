@@ -7,6 +7,8 @@
 namespace drash
 {
 
+class CLogger;
+
 class CAppEventCombination
 {
 public:

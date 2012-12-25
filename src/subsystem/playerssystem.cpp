@@ -24,7 +24,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "playerssystem.h"
 
-#include <diag/clogger.h>
+#include "../diag/clogger.h"
+#include "../sceneobjects/cplayer.h"
+#include "../cscene.h"
 
 namespace drash
 {
