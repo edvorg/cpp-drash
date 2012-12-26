@@ -172,6 +172,8 @@ bool CTemplateSystem::Load()
     unsigned int templates_count = 0;
     unsigned int figures_count = 0;
     unsigned int vertices_count = 0;
+    float z = 0;
+    float depth = 0;
     CVec2f vertex;
     std::string name = "";
 
@@ -192,9 +194,15 @@ bool CTemplateSystem::Load()
         for (unsigned int j = 0; j < figures_count; j++)
         {
             vertices_count = 0;
+            z = 0;
+            depth = 0;
 
+            in>>z;
+            in>>depth;
             in>>vertices_count;
 
+            g->mFigures[j].mZ = z;
+            g->mFigures[j].mDepth = depth;
             g->mFigures[j].mVertices.resize(vertices_count);
 
             for (unsigned int k = 0; k < vertices_count; k++)
@@ -233,6 +241,8 @@ bool CTemplateSystem::Store()
 
         for (auto &j : i.second->mFigures)
         {
+            out<<j.mZ<<endl;
+            out<<j.mDepth<<endl;
             out<<j.mVertices.size()<<endl;
 
             for (auto &k : j.mVertices)

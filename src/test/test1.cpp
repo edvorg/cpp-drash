@@ -343,6 +343,104 @@ void CTest1::CamViewProcessors()
     {
         GetDebugDrawSystem().GetActiveCam()->Strafe(-5);
     }));
+
+    GetEventSystem().SetProcessor("q", CAppEventProcessor(
+    [this] ()
+    {
+        if (mCurrentTemplate == nullptr)
+        {
+            mCurrentTemplate = (--GetTemplateSystem().GetSceneObjectTemplates().end())->second;
+
+            if (mCurrentObject != nullptr)
+            {
+                GetScene().DestroyObject(mCurrentObject);
+            }
+
+            CSceneObjectParams p;
+            p.mDynamic = false;
+            mCurrentObject = GetScene().CreateObject<CSceneObject>(*mCurrentTemplate, p);
+            mCurrentObject->SetActive(false);
+        }
+        else
+        {
+            auto &t = GetTemplateSystem().GetSceneObjectTemplates();
+            for (auto i = t.begin(); i != t.end(); i++)
+            {
+                if (mCurrentTemplate == i->second)
+                {
+                    if (i == t.begin())
+                    {
+                        break;
+                    }
+
+                    i--;
+
+                    mCurrentTemplate = i->second;
+
+                    if (mCurrentObject != nullptr)
+                    {
+                        GetScene().DestroyObject(mCurrentObject);
+                    }
+
+                    CSceneObjectParams p;
+                    p.mDynamic = false;
+                    mCurrentObject = GetScene().CreateObject<CSceneObject>(*mCurrentTemplate, p);
+                    mCurrentObject->SetActive(false);
+
+                    break;
+                }
+            }
+        }
+    }));
+
+    GetEventSystem().SetProcessor("e", CAppEventProcessor(
+    [this] ()
+    {
+        if (mCurrentTemplate == nullptr)
+        {
+            mCurrentTemplate = GetTemplateSystem().GetSceneObjectTemplates().begin()->second;
+
+            if (mCurrentObject != nullptr)
+            {
+                GetScene().DestroyObject(mCurrentObject);
+            }
+
+            CSceneObjectParams p;
+            p.mDynamic = false;
+            mCurrentObject = GetScene().CreateObject<CSceneObject>(*mCurrentTemplate, p);
+            mCurrentObject->SetActive(false);
+        }
+        else
+        {
+            auto &t = GetTemplateSystem().GetSceneObjectTemplates();
+            for (auto i = t.begin(); i != t.end(); i++)
+            {
+                if (mCurrentTemplate == i->second)
+                {
+                    i++;
+
+                    if (i == t.end())
+                    {
+                        break;
+                    }
+
+                    mCurrentTemplate = i->second;
+
+                    if (mCurrentObject != nullptr)
+                    {
+                        GetScene().DestroyObject(mCurrentObject);
+                    }
+
+                    CSceneObjectParams p;
+                    p.mDynamic = false;
+                    mCurrentObject = GetScene().CreateObject<CSceneObject>(*mCurrentTemplate, p);
+                    mCurrentObject->SetActive(false);
+
+                    break;
+                }
+            }
+        }
+    }));
 }
 
 void CTest1::CompleteFigure()
