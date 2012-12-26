@@ -97,7 +97,7 @@ public:
 
     friend CLogger &operator <<(CLogger &_logger, const CSceneObject &_object);
 
-    CSceneObjectGeometry* GetGeometry() const;
+    void DumpGeometry(CSceneObjectGeometry *_geometry) const;
 protected:
     CSceneObject(void);
     virtual ~CSceneObject(void);

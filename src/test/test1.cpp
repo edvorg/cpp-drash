@@ -159,6 +159,8 @@ void CTest1::SetProcessors()
         if (mCurrentFigure != nullptr)
         {
             mCurrentFigure->SetDepth(mCurrentFigure->GetDepth() + 1.0f);
+
+            mCurrentObject->DumpGeometry(mCurrentTemplate);
         }
     }));
 
@@ -168,6 +170,8 @@ void CTest1::SetProcessors()
         if (mCurrentFigure != nullptr)
         {
             mCurrentFigure->SetDepth(math::Max<float>(0, mCurrentFigure->GetDepth() - 1.0f));
+
+            mCurrentObject->DumpGeometry(mCurrentTemplate);
         }
     }));
 
@@ -215,6 +219,8 @@ void CTest1::SetProcessors()
             delete [] v;
 
             mFigureMoveFirstClick = new_pos;
+
+            mCurrentObject->DumpGeometry(mCurrentTemplate);
         }
         else if (mAxisMoving == 2)
         {
@@ -233,6 +239,8 @@ void CTest1::SetProcessors()
             delete [] v;
 
             mFigureMoveFirstClick = new_pos;
+
+            mCurrentObject->DumpGeometry(mCurrentTemplate);
         }
         else if (mAxisMoving == 3)
         {
@@ -244,6 +252,8 @@ void CTest1::SetProcessors()
             mCurrentFigure->SetZ(mCurrentFigure->GetZ() + new_pos.mZ - mFigureMoveFirstClick.mZ);
 
             mFigureMoveFirstClick = new_pos;
+
+            mCurrentObject->DumpGeometry(mCurrentTemplate);
         }
     },
     [this] ()

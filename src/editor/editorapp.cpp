@@ -435,7 +435,8 @@ void CObjectEditorApp::SaveCurrentObject()
         return;
     }
 
-    GetTemplateSystem().ChangeGeometry( mCurrentObject->GetGeometry(), mCurrentTemplateName );
+//    TODO: fix this
+//    GetTemplateSystem().ChangeGeometry( mCurrentObject->GetGeometry(), mCurrentTemplateName );
 
     ShowObject(mCurrentTemplateName);
 }
