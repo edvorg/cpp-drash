@@ -107,6 +107,8 @@ void CSceneObject::Step(double _dt)
             CSceneObjectGeometry g;
             g.mFigures.resize(1);
             g.mFigures[0].mVertices.resize(mFigures[i]->EnumVertices());
+            g.mFigures[0].mZ = mFigures[i]->GetZ();
+            g.mFigures[0].mDepth = mFigures[i]->GetDepth();
             memcpy(&*g.mFigures[0].mVertices.begin(), mFigures[i]->GetVertices(), sizeof(CVec2f) * mFigures[i]->EnumVertices());
 
             CSceneObjectParams p;
