@@ -376,6 +376,7 @@ void CTest1::CompleteFigure()
         CSceneObjectParams p;
         p.mDynamic = false;
         mCurrentObject = GetScene().CreateObject<CSceneObject>(*mCurrentTemplate, p);
+        mCurrentObject->SetActive(false);
 
         mVertices.clear();
     }
@@ -406,7 +407,15 @@ void CTest1::DetachCurrentObject()
     if (mCurrentObject != nullptr)
     {
         mCurrentObject->SetDynamic(true);
-        mCurrentObject = nullptr;
+        mCurrentObject->SetActive(true);
+
+        if (mCurrentTemplate != nullptr)
+        {
+            CSceneObjectParams p;
+            p.mDynamic = false;
+            mCurrentObject = GetScene().CreateObject<CSceneObject>(*mCurrentTemplate, p);
+            mCurrentObject->SetActive(false);
+        }
     }
 }
 
