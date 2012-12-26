@@ -72,7 +72,6 @@ void CApp::Step(double _dt)
 {
     if (mQuit)
     {
-        this->Release();
         mQuitHandler();
         return;
     }

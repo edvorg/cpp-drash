@@ -43,7 +43,6 @@ void GameWindowParams::SetCommandLine(unsigned int _argc, char *_argv[])
 
 GameWindow::GameWindow(QWidget *parent) :
     QMainWindow(parent),
-    mInitialized(false),
     ui(new Ui::GameWindow),
     mSceneWidget(nullptr)
 {
@@ -56,16 +55,11 @@ GameWindow::GameWindow(QWidget *parent) :
 
     mSceneWidget->setFocus();
 
-    mTimer.Reset(true);
+    mGameTimer.Reset(true);
 }
 
 GameWindow::~GameWindow()
 {
-    if (!mInitialized)
-    {
-        return;
-    }
-
     if (mApp != nullptr)
     {
         mApp->Release();
@@ -99,6 +93,7 @@ bool GameWindow::Init( const GameWindowParams &_params )
 
                 if (mApp->Init() == false)
                 {
+                    mApp = nullptr;
                     return false;
                 }
 
@@ -107,8 +102,7 @@ bool GameWindow::Init( const GameWindowParams &_params )
 
                 mApp->SetQuitHandler([this] ()
                 {
-                    disconnect(&timer);
-                    mSceneWidget->SetTestApp(nullptr);
+                    disconnect(&mUpdateTimer);
                     QApplication::quit();
                 });
 
@@ -124,22 +118,20 @@ bool GameWindow::Init( const GameWindowParams &_params )
 
     mSceneWidget->SetTestApp(mApp);
 
-    mInitialized = true;    
-
     this->setWindowTitle(title);
 
-    timer.start(0);
-    connect( &timer, SIGNAL( timeout() ), this, SLOT( UpdateScene() ) );
+    mUpdateTimer.start(0);
+    connect( &mUpdateTimer, SIGNAL( timeout() ), this, SLOT( UpdateScene() ) );
 
     return true;
 }
 
 void GameWindow::UpdateScene()
 {
-    mTimer.Tick();
+    mGameTimer.Tick();
     if (mApp != nullptr)
     {
-        mApp->Step(mTimer.GetDeltaTime());
+        mApp->Step(mGameTimer.GetDeltaTime());
     }
 
     mStatusLabel->setText(QString(drash::CLogger::Tail().c_str()));

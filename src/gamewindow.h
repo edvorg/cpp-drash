@@ -65,12 +65,11 @@ public:
     bool Init( const GameWindowParams &_params );
     
 private:
-    bool mInitialized = false;
     Ui::GameWindow *ui = nullptr;
     drash::CApp *mApp = nullptr;
     SceneWidget *mSceneWidget = nullptr;
-    QTimer timer;
-    drash::CTimer mTimer;
+    QTimer mUpdateTimer;
+    drash::CTimer mGameTimer;
     QLabel *mStatusLabel = nullptr;
 };
 
