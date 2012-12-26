@@ -22,12 +22,14 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "csceneobject.h"
+#include "sceneobject.h"
 
-#include "../diag/clogger.h"
+#include "figure.h"
+#include "../diag/logger.h"
 #include "../diag/assert.h"
 #include "explosion.h"
 #include "../misc/graphics.h"
+#include "../scene.h"
 
 namespace drash
 {
@@ -54,7 +56,7 @@ CSceneObject::~CSceneObject(void)
 
 bool CSceneObject::Init(const GeometryT &_geometry, const CSceneObject::ParamsT &_params )
 {
-    if ( mBody == NULL )
+    if ( mBody == nullptr )
     {
         return false;
     }
@@ -89,13 +91,40 @@ void CSceneObject::Release()
     while ( b2Fixture *f = mBody->GetFixtureList() )
     {
         delete reinterpret_cast<CFigure*>( f->GetUserData() );
-        f->SetUserData(NULL);
+        f->SetUserData(nullptr);
         mBody->DestroyFixture(f);
     }
 }
 
 void CSceneObject::Step(double _dt)
 {
+    mLifeTime += _dt;
+
+    for (unsigned int i = 0; i < mFiguresCount; i++)
+    {
+        if (mFigures[i]->mDead == true)
+        {
+            CSceneObjectGeometry g;
+            g.mFigures.resize(1);
+            g.mFigures[0].mVertices.resize(mFigures[i]->EnumVertices());
+            g.mFigures[0].mZ = mFigures[i]->GetZ();
+            g.mFigures[0].mDepth = mFigures[i]->GetDepth();
+            memcpy(&*g.mFigures[0].mVertices.begin(), mFigures[i]->GetVertices(), sizeof(CVec2f) * mFigures[i]->EnumVertices());
+
+            CSceneObjectParams p;
+            p.mAngle = mAngle.Get();
+            p.mDynamic = true;
+            p.mFixedRotation = false;
+            p.mPos = mPos.Get();
+
+            GetScene()->CreateObject<CSceneObject>(g, p);
+
+            DestroyFigure(mFigures[i]);
+
+            break;
+        }
+    }
+
     if (mPos.IsTargetSet())
     {
         mPos.Step(_dt);
@@ -121,8 +150,23 @@ void CSceneObject::Step(double _dt)
     }
 }
 
-void CSceneObject::OnContactBegin(const CFigure *, const CFigure *)
+void CSceneObject::OnContactBegin(const CFigure *_f1, const CFigure *_f2)
 {
+    CVec3f speed(_f2->GetSceneObject()->GetLinearVelocity(), 0);
+    speed.Vec2() -= _f1->GetSceneObject()->GetLinearVelocity();
+
+    if (speed.LengthSquared() > 3000 && mLifeTime > 1 && mFiguresCount > 1)
+    {
+        for (unsigned int i = 0; i < mFiguresCount; i++)
+        {
+            if (mFigures[i] == _f1)
+            {
+                mFigures[i]->mDead = true;
+
+                return;
+            }
+        }
+    }
 }
 
 void CSceneObject::OnContactPreSolve(const CFigure *, const CFigure *)
@@ -149,7 +193,7 @@ void CSceneObject::OnBoom( const CExplosionParams &_boom )
 void CSceneObject::DrawDebug() const
 {
     unsigned int j = 0;
-    for ( b2Fixture *f = mBody->GetFixtureList(); f != NULL; f = f->GetNext() )
+    for ( b2Fixture *f = mBody->GetFixtureList(); f != nullptr; f = f->GetNext() )
     {
         if ( f->GetShape()->GetType() == b2Shape::e_polygon )
         {
@@ -204,7 +248,7 @@ CFigure *CSceneObject::CreateFigure(const CFigureParams &_params)
     fdef.isSensor = false;
     fdef.restitution = _params.mRestitution;
     fdef.shape = &s;
-    fdef.userData = NULL;
+    fdef.userData = nullptr;
 
     b2Fixture *f = mBody->CreateFixture(&fdef);
 
@@ -214,6 +258,7 @@ CFigure *CSceneObject::CreateFigure(const CFigureParams &_params)
     figure->mMass = _params.mMass;
     figure->mDepth = _params.mDepth;
     figure->mInternalId = mFiguresCount;
+    figure->mZ = _params.mZ;
 
     f->SetUserData(figure);
 
@@ -260,7 +305,7 @@ void CSceneObject::ComputeBoundingBox()
     mBoundingBox.lowerBound = b2Vec2(FLT_MAX,FLT_MAX);
     mBoundingBox.upperBound = b2Vec2(-FLT_MAX,-FLT_MAX);
     b2Fixture* fixture = mBody->GetFixtureList();
-    while (fixture != NULL)
+    while (fixture != nullptr)
     {
         mBoundingBox.Combine(mBoundingBox, fixture->GetAABB(0));
         fixture = fixture->GetNext();

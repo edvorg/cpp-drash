@@ -26,7 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CANIMATEDPARAM_H
 #define CANIMATEDPARAM_H
 
-#include "../diag/clogger.h"
+#include "../diag/logger.h"
 #include "../misc/math.h"
 #include <functional>
 

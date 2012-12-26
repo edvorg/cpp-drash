@@ -26,7 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define ASSERT_H
 
 #include <cassert>
-#include "clogger.h"
+#include "logger.h"
 
 namespace drash
 {

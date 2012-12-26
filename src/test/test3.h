@@ -23,26 +23,45 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #pragma once
-#ifndef CTESTAPP2_H
-#define CTESTAPP2_H
+#ifndef CTESTAPP3DRASHTEST_H
+#define CTESTAPP3DRASHTEST_H
 
-#include "../app/app.h"
+#include "test1.h"
+
+#include "../ui/uislider.h"
+#include "../ui/uibutton.h"
 
 namespace drash
 {
 
-class CTestApp2 : public CApp
+namespace test
+{
+
+class CTest3 : public CTest1
 {
 public:
-    virtual ~CTestApp2() override {}
+    virtual ~CTest3() override {}
 
     virtual bool Init() override;
+    virtual void Step(double _dt) override;
+    virtual void Render() override;
 
 private:
     void SetProcessors();
-    CSceneObject *mSelectedObject = nullptr;
+    void InitObjects();
+    double mTime = 0;
+    CSceneObject *mO1 = nullptr;
+    CSceneObject *mO2 = nullptr;
+    CSceneObject *mMoveObject = nullptr;
+
+    // gravity in y axis
+    ui::CUISlider mSlider1;
+    // gravity in x axis
+    ui::CUISlider mSlider2;
 };
 
+} // namespace test
 
-}// namespace drash
-#endif // CTESTAPP2_H
+} // namespace drash
+
+#endif // CTESTAPP3DRASHTEST_H

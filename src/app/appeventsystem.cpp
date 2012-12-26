@@ -1,5 +1,10 @@
 #include "appeventsystem.h"
 
+#include <algorithm>
+#include <cstring>
+
+#include "../diag/logger.h"
+
 namespace drash
 {
 

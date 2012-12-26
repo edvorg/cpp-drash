@@ -26,7 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CBOOMPARAMS_H
 #define CBOOMPARAMS_H
 
-#include "csceneobject.h"
+#include "sceneobject.h"
 
 namespace drash
 {

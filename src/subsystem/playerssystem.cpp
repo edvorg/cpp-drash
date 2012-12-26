@@ -24,7 +24,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "playerssystem.h"
 
-#include <diag/clogger.h>
+#include "../diag/logger.h"
+#include "../sceneobjects/player.h"
+#include "../scene.h"
 
 namespace drash
 {
@@ -44,7 +46,7 @@ void CPlayersSystem::Release()
 
 int CPlayersSystem::AddPlayer(const CSceneObjectGeometry &_geometry, const CPlayerParams &_params)
 {
-    if (GetScene() == NULL)
+    if (GetScene() == nullptr)
     {
         return -1;
     }
@@ -57,7 +59,7 @@ int CPlayersSystem::AddPlayer(const CSceneObjectGeometry &_geometry, const CPlay
 
     CPlayer *p = GetScene()->CreateObject<CPlayer>(_geometry, _params);
 
-    if (p != NULL)
+    if (p != nullptr)
     {
         mPlayers[mPlayersCount] = p;
         return mPlayersCount++;
@@ -70,7 +72,7 @@ int CPlayersSystem::AddPlayer(const CSceneObjectGeometry &_geometry, const CPlay
 
 void CPlayersSystem::RemPlayer(int _player)
 {
-    if (GetScene() == NULL)
+    if (GetScene() == nullptr)
     {
         LOG_ERR("CPlayersSystem::RemPlayer(): scene is unconnected");
         return;

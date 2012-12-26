@@ -23,12 +23,31 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #pragma once
-#ifndef SCENEOBJECTS_H
-#define SCENEOBJECTS_H
+#ifndef CTESTAPP2_H
+#define CTESTAPP2_H
 
-#include "sceneobjects/cdrashbody.h"
-#include "sceneobjects/cplayer.h"
-#include "sceneobjects/csceneobject.h"
-#include "sceneobjects/explosion.h"
+#include "../app/app.h"
 
-#endif // SCENEOBJECTS_H
+namespace drash
+{
+
+namespace test
+{
+
+class CTest2 : public CApp
+{
+public:
+    virtual ~CTest2() override {}
+
+    virtual bool Init() override;
+
+private:
+    void SetProcessors();
+    CSceneObject *mSelectedObject = nullptr;
+};
+
+} // namespace test
+
+}// namespace drash
+
+#endif // CTESTAPP2_H

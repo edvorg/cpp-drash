@@ -3,6 +3,7 @@
 #include "../debugdrawsystem/camera.h"
 
 #include "../misc/plane.h"
+#include "../misc/ray.h"
 
 namespace drash
 {
@@ -50,4 +51,5 @@ bool CTest5::Init()
 }
 
 } // namespace test
+
 } // namespace drash

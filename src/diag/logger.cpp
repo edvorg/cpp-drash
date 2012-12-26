@@ -22,7 +22,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
- #include "clogger.h"
+ #include "logger.h"
 
  #include <iostream>
 

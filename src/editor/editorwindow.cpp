@@ -21,17 +21,26 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 // DRASH_LICENSE_END
+
 #include "editorwindow.h"
 #include "ui_editorwindow.h"
-#include "../cscene.h"
+
+#include <QTreeWidgetItem>
+#include <QStringList>
+#include <QLabel>
+#include <QStatusBar>
+#include <QDebug>
+
+#include "../scene.h"
+#include "../sceneobjects/figure.h"
+#include "../sceneobjects/sceneobject.h"
 #include "../subsystem/templatesystem.h"
 #include "../misc/vec2.h"
 #include "../debugdrawsystem/camera.h"
+#include "editorapp.h"
 
 #include <vector>
 #include <string>
-#include <QTreeWidgetItem>
-#include <QStringList>
 
 using namespace drash;
 
@@ -76,7 +85,7 @@ bool EditorWindow::InitScene()
     drash::CSceneParams params;
     params.mGravity.Set( 0.0f, -9.8f );
     mObjectApp = new CObjectEditorApp();
-    if (mObjectApp == NULL) {
+    if (mObjectApp == nullptr) {
         return false;
     }
 
@@ -290,7 +299,7 @@ void EditorWindow::on_mTreeObjects_itemSelectionChanged()
     } else {
         return;
     }
-    if (item->parent() == NULL) {
+    if (item->parent() == nullptr) {
         qDebug() << "Object created";
         mObjectApp->ShowObject(item->text(0).toStdString());
         //mCurrentObject = mObjectApp->GetTemplateSystem().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
@@ -305,7 +314,7 @@ void EditorWindow::Remove_Object()
     } else {
         return;
     }
-    if (item->parent() == NULL) {
+    if (item->parent() == nullptr) {
         //qDebug() << "Object created";
         mObjectApp->GetTemplateSystem().RemoveSceneObjectTemplate(item->text(0).toStdString());
         UpdateTreeObject();

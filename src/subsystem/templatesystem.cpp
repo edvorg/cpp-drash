@@ -24,6 +24,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "templatesystem.h"
 
+#include "../scene.h"
+#include "../sceneobjects/figure.h"
+#include "../sceneobjects/sceneobject.h"
+
 namespace drash
 {
 
@@ -43,12 +47,6 @@ void CTemplateSystem::Release()
         delete i->second;
     }
     mSceneObjectTemplates.clear();
-
-    for (auto i=mDrashBodyTemplates.begin(), i_e=mDrashBodyTemplates.end(); i!=i_e; i++)
-    {
-        delete i->second;
-    }
-    mDrashBodyTemplates.clear();
 }
 
 CSceneObjectGeometry *CTemplateSystem::CreateSceneObjectTemplate(const std::string &_name)
@@ -138,59 +136,6 @@ CSceneObjectGeometry *CTemplateSystem::FindTemplate(const std::string &_name)
 
 }
 
-CDrashBodyGeometry *CTemplateSystem::CreateDrashBodyTemplate(const std::string &_name)
-{
-    if (_name == "")
-    {
-        return nullptr;
-    }
-    else
-    {
-        if (mDrashBodyTemplates.find(_name) != mDrashBodyTemplates.end()) {
-            LOG_ERR("Template " << _name.c_str() << " exists in TemplateSystem");
-            return nullptr;
-        }
-        MapDrashBodyItem elem;
-        elem.second = new CDrashBodyGeometry();
-        elem.first = _name;
-        mDrashBodyTemplates.insert(elem);
-        return elem.second;
-    }
-}
-
-void CTemplateSystem::DestoyDrashBodyTemplate(CDrashBodyGeometry *_t)
-{
-    for (auto i=mDrashBodyTemplates.begin(), i_e=mDrashBodyTemplates.end(); i!=i_e; i++)
-    {
-        if (i->second == _t)
-        {
-            delete _t;
-            mDrashBodyTemplates.erase(i);
-            return;
-        }
-    }
-}
-
-void CTemplateSystem::RemoveDrashBodyTemplate(const std::string &_name)
-{
-    auto iter = mDrashBodyTemplates.find(_name);
-    if (iter == mDrashBodyTemplates.end()) {
-        return;
-    }
-    delete iter->second;
-    mDrashBodyTemplates.erase(iter);
-}
-
-CDrashBody *CTemplateSystem::CreateDrashBodyFromTemplate(const std::string &_name, const CDrashBodyParams &_params)
-{
-    auto iter = mDrashBodyTemplates.find(_name);
-    if (iter == mDrashBodyTemplates.end()) {
-        LOG_ERR("Object" << _name.c_str() << "not found in CTemplateSystem");
-        return nullptr;
-    }
-    return GetScene()->CreateObject<CDrashBody>(*(iter->second), _params);
-}
-
 const CTemplateSystem::SceneObjectTemplatesT &CTemplateSystem::GetSceneObjectTemplates() const
 {
     return this->mSceneObjectTemplates;
@@ -209,11 +154,6 @@ void CTemplateSystem::RenameTemplate(const std::string &_oldName, const std::str
     mSceneObjectTemplates.erase(iter);
     buff.first = _newName;
     mSceneObjectTemplates.insert(buff);
-}
-
-const CTemplateSystem::DrashBodyTemplatesT &CTemplateSystem::GetDrashBodyTemplates() const
-{
-    return this->mDrashBodyTemplates;
 }
 
 }// namespace drash

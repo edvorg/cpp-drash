@@ -1,10 +1,31 @@
 #include "plane.h"
 
+#include "ray.h"
+
 namespace drash
 {
 
+extern const CPlane PlaneXY(CVec3f(0), CVec3f(0, 0, 1));
+extern const CPlane PlaneYZ(CVec3f(0), CVec3f(1, 0, 0));
+extern const CPlane PlaneXZ(CVec3f(0), CVec3f(0, 1, 0));
+
 CPlane::CPlane()
 {
+}
+
+CPlane::CPlane(const CPlane &_plane):
+    mPoint(_plane.mPoint),
+    mNormal(_plane.mNormal),
+    mD(_plane.mD)
+{
+}
+
+CPlane::CPlane(const CVec3f &_point, const CVec3f &_normal)
+{
+    mPoint = _point;
+    mNormal = _normal;
+    mNormal.Normalize();
+    ComputeD();
 }
 
 void CPlane::SetPoint(const CVec3f &_point)

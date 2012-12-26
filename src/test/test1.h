@@ -23,21 +23,21 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #pragma once
-#ifndef CTESTAPP3DRASHTEST_H
-#define CTESTAPP3DRASHTEST_H
+#ifndef TESTEDITORAPP_H
+#define TESTEDITORAPP_H
 
-#include "TestEditorApp.h"
-
-#include "../ui/uislider.h"
-#include "../ui/uibutton.h"
+#include "../app/app.h"
 
 namespace drash
 {
 
-class CTestApp3 : public CTestEditorApp
+namespace test
+{
+
+class CTest1 : public CApp
 {
 public:
-    virtual ~CTestApp3() override {}
+    virtual ~CTest1() override {}
 
     virtual bool Init() override;
     virtual void Step(double _dt) override;
@@ -45,21 +45,35 @@ public:
 
 private:
     void SetProcessors();
-    void InitObjects();
+    void CamViewProcessors();
+    void CompleteFigure();
+    void CreateTemplate();
+    void DetachCurrentObject();
+    void SelectFigure();
+
     double mTime = 0;
-    CSceneObject *mO1 = nullptr;
-    CSceneObject *mO2 = nullptr;
-    CSceneObject *mMoveObject = nullptr;
 
-    // gravity in y axis
-    ui::CUISlider mSlider1;
-    // gravity in x axis
-    ui::CUISlider mSlider2;
+    std::vector<CVec2f> mVertices;
+    unsigned int mTemplateCounter = 0;
+    CSceneObjectGeometry *mCurrentTemplate = nullptr;
+    CSceneObject *mCurrentObject = nullptr;
+    CFigure *mCurrentFigure = nullptr;
 
-    // creates objct at random position from geometry of template system (if it has any).
-    ui::CUIButton mButton1;
+    CVec2f mCamRotFirstClick;
+
+    CVec3f mCenter;
+    CVec3f mX;
+    CVec3f mY;
+    CVec3f mZ;
+
+    CVec3f mAxisDrawK;
+    unsigned int mAxisOver = 0;
+    CVec3f mFigureMoveFirstClick;
+    unsigned int mAxisMoving = 0;
 };
+
+} // namespace test
 
 } // namespace drash
 
-#endif // CTESTAPP3DRASHTEST_H
+#endif // TESTEDITORAPP_H

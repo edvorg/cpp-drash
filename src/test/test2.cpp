@@ -22,17 +22,23 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "ctestapp2.h"
+#include "test2.h"
 
-#include "../cscene.h"
+#include "../scene.h"
 #include "../app/appeventprocessor.h"
 #include "../debugdrawsystem/camera.h"
 #include "./misc/plane.h"
+#include "../sceneobjects/sceneobject.h"
+#include "../sceneobjects/player.h"
+#include "../sceneobjects/figure.h"
 
 namespace drash
 {
 
-bool CTestApp2::Init()
+namespace test
+{
+
+bool CTest2::Init()
 {
     if ( CApp::Init() == false )
     {
@@ -86,7 +92,7 @@ bool CTestApp2::Init()
     return true;
 }
 
-void CTestApp2::SetProcessors()
+void CTest2::SetProcessors()
 {    
     auto t = GetTemplateSystem().CreateSceneObjectTemplate("lambda_test");
     t->mFigures.resize(1);
@@ -163,4 +169,6 @@ void CTestApp2::SetProcessors()
     }));
 }
 
-}
+} // namespace test
+
+} // namespace drash

@@ -22,10 +22,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "cplayer.h"
-#include "../diag/clogger.h"
-
-#include "../cscene.h"
+#include "player.h"
+#include "../diag/logger.h"
+#include "../scene.h"
 
 namespace drash
 {

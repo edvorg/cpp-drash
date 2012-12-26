@@ -30,7 +30,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 int main(int argc, char *argv[])
 {
-    srand( time(NULL) );
+    srand( time(nullptr) );
 
     QApplication a(argc, argv);
 
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 
     // allocate and init editor or game window
 
-    QMainWindow *w = NULL;
+    QMainWindow *w = nullptr;
 
     if (editor)
     {
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
         if (reinterpret_cast<GameWindow*>(w)->Init(p) == false)
         {
             delete w;
-            w = NULL;
+            w = nullptr;
         }
     }
 
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 
     int res = 1;
 
-    if (w != NULL)
+    if (w != nullptr)
     {
         w->show();
         res = a.exec();

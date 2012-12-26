@@ -51,4 +51,5 @@ void CTest4::Release()
 }
 
 } // namespace test
+
 } // namespace drash

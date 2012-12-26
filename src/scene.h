@@ -26,13 +26,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CSCENE_H
 #define CSCENE_H
 
-#include "sceneobjects.h"
 #include "physobserver.h"
-#include "diag/assert.h"
-#include "joints/joint.h"
+#include "misc/vec2.h"
+#include "misc/vec3.h"
 
 namespace drash
 {
+
+class CSceneObject;
+class CJoint;
 
 class CSceneParams
 {
@@ -130,13 +132,13 @@ T* CScene::CreateObject(const typename T::GeometryT &_geometry, const typename T
     if (mObjectsCount == mObjectsCountLimit)
 	{
         LOG_ERR("CScene::CreateObject(): Achieved maximum Amount of Objects in scene");
-        return NULL;
+        return nullptr;
     }
 
     if (mWorld.IsLocked())
     {
         LOG_ERR("CScene::CreateObject(): world is locked now");
-        return NULL;
+        return nullptr;
     }
 
     b2BodyDef bdef;

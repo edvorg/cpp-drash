@@ -27,7 +27,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define CSCENEOBJECT_H
 
 #include <Box2D/Box2D.h>
-#include "figure.h"
 #include "../misc/animatedparam.h"
 #include "../misc/vec3.h"
 
@@ -35,7 +34,8 @@ namespace drash
 {
 
 class CScene;
-class CSceneObject;
+class CFigureParams;
+class CFigure;
 class CExplosionParams;
 
 class CSceneObjectGeometry
@@ -107,7 +107,7 @@ protected:
 
     virtual void Step(double _dt);
 
-    virtual void OnContactBegin(const CFigure *, const CFigure *);
+    virtual void OnContactBegin(const CFigure *_f1, const CFigure *_f2);
     virtual void OnContactPreSolve(const CFigure *, const CFigure *);
     virtual void OnContactEnd(const CFigure *, const CFigure *);
     virtual void OnBoom( const CExplosionParams &_boom );
@@ -142,6 +142,8 @@ private:
 
     /// color, used for debug rendering. will be removed
     float mColor[3];
+
+    float mLifeTime = 0.0f;
 };
 
 inline CScene *CSceneObject::GetScene()

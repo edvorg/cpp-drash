@@ -25,11 +25,13 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCENEWIDGET_H
 #define SCENEWIDGET_H
 
-#include <QtOpenGL/QtOpenGL>
-#include "sceneobjects.h"
-#include "app/app.h"
-#include "cscene.h"
 #include <QGLWidget>
+#include "misc/vec2.h"
+
+namespace drash
+{
+    class CApp;
+}
 
 class SceneWidget : public QGLWidget
 {

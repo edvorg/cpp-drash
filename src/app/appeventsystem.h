@@ -1,9 +1,9 @@
 #ifndef DRASH_APPEVENTSYSTEM_H
 #define DRASH_APPEVENTSYSTEM_H
 
-#include "appevent.h"
 #include "appeventprocessor.h"
 #include "appeventcombination.h"
+
 #include <string>
 #include <list>
 #include <map>
@@ -15,6 +15,8 @@ namespace drash
 #define STATE_BEGIN 0x02
 #define STATE_PROCESSING 0x04
 #define STATE_END 0x08
+
+class CAppEvent;
 
 class CAppEventCombinationTree
 {

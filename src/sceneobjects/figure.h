@@ -26,7 +26,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define FIGURE_H
 
 #include <vector>
-#include "../misc/math.h"
 #include "../misc/vec2.h"
 
 namespace drash
@@ -43,10 +42,11 @@ public:
     float mRestitution = 0;
     float mMass = 1;
 
-    /// if size of mVertices is NULL, creates a box with (1, 1) dimentions
+    /// if size of mVertices is nullptr, creates a box with (1, 1) dimentions
     std::vector<CVec2f> mVertices;
 
     float mDepth = 1;
+    float mZ = 0;
 };
 
 class CFigure
@@ -77,6 +77,7 @@ private:
     float mDepth = 1;
     float mMass = 1;
     int mInternalId = -1;
+    bool mDead = false;
 };
 
 inline float CFigure::GetFriction() const
