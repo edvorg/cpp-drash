@@ -42,6 +42,7 @@ public:
     virtual bool Init() override;
     virtual void Step(double _dt) override;
     virtual void Render() override;
+    virtual void Release() override;
 
 private:
     void SetProcessors();

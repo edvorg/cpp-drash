@@ -60,6 +60,9 @@ public:
 
     void RenameTemplate(const std::string &_oldName, const std::string &_newName);
 
+    bool Load();
+    bool Store();
+
 protected:
 private:
     SceneObjectTemplatesT mSceneObjectTemplates;

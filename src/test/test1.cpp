@@ -47,6 +47,11 @@ bool CTest1::Init()
         return false;
     }
 
+    if (GetTemplateSystem().Load() == false)
+    {
+        return false;
+    }
+
     GetDebugDrawSystem().GetActiveCam()->GetPos().Set(CVec3f(0, 0, 100));
 
     SetProcessors();
@@ -135,6 +140,13 @@ void CTest1::Render()
         GetDebugDrawSystem().DrawLine(mCenter, mY, b2Color(0, 1 * mAxisDrawK.mY, 0));
         GetDebugDrawSystem().DrawLine(mCenter, mZ, b2Color(0, 0, 1 * mAxisDrawK.mZ));
     }
+}
+
+void CTest1::Release()
+{
+    GetTemplateSystem().Store();
+
+    CApp::Release();
 }
 
 void CTest1::SetProcessors()

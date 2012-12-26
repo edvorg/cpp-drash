@@ -28,6 +28,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../sceneobjects/figure.h"
 #include "../sceneobjects/sceneobject.h"
 
+#include <fstream>
+
 namespace drash
 {
 
@@ -154,6 +156,97 @@ void CTemplateSystem::RenameTemplate(const std::string &_oldName, const std::str
     mSceneObjectTemplates.erase(iter);
     buff.first = _newName;
     mSceneObjectTemplates.insert(buff);
+}
+
+bool CTemplateSystem::Load()
+{
+    Release();
+
+    std::ifstream in("templates.txt");
+
+    if (in.is_open() == false)
+    {
+        return false;
+    }
+
+    unsigned int templates_count = 0;
+    unsigned int figures_count = 0;
+    unsigned int vertices_count = 0;
+    CVec2f vertex;
+    std::string name = "";
+
+    in>>templates_count;
+
+    for (unsigned int i = 0; i < templates_count; i++)
+    {
+        name = "";
+        figures_count = 0;
+
+        in>>name;
+        in>>figures_count;
+
+        CSceneObjectGeometry *g = CreateSceneObjectTemplate(name.c_str());
+
+        g->mFigures.resize(figures_count);
+
+        for (unsigned int j = 0; j < figures_count; j++)
+        {
+            vertices_count = 0;
+
+            in>>vertices_count;
+
+            g->mFigures[j].mVertices.resize(vertices_count);
+
+            for (unsigned int k = 0; k < vertices_count; k++)
+            {
+                vertex.Set(0, 0);
+
+                in>>vertex.mX;
+                in>>vertex.mY;
+
+                g->mFigures[j].mVertices[k] = vertex;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool CTemplateSystem::Store()
+{
+    using std::endl;
+
+    std::ofstream out("templates.txt");
+
+    if (out.is_open() == false)
+    {
+        return false;
+    }
+
+    out<<mSceneObjectTemplates.size()<<endl;
+
+    for (auto &i : mSceneObjectTemplates)
+    {
+        out<<i.first<<std::endl;
+
+        out<<i.second->mFigures.size()<<endl;
+
+        for (auto &j : i.second->mFigures)
+        {
+            out<<j.mVertices.size()<<endl;
+
+            for (auto &k : j.mVertices)
+            {
+                out<<k.mX<<' '<<k.mY<<endl;
+            }
+        }
+    }
+
+    out<<endl;
+
+    out.close();
+
+    return true;
 }
 
 }// namespace drash
