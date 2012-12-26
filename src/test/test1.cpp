@@ -54,6 +54,67 @@ bool CTest1::Init()
     return true;
 }
 
+void CTest1::Step(double _dt)
+{
+    CApp::Step(_dt);
+
+
+    if (mCurrentFigure != nullptr && mCurrentObject != nullptr)
+    {
+        mCenter.Set(mCurrentFigure->GetVertices()[0], mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ());
+
+        for (unsigned int i = 1; i < mCurrentFigure->EnumVertices(); i++)
+        {
+            mCenter.Vec2() += mCurrentFigure->GetVertices()[i];
+        }
+
+        mCenter.Vec2() /= CVec2f(mCurrentFigure->EnumVertices());
+
+        mX = mCenter;
+        mY = mCenter;
+        mZ = mCenter;
+        mX.mX += 10;
+        mY.mY += 10;
+        mZ.mZ += 10;
+
+        CPlane xz(PlaneXZ);
+        xz.SetPoint(mCenter);
+        CPlane xy(PlaneXY);
+        xy.SetPoint(mCenter);
+
+        CVec3f r1;
+        GetDebugDrawSystem().CastRay(GetCursorPos(), xz, r1);
+        CVec3f r2;
+        GetDebugDrawSystem().CastRay(GetCursorPos(), xy, r2);
+
+        CVec2f dstz = r1;
+        dstz -= mCenter.Vec2();
+        CVec2f dstx(r1.mZ, r1.mY);
+        dstx -= CVec2f(mCenter.mZ, mCenter.mY);
+        CVec2f dsty(r2.mZ, r2.mX);
+        dsty -= CVec2f(mCenter.mZ, mCenter.mX);
+
+        mAxisOver = 0;
+        mAxisDrawK.Set(1, 1, 1);
+
+        if (dstz.Length() < 3)
+        {
+            mAxisDrawK.mZ *= 0.5;
+            mAxisOver = 3;
+        }
+        else if (dstx.Length() < 3)
+        {
+            mAxisDrawK.mX *= 0.5;
+            mAxisOver = 1;
+        }
+        else if (dsty.Length() < 3)
+        {
+            mAxisDrawK.mY *= 0.5;
+            mAxisOver = 2;
+        }
+    }
+}
+
 void CTest1::Render()
 {
     CApp::Render();
@@ -67,10 +128,121 @@ void CTest1::Render()
         GetDebugDrawSystem().DrawLine(mVertices[mVertices.size()-1], GetCursorPos(), b2Color(0, 1, 0));
         GetDebugDrawSystem().DrawLine(mVertices[0], GetCursorPos(), b2Color(0, 1, 0));
     }
+
+    if (mCurrentFigure != nullptr && mCurrentObject != nullptr)
+    {
+        GetDebugDrawSystem().DrawLine(mCenter, mX, b2Color(1 * mAxisDrawK.mX, 0, 0));
+        GetDebugDrawSystem().DrawLine(mCenter, mY, b2Color(0, 1 * mAxisDrawK.mY, 0));
+        GetDebugDrawSystem().DrawLine(mCenter, mZ, b2Color(0, 0, 1 * mAxisDrawK.mZ));
+    }
 }
 
 void CTest1::SetProcessors()
 {
+    GetEventSystem().SetMode(std::string("figure_movement"));
+
+    GetEventSystem().SetProcessor("WHUP", CAppEventProcessor(
+    [this] ()
+    {
+        if (mCurrentFigure != nullptr)
+        {
+            mCurrentFigure->SetDepth(mCurrentFigure->GetDepth() + 1.0f);
+        }
+    }));
+
+    GetEventSystem().SetProcessor("WHDN", CAppEventProcessor(
+    [this] ()
+    {
+        if (mCurrentFigure != nullptr)
+        {
+            mCurrentFigure->SetDepth(math::Max<float>(0, mCurrentFigure->GetDepth() - 1.0f));
+        }
+    }));
+
+    GetEventSystem().SetProcessor("LB", CAppEventProcessor(
+    [this] ()
+    {
+        if (mAxisOver == 0)
+        {
+            SelectFigure();
+        }
+        else
+        {
+            if (mAxisOver == 2)
+            {
+                CPlane xy(PlaneXY);
+                xy.SetPoint(mCenter);
+                GetDebugDrawSystem().CastRay(GetCursorPos(), xy, mFigureMoveFirstClick);
+                mAxisMoving = mAxisOver;
+            }
+            else
+            {
+                CPlane xz(PlaneXZ);
+                xz.SetPoint(mCenter);
+                GetDebugDrawSystem().CastRay(GetCursorPos(), xz, mFigureMoveFirstClick);
+                mAxisMoving = mAxisOver;
+            }
+        }
+    },
+    [this] ()
+    {
+        if (mAxisMoving == 1)
+        {
+            CPlane xz(PlaneXZ);
+            xz.SetPoint(mCenter);
+            CVec3f new_pos;
+            GetDebugDrawSystem().CastRay(GetCursorPos(), xz, new_pos);
+
+            CVec2f *v = new CVec2f[mCurrentFigure->EnumVertices()];
+            for (unsigned int i = 0; i < mCurrentFigure->EnumVertices(); i++)
+            {
+                v[i].mX = mCurrentFigure->GetVertices()[i].mX + new_pos.mX - mFigureMoveFirstClick.mX;
+                v[i].mY = mCurrentFigure->GetVertices()[i].mY;
+            }
+            mCurrentFigure->SetVertices(v, mCurrentFigure->EnumVertices());
+            delete [] v;
+
+            mFigureMoveFirstClick = new_pos;
+        }
+        else if (mAxisMoving == 2)
+        {
+            CPlane xy(PlaneXY);
+            xy.SetPoint(mCenter);
+            CVec3f new_pos;
+            GetDebugDrawSystem().CastRay(GetCursorPos(), xy, new_pos);
+
+            CVec2f *v = new CVec2f[mCurrentFigure->EnumVertices()];
+            for (unsigned int i = 0; i < mCurrentFigure->EnumVertices(); i++)
+            {
+                v[i].mX = mCurrentFigure->GetVertices()[i].mX;
+                v[i].mY = mCurrentFigure->GetVertices()[i].mY + new_pos.mY - mFigureMoveFirstClick.mY;
+            }
+            mCurrentFigure->SetVertices(v, mCurrentFigure->EnumVertices());
+            delete [] v;
+
+            mFigureMoveFirstClick = new_pos;
+        }
+        else if (mAxisMoving == 3)
+        {
+            CPlane xz(PlaneXZ);
+            xz.SetPoint(mCenter);
+            CVec3f new_pos;
+            GetDebugDrawSystem().CastRay(GetCursorPos(), xz, new_pos);
+
+            mCurrentFigure->SetZ(mCurrentFigure->GetZ() + new_pos.mZ - mFigureMoveFirstClick.mZ);
+
+            mFigureMoveFirstClick = new_pos;
+        }
+    },
+    [this] ()
+    {
+        mAxisMoving = 0;
+    }));
+
+    CamViewProcessors();
+
+    ///
+
     GetEventSystem().SetMode(std::string("editor_mode"));
 
     GetEventSystem().SetProcessor("C-c", CAppEventProcessor(
@@ -91,12 +263,29 @@ void CTest1::SetProcessors()
         mVertices.push_back(GetCursorPos());
     }));
 
+    GetEventSystem().SetProcessor("LB", CAppEventProcessor(
+    [this] ()
+    {
+        SelectFigure();
+    }));
+
     GetEventSystem().SetProcessor("RB", CAppEventProcessor(
     [this] ()
     {
         CompleteFigure();
     }));
 
+    CamViewProcessors();
+
+    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
+    [this] ()
+    {
+        this->Quit();
+    }));
+}
+
+void CTest1::CamViewProcessors()
+{
     GetEventSystem().SetProcessor("MB", CAppEventProcessor(
     [this] ()
     {
@@ -141,12 +330,6 @@ void CTest1::SetProcessors()
     [this] ()
     {
         GetDebugDrawSystem().GetActiveCam()->Strafe(-5);
-    }));
-
-    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
-    [this] ()
-    {
-        this->Quit();
     }));
 }
 
@@ -206,6 +389,20 @@ void CTest1::DetachCurrentObject()
     {
         mCurrentObject->SetDynamic(true);
         mCurrentObject = nullptr;
+    }
+}
+
+void CTest1::SelectFigure()
+{
+    mCurrentFigure = GetDebugDrawSystem().FindFigure(GetCursorPos());
+
+    if (mCurrentFigure != nullptr)
+    {
+        GetEventSystem().SetMode("figure_movement");
+    }
+    else
+    {
+        GetEventSystem().SetMode("editor_mode");
     }
 }
 

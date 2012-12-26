@@ -40,13 +40,16 @@ public:
     virtual ~CTest1() override {}
 
     virtual bool Init() override;
+    virtual void Step(double _dt) override;
     virtual void Render() override;
 
 private:
     void SetProcessors();
+    void CamViewProcessors();
     void CompleteFigure();
     void CreateTemplate();
     void DetachCurrentObject();
+    void SelectFigure();
 
     double mTime = 0;
 
@@ -54,8 +57,19 @@ private:
     unsigned int mTemplateCounter = 0;
     CSceneObjectGeometry *mCurrentTemplate = nullptr;
     CSceneObject *mCurrentObject = nullptr;
+    CFigure *mCurrentFigure = nullptr;
 
     CVec2f mCamRotFirstClick;
+
+    CVec3f mCenter;
+    CVec3f mX;
+    CVec3f mY;
+    CVec3f mZ;
+
+    CVec3f mAxisDrawK;
+    unsigned int mAxisOver = 0;
+    CVec3f mFigureMoveFirstClick;
+    unsigned int mAxisMoving = 0;
 };
 
 } // namespace test
