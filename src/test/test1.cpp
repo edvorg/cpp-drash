@@ -383,10 +383,16 @@ void CTest1::CompleteFigure()
 
 void CTest1::CreateTemplate()
 {
-    std::ostringstream is;
-    is<<"new_template_"<<(mTemplateCounter++);
+    static const unsigned max_try_count = 10;
+    unsigned int counter = 0;
 
-    this->mCurrentTemplate = GetTemplateSystem().CreateSceneObjectTemplate(is.str().c_str());
+    do
+    {
+        std::ostringstream is;
+        is<<"new_template_"<<(mTemplateCounter++);
+        this->mCurrentTemplate = GetTemplateSystem().CreateSceneObjectTemplate(is.str().c_str());
+    }
+    while (this->mCurrentTemplate == nullptr && counter < max_try_count);
 
     if (mCurrentObject != nullptr)
     {
