@@ -134,8 +134,6 @@ void SceneWidget::paintGL()
     {
         mApp->Render();
     }
-
-    swapBuffers();
 }
 
 void SceneWidget::SetTestApp( drash::CApp *_app )
