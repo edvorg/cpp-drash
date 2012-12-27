@@ -224,15 +224,14 @@ void CTest3::SetProcessors()
     {
         if (mMoveObject != nullptr)
         {
-            CPlane p;
-            p.SetNormal(CVec3f(0, 0, 1));
+            CPlane p(PlaneXY);
             p.SetPoint(mMoveObject->GetPos().Get());
 
             CVec3f pos;
 
             GetDebugDrawSystem().CastRay(GetCursorPos(), p, pos);
 
-            pos -= mMoveObject->GetPos().Get();
+            pos.Vec2() -= mMoveObject->GetMassCenter();
             pos *= 10;
             mMoveObject->SetLinearVelocity(pos);
         }

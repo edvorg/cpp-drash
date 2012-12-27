@@ -88,6 +88,7 @@ public:
     inline void SetFixedRotation( bool _fixed );
     inline void SetActive( bool _active );
     inline CVec2f GetWorldPoint(const CVec2f &_local_point) const;
+    inline CVec2f GetMassCenter() const;
 
     inline CAnimatedParam<CVec3f> &GetPos();
     inline CAnimatedParam<float> &GetAngle();
@@ -211,9 +212,14 @@ inline void CSceneObject::SetActive( bool _active )
     mBody->SetActive(_active);
 }
 
-CVec2f CSceneObject::GetWorldPoint(const CVec2f &_local_point) const
+inline CVec2f CSceneObject::GetWorldPoint(const CVec2f &_local_point) const
 {
     return B2Vec2ToCVec2(mBody->GetWorldPoint(CVec2ToB2Vec2(_local_point)));
+}
+
+inline CVec2f CSceneObject::GetMassCenter() const
+{
+    return B2Vec2ToCVec2(mBody->GetWorldCenter());
 }
 
 inline CAnimatedParam<CVec3f> &CSceneObject::GetPos()
