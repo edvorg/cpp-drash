@@ -23,6 +23,8 @@ public:
     CColor3(const T &_rgb);
     CColor3(const T &_r, const T &_g, const T &_b);
 
+    CColor3 &Set(const T &_r, const T &_g, const T &_b);
+
     T mR = DEF_VAL_FUNC();
     T mG = DEF_VAL_FUNC();
     T mB = DEF_VAL_FUNC();
@@ -59,6 +61,15 @@ CColor3<T, DEF_VAL_FUNC>::CColor3(const T &_r, const T &_g, const T &_b):
     mG(_g),
     mB(_b)
 {
+}
+
+template<class T, T (*DEF_VAL_FUNC) ()>
+CColor3<T, DEF_VAL_FUNC> &CColor3<T, DEF_VAL_FUNC>::Set(const T &_r, const T &_g, const T &_b)
+{
+    this->mR = _r;
+    this->mG = _g;
+    this->mB = _b;
+    return *this;
 }
 
 } // namespace drash

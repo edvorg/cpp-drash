@@ -15,6 +15,8 @@ public:
     CColor4(const T &_rgb);
     CColor4(const T &_r, const T &_g, const T &_b, const T &_a);
 
+    CColor4 &Set(const T &_r, const T &_g, const T &_b, const T &_a);
+
     T mA = DEF_VAL_FUNC();
 protected:
 private:
@@ -46,6 +48,16 @@ CColor4<T, DEF_VAL_FUNC>::CColor4(const T &_r, const T &_g, const T &_b, const T
     CColor3<T, DEF_VAL_FUNC>(_r, _g, _b),
     mA(_a)
 {
+}
+
+template<class T, T (*DEF_VAL_FUNC) ()>
+CColor4<T, DEF_VAL_FUNC> &CColor4<T, DEF_VAL_FUNC>::Set(const T &_r, const T &_g, const T &_b, const T &_a)
+{
+    this->mR = _r;
+    this->mG = _g;
+    this->mB = _b;
+    this->mA = _a;
+    return *this;
 }
 
 } // namespace drash
