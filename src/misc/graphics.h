@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "vec2.h"
 #include "math.h"
+#include "color4.h"
 
 namespace drash
 {
@@ -37,16 +38,16 @@ void DrawBodySide(const CVec2f &_v1,
               const CVec2f &_v2,
               float _z,
               float _depth,
-              const b2Color &_diffuse );
+              const CColor4f &_diffuse );
 
 void DrawBody(const CVec2f *_vertices,
               unsigned int _count,
               float _z,
               float _depth,
-              const b2Color &_color);
+              const CColor4f &_color);
 
 void DrawCircle(float _rad,
-                float _r, float _g, float _b, float _a);
+                const CColor4f &_color);
 
 }// namespace drash
 

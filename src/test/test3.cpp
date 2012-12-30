@@ -93,7 +93,7 @@ void CTest3::Render()
         const b2AABB &b = mO1->GetBoundingBox();
         CVec3f upper(B2Vec2ToCVec2(b.upperBound), mO1->GetPos().Get().mZ);
         CVec3f lower(B2Vec2ToCVec2(b.lowerBound), mO1->GetPos().Get().mZ);
-        b2Color col(1, 0, 0);
+        CColor4f col(1, 0, 0, 1);
         CVec3f tmp1(upper.mX, lower.mY, mO1->GetPos().Get().mZ);
         CVec3f tmp2(lower.mX, upper.mY, mO1->GetPos().Get().mZ);
         GetDebugDrawSystem().DrawLine(tmp1, upper, col);

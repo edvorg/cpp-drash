@@ -82,10 +82,10 @@ void CObjectEditorApp::Render()
     CApp::Render();
     if (mVertexs.size() != 0 && mState == BuildState) {
         for (unsigned int i = 1 ; i < mVertexs.size() ; i++) {
-            GetDebugDrawSystem().DrawLine(mVertexs[i-1],mVertexs[i],b2Color(0,255,0));
+            GetDebugDrawSystem().DrawLine(mVertexs[i-1],mVertexs[i], CColor4f(0, 1, 0, 1));
         }
-        GetDebugDrawSystem().DrawLine(mVertexs[mVertexs.size() -1 ],GetCursorPos(),b2Color(0,255,0));
-        GetDebugDrawSystem().DrawLine(mVertexs[0],GetCursorPos(),b2Color(0,255,0));
+        GetDebugDrawSystem().DrawLine(mVertexs[mVertexs.size() -1 ],GetCursorPos(), CColor4f(0, 1, 0, 1));
+        GetDebugDrawSystem().DrawLine(mVertexs[0],GetCursorPos(), CColor4f(0, 1, 0, 1));
     }
     if (mState == StretchState) {
 //        qDebug() << "THIS!!!";
@@ -103,7 +103,7 @@ void CObjectEditorApp::Render()
             {
                 CVec3f position(figure->GetVertices()[j], mCurrentObject->GetPos().Get().mZ + figure->GetZ() + figure->GetDepth() * 0.5f);
 
-                b2Color color(255,155,0);
+                CColor4f color(1, 0.5, 0, 1);
 
                 CVec3f cursor_pos;
 
@@ -116,14 +116,14 @@ void CObjectEditorApp::Render()
                 if (drash::math::Abs(position.mX -cursor_pos.mX) <= 1 &&
                         drash::math::Abs(position.mY -cursor_pos.mY) <= 1)
                 {
-                    color.Set(255,0,0);
+                    color.Col3().Set(255,0,0);
                 }
 
                 GetDebugDrawSystem().DrawPoint(position, 10.0f, color);
 
                 //
 
-                color.Set(255,155,0);
+                color.Col3().Set(255,155,0);
 
                 position.mZ = mCurrentObject->GetPos().Get().mZ + figure->GetZ() - figure->GetDepth() * 0.5f;
 
@@ -134,7 +134,7 @@ void CObjectEditorApp::Render()
                 if (drash::math::Abs(position.mX -cursor_pos.mX) <= 1 &&
                         drash::math::Abs(position.mY -cursor_pos.mY) <= 1)
                 {
-                    color.Set(255,0,0);
+                    color.Col3().Set(255,0,0);
                 }
 
                 GetDebugDrawSystem().DrawPoint(position, 10.0f, color);

@@ -4,6 +4,7 @@
 #include "../misc/vec2.h"
 #include "../misc/math.h"
 #include "../debugdrawsystem/debugdrawsystem.h"
+#include "../misc/color4.h"
 
 namespace drash
 {
@@ -35,7 +36,7 @@ void CUIButton::Connect(CUISystem *_system)
 
     SetDrawHandler([this] ()
     {
-        b2Color c(mPressed ? 0 : mTime, mPressed ? 0.0f : 1.0f - mTime, mPressed ? 1 : 0);
+        CColor4f c(mPressed ? 0 : mTime, mPressed ? 0.0f : 1.0f - mTime, mPressed ? 1 : 0, 1);
         CVec2f p1;
         CVec2f p2;
         CVec2f p3;

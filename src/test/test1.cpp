@@ -128,17 +128,17 @@ void CTest1::Render()
     {
         for (int i = 0; i < (int)mVertices.size() - 1; i++)
         {
-            GetDebugDrawSystem().DrawLine(mVertices[i], mVertices[i+1], b2Color(0, 1, 0));
+            GetDebugDrawSystem().DrawLine(mVertices[i], mVertices[i+1], CColor4f(0, 1, 0, 1));
         }
-        GetDebugDrawSystem().DrawLine(mVertices[mVertices.size()-1], GetCursorPos(), b2Color(0, 1, 0));
-        GetDebugDrawSystem().DrawLine(mVertices[0], GetCursorPos(), b2Color(0, 1, 0));
+        GetDebugDrawSystem().DrawLine(mVertices[mVertices.size()-1], GetCursorPos(), CColor4f(0, 1, 0, 1), false);
+        GetDebugDrawSystem().DrawLine(mVertices[0], GetCursorPos(), CColor4f(0, 1, 0, 1), false);
     }
 
     if (mCurrentFigure != nullptr && mCurrentObject != nullptr)
     {
-        GetDebugDrawSystem().DrawLine(mCenter, mX, b2Color(1 * mAxisDrawK.mX, 0, 0));
-        GetDebugDrawSystem().DrawLine(mCenter, mY, b2Color(0, 1 * mAxisDrawK.mY, 0));
-        GetDebugDrawSystem().DrawLine(mCenter, mZ, b2Color(0, 0, 1 * mAxisDrawK.mZ));
+        GetDebugDrawSystem().DrawLine(mCenter, mX, CColor4f(1 * mAxisDrawK.mX, 0, 0, 1), false);
+        GetDebugDrawSystem().DrawLine(mCenter, mY, CColor4f(0, 1 * mAxisDrawK.mY, 0, 1), false);
+        GetDebugDrawSystem().DrawLine(mCenter, mZ, CColor4f(0, 0, 1 * mAxisDrawK.mZ, 1), false);
     }
 }
 

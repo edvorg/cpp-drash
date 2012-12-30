@@ -282,7 +282,7 @@ void CDebugDrawSystem::Draw() const
     }
 }
 
-void CDebugDrawSystem::DrawTriangle(const CVec2f &_p1, const CVec2f &_p2, const CVec2f &_p3, const b2Color &_col) const
+void CDebugDrawSystem::DrawTriangle(const CVec2f &_p1, const CVec2f &_p2, const CVec2f &_p3, const CColor4f &_col, bool _depth_test) const
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -290,25 +290,46 @@ void CDebugDrawSystem::DrawTriangle(const CVec2f &_p1, const CVec2f &_p2, const 
     glLoadIdentity();
     glOrtho(-0.5, 0.5, -0.5, 0.5, 1, -1);
 
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_BLEND);
+    if (_depth_test == true)
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
+    glDisable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glBegin(GL_TRIANGLES);
-    glColor3f(_col.r, _col.g, _col.b);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
     glVertex2f(_p1.mX, _p1.mY);
-    glColor3f(_col.r, _col.g, _col.b);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
     glVertex2f(_p2.mX, _p2.mY);
-    glColor3f(_col.r, _col.g, _col.b);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
     glVertex2f(_p3.mX, _p3.mY);
     glEnd();
 }
 
-void CDebugDrawSystem::DrawTriangle(const CVec3f &_p1, const CVec3f &_p2, const CVec3f &_p3, const b2Color &_col) const
+void CDebugDrawSystem::DrawTriangle(const CVec3f &_p1, const CVec3f &_p2, const CVec3f &_p3, const CColor4f &_col, bool _depth_test) const
 {
     if (mActiveCam == nullptr)
     {
         return;
     }
+
+    if (_depth_test == true)
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
+    glDisable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(mViewMatrixTransposed.mData);
@@ -317,16 +338,16 @@ void CDebugDrawSystem::DrawTriangle(const CVec3f &_p1, const CVec3f &_p2, const 
     gluPerspective(mActiveCam->GetFov().Get() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView().Get());
 
     glBegin(GL_TRIANGLES);
-    glColor3f(_col.r, _col.g, _col.b);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
     glVertex3f(_p1.mX, _p1.mY, _p1.mZ);
-    glColor3f(_col.r, _col.g, _col.b);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
     glVertex3f(_p2.mX, _p2.mY, _p2.mZ);
-    glColor3f(_col.r, _col.g, _col.b);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
     glVertex3f(_p3.mX, _p3.mY, _p3.mZ);
     glEnd();
 }
 
-void CDebugDrawSystem::DrawLine(const CVec2f &_p1, const CVec2f &_p2, const b2Color &_col) const
+void CDebugDrawSystem::DrawLine(const CVec2f &_p1, const CVec2f &_p2, const CColor4f &_col, bool _depth_test) const
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -334,23 +355,42 @@ void CDebugDrawSystem::DrawLine(const CVec2f &_p1, const CVec2f &_p2, const b2Co
     glLoadIdentity();
     glOrtho(-0.5, 0.5, -0.5, 0.5, 1, -1);
 
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_BLEND);
+    if (_depth_test == true)
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glBegin(GL_LINES);
-    glColor3f(_col.r, _col.g, _col.b);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
     glVertex2f(_p1.mX, _p1.mY);
-    glColor3f(_col.r, _col.g, _col.b);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
     glVertex2f(_p2.mX, _p2.mY);
     glEnd();
 }
 
-void CDebugDrawSystem::DrawLine(const CVec3f &_p1, const CVec3f &_p2, const b2Color &_col) const
+void CDebugDrawSystem::DrawLine(const CVec3f &_p1, const CVec3f &_p2, const CColor4f &_col, bool _depth_test) const
 {
     if (mActiveCam == nullptr)
     {
         return;
     }
+
+    if (_depth_test == true)
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(mViewMatrixTransposed.mData);
@@ -359,14 +399,14 @@ void CDebugDrawSystem::DrawLine(const CVec3f &_p1, const CVec3f &_p2, const b2Co
     gluPerspective(mActiveCam->GetFov().Get() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView().Get());
 
     glBegin(GL_LINES);
-    glColor3f(_col.r, _col.g, _col.b);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
     glVertex3f(_p1.mX, _p1.mY, _p1.mZ);
-    glColor3f(_col.r, _col.g, _col.b);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
     glVertex3f(_p2.mX, _p2.mY, _p2.mZ);
     glEnd();
 }
 
-void CDebugDrawSystem::DrawPoint(const CVec2f &_p, float _size, const b2Color &_col) const
+void CDebugDrawSystem::DrawPoint(const CVec2f &_p, float _size, const CColor4f &_col, bool _depth_test) const
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -374,23 +414,42 @@ void CDebugDrawSystem::DrawPoint(const CVec2f &_p, float _size, const b2Color &_
     glLoadIdentity();
     glOrtho(-0.5, 0.5, -0.5, 0.5, 1, -1);
 
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_BLEND);
+    if (_depth_test == true)
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glPointSize(_size);
 
     glBegin(GL_POINTS);
-    glColor3f(_col.r, _col.g, _col.b);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
     glVertex2f(_p.mX, _p.mY);
     glEnd();
 }
 
-void CDebugDrawSystem::DrawPoint(const CVec3f &_p, float _size, const b2Color &_col) const
+void CDebugDrawSystem::DrawPoint(const CVec3f &_p, float _size, const CColor4f &_col, bool _depth_test) const
 {
     if (mActiveCam == nullptr)
     {
         return;
     }
+
+    if (_depth_test == true)
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(mViewMatrixTransposed.mData);
@@ -401,7 +460,7 @@ void CDebugDrawSystem::DrawPoint(const CVec3f &_p, float _size, const b2Color &_
     glPointSize(_size);
 
     glBegin(GL_POINTS);
-    glColor3f(_col.r, _col.g, _col.b);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
     glVertex3f(_p.mX, _p.mY, _p.mZ);
     glEnd();
 }

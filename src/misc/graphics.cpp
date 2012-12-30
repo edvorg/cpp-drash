@@ -37,7 +37,7 @@ void DrawBodySide(const CVec2f &_v1,
                   const CVec2f &_v2,
                   float _z,
                   float _depth,
-                  const b2Color &_diffuse )
+                  const CColor4f &_diffuse )
 {
     CVec2f dp = _v1 - _v2;
     dp.Normalize();
@@ -47,26 +47,50 @@ void DrawBodySide(const CVec2f &_v1,
     dot += 2.0;
     dot /= 3.0f;
 
-    glColor3f( _diffuse.r * dot,
-               _diffuse.g * dot,
-               _diffuse.b * dot );
-
+    glColor4f(_diffuse.mR * dot,
+              _diffuse.mG * dot,
+              _diffuse.mB * dot,
+              _diffuse.mA);
     glVertex3f( _v1.mX,
                 _v1.mY,
                 _z + _depth / 2.0f );
+
+    glColor4f(_diffuse.mR * dot,
+              _diffuse.mG * dot,
+              _diffuse.mB * dot,
+              _diffuse.mA);
     glVertex3f( _v1.mX,
                 _v1.mY,
                 _z - _depth / 2.0f );
+
+    glColor4f(_diffuse.mR * dot,
+              _diffuse.mG * dot,
+              _diffuse.mB * dot,
+              _diffuse.mA);
     glVertex3f( _v2.mX,
                 _v2.mY,
                 _z + _depth / 2.0f );
 
+    glColor4f(_diffuse.mR * dot,
+              _diffuse.mG * dot,
+              _diffuse.mB * dot,
+              _diffuse.mA);
     glVertex3f( _v2.mX,
                 _v2.mY,
                 _z + _depth / 2.0f );
+
+    glColor4f(_diffuse.mR * dot,
+              _diffuse.mG * dot,
+              _diffuse.mB * dot,
+              _diffuse.mA);
     glVertex3f( _v1.mX,
                 _v1.mY,
                 _z - _depth / 2.0f );
+
+    glColor4f(_diffuse.mR * dot,
+              _diffuse.mG * dot,
+              _diffuse.mB * dot,
+              _diffuse.mA);
     glVertex3f( _v2.mX,
                 _v2.mY,
                 _z - _depth / 2.0f );
@@ -76,16 +100,20 @@ void DrawBody(const CVec2f *_vertices,
               unsigned int _count,
               float _z,
               float _depth,
-              const b2Color &_color)
+              const CColor4f &_color)
 {
+    glDisable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glBegin(GL_TRIANGLE_FAN);
-    glColor3f( 0.4 * _color.r,
-               0.4 * _color.g,
-               0.4 * _color.b );
     for ( unsigned int i = 0; i < _count; i++ )
     {
+        glColor4f(0.4 * _color.mR,
+                  0.4 * _color.mG,
+                  0.4 * _color.mB,
+                  _color.mA);
         glVertex3f( _vertices[i].mX,
                     _vertices[i].mY,
                     _z + _depth / 2.0f );
@@ -93,11 +121,12 @@ void DrawBody(const CVec2f *_vertices,
     glEnd();
 
     glBegin(GL_TRIANGLE_FAN);
-    glColor3f( 0.4 * _color.r,
-               0.4 * _color.g,
-               0.4 * _color.b );
     for ( unsigned int i = 0; i < _count; i++ )
     {
+        glColor4f(0.4 * _color.mR,
+                  0.4 * _color.mG,
+                  0.4 * _color.mB,
+                  _color.mA);
         glVertex3f( _vertices[i].mX,
                     _vertices[i].mY,
                     _z - _depth / 2.0f );
@@ -122,10 +151,10 @@ void DrawBody(const CVec2f *_vertices,
 }
 
 void DrawCircle(float _rad,
-                float _r, float _g, float _b, float _a)
+                const CColor4f &_color)
 {
     glDisable(GL_CULL_FACE);
-
+    glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -134,9 +163,9 @@ void DrawCircle(float _rad,
     static const double delta = 2.0 * M_PI / segments;
     for (unsigned int i=0; i<segments+1; i++)
     {
-        glColor4f(_r, _g, _b, _a);
+        glColor4f(_color.mR, _color.mG, _color.mB, _color.mA);
         glVertex2f(0, 0);
-        glColor4f(_r, _g, _b, _a);
+        glColor4f(_color.mR, _color.mG, _color.mB, _color.mA);
         glVertex2f(_rad * cos(i*delta), _rad * sin(i*delta));
     }
     glEnd();

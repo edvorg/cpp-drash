@@ -94,7 +94,7 @@ void CExplosion::Step(double _dt)
 
 void CExplosion::DrawDebug() const
 {
-    DrawCircle(mParams.mRadius * (mParams.mLifeTime - mTime) / mParams.mLifeTime, 1, 0, 0, 0.5);
+    DrawCircle(mParams.mRadius * (mParams.mLifeTime - mTime) / mParams.mLifeTime, CColor4f(1, 0, 0, 0.5));
 }
 
 }// namespace drash

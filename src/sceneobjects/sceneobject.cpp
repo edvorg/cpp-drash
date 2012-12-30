@@ -201,7 +201,7 @@ void CSceneObject::DrawDebug() const
 
             if (s)
             {
-                b2Color diffuse( mColor[0], mColor[1], mColor[2] );
+                CColor4f diffuse(mColor[0], mColor[1], mColor[2], 1);
 
                 float depth = 1;
                 float local_z = 0;

@@ -28,6 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "subsystem/subsystem.h"
 #include <vector>
 #include "../misc/matrix4.h"
+#include "../misc/color4.h"
 
 namespace drash
 {
@@ -71,24 +72,24 @@ public:
     void Draw() const;
 
     /// draws triangle giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) and color
-    void DrawTriangle(const CVec2f &_p1, const CVec2f &_p2, const CVec2f &_p3, const b2Color &_col) const;
+    void DrawTriangle(const CVec2f &_p1, const CVec2f &_p2, const CVec2f &_p3, const CColor4f &_col, bool _depth_test = false) const;
 
     /// draws line giving world space coordinates and color
-    void DrawTriangle(const CVec3f &_p1, const CVec3f &_p2, const CVec3f &_p3, const b2Color &_col) const;
+    void DrawTriangle(const CVec3f &_p1, const CVec3f &_p2, const CVec3f &_p3, const CColor4f &_col, bool _depth_test = true) const;
 
     /// draws line giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) start and end points
     /// and color
-    void DrawLine(const CVec2f &_p1, const CVec2f &_p2, const b2Color &_col) const;
+    void DrawLine(const CVec2f &_p1, const CVec2f &_p2, const CColor4f &_col, bool _depth_test = false) const;
 
     /// draws line giving world space coordinates start and end points
     /// and color
-    void DrawLine(const CVec3f &_p1, const CVec3f &_p2, const b2Color &_col) const;
+    void DrawLine(const CVec3f &_p1, const CVec3f &_p2, const CColor4f &_col, bool _depth_test = true) const;
 
     /// draws point giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
-    void DrawPoint(const CVec2f &_p, float _size, const b2Color &_col) const;
+    void DrawPoint(const CVec2f &_p, float _size, const CColor4f &_col, bool _depth_test = false) const;
 
     /// draws point giving world space coordinates
-    void DrawPoint(const CVec3f &_p, float _size, const b2Color &_col) const;
+    void DrawPoint(const CVec3f &_p, float _size, const CColor4f &_col, bool _depth_test = true) const;
 
 protected:
 private:

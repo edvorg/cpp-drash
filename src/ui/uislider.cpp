@@ -40,7 +40,7 @@ void CUISlider::Connect(CUISystem *_system)
 
     SetDrawHandler([this] ()
     {
-        b2Color c(1, 0, 0);
+        CColor4f c(1, 0, 0, 1);
 
         CVec2f p1;
         CVec2f p2;
