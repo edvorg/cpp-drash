@@ -10,12 +10,12 @@ template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
 class CColor4 : public CColor3<T, DEF_VAL_FUNC>
 {
 public:
-    CColor4() = default;
-    CColor4(const CColor4 &_rgba);
-    CColor4(const CColor3<T, DEF_VAL_FUNC> &_rgb, const T &_a);
-    CColor4(const T &_rgba);
-    CColor4(const T &_r, const T &_g, const T &_b);
-    CColor4(const T &_r, const T &_g, const T &_b, const T &_a);
+    explicit CColor4() = default;
+    explicit CColor4(const CColor4 &_rgba);
+    explicit CColor4(const CColor3<T, DEF_VAL_FUNC> &_rgb, const T &_a);
+    explicit CColor4(const T &_rgba);
+    explicit CColor4(const T &_r, const T &_g, const T &_b);
+    explicit CColor4(const T &_r, const T &_g, const T &_b, const T &_a);
 
     CColor4 &Set(const CColor3<T, DEF_VAL_FUNC> &_rgb, const T &_a);
     CColor4 &Set(const T &_r, const T &_g, const T &_b, const T &_a);
