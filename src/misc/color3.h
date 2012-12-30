@@ -14,7 +14,7 @@ constexpr unsigned char CColorDefValUnsignedByte(unsigned int _comp_index)
     return _comp_index < 3 ? 0 : 255;
 }
 
-template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
+template<class T, constexpr T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
 class CColor3
 {
 public:
