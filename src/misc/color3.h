@@ -4,17 +4,17 @@
 namespace drash
 {
 
-constexpr float CColorDefValFloat()
+constexpr float CColorDefValFloat(unsigned int _comp_index)
 {
-    return 0.0f;
+    return _comp_index < 3 ? 0.0f: 1.0f;
 }
 
-constexpr unsigned char CColorDefValUnsignedByte()
+constexpr unsigned char CColorDefValUnsignedByte(unsigned int _comp_index)
 {
-    return 0;
+    return _comp_index < 3 ? 0 : 255;
 }
 
-template<class T, T (*DEF_VAL_FUNC) ()>
+template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
 class CColor3
 {
 public:
@@ -25,9 +25,9 @@ public:
 
     CColor3 &Set(const T &_r, const T &_g, const T &_b);
 
-    T mR = DEF_VAL_FUNC();
-    T mG = DEF_VAL_FUNC();
-    T mB = DEF_VAL_FUNC();
+    T mR = DEF_VAL_FUNC(0);
+    T mG = DEF_VAL_FUNC(1);
+    T mB = DEF_VAL_FUNC(2);
 protected:
 private:
 };
@@ -39,7 +39,7 @@ typedef CColor3<unsigned char, CColorDefValUnsignedByte> CColor3ub;
 
 /// CColor3 implementation
 
-template<class T, T (*DEF_VAL_FUNC) ()>
+template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
 CColor3<T, DEF_VAL_FUNC>::CColor3(const CColor3 &_rgb):
     mR(_rgb.mR),
     mG(_rgb.mG),
@@ -47,7 +47,7 @@ CColor3<T, DEF_VAL_FUNC>::CColor3(const CColor3 &_rgb):
 {
 }
 
-template<class T, T (*DEF_VAL_FUNC) ()>
+template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
 CColor3<T, DEF_VAL_FUNC>::CColor3(const T &_rgb):
     mR(_rgb),
     mG(_rgb),
@@ -55,7 +55,7 @@ CColor3<T, DEF_VAL_FUNC>::CColor3(const T &_rgb):
 {
 }
 
-template<class T, T (*DEF_VAL_FUNC) ()>
+template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
 CColor3<T, DEF_VAL_FUNC>::CColor3(const T &_r, const T &_g, const T &_b):
     mR(_r),
     mG(_g),
@@ -63,7 +63,7 @@ CColor3<T, DEF_VAL_FUNC>::CColor3(const T &_r, const T &_g, const T &_b):
 {
 }
 
-template<class T, T (*DEF_VAL_FUNC) ()>
+template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
 CColor3<T, DEF_VAL_FUNC> &CColor3<T, DEF_VAL_FUNC>::Set(const T &_r, const T &_g, const T &_b)
 {
     this->mR = _r;

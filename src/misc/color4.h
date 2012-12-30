@@ -6,7 +6,7 @@
 namespace drash
 {
 
-template<class T, T (*DEF_VAL_FUNC) ()>
+template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
 class CColor4 : public CColor3<T, DEF_VAL_FUNC>
 {
 public:
@@ -22,7 +22,7 @@ public:
     inline CColor3<T, DEF_VAL_FUNC> &Col3();
     inline const CColor3<T, DEF_VAL_FUNC> &Col3() const;
 
-    T mA = DEF_VAL_FUNC();
+    T mA = DEF_VAL_FUNC(3);
 protected:
 private:
 };
@@ -34,28 +34,28 @@ typedef CColor4<unsigned char, CColorDefValUnsignedByte> CColor4ub;
 
 /// CColor3 implementation
 
-template<class T, T (*DEF_VAL_FUNC) ()>
+template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
 CColor4<T, DEF_VAL_FUNC>::CColor4(const CColor4 &_rgb):
     CColor3<T, DEF_VAL_FUNC>(_rgb),
     mA(_rgb.mA)
 {
 }
 
-template<class T, T (*DEF_VAL_FUNC) ()>
+template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
 CColor4<T, DEF_VAL_FUNC>::CColor4(const T &_rgb):
     CColor3<T, DEF_VAL_FUNC>(_rgb),
     mA(_rgb)
 {
 }
 
-template<class T, T (*DEF_VAL_FUNC) ()>
+template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
 CColor4<T, DEF_VAL_FUNC>::CColor4(const T &_r, const T &_g, const T &_b, const T &_a):
     CColor3<T, DEF_VAL_FUNC>(_r, _g, _b),
     mA(_a)
 {
 }
 
-template<class T, T (*DEF_VAL_FUNC) ()>
+template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
 CColor4<T, DEF_VAL_FUNC> &CColor4<T, DEF_VAL_FUNC>::Set(const T &_r, const T &_g, const T &_b, const T &_a)
 {
     this->mR = _r;
@@ -65,13 +65,13 @@ CColor4<T, DEF_VAL_FUNC> &CColor4<T, DEF_VAL_FUNC>::Set(const T &_r, const T &_g
     return *this;
 }
 
-template<class T, T (*DEF_VAL_FUNC) ()>
+template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
 inline CColor3<T, DEF_VAL_FUNC> &CColor4<T, DEF_VAL_FUNC>::Col3()
 {
     return *this;
 }
 
-template<class T, T (*DEF_VAL_FUNC) ()>
+template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
 inline const CColor3<T, DEF_VAL_FUNC> &CColor4<T, DEF_VAL_FUNC>::Col3() const
 {
     return *this;
