@@ -20,6 +20,8 @@ public:
     void SetNormal(const CVec3f &_normal);
     inline const CVec3f &GetNormal() const;
 
+    void Set(const CVec3f &_p1, const CVec3f &_p2, const CVec3f &_p3);
+
     void CastRay(const CRay &_ray, CVec3f &_result) const;
 
 private:
