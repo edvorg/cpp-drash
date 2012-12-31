@@ -30,6 +30,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <GL/gl.h>
 #endif
 
+#include "matrix4.h"
+
 namespace drash
 {
 
@@ -37,11 +39,16 @@ void DrawBodySide(const CVec2f &_v1,
                   const CVec2f &_v2,
                   float _z,
                   float _depth,
-                  const CColor4f &_diffuse )
+                  const CColor4f &_diffuse,
+                  float _angle)
 {
     CVec2f dp = _v1 - _v2;
     dp.Normalize();
-    CVec2f localx(1, 0);
+    CVec4f old_localx(1, 0, 0, 1);
+    CVec4f localx(1, 0, 0, 1);
+    CMatrix4f m;
+    MatrixRotationZ(m, _angle);
+    MatrixMultiply(old_localx, m, localx);
 
     float dot = dp.mX * localx.mX + dp.mY * localx.mY;
     dot += 2.0;
@@ -100,7 +107,8 @@ void DrawBody(const CVec2f *_vertices,
               unsigned int _count,
               float _z,
               float _depth,
-              const CColor4f &_color)
+              const CColor4f &_color,
+              float _angle)
 {
     glDisable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
@@ -140,13 +148,15 @@ void DrawBody(const CVec2f *_vertices,
                      _vertices[i+1],
                      _z,
                      _depth,
-                     _color );
+                     _color,
+                     _angle);
     }
     DrawBodySide(_vertices[_count - 1],
                  _vertices[0],
                  _z,
                  _depth,
-                 _color );
+                 _color,
+                 _angle);
     glEnd();
 }
 

@@ -38,13 +38,15 @@ void DrawBodySide(const CVec2f &_v1,
               const CVec2f &_v2,
               float _z,
               float _depth,
-              const CColor4f &_diffuse );
+              const CColor4f &_diffuse,
+              float _angle);
 
 void DrawBody(const CVec2f *_vertices,
               unsigned int _count,
               float _z,
               float _depth,
-              const CColor4f &_color);
+              const CColor4f &_color,
+              float _angle);
 
 void DrawCircle(float _rad,
                 const CColor4f &_color);

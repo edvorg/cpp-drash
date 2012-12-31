@@ -213,7 +213,12 @@ void CSceneObject::DrawDebug() const
                     local_z = fg->GetZ();
                 }
 
-                DrawBody(&B2Vec2ToCVec2(*s->m_vertices), s->GetVertexCount(), mPos.Get().mZ+local_z, depth, diffuse);
+                DrawBody(&B2Vec2ToCVec2(*s->m_vertices),
+                         s->GetVertexCount(),
+                         mPos.Get().mZ+local_z,
+                         depth,
+                         diffuse,
+                         mAngle.Get());
             }
         }
         j++;
