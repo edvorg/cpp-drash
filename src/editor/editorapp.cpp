@@ -82,10 +82,10 @@ void CObjectEditorApp::Render()
     CApp::Render();
     if (mVertexs.size() != 0 && mState == BuildState) {
         for (unsigned int i = 1 ; i < mVertexs.size() ; i++) {
-            GetDebugDrawSystem().DrawLine(mVertexs[i-1],mVertexs[i], CColor4f(0, 1, 0, 1));
+            GetDebugDrawSystem().DrawLine(mVertexs[i-1],mVertexs[i], 1, CColor4f(0, 1, 0, 1));
         }
-        GetDebugDrawSystem().DrawLine(mVertexs[mVertexs.size() -1 ],GetCursorPos(), CColor4f(0, 1, 0, 1));
-        GetDebugDrawSystem().DrawLine(mVertexs[0],GetCursorPos(), CColor4f(0, 1, 0, 1));
+        GetDebugDrawSystem().DrawLine(mVertexs[mVertexs.size() -1 ],GetCursorPos(), 1, CColor4f(0, 1, 0, 1));
+        GetDebugDrawSystem().DrawLine(mVertexs[0],GetCursorPos(), 1, CColor4f(0, 1, 0, 1));
     }
     if (mState == StretchState) {
 //        qDebug() << "THIS!!!";

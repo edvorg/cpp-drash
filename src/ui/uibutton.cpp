@@ -50,10 +50,10 @@ void CUIButton::Connect(CUISystem *_system)
         GetUISystem()->GetDebugDrawSystem()->DrawTriangle(p4, p2, p1, c);
         GetUISystem()->GetDebugDrawSystem()->DrawTriangle(p3, p2, p4, c);
 
-        GetUISystem()->GetDebugDrawSystem()->DrawLine(p1, p2, c);
-        GetUISystem()->GetDebugDrawSystem()->DrawLine(p3, p2, c);
-        GetUISystem()->GetDebugDrawSystem()->DrawLine(p3, p4, c);
-        GetUISystem()->GetDebugDrawSystem()->DrawLine(p1, p4, c);
+        GetUISystem()->GetDebugDrawSystem()->DrawLine(p1, p2, 1, c);
+        GetUISystem()->GetDebugDrawSystem()->DrawLine(p3, p2, 1, c);
+        GetUISystem()->GetDebugDrawSystem()->DrawLine(p3, p4, 1, c);
+        GetUISystem()->GetDebugDrawSystem()->DrawLine(p1, p4, 1, c);
     });
 
     SetPressHandler([this] ()

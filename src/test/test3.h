@@ -49,7 +49,6 @@ public:
 private:
     void SetProcessors();
     void InitObjects();
-    double mTime = 0;
     CSceneObject *mO1 = nullptr;
     CSceneObject *mO2 = nullptr;
     CSceneObject *mMoveObject = nullptr;

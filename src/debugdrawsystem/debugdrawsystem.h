@@ -79,11 +79,11 @@ public:
 
     /// draws line giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) start and end points
     /// and color
-    void DrawLine(const CVec2f &_p1, const CVec2f &_p2, const CColor4f &_col, bool _depth_test = false) const;
+    void DrawLine(const CVec2f &_p1, const CVec2f &_p2, float _width, const CColor4f &_col, bool _depth_test = false) const;
 
     /// draws line giving world space coordinates start and end points
     /// and color
-    void DrawLine(const CVec3f &_p1, const CVec3f &_p2, const CColor4f &_col, bool _depth_test = true) const;
+    void DrawLine(const CVec3f &_p1, const CVec3f &_p2, float _width, const CColor4f &_col, bool _depth_test = true) const;
 
     /// draws point giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
     void DrawPoint(const CVec2f &_p, float _size, const CColor4f &_col, bool _depth_test = false) const;

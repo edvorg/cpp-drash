@@ -347,7 +347,7 @@ void CDebugDrawSystem::DrawTriangle(const CVec3f &_p1, const CVec3f &_p2, const 
     glEnd();
 }
 
-void CDebugDrawSystem::DrawLine(const CVec2f &_p1, const CVec2f &_p2, const CColor4f &_col, bool _depth_test) const
+void CDebugDrawSystem::DrawLine(const CVec2f &_p1, const CVec2f &_p2, float _width, const CColor4f &_col, bool _depth_test) const
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -366,6 +366,8 @@ void CDebugDrawSystem::DrawLine(const CVec2f &_p1, const CVec2f &_p2, const CCol
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    glLineWidth(_width);
+
     glBegin(GL_LINES);
     glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
     glVertex2f(_p1.mX, _p1.mY);
@@ -374,7 +376,7 @@ void CDebugDrawSystem::DrawLine(const CVec2f &_p1, const CVec2f &_p2, const CCol
     glEnd();
 }
 
-void CDebugDrawSystem::DrawLine(const CVec3f &_p1, const CVec3f &_p2, const CColor4f &_col, bool _depth_test) const
+void CDebugDrawSystem::DrawLine(const CVec3f &_p1, const CVec3f &_p2, float _width, const CColor4f &_col, bool _depth_test) const
 {
     if (mActiveCam == nullptr)
     {
@@ -397,6 +399,8 @@ void CDebugDrawSystem::DrawLine(const CVec3f &_p1, const CVec3f &_p2, const CCol
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(mActiveCam->GetFov().Get() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView().Get());
+
+    glLineWidth(_width);
 
     glBegin(GL_LINES);
     glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);

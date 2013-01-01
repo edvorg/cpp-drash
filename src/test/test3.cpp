@@ -96,10 +96,10 @@ void CTest3::Render()
         CColor4f col(1, 0, 0, 1);
         CVec3f tmp1(upper.mX, lower.mY, mO1->GetPos().Get().mZ);
         CVec3f tmp2(lower.mX, upper.mY, mO1->GetPos().Get().mZ);
-        GetDebugDrawSystem().DrawLine(tmp1, upper, col);
-        GetDebugDrawSystem().DrawLine(tmp1, lower, col);
-        GetDebugDrawSystem().DrawLine(tmp2, upper, col);
-        GetDebugDrawSystem().DrawLine(tmp2, lower, col);
+        GetDebugDrawSystem().DrawLine(tmp1, upper, 1, col);
+        GetDebugDrawSystem().DrawLine(tmp1, lower, 1, col);
+        GetDebugDrawSystem().DrawLine(tmp2, upper, 1, col);
+        GetDebugDrawSystem().DrawLine(tmp2, lower, 1, col);
     }
 }
 
@@ -391,24 +391,6 @@ void CTest3::InitObjects()
     CPlayerParams ppp;
     ppp.mPos.Set(0, 10, 0);
     GetPlayersSystem().AddPlayer(ppg, ppp);
-
-    CSceneObjectGeometry platform_geometry;
-    platform_geometry.mFigures.resize(1);
-    platform_geometry.mFigures[0].mDepth = 8;
-    platform_geometry.mFigures[0].mFriction = 1.0;
-    platform_geometry.mFigures[0].mVertices.push_back( CVec2f( -100, -5 ) );
-    platform_geometry.mFigures[0].mVertices.push_back( CVec2f( 100, -5 ) );
-    platform_geometry.mFigures[0].mVertices.push_back( CVec2f( 100, 5 ) );
-    platform_geometry.mFigures[0].mVertices.push_back( CVec2f( -100, 5 ) );
-    CSceneObject::ParamsT platform_params;
-    platform_params.mPos.Set(0, 50, 0);
-    platform_params.mAngle = -M_PI / 18.0;
-    platform_params.mDynamic = false;
-
-    CSceneObject *platform = GetScene().CreateObject<CSceneObject>(platform_geometry, platform_params);
-    platform->GetPos().Set(CVec3f(-100, 50, 0));
-    platform->GetPos().SetTarget(CVec3f(100, 50, 0), 10, AnimationBehaviorBounce);
-    platform->GetAngle().SetTarget(M_PI / 18.0, 10, AnimationBehaviorBounce);
 }
 
 } // namespace test
