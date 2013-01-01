@@ -12,6 +12,7 @@ class CVec4 : public CVec3<T, DEF_VAL>
 public:
     CVec4() = default;
     CVec4(const CVec2<T, DEF_VAL> &_xy, const T &_z, const T &_w);
+    CVec4(const CVec3<T, DEF_VAL> &_xyz, const T &_w);
     CVec4(const T &_x, const T &_y, const T &_z, const T &_w);
 
     /// setters. just syntax sugare
@@ -68,6 +69,13 @@ CVec4<T, DEF_VAL>::CVec4(const CVec2<T, DEF_VAL> &_xy, const T &_z, const T &_w)
     this->mX = _xy.mX;
     this->mY = _xy.mY;
     this->mZ = _z;
+}
+
+template<typename T, const int DEF_VAL>
+CVec4<T, DEF_VAL>::CVec4(const CVec3<T, DEF_VAL> &_xyz, const T &_w):
+    CVec3<T, DEF_VAL>(_xyz),
+    mW(_w)
+{
 }
 
 template<typename T, const int DEF_VAL>
