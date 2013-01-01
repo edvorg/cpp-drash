@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define TESTEDITORAPP_H
 
 #include "../app/app.h"
+#include "../misc/plane.h"
 
 namespace drash
 {
@@ -46,13 +47,16 @@ public:
 
 private:
     void SetProcessors();
+    void BeginSplit();
+    void DetectNewSplitPoint(const CVec2f &_p1, const CVec2f &_p2, unsigned int _index, const CRay &_r);
+    void ComputeIntersections();
+    void EndSplit();
+    void ExtrudeFigure(float _delta_depth);
     void CamViewProcessors();
     void CompleteFigure();
     void CreateTemplate();
     void DetachCurrentObject();
     void SelectFigure();
-
-    double mTime = 0;
 
     std::vector<CVec2f> mVertices;
     unsigned int mTemplateCounter = 0;
@@ -71,6 +75,18 @@ private:
     unsigned int mAxisOver = 0;
     CVec3f mFigureMoveFirstClick;
     unsigned int mAxisMoving = 0;
+
+    bool mSplitMode = false;
+    CPlane mSplitPlane;
+    CVec3f mSplitPlanePoint1;
+    CVec3f mSplitPlanePoint2;
+    CVec3f mSplitPlanePoint3;
+    CVec3f mSplitPlanePoint4;
+    CVec3f mSplitIntersection1;
+    unsigned mSplitIntersection1Index = 0;
+    CVec3f mSplitIntersection2;
+    unsigned mSplitIntersection2Index = 0;
+    unsigned int mSplitIntersectionsCount = 0;
 };
 
 } // namespace test
