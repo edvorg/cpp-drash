@@ -76,6 +76,8 @@ private:
     CVec3f mFigureMoveFirstClick;
     unsigned int mAxisMoving = 0;
 
+    CVec3f mSplitFigureMin;
+    CVec3f mSplitFigureMax;
     bool mSplitMode = false;
     CPlane mSplitPlane;
     CVec3f mSplitPlanePoint1;

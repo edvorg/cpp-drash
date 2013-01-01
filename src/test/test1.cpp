@@ -337,6 +337,18 @@ void CTest1::SetProcessors()
         EndSplit();
     }));
 
+    GetEventSystem().SetProcessor("C-r", CAppEventProcessor(
+    [this] ()
+    {
+        CMatrix4f m;
+        MatrixRotationZ(m, M_PI / 12);
+        CVec4f old_normal(mSplitPlane.GetNormal(), 1);
+        CVec4f new_normal;
+        MatrixMultiply(old_normal, m, new_normal);
+        mSplitPlane.SetNormal(new_normal);
+        ComputeIntersections();
+    }));
+
     CamViewProcessors();
 
     ///
@@ -438,52 +450,33 @@ void CTest1::BeginSplit()
         GetEventSystem().SetMode(std::string("split_mode"));
         mSplitMode = true;
 
-        CRay r;
-
-        CVec3f min(mCurrentFigure->GetVertices()[0].mX,
-                   mCurrentFigure->GetVertices()[0].mY,
-                   mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ());
-        CVec3f max(mCurrentFigure->GetVertices()[0].mX,
-                   mCurrentFigure->GetVertices()[0].mY,
-                   mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ());
+        mSplitFigureMin.Set(mCurrentFigure->GetVertices()[0].mX,
+                            mCurrentFigure->GetVertices()[0].mY,
+                            mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ());
+        mSplitFigureMax.Set(mCurrentFigure->GetVertices()[0].mX,
+                            mCurrentFigure->GetVertices()[0].mY,
+                            mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ());
 
         for (unsigned int i = 0; i < mCurrentFigure->EnumVertices(); i++)
         {
-            min.mX = math::Min<float>(min.mX, mCurrentFigure->GetVertices()[i].mX);
-            max.mX = math::Max<float>(max.mX, mCurrentFigure->GetVertices()[i].mX);
-            min.mY = math::Min<float>(min.mY, mCurrentFigure->GetVertices()[i].mY);
-            max.mY = math::Max<float>(max.mY, mCurrentFigure->GetVertices()[i].mY);
-            min.mZ = math::Min<float>(min.mZ, mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ());
-            max.mZ = math::Max<float>(max.mZ, mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ());
+            mSplitFigureMin.mX = math::Min<float>(mSplitFigureMin.mX, mCurrentFigure->GetVertices()[i].mX);
+            mSplitFigureMax.mX = math::Max<float>(mSplitFigureMax.mX, mCurrentFigure->GetVertices()[i].mX);
+            mSplitFigureMin.mY = math::Min<float>(mSplitFigureMin.mY, mCurrentFigure->GetVertices()[i].mY);
+            mSplitFigureMax.mY = math::Max<float>(mSplitFigureMax.mY, mCurrentFigure->GetVertices()[i].mY);
+            mSplitFigureMin.mZ = math::Min<float>(mSplitFigureMin.mZ, mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ());
+            mSplitFigureMax.mZ = math::Max<float>(mSplitFigureMax.mZ, mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ());
         }
 
-        min -= 10;
-        max += 10;
+        mSplitFigureMin -= 10;
+        mSplitFigureMax += 10;
 
-        min.mZ -= mCurrentFigure->GetDepth() * 0.5;
-        max.mZ += mCurrentFigure->GetDepth() * 0.5;
-
-        mSplitPlanePoint1.Set(min.mX, 0, max.mZ);
-        mSplitPlanePoint2.Set(min.mX, 0, min.mZ);
-        mSplitPlanePoint3.Set(max.mX, 0, min.mZ);
-        mSplitPlanePoint4.Set(max.mX, 0, max.mZ);
+        mSplitFigureMin.mZ -= mCurrentFigure->GetDepth() * 0.5;
+        mSplitFigureMax.mZ += mCurrentFigure->GetDepth() * 0.5;
 
         mSplitPlane.SetNormal(CVec3f(0, 1, 0));
-        mSplitPlane.SetPoint(CVec3f(0.5f * (min.mX + max.mX),
-                                    0.5f * (min.mY + max.mY),
-                                    0.5f * (min.mZ + max.mZ)));
-        r.SetDirection(CVec3f(0, -1, 0));
-
-        r.SetPoint(mSplitPlanePoint1);
-        mSplitPlane.CastRay(r, mSplitPlanePoint1);
-        r.SetPoint(mSplitPlanePoint2);
-        mSplitPlane.CastRay(r, mSplitPlanePoint2);
-        r.SetPoint(mSplitPlanePoint3);
-        mSplitPlane.CastRay(r, mSplitPlanePoint3);
-        r.SetPoint(mSplitPlanePoint4);
-        mSplitPlane.CastRay(r, mSplitPlanePoint4);
-
-        mCurrentObject->GetColor().mA = 0.75;
+        mSplitPlane.SetPoint(CVec3f(0.5f * (mSplitFigureMin.mX + mSplitFigureMax.mX),
+                                    0.5f * (mSplitFigureMin.mY + mSplitFigureMax.mY),
+                                    0.5f * (mSplitFigureMin.mZ + mSplitFigureMax.mZ)));
 
         ComputeIntersections();
     }
@@ -524,12 +517,31 @@ void CTest1::ComputeIntersections()
 {
     if (mCurrentTemplate != nullptr && mCurrentObject != nullptr && mCurrentFigure != nullptr)
     {
+        CRay r;
+
+        mSplitPlanePoint1.Set(mSplitFigureMin.mX, 0, mSplitFigureMax.mZ);
+        mSplitPlanePoint2.Set(mSplitFigureMin.mX, 0, mSplitFigureMin.mZ);
+        mSplitPlanePoint3.Set(mSplitFigureMax.mX, 0, mSplitFigureMin.mZ);
+        mSplitPlanePoint4.Set(mSplitFigureMax.mX, 0, mSplitFigureMax.mZ);
+
+        r.SetDirection(CVec3f(0, -1, 0));
+
+        r.SetPoint(mSplitPlanePoint1);
+        mSplitPlane.CastRay(r, mSplitPlanePoint1);
+        r.SetPoint(mSplitPlanePoint2);
+        mSplitPlane.CastRay(r, mSplitPlanePoint2);
+        r.SetPoint(mSplitPlanePoint3);
+        mSplitPlane.CastRay(r, mSplitPlanePoint3);
+        r.SetPoint(mSplitPlanePoint4);
+        mSplitPlane.CastRay(r, mSplitPlanePoint4);
+
+        mCurrentObject->GetColor().mA = 0.75;
+
         CVec3f dir = mSplitPlanePoint1;
         dir -= mSplitPlanePoint4;
 
         float centerz = mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ();
 
-        CRay r;
         r.SetPoint(CVec3f(mSplitPlanePoint4.Vec2(), centerz));
         r.SetDirection(dir);
 
