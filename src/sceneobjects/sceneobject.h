@@ -29,6 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <Box2D/Box2D.h>
 #include "../misc/animatedparam.h"
 #include "../misc/vec3.h"
+#include "../misc/color4.h"
 
 namespace drash
 {
@@ -99,6 +100,9 @@ public:
     friend CLogger &operator <<(CLogger &_logger, const CSceneObject &_object);
 
     void DumpGeometry(CSceneObjectGeometry *_geometry) const;
+
+    inline CColor4f &GetColor();
+    inline const CColor4f &GetColor() const;
 protected:
     CSceneObject(void);
     virtual ~CSceneObject(void);
@@ -142,7 +146,7 @@ private:
     CAnimatedParam<float> mAngle;
 
     /// color, used for debug rendering. will be removed
-    float mColor[3];
+    CColor4f mDebugColor;
 
     float mLifeTime = 0.0f;
 };
@@ -235,6 +239,16 @@ inline CAnimatedParam<float> &CSceneObject::GetAngle()
 inline const b2AABB &CSceneObject::GetBoundingBox() const
 {
     return mBoundingBox;
+}
+
+inline CColor4f &CSceneObject::GetColor()
+{
+    return mDebugColor;
+}
+
+inline const CColor4f &CSceneObject::GetColor() const
+{
+    return mDebugColor;
 }
 
 } // namespace drash

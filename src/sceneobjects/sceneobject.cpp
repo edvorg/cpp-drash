@@ -44,9 +44,9 @@ CSceneObject::CSceneObject(void):
         mBody->SetTransform(mBody->GetWorldPoint(b2Vec2(0, 0)), _new_value);
     })
 {
-    mColor[0] = math::Rand<float>(0.35f, 0.9f, 0.01f);
-    mColor[1] = math::Rand<float>( 0.35f, 0.9f, 0.01f);
-    mColor[2] = math::Rand<float>(0.35f, 0.9f, 0.01f);
+    mDebugColor.mR = math::Rand<float>(0.35f, 0.9f, 0.01f);
+    mDebugColor.mG = math::Rand<float>( 0.35f, 0.9f, 0.01f);
+    mDebugColor.mB = math::Rand<float>(0.35f, 0.9f, 0.01f);
 }
 
 CSceneObject::~CSceneObject(void)
@@ -201,8 +201,6 @@ void CSceneObject::DrawDebug() const
 
             if (s)
             {
-                CColor4f diffuse(mColor[0], mColor[1], mColor[2], 1);
-
                 float depth = 1;
                 float local_z = 0;
 
@@ -217,7 +215,7 @@ void CSceneObject::DrawDebug() const
                          s->GetVertexCount(),
                          mPos.Get().mZ+local_z,
                          depth,
-                         diffuse,
+                         mDebugColor,
                          mAngle.Get());
             }
         }
