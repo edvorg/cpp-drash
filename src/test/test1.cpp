@@ -180,32 +180,45 @@ void CTest1::Render()
         mCurrentObject != nullptr &&
         mCurrentFigure != nullptr)
     {
-        GetDebugDrawSystem().DrawTriangle(mSplitPlanePoint1,
-                                          mSplitPlanePoint2,
-                                          mSplitPlanePoint4,
-                                          CColor4f(1, 0, 0.5, 0.5),
-                                          true);
-        GetDebugDrawSystem().DrawTriangle(mSplitPlanePoint4,
-                                          mSplitPlanePoint2,
-                                          mSplitPlanePoint3,
-                                          CColor4f(1, 0, 0.5, 0.5),
-                                          true);
-
-        if (mSplitIntersectionsCount == 2)
+        if (mSplitDepth == false)
         {
-            auto draw_split = [&] (CVec3f _split_intersection)
+            GetDebugDrawSystem().DrawTriangle(mSplitPlanePoint1,
+                                              mSplitPlanePoint2,
+                                              mSplitPlanePoint4,
+                                              CColor4f(1, 0, 0.5, 0.5),
+                                              true);
+            GetDebugDrawSystem().DrawTriangle(mSplitPlanePoint4,
+                                              mSplitPlanePoint2,
+                                              mSplitPlanePoint3,
+                                              CColor4f(1, 0, 0.5, 0.5),
+                                              true);
+
+            if (mSplitIntersectionsCount == 2)
             {
-                CVec3f p1 = _split_intersection;
-                CVec3f p2 = _split_intersection;
+                auto draw_split = [&] (CVec3f _split_intersection)
+                {
+                    CVec3f p1 = _split_intersection;
+                    CVec3f p2 = _split_intersection;
 
-                p1.mZ = mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ() - mCurrentFigure->GetDepth() * 0.5f;
-                p2.mZ = mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ() + mCurrentFigure->GetDepth() * 0.5f;
+                    p1.mZ = mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ() - mCurrentFigure->GetDepth() * 0.5f;
+                    p2.mZ = mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ() + mCurrentFigure->GetDepth() * 0.5f;
 
-                GetDebugDrawSystem().DrawLine(p1, p2, 2, CColor4f(1, 1, 1), false);
-            };
+                    GetDebugDrawSystem().DrawLine(p1, p2, 2, CColor4f(1, 1, 1), false);
+                };
 
-            draw_split(mSplitIntersection1);
-            draw_split(mSplitIntersection2);
+                draw_split(mSplitIntersection1);
+                draw_split(mSplitIntersection2);
+            }
+        }
+        else
+        {
+            CVec3f p1(mSplitFigureMin.Vec2(), mSplitFigureCenterZ);
+            CVec3f p2(mSplitFigureMin.mX, mSplitFigureMax.mY, mSplitFigureCenterZ);
+            CVec3f p3(mSplitFigureMax.Vec2(), mSplitFigureCenterZ);
+            CVec3f p4(mSplitFigureMax.mX, mSplitFigureMin.mY, mSplitFigureCenterZ);
+
+            GetDebugDrawSystem().DrawTriangle(p1, p2, p4, CColor4f(1, 0, 0.5, 0.5), true);
+            GetDebugDrawSystem().DrawTriangle(p4, p2, p3, CColor4f(1, 0, 0.5, 0.5), true);
         }
     }
 }
@@ -335,6 +348,12 @@ void CTest1::SetProcessors()
     [this] ()
     {
         EndSplit();
+    }));
+
+    GetEventSystem().SetProcessor("C-v", CAppEventProcessor(
+    [this] ()
+    {
+        mSplitDepth = !mSplitDepth;
     }));
 
     GetEventSystem().SetProcessor("C-r", CAppEventProcessor(
@@ -478,6 +497,9 @@ void CTest1::BeginSplit()
                                     0.5f * (mSplitFigureMin.mY + mSplitFigureMax.mY),
                                     0.5f * (mSplitFigureMin.mZ + mSplitFigureMax.mZ)));
 
+
+        mSplitFigureCenterZ = 0.5f * (mSplitFigureMin.mZ + mSplitFigureMax.mZ);
+
         ComputeIntersections();
     }
 }
@@ -570,55 +592,88 @@ void CTest1::EndSplit()
     {
         mCurrentObject->GetColor().mA = 1;
 
-        if (mCurrentFigure != nullptr && mCurrentTemplate != nullptr && mSplitIntersectionsCount == 2)
+        if (mCurrentFigure != nullptr && mCurrentTemplate != nullptr)
         {
-            unsigned int fsize = mSplitIntersection1Index +
-                                 2 +
-                                 mCurrentFigure->EnumVertices() -
-                                 mSplitIntersection2Index;
-
-            CFigureParams fp;
-            fp.mVertices.resize(fsize);
-            fp.mDepth = mCurrentFigure->GetDepth();
-            fp.mZ = mCurrentFigure->GetZ();
-
-            unsigned int i = 0;
-
-            for (; i <= mSplitIntersection1Index; i++)
+            if (mSplitDepth == false)
             {
-                fp.mVertices[i] = mCurrentFigure->GetVertices()[i];
+                if (mSplitIntersectionsCount == 2)
+                {
+                    unsigned int fsize = mSplitIntersection1Index +
+                                         2 +
+                                         mCurrentFigure->EnumVertices() -
+                                         mSplitIntersection2Index;
+
+                    CFigureParams fp;
+                    fp.mVertices.resize(fsize);
+                    fp.mDepth = mCurrentFigure->GetDepth();
+                    fp.mZ = mCurrentFigure->GetZ();
+
+                    unsigned int i = 0;
+
+                    for (; i <= mSplitIntersection1Index; i++)
+                    {
+                        fp.mVertices[i] = mCurrentFigure->GetVertices()[i];
+                    }
+                    fp.mVertices[i++] = mSplitIntersection1;
+                    fp.mVertices[i++] = mSplitIntersection2;
+                    for (i = mSplitIntersection2Index + 1; i < mCurrentFigure->EnumVertices(); i++)
+                    {
+                        fp.mVertices[i] = mCurrentFigure->GetVertices()[i];
+                    }
+
+                    mCurrentObject->CreateFigure(fp);
+
+                    fsize = mSplitIntersection2Index -
+                            mSplitIntersection1Index +
+                            2;
+
+                    fp.mVertices.clear();
+                    fp.mVertices.resize(fsize);
+
+                    i = 0;
+                    fp.mVertices[i++] = mSplitIntersection1;
+                    for (unsigned int j = mSplitIntersection1Index + 1; j <= mSplitIntersection2Index; j++)
+                    {
+                        fp.mVertices[i++] = mCurrentFigure->GetVertices()[j];
+                    }
+                    fp.mVertices[i] = mSplitIntersection2;
+
+                    mCurrentObject->CreateFigure(fp);
+
+                    mCurrentObject->DestroyFigure(mCurrentFigure);
+                    mCurrentFigure = nullptr;
+                    mCurrentObject->DumpGeometry(mCurrentTemplate);
+
+                    GetEventSystem().SetMode(std::string("editor_mode"));
+                }
             }
-            fp.mVertices[i++] = mSplitIntersection1;
-            fp.mVertices[i++] = mSplitIntersection2;
-            for (i = mSplitIntersection2Index + 1; i < mCurrentFigure->EnumVertices(); i++)
+            else
             {
-                fp.mVertices[i] = mCurrentFigure->GetVertices()[i];
+                CFigureParams fp;
+                fp.mVertices.resize(mCurrentFigure->EnumVertices());
+                memcpy(&fp.mVertices[0], mCurrentFigure->GetVertices(), sizeof(CVec2f) * mCurrentFigure->EnumVertices());
+
+                float min = mCurrentObject->GetPos().Get().mZ +
+                            mCurrentFigure->GetZ() +
+                            0.5f * mCurrentFigure->GetDepth();
+                float max = mCurrentObject->GetPos().Get().mZ +
+                            mCurrentFigure->GetZ() -
+                            0.5f * mCurrentFigure->GetDepth();
+
+                fp.mZ = 0.5f * (mSplitFigureCenterZ + min);
+                fp.mDepth = mSplitFigureCenterZ - min;
+                mCurrentObject->CreateFigure(fp);
+
+                fp.mZ = 0.5f * (mSplitFigureCenterZ + max);
+                fp.mDepth = max - mSplitFigureCenterZ;
+                mCurrentObject->CreateFigure(fp);
+
+                mCurrentObject->DestroyFigure(mCurrentFigure);
+                mCurrentFigure = nullptr;
+                mCurrentObject->DumpGeometry(mCurrentTemplate);
+
+                GetEventSystem().SetMode(std::string("editor_mode"));
             }
-
-            mCurrentObject->CreateFigure(fp);
-
-            fsize = mSplitIntersection2Index -
-                    mSplitIntersection1Index +
-                    2;
-
-            fp.mVertices.clear();
-            fp.mVertices.resize(fsize);
-
-            i = 0;
-            fp.mVertices[i++] = mSplitIntersection1;
-            for (unsigned int j = mSplitIntersection1Index + 1; j <= mSplitIntersection2Index; j++)
-            {
-                fp.mVertices[i++] = mCurrentFigure->GetVertices()[j];
-            }
-            fp.mVertices[i] = mSplitIntersection2;
-
-            mCurrentObject->CreateFigure(fp);
-
-            mCurrentObject->DestroyFigure(mCurrentFigure);
-            mCurrentFigure = nullptr;
-            mCurrentObject->DumpGeometry(mCurrentTemplate);
-
-            GetEventSystem().SetMode(std::string("editor_mode"));
         }
     }
 }

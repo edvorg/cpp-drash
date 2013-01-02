@@ -89,6 +89,8 @@ private:
     CVec3f mSplitIntersection2;
     unsigned mSplitIntersection2Index = 0;
     unsigned int mSplitIntersectionsCount = 0;
+    bool mSplitDepth = false;
+    float mSplitFigureCenterZ = 0;
 };
 
 } // namespace test
