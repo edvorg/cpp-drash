@@ -59,8 +59,14 @@ void CTest5::Render()
         CMatrix4f r;
         MatrixRotationZ(r, angle);
 
+        CMatrix4f s;
+        MatrixScale(s, CVec3f(10));
+
+        CMatrix4f model;
+        MatrixMultiply(r, s, model);
+
         CMatrix4f model_view;
-        MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), r, model_view);
+        MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
         GetRenderer().RenderMesh(mMesh, model_view);
 	}
