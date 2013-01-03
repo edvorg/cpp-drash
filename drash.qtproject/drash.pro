@@ -46,12 +46,9 @@ SOURCES += ../src/main.cpp\
     ../src/ui/uislider.cpp \
     ../src/sceneobjects/destructiongraph.cpp \
     ../src/test/test5.cpp \
-    ../src/misc/vec3.cpp \
     ../src/misc/plane.cpp \
     ../src/misc/ray.cpp \
     ../src/misc/matrix4.cpp \
-    ../src/misc/vec4.cpp \
-    ../src/misc/vec2.cpp \
     ../src/scene.cpp \
     ../src/test/test3.cpp \
     ../src/test/test2.cpp \
@@ -61,9 +58,7 @@ SOURCES += ../src/main.cpp\
     ../src/editor/editorapp.cpp \
     ../src/diag/logger.cpp \
     ../src/diag/timer.cpp \
-    ../src/misc/segment2.cpp \
-    ../src/misc/color3.cpp \
-    ../src/misc/color4.cpp
+    ../src/misc/segment2.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
