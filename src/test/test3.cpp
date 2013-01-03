@@ -83,6 +83,8 @@ void CTest3::Step(double _dt)
     CTest1::Step(_dt);
 }
 
+float angle = 0;
+
 void CTest3::Render()
 {
     CTest1::Render();
@@ -101,6 +103,15 @@ void CTest3::Render()
         GetDebugDrawSystem().DrawLine(tmp2, upper, 1, col);
         GetDebugDrawSystem().DrawLine(tmp2, lower, 1, col);
     }
+
+    CVec4f origin(40, 20, 0, 1);
+    CVec4f pos(0, 0, 0, 1);
+    CMatrix4f m;
+    MatrixRotationX(m, angle);
+    MatrixMultiply(origin, m, pos);
+    GetDebugDrawSystem().DrawPoint(pos, 10, CColor4f(1, 0, 0), false);
+
+    angle += 0.01;
 }
 
 void CTest3::SetProcessors()

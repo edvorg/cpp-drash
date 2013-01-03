@@ -136,11 +136,14 @@ void CCamera::ComputeMatrices()
     CMatrix4f roty;
     MatrixRotationY(roty, -mRotation.Get().mY);
 
-    MatrixMultiply(rotx, roty, mRotationMatrix);
+    MatrixMultiply(roty, rotx, mRotationMatrix);
 
     CVec3f tv(-mPos.Get().mX, -mPos.Get().mY, -mPos.Get().mZ);
     CMatrix4f tm;
     MatrixTranslation(tm, tv);
+
+    mRotationMatrix.Transpose();
+    tm.Transpose();
 
     MatrixMultiply(mRotationMatrix, tm, mViewMatrix);
 }
