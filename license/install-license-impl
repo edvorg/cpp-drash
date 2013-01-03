@@ -24,7 +24,7 @@ if [ "$LICENSE_INSTALLED" == "false" ] ; then
     echo installing license in $1
     cat $1 > $1.tmp
     echo "// DRASH_LICENSE_BEGIN" > $1
-    cat license.txt >> $1
+    cat ./license/license.txt >> $1
     echo "// DRASH_LICENSE_END" >> $1
     echo "" >> $1
     cat $1.tmp >> $1
