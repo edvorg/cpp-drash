@@ -25,7 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DEBUGDRAWSYSTEM_H
 #define DEBUGDRAWSYSTEM_H
 
-#include "subsystem/subsystem.h"
+#include "../subsystem/subsystem.h"
 #include <vector>
 #include "../misc/matrix4.h"
 #include "../misc/color4.h"

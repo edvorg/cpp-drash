@@ -24,7 +24,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "explosion.h"
 
-#include "../scene.h"
+#include "scene.h"
 #include "../misc/graphics.h"
 
 namespace drash

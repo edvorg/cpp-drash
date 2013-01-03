@@ -38,9 +38,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../misc/ray.h"
 #include "../misc/vec4.h"
 #include "../misc/matrix4.h"
-#include "../sceneobjects/sceneobject.h"
-#include "../sceneobjects/figure.h"
-#include "../scene.h"
+#include "../scene/sceneobject.h"
+#include "../scene/figure.h"
+#include "../scene/scene.h"
 
 namespace drash
 {

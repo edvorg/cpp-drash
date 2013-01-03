@@ -120,7 +120,7 @@
   <customwidget>
    <class>SceneWidget</class>
    <extends>QWidget</extends>
-   <header>scenewidget.h</header>
+   <header>../src/qt/scenewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

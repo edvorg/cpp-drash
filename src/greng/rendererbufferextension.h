@@ -22,61 +22,30 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "test5.h"
+#ifndef GRENG_RENDERERBUFFEREXTENSION_H
+#define GRENG_RENDERERBUFFEREXTENSION_H
 
-#include "../debugdrawsystem/camera.h"
+#include <GL/gl.h>
+#include <GL/glext.h>
+#include <GL/glx.h>
+#include <GL/glxext.h>
 
-namespace drash
+extern PFNGLGENBUFFERSPROC glGenBuffers;
+extern PFNGLBINDBUFFERPROC glBindBuffer;
+extern PFNGLBUFFERDATAPROC glBufferData;
+extern PFNGLDELETEBUFFERSPROC glDeleteBuffers;
+
+namespace greng
 {
 
-namespace test
+class CRendererBufferExtension
 {
+public:
+    CRendererBufferExtension() = delete;
 
-bool CTest5::Init()
-{
-    if (CApp::Init() == false)
-    {
-        return false;
-    }
+    static bool Init();
+};
 
-    SetupCam();
-    SetupProcessors();
-    SetupMesh();
+} // namespace greng
 
-    return true;
-}
-
-void CTest5::Render()
-{
-    CApp::Render();
-
-    GetRenderer().RenderMesh(mMesh);
-}
-
-void CTest5::SetupCam()
-{
-    auto cam = GetDebugDrawSystem().GetActiveCam();
-
-    if (cam != nullptr)
-    {
-        cam->GetPos().Set(CVec3f(0, 0, 100));
-    }
-}
-
-void CTest5::SetupMesh()
-{
-    mMesh = GetMeshManager().CreateMeshBox();
-}
-
-void CTest5::SetupProcessors()
-{
-    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
-    [this] ()
-    {
-        this->Quit();
-    }));
-}
-
-} // namespace test
-
-} // namespace drash
+#endif // GRENG_RENDERERBUFFEREXTENSION_H

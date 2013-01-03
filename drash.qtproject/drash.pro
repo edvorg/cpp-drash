@@ -13,14 +13,13 @@ TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++0x
 
-INCLUDEPATH += ../3rd/Box2D/include\
-    ../src/
+INCLUDEPATH += ../3rd/Box2D/include
 
-SOURCES += ../src/main.cpp\
-        ../src/gamewindow.cpp \
-    ../src/scenewidget.cpp \
+SOURCES += ../src/qt/main.cpp\
+        ../src/qt/gamewindow.cpp \
+    ../src/qt/scenewidget.cpp \
     ../src/debugdrawsystem/camera.cpp \
-    ../src/sceneobjects/explosion.cpp \
+    ../src/scene/explosion.cpp \
     ../src/test/test.cpp \
     ../src/subsystem/subsystem.cpp \
     ../src/subsystem/explosionsystem.cpp \
@@ -28,8 +27,8 @@ SOURCES += ../src/main.cpp\
     ../src/editor/editorwindow.cpp \
     ../src/misc/graphics.cpp \
     ../src/subsystem/templatesystem.cpp \
-    ../src/physobserver.cpp \
-    ../src/sceneobjects/figure.cpp \
+    ../src/scene/physobserver.cpp \
+    ../src/scene/figure.cpp \
     ../src/debugdrawsystem/debugdrawsystem.cpp \
     ../src/app/app.cpp \
     ../src/app/appevent.cpp \
@@ -44,28 +43,31 @@ SOURCES += ../src/main.cpp\
     ../src/ui/uiwidget.cpp \
     ../src/ui/uibutton.cpp \
     ../src/ui/uislider.cpp \
-    ../src/sceneobjects/destructiongraph.cpp \
+    ../src/scene/destructiongraph.cpp \
     ../src/test/test5.cpp \
     ../src/misc/plane.cpp \
     ../src/misc/ray.cpp \
     ../src/misc/matrix4.cpp \
-    ../src/scene.cpp \
+    ../src/scene/scene.cpp \
     ../src/test/test3.cpp \
     ../src/test/test2.cpp \
     ../src/test/test1.cpp \
-    ../src/sceneobjects/sceneobject.cpp \
-    ../src/sceneobjects/player.cpp \
+    ../src/scene/sceneobject.cpp \
+    ../src/scene/player.cpp \
     ../src/editor/editorapp.cpp \
     ../src/diag/logger.cpp \
     ../src/diag/timer.cpp \
-    ../src/misc/segment2.cpp
+    ../src/misc/segment2.cpp \
+    ../src/greng/meshmanager.cpp \
+    ../src/greng/renderer.cpp \
+    ../src/greng/rendererbufferextension.cpp
 
-HEADERS  += ../src/gamewindow.h \
-    ../src/scenewidget.h \
+HEADERS  += ../src/qt/gamewindow.h \
+    ../src/qt/scenewidget.h \
     ../src/misc/math.h \
     ../src/misc/animatedparam.h \
     ../src/debugdrawsystem/camera.h \
-    ../src/sceneobjects/explosion.h \
+    ../src/scene/explosion.h \
     ../src/test/test.h \
     ../src/diag/assert.h \
     ../src/subsystem/subsystem.h \
@@ -74,8 +76,8 @@ HEADERS  += ../src/gamewindow.h \
     ../src/editor/editorwindow.h \
     ../src/subsystem/templatesystem.h \
     ../src/misc/graphics.h \
-    ../src/physobserver.h \
-    ../src/sceneobjects/figure.h \
+    ../src/scene/physobserver.h \
+    ../src/scene/figure.h \
     ../src/debugdrawsystem/debugdrawsystem.h \
     ../src/app/app.h \
     ../src/app/appevent.h \
@@ -90,7 +92,7 @@ HEADERS  += ../src/gamewindow.h \
     ../src/ui/uiwidget.h \
     ../src/ui/uibutton.h \
     ../src/ui/uislider.h \
-    ../src/sceneobjects/destructiongraph.h \
+    ../src/scene/destructiongraph.h \
     ../src/test/test5.h \
     ../src/misc/vec3.h \
     ../src/misc/plane.h \
@@ -101,17 +103,22 @@ HEADERS  += ../src/gamewindow.h \
     ../src/diag/logger.h \
     ../src/diag/timer.h \
     ../src/editor/editorapp.h \
-    ../src/sceneobjects/player.h \
-    ../src/sceneobjects/sceneobject.h \
+    ../src/scene/player.h \
+    ../src/scene/sceneobject.h \
     ../src/test/test2.h \
     ../src/test/test3.h \
-    ../src/scene.h \
+    ../src/scene/scene.h \
     ../src/test/test1.h \
     ../src/misc/segment2.h \
     ../src/misc/color3.h \
-    ../src/misc/color4.h
+    ../src/misc/color4.h \
+    ../src/greng/meshmanager.h \
+    ../src/greng/vertex.h \
+    ../src/greng/mesh.h \
+    ../src/greng/renderer.h \
+    ../src/greng/rendererbufferextension.h
 
-FORMS    += ../src/gamewindow.ui \
+FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui
 
 LIBS += -L../3rd/Box2D/lib -lBox2D

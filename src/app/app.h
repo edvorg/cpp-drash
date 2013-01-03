@@ -26,13 +26,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CTESTAPP_H
 #define CTESTAPP_H
 
-#include "../scene.h"
+#include "../scene/scene.h"
 #include "../subsystem/explosionsystem.h"
 #include "../subsystem/playerssystem.h"
 #include "../subsystem/templatesystem.h"
 #include "../debugdrawsystem/debugdrawsystem.h"
 #include "appeventsystem.h"
 #include "../ui/uisystem.h"
+#include "../greng/meshmanager.h"
+#include "../greng/renderer.h"
 
 namespace drash
 {
@@ -60,6 +62,8 @@ public:
     inline CTemplateSystem &GetTemplateSystem();
     inline CDebugDrawSystem &GetDebugDrawSystem();
     inline ui::CUISystem &GetUISystem();
+    inline greng::CMeshManager &GetMeshManager();
+    inline greng::CRenderer &GetRenderer();
 
     /// used to make CApp childs about mouse moving event
     /// use this from your CApp back end (Qt, SDL, etc.)
@@ -85,6 +89,8 @@ private:
     CTemplateSystem mTemplateSystem;
     CDebugDrawSystem mDebugDrawSystem;
     ui::CUISystem mUISystem;
+    greng::CMeshManager mMeshManager;
+    greng::CRenderer mRenderer;
 
     std::function<void ()> mQuitHandler = [] () {};
     bool mQuit = false;
@@ -139,6 +145,16 @@ inline CDebugDrawSystem &CApp::GetDebugDrawSystem()
 inline ui::CUISystem &CApp::GetUISystem()
 {
     return mUISystem;
+}
+
+inline greng::CMeshManager &CApp::GetMeshManager()
+{
+    return mMeshManager;
+}
+
+inline greng::CRenderer &CApp::GetRenderer()
+{
+    return mRenderer;
 }
 
 inline void CApp::SetCursorPos(const CVec2f &_pos)

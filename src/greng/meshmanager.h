@@ -22,61 +22,36 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "test5.h"
+#ifndef GRENG_MESHMANAGER_H
+#define GRENG_MESHMANAGER_H
 
-#include "../debugdrawsystem/camera.h"
-
-namespace drash
+namespace greng
 {
 
-namespace test
+class CMesh;
+
+class CMeshManager final
 {
+public:
+    constexpr static unsigned int mMeshesCountLimit = 1024;
 
-bool CTest5::Init()
-{
-    if (CApp::Init() == false)
-    {
-        return false;
-    }
+    CMeshManager();
+    CMeshManager(const CMeshManager &) = delete;
+    CMeshManager(CMeshManager &&) = delete;
+    CMeshManager &operator =(const CMeshManager &) = delete;
+    CMeshManager &operator =(CMeshManager &&) = delete;
+    ~CMeshManager();
 
-    SetupCam();
-    SetupProcessors();
-    SetupMesh();
+    CMesh *CreateMesh();
+    CMesh *CreateMeshFromObjFile(const char *_path);
+    CMesh *CreateMeshBox();
 
-    return true;
-}
+protected:
+private:
+    CMesh *mMeshes[mMeshesCountLimit];
+    unsigned int mMeshesCount = 0;
+};
 
-void CTest5::Render()
-{
-    CApp::Render();
+} // namespace greng
 
-    GetRenderer().RenderMesh(mMesh);
-}
-
-void CTest5::SetupCam()
-{
-    auto cam = GetDebugDrawSystem().GetActiveCam();
-
-    if (cam != nullptr)
-    {
-        cam->GetPos().Set(CVec3f(0, 0, 100));
-    }
-}
-
-void CTest5::SetupMesh()
-{
-    mMesh = GetMeshManager().CreateMeshBox();
-}
-
-void CTest5::SetupProcessors()
-{
-    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
-    [this] ()
-    {
-        this->Quit();
-    }));
-}
-
-} // namespace test
-
-} // namespace drash
+#endif // GRENG_MESHMANAGER_H

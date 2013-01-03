@@ -22,61 +22,28 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "test5.h"
+#ifndef GRENG_VERTEX_H
+#define GRENG_VERTEX_H
 
-#include "../debugdrawsystem/camera.h"
+#include "../misc/vec3.h"
+#include "../misc/color4.h"
 
-namespace drash
+namespace greng
 {
 
-namespace test
+class CVertex
 {
+public:
+    CVertex() = default;
 
-bool CTest5::Init()
-{
-    if (CApp::Init() == false)
-    {
-        return false;
-    }
+    drash::CVec3f mPos = drash::CVec3f(0);
+    drash::CVec2f mUV = drash::CVec2f(0);
+    drash::CColor4f mColor = drash::CColor4f(1);
 
-    SetupCam();
-    SetupProcessors();
-    SetupMesh();
+protected:
+private:
+};
 
-    return true;
-}
+} // namespace greng
 
-void CTest5::Render()
-{
-    CApp::Render();
-
-    GetRenderer().RenderMesh(mMesh);
-}
-
-void CTest5::SetupCam()
-{
-    auto cam = GetDebugDrawSystem().GetActiveCam();
-
-    if (cam != nullptr)
-    {
-        cam->GetPos().Set(CVec3f(0, 0, 100));
-    }
-}
-
-void CTest5::SetupMesh()
-{
-    mMesh = GetMeshManager().CreateMeshBox();
-}
-
-void CTest5::SetupProcessors()
-{
-    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
-    [this] ()
-    {
-        this->Quit();
-    }));
-}
-
-} // namespace test
-
-} // namespace drash
+#endif // GRENG_VERTEX_H

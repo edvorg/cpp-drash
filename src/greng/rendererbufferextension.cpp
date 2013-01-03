@@ -22,61 +22,27 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "test5.h"
+#include "rendererbufferextension.h"
 
-#include "../debugdrawsystem/camera.h"
-
-namespace drash
+namespace greng
 {
 
-namespace test
-{
+PFNGLGENBUFFERSPROC glGenBuffers = 0;
+PFNGLBINDBUFFERPROC glBindBuffer = 0;
+PFNGLBUFFERDATAPROC glBufferData = 0;
+PFNGLDELETEBUFFERSPROC glDeleteBuffers = 0;
 
-bool CTest5::Init()
+bool CRendererBufferExtension::Init()
 {
-    if (CApp::Init() == false)
-    {
-        return false;
-    }
-
-    SetupCam();
-    SetupProcessors();
-    SetupMesh();
+    #define GET_EXT(ext, type) ext = reinterpret_cast<type>(glXGetProcAddress(reinterpret_cast<const GLubyte*>(#ext)));\
+                               if (ext == 0) return false;
+    GET_EXT(glGenBuffers, PFNGLGENBUFFERSPROC);
+    GET_EXT(glBindBuffer, PFNGLBINDBUFFERPROC);
+    GET_EXT(glBufferData, PFNGLBUFFERDATAPROC);
+    GET_EXT(glDeleteBuffers, PFNGLDELETEBUFFERSPROC);
+    #undef GET_EXT
 
     return true;
 }
 
-void CTest5::Render()
-{
-    CApp::Render();
-
-    GetRenderer().RenderMesh(mMesh);
-}
-
-void CTest5::SetupCam()
-{
-    auto cam = GetDebugDrawSystem().GetActiveCam();
-
-    if (cam != nullptr)
-    {
-        cam->GetPos().Set(CVec3f(0, 0, 100));
-    }
-}
-
-void CTest5::SetupMesh()
-{
-    mMesh = GetMeshManager().CreateMeshBox();
-}
-
-void CTest5::SetupProcessors()
-{
-    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
-    [this] ()
-    {
-        this->Quit();
-    }));
-}
-
-} // namespace test
-
-} // namespace drash
+} // namespace greng

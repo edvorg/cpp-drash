@@ -22,61 +22,29 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "test5.h"
+#ifndef GRENG_RENDERER_H
+#define GRENG_RENDERER_H
 
-#include "../debugdrawsystem/camera.h"
-
-namespace drash
+namespace greng
 {
 
-namespace test
+class CMesh;
+
+class CRenderer
 {
+public:
+    CRenderer() = default;
+    CRenderer(const CRenderer &) = delete;
+    CRenderer(CRenderer &&) = delete;
+    CRenderer &operator =(const CRenderer &) = delete;
+    CRenderer &operator =(CRenderer &&) = delete;
+    ~CRenderer() = default;
 
-bool CTest5::Init()
-{
-    if (CApp::Init() == false)
-    {
-        return false;
-    }
+    bool Init();
 
-    SetupCam();
-    SetupProcessors();
-    SetupMesh();
+    void RenderMesh(const CMesh *_mesh);
+};
 
-    return true;
-}
+} // namespace greng
 
-void CTest5::Render()
-{
-    CApp::Render();
-
-    GetRenderer().RenderMesh(mMesh);
-}
-
-void CTest5::SetupCam()
-{
-    auto cam = GetDebugDrawSystem().GetActiveCam();
-
-    if (cam != nullptr)
-    {
-        cam->GetPos().Set(CVec3f(0, 0, 100));
-    }
-}
-
-void CTest5::SetupMesh()
-{
-    mMesh = GetMeshManager().CreateMeshBox();
-}
-
-void CTest5::SetupProcessors()
-{
-    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
-    [this] ()
-    {
-        this->Quit();
-    }));
-}
-
-} // namespace test
-
-} // namespace drash
+#endif // GRENG_RENDERER_H

@@ -26,9 +26,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QMouseEvent>
 
-#include "misc/vec2.h"
-#include "app/app.h"
-#include "app/appevent.h"
+#include "../misc/vec2.h"
+#include "../app/app.h"
+#include "../app/appevent.h"
 
 using namespace drash;
 
@@ -105,6 +105,16 @@ CVec2f SceneWidget::WidgetSpaceToScreenSpace(const CVec2f &_from) const
     res.mY *= -1;
 
     return res;
+}
+
+void SceneWidget::initializeGL()
+{
+    QGLWidget::initializeGL();
+
+    if (mApp != nullptr)
+    {
+
+    }
 }
 
 void SceneWidget::resizeGL( int _w, int _h )
