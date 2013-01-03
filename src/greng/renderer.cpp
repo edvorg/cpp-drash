@@ -36,14 +36,16 @@ bool CRenderer::Init()
 }
 
 void CRenderer::RenderMesh(const CMesh *_mesh,
-                           const drash::CMatrix4f &_model_view_matrix)
+                           const drash::CMatrix4f &_model_view)
 {
-    drash::CMatrix4f m(_model_view_matrix);
+    drash::CMatrix4f m(_model_view);
     m.Transpose();
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(m.mData);
 
-    glDisable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CW);
+    glEnable(GL_CULL_FACE);
 
     glEnable(GL_TEXTURE_2D);
     glEnableClientState(GL_VERTEX_ARRAY);

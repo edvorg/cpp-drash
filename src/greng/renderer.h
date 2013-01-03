@@ -50,7 +50,7 @@ public:
     bool Init();
 
     void RenderMesh(const CMesh *_mesh,
-                    const drash::CMatrix4f &_model_view_matrix);
+                    const drash::CMatrix4f &_model_view);
 };
 
 } // namespace greng

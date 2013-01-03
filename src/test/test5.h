@@ -46,7 +46,8 @@ private:
     void SetupMesh();
     void SetupProcessors();
 
-    greng::CMesh *mMesh;
+    greng::CMesh *mMesh1;
+    greng::CMesh *mMesh2;
 };
 
 } // namespace test

@@ -45,6 +45,7 @@ public:
     CMesh *CreateMesh();
     CMesh *CreateMeshFromObjFile(const char *_path);
     CMesh *CreateMeshQuad();
+    CMesh *CreateMeshCube();
 
 protected:
 private:

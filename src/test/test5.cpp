@@ -54,8 +54,8 @@ void CTest5::Render()
 
     CApp::Render();
 
-	if (mMesh != nullptr)
-	{
+    if (mMesh1 != nullptr)
+    {
         CMatrix4f r;
         MatrixRotationZ(r, angle);
 
@@ -68,8 +68,31 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
-        GetRenderer().RenderMesh(mMesh, model_view);
-	}
+        GetRenderer().RenderMesh(mMesh1, model_view);
+    }
+
+    if (mMesh1 != nullptr)
+    {
+        CMatrix4f r;
+        MatrixRotationZ(r, -angle);
+
+        CMatrix4f s;
+        MatrixScale(s, CVec3f(10));
+
+        CMatrix4f rot;
+        MatrixMultiply(r, s, rot);
+
+        CMatrix4f transl;
+        MatrixTranslation(transl, CVec3f(50, 0, 0));
+
+        CMatrix4f model;
+        MatrixMultiply(transl, rot, model);
+
+        CMatrix4f model_view;
+        MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
+
+        GetRenderer().RenderMesh(mMesh2, model_view);
+    }
 
     angle += 1.0 * GetCurrentTimeDelta();
 }
@@ -86,7 +109,8 @@ void CTest5::SetupCam()
 
 void CTest5::SetupMesh()
 {
-    mMesh = GetMeshManager().CreateMeshQuad();
+    mMesh1 = GetMeshManager().CreateMeshCube();
+    mMesh2 = GetMeshManager().CreateMeshQuad();
 }
 
 void CTest5::SetupProcessors()
