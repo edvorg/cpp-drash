@@ -35,6 +35,9 @@ EventKey ConvertKey(SDLKey _key);
 EventKey ConvertButton(int _button);
 void WindowSpaceToScreenSpace(CVec2f &_from);
 
+const double gWindowWidth = 1366;
+const double gWindowHeight = 768;
+
 int main(int _argc, char **_argv)
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -45,7 +48,7 @@ int main(int _argc, char **_argv)
 
     SDL_WM_SetCaption("Drash", nullptr);
 
-    if (SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE | SDL_OPENGL) == nullptr)
+    if (SDL_SetVideoMode(gWindowWidth, gWindowHeight, 32, SDL_HWSURFACE | SDL_OPENGL) == nullptr)
     {
         LOG_ERR("SDL_SetVideoMode() failed");
         return 0;
@@ -78,8 +81,8 @@ int main(int _argc, char **_argv)
     {
         if (app->Init() == true)
         {
-            glViewport(0, 0, 800, 600);
-            app->GetDebugDrawSystem().SetAspectRatio(800.0 / 600.0);
+            glViewport(0, 0, gWindowWidth, gWindowHeight);
+            app->GetDebugDrawSystem().SetAspectRatio(gWindowWidth / gWindowHeight);
 
             bool exit = false;
             SDL_Event e;
@@ -161,43 +164,43 @@ drash::EventKey ConvertKey(SDLKey _key)
     switch (_key)
     {
     case SDLK_q:
-        return drash::EventKeyQ;
+        return EventKeyQ;
     case SDLK_w:
-        return drash::EventKeyW;
+        return EventKeyW;
     case SDLK_e:
-        return drash::EventKeyE;
+        return EventKeyE;
     case SDLK_r:
-        return drash::EventKeyR;
+        return EventKeyR;
     case SDLK_a:
-        return drash::EventKeyA;
+        return EventKeyA;
     case SDLK_s:
-        return drash::EventKeyS;
+        return EventKeyS;
     case SDLK_d:
-        return drash::EventKeyD;
+        return EventKeyD;
     case SDLK_f:
-        return drash::EventKeyF;
+        return EventKeyF;
     case SDLK_z:
-        return drash::EventKeyZ;
+        return EventKeyZ;
     case SDLK_x:
-        return drash::EventKeyX;
+        return EventKeyX;
     case SDLK_c:
-        return drash::EventKeyC;
+        return EventKeyC;
     case SDLK_v:
-        return drash::EventKeyV;
+        return EventKeyV;
     case SDLK_SPACE:
-        return drash::EventKeySpace;
+        return EventKeySpace;
     case SDLK_ESCAPE:
-        return drash::EventKeyEscape;
+        return EventKeyEscape;
     case SDLK_LCTRL:
-        return drash::EventKeyControl;
+        return EventKeyControl;
     case SDLK_LSHIFT:
-        return drash::EventKeyShift;
+        return EventKeyShift;
     case SDLK_LALT:
-        return drash::EventKeyAlt;
+        return EventKeyAlt;
     case SDLK_LMETA:
-        return drash::EventKeyMeta;
+        return EventKeyMeta;
     default:
-        return drash::EventKeyUnknown;
+        return EventKeyUnknown;
     }
 }
 
@@ -206,20 +209,24 @@ drash::EventKey ConvertButton(int _button)
     switch (_button)
     {
     case SDL_BUTTON_LEFT:
-        return drash::EventKeyLeftButton;
+        return EventKeyLeftButton;
     case SDL_BUTTON_RIGHT:
-        return drash::EventKeyRightButton;
+        return EventKeyRightButton;
     case SDL_BUTTON_MIDDLE:
-        return drash::EventKeyMiddleButton;
+        return EventKeyMiddleButton;
+    case SDL_BUTTON_WHEELUP:
+        return EventKeyWheelUp;
+    case SDL_BUTTON_WHEELDOWN:
+        return EventKeyWheelDown;
     default:
-        return drash::EventKeyUnknown;
+        return EventKeyUnknown;
     }
 }
 
 void WindowSpaceToScreenSpace(CVec2f &_from)
 {
-    _from.mX /= 800.0;
-    _from.mY /= 600.0;
+    _from.mX /= gWindowWidth;
+    _from.mY /= gWindowHeight;
 
     _from.mX -= 0.5;
     _from.mY -= 0.5;
