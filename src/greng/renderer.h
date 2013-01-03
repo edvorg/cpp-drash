@@ -38,7 +38,7 @@ public:
     CRenderer(CRenderer &&) = delete;
     CRenderer &operator =(const CRenderer &) = delete;
     CRenderer &operator =(CRenderer &&) = delete;
-    ~CRenderer() = delete;
+    ~CRenderer() = default;
 
     void RenderMesh(const CMesh *_mesh);
 };
