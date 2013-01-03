@@ -31,6 +31,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace drash;
 
+EventKey ConvertKey(SDLKey _key);
+EventKey ConvertButton(int _button);
+void WindowSpaceToScreenSpace(CVec2f &_from);
+
 int main(int _argc, char **_argv)
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -47,7 +51,7 @@ int main(int _argc, char **_argv)
         return 0;
     }
 
-    drash::CApp *app = nullptr;
+    CApp *app = nullptr;
 
     for (int i = 0; i < _argc; i++)
     {
@@ -55,7 +59,7 @@ int main(int _argc, char **_argv)
         {
             if (++i < _argc)
             {
-                app = drash::test::StartApp(_argv[i]);
+                app = test::StartApp(_argv[i]);
 
                 if (app == nullptr)
                 {
@@ -67,7 +71,7 @@ int main(int _argc, char **_argv)
         }
     }
 
-    drash::CTimer timer;
+    CTimer timer;
     timer.Reset(true);
 
     if (app != nullptr)
@@ -77,11 +81,16 @@ int main(int _argc, char **_argv)
             glViewport(0, 0, 800, 600);
             app->GetDebugDrawSystem().SetAspectRatio(800.0 / 600.0);
 
+            bool exit = false;
+            SDL_Event e;
+
+            app->SetQuitHandler([&exit] ()
+            {
+                exit = true;
+            });
+
             for (;;)
             {
-                bool exit = false;
-                SDL_Event e;
-
                 while (SDL_PollEvent(&e))
                 {
                     if (e.type == SDL_QUIT)
@@ -89,11 +98,39 @@ int main(int _argc, char **_argv)
                         exit = true;
                         break;
                     }
+                    else if (e.type == SDL_KEYDOWN)
+                    {
+                        app->GetEventSystem().BeginEvent(ConvertKey(e.key.keysym.sym));
+                    }
+                    else if (e.type == SDL_KEYUP)
+                    {
+                        app->GetEventSystem().EndEvent(ConvertKey(e.key.keysym.sym));
+                    }
+                    else if (e.type == SDL_MOUSEBUTTONDOWN)
+                    {
+                        CVec2f pos(e.button.x, e.button.y);
+                        WindowSpaceToScreenSpace(pos);
+                        app->SetCursorPos(pos);
+                        app->GetEventSystem().BeginEvent(ConvertButton(e.button.button));
+                    }
+                    else if (e.type == SDL_MOUSEBUTTONUP)
+                    {
+                        CVec2f pos(e.button.x, e.button.y);
+                        WindowSpaceToScreenSpace(pos);
+                        app->SetCursorPos(pos);
+                        app->GetEventSystem().EndEvent(ConvertButton(e.button.button));
+                    }
+                    else if (e.type == SDL_MOUSEMOTION)
+                    {
+                        CVec2f pos(e.motion.x, e.motion.y);
+                        WindowSpaceToScreenSpace(pos);
+                        app->SetCursorPos(pos);
+                    }
                 }
 
                 timer.Tick();
                 app->Step(timer.GetDeltaTime());
-                glClearColor( 0.5f, 0.5f, 0.5f, 1.0f );
+                glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
                 glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
                 app->Render();
                 SDL_GL_SwapBuffers();
@@ -117,4 +154,74 @@ int main(int _argc, char **_argv)
     SDL_Quit();
 
     return 0;
+}
+
+drash::EventKey ConvertKey(SDLKey _key)
+{
+    switch (_key)
+    {
+    case SDLK_q:
+        return drash::EventKeyQ;
+    case SDLK_w:
+        return drash::EventKeyW;
+    case SDLK_e:
+        return drash::EventKeyE;
+    case SDLK_r:
+        return drash::EventKeyR;
+    case SDLK_a:
+        return drash::EventKeyA;
+    case SDLK_s:
+        return drash::EventKeyS;
+    case SDLK_d:
+        return drash::EventKeyD;
+    case SDLK_f:
+        return drash::EventKeyF;
+    case SDLK_z:
+        return drash::EventKeyZ;
+    case SDLK_x:
+        return drash::EventKeyX;
+    case SDLK_c:
+        return drash::EventKeyC;
+    case SDLK_v:
+        return drash::EventKeyV;
+    case SDLK_SPACE:
+        return drash::EventKeySpace;
+    case SDLK_ESCAPE:
+        return drash::EventKeyEscape;
+    case SDLK_LCTRL:
+        return drash::EventKeyControl;
+    case SDLK_LSHIFT:
+        return drash::EventKeyShift;
+    case SDLK_LALT:
+        return drash::EventKeyAlt;
+    case SDLK_LMETA:
+        return drash::EventKeyMeta;
+    default:
+        return drash::EventKeyUnknown;
+    }
+}
+
+drash::EventKey ConvertButton(int _button)
+{
+    switch (_button)
+    {
+    case SDL_BUTTON_LEFT:
+        return drash::EventKeyLeftButton;
+    case SDL_BUTTON_RIGHT:
+        return drash::EventKeyRightButton;
+    case SDL_BUTTON_MIDDLE:
+        return drash::EventKeyMiddleButton;
+    default:
+        return drash::EventKeyUnknown;
+    }
+}
+
+void WindowSpaceToScreenSpace(CVec2f &_from)
+{
+    _from.mX /= 800.0;
+    _from.mY /= 600.0;
+
+    _from.mX -= 0.5;
+    _from.mY -= 0.5;
+    _from.mY *= -1;
 }
