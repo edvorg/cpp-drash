@@ -22,8 +22,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
+#include <GL/glew.h>
 #include <SDL/SDL.h>
-#include <GL/gl.h>
 #include "../app/app.h"
 #include "../test/test.h"
 #include "../diag/logger.h"
@@ -40,6 +40,8 @@ const double gWindowHeight = 600;
 
 int main(int _argc, char **_argv)
 {
+    bool fail = false;
+
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         LOG_ERR("SDL_Init() failed");
@@ -51,25 +53,34 @@ int main(int _argc, char **_argv)
     if (SDL_SetVideoMode(gWindowWidth, gWindowHeight, 32, SDL_HWSURFACE | SDL_OPENGL) == nullptr)
     {
         LOG_ERR("SDL_SetVideoMode() failed");
-        return 0;
+        fail = true;
+    }
+
+    if (glewInit() != GLEW_OK)
+    {
+		LOG_ERR("glewInit() failed");
+        fail = true;
     }
 
     CApp *app = nullptr;
 
-    for (int i = 0; i < _argc; i++)
+    if (fail == false)
     {
-        if (strcmp("--test", _argv[i]) == 0)
+        for (int i = 0; i < _argc; i++)
         {
-            if (++i < _argc)
+            if (strcmp("--test", _argv[i]) == 0)
             {
-                app = test::StartApp(_argv[i]);
-
-                if (app == nullptr)
+                if (++i < _argc)
                 {
-                    LOG_ERR("drash::test::StartApp() failed");
-                }
+                    app = test::StartApp(_argv[i]);
 
-                break;
+                    if (app == nullptr)
+                    {
+                        LOG_ERR("drash::test::StartApp() failed");
+                    }
+
+                    break;
+                }
             }
         }
     }
@@ -77,7 +88,7 @@ int main(int _argc, char **_argv)
     CTimer timer;
     timer.Reset(true);
 
-    if (app != nullptr)
+    if (fail == false && app != nullptr)
     {
         if (app->Init() == true)
         {

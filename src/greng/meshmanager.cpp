@@ -22,10 +22,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
+#include <GL/glew.h>
 #include "meshmanager.h"
 #include "mesh.h"
 #include "../diag/logger.h"
-#include "rendererbufferextension.h"
 
 namespace greng
 {

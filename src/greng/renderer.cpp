@@ -22,27 +22,17 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
+#include <GL/glew.h>
 #include "renderer.h"
-
 #include "mesh.h"
 
-#if defined(__MACH__)
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glext.h>
-#endif
-
-#include "rendererbufferextension.h"
 
 namespace greng
 {
 
 bool CRenderer::Init()
 {
-    return CRendererBufferExtension::Init();
+    return true;
 }
 
 void CRenderer::RenderMesh(const CMesh *_mesh)
