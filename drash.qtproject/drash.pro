@@ -13,8 +13,7 @@ TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++0x
 
-INCLUDEPATH += ../3rd/Box2D/include\
-    ../src/
+INCLUDEPATH += ../3rd/Box2D/include
 
 SOURCES += ../src/qt/main.cpp\
         ../src/qt/gamewindow.cpp \

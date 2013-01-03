@@ -24,12 +24,12 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "scene.h"
 
-#include "diag/assert.h"
-#include "diag/logger.h"
-#include <subsystem/subsystem.h>
+#include "../diag/assert.h"
+#include "../diag/logger.h"
+#include "../subsystem/subsystem.h"
 
 #include "sceneobject.h"
-#include "joints/joint.h"
+#include "../joints/joint.h"
 
 namespace drash
 {

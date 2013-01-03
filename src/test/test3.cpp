@@ -25,9 +25,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "test3.h"
 
 #include "../scene/scene.h"
-#include "scene/explosion.h"
-#include "scene/player.h"
-#include "scene/figure.h"
+#include "../scene/explosion.h"
+#include "../scene/player.h"
+#include "../scene/figure.h"
 
 #include "../debugdrawsystem/camera.h"
 #include "../misc/plane.h"

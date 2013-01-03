@@ -26,9 +26,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QMouseEvent>
 
-#include "misc/vec2.h"
-#include "app/app.h"
-#include "app/appevent.h"
+#include "../misc/vec2.h"
+#include "../app/app.h"
+#include "../app/appevent.h"
 
 using namespace drash;
 

@@ -27,8 +27,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define CSCENE_H
 
 #include "physobserver.h"
-#include "misc/vec2.h"
-#include "misc/vec3.h"
+#include "../misc/vec2.h"
+#include "../misc/vec3.h"
 
 namespace drash
 {

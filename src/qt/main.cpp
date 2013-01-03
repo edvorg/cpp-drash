@@ -24,7 +24,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QApplication>
 #include "gamewindow.h"
-#include "editor/editorwindow.h"
+#include "../editor/editorwindow.h"
 #include <cstdlib>
 #include <ctime>
 

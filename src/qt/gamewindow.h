@@ -27,7 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QMainWindow>
 #include <QTimer>
-#include "diag/timer.h"
+#include "../diag/timer.h"
 
 class SceneWidget;
 class QLabel;
