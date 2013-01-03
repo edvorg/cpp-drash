@@ -47,8 +47,6 @@ int main(int _argc, char **_argv)
         return 0;
     }
 
-    glViewport(0, 0, 800, 600);
-
     drash::CApp *app = nullptr;
 
     for (int i = 0; i < _argc; i++)
@@ -76,6 +74,9 @@ int main(int _argc, char **_argv)
     {
         if (app->Init() == true)
         {
+            glViewport(0, 0, 800, 600);
+            app->GetDebugDrawSystem().SetAspectRatio(800.0 / 600.0);
+
             for (;;)
             {
                 bool exit = false;
