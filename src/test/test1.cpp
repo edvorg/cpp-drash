@@ -661,11 +661,11 @@ void CTest1::EndSplit()
                             0.5f * mCurrentFigure->GetDepth();
 
                 fp.mZ = 0.5f * (mSplitFigureCenterZ + min);
-                fp.mDepth = mSplitFigureCenterZ - min;
+                fp.mDepth = math::Abs(mSplitFigureCenterZ - min);
                 mCurrentObject->CreateFigure(fp);
 
                 fp.mZ = 0.5f * (mSplitFigureCenterZ + max);
-                fp.mDepth = max - mSplitFigureCenterZ;
+                fp.mDepth = math::Abs(max - mSplitFigureCenterZ);
                 mCurrentObject->CreateFigure(fp);
 
                 mCurrentObject->DestroyFigure(mCurrentFigure);
