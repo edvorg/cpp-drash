@@ -74,7 +74,8 @@ SOURCES += ../src/qt/main.cpp\
     ../src/diag/timer.cpp \
     ../src/misc/segment2.cpp \
     ../src/greng/meshmanager.cpp \
-    ../src/greng/renderer.cpp
+    ../src/greng/renderer.cpp \
+    ../src/greng/loadmeshobj.cpp
 
 HEADERS  += ../src/qt/gamewindow.h \
     ../src/qt/scenewidget.h \
@@ -129,7 +130,8 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/greng/meshmanager.h \
     ../src/greng/vertex.h \
     ../src/greng/mesh.h \
-    ../src/greng/renderer.h
+    ../src/greng/renderer.h \
+    ../src/greng/loadmeshobj.h
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui
