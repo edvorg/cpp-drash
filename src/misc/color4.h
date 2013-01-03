@@ -35,14 +35,20 @@ class CColor4 : public CColor3<T, DEF_VAL_FUNC>
 {
 public:
     explicit CColor4() = default;
-    explicit CColor4(const CColor4 &_rgba);
-    explicit CColor4(const CColor3<T, DEF_VAL_FUNC> &_rgb, const T &_a);
-    explicit CColor4(const T &_rgba);
-    explicit CColor4(const T &_r, const T &_g, const T &_b);
-    explicit CColor4(const T &_r, const T &_g, const T &_b, const T &_a);
+    CColor4(const CColor4 &_rgba);
+    CColor4(const CColor3<T, DEF_VAL_FUNC> &_rgb, const T &_a);
+    CColor4(const T &_rgba);
+    CColor4(const T &_r, const T &_g, const T &_b);
+    CColor4(const T &_r, const T &_g, const T &_b, const T &_a);
+
+    /// setters
 
     CColor4 &Set(const CColor3<T, DEF_VAL_FUNC> &_rgb, const T &_a);
     CColor4 &Set(const T &_r, const T &_g, const T &_b, const T &_a);
+
+    /// operators
+
+    CColor4 &operator =(const CColor4 &_rgba);
 
     /// conversion
 
@@ -112,6 +118,16 @@ CColor4<T, DEF_VAL_FUNC> &CColor4<T, DEF_VAL_FUNC>::Set(const T &_r, const T &_g
     this->mG = _g;
     this->mB = _b;
     this->mA = _a;
+    return *this;
+}
+
+template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
+CColor4<T, DEF_VAL_FUNC> &CColor4<T, DEF_VAL_FUNC>::operator =(const CColor4 &_rgba)
+{
+    this->mR = _rgba.mR;
+    this->mG = _rgba.mG;
+    this->mB = _rgba.mB;
+    this->mA = _rgba.mA;
     return *this;
 }
 
