@@ -25,6 +25,13 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRENG_RENDERER_H
 #define GRENG_RENDERER_H
 
+namespace drash
+{
+
+class CMatrix4f;
+
+}
+
 namespace greng
 {
 
@@ -42,7 +49,8 @@ public:
 
     bool Init();
 
-    void RenderMesh(const CMesh *_mesh);
+    void RenderMesh(const CMesh *_mesh,
+                    const drash::CMatrix4f &_model_view_matrix);
 };
 
 } // namespace greng

@@ -48,9 +48,22 @@ bool CTest5::Init()
 
 void CTest5::Render()
 {
+    static float angle = 0;
+
     CApp::Render();
 
-    GetRenderer().RenderMesh(mMesh);
+	if (mMesh != nullptr)
+	{
+        CMatrix4f r;
+        MatrixRotationZ(r, angle);
+
+        CMatrix4f model_view;
+        MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), r, model_view);
+
+        GetRenderer().RenderMesh(mMesh, model_view);
+	}
+
+    angle += 1.0 * GetCurrentTimeDelta();
 }
 
 void CTest5::SetupCam()
@@ -59,13 +72,13 @@ void CTest5::SetupCam()
 
     if (cam != nullptr)
     {
-        cam->GetPos().Set(CVec3f(0, 0, 100));
+        cam->GetPos().Set(CVec3f(0, 0, 10));
     }
 }
 
 void CTest5::SetupMesh()
 {
-    mMesh = GetMeshManager().CreateMeshBox();
+    mMesh = GetMeshManager().CreateMeshQuad();
 }
 
 void CTest5::SetupProcessors()

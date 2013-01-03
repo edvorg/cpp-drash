@@ -48,9 +48,27 @@ int main(int _argc, char **_argv)
         return 0;
     }
 
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE,            8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE,          8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,           8);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE,          8);
+
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,          8);
+    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE,         24);
+
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE,      8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE,    8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE,     8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE,    8);
+
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,  0);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  0);
+
     SDL_WM_SetCaption("Drash", nullptr);
 
-    if (SDL_SetVideoMode(gWindowWidth, gWindowHeight, 32, SDL_HWSURFACE | SDL_OPENGL) == nullptr)
+    if (SDL_SetVideoMode(gWindowWidth, gWindowHeight, 32, SDL_HWSURFACE |
+                                                          SDL_OPENGL |
+                                                          SDL_GL_DOUBLEBUFFER) == nullptr)
     {
         LOG_ERR("SDL_SetVideoMode() failed");
         fail = true;
@@ -61,6 +79,10 @@ int main(int _argc, char **_argv)
 		LOG_ERR("glewInit() failed");
         fail = true;
     }
+
+    LOG_INFO("OpenGL version: "<<(const char*)glGetString(GL_VERSION));
+    LOG_INFO("Vendor: "<<(const char*)glGetString(GL_VENDOR));
+    LOG_INFO("GLSL version: "<<(const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
 
     CApp *app = nullptr;
 
