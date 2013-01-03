@@ -61,7 +61,8 @@ SOURCES += \
     ../src/app/appeventcombination.cpp \
     ../src/app/appevent.cpp \
     ../src/app/app.cpp \
-    ../src/sdl/main.cpp
+    ../src/sdl/main.cpp \
+    ../src/greng/loadmeshobj.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -112,5 +113,6 @@ HEADERS += \
     ../src/app/appeventprocessor.h \
     ../src/app/appeventcombination.h \
     ../src/app/appevent.h \
-    ../src/app/app.h
+    ../src/app/app.h \
+    ../src/greng/loadmeshobj.h
 
