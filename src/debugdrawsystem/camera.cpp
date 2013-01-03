@@ -139,7 +139,7 @@ void CCamera::ComputeMatrices()
     MatrixMultiply(rotx, roty, mRotationMatrix);
     MatrixRotationX(rotx, mRotation.Get().mX);
     MatrixRotationY(roty, mRotation.Get().mY);
-    MatrixMultiply(rotx, roty, mAntiRotationMatrix);
+    MatrixMultiply(roty, rotx, mAntiRotationMatrix);
 
     CVec3f tv(-mPos.Get().mX, -mPos.Get().mY, -mPos.Get().mZ);
     CMatrix4f tm;
