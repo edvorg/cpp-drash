@@ -24,7 +24,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "subsystem.h"
 
-#include "../scene.h"
+#include "../scene/scene.h"
 
 namespace drash
 {

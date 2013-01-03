@@ -29,7 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../diag/assert.h"
 #include "explosion.h"
 #include "../misc/graphics.h"
-#include "../scene.h"
+#include "scene.h"
 
 namespace drash
 {

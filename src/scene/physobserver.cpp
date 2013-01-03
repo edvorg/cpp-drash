@@ -24,8 +24,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "physobserver.h"
 
-#include "sceneobjects/sceneobject.h"
-#include "sceneobjects/figure.h"
+#include "sceneobject.h"
+#include "figure.h"
 
 namespace drash
 {

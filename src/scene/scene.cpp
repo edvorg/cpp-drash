@@ -28,7 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "diag/logger.h"
 #include <subsystem/subsystem.h>
 
-#include "sceneobjects/sceneobject.h"
+#include "sceneobject.h"
 #include "joints/joint.h"
 
 namespace drash

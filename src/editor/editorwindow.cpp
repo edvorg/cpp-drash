@@ -31,9 +31,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <QStatusBar>
 #include <QDebug>
 
-#include "../scene.h"
-#include "../sceneobjects/figure.h"
-#include "../sceneobjects/sceneobject.h"
+#include "../scene/scene.h"
+#include "../scene/figure.h"
+#include "../scene/sceneobject.h"
 #include "../subsystem/templatesystem.h"
 #include "../misc/vec2.h"
 #include "../debugdrawsystem/camera.h"

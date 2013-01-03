@@ -25,8 +25,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "playerssystem.h"
 
 #include "../diag/logger.h"
-#include "../sceneobjects/player.h"
-#include "../scene.h"
+#include "../scene/player.h"
+#include "../scene/scene.h"
 
 namespace drash
 {

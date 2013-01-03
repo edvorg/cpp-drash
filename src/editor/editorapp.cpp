@@ -28,8 +28,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../debugdrawsystem/camera.h"
 #include "../misc/plane.h"
-#include "../sceneobjects/figure.h"
-#include "../sceneobjects/sceneobject.h"
+#include "../scene/figure.h"
+#include "../scene/sceneobject.h"
 
 namespace drash {
 

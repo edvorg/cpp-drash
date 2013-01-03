@@ -26,7 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CTESTAPP_H
 #define CTESTAPP_H
 
-#include "../scene.h"
+#include "../scene/scene.h"
 #include "../subsystem/explosionsystem.h"
 #include "../subsystem/playerssystem.h"
 #include "../subsystem/templatesystem.h"
