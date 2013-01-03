@@ -9,7 +9,7 @@ INCLUDEPATH += ../3rd/Box2D/include
 
 LIBS += -L../3rd/Box2D/lib -lBox2D
 
-unix:!macx: LIBS += -lrt -lGLU
+unix:!macx: LIBS += -lrt -lGLU -lGL -lSDL
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG
@@ -61,7 +61,8 @@ SOURCES += \
     ../src/app/appeventprocessor.cpp \
     ../src/app/appeventcombination.cpp \
     ../src/app/appevent.cpp \
-    ../src/app/app.cpp
+    ../src/app/app.cpp \
+    ../src/sdl/main.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
