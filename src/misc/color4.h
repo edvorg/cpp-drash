@@ -30,7 +30,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
-template<class T, constexpr T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
+template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
 class CColor4 : public CColor3<T, DEF_VAL_FUNC>
 {
 public:
