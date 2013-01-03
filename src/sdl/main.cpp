@@ -35,8 +35,8 @@ EventKey ConvertKey(SDLKey _key);
 EventKey ConvertButton(int _button);
 void WindowSpaceToScreenSpace(CVec2f &_from);
 
-const double gWindowWidth = 1366;
-const double gWindowHeight = 768;
+const double gWindowWidth = 800;
+const double gWindowHeight = 600;
 
 int main(int _argc, char **_argv)
 {
@@ -83,6 +83,8 @@ int main(int _argc, char **_argv)
         {
             glViewport(0, 0, gWindowWidth, gWindowHeight);
             app->GetDebugDrawSystem().SetAspectRatio(gWindowWidth / gWindowHeight);
+            app->GetUISystem().SetAspectRatio(gWindowWidth / gWindowHeight);
+            app->GetUISystem().SetWidth(gWindowWidth);
 
             bool exit = false;
             SDL_Event e;
@@ -91,6 +93,17 @@ int main(int _argc, char **_argv)
             {
                 exit = true;
             });
+
+            auto update_cursor = [&app] (int _x, int _y)
+            {
+                CVec2f pos(_x, _y);
+                WindowSpaceToScreenSpace(pos);
+                app->SetCursorPos(pos);
+                int x;
+                int y;
+                app->GetUISystem().ScreenSpaceToUISpace(pos, x, y);
+                app->GetUISystem().SetCursorPos(x, y);
+            };
 
             for (;;)
             {
@@ -111,23 +124,19 @@ int main(int _argc, char **_argv)
                     }
                     else if (e.type == SDL_MOUSEBUTTONDOWN)
                     {
-                        CVec2f pos(e.button.x, e.button.y);
-                        WindowSpaceToScreenSpace(pos);
-                        app->SetCursorPos(pos);
+                        update_cursor(e.button.x, e.button.y);
+                        app->GetUISystem().BeginEvent();
                         app->GetEventSystem().BeginEvent(ConvertButton(e.button.button));
                     }
                     else if (e.type == SDL_MOUSEBUTTONUP)
                     {
-                        CVec2f pos(e.button.x, e.button.y);
-                        WindowSpaceToScreenSpace(pos);
-                        app->SetCursorPos(pos);
+                        update_cursor(e.button.x, e.button.y);
+                        app->GetUISystem().EndEvent();
                         app->GetEventSystem().EndEvent(ConvertButton(e.button.button));
                     }
                     else if (e.type == SDL_MOUSEMOTION)
                     {
-                        CVec2f pos(e.motion.x, e.motion.y);
-                        WindowSpaceToScreenSpace(pos);
-                        app->SetCursorPos(pos);
+                        update_cursor(e.motion.x, e.motion.y);
                     }
                 }
 
