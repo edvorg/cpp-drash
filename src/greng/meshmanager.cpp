@@ -23,8 +23,52 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include "meshmanager.h"
+#include "mesh.h"
+#include "../diag/logger.h"
 
 namespace greng
 {
+
+using drash::CLogger;
+
+CMeshManager::CMeshManager()
+{
+    for (unsigned int i = 0; i < mMeshesCount; i++)
+    {
+        mMeshes[i] = nullptr;
+    }
+}
+
+CMeshManager::~CMeshManager()
+{
+    for (unsigned int i = 0; i < mMeshesCount; i++)
+    {
+        delete mMeshes[i];
+        mMeshes[i] = nullptr;
+    }
+}
+
+CMesh *CMeshManager::CreateMesh()
+{
+    if (mMeshesCount >= mMeshesCountLimit)
+    {
+        LOG_ERR("CMeshManager::CreateMesh(): meshes count exceedes it's limit");
+        return nullptr;
+    }
+
+    return mMeshes[mMeshesCount++] = new CMesh();
+}
+
+CMesh *CMeshManager::CreateMeshFromObjFile(const char *_path)
+{
+    CMesh *res = CreateMesh();
+
+    if (res == nullptr)
+    {
+        return nullptr;
+    }
+
+    return res;
+}
 
 } // namespace greng

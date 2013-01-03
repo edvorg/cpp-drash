@@ -28,14 +28,27 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace greng
 {
 
-class CMeshManager
+class CMesh;
+
+class CMeshManager final
 {
 public:
-    CMeshManager() = default;
+    constexpr static unsigned int mMeshesCountLimit = 1024;
+
+    CMeshManager();
     CMeshManager(const CMeshManager &) = delete;
     CMeshManager(CMeshManager &&) = delete;
     CMeshManager &operator =(const CMeshManager &) = delete;
     CMeshManager &operator =(CMeshManager &&) = delete;
+    ~CMeshManager();
+
+    CMesh *CreateMesh();
+    CMesh *CreateMeshFromObjFile(const char *_path);
+
+protected:
+private:
+    CMesh *mMeshes[mMeshesCountLimit];
+    unsigned int mMeshesCount = 0;
 };
 
 } // namespace greng
