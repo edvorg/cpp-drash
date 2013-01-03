@@ -712,28 +712,28 @@ void CTest1::CamViewProcessors()
     [this] () {},
     [this] ()
     {
-        GetDebugDrawSystem().GetActiveCam()->Forward(5);
+        GetDebugDrawSystem().GetActiveCam()->Forward(500 * GetCurrentTimeDelta());
     }));
 
     GetEventSystem().SetProcessor("a", CAppEventProcessor(
     [this] () {},
     [this] ()
     {
-        GetDebugDrawSystem().GetActiveCam()->Strafe(5);
+        GetDebugDrawSystem().GetActiveCam()->Strafe(500 * GetCurrentTimeDelta());
     }));
 
     GetEventSystem().SetProcessor("s", CAppEventProcessor(
     [this] () {},
     [this] ()
     {
-        GetDebugDrawSystem().GetActiveCam()->Forward(-5);
+        GetDebugDrawSystem().GetActiveCam()->Forward(-500 * GetCurrentTimeDelta());
     }));
 
     GetEventSystem().SetProcessor("d", CAppEventProcessor(
     [this] () {},
     [this] ()
     {
-        GetDebugDrawSystem().GetActiveCam()->Strafe(-5);
+        GetDebugDrawSystem().GetActiveCam()->Strafe(-500 * GetCurrentTimeDelta());
     }));
 
     GetEventSystem().SetProcessor("q", CAppEventProcessor(

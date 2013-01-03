@@ -73,8 +73,10 @@ void CApp::Step(double _dt)
     if (mQuit)
     {
         mQuitHandler();
-        return;
+        return;    
     }
+
+    mCurrentTimeDelta = _dt;
 
     mEventSystem.Process();
     mScene.Step(_dt);

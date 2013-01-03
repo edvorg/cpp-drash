@@ -70,6 +70,8 @@ public:
     /// returns coordinates in screen space (-0.5, -0.5) (0.5, 0.5)
     inline const CVec2f &GetCursorPos() const;
 
+    inline double GetCurrentTimeDelta() const;
+
 protected:
 
 private:
@@ -86,6 +88,7 @@ private:
 
     std::function<void ()> mQuitHandler = [] () {};
     bool mQuit = false;
+    double mCurrentTimeDelta = 0;
 };
 
 inline void CApp::Quit()
@@ -146,6 +149,11 @@ inline void CApp::SetCursorPos(const CVec2f &_pos)
 inline const CVec2f &CApp::GetCursorPos() const
 {
     return mCursorPos;
+}
+
+inline double CApp::GetCurrentTimeDelta() const
+{
+    return mCurrentTimeDelta;
 }
 
 } // namespace drash
