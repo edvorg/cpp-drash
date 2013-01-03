@@ -59,7 +59,8 @@ SOURCES += ../src/main.cpp\
     ../src/diag/logger.cpp \
     ../src/diag/timer.cpp \
     ../src/misc/segment2.cpp \
-    ../src/greng/meshmanager.cpp
+    ../src/greng/meshmanager.cpp \
+    ../src/greng/renderer.cpp
 
 HEADERS  += ../src/gamewindow.h \
     ../src/scenewidget.h \
@@ -111,7 +112,10 @@ HEADERS  += ../src/gamewindow.h \
     ../src/misc/segment2.h \
     ../src/misc/color3.h \
     ../src/misc/color4.h \
-    ../src/greng/meshmanager.h
+    ../src/greng/meshmanager.h \
+    ../src/greng/vertex.h \
+    ../src/greng/mesh.h \
+    ../src/greng/renderer.h
 
 FORMS    += ../src/gamewindow.ui \
     ../src/editor/editorwindow.ui
