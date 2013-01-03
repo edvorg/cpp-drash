@@ -55,7 +55,7 @@ void CCamera::Forward(float _distance)
 {
     CVec4f z(0, 0, -1, 1);
     CVec4f dir;
-    MatrixMultiply(z, GetRotationMatrix(), dir);
+    MatrixMultiply(mAntiRotationMatrix, z, dir);
 
     dir.Normalize();
     dir.mX *= _distance;
@@ -73,7 +73,7 @@ void CCamera::Strafe(float _distance)
     CVec3f up(0, 1, 0);
     CVec4f z(0, 0, -1, 1);
     CVec4f dir;
-    MatrixMultiply(z, GetRotationMatrix(), dir);
+    MatrixMultiply(mAntiRotationMatrix, z, dir);
 
     CVec3f strafe_dir;
     Vec3Cross(up, dir, strafe_dir);
@@ -136,14 +136,14 @@ void CCamera::ComputeMatrices()
     CMatrix4f roty;
     MatrixRotationY(roty, -mRotation.Get().mY);
 
-    MatrixMultiply(roty, rotx, mRotationMatrix);
+    MatrixMultiply(rotx, roty, mRotationMatrix);
+    MatrixRotationX(rotx, mRotation.Get().mX);
+    MatrixRotationY(roty, mRotation.Get().mY);
+    MatrixMultiply(rotx, roty, mAntiRotationMatrix);
 
     CVec3f tv(-mPos.Get().mX, -mPos.Get().mY, -mPos.Get().mZ);
     CMatrix4f tm;
     MatrixTranslation(tm, tv);
-
-    mRotationMatrix.Transpose();
-    tm.Transpose();
 
     MatrixMultiply(mRotationMatrix, tm, mViewMatrix);
 }

@@ -64,6 +64,7 @@ public:
     void Strafe(float _distance);
 
     inline const CMatrix4f &GetRotationMatrix() const;
+    inline const CMatrix4f &GetAntiRotationMatrix() const;
     inline const CMatrix4f &GetViewMatrix() const;
 
 protected:        
@@ -84,6 +85,7 @@ private:
     CAnimatedParam<CVec2f> mRotation;
 
     CMatrix4f mRotationMatrix;
+    CMatrix4f mAntiRotationMatrix;
     CMatrix4f mViewMatrix;
 };
 
@@ -125,6 +127,11 @@ inline CAnimatedParam<CVec2f> &CCamera::GetRotation()
 inline const CMatrix4f &CCamera::GetRotationMatrix() const
 {
     return mRotationMatrix;
+}
+
+inline const CMatrix4f &CCamera::GetAntiRotationMatrix() const
+{
+    return mAntiRotationMatrix;
 }
 
 inline const CMatrix4f &CCamera::GetViewMatrix() const

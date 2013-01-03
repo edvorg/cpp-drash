@@ -42,7 +42,7 @@ private:
 };
 
 CMatrix4f &MatrixMultiply(const CMatrix4f &_m1, const CMatrix4f &_m2, CMatrix4f &_result);
-CVec4f &MatrixMultiply(const CVec4f &_v, const CMatrix4f &_m, CVec4f &_result);
+CVec4f &MatrixMultiply(const CMatrix4f &_m, const CVec4f &_v, CVec4f &_result);
 CMatrix4f &MatrixRotationX(CMatrix4f &_m, float _angle);
 CMatrix4f &MatrixRotationY(CMatrix4f &_m, float _angle);
 CMatrix4f &MatrixRotationZ(CMatrix4f &_m, float _angle);

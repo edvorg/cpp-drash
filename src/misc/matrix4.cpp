@@ -151,29 +151,29 @@ CMatrix4f &MatrixMultiply(const CMatrix4f &_m1, const CMatrix4f &_m2, CMatrix4f 
     return _result;
 }
 
-CVec4f &MatrixMultiply(const CVec4f &_v, const CMatrix4f &_m, CVec4f &_result)
+CVec4f &MatrixMultiply(const CMatrix4f &_m, const CVec4f &_v, CVec4f &_result)
 {
     _result.mX = _v.mX * _m.mData[_m.m00] +
-                    _v.mY * _m.mData[_m.m10] +
-                    _v.mZ * _m.mData[_m.m20] +
-                    _v.mW * _m.mData[_m.m30];
+                    _v.mY * _m.mData[_m.m01] +
+                    _v.mZ * _m.mData[_m.m02] +
+                    _v.mW * _m.mData[_m.m03];
 
 
-    _result.mY = _v.mX * _m.mData[_m.m01] +
+    _result.mY = _v.mX * _m.mData[_m.m10] +
                     _v.mY * _m.mData[_m.m11] +
-                    _v.mZ * _m.mData[_m.m21] +
-                    _v.mW * _m.mData[_m.m31];
+                    _v.mZ * _m.mData[_m.m12] +
+                    _v.mW * _m.mData[_m.m13];
 
 
-    _result.mZ = _v.mX * _m.mData[_m.m02] +
-                    _v.mY * _m.mData[_m.m12] +
+    _result.mZ = _v.mX * _m.mData[_m.m20] +
+                    _v.mY * _m.mData[_m.m21] +
                     _v.mZ * _m.mData[_m.m22] +
-                    _v.mW * _m.mData[_m.m32];
+                    _v.mW * _m.mData[_m.m23];
 
 
-    _result.mW = _v.mX * _m.mData[_m.m03] +
-                    _v.mY * _m.mData[_m.m13] +
-                    _v.mZ * _m.mData[_m.m23] +
+    _result.mW = _v.mX * _m.mData[_m.m30] +
+                    _v.mY * _m.mData[_m.m31] +
+                    _v.mZ * _m.mData[_m.m32] +
                     _v.mW * _m.mData[_m.m33];
 
 
@@ -187,8 +187,8 @@ CMatrix4f &MatrixRotationX(CMatrix4f &_m, float _angle)
 
     _m.Identity();
     _m.mData[_m.m11] = _m.mData[_m.m22] = c;
-    _m.mData[_m.m12] = s;
-    _m.mData[_m.m21] = -s;
+    _m.mData[_m.m12] = -s;
+    _m.mData[_m.m21] = s;
 
     return _m;
 }
@@ -200,8 +200,8 @@ CMatrix4f &MatrixRotationY(CMatrix4f &_m, float _angle)
 
     _m.Identity();
     _m.mData[_m.m00] = _m.mData[_m.m22] = c;
-    _m.mData[_m.m02] = -s;
-    _m.mData[_m.m20] = s;
+    _m.mData[_m.m02] = s;
+    _m.mData[_m.m20] = -s;
 
     return _m;
 }
@@ -213,8 +213,8 @@ CMatrix4f &MatrixRotationZ(CMatrix4f &_m, float _angle)
 
     _m.Identity();
     _m.mData[_m.m00] = _m.mData[_m.m11] = c;
-    _m.mData[_m.m01] = s;
-    _m.mData[_m.m10] = -s;
+    _m.mData[_m.m01] = -s;
+    _m.mData[_m.m10] = s;
 
     return _m;
 }
@@ -223,9 +223,9 @@ CMatrix4f &MatrixTranslation(CMatrix4f &_m, const CVec3f &_translation)
 {
     _m.Identity();
 
-    _m.mData[_m.m30] = _translation.mX;
-    _m.mData[_m.m31] = _translation.mY;
-    _m.mData[_m.m32] = _translation.mZ;
+    _m.mData[_m.m03] = _translation.mX;
+    _m.mData[_m.m13] = _translation.mY;
+    _m.mData[_m.m23] = _translation.mZ;
 
     return _m;
 }

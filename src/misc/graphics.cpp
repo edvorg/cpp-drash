@@ -48,7 +48,7 @@ void DrawBodySide(const CVec2f &_v1,
     CVec4f localx(1, 0, 0, 1);
     CMatrix4f m;
     MatrixRotationZ(m, _angle);
-    MatrixMultiply(old_localx, m, localx);
+    MatrixMultiply(m, old_localx, localx);
 
     float dot = dp.mX * localx.mX + dp.mY * localx.mY;
     dot += 2.0;

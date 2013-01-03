@@ -108,7 +108,7 @@ void CTest3::Render()
     CVec4f pos(0, 0, 0, 1);
     CMatrix4f m;
     MatrixRotationX(m, angle);
-    MatrixMultiply(origin, m, pos);
+    MatrixMultiply(m, origin, pos);
     GetDebugDrawSystem().DrawPoint(pos, 10, CColor4f(1, 0, 0), false);
 
     angle += 0.01;

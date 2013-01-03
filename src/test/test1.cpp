@@ -363,7 +363,7 @@ void CTest1::SetProcessors()
         MatrixRotationZ(m, M_PI / 12);
         CVec4f old_normal(mSplitPlane.GetNormal(), 1);
         CVec4f new_normal;
-        MatrixMultiply(old_normal, m, new_normal);
+        MatrixMultiply(m, old_normal, new_normal);
         mSplitPlane.SetNormal(new_normal);
         ComputeIntersections();
     }));

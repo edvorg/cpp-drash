@@ -152,7 +152,7 @@ void CDebugDrawSystem::CastRay(const CVec2f &_pos, const CPlane &_plane, CVec3f 
 
     CVec4f dir(pos, -1, 1);
     CVec4f tmp;
-    MatrixMultiply(dir, mActiveCam->GetRotationMatrix(), tmp);
+    MatrixMultiply(mActiveCam->GetAntiRotationMatrix(), dir, tmp);
 
     CRay r;
     r.SetPoint(mActiveCam->GetPos().Get());
