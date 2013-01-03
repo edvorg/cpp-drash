@@ -1,5 +1,0 @@
-#! /bin/bash
-
-find ./ -name *.cpp -exec `pwd`/install-license-impl {} \;
-find ./ -name *.h -exec `pwd`/install-license-impl {} \;
-find ./ -name *.md -exec `pwd`/install-license-impl {} \;

@@ -1,0 +1,35 @@
+#! /bin/bash
+
+if [ "$1" == "" ] ; then
+    echo file not specified
+    exit 1
+fi
+
+if [ ! -f "$1" ] ; then
+    echo file not exits
+    exit 1
+fi
+
+LICENSE_INSTALLED="false"
+
+TMP=`cat $1 | grep '// DRASH_LICENSE_BEGIN' | wc -l`
+
+if [ "$TMP" != "" ] ; then
+    if (( $TMP >= 1 )) ; then
+	LICENSE_INSTALLED="true"
+    fi
+fi
+
+if [ "$LICENSE_INSTALLED" == "false" ] ; then
+    echo installing license in $1
+    cat $1 > $1.tmp
+    echo "// DRASH_LICENSE_BEGIN" > $1
+    cat license.txt >> $1
+    echo "// DRASH_LICENSE_END" >> $1
+    echo "" >> $1
+    cat $1.tmp >> $1
+    rm $1.tmp
+elif [ "$LICENSE_INSTALLED" == "true" ] ; then
+    echo updating license in $1
+	# TODO: implement this
+fi
