@@ -36,6 +36,7 @@ class CMesh
 {
 public:
     friend class CMeshManager;
+    friend class CRenderer;
 
     CMesh() = default;
 
@@ -45,6 +46,8 @@ private:
     std::vector<unsigned int> mIndices;
     std::vector<unsigned int> mMaterialOffsets;
     std::vector<std::string> mMaterialNames;
+    unsigned int mVertexBufferId = 0;
+    unsigned int mIndexBufferId = 0;
 };
 
 } // namespace greng

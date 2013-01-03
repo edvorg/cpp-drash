@@ -40,6 +40,8 @@ public:
     CRenderer &operator =(CRenderer &&) = delete;
     ~CRenderer() = default;
 
+    bool Init();
+
     void RenderMesh(const CMesh *_mesh);
 };
 

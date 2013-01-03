@@ -37,7 +37,16 @@ class CTest5 : public drash::CApp
 {
 public:
     CTest5() = default;
-    virtual bool Init();
+    virtual bool Init() override;
+    virtual void Render() override;
+
+protected:
+private:
+    void SetupCam();
+    void SetupMesh();
+    void SetupProcessors();
+
+    greng::CMesh *mMesh;
 };
 
 } // namespace test

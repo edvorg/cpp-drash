@@ -25,7 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCENEEDITOR_H
 #define SCENEEDITOR_H
 
-#include "../scenewidget.h"
+#include "../qt/scenewidget.h"
 
 class SceneEditor : public SceneWidget
 {

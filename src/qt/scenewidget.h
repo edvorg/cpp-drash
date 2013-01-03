@@ -45,6 +45,7 @@ public:
     /// to screen space (-0.5, -0.5)..(0.5, 0.5)
     drash::CVec2f WidgetSpaceToScreenSpace(const drash::CVec2f& _from) const;
 
+    virtual void initializeGL() override;
     virtual void resizeGL( int _w, int _h ) override;
     virtual void paintGL() override;
 

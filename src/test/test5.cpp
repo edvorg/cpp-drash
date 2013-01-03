@@ -26,9 +26,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../debugdrawsystem/camera.h"
 
-#include "../misc/plane.h"
-#include "../misc/ray.h"
-
 namespace drash
 {
 
@@ -42,36 +39,42 @@ bool CTest5::Init()
         return false;
     }
 
-    CPlane p;
-    p.SetNormal(CVec3f(0, 0, 1));
-    p.SetPoint(CVec3f(0));
-
-    CVec3f cast_result;
-    CRay r;
-
-    r.SetDirection(CVec3f(1, 1, -1));
-    r.SetPoint(CVec3f(0, 0, 1));
-    p.CastRay(r, cast_result);
-    LOG_INFO(cast_result);
-
-    r.SetDirection(CVec3f(1, 0, -1));
-    r.SetPoint(CVec3f(0, 0, 1));
-    p.CastRay(r, cast_result);
-    LOG_INFO(cast_result);
-
-    r.SetDirection(CVec3f(-1, 0, -1));
-    r.SetPoint(CVec3f(0, 0, 1));
-    p.CastRay(r, cast_result);
-    LOG_INFO(cast_result);
-
-    r.SetDirection(CVec3f(0, -1, -1));
-    r.SetPoint(CVec3f(0, 0, 1));
-    p.CastRay(r, cast_result);
-    LOG_INFO(cast_result);
-
-    this->Quit();
+    SetupCam();
+    SetupProcessors();
+    SetupMesh();
 
     return true;
+}
+
+void CTest5::Render()
+{
+    CApp::Render();
+
+    GetRenderer().RenderMesh(mMesh);
+}
+
+void CTest5::SetupCam()
+{
+    auto cam = GetDebugDrawSystem().GetActiveCam();
+
+    if (cam != nullptr)
+    {
+        cam->GetPos().Set(CVec3f(0, 0, 100));
+    }
+}
+
+void CTest5::SetupMesh()
+{
+    mMesh = GetMeshManager().CreateMeshBox();
+}
+
+void CTest5::SetupProcessors()
+{
+    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
+    [this] ()
+    {
+        this->Quit();
+    }));
 }
 
 } // namespace test

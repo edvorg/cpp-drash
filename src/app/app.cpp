@@ -45,7 +45,8 @@ bool CApp::Init()
         mTemplateSystem.Init() == false ||
         mDebugDrawSystem.Init() == false ||
         mEventSystem.Init() == false ||
-        mUISystem.Init() == false)
+        mUISystem.Init() == false ||
+        mRenderer.Init() == false)
     {
         return false;
     }

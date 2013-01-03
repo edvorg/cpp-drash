@@ -32,20 +32,52 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #else
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <GL/glext.h>
 #endif
+
+#include "rendererbufferextension.h"
 
 namespace greng
 {
 
+bool CRenderer::Init()
+{
+    return CRendererBufferExtension::Init();
+}
+
 void CRenderer::RenderMesh(const CMesh *_mesh)
 {
+    glDisable(GL_CULL_FACE);
+
+    glEnable(GL_TEXTURE_2D);
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
 
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, _mesh->mVertexBufferId);
+    glVertexPointer(3, GL_FLOAT, sizeof(CVertex), nullptr);
+    glTexCoordPointer(2, GL_FLOAT, sizeof(CVertex), reinterpret_cast<GLvoid*>(sizeof(drash::CVec3f)));
+    glTexCoordPointer(4, GL_FLOAT, sizeof(CVertex), reinterpret_cast<GLvoid*>(sizeof(drash::CVec3f) +
+                                                                              sizeof(drash::CVec2f)));
+
+    for (unsigned int i = 0; i < _mesh->mMaterialOffsets.size() - 1; i++)
+    {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->mIndexBufferId);
+        glDrawElements(GL_TRIANGLES,
+                       _mesh->mMaterialOffsets[i+1] - _mesh->mMaterialOffsets[i],
+                       GL_UNSIGNED_INT,
+                       reinterpret_cast<const GLvoid*>(sizeof(unsigned int) * _mesh->mMaterialOffsets[i]));
+    }
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
+    glDisable(GL_TEXTURE_2D);
 }
 
 } // namespace greng

@@ -16,9 +16,9 @@ QMAKE_CXXFLAGS += -std=c++0x
 INCLUDEPATH += ../3rd/Box2D/include\
     ../src/
 
-SOURCES += ../src/main.cpp\
-        ../src/gamewindow.cpp \
-    ../src/scenewidget.cpp \
+SOURCES += ../src/qt/main.cpp\
+        ../src/qt/gamewindow.cpp \
+    ../src/qt/scenewidget.cpp \
     ../src/debugdrawsystem/camera.cpp \
     ../src/sceneobjects/explosion.cpp \
     ../src/test/test.cpp \
@@ -60,10 +60,11 @@ SOURCES += ../src/main.cpp\
     ../src/diag/timer.cpp \
     ../src/misc/segment2.cpp \
     ../src/greng/meshmanager.cpp \
-    ../src/greng/renderer.cpp
+    ../src/greng/renderer.cpp \
+    ../src/greng/rendererbufferextension.cpp
 
-HEADERS  += ../src/gamewindow.h \
-    ../src/scenewidget.h \
+HEADERS  += ../src/qt/gamewindow.h \
+    ../src/qt/scenewidget.h \
     ../src/misc/math.h \
     ../src/misc/animatedparam.h \
     ../src/debugdrawsystem/camera.h \
@@ -115,9 +116,10 @@ HEADERS  += ../src/gamewindow.h \
     ../src/greng/meshmanager.h \
     ../src/greng/vertex.h \
     ../src/greng/mesh.h \
-    ../src/greng/renderer.h
+    ../src/greng/renderer.h \
+    ../src/greng/rendererbufferextension.h
 
-FORMS    += ../src/gamewindow.ui \
+FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui
 
 LIBS += -L../3rd/Box2D/lib -lBox2D

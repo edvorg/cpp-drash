@@ -107,6 +107,16 @@ CVec2f SceneWidget::WidgetSpaceToScreenSpace(const CVec2f &_from) const
     return res;
 }
 
+void SceneWidget::initializeGL()
+{
+    QGLWidget::initializeGL();
+
+    if (mApp != nullptr)
+    {
+
+    }
+}
+
 void SceneWidget::resizeGL( int _w, int _h )
 {
     QGLWidget::resizeGL( _w, _h );
