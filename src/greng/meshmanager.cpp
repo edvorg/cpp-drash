@@ -35,7 +35,7 @@ using drash::CLogger;
 
 CMeshManager::CMeshManager()
 {
-    for (unsigned int i = 0; i < mMeshesCount; i++)
+    for (unsigned int i = 0; i < mMeshesCountLimit; i++)
     {
         mMeshes[i] = nullptr;
     }

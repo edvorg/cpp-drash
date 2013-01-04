@@ -34,6 +34,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "appeventsystem.h"
 #include "../ui/uisystem.h"
 #include "../greng/meshmanager.h"
+#include "../greng/texturemanager.h"
 #include "../greng/renderer.h"
 
 namespace drash
@@ -63,6 +64,7 @@ public:
     inline CDebugDrawSystem &GetDebugDrawSystem();
     inline ui::CUISystem &GetUISystem();
     inline greng::CMeshManager &GetMeshManager();
+    inline greng::CTextureManager &GetTextureManager();
     inline greng::CRenderer &GetRenderer();
 
     /// used to make CApp childs about mouse moving event
@@ -90,6 +92,7 @@ private:
     CDebugDrawSystem mDebugDrawSystem;
     ui::CUISystem mUISystem;
     greng::CMeshManager mMeshManager;
+    greng::CTextureManager mTextureManager;
     greng::CRenderer mRenderer;
 
     std::function<void ()> mQuitHandler = [] () {};
@@ -150,6 +153,11 @@ inline ui::CUISystem &CApp::GetUISystem()
 inline greng::CMeshManager &CApp::GetMeshManager()
 {
     return mMeshManager;
+}
+
+inline greng::CTextureManager &CApp::GetTextureManager()
+{
+    return mTextureManager;
 }
 
 inline greng::CRenderer &CApp::GetRenderer()

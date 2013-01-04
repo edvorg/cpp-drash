@@ -22,39 +22,36 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#ifndef GRENG_RENDERER_H
-#define GRENG_RENDERER_H
-
-namespace drash
-{
-
-class CMatrix4f;
-
-}
+#ifndef GRENG_TEXTUREMANAGER_H
+#define GRENG_TEXTUREMANAGER_H
 
 namespace greng
 {
 
-class CMesh;
 class CTexture;
 
-class CRenderer
+class CTextureManager
 {
 public:
-    CRenderer() = default;
-    CRenderer(const CRenderer &) = delete;
-    CRenderer(CRenderer &&) = delete;
-    CRenderer &operator =(const CRenderer &) = delete;
-    CRenderer &operator =(CRenderer &&) = delete;
-    ~CRenderer() = default;
+    constexpr static unsigned int mTexturesCountLimit = 1024;
 
-    bool Init();
+    CTextureManager();
+    CTextureManager(const CTextureManager &) = delete;
+    CTextureManager(CTextureManager &&) = delete;
+    CTextureManager &operator =(const CTextureManager &) = delete;
+    CTextureManager &operator =(CTextureManager &&) = delete;
+    ~CTextureManager();
 
-    void RenderMesh(const CMesh *_mesh,
-                    const CTexture *_texture,
-                    const drash::CMatrix4f &_model_view);
+    CTexture *CreateTexture();
+    CTexture *CreateTextureFromFile(const char *_path);
+    CTexture *CreateTextureDummy();
+
+protected:
+private:
+    CTexture *mTextures[mTexturesCountLimit];
+    unsigned int mTexturesCount = 0;
 };
 
 } // namespace greng
 
-#endif // GRENG_RENDERER_H
+#endif // GRENG_TEXTUREMANAGER_H

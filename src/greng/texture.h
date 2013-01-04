@@ -22,39 +22,23 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#ifndef GRENG_RENDERER_H
-#define GRENG_RENDERER_H
-
-namespace drash
-{
-
-class CMatrix4f;
-
-}
+#ifndef GRENG_TEXTURE_H
+#define GRENG_TEXTURE_H
 
 namespace greng
 {
 
-class CMesh;
-class CTexture;
-
-class CRenderer
+class CTexture
 {
 public:
-    CRenderer() = default;
-    CRenderer(const CRenderer &) = delete;
-    CRenderer(CRenderer &&) = delete;
-    CRenderer &operator =(const CRenderer &) = delete;
-    CRenderer &operator =(CRenderer &&) = delete;
-    ~CRenderer() = default;
+    CTexture() = default;
 
-    bool Init();
+    unsigned int mTextureBufferId = 0;
 
-    void RenderMesh(const CMesh *_mesh,
-                    const CTexture *_texture,
-                    const drash::CMatrix4f &_model_view);
+protected:
+private:
 };
 
 } // namespace greng
 
-#endif // GRENG_RENDERER_H
+#endif // GRENG_TEXTURE_H

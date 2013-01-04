@@ -43,13 +43,15 @@ public:
 protected:
 private:
     void SetupCam();
-    void SetupMesh();
+    void SetupMeshes();
+    void SetupTextures();
     void SetupProcessors();
 
     greng::CMesh *mMesh1;
     greng::CMesh *mMesh2;
     greng::CMesh *mMesh3;
     CMatrix4f mMesh3ConstMatrix;
+    greng::CTexture *mTex1;
 };
 
 } // namespace test

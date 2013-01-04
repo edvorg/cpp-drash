@@ -9,7 +9,7 @@ INCLUDEPATH += ../3rd/Box2D/include
 
 LIBS += -L../3rd/Box2D/lib -lBox2D
 
-unix:!macx: LIBS += -lrt -lGLU -lGL -lSDL -lGLEW
+unix:!macx: LIBS += -lrt -lGLU -lGL -lSDL -lGLEW -lSDL_image
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG
@@ -62,7 +62,8 @@ SOURCES += \
     ../src/app/appevent.cpp \
     ../src/app/app.cpp \
     ../src/sdl/main.cpp \
-    ../src/greng/loadmeshobj.cpp
+    ../src/greng/loadmeshobj.cpp \
+    ../src/greng/texturemanager.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -114,5 +115,7 @@ HEADERS += \
     ../src/app/appeventcombination.h \
     ../src/app/appevent.h \
     ../src/app/app.h \
-    ../src/greng/loadmeshobj.h
+    ../src/greng/loadmeshobj.h \
+    ../src/greng/texturemanager.h \
+    ../src/greng/texture.h
 

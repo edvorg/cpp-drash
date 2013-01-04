@@ -25,6 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <GL/glew.h>
 #include "renderer.h"
 #include "mesh.h"
+#include "texture.h"
 #include "../misc/matrix4.h"
 
 namespace greng
@@ -36,6 +37,7 @@ bool CRenderer::Init()
 }
 
 void CRenderer::RenderMesh(const CMesh *_mesh,
+                           const CTexture *_texture,
                            const drash::CMatrix4f &_model_view)
 {
     drash::CMatrix4f m(_model_view);
@@ -43,18 +45,27 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(m.mData);
 
-    glCullFace(GL_BACK);
-    glFrontFace(GL_CW);
-    glEnable(GL_CULL_FACE);
+    //glCullFace(GL_BACK);
+    //glFrontFace(GL_CCW);
+    glDisable(GL_CULL_FACE);
 
     glEnable(GL_DEPTH_TEST);
 
     glEnable(GL_TEXTURE_2D);
+
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
 
-    glBindTexture(GL_TEXTURE_2D, 0);
+    if (_texture == nullptr)
+    {
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+    else
+    {
+        glBindTexture(GL_TEXTURE_2D, _texture->mTextureBufferId);
+    }
+
     glBindBuffer(GL_ARRAY_BUFFER, _mesh->mVertexBufferId);
     glVertexPointer(3, GL_FLOAT, sizeof(CVertex), nullptr);
     glTexCoordPointer(2, GL_FLOAT, sizeof(CVertex), reinterpret_cast<GLvoid*>(sizeof(drash::CVec3f)));
@@ -70,13 +81,15 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
                        reinterpret_cast<const GLvoid*>(sizeof(unsigned int) * _mesh->mMaterialOffsets[i]));
     }
 
+    glBindTexture(GL_TEXTURE_2D, 0);
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindTexture(GL_TEXTURE_2D, 0);
 
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
+
     glDisable(GL_TEXTURE_2D);
 }
 
