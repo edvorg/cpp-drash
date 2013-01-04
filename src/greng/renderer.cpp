@@ -47,6 +47,8 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
     glFrontFace(GL_CW);
     glEnable(GL_CULL_FACE);
 
+    glEnable(GL_DEPTH_TEST);
+
     glEnable(GL_TEXTURE_2D);
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);

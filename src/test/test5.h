@@ -25,7 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_TEST_TEST5_H
 #define DRASH_TEST_TEST5_H
 
-#include "test1.h"
+#include "test3.h"
 
 namespace drash
 {
@@ -33,7 +33,7 @@ namespace drash
 namespace test
 {
 
-class CTest5 : public CTest1
+class CTest5 : public CTest3
 {
 public:
     CTest5() = default;

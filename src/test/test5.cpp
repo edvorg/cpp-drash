@@ -34,7 +34,7 @@ namespace test
 
 bool CTest5::Init()
 {
-    if (CTest1::Init() == false)
+    if (CTest3::Init() == false)
     {
         return false;
     }
@@ -48,11 +48,9 @@ bool CTest5::Init()
 
 void CTest5::Render()
 {
-    CTest1::Render();
+    CTest3::Render();
 
     static float angle = 0;
-
-    CApp::Render();
 
     if (mMesh1 != nullptr)
     {
