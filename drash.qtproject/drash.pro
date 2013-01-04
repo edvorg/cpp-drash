@@ -133,7 +133,8 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/greng/mesh.h \
     ../src/greng/renderer.h \
     ../src/greng/loadmeshobj.h \
-    ../src/greng/texturemanager.h
+    ../src/greng/texturemanager.h \
+    ../src/greng/texture.h
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui
