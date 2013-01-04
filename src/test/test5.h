@@ -48,6 +48,8 @@ private:
 
     greng::CMesh *mMesh1;
     greng::CMesh *mMesh2;
+    greng::CMesh *mMesh3;
+    CMatrix4f mMesh3ConstMatrix;
 };
 
 } // namespace test
