@@ -24,6 +24,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
 #include "../app/app.h"
 #include "../test/test.h"
 #include "../diag/logger.h"
@@ -77,6 +78,14 @@ int main(int _argc, char **_argv)
     if (glewInit() != GLEW_OK)
     {
 		LOG_ERR("glewInit() failed");
+        fail = true;
+    }
+
+    int img_flags = IMG_INIT_PNG;
+
+    if (IMG_Init(img_flags) != img_flags)
+    {
+        LOG_ERR("IMG_Init() failed");
         fail = true;
     }
 
@@ -196,6 +205,7 @@ int main(int _argc, char **_argv)
         app = nullptr;
     }
 
+    IMG_Quit();
     SDL_Quit();
 
     return 0;

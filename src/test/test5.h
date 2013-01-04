@@ -52,6 +52,7 @@ private:
     greng::CMesh *mMesh3;
     CMatrix4f mMesh3ConstMatrix;
     greng::CTexture *mTex1;
+    greng::CTexture *mTex2;
 };
 
 } // namespace test

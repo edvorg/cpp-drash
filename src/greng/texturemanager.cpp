@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../diag/logger.h"
 #include "../misc/color4.h"
 #include <GL/glew.h>
+#include <SDL/SDL_image.h>
 
 namespace greng
 {
@@ -83,6 +84,38 @@ CTexture *CTextureManager::CreateTextureFromFile(const char *_path)
     {
         return nullptr;
     }
+
+    SDL_Surface *s = IMG_Load(_path);
+
+    if (s == nullptr)
+    {
+        glDeleteTextures(1, &res->mTextureBufferId);
+        res->mTextureBufferId = 0;
+        delete res;
+        res = nullptr;
+        return nullptr;
+    }
+
+    unsigned int comps_count = (s->format->Rmask ? 1 : 0) +
+                               (s->format->Gmask ? 1 : 0) +
+                               (s->format->Bmask ? 1 : 0) +
+                               (s->format->Amask ? 1 : 0);
+
+    glBindTexture(GL_TEXTURE_2D, res->mTextureBufferId);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D,
+                 0,
+                 comps_count,
+                 s->w,
+                 s->h,
+                 0,
+                 comps_count == 4 ? GL_RGBA : GL_RGB,
+                 GL_UNSIGNED_BYTE,
+                 s->pixels);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    SDL_FreeSurface(s);
 
     return res;
 }

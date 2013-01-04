@@ -73,7 +73,7 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
-        GetRenderer().RenderMesh(mMesh1, nullptr, model_view);
+        GetRenderer().RenderMesh(mMesh1, mTex1, model_view);
     }
 
     if (mMesh2 != nullptr)
@@ -82,7 +82,7 @@ void CTest5::Render()
         MatrixRotationZ(r, -angle);
 
         CMatrix4f s;
-        MatrixScale(s, CVec3f(1));
+        MatrixScale(s, CVec3f(10));
 
         CMatrix4f rot;
         MatrixMultiply(r, s, rot);
@@ -96,7 +96,7 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
-        GetRenderer().RenderMesh(mMesh2, mTex1, model_view);
+        GetRenderer().RenderMesh(mMesh2, mTex2, model_view);
     }
 
     if (mMesh3 != nullptr)
@@ -149,6 +149,7 @@ void CTest5::SetupMeshes()
 void CTest5::SetupTextures()
 {
     mTex1 = GetTextureManager().CreateTextureDummy();
+    mTex2 = GetTextureManager().CreateTextureFromFile("tux.png");
 }
 
 void CTest5::SetupProcessors()
