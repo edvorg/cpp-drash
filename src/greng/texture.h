@@ -22,35 +22,23 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#ifndef GRENG_TEXTUREMANAGER_H
-#define GRENG_TEXTUREMANAGER_H
+#ifndef GRENG_TEXTURE_H
+#define GRENG_TEXTURE_H
 
 namespace greng
 {
 
-class CTexture;
-
-class CTextureManager
+class CTexture
 {
 public:
-    constexpr static unsigned int mTexturesCountLimit = 1024;
+    CTexture() = default;
 
-    CTextureManager();
-    CTextureManager(const CTextureManager &) = delete;
-    CTextureManager(CTextureManager &&) = delete;
-    CTextureManager &operator =(const CTextureManager &) = delete;
-    CTextureManager &operator =(CTextureManager &&) = delete;
-    ~CTextureManager();
-
-    CTexture *CreateTexture();
-    CTexture *CreateTextureFromFile(const char *_path);
+    unsigned int mTextureBufferId = 0;
 
 protected:
 private:
-    CTexture *mTextures[mTexturesCountLimit];
-    unsigned int mTexturesCount = 0;
 };
 
 } // namespace greng
 
-#endif // GRENG_TEXTUREMANAGER_H
+#endif // GRENG_TEXTURE_H

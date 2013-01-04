@@ -23,8 +23,67 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include "texturemanager.h"
+#include "texture.h"
+#include "../diag/logger.h"
+#include <GL/glew.h>
 
 namespace greng
 {
+
+using drash::CLogger;
+
+CTextureManager::CTextureManager()
+{
+    for (unsigned int i = 0; i < mTexturesCountLimit; i++)
+    {
+        mTextures[i] = nullptr;
+    }
+}
+
+CTextureManager::~CTextureManager()
+{
+    for (unsigned int i = 0; i < mTexturesCount; i++)
+    {
+        glDeleteTextures(1, &mTextures[i]->mTextureBufferId);
+        mTextures[i]->mTextureBufferId = 0;
+        delete mTextures[i];
+        mTextures[i] = nullptr;
+    }
+}
+
+CTexture *CTextureManager::CreateTexture()
+{
+    if (mTexturesCount >= mTexturesCountLimit)
+    {
+        LOG_ERR("CTextureManager::CreateMesh(): textures count exceedes it's limit");
+        return nullptr;
+    }
+
+    CTexture *res = new CTexture();
+
+    glGenTextures(1, &res->mTextureBufferId);
+
+    if (res->mTextureBufferId == 0)
+    {
+        delete res;
+        return nullptr;
+    }
+    else
+    {
+        return mTextures[mTexturesCount++] = res;
+    }
+}
+
+CTexture *CTextureManager::CreateTextureFromFile(const char *_path)
+{
+    CTexture *res = CreateTexture();
+
+    if (res == nullptr)
+    {
+        return nullptr;
+    }
+
+    return res;
+}
 
 } // namespace greng
