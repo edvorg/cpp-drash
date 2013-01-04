@@ -195,13 +195,18 @@ void LoadFaces(CMesh *res, std::ifstream& f, unsigned int fsize, std::vector<CVe
             if (fc.triangle == true)
             {
                 res->mVertices.push_back(res->mVertices[fc.v1]);
-                res->mVertices.push_back(res->mVertices[fc.v2]);
-                res->mVertices.push_back(res->mVertices[fc.v3]);
-
                 if (fc.tc == true)
                 {
                     res->mVertices.back().mUV = uv[fc.vt1];
+                }
+                res->mVertices.push_back(res->mVertices[fc.v2]);
+                if (fc.tc == true)
+                {
                     res->mVertices.back().mUV = uv[fc.vt2];
+                }
+                res->mVertices.push_back(res->mVertices[fc.v3]);
+                if (fc.tc == true)
+                {
                     res->mVertices.back().mUV = uv[fc.vt3];
                 }
 
@@ -212,19 +217,33 @@ void LoadFaces(CMesh *res, std::ifstream& f, unsigned int fsize, std::vector<CVe
             else
             {
                 res->mVertices.push_back(res->mVertices[fc.v1]);
-                res->mVertices.push_back(res->mVertices[fc.v2]);
-                res->mVertices.push_back(res->mVertices[fc.v4]);
-                res->mVertices.push_back(res->mVertices[fc.v4]);
-                res->mVertices.push_back(res->mVertices[fc.v2]);
-                res->mVertices.push_back(res->mVertices[fc.v3]);
-
                 if (fc.tc == true)
                 {
                     res->mVertices.back().mUV = uv[fc.vt1];
+                }
+                res->mVertices.push_back(res->mVertices[fc.v2]);
+                if (fc.tc == true)
+                {
                     res->mVertices.back().mUV = uv[fc.vt2];
+                }
+                res->mVertices.push_back(res->mVertices[fc.v4]);
+                if (fc.tc == true)
+                {
                     res->mVertices.back().mUV = uv[fc.vt4];
+                }
+                res->mVertices.push_back(res->mVertices[fc.v4]);
+                if (fc.tc == true)
+                {
                     res->mVertices.back().mUV = uv[fc.vt4];
+                }
+                res->mVertices.push_back(res->mVertices[fc.v2]);
+                if (fc.tc == true)
+                {
                     res->mVertices.back().mUV = uv[fc.vt2];
+                }
+                res->mVertices.push_back(res->mVertices[fc.v3]);
+                if (fc.tc == true)
+                {
                     res->mVertices.back().mUV = uv[fc.vt3];
                 }
 

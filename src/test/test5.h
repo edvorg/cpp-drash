@@ -53,6 +53,9 @@ private:
     CMatrix4f mMesh3ConstMatrix;
     greng::CTexture *mTex1;
     greng::CTexture *mTex2;
+    greng::CTexture *mTex3;
+    greng::CTexture *mTex4;
+    greng::CTexture *mTex5;
 };
 
 } // namespace test

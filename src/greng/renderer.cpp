@@ -37,9 +37,15 @@ bool CRenderer::Init()
 }
 
 void CRenderer::RenderMesh(const CMesh *_mesh,
+                           unsigned int _submesh,
                            const CTexture *_texture,
                            const drash::CMatrix4f &_model_view)
 {
+    if (_submesh >= _mesh->mMaterialOffsets.size() - 1)
+    {
+        return;
+    }
+
     drash::CMatrix4f m(_model_view);
     m.Transpose();
     glMatrixMode(GL_MODELVIEW);
@@ -72,14 +78,11 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
     glColorPointer(4, GL_FLOAT, sizeof(CVertex), reinterpret_cast<GLvoid*>(sizeof(drash::CVec3f) +
                                                                               sizeof(drash::CVec2f)));
 
-    for (unsigned int i = 0; i < _mesh->mMaterialOffsets.size() - 1; i++)
-    {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->mIndexBufferId);
-        glDrawElements(GL_TRIANGLES,
-                       _mesh->mMaterialOffsets[i+1] - _mesh->mMaterialOffsets[i],
-                       GL_UNSIGNED_INT,
-                       reinterpret_cast<const GLvoid*>(sizeof(unsigned int) * _mesh->mMaterialOffsets[i]));
-    }
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->mIndexBufferId);
+    glDrawElements(GL_TRIANGLES,
+                   _mesh->mMaterialOffsets[_submesh+1] - _mesh->mMaterialOffsets[_submesh],
+                   GL_UNSIGNED_INT,
+                   reinterpret_cast<const GLvoid*>(sizeof(unsigned int) * _mesh->mMaterialOffsets[_submesh]));
 
     glBindTexture(GL_TEXTURE_2D, 0);
 
