@@ -96,7 +96,7 @@ bool EditorWindow::InitScene()
 //    mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetOrthoWidth().Set(120);
     mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetPos().Set(CVec3f(0, 50, 100));
     mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetRotation().Set(CVec3f(-M_PI / 6, 0, 0));
-    ui->mScene->SetTestApp(mObjectApp);
+    ui->mScene->SetApp(mObjectApp);
     mCurrentApp = mObjectApp;
     return true;
 }

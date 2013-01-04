@@ -22,6 +22,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
+#include <GL/glew.h>
+#include <SDL/SDL_image.h>
 #include "scenewidget.h"
 
 #include <QMouseEvent>
@@ -91,6 +93,7 @@ SceneWidget::SceneWidget(QWidget *parent) :
 
 SceneWidget::~SceneWidget()
 {
+    IMG_Quit();
 }
 
 CVec2f SceneWidget::WidgetSpaceToScreenSpace(const CVec2f &_from) const
@@ -111,9 +114,26 @@ void SceneWidget::initializeGL()
 {
     QGLWidget::initializeGL();
 
+    int img_flags = IMG_INIT_PNG;
+
+    if (IMG_Init(img_flags) != img_flags)
+    {
+        mApp = nullptr;
+        return;
+    }
+
+    if (glewInit() != GLEW_OK)
+    {
+        mApp = nullptr;
+        return;
+    }
+
     if (mApp != nullptr)
     {
-
+        if (mApp->Init() == false)
+        {
+            mApp = nullptr;
+        }
     }
 }
 
@@ -144,11 +164,6 @@ void SceneWidget::paintGL()
     {
         mApp->Render();
     }
-}
-
-void SceneWidget::SetTestApp( drash::CApp *_app )
-{
-    mApp = _app;
 }
 
 void SceneWidget::mousePressEvent( QMouseEvent *_event )

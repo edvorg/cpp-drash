@@ -17,7 +17,7 @@ INCLUDEPATH += ../3rd/Box2D/include
 
 LIBS += -L../3rd/Box2D/lib -lBox2D
 
-unix:!macx: LIBS += -lrt -lGLU -lGLEW
+unix:!macx: LIBS += -lrt -lGLU -lGLEW -lSDL -lSDL_image
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG
