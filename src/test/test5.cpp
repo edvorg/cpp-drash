@@ -41,7 +41,8 @@ bool CTest5::Init()
 
     SetupCam();
     SetupProcessors();
-    SetupMesh();
+    SetupMeshes();
+    SetupTextures();
 
     return true;
 }
@@ -72,7 +73,7 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
-        GetRenderer().RenderMesh(mMesh1, model_view);
+        GetRenderer().RenderMesh(mMesh1, nullptr, model_view);
     }
 
     if (mMesh2 != nullptr)
@@ -95,7 +96,7 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
-        GetRenderer().RenderMesh(mMesh2, model_view);
+        GetRenderer().RenderMesh(mMesh2, mTex1, model_view);
     }
 
     if (mMesh3 != nullptr)
@@ -109,7 +110,7 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
-        GetRenderer().RenderMesh(mMesh3, model_view);
+        GetRenderer().RenderMesh(mMesh3, nullptr, model_view);
     }
 
     angle += 1.0 * GetCurrentTimeDelta();
@@ -124,7 +125,7 @@ void CTest5::SetupCam()
     }
 }
 
-void CTest5::SetupMesh()
+void CTest5::SetupMeshes()
 {
     mMesh1 = GetMeshManager().CreateMeshCube();
     mMesh2 = GetMeshManager().CreateMeshQuad();
@@ -143,6 +144,11 @@ void CTest5::SetupMesh()
     MatrixMultiply(ry, rx, rxy);
 
     MatrixMultiply(rxy, s, mMesh3ConstMatrix);
+}
+
+void CTest5::SetupTextures()
+{
+    mTex1 = GetTextureManager().CreateTextureDummy();
 }
 
 void CTest5::SetupProcessors()

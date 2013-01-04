@@ -36,6 +36,7 @@ namespace greng
 {
 
 class CMesh;
+class CTexture;
 
 class CRenderer
 {
@@ -50,6 +51,7 @@ public:
     bool Init();
 
     void RenderMesh(const CMesh *_mesh,
+                    const CTexture *_texture,
                     const drash::CMatrix4f &_model_view);
 };
 

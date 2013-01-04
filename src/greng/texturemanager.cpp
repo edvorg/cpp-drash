@@ -25,6 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "texturemanager.h"
 #include "texture.h"
 #include "../diag/logger.h"
+#include "../misc/color4.h"
 #include <GL/glew.h>
 
 namespace greng
@@ -82,6 +83,30 @@ CTexture *CTextureManager::CreateTextureFromFile(const char *_path)
     {
         return nullptr;
     }
+
+    return res;
+}
+
+CTexture *CTextureManager::CreateTextureDummy()
+{
+    CTexture *res = CreateTexture();
+
+    if (res == nullptr)
+    {
+        return nullptr;
+    }
+
+    drash::CColor4f data[4];
+    data[0].Set(1, 0, 0, 1);
+    data[1].Set(0, 1, 0, 1);
+    data[2].Set(0, 0, 1, 1);
+    data[3].Set(1, 1, 1, 0.5f);
+
+    glBindTexture(GL_TEXTURE_2D, res->mTextureBufferId);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_FLOAT, data);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     return res;
 }

@@ -44,6 +44,7 @@ public:
 
     CTexture *CreateTexture();
     CTexture *CreateTextureFromFile(const char *_path);
+    CTexture *CreateTextureDummy();
 
 protected:
 private:
