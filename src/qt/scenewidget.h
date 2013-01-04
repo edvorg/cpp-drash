@@ -49,7 +49,8 @@ public:
     virtual void resizeGL( int _w, int _h ) override;
     virtual void paintGL() override;
 
-    void SetTestApp( drash::CApp *_app );
+    inline void SetApp( drash::CApp *_app );
+    inline drash::CApp *GetApp();
 
 protected:
     virtual void mousePressEvent( QMouseEvent * _event ) override;
@@ -63,5 +64,15 @@ protected:
     float mWidth = 1.0f;
     float mHeight = 1.0f;
 };
+
+inline void SceneWidget::SetApp(drash::CApp *_app)
+{
+    mApp = _app;
+}
+
+inline drash::CApp *SceneWidget::GetApp()
+{
+    return mApp;
+}
 
 #endif // SCENEWIDGET_H

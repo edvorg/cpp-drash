@@ -60,6 +60,8 @@ GameWindow::GameWindow(QWidget *parent) :
 
 GameWindow::~GameWindow()
 {
+    disconnect(&mUpdateTimer);
+
     if (mApp != nullptr)
     {
         mApp->Release();
@@ -91,12 +93,6 @@ bool GameWindow::Init( const GameWindowParams &_params )
                     return false;
                 }
 
-                if (mApp->Init() == false)
-                {
-                    mApp = nullptr;
-                    return false;
-                }
-
                 title += " - ";
                 title += _params.mArgv[i+1].c_str();
 
@@ -116,7 +112,7 @@ bool GameWindow::Init( const GameWindowParams &_params )
         }
     }
 
-    mSceneWidget->SetTestApp(mApp);
+    mSceneWidget->SetApp(mApp);
 
     this->setWindowTitle(title);
 
@@ -128,6 +124,12 @@ bool GameWindow::Init( const GameWindowParams &_params )
 
 void GameWindow::UpdateScene()
 {
+    if (mSceneWidget->GetApp() == nullptr)
+    {
+        disconnect(&mUpdateTimer);
+        QApplication::quit();
+    }
+
     mGameTimer.Tick();
     if (mApp != nullptr)
     {
