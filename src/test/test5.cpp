@@ -73,7 +73,7 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
-        GetRenderer().RenderMesh(mMesh1, mTex1, model_view);
+        GetRenderer().RenderMesh(mMesh1, 0, mTex1, model_view);
     }
 
     if (mMesh2 != nullptr)
@@ -96,7 +96,7 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
-        GetRenderer().RenderMesh(mMesh2, mTex2, model_view);
+        GetRenderer().RenderMesh(mMesh2, 0, mTex2, model_view);
     }
 
     if (mMesh3 != nullptr)
@@ -110,7 +110,9 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
-        GetRenderer().RenderMesh(mMesh3, nullptr, model_view);
+        GetRenderer().RenderMesh(mMesh3, 0, mTex4, model_view);
+        GetRenderer().RenderMesh(mMesh3, 1, mTex3, model_view);
+        GetRenderer().RenderMesh(mMesh3, 2, mTex5, model_view);
     }
 
     angle += 1.0 * GetCurrentTimeDelta();
@@ -150,6 +152,9 @@ void CTest5::SetupTextures()
 {
     mTex1 = GetTextureManager().CreateTextureDummy();
     mTex2 = GetTextureManager().CreateTextureFromFile("tux.png");
+    mTex3 = GetTextureManager().CreateTextureFromFile("RB_MegatronBodyT2_MATINST.png");
+    mTex4 = GetTextureManager().CreateTextureFromFile("RB_MegatronHead_MATINST.png");
+    mTex5 = GetTextureManager().CreateTextureFromFile("RB_MegatronArmFeet_MATINST.png");
 }
 
 void CTest5::SetupProcessors()

@@ -51,6 +51,7 @@ public:
     bool Init();
 
     void RenderMesh(const CMesh *_mesh,
+                    unsigned int _submesh,
                     const CTexture *_texture,
                     const drash::CMatrix4f &_model_view);
 };
