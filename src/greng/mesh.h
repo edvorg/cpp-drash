@@ -40,14 +40,15 @@ public:
 
     CMesh() = default;
 
-protected:
-private:
     std::vector<CVertex> mVertices;
     std::vector<unsigned int> mIndices;
     std::vector<unsigned int> mMaterialOffsets;
     std::vector<std::string> mMaterialNames;
     unsigned int mVertexBufferId = 0;
     unsigned int mIndexBufferId = 0;
+
+protected:
+private:
 };
 
 } // namespace greng

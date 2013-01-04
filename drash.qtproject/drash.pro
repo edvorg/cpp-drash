@@ -15,6 +15,21 @@ QMAKE_CXXFLAGS += -std=c++0x
 
 INCLUDEPATH += ../3rd/Box2D/include
 
+LIBS += -L../3rd/Box2D/lib -lBox2D
+
+unix:!macx: LIBS += -lrt -lGLU -lGLEW
+
+CONFIG(debug, debug|release) {
+    DEFINES += DRASH_DEBUG
+    QMAKE_CXXFLAGS += -O0
+}
+
+CONFIG(release, debug|release) {
+    DEFINES += DRASH_RELEASE
+    QMAKE_CXXFLAGS += -O2
+}
+
+
 SOURCES += ../src/qt/main.cpp\
         ../src/qt/gamewindow.cpp \
     ../src/qt/scenewidget.cpp \
@@ -60,7 +75,7 @@ SOURCES += ../src/qt/main.cpp\
     ../src/misc/segment2.cpp \
     ../src/greng/meshmanager.cpp \
     ../src/greng/renderer.cpp \
-    ../src/greng/rendererbufferextension.cpp
+    ../src/greng/loadmeshobj.cpp
 
 HEADERS  += ../src/qt/gamewindow.h \
     ../src/qt/scenewidget.h \
@@ -116,21 +131,7 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/greng/vertex.h \
     ../src/greng/mesh.h \
     ../src/greng/renderer.h \
-    ../src/greng/rendererbufferextension.h
+    ../src/greng/loadmeshobj.h
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui
-
-LIBS += -L../3rd/Box2D/lib -lBox2D
-
-unix:!macx: LIBS += -lrt -lGLU
-
-CONFIG(debug, debug|release) {
-    DEFINES += DRASH_DEBUG
-    QMAKE_CXXFLAGS += -O0
-}
-
-CONFIG(release, debug|release) {
-    DEFINES += DRASH_RELEASE
-    QMAKE_CXXFLAGS += -O2
-}

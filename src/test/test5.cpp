@@ -34,7 +34,7 @@ namespace test
 
 bool CTest5::Init()
 {
-    if (CApp::Init() == false)
+    if (CTest1::Init() == false)
     {
         return false;
     }
@@ -48,9 +48,53 @@ bool CTest5::Init()
 
 void CTest5::Render()
 {
+    CTest1::Render();
+
+    static float angle = 0;
+
     CApp::Render();
 
-    GetRenderer().RenderMesh(mMesh);
+    if (mMesh1 != nullptr)
+    {
+        CMatrix4f r;
+        MatrixRotationZ(r, angle);
+
+        CMatrix4f s;
+        MatrixScale(s, CVec3f(10));
+
+        CMatrix4f model;
+        MatrixMultiply(r, s, model);
+
+        CMatrix4f model_view;
+        MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
+
+        GetRenderer().RenderMesh(mMesh1, model_view);
+    }
+
+    if (mMesh2 != nullptr)
+    {
+        CMatrix4f r;
+        MatrixRotationZ(r, -angle);
+
+        CMatrix4f s;
+        MatrixScale(s, CVec3f(0.1));
+
+        CMatrix4f rot;
+        MatrixMultiply(r, s, rot);
+
+        CMatrix4f transl;
+        MatrixTranslation(transl, CVec3f(50, 0, 0));
+
+        CMatrix4f model;
+        MatrixMultiply(transl, rot, model);
+
+        CMatrix4f model_view;
+        MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
+
+        GetRenderer().RenderMesh(mMesh2, model_view);
+    }
+
+    angle += 1.0 * GetCurrentTimeDelta();
 }
 
 void CTest5::SetupCam()
@@ -60,20 +104,34 @@ void CTest5::SetupCam()
     if (cam != nullptr)
     {
         cam->GetPos().Set(CVec3f(0, 0, 100));
+        cam->GetDepthOfView().Set(1000);
     }
 }
 
 void CTest5::SetupMesh()
 {
-    mMesh = GetMeshManager().CreateMeshBox();
+    mMesh1 = GetMeshManager().CreateMeshCube();
+    mMesh2 = GetMeshManager().CreateMeshFromObjFile("mt.obj");
 }
 
 void CTest5::SetupProcessors()
 {
-    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
+    GetEventSystem().SetMode("editor_mode");
+
+    GetEventSystem().SetProcessor("C-x", CAppEventProcessor(
+    [] () {},
     [this] ()
     {
-        this->Quit();
+        GetEventSystem().SetMode("test5");
+    }));
+
+    GetEventSystem().SetMode("test5");
+
+    GetEventSystem().SetProcessor("C-x", CAppEventProcessor(
+    [] () {},
+    [this] ()
+    {
+        GetEventSystem().SetMode("editor_mode");
     }));
 }
 

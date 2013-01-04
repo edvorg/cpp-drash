@@ -22,8 +22,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
+#include <GL/glew.h>
 #include <SDL/SDL.h>
-#include <GL/gl.h>
 #include "../app/app.h"
 #include "../test/test.h"
 #include "../diag/logger.h"
@@ -35,41 +35,74 @@ EventKey ConvertKey(SDLKey _key);
 EventKey ConvertButton(int _button);
 void WindowSpaceToScreenSpace(CVec2f &_from);
 
-const double gWindowWidth = 1366;
-const double gWindowHeight = 768;
+const double gWindowWidth = 800;
+const double gWindowHeight = 600;
 
 int main(int _argc, char **_argv)
 {
+    bool fail = false;
+
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         LOG_ERR("SDL_Init() failed");
         return 0;
     }
 
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE,            8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE,          8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,           8);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE,          8);
+
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,          8);
+    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE,         24);
+
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE,      8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE,    8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE,     8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE,    8);
+
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,  0);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  0);
+
     SDL_WM_SetCaption("Drash", nullptr);
 
-    if (SDL_SetVideoMode(gWindowWidth, gWindowHeight, 32, SDL_HWSURFACE | SDL_OPENGL) == nullptr)
+    if (SDL_SetVideoMode(gWindowWidth, gWindowHeight, 32, SDL_HWSURFACE |
+                                                          SDL_OPENGL |
+                                                          SDL_GL_DOUBLEBUFFER) == nullptr)
     {
         LOG_ERR("SDL_SetVideoMode() failed");
-        return 0;
+        fail = true;
     }
+
+    if (glewInit() != GLEW_OK)
+    {
+		LOG_ERR("glewInit() failed");
+        fail = true;
+    }
+
+    LOG_INFO("OpenGL version: "<<(const char*)glGetString(GL_VERSION));
+    LOG_INFO("Vendor: "<<(const char*)glGetString(GL_VENDOR));
+    LOG_INFO("GLSL version: "<<(const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
 
     CApp *app = nullptr;
 
-    for (int i = 0; i < _argc; i++)
+    if (fail == false)
     {
-        if (strcmp("--test", _argv[i]) == 0)
+        for (int i = 0; i < _argc; i++)
         {
-            if (++i < _argc)
+            if (strcmp("--test", _argv[i]) == 0)
             {
-                app = test::StartApp(_argv[i]);
-
-                if (app == nullptr)
+                if (++i < _argc)
                 {
-                    LOG_ERR("drash::test::StartApp() failed");
-                }
+                    app = test::StartApp(_argv[i]);
 
-                break;
+                    if (app == nullptr)
+                    {
+                        LOG_ERR("drash::test::StartApp() failed");
+                    }
+
+                    break;
+                }
             }
         }
     }
@@ -77,12 +110,14 @@ int main(int _argc, char **_argv)
     CTimer timer;
     timer.Reset(true);
 
-    if (app != nullptr)
+    if (fail == false && app != nullptr)
     {
         if (app->Init() == true)
         {
             glViewport(0, 0, gWindowWidth, gWindowHeight);
             app->GetDebugDrawSystem().SetAspectRatio(gWindowWidth / gWindowHeight);
+            app->GetUISystem().SetAspectRatio(gWindowWidth / gWindowHeight);
+            app->GetUISystem().SetWidth(gWindowWidth);
 
             bool exit = false;
             SDL_Event e;
@@ -91,6 +126,17 @@ int main(int _argc, char **_argv)
             {
                 exit = true;
             });
+
+            auto update_cursor = [&app] (int _x, int _y)
+            {
+                CVec2f pos(_x, _y);
+                WindowSpaceToScreenSpace(pos);
+                app->SetCursorPos(pos);
+                int x;
+                int y;
+                app->GetUISystem().ScreenSpaceToUISpace(pos, x, y);
+                app->GetUISystem().SetCursorPos(x, y);
+            };
 
             for (;;)
             {
@@ -111,23 +157,19 @@ int main(int _argc, char **_argv)
                     }
                     else if (e.type == SDL_MOUSEBUTTONDOWN)
                     {
-                        CVec2f pos(e.button.x, e.button.y);
-                        WindowSpaceToScreenSpace(pos);
-                        app->SetCursorPos(pos);
+                        update_cursor(e.button.x, e.button.y);
+                        app->GetUISystem().BeginEvent();
                         app->GetEventSystem().BeginEvent(ConvertButton(e.button.button));
                     }
                     else if (e.type == SDL_MOUSEBUTTONUP)
                     {
-                        CVec2f pos(e.button.x, e.button.y);
-                        WindowSpaceToScreenSpace(pos);
-                        app->SetCursorPos(pos);
+                        update_cursor(e.button.x, e.button.y);
+                        app->GetUISystem().EndEvent();
                         app->GetEventSystem().EndEvent(ConvertButton(e.button.button));
                     }
                     else if (e.type == SDL_MOUSEMOTION)
                     {
-                        CVec2f pos(e.motion.x, e.motion.y);
-                        WindowSpaceToScreenSpace(pos);
-                        app->SetCursorPos(pos);
+                        update_cursor(e.motion.x, e.motion.y);
                     }
                 }
 

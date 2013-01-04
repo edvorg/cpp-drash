@@ -9,7 +9,7 @@ INCLUDEPATH += ../3rd/Box2D/include
 
 LIBS += -L../3rd/Box2D/lib -lBox2D
 
-unix:!macx: LIBS += -lrt -lGLU -lGL -lSDL
+unix:!macx: LIBS += -lrt -lGLU -lGL -lSDL -lGLEW
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG
@@ -50,7 +50,6 @@ SOURCES += \
     ../src/misc/matrix4.cpp \
     ../src/misc/graphics.cpp \
     ../src/joints/joint.cpp \
-    ../src/greng/rendererbufferextension.cpp \
     ../src/greng/renderer.cpp \
     ../src/greng/meshmanager.cpp \
     ../src/diag/timer.cpp \
@@ -62,7 +61,8 @@ SOURCES += \
     ../src/app/appeventcombination.cpp \
     ../src/app/appevent.cpp \
     ../src/app/app.cpp \
-    ../src/sdl/main.cpp
+    ../src/sdl/main.cpp \
+    ../src/greng/loadmeshobj.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -101,7 +101,6 @@ HEADERS += \
     ../src/misc/animatedparam.h \
     ../src/joints/joint.h \
     ../src/greng/vertex.h \
-    ../src/greng/rendererbufferextension.h \
     ../src/greng/renderer.h \
     ../src/greng/meshmanager.h \
     ../src/greng/mesh.h \
@@ -114,5 +113,6 @@ HEADERS += \
     ../src/app/appeventprocessor.h \
     ../src/app/appeventcombination.h \
     ../src/app/appevent.h \
-    ../src/app/app.h
+    ../src/app/app.h \
+    ../src/greng/loadmeshobj.h
 

@@ -204,6 +204,16 @@ CVec4f &MatrixMultiply(const CMatrix4f &_m, const CVec4f &_v, CVec4f &_result)
     return _result;
 }
 
+CMatrix4f &MatrixScale(CMatrix4f &_m, const CVec3f _scale)
+{
+    _m.Identity();
+    _m.mData[_m.m00] = _scale.mX;
+    _m.mData[_m.m11] = _scale.mY;
+    _m.mData[_m.m22] = _scale.mZ;
+
+    return _m;
+}
+
 CMatrix4f &MatrixRotationX(CMatrix4f &_m, float _angle)
 {
     float c = cos(_angle);

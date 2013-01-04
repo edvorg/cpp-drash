@@ -22,27 +22,16 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "rendererbufferextension.h"
+#ifndef LOADMESHOBJ_H
+#define LOADMESHOBJ_H
 
 namespace greng
 {
 
-PFNGLGENBUFFERSPROC glGenBuffers = 0;
-PFNGLBINDBUFFERPROC glBindBuffer = 0;
-PFNGLBUFFERDATAPROC glBufferData = 0;
-PFNGLDELETEBUFFERSPROC glDeleteBuffers = 0;
+class CMesh;
 
-bool CRendererBufferExtension::Init()
-{
-    #define GET_EXT(ext, type) ext = reinterpret_cast<type>(glXGetProcAddress(reinterpret_cast<const GLubyte*>(#ext)));\
-                               if (ext == 0) return false;
-    GET_EXT(glGenBuffers, PFNGLGENBUFFERSPROC);
-    GET_EXT(glBindBuffer, PFNGLBINDBUFFERPROC);
-    GET_EXT(glBufferData, PFNGLBUFFERDATAPROC);
-    GET_EXT(glDeleteBuffers, PFNGLDELETEBUFFERSPROC);
-    #undef GET_EXT
+bool LoadMeshObj(const char *_path, CMesh *_mesh);
 
-    return true;
 }
 
-} // namespace greng
+#endif // LOADMESHOBJ_H
