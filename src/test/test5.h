@@ -50,6 +50,7 @@ private:
     greng::CMesh *mMesh1;
     greng::CMesh *mMesh2;
     greng::CMesh *mMesh3;
+    greng::CMesh *mMesh4;
     CMatrix4f mMesh3ConstMatrix;
     greng::CTexture *mTex1;
     greng::CTexture *mTex2;
