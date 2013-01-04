@@ -34,7 +34,7 @@ namespace test
 
 bool CTest5::Init()
 {
-    if (CTest1::Init() == false)
+    if (CTest3::Init() == false)
     {
         return false;
     }
@@ -48,11 +48,9 @@ bool CTest5::Init()
 
 void CTest5::Render()
 {
-    CTest1::Render();
+    CTest3::Render();
 
     static float angle = 0;
-
-    CApp::Render();
 
     if (mMesh1 != nullptr)
     {
@@ -62,8 +60,14 @@ void CTest5::Render()
         CMatrix4f s;
         MatrixScale(s, CVec3f(10));
 
+        CMatrix4f rot;
+        MatrixMultiply(r, s, rot);
+
+        CMatrix4f transl;
+        MatrixTranslation(transl, CVec3f(-100, 30, 0));
+
         CMatrix4f model;
-        MatrixMultiply(r, s, model);
+        MatrixMultiply(transl, rot, model);
 
         CMatrix4f model_view;
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
@@ -77,13 +81,13 @@ void CTest5::Render()
         MatrixRotationZ(r, -angle);
 
         CMatrix4f s;
-        MatrixScale(s, CVec3f(0.1));
+        MatrixScale(s, CVec3f(1));
 
         CMatrix4f rot;
         MatrixMultiply(r, s, rot);
 
         CMatrix4f transl;
-        MatrixTranslation(transl, CVec3f(50, 0, 0));
+        MatrixTranslation(transl, CVec3f(100, 30, 0));
 
         CMatrix4f model;
         MatrixMultiply(transl, rot, model);
@@ -92,6 +96,20 @@ void CTest5::Render()
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
         GetRenderer().RenderMesh(mMesh2, model_view);
+    }
+
+    if (mMesh3 != nullptr)
+    {
+        CMatrix4f rangle;
+        MatrixRotationY(rangle, angle);
+
+        CMatrix4f model;
+        MatrixMultiply(rangle, mMesh3ConstMatrix, model);
+
+        CMatrix4f model_view;
+        MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
+
+        GetRenderer().RenderMesh(mMesh3, model_view);
     }
 
     angle += 1.0 * GetCurrentTimeDelta();
@@ -103,36 +121,32 @@ void CTest5::SetupCam()
 
     if (cam != nullptr)
     {
-        cam->GetPos().Set(CVec3f(0, 0, 100));
-        cam->GetDepthOfView().Set(1000);
     }
 }
 
 void CTest5::SetupMesh()
 {
     mMesh1 = GetMeshManager().CreateMeshCube();
-    mMesh2 = GetMeshManager().CreateMeshFromObjFile("mt.obj");
+    mMesh2 = GetMeshManager().CreateMeshQuad();
+    mMesh3 = GetMeshManager().CreateMeshFromObjFile("mt.obj");
+
+    CMatrix4f s;
+    MatrixScale(s, CVec3f(0.1));
+
+    CMatrix4f rx;
+    MatrixRotationX(rx, - M_PI / 2.0);
+
+    CMatrix4f ry;
+    MatrixRotationY(ry, - M_PI / 2.0);
+
+    CMatrix4f rxy;
+    MatrixMultiply(ry, rx, rxy);
+
+    MatrixMultiply(rxy, s, mMesh3ConstMatrix);
 }
 
 void CTest5::SetupProcessors()
 {
-    GetEventSystem().SetMode("editor_mode");
-
-    GetEventSystem().SetProcessor("C-x", CAppEventProcessor(
-    [] () {},
-    [this] ()
-    {
-        GetEventSystem().SetMode("test5");
-    }));
-
-    GetEventSystem().SetMode("test5");
-
-    GetEventSystem().SetProcessor("C-x", CAppEventProcessor(
-    [] () {},
-    [this] ()
-    {
-        GetEventSystem().SetMode("editor_mode");
-    }));
 }
 
 } // namespace test
