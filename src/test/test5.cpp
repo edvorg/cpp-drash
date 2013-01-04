@@ -71,13 +71,13 @@ void CTest5::Render()
         GetRenderer().RenderMesh(mMesh1, model_view);
     }
 
-    if (mMesh1 != nullptr)
+    if (mMesh2 != nullptr)
     {
         CMatrix4f r;
         MatrixRotationZ(r, -angle);
 
         CMatrix4f s;
-        MatrixScale(s, CVec3f(10));
+        MatrixScale(s, CVec3f(0.1));
 
         CMatrix4f rot;
         MatrixMultiply(r, s, rot);
@@ -103,14 +103,15 @@ void CTest5::SetupCam()
 
     if (cam != nullptr)
     {
-        cam->GetPos().Set(CVec3f(0, 0, 10));
+        cam->GetPos().Set(CVec3f(0, 0, 100));
+        cam->GetDepthOfView().Set(1000);
     }
 }
 
 void CTest5::SetupMesh()
 {
     mMesh1 = GetMeshManager().CreateMeshCube();
-    mMesh2 = GetMeshManager().CreateMeshQuad();
+    mMesh2 = GetMeshManager().CreateMeshFromObjFile("mt.obj");
 }
 
 void CTest5::SetupProcessors()

@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "meshmanager.h"
 #include "mesh.h"
 #include "../diag/logger.h"
+#include "loadmeshobj.h"
 
 namespace greng
 {
@@ -103,6 +104,19 @@ CMesh *CMeshManager::CreateMeshFromObjFile(const char *_path)
     {
         return nullptr;
     }
+
+    if (LoadMeshObj(_path, res) == false)
+    {
+        delete res;
+        res = nullptr;
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, res->mVertexBufferId);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * res->mVertices.size(), &res->mVertices[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, res->mIndexBufferId);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * res->mIndices.size(), &res->mIndices[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     return res;
 }
