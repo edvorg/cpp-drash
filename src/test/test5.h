@@ -57,6 +57,7 @@ private:
     greng::CTexture *mTex3;
     greng::CTexture *mTex4;
     greng::CTexture *mTex5;
+    greng::CTexture *mTex6;
 };
 
 } // namespace test

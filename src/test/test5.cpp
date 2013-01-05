@@ -73,7 +73,7 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
-        GetRenderer().RenderMesh(mMesh1, 0, mTex1, model_view);
+        GetRenderer().RenderMesh(mMesh1, 0, mTex6, model_view);
     }
 
     if (mMesh2 != nullptr)
@@ -183,6 +183,7 @@ void CTest5::SetupTextures()
     mTex3 = GetTextureManager().CreateTextureFromFile("RB_MegatronBodyT2_MATINST.png");
     mTex4 = GetTextureManager().CreateTextureFromFile("RB_MegatronHead_MATINST.png");
     mTex5 = GetTextureManager().CreateTextureFromFile("RB_MegatronArmFeet_MATINST.png");
+    mTex6 = GetTextureManager().CreateTextureFromFile("wall5.png");
 }
 
 void CTest5::SetupProcessors()
