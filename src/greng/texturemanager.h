@@ -25,6 +25,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRENG_TEXTUREMANAGER_H
 #define GRENG_TEXTUREMANAGER_H
 
+#include "../misc/objectfactory.h"
+
 namespace greng
 {
 
@@ -45,11 +47,11 @@ public:
     CTexture *CreateTexture();
     CTexture *CreateTextureFromFile(const char *_path);
     CTexture *CreateTextureDummy();
+    bool DestroyTexture(CTexture *_texture);
 
 protected:
 private:
-    CTexture *mTextures[mTexturesCountLimit];
-    unsigned int mTexturesCount = 0;
+    drash::CObjectFactory<CTexture> mTextureFactory;
 };
 
 } // namespace greng

@@ -74,13 +74,18 @@ CObjectFactory<T>::CObjectFactory(unsigned int _size, const char *_product_name)
     mObjectsCountLimit(_size),
     mProductName(_product_name)
 {
-    if (mObjectsCountLimit != 0)
+    if (mObjectsCountLimit == 0)
     {
-        mObjects = new T*[mObjectsCountLimit];
-        for (unsigned int i = 0; i < mObjectsCount; i++)
-        {
-            mObjects[i] = nullptr;
-        }
+        LOG_ERR("CObjectFactory<"<<
+                mProductName.c_str()<<
+                ">::CObjectFactory(): Empty factory is unusable");
+        return;
+    }
+
+    mObjects = new T*[mObjectsCountLimit];
+    for (unsigned int i = 0; i < mObjectsCount; i++)
+    {
+        mObjects[i] = nullptr;
     }
 }
 
@@ -156,7 +161,7 @@ void CObjectFactory<T>::DestroyObject(CFactoryProduct *_obj)
 template<class T>
 inline bool CObjectFactory<T>::IsObject(CObjectFactory::CFactoryProduct *_obj) const
 {
-    return _obj->mInternalId < mObjectsCount && _obj == mObjects[_obj->mInternalId];
+    return _obj != nullptr && _obj->mInternalId < mObjectsCount && _obj == mObjects[_obj->mInternalId];
 }
 
 template<class T>

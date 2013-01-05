@@ -34,46 +34,37 @@ namespace greng
 
 using drash::CLogger;
 
-CTextureManager::CTextureManager()
+CTextureManager::CTextureManager():
+    mTextureFactory(mTexturesCountLimit, "CTexture")
 {
-    for (unsigned int i = 0; i < mTexturesCountLimit; i++)
-    {
-        mTextures[i] = nullptr;
-    }
 }
 
 CTextureManager::~CTextureManager()
 {
-    for (unsigned int i = 0; i < mTexturesCount; i++)
+    while (mTextureFactory.EnumObjects() != 0)
     {
-        glDeleteTextures(1, &mTextures[i]->mTextureBufferId);
-        mTextures[i]->mTextureBufferId = 0;
-        delete mTextures[i];
-        mTextures[i] = nullptr;
+        DestroyTexture(mTextureFactory.GetObjects()[0]);
     }
 }
 
 CTexture *CTextureManager::CreateTexture()
-{
-    if (mTexturesCount >= mTexturesCountLimit)
+{    
+    CTexture *res = mTextureFactory.CreateObject();
+
+    if (res == nullptr)
     {
-        LOG_ERR("CTextureManager::CreateMesh(): textures count exceedes it's limit");
         return nullptr;
     }
-
-    CTexture *res = new CTexture();
 
     glGenTextures(1, &res->mTextureBufferId);
 
     if (res->mTextureBufferId == 0)
     {
-        delete res;
-        return nullptr;
+        mTextureFactory.DestroyObject(res);
+        res = nullptr;
     }
-    else
-    {
-        return mTextures[mTexturesCount++] = res;
-    }
+
+    return res;
 }
 
 CTexture *CTextureManager::CreateTextureFromFile(const char *_path)
@@ -89,10 +80,7 @@ CTexture *CTextureManager::CreateTextureFromFile(const char *_path)
 
     if (s == nullptr)
     {
-        glDeleteTextures(1, &res->mTextureBufferId);
-        res->mTextureBufferId = 0;
-        delete res;
-        res = nullptr;
+        DestroyTexture(res);
         return nullptr;
     }
 
@@ -142,6 +130,21 @@ CTexture *CTextureManager::CreateTextureDummy()
     glBindTexture(GL_TEXTURE_2D, 0);
 
     return res;
+}
+
+bool CTextureManager::DestroyTexture(CTexture *_texture)
+{
+    if (mTextureFactory.IsObject(_texture) == false)
+    {
+        return false;
+    }
+
+    glDeleteTextures(1, &_texture->mTextureBufferId);
+    _texture->mTextureBufferId = 0;
+
+    mTextureFactory.DestroyObject(_texture);
+
+    return true;
 }
 
 } // namespace greng
