@@ -110,6 +110,10 @@ CMesh *CMeshManager::CreateMeshFromObjFile(const char *_path)
 
     if (LoadMeshObj(_path, res) == false)
     {
+        glDeleteBuffers(1, &res->mVertexBufferId);
+        glDeleteBuffers(1, &res->mIndexBufferId);
+        res->mVertexBufferId = 0;
+        res->mIndexBufferId = 0;
         delete res;
         res = nullptr;
     }
@@ -140,19 +144,12 @@ CMesh *CMeshManager::CreateMeshQuad()
 
     v1.mPos.Set(-1, -1, 0);
     v1.mUV.Set(0, 0);
-    v1.mColor.Set(1, 1, 1, 1);
-
     v2.mPos.Set(-1, 1, 0);
     v2.mUV.Set(0, 1);
-    v2.mColor.Set(1, 1, 1, 1);
-
     v3.mPos.Set(1, 1, 0);
     v3.mUV.Set(1, 1);
-    v3.mColor.Set(1, 1, 1, 1);
-
     v4.mPos.Set(1, -1, 0);
     v4.mUV.Set(1, 0);
-    v4.mColor.Set(1, 1, 1, 1);
 
     res->mVertices.push_back(v1);
     res->mVertices.push_back(v2);
