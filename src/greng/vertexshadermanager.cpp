@@ -25,6 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <GL/glew.h>
 #include "vertexshadermanager.h"
 #include "vertexshader.h"
+#include <cstring>
 
 namespace greng
 {
@@ -38,6 +39,10 @@ CVertexShaderManager::CVertexShaderManager():
 
 CVertexShaderManager::~CVertexShaderManager()
 {
+    while (mShaderFactory.EnumObjects() != 0)
+    {
+        mShaderFactory.DestroyObject(mShaderFactory.GetObjects()[0]);
+    }
 }
 
 CVertexShader *CVertexShaderManager::CreateShader()
@@ -55,6 +60,50 @@ CVertexShader *CVertexShaderManager::CreateShader()
     {
         mShaderFactory.DestroyObject(res);
         return nullptr;
+    }
+
+    return res;
+}
+
+CVertexShader *CVertexShaderManager::CreateShaderDummy()
+{
+    CVertexShader *res = CreateShader();
+
+    if (res == nullptr)
+    {
+        return nullptr;
+    }
+
+    const char *source = "#version 120\n\n"
+    "uniform mat4 gModelViewProj;\n\n"
+    "void main(void)\n"
+    "{\n"
+    "gl_Position = gModelViewProj * gl_Vertex;\n"
+    "}\n";
+
+    int len = strlen(source);
+
+    glShaderSource(res->mVertexShaderId, 1, &source, &len);
+
+    glCompileShader(res->mVertexShaderId);
+
+    int status = GL_FALSE;
+
+    glGetShaderiv(res->mVertexShaderId, GL_COMPILE_STATUS, &status);
+
+    if (status == GL_FALSE)
+    {
+        const int buffer_size = 128;
+        char buffer[buffer_size];
+        int length = 0;
+
+        glGetShaderInfoLog(res->mVertexShaderId, buffer_size - 1, &length, buffer);
+
+        LOG_ERR("CVertexShaderManager::CreateShaderDummy(): glCompileShader failed");
+        LOG_ERR("Message: "<<buffer);
+
+        DestroyShader(res);
+        res = nullptr;
     }
 
     return res;

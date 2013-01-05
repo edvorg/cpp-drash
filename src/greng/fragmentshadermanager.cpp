@@ -25,6 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <GL/glew.h>
 #include "fragmentshadermanager.h"
 #include "fragmentshader.h"
+#include <cstring>
 
 namespace greng
 {
@@ -38,6 +39,10 @@ CFragmentShaderManager::CFragmentShaderManager():
 
 CFragmentShaderManager::~CFragmentShaderManager()
 {
+    while (mShaderFactory.EnumObjects() != 0)
+    {
+        mShaderFactory.DestroyObject(mShaderFactory.GetObjects()[0]);
+    }
 }
 
 CFragmentShader *CFragmentShaderManager::CreateShader()
@@ -55,6 +60,49 @@ CFragmentShader *CFragmentShaderManager::CreateShader()
     {
         mShaderFactory.DestroyObject(res);
         return nullptr;
+    }
+
+    return res;
+}
+
+CFragmentShader *CFragmentShaderManager::CreateShaderDummy()
+{
+    CFragmentShader *res = CreateShader();
+
+    if (res == nullptr)
+    {
+        return nullptr;
+    }
+
+    const char *source = "#version 120\n\n"
+    "void main(void)\n"
+    "{\n"
+    "gl_FragColor = vec4(0, 1, 0, 1);\n"
+    "}\n";
+
+    int len = strlen(source);
+
+    glShaderSource(res->mVertexShaderId, 1, &source, &len);
+
+    glCompileShader(res->mVertexShaderId);
+
+    int status = GL_FALSE;
+
+    glGetShaderiv(res->mVertexShaderId, GL_COMPILE_STATUS, &status);
+
+    if (status == GL_FALSE)
+    {
+        const int buffer_size = 128;
+        char buffer[buffer_size];
+        int length = 0;
+
+        glGetShaderInfoLog(res->mVertexShaderId, buffer_size - 1, &length, buffer);
+
+        LOG_ERR("CFragmentShaderManager::CreateShaderDummy(): glCompileShader failed");
+        LOG_ERR("Message: "<<buffer);
+
+        DestroyShader(res);
+        res = nullptr;
     }
 
     return res;

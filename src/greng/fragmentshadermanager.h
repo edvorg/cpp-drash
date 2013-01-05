@@ -45,6 +45,7 @@ public:
     ~CFragmentShaderManager();
 
     CFragmentShader *CreateShader();
+    CFragmentShader *CreateShaderDummy();
     bool DestroyShader(CFragmentShader *_shader);
 
 protected:

@@ -43,6 +43,7 @@ bool CTest5::Init()
     SetupProcessors();
     SetupMeshes();
     SetupTextures();
+    SetupShaders();
 
     return true;
 }
@@ -184,6 +185,12 @@ void CTest5::SetupTextures()
     mTex4 = GetTextureManager().CreateTextureFromFile("RB_MegatronHead_MATINST.png");
     mTex5 = GetTextureManager().CreateTextureFromFile("RB_MegatronArmFeet_MATINST.png");
     mTex6 = GetTextureManager().CreateTextureFromFile("wall5.png");
+}
+
+void CTest5::SetupShaders()
+{
+    mVertexShader1 = GetVertexShaderManager().CreateShaderDummy();
+    mFragmentShader1 = GetFragmentShaderManager().CreateShaderDummy();
 }
 
 void CTest5::SetupProcessors()

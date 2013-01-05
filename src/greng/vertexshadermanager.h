@@ -45,6 +45,7 @@ public:
     ~CVertexShaderManager();
 
     CVertexShader *CreateShader();
+    CVertexShader *CreateShaderDummy();
     bool DestroyShader(CVertexShader *_shader);
 
 protected:

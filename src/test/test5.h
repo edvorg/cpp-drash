@@ -45,6 +45,7 @@ private:
     void SetupCam();
     void SetupMeshes();
     void SetupTextures();
+    void SetupShaders();
     void SetupProcessors();
 
     greng::CMesh *mMesh1 = nullptr;
@@ -58,6 +59,8 @@ private:
     greng::CTexture *mTex4 = nullptr;
     greng::CTexture *mTex5 = nullptr;
     greng::CTexture *mTex6 = nullptr;
+    greng::CVertexShader *mVertexShader1 = nullptr;
+    greng::CFragmentShader *mFragmentShader1 = nullptr;
 };
 
 } // namespace test

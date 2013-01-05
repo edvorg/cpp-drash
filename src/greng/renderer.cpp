@@ -96,4 +96,66 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
     glDisable(GL_TEXTURE_2D);
 }
 
+void CRenderer::RenderMesh(const CMesh *_mesh,
+                           unsigned int _submesh,
+                           const CTexture *_texture,
+                           const CVertexShader *_vertex_shader,
+                           const CFragmentShader *_fragment_shader,
+                           const drash::CMatrix4f &_model_view)
+{
+    if (_submesh >= _mesh->mMaterialOffsets.size() - 1)
+    {
+        return;
+    }
+
+    drash::CMatrix4f m(_model_view);
+    m.Transpose();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixf(m.mData);
+
+    //glCullFace(GL_BACK);
+    //glFrontFace(GL_CCW);
+    glDisable(GL_CULL_FACE);
+
+    glEnable(GL_DEPTH_TEST);
+
+    glEnable(GL_TEXTURE_2D);
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+
+    if (_texture == nullptr)
+    {
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+    else
+    {
+        glBindTexture(GL_TEXTURE_2D, _texture->mTextureBufferId);
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, _mesh->mVertexBufferId);
+    glVertexPointer(3, GL_FLOAT, sizeof(CVertex), nullptr);
+    glTexCoordPointer(2, GL_FLOAT, sizeof(CVertex), reinterpret_cast<GLvoid*>(sizeof(drash::CVec3f)));
+    glColorPointer(4, GL_FLOAT, sizeof(CVertex), reinterpret_cast<GLvoid*>(sizeof(drash::CVec3f) +
+                                                                              sizeof(drash::CVec2f)));
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->mIndexBufferId);
+    glDrawElements(GL_TRIANGLES,
+                   _mesh->mMaterialOffsets[_submesh+1] - _mesh->mMaterialOffsets[_submesh],
+                   GL_UNSIGNED_INT,
+                   reinterpret_cast<const GLvoid*>(sizeof(unsigned int) * _mesh->mMaterialOffsets[_submesh]));
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+
+    glDisable(GL_TEXTURE_2D);
+}
+
 } // namespace greng
