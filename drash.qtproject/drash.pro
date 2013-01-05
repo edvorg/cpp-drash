@@ -76,7 +76,9 @@ SOURCES += ../src/qt/main.cpp\
     ../src/greng/meshmanager.cpp \
     ../src/greng/renderer.cpp \
     ../src/greng/loadmeshobj.cpp \
-    ../src/greng/texturemanager.cpp
+    ../src/greng/texturemanager.cpp \
+    ../src/greng/vertexshader.cpp \
+    ../src/greng/vertexshadermanager.cpp
 
 HEADERS  += ../src/qt/gamewindow.h \
     ../src/qt/scenewidget.h \
@@ -135,7 +137,9 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/greng/loadmeshobj.h \
     ../src/greng/texturemanager.h \
     ../src/greng/texture.h \
-    ../src/misc/objectfactory.h
+    ../src/misc/objectfactory.h \
+    ../src/greng/vertexshader.h \
+    ../src/greng/vertexshadermanager.h
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui

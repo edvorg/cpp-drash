@@ -63,7 +63,9 @@ SOURCES += \
     ../src/app/app.cpp \
     ../src/sdl/main.cpp \
     ../src/greng/loadmeshobj.cpp \
-    ../src/greng/texturemanager.cpp
+    ../src/greng/texturemanager.cpp \
+    ../src/greng/vertexshadermanager.cpp \
+    ../src/greng/vertexshader.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -118,5 +120,7 @@ HEADERS += \
     ../src/greng/loadmeshobj.h \
     ../src/greng/texturemanager.h \
     ../src/greng/texture.h \
-    ../src/misc/objectfactory.h
+    ../src/misc/objectfactory.h \
+    ../src/greng/vertexshadermanager.h \
+    ../src/greng/vertexshader.h
 
