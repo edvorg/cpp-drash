@@ -191,6 +191,7 @@ void CTest5::SetupShaders()
 {
     mVertexShader1 = GetVertexShaderManager().CreateShaderDummy();
     mFragmentShader1 = GetFragmentShaderManager().CreateShaderDummy();
+    mShaderProgram1 = GetShaderProgramManager().CreateProgram(mVertexShader1, mFragmentShader1);
 }
 
 void CTest5::SetupProcessors()

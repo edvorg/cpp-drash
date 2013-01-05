@@ -61,6 +61,7 @@ private:
     greng::CTexture *mTex6 = nullptr;
     greng::CVertexShader *mVertexShader1 = nullptr;
     greng::CFragmentShader *mFragmentShader1 = nullptr;
+    greng::CShaderProgram *mShaderProgram1 = nullptr;
 };
 
 } // namespace test

@@ -25,6 +25,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <GL/glew.h>
 #include "shaderprogrammanager.h"
 #include "shaderprogram.h"
+#include "vertexshader.h"
+#include "fragmentshader.h"
 
 namespace greng
 {
@@ -64,9 +66,75 @@ CShaderProgram *CShaderProgramManager::CreateProgram()
     return res;
 }
 
+CShaderProgram *CShaderProgramManager::CreateProgram(CVertexShader *_vs, CFragmentShader *_fs)
+{
+    if (_vs == nullptr || _fs == nullptr)
+    {
+        return nullptr;
+    }
+
+    CShaderProgram *res = CreateProgram();
+
+    if (res == nullptr)
+    {
+        return nullptr;
+    }
+
+    glAttachShader(res->mProgramId, _vs->mVertexShaderId);
+    glAttachShader(res->mProgramId, _fs->mVertexShaderId);
+    glLinkProgram(res->mProgramId);
+
+    int status = GL_FALSE;
+
+    glGetProgramiv(res->mProgramId, GL_LINK_STATUS, &status);
+
+    if (status == GL_FALSE)
+    {
+        const int buffer_size = 128;
+        char buffer[buffer_size];
+        int length = 0;
+
+        glGetProgramInfoLog(res->mProgramId, buffer_size - 1, &length, buffer);
+
+        LOG_ERR("CShaderProgramManager::CreateProgram(): glLinkProgram failed");
+        LOG_ERR("Message: "<<buffer);
+
+        DestroyProgram(res);
+
+        return nullptr;
+    }
+
+    glUseProgram(res->mProgramId);
+    glValidateProgram(res->mProgramId);
+
+    status = GL_FALSE;
+
+    glGetProgramiv(res->mProgramId, GL_VALIDATE_STATUS, &status);
+
+    if (status == GL_FALSE)
+    {
+        const int buffer_size = 128;
+        char buffer[buffer_size];
+        int length = 0;
+
+        glGetProgramInfoLog(res->mProgramId, buffer_size - 1, &length, buffer);
+
+        LOG_ERR("CShaderProgramManager::CreateProgram(): glValidateProgram failed");
+        LOG_ERR("Message: "<<buffer);
+
+        DestroyProgram(res);
+
+        return nullptr;
+    }
+
+    glUseProgram(0);
+
+    return res;
+}
+
 bool CShaderProgramManager::DestroyProgram(CShaderProgram *_program)
 {
-    if (mProgramFactory.IsObject(_program))
+    if (mProgramFactory.IsObject(_program) == false)
     {
         LOG_ERR("CShaderProgramManager::DestroyProgram(): invalid program taken");
         return false;

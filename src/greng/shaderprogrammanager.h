@@ -30,6 +30,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace greng
 {
 
+class CVertexShader;
+class CFragmentShader;
 class CShaderProgram;
 
 class CShaderProgramManager
@@ -45,6 +47,7 @@ public:
     ~CShaderProgramManager();
 
     CShaderProgram *CreateProgram();
+    CShaderProgram *CreateProgram(CVertexShader *_vs, CFragmentShader *_fs);
     bool DestroyProgram(CShaderProgram *_program);
 
 protected:
