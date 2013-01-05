@@ -37,8 +37,7 @@ namespace greng
 
 class CMesh;
 class CTexture;
-class CVertexShader;
-class CFragmentShader;
+class CShaderProgram;
 
 class CRenderer
 {
@@ -60,9 +59,9 @@ public:
     void RenderMesh(const CMesh *_mesh,
                     unsigned int _submesh,
                     const CTexture *_texture,
-                    const CVertexShader *_vertex_shader,
-                    const CFragmentShader *_fragment_shader,
-                    const drash::CMatrix4f &_model_view);
+                    const CShaderProgram *_program,
+                    const drash::CMatrix4f &_model_view,
+                    const drash::CMatrix4f &_proj_matrix);
 };
 
 } // namespace greng

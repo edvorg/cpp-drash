@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "mesh.h"
 #include "texture.h"
 #include "../misc/matrix4.h"
+#include "shaderprogram.h"
 
 namespace greng
 {
@@ -99,19 +100,14 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
 void CRenderer::RenderMesh(const CMesh *_mesh,
                            unsigned int _submesh,
                            const CTexture *_texture,
-                           const CVertexShader *_vertex_shader,
-                           const CFragmentShader *_fragment_shader,
-                           const drash::CMatrix4f &_model_view)
+                           const CShaderProgram *_program,
+                           const drash::CMatrix4f &_model_view,
+                           const drash::CMatrix4f &_proj_matrix)
 {
     if (_submesh >= _mesh->mMaterialOffsets.size() - 1)
     {
         return;
     }
-
-    drash::CMatrix4f m(_model_view);
-    m.Transpose();
-    glMatrixMode(GL_MODELVIEW);
-    glLoadMatrixf(m.mData);
 
     //glCullFace(GL_BACK);
     //glFrontFace(GL_CCW);
@@ -141,10 +137,24 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
                                                                               sizeof(drash::CVec2f)));
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->mIndexBufferId);
-    glDrawElements(GL_TRIANGLES,
-                   _mesh->mMaterialOffsets[_submesh+1] - _mesh->mMaterialOffsets[_submesh],
-                   GL_UNSIGNED_INT,
-                   reinterpret_cast<const GLvoid*>(sizeof(unsigned int) * _mesh->mMaterialOffsets[_submesh]));
+
+    glUseProgram(_program->mProgramId);
+
+    int mvloc = glGetUniformLocation(_program->mProgramId, "gModelViewMatrix");
+    int ploc = glGetUniformLocation(_program->mProgramId, "gProjMatrix");
+
+    if (mvloc != -1 && ploc != -1)
+    {
+        glUniformMatrix4fv(mvloc, 1, GL_TRUE, _model_view.mData);
+        glUniformMatrix4fv(ploc, 1, GL_TRUE, _proj_matrix.mData);
+
+        glDrawElements(GL_TRIANGLES,
+                       _mesh->mMaterialOffsets[_submesh+1] - _mesh->mMaterialOffsets[_submesh],
+                       GL_UNSIGNED_INT,
+                       reinterpret_cast<const GLvoid*>(sizeof(unsigned int) * _mesh->mMaterialOffsets[_submesh]));
+    }
+
+    glUseProgram(0);
 
     glBindTexture(GL_TEXTURE_2D, 0);
 

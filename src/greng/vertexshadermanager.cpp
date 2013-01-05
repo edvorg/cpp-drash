@@ -75,10 +75,11 @@ CVertexShader *CVertexShaderManager::CreateShaderDummy()
     }
 
     const char *source = "#version 120\n\n"
-    "uniform mat4 gModelViewProj;\n\n"
+    "uniform mat4 gModelViewMatrix;\n"
+    "uniform mat4 gProjMatrix;\n\n"
     "void main(void)\n"
     "{\n"
-    "gl_Position = gModelViewProj * gl_Vertex;\n"
+    "gl_Position = gProjMatrix * gModelViewMatrix * gl_Vertex;\n"
     "}\n";
 
     int len = strlen(source);

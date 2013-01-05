@@ -88,6 +88,8 @@ drash::CCamera *CDebugDrawSystem::CreateCam(const drash::CCameraParams &_params,
 
     mCameras.push_back(res);
 
+    res->SetAspectRatio(mAspectRatio);
+
     if (_set_active)
     {
         SetActiveCam(res);
@@ -127,7 +129,17 @@ void CDebugDrawSystem::SetActiveCam(CCamera *_cam)
 
 void CDebugDrawSystem::SetAspectRatio(float _ratio)
 {
-    mAspectRatio = (drash::math::Abs(_ratio) > 0.00001 ? _ratio : 1);
+    if (drash::math::Abs(_ratio) < 0.000001)
+    {
+        _ratio = 1.0f;
+    }
+
+    mAspectRatio = _ratio;
+
+    for (auto i = mCameras.begin(); i != mCameras.end(); i++)
+    {
+        (*i)->SetAspectRatio(_ratio);
+    }
 }
 
 void CDebugDrawSystem::CastRay(const CVec2f &_pos, const CPlane &_plane, CVec3f &_result) const
