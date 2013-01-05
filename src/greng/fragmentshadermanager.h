@@ -46,6 +46,8 @@ public:
 
     CFragmentShader *CreateShader();
     CFragmentShader *CreateShaderDummy();
+    CFragmentShader *CreateShaderFromSource(const char *_source);
+    CFragmentShader *CreateShaderFromFile(const char *_path);
     bool DestroyShader(CFragmentShader *_shader);
 
 protected:

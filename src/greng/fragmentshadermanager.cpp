@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "fragmentshadermanager.h"
 #include "fragmentshader.h"
 #include <cstring>
+#include <fstream>
 
 namespace greng
 {
@@ -67,6 +68,22 @@ CFragmentShader *CFragmentShaderManager::CreateShader()
 
 CFragmentShader *CFragmentShaderManager::CreateShaderDummy()
 {
+    const char *source = "#version 120\n\n"
+    "void main(void)\n"
+    "{\n"
+    "gl_FragColor = vec4(0, 1, 0, 1);\n"
+    "}\n";
+
+    return CreateShaderFromSource(source);
+}
+
+CFragmentShader *CFragmentShaderManager::CreateShaderFromSource(const char *_source)
+{
+    if (_source == nullptr)
+    {
+        return nullptr;
+    }
+
     CFragmentShader *res = CreateShader();
 
     if (res == nullptr)
@@ -74,15 +91,9 @@ CFragmentShader *CFragmentShaderManager::CreateShaderDummy()
         return nullptr;
     }
 
-    const char *source = "#version 120\n\n"
-    "void main(void)\n"
-    "{\n"
-    "gl_FragColor = vec4(0, 1, 0, 1);\n"
-    "}\n";
+    int len = strlen(_source);
 
-    int len = strlen(source);
-
-    glShaderSource(res->mVertexShaderId, 1, &source, &len);
+    glShaderSource(res->mVertexShaderId, 1, &_source, &len);
 
     glCompileShader(res->mVertexShaderId);
 
@@ -106,6 +117,27 @@ CFragmentShader *CFragmentShaderManager::CreateShaderDummy()
     }
 
     return res;
+}
+
+CFragmentShader *CFragmentShaderManager::CreateShaderFromFile(const char *_path)
+{
+    if (_path == nullptr)
+    {
+        return nullptr;
+    }
+
+    std::ifstream in(_path);
+
+    if (in.is_open() == false)
+    {
+        return nullptr;
+    }
+
+    const unsigned int buffer_size = 1024;
+    char buffer[buffer_size] = "";
+    in.read(buffer, buffer_size - 1);
+
+    return CreateShaderFromSource(buffer);
 }
 
 bool CFragmentShaderManager::DestroyShader(CFragmentShader *_shader)

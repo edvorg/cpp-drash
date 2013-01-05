@@ -215,8 +215,8 @@ void CTest5::SetupTextures()
 
 void CTest5::SetupShaders()
 {
-    mVertexShader1 = GetVertexShaderManager().CreateShaderDummy();
-    mFragmentShader1 = GetFragmentShaderManager().CreateShaderDummy();
+    mVertexShader1 = GetVertexShaderManager().CreateShaderFromFile("shader1.120.vs");
+    mFragmentShader1 = GetFragmentShaderManager().CreateShaderFromFile("shader1.120.fs");
     mShaderProgram1 = GetShaderProgramManager().CreateProgram(mVertexShader1, mFragmentShader1);
 }
 

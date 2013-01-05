@@ -82,9 +82,26 @@ CVertexShader *CVertexShaderManager::CreateShaderDummy()
     "gl_Position = gProjMatrix * gModelViewMatrix * gl_Vertex;\n"
     "}\n";
 
-    int len = strlen(source);
+    return CreateShaderFromSource(source);
+}
 
-    glShaderSource(res->mVertexShaderId, 1, &source, &len);
+CVertexShader *CVertexShaderManager::CreateShaderFromSource(const char *_source)
+{
+    if (_source == nullptr)
+    {
+        return nullptr;
+    }
+
+    CVertexShader *res = CreateShader();
+
+    if (res == nullptr)
+    {
+        return nullptr;
+    }
+
+    int len = strlen(_source);
+
+    glShaderSource(res->mVertexShaderId, 1, &_source, &len);
 
     glCompileShader(res->mVertexShaderId);
 
@@ -108,6 +125,27 @@ CVertexShader *CVertexShaderManager::CreateShaderDummy()
     }
 
     return res;
+}
+
+CVertexShader *CVertexShaderManager::CreateShaderFromFile(const char *_path)
+{
+    if (_path == nullptr)
+    {
+        return nullptr;
+    }
+
+    std::ifstream in(_path);
+
+    if (in.is_open() == false)
+    {
+        return nullptr;
+    }
+
+    const unsigned int buffer_size = 1024;
+    char buffer[buffer_size] = "";
+    in.read(buffer, buffer_size - 1);
+
+    return CreateShaderFromSource(buffer);
 }
 
 bool CVertexShaderManager::DestroyShader(CVertexShader *_shader)

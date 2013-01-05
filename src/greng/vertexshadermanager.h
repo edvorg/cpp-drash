@@ -46,6 +46,8 @@ public:
 
     CVertexShader *CreateShader();
     CVertexShader *CreateShaderDummy();
+    CVertexShader *CreateShaderFromSource(const char *_source);
+    CVertexShader *CreateShaderFromFile(const char *_path);
     bool DestroyShader(CVertexShader *_shader);
 
 protected:
