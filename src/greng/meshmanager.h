@@ -25,6 +25,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRENG_MESHMANAGER_H
 #define GRENG_MESHMANAGER_H
 
+#include "../misc/objectfactory.h"
+
 namespace greng
 {
 
@@ -46,11 +48,11 @@ public:
     CMesh *CreateMeshFromObjFile(const char *_path);
     CMesh *CreateMeshQuad();
     CMesh *CreateMeshCube();
+    bool DestroyMesh(CMesh *_mesh);
 
 protected:
 private:
-    CMesh *mMeshes[mMeshesCountLimit];
-    unsigned int mMeshesCount = 0;
+    drash::CObjectFactory<CMesh> mMeshFactory;
 };
 
 } // namespace greng

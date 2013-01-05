@@ -36,36 +36,27 @@ namespace greng
 
 using drash::CLogger;
 
-CMeshManager::CMeshManager()
+CMeshManager::CMeshManager():
+    mMeshFactory(mMeshesCountLimit, "CMesh")
 {
-    for (unsigned int i = 0; i < mMeshesCountLimit; i++)
-    {
-        mMeshes[i] = nullptr;
-    }
 }
 
 CMeshManager::~CMeshManager()
 {
-    for (unsigned int i = 0; i < mMeshesCount; i++)
+    while (mMeshFactory.EnumObjects() != 0)
     {
-        glDeleteBuffers(1, &mMeshes[i]->mVertexBufferId);
-        glDeleteBuffers(1, &mMeshes[i]->mIndexBufferId);
-        mMeshes[i]->mVertexBufferId = 0;
-        mMeshes[i]->mIndexBufferId = 0;
-        delete mMeshes[i];
-        mMeshes[i] = nullptr;
+        DestroyMesh(mMeshFactory.GetObjects()[0]);
     }
 }
 
 CMesh *CMeshManager::CreateMesh()
 {
-    if (mMeshesCount >= mMeshesCountLimit)
+    CMesh *res = mMeshFactory.CreateObject();
+
+    if (res == nullptr)
     {
-        LOG_ERR("CMeshManager::CreateMesh(): meshes count exceedes it's limit");
         return nullptr;
     }
-
-    CMesh *res = new CMesh();
 
     glGenBuffers(1, &res->mVertexBufferId);
     glGenBuffers(1, &res->mIndexBufferId);
@@ -90,13 +81,11 @@ CMesh *CMeshManager::CreateMesh()
 
     if (fail == true)
     {
-        delete res;
-        return nullptr;
+        mMeshFactory.DestroyObject(res);
+        res = nullptr;
     }
-    else
-    {
-        return mMeshes[mMeshesCount++] = res;
-    }
+
+    return res;
 }
 
 CMesh *CMeshManager::CreateMeshFromObjFile(const char *_path)
@@ -110,12 +99,8 @@ CMesh *CMeshManager::CreateMeshFromObjFile(const char *_path)
 
     if (LoadMeshObj(_path, res) == false)
     {
-        glDeleteBuffers(1, &res->mVertexBufferId);
-        glDeleteBuffers(1, &res->mIndexBufferId);
-        res->mVertexBufferId = 0;
-        res->mIndexBufferId = 0;
-        delete res;
-        res = nullptr;
+        DestroyMesh(res);
+        return nullptr;
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, res->mVertexBufferId);
@@ -263,6 +248,23 @@ CMesh *CMeshManager::CreateMeshCube()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     return res;
+}
+
+bool CMeshManager::DestroyMesh(CMesh *_mesh)
+{
+    if (mMeshFactory.IsObject(_mesh) == false)
+    {
+        return false;
+    }
+
+    glDeleteBuffers(1, &_mesh->mVertexBufferId);
+    glDeleteBuffers(1, &_mesh->mIndexBufferId);
+    _mesh->mVertexBufferId = 0;
+    _mesh->mIndexBufferId = 0;
+
+    mMeshFactory.DestroyObject(_mesh);
+
+    return true;
 }
 
 } // namespace greng
