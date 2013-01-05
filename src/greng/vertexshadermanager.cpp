@@ -41,7 +41,7 @@ CVertexShaderManager::~CVertexShaderManager()
 {
     while (mShaderFactory.EnumObjects() != 0)
     {
-        mShaderFactory.DestroyObject(mShaderFactory.GetObjects()[0]);
+        DestroyShader(mShaderFactory.GetObjects()[0]);
     }
 }
 

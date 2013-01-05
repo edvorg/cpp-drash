@@ -37,6 +37,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/texturemanager.h"
 #include "../greng/vertexshadermanager.h"
 #include "../greng/fragmentshadermanager.h"
+#include "../greng/shaderprogrammanager.h"
 #include "../greng/renderer.h"
 
 namespace drash
@@ -69,6 +70,7 @@ public:
     inline greng::CTextureManager &GetTextureManager();
     inline greng::CVertexShaderManager &GetVertexShaderManager();
     inline greng::CFragmentShaderManager &GetFragmentShaderManager();
+    inline greng::CShaderProgramManager &GetShaderProgramManager();
     inline greng::CRenderer &GetRenderer();
 
     /// used to make CApp childs about mouse moving event
@@ -99,6 +101,7 @@ private:
     greng::CTextureManager mTextureManager;
     greng::CVertexShaderManager mVertexShaderManager;
     greng::CFragmentShaderManager mFragmentShaderManager;
+    greng::CShaderProgramManager mShaderProgramManager;
     greng::CRenderer mRenderer;
 
     std::function<void ()> mQuitHandler = [] () {};
@@ -174,6 +177,11 @@ inline greng::CVertexShaderManager &CApp::GetVertexShaderManager()
 inline greng::CFragmentShaderManager &CApp::GetFragmentShaderManager()
 {
     return mFragmentShaderManager;
+}
+
+inline greng::CShaderProgramManager &CApp::GetShaderProgramManager()
+{
+    return mShaderProgramManager;
 }
 
 inline greng::CRenderer &CApp::GetRenderer()
