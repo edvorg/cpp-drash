@@ -25,10 +25,12 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRENG_TEXTURE_H
 #define GRENG_TEXTURE_H
 
+#include "../misc/objectfactory.h"
+
 namespace greng
 {
 
-class CTexture
+class CTexture : public drash::CObjectFactory<CTexture>::CFactoryProduct
 {
 public:
     CTexture() = default;

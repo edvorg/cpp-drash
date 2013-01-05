@@ -47,15 +47,17 @@ private:
     void SetupTextures();
     void SetupProcessors();
 
-    greng::CMesh *mMesh1;
-    greng::CMesh *mMesh2;
-    greng::CMesh *mMesh3;
+    greng::CMesh *mMesh1 = nullptr;
+    greng::CMesh *mMesh2 = nullptr;
+    greng::CMesh *mMesh3 = nullptr;
+    greng::CMesh *mMesh4 = nullptr;
     CMatrix4f mMesh3ConstMatrix;
-    greng::CTexture *mTex1;
-    greng::CTexture *mTex2;
-    greng::CTexture *mTex3;
-    greng::CTexture *mTex4;
-    greng::CTexture *mTex5;
+    greng::CTexture *mTex1 = nullptr;
+    greng::CTexture *mTex2 = nullptr;
+    greng::CTexture *mTex3 = nullptr;
+    greng::CTexture *mTex4 = nullptr;
+    greng::CTexture *mTex5 = nullptr;
+    greng::CTexture *mTex6 = nullptr;
 };
 
 } // namespace test

@@ -27,42 +27,36 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "mesh.h"
 #include "../diag/logger.h"
 #include "loadmeshobj.h"
+#include "../misc/vec4.h"
+#include "../misc/matrix4.h"
+#include "../misc/math.h"
 
 namespace greng
 {
 
 using drash::CLogger;
 
-CMeshManager::CMeshManager()
+CMeshManager::CMeshManager():
+    mMeshFactory(mMeshesCountLimit, "CMesh")
 {
-    for (unsigned int i = 0; i < mMeshesCountLimit; i++)
-    {
-        mMeshes[i] = nullptr;
-    }
 }
 
 CMeshManager::~CMeshManager()
 {
-    for (unsigned int i = 0; i < mMeshesCount; i++)
+    while (mMeshFactory.EnumObjects() != 0)
     {
-        glDeleteBuffers(1, &mMeshes[i]->mVertexBufferId);
-        glDeleteBuffers(1, &mMeshes[i]->mIndexBufferId);
-        mMeshes[i]->mVertexBufferId = 0;
-        mMeshes[i]->mIndexBufferId = 0;
-        delete mMeshes[i];
-        mMeshes[i] = nullptr;
+        DestroyMesh(mMeshFactory.GetObjects()[0]);
     }
 }
 
 CMesh *CMeshManager::CreateMesh()
 {
-    if (mMeshesCount >= mMeshesCountLimit)
+    CMesh *res = mMeshFactory.CreateObject();
+
+    if (res == nullptr)
     {
-        LOG_ERR("CMeshManager::CreateMesh(): meshes count exceedes it's limit");
         return nullptr;
     }
-
-    CMesh *res = new CMesh();
 
     glGenBuffers(1, &res->mVertexBufferId);
     glGenBuffers(1, &res->mIndexBufferId);
@@ -87,13 +81,11 @@ CMesh *CMeshManager::CreateMesh()
 
     if (fail == true)
     {
-        delete res;
-        return nullptr;
+        mMeshFactory.DestroyObject(res);
+        res = nullptr;
     }
-    else
-    {
-        return mMeshes[mMeshesCount++] = res;
-    }
+
+    return res;
 }
 
 CMesh *CMeshManager::CreateMeshFromObjFile(const char *_path)
@@ -107,8 +99,8 @@ CMesh *CMeshManager::CreateMeshFromObjFile(const char *_path)
 
     if (LoadMeshObj(_path, res) == false)
     {
-        delete res;
-        res = nullptr;
+        DestroyMesh(res);
+        return nullptr;
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, res->mVertexBufferId);
@@ -137,19 +129,12 @@ CMesh *CMeshManager::CreateMeshQuad()
 
     v1.mPos.Set(-1, -1, 0);
     v1.mUV.Set(0, 0);
-    v1.mColor.Set(1, 1, 1, 1);
-
     v2.mPos.Set(-1, 1, 0);
     v2.mUV.Set(0, 1);
-    v2.mColor.Set(1, 1, 1, 1);
-
     v3.mPos.Set(1, 1, 0);
     v3.mUV.Set(1, 1);
-    v3.mColor.Set(1, 1, 1, 1);
-
     v4.mPos.Set(1, -1, 0);
     v4.mUV.Set(1, 0);
-    v4.mColor.Set(1, 1, 1, 1);
 
     res->mVertices.push_back(v1);
     res->mVertices.push_back(v2);
@@ -185,109 +170,72 @@ CMesh *CMeshManager::CreateMeshCube()
         return nullptr;
     }
 
+    drash::CVec2f angles[6];
+    angles[0].Set(0, 0);
+    angles[1].Set(0, M_PI / 2);
+    angles[2].Set(M_PI, 0);
+    angles[3].Set(0, 3 * M_PI / 2);
+    angles[4].Set(-M_PI / 2.0, 0);
+    angles[5].Set(M_PI / 2.0, 0);
+
     CVertex v1;
     CVertex v2;
     CVertex v3;
     CVertex v4;
-    CVertex v5;
-    CVertex v6;
-    CVertex v7;
-    CVertex v8;
 
-    v1.mPos.Set(-1, -1, 1);
     v1.mUV.Set(0, 0);
-    v1.mColor.Set(1, 1, 1, 1);
-
-    v2.mPos.Set(-1, 1, 1);
     v2.mUV.Set(0, 1);
-    v2.mColor.Set(1, 1, 1, 1);
-
-    v3.mPos.Set(1, 1, 1);
     v3.mUV.Set(1, 1);
-    v3.mColor.Set(1, 1, 1, 1);
-
-    v4.mPos.Set(1, -1, 1);
     v4.mUV.Set(1, 0);
-    v4.mColor.Set(1, 1, 1, 1);
 
-    v5.mPos.Set(-1, -1, -1);
-    v5.mUV.Set(0, 0);
-    v5.mColor.Set(1, 1, 1, 1);
+    for (unsigned int i = 0; i < 6; i++)
+    {
+        unsigned int basei = i * 4;
+        res->mIndices.push_back(basei + 0);
+        res->mIndices.push_back(basei + 1);
+        res->mIndices.push_back(basei + 3);
+        res->mIndices.push_back(basei + 3);
+        res->mIndices.push_back(basei + 1);
+        res->mIndices.push_back(basei + 2);
 
-    v6.mPos.Set(-1, 1, -1);
-    v6.mUV.Set(0, 1);
-    v6.mColor.Set(1, 1, 1, 1);
+        drash::CVec4f p1(-1, -1, 1, 1);
+        drash::CVec4f p2(-1,  1, 1, 1);
+        drash::CVec4f p3( 1,  1, 1, 1);
+        drash::CVec4f p4( 1, -1, 1, 1);
 
-    v7.mPos.Set(1, 1, -1);
-    v7.mUV.Set(1, 1);
-    v7.mColor.Set(1, 1, 1, 1);
+        drash::CVec4f rp1 = p1;
+        drash::CVec4f rp2 = p2;
+        drash::CVec4f rp3 = p3;
+        drash::CVec4f rp4 = p4;
 
-    v8.mPos.Set(1, -1, -1);
-    v8.mUV.Set(1, 0);
-    v8.mColor.Set(1, 1, 1, 1);
+        drash::CMatrix4f m;
+        if (drash::math::Abs(angles[i].mX) > 0.0001)
+        {
+            drash::MatrixRotationX(m, angles[i].mX);
+            drash::MatrixMultiply(m, p1, rp1);
+            drash::MatrixMultiply(m, p2, rp2);
+            drash::MatrixMultiply(m, p3, rp3);
+            drash::MatrixMultiply(m, p4, rp4);
+        }
+        else if (drash::math::Abs(angles[i].mY) > 0.0001)
+        {
+            drash::MatrixRotationY(m, angles[i].mY);
+            drash::MatrixMultiply(m, p1, rp1);
+            drash::MatrixMultiply(m, p2, rp2);
+            drash::MatrixMultiply(m, p3, rp3);
+            drash::MatrixMultiply(m, p4, rp4);
+        }
 
-    res->mVertices.push_back(v1);
-    res->mVertices.push_back(v2);
-    res->mVertices.push_back(v3);
-    res->mVertices.push_back(v4);
-    res->mVertices.push_back(v5);
-    res->mVertices.push_back(v6);
-    res->mVertices.push_back(v7);
-    res->mVertices.push_back(v8);
+        v1.mPos = rp1;
+        v2.mPos = rp2;
+        v3.mPos = rp3;
+        v4.mPos = rp4;
 
-    /// front face
-
-    res->mIndices.push_back(0);
-    res->mIndices.push_back(1);
-    res->mIndices.push_back(3);
-    res->mIndices.push_back(3);
-    res->mIndices.push_back(1);
-    res->mIndices.push_back(2);
-
-    /// right face
-
-    res->mIndices.push_back(3);
-    res->mIndices.push_back(2);
-    res->mIndices.push_back(7);
-    res->mIndices.push_back(7);
-    res->mIndices.push_back(2);
-    res->mIndices.push_back(6);
-
-    /// back face
-
-    res->mIndices.push_back(7);
-    res->mIndices.push_back(6);
-    res->mIndices.push_back(4);
-    res->mIndices.push_back(4);
-    res->mIndices.push_back(6);
-    res->mIndices.push_back(5);
-
-    /// left face
-
-    res->mIndices.push_back(4);
-    res->mIndices.push_back(5);
-    res->mIndices.push_back(0);
-    res->mIndices.push_back(0);
-    res->mIndices.push_back(5);
-    res->mIndices.push_back(1);
-
-    /// top face
-
-    res->mIndices.push_back(1);
-    res->mIndices.push_back(5);
-    res->mIndices.push_back(2);
-    res->mIndices.push_back(2);
-    res->mIndices.push_back(5);
-    res->mIndices.push_back(6);
-
-    /// bottom face
-
-    res->mIndices.push_back(4);
-    res->mIndices.push_back(0);
-    res->mIndices.push_back(7);
-    res->mIndices.push_back(7);
-    res->mIndices.push_back(0);
-    res->mIndices.push_back(3);
+        res->mVertices.push_back(v1);
+        res->mVertices.push_back(v2);
+        res->mVertices.push_back(v3);
+        res->mVertices.push_back(v4);
+    }
 
     res->mMaterialOffsets.push_back(0);
     res->mMaterialOffsets.push_back(res->mIndices.size());
@@ -300,6 +248,23 @@ CMesh *CMeshManager::CreateMeshCube()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     return res;
+}
+
+bool CMeshManager::DestroyMesh(CMesh *_mesh)
+{
+    if (mMeshFactory.IsObject(_mesh) == false)
+    {
+        return false;
+    }
+
+    glDeleteBuffers(1, &_mesh->mVertexBufferId);
+    glDeleteBuffers(1, &_mesh->mIndexBufferId);
+    _mesh->mVertexBufferId = 0;
+    _mesh->mIndexBufferId = 0;
+
+    mMeshFactory.DestroyObject(_mesh);
+
+    return true;
 }
 
 } // namespace greng

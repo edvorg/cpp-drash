@@ -117,5 +117,6 @@ HEADERS += \
     ../src/app/app.h \
     ../src/greng/loadmeshobj.h \
     ../src/greng/texturemanager.h \
-    ../src/greng/texture.h
+    ../src/greng/texture.h \
+    ../src/misc/objectfactory.h
 

@@ -28,11 +28,12 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include <string>
 #include "vertex.h"
+#include "../misc/objectfactory.h"
 
 namespace greng
 {
 
-class CMesh
+class CMesh : public drash::CObjectFactory<CMesh>::CFactoryProduct
 {
 public:
     friend class CMeshManager;

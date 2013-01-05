@@ -73,7 +73,7 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
-        GetRenderer().RenderMesh(mMesh1, 0, mTex1, model_view);
+        GetRenderer().RenderMesh(mMesh1, 0, mTex6, model_view);
     }
 
     if (mMesh2 != nullptr)
@@ -114,6 +114,33 @@ void CTest5::Render()
         GetRenderer().RenderMesh(mMesh3, 1, mTex3, model_view);
         GetRenderer().RenderMesh(mMesh3, 2, mTex5, model_view);
     }
+    if (mMesh4 != nullptr)
+    {
+        CMatrix4f r;
+        MatrixRotationY(r, -angle);
+
+        CMatrix4f s;
+        MatrixScale(s, CVec3f(1));
+
+        CMatrix4f rot;
+        MatrixMultiply(r, s, rot);
+
+        CMatrix4f transl;
+        MatrixTranslation(transl, CVec3f(200, 30, 0));
+
+        CMatrix4f model;
+        MatrixMultiply(transl, rot, model);
+
+        CMatrix4f model_view;
+        MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
+
+        GetRenderer().RenderMesh(mMesh4, 0, mTex1, model_view);
+        GetRenderer().RenderMesh(mMesh4, 1, mTex1, model_view);
+        GetRenderer().RenderMesh(mMesh4, 2, mTex1, model_view);
+        GetRenderer().RenderMesh(mMesh4, 3, mTex1, model_view);
+        GetRenderer().RenderMesh(mMesh4, 4, mTex1, model_view);
+        GetRenderer().RenderMesh(mMesh4, 5, mTex1, model_view);
+    }
 
     angle += 1.0 * GetCurrentTimeDelta();
 }
@@ -132,6 +159,7 @@ void CTest5::SetupMeshes()
     mMesh1 = GetMeshManager().CreateMeshCube();
     mMesh2 = GetMeshManager().CreateMeshQuad();
     mMesh3 = GetMeshManager().CreateMeshFromObjFile("mt.obj");
+    mMesh4 = GetMeshManager().CreateMeshFromObjFile("player.obj");
 
     CMatrix4f s;
     MatrixScale(s, CVec3f(0.1));
@@ -155,6 +183,7 @@ void CTest5::SetupTextures()
     mTex3 = GetTextureManager().CreateTextureFromFile("RB_MegatronBodyT2_MATINST.png");
     mTex4 = GetTextureManager().CreateTextureFromFile("RB_MegatronHead_MATINST.png");
     mTex5 = GetTextureManager().CreateTextureFromFile("RB_MegatronArmFeet_MATINST.png");
+    mTex6 = GetTextureManager().CreateTextureFromFile("wall5.png");
 }
 
 void CTest5::SetupProcessors()
