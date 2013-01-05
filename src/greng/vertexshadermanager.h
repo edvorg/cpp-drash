@@ -44,6 +44,9 @@ public:
     CVertexShaderManager &operator =(CVertexShaderManager &&) = delete;
     ~CVertexShaderManager();
 
+    CVertexShader *CreateShader();
+    bool DestroyShader(CVertexShader *_shader);
+
 protected:
 private:
     drash::CObjectFactory<CVertexShader> mShaderFactory;

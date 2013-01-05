@@ -34,6 +34,8 @@ class CVertexShader : public drash::CObjectFactory<CVertexShader>::CFactoryProdu
 {
 public:
     CVertexShader() = default;
+
+    unsigned int mVertexShaderId = 0;
 };
 
 } // namespace greng

@@ -22,11 +22,14 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
+#include <GL/glew.h>
 #include "vertexshadermanager.h"
 #include "vertexshader.h"
 
 namespace greng
 {
+
+using drash::CLogger;
 
 CVertexShaderManager::CVertexShaderManager():
     mShaderFactory(mShadersCountLimit, "CVertexShader")
@@ -35,6 +38,42 @@ CVertexShaderManager::CVertexShaderManager():
 
 CVertexShaderManager::~CVertexShaderManager()
 {
+}
+
+CVertexShader *CVertexShaderManager::CreateShader()
+{
+    CVertexShader *res = mShaderFactory.CreateObject();
+
+    if (res == nullptr)
+    {
+        return nullptr;
+    }
+
+    res->mVertexShaderId = glCreateShader(GL_VERTEX_SHADER);
+
+    if (res->mVertexShaderId == 0)
+    {
+        mShaderFactory.DestroyObject(res);
+        return nullptr;
+    }
+
+    return res;
+}
+
+bool CVertexShaderManager::DestroyShader(CVertexShader *_shader)
+{
+    if (mShaderFactory.IsObject(_shader) == false)
+    {
+        LOG_ERR("CVertexShaderManager::DestroyShader(): invalid shader taken");
+        return false;
+    }
+
+    glDeleteShader(_shader->mVertexShaderId);
+    _shader->mVertexShaderId = 0;
+
+    mShaderFactory.DestroyObject(_shader);
+
+    return true;
 }
 
 } // namespace greng
