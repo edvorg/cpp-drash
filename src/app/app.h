@@ -35,6 +35,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../ui/uisystem.h"
 #include "../greng/meshmanager.h"
 #include "../greng/texturemanager.h"
+#include "../greng/vertexshadermanager.h"
+#include "../greng/fragmentshadermanager.h"
+#include "../greng/shaderprogrammanager.h"
 #include "../greng/renderer.h"
 
 namespace drash
@@ -65,6 +68,9 @@ public:
     inline ui::CUISystem &GetUISystem();
     inline greng::CMeshManager &GetMeshManager();
     inline greng::CTextureManager &GetTextureManager();
+    inline greng::CVertexShaderManager &GetVertexShaderManager();
+    inline greng::CFragmentShaderManager &GetFragmentShaderManager();
+    inline greng::CShaderProgramManager &GetShaderProgramManager();
     inline greng::CRenderer &GetRenderer();
 
     /// used to make CApp childs about mouse moving event
@@ -93,6 +99,9 @@ private:
     ui::CUISystem mUISystem;
     greng::CMeshManager mMeshManager;
     greng::CTextureManager mTextureManager;
+    greng::CVertexShaderManager mVertexShaderManager;
+    greng::CFragmentShaderManager mFragmentShaderManager;
+    greng::CShaderProgramManager mShaderProgramManager;
     greng::CRenderer mRenderer;
 
     std::function<void ()> mQuitHandler = [] () {};
@@ -158,6 +167,21 @@ inline greng::CMeshManager &CApp::GetMeshManager()
 inline greng::CTextureManager &CApp::GetTextureManager()
 {
     return mTextureManager;
+}
+
+inline greng::CVertexShaderManager &CApp::GetVertexShaderManager()
+{
+    return mVertexShaderManager;
+}
+
+inline greng::CFragmentShaderManager &CApp::GetFragmentShaderManager()
+{
+    return mFragmentShaderManager;
+}
+
+inline greng::CShaderProgramManager &CApp::GetShaderProgramManager()
+{
+    return mShaderProgramManager;
 }
 
 inline greng::CRenderer &CApp::GetRenderer()

@@ -23,8 +23,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include <GL/glew.h>
-#include "vertexshadermanager.h"
-#include "vertexshader.h"
+#include "fragmentshadermanager.h"
+#include "fragmentshader.h"
 #include <cstring>
 
 namespace greng
@@ -32,12 +32,12 @@ namespace greng
 
 using drash::CLogger;
 
-CVertexShaderManager::CVertexShaderManager():
-    mShaderFactory(mShadersCountLimit, "CVertexShader")
+CFragmentShaderManager::CFragmentShaderManager():
+    mShaderFactory(mShadersCountLimit, "CFragmentShader")
 {
 }
 
-CVertexShaderManager::~CVertexShaderManager()
+CFragmentShaderManager::~CFragmentShaderManager()
 {
     while (mShaderFactory.EnumObjects() != 0)
     {
@@ -45,16 +45,16 @@ CVertexShaderManager::~CVertexShaderManager()
     }
 }
 
-CVertexShader *CVertexShaderManager::CreateShader()
+CFragmentShader *CFragmentShaderManager::CreateShader()
 {
-    CVertexShader *res = mShaderFactory.CreateObject();
+    CFragmentShader *res = mShaderFactory.CreateObject();
 
     if (res == nullptr)
     {
         return nullptr;
     }
 
-    res->mVertexShaderId = glCreateShader(GL_VERTEX_SHADER);
+    res->mVertexShaderId = glCreateShader(GL_FRAGMENT_SHADER);
 
     if (res->mVertexShaderId == 0)
     {
@@ -65,9 +65,9 @@ CVertexShader *CVertexShaderManager::CreateShader()
     return res;
 }
 
-CVertexShader *CVertexShaderManager::CreateShaderDummy()
+CFragmentShader *CFragmentShaderManager::CreateShaderDummy()
 {
-    CVertexShader *res = CreateShader();
+    CFragmentShader *res = CreateShader();
 
     if (res == nullptr)
     {
@@ -75,11 +75,9 @@ CVertexShader *CVertexShaderManager::CreateShaderDummy()
     }
 
     const char *source = "#version 120\n\n"
-    "uniform mat4 gModelViewMatrix;\n"
-    "uniform mat4 gProjMatrix;\n\n"
     "void main(void)\n"
     "{\n"
-    "gl_Position = gProjMatrix * gModelViewMatrix * gl_Vertex;\n"
+    "gl_FragColor = vec4(0, 1, 0, 1);\n"
     "}\n";
 
     int len = strlen(source);
@@ -100,7 +98,7 @@ CVertexShader *CVertexShaderManager::CreateShaderDummy()
 
         glGetShaderInfoLog(res->mVertexShaderId, buffer_size - 1, &length, buffer);
 
-        LOG_ERR("CVertexShaderManager::CreateShaderDummy(): glCompileShader failed");
+        LOG_ERR("CFragmentShaderManager::CreateShaderDummy(): glCompileShader failed");
         LOG_ERR("Message: "<<buffer);
 
         DestroyShader(res);
@@ -110,11 +108,11 @@ CVertexShader *CVertexShaderManager::CreateShaderDummy()
     return res;
 }
 
-bool CVertexShaderManager::DestroyShader(CVertexShader *_shader)
+bool CFragmentShaderManager::DestroyShader(CFragmentShader *_shader)
 {
     if (mShaderFactory.IsObject(_shader) == false)
     {
-        LOG_ERR("CVertexShaderManager::DestroyShader(): invalid shader taken");
+        LOG_ERR("CFragmentShaderManager::DestroyShader(): invalid shader taken");
         return false;
     }
 

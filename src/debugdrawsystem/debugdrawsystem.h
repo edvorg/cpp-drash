@@ -97,6 +97,7 @@ private:
     std::vector<CCamera*> mCameras;
     float mAspectRatio = 1;
     CMatrix4f mViewMatrixTransposed;
+    CMatrix4f mProjectionMatrixTransposed;
 };
 
 inline CCamera *CDebugDrawSystem::GetActiveCam() const

@@ -26,10 +26,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #if defined(__MACH__)
 #include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
 #else
 #include <GL/gl.h>
-#include <GL/glu.h>
 #endif
 
 #include "camera.h"
@@ -60,7 +58,9 @@ void CDebugDrawSystem::Step(double _dt)
     if (mActiveCam != nullptr)
     {
         mViewMatrixTransposed = mActiveCam->GetViewMatrix();
+        mProjectionMatrixTransposed = mActiveCam->GetProjectionMatrix();
         mViewMatrixTransposed.Transpose();
+        mProjectionMatrixTransposed.Transpose();
     }
 }
 
@@ -87,6 +87,8 @@ drash::CCamera *CDebugDrawSystem::CreateCam(const drash::CCameraParams &_params,
     }
 
     mCameras.push_back(res);
+
+    res->SetAspectRatio(mAspectRatio);
 
     if (_set_active)
     {
@@ -121,13 +123,25 @@ void CDebugDrawSystem::SetActiveCam(CCamera *_cam)
     if (mActiveCam != nullptr)
     {
         mViewMatrixTransposed = mActiveCam->GetViewMatrix();
+        mProjectionMatrixTransposed = mActiveCam->GetProjectionMatrix();
         mViewMatrixTransposed.Transpose();
+        mProjectionMatrixTransposed.Transpose();
     }
 }
 
 void CDebugDrawSystem::SetAspectRatio(float _ratio)
 {
-    mAspectRatio = (drash::math::Abs(_ratio) > 0.00001 ? _ratio : 1);
+    if (drash::math::Abs(_ratio) < 0.000001)
+    {
+        _ratio = 1.0f;
+    }
+
+    mAspectRatio = _ratio;
+
+    for (auto i = mCameras.begin(); i != mCameras.end(); i++)
+    {
+        (*i)->SetAspectRatio(_ratio);
+    }
 }
 
 void CDebugDrawSystem::CastRay(const CVec2f &_pos, const CPlane &_plane, CVec3f &_result) const
@@ -248,14 +262,14 @@ void CDebugDrawSystem::Draw() const
     unsigned int count = GetScene()->EnumObjects();
 
     glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
 
     if (mActiveCam->mOrtho == false)
     {
-        gluPerspective(mActiveCam->GetFov().Get() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView().Get());
+        glLoadMatrixf(mProjectionMatrixTransposed.mData);
     }
     else
     {
+        glLoadIdentity();
         float mhw = mActiveCam->GetOrthoWidth().Get() * 0.5f;
         float mhh = mhw / mAspectRatio;
         glOrtho(-mhw, mhw,
@@ -334,8 +348,7 @@ void CDebugDrawSystem::DrawTriangle(const CVec3f &_p1, const CVec3f &_p2, const 
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(mViewMatrixTransposed.mData);
     glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(mActiveCam->GetFov().Get() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView().Get());
+    glLoadMatrixf(mProjectionMatrixTransposed.mData);
 
     glBegin(GL_TRIANGLES);
     glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
@@ -397,8 +410,7 @@ void CDebugDrawSystem::DrawLine(const CVec3f &_p1, const CVec3f &_p2, float _wid
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(mViewMatrixTransposed.mData);
     glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(mActiveCam->GetFov().Get() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView().Get());
+    glLoadMatrixf(mProjectionMatrixTransposed.mData);
 
     glLineWidth(_width);
 
@@ -458,8 +470,7 @@ void CDebugDrawSystem::DrawPoint(const CVec3f &_p, float _size, const CColor4f &
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(mViewMatrixTransposed.mData);
     glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(mActiveCam->GetFov().Get() * 180.0 / M_PI, mAspectRatio, 1.0f, mActiveCam->GetDepthOfView().Get());
+    glLoadMatrixf(mProjectionMatrixTransposed.mData);
 
     glPointSize(_size);
 

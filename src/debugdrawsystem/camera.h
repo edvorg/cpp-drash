@@ -63,9 +63,12 @@ public:
     void Forward(float _distance);
     void Strafe(float _distance);
 
+    void SetAspectRatio(float _aspect);
+
     inline const CMatrix4f &GetRotationMatrix() const;
     inline const CMatrix4f &GetAntiRotationMatrix() const;
     inline const CMatrix4f &GetViewMatrix() const;
+    inline const CMatrix4f &GetProjectionMatrix() const;
 
 protected:        
     CCamera(void);
@@ -87,6 +90,9 @@ private:
     CMatrix4f mRotationMatrix;
     CMatrix4f mAntiRotationMatrix;
     CMatrix4f mViewMatrix;
+    CMatrix4f mProjectionMatrix;
+
+    float mAspectRatio = 1.0f;
 };
 
 inline void CCamera::SetOrtho(bool _ortho)
@@ -137,6 +143,11 @@ inline const CMatrix4f &CCamera::GetAntiRotationMatrix() const
 inline const CMatrix4f &CCamera::GetViewMatrix() const
 {
     return mViewMatrix;
+}
+
+inline const CMatrix4f &CCamera::GetProjectionMatrix() const
+{
+    return mProjectionMatrix;
 }
 
 }// namespace drash

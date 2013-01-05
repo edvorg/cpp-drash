@@ -22,22 +22,37 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#ifndef GRENG_VERTEXSHADER_H
-#define GRENG_VERTEXSHADER_H
+#ifndef GRENG_FRAGMENTSHADERMANAGER_H
+#define GRENG_FRAGMENTSHADERMANAGER_H
 
 #include "../misc/objectfactory.h"
 
 namespace greng
 {
 
-class CVertexShader : public drash::CObjectFactory<CVertexShader>::CFactoryProduct
+class CFragmentShader;
+
+class CFragmentShaderManager
 {
 public:
-    CVertexShader() = default;
+    constexpr static unsigned int mShadersCountLimit = 32;
 
-    unsigned int mVertexShaderId = 0;
+    CFragmentShaderManager();
+    CFragmentShaderManager(const CFragmentShaderManager &) = delete;
+    CFragmentShaderManager(CFragmentShaderManager &&) = delete;
+    CFragmentShaderManager &operator =(const CFragmentShaderManager &) = delete;
+    CFragmentShaderManager &operator =(CFragmentShaderManager &&) = delete;
+    ~CFragmentShaderManager();
+
+    CFragmentShader *CreateShader();
+    CFragmentShader *CreateShaderDummy();
+    bool DestroyShader(CFragmentShader *_shader);
+
+protected:
+private:
+    drash::CObjectFactory<CFragmentShader> mShaderFactory;
 };
 
 } // namespace greng
 
-#endif // GRENG_VERTEXSHADER_H
+#endif // GRENG_FRAGMENTSHADERMANAGER_H

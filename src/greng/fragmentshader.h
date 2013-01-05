@@ -22,9 +22,22 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "vertexshader.h"
+#ifndef GRENG_FRAGMENTSHADER_H
+#define GRENG_FRAGMENTSHADER_H
+
+#include "../misc/objectfactory.h"
 
 namespace greng
 {
 
+class CFragmentShader : public drash::CObjectFactory<CFragmentShader>::CFactoryProduct
+{
+public:
+    CFragmentShader() = default;
+
+    unsigned int mVertexShaderId = 0;
+};
+
 } // namespace greng
+
+#endif // GRENG_FRAGMENTSHADER_H

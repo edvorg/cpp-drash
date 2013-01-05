@@ -9,7 +9,7 @@ INCLUDEPATH += ../3rd/Box2D/include
 
 LIBS += -L../3rd/Box2D/lib -lBox2D
 
-unix:!macx: LIBS += -lrt -lGLU -lGL -lSDL -lGLEW -lSDL_image
+unix:!macx: LIBS += -lrt -lGL -lSDL -lGLEW -lSDL_image
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG
@@ -65,7 +65,8 @@ SOURCES += \
     ../src/greng/loadmeshobj.cpp \
     ../src/greng/texturemanager.cpp \
     ../src/greng/vertexshadermanager.cpp \
-    ../src/greng/vertexshader.cpp
+    ../src/greng/fragmentshadermanager.cpp \
+    ../src/greng/shaderprogrammanager.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -122,5 +123,9 @@ HEADERS += \
     ../src/greng/texture.h \
     ../src/misc/objectfactory.h \
     ../src/greng/vertexshadermanager.h \
-    ../src/greng/vertexshader.h
+    ../src/greng/vertexshader.h \
+    ../src/greng/fragmentshader.h \
+    ../src/greng/fragmentshadermanager.h \
+    ../src/greng/shaderprogram.h \
+    ../src/greng/shaderprogrammanager.h
 

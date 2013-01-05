@@ -264,4 +264,23 @@ CMatrix4f &MatrixTranslation(CMatrix4f &_m, const CVec3f &_translation)
     return _m;
 }
 
+CMatrix4f &Matrix4Perspective(CMatrix4f &_m, float _fov, float _aspect, float _znear, float _zfar)
+{
+    _m.Identity();
+
+    float f = 1.0f / tan(_fov / 2.0f);
+    float a = (_zfar + _znear) / (_znear - _zfar);
+    float b = (2 * _zfar * _znear) / (_znear - _zfar);
+
+    _m.mData[_m.m00] = f / _aspect;
+    _m.mData[_m.m11] = f;
+    _m.mData[_m.m22] = a;
+    _m.mData[_m.m33] = 0;
+
+    _m.mData[_m.m23] = b;
+    _m.mData[_m.m32] = -1;
+
+    return _m;
+}
+
 } // namespace drash

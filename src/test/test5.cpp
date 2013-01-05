@@ -43,6 +43,7 @@ bool CTest5::Init()
     SetupProcessors();
     SetupMeshes();
     SetupTextures();
+    SetupShaders();
 
     return true;
 }
@@ -73,7 +74,12 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
-        GetRenderer().RenderMesh(mMesh1, 0, mTex6, model_view);
+        GetRenderer().RenderMesh(mMesh1,
+                                 0,
+                                 mTex6,
+                                 mShaderProgram1,
+                                 model_view,
+                                 GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix());
     }
 
     if (mMesh2 != nullptr)
@@ -96,7 +102,12 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
-        GetRenderer().RenderMesh(mMesh2, 0, mTex2, model_view);
+        GetRenderer().RenderMesh(mMesh2,
+                                 0,
+                                 mTex2,
+                                 mShaderProgram1,
+                                 model_view,
+                                 GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix());
     }
 
     if (mMesh3 != nullptr)
@@ -110,9 +121,22 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
-        GetRenderer().RenderMesh(mMesh3, 0, mTex4, model_view);
-        GetRenderer().RenderMesh(mMesh3, 1, mTex3, model_view);
-        GetRenderer().RenderMesh(mMesh3, 2, mTex5, model_view);
+        greng::CTexture *texts[3] =
+        {
+            mTex4,
+            mTex3,
+            mTex5
+        };
+
+        for (unsigned int i = 0; i < 3; i++)
+        {
+            GetRenderer().RenderMesh(mMesh3,
+                                     i,
+                                     texts[i],
+                                     mShaderProgram1,
+                                     model_view,
+                                     GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix());
+        }
     }
     if (mMesh4 != nullptr)
     {
@@ -134,12 +158,15 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
 
-        GetRenderer().RenderMesh(mMesh4, 0, mTex1, model_view);
-        GetRenderer().RenderMesh(mMesh4, 1, mTex1, model_view);
-        GetRenderer().RenderMesh(mMesh4, 2, mTex1, model_view);
-        GetRenderer().RenderMesh(mMesh4, 3, mTex1, model_view);
-        GetRenderer().RenderMesh(mMesh4, 4, mTex1, model_view);
-        GetRenderer().RenderMesh(mMesh4, 5, mTex1, model_view);
+        for (unsigned int i = 0; i < 6; i++)
+        {
+            GetRenderer().RenderMesh(mMesh4,
+                                     i,
+                                     mTex1,
+                                     mShaderProgram1,
+                                     model_view,
+                                     GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix());
+        }
     }
 
     angle += 1.0 * GetCurrentTimeDelta();
@@ -184,6 +211,13 @@ void CTest5::SetupTextures()
     mTex4 = GetTextureManager().CreateTextureFromFile("RB_MegatronHead_MATINST.png");
     mTex5 = GetTextureManager().CreateTextureFromFile("RB_MegatronArmFeet_MATINST.png");
     mTex6 = GetTextureManager().CreateTextureFromFile("wall5.png");
+}
+
+void CTest5::SetupShaders()
+{
+    mVertexShader1 = GetVertexShaderManager().CreateShaderDummy();
+    mFragmentShader1 = GetFragmentShaderManager().CreateShaderDummy();
+    mShaderProgram1 = GetShaderProgramManager().CreateProgram(mVertexShader1, mFragmentShader1);
 }
 
 void CTest5::SetupProcessors()

@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "mesh.h"
 #include "texture.h"
 #include "../misc/matrix4.h"
+#include "shaderprogram.h"
 
 namespace greng
 {
@@ -83,6 +84,77 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
                    _mesh->mMaterialOffsets[_submesh+1] - _mesh->mMaterialOffsets[_submesh],
                    GL_UNSIGNED_INT,
                    reinterpret_cast<const GLvoid*>(sizeof(unsigned int) * _mesh->mMaterialOffsets[_submesh]));
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+
+    glDisable(GL_TEXTURE_2D);
+}
+
+void CRenderer::RenderMesh(const CMesh *_mesh,
+                           unsigned int _submesh,
+                           const CTexture *_texture,
+                           const CShaderProgram *_program,
+                           const drash::CMatrix4f &_model_view,
+                           const drash::CMatrix4f &_proj_matrix)
+{
+    if (_submesh >= _mesh->mMaterialOffsets.size() - 1)
+    {
+        return;
+    }
+
+    //glCullFace(GL_BACK);
+    //glFrontFace(GL_CCW);
+    glDisable(GL_CULL_FACE);
+
+    glEnable(GL_DEPTH_TEST);
+
+    glEnable(GL_TEXTURE_2D);
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+
+    if (_texture == nullptr)
+    {
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+    else
+    {
+        glBindTexture(GL_TEXTURE_2D, _texture->mTextureBufferId);
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, _mesh->mVertexBufferId);
+    glVertexPointer(3, GL_FLOAT, sizeof(CVertex), nullptr);
+    glTexCoordPointer(2, GL_FLOAT, sizeof(CVertex), reinterpret_cast<GLvoid*>(sizeof(drash::CVec3f)));
+    glColorPointer(4, GL_FLOAT, sizeof(CVertex), reinterpret_cast<GLvoid*>(sizeof(drash::CVec3f) +
+                                                                              sizeof(drash::CVec2f)));
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->mIndexBufferId);
+
+    glUseProgram(_program->mProgramId);
+
+    int mvloc = glGetUniformLocation(_program->mProgramId, "gModelViewMatrix");
+    int ploc = glGetUniformLocation(_program->mProgramId, "gProjMatrix");
+
+    if (mvloc != -1 && ploc != -1)
+    {
+        glUniformMatrix4fv(mvloc, 1, GL_TRUE, _model_view.mData);
+        glUniformMatrix4fv(ploc, 1, GL_TRUE, _proj_matrix.mData);
+
+        glDrawElements(GL_TRIANGLES,
+                       _mesh->mMaterialOffsets[_submesh+1] - _mesh->mMaterialOffsets[_submesh],
+                       GL_UNSIGNED_INT,
+                       reinterpret_cast<const GLvoid*>(sizeof(unsigned int) * _mesh->mMaterialOffsets[_submesh]));
+    }
+
+    glUseProgram(0);
 
     glBindTexture(GL_TEXTURE_2D, 0);
 

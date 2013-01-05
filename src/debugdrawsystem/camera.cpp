@@ -86,6 +86,18 @@ void CCamera::Strafe(float _distance)
     mPos.Set(strafe_dir);
 }
 
+void CCamera::SetAspectRatio(float _aspect)
+{
+    if (math::Abs(_aspect) < 0.000001)
+    {
+        _aspect = 1.0f;
+    }
+
+    mAspectRatio = _aspect;
+
+    ComputeMatrices();
+}
+
 CCamera::CCamera():
     mPos([this] (const CVec3f &_new_pos)
     {
@@ -146,6 +158,8 @@ void CCamera::ComputeMatrices()
     MatrixTranslation(tm, tv);
 
     MatrixMultiply(mRotationMatrix, tm, mViewMatrix);
+
+    Matrix4Perspective(mProjectionMatrix, mFov.Get(), mAspectRatio, 1.0, mDepthOfView.Get() + 1.0f);
 }
 
 }// namespace drash
