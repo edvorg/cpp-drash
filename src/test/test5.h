@@ -71,6 +71,9 @@ private:
     greng::CPointLight mPointLight;
 
     double mAngle = 0.0;
+
+    CVec3f mOldPlayerPos;
+    float mPlayerAngle = 0;
 };
 
 } // namespace test

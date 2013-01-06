@@ -87,26 +87,32 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
     switch ( _event.mType )
     {
         case CPlayerEvent::PlayerActionJump:
-            if (mJumpAllowed)
+            if (mJumpAllowed == true)
             {
-                move(CVec3f(0, mSpeedJump, 0));
+                ApplyLinearImpulse(CVec2f(0, 5.0), GetMassCenter());
             }
             break;
 
         case CPlayerEvent::PlayerActionMoveLeft:
-            move(CVec3f(-1, 0, 0));
+            if (mJumpAllowed == true && GetLinearVelocity().LengthSquared() < 400)
+            {
+                ApplyLinearImpulse(CVec2f(-1.0, 0), GetMassCenter());
+            }
             break;
 
         case CPlayerEvent::PlayerActionMoveRight:
-            move(CVec3f(1, 0, 0));
+            if (mJumpAllowed == true && GetLinearVelocity().LengthSquared() < 400)
+            {
+                ApplyLinearImpulse(CVec2f(1.0, 0), GetMassCenter());
+            }
             break;
 
         case CPlayerEvent::PlayerActionMoveDeep:
-            move(CVec3f(0, 0, -5));
+            move(CVec3f(0, 0, -0.1));
             break;
 
         case CPlayerEvent::PlayerActionMoveOut:
-            move(CVec3f(0, 0, 5));
+            move(CVec3f(0, 0, 0.1));
             break;
     }
 }

@@ -25,6 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "test5.h"
 
 #include "../debugdrawsystem/camera.h"
+#include "../scene/player.h"
 
 namespace drash
 {
@@ -46,6 +47,11 @@ bool CTest5::Init()
     SetupShaders();
     SetupLights();
 
+    if (GetPlayersSystem().EnumPlayers() != 0)
+    {
+        mOldPlayerPos = GetPlayersSystem().GetPlayers()[0]->GetPos().Get();
+    }
+
     return true;
 }
 
@@ -61,6 +67,29 @@ void CTest5::Step(double _dt)
     }
 
     mPointLight.mPosition.mX = -50 + 200 * sin(mAngle);
+
+    CVec2f dir(GetPlayersSystem().GetPlayers()[0]->GetPos().Get().mX - mOldPlayerPos.mX,
+               mOldPlayerPos.mZ - GetPlayersSystem().GetPlayers()[0]->GetPos().Get().mZ);
+
+    if (dir.Length() < 0.00001)
+    {
+        mPlayerAngle *= 0.99;
+    }
+    else
+    {
+        dir.Normalize();
+
+        mPlayerAngle = acos(dir.mX);
+
+        if (dir.mY < 0.0f)
+        {
+            mPlayerAngle *= -1.0f;
+        }
+
+        mOldPlayerPos = GetPlayersSystem().GetPlayers()[0]->GetPos().Get();
+
+        LOG_ERR(mPlayerAngle);
+    }
 }
 
 void CTest5::Render()
@@ -162,35 +191,38 @@ void CTest5::Render()
     }
     if (mMesh4 != nullptr)
     {
-        CMatrix4f r;
-        MatrixRotationY(r, -mAngle);
-
-        CMatrix4f s;
-        MatrixScale(s, CVec3f(1));
-
-        CMatrix4f rot;
-        MatrixMultiply(r, s, rot);
-
-        CMatrix4f transl;
-        MatrixTranslation(transl, CVec3f(200, 30, 0));
-
-        CMatrix4f model;
-        MatrixMultiply(transl, rot, model);
-
-        CMatrix4f model_view;
-        MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
-
-        for (unsigned int i = 0; i < 6; i++)
+        if (GetPlayersSystem().EnumPlayers() != 0)
         {
-            GetRenderer().RenderMesh(mMesh4,
-                                     i,
-                                     mTex1,
-                                     mShaderProgram2,
-                                     model,
-                                     GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(),
-                                     model_view,
-                                     GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix(),
-                                     &mPointLight);
+            CMatrix4f r;
+            MatrixRotationY(r, M_PI * 0.5 + mPlayerAngle);
+
+            CMatrix4f s;
+            MatrixScale(s, CVec3f(1));
+
+            CMatrix4f rot;
+            MatrixMultiply(r, s, rot);
+
+            CMatrix4f transl;
+            MatrixTranslation(transl, GetPlayersSystem().GetPlayers()[0]->GetPos().Get() - CVec3f(0, 1, 0));
+
+            CMatrix4f model;
+            MatrixMultiply(transl, rot, model);
+
+            CMatrix4f model_view;
+            MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
+
+            for (unsigned int i = 0; i < 6; i++)
+            {
+                GetRenderer().RenderMesh(mMesh4,
+                                         i,
+                                         mTex1,
+                                         mShaderProgram2,
+                                         model,
+                                         GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(),
+                                         model_view,
+                                         GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix(),
+                                         &mPointLight);
+            }
         }
     }
 

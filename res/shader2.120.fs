@@ -21,5 +21,5 @@ void main(void)
 
 	float diffuseKoeff = clamp(dot(lightDir, transformedNormal), 0, 1);
 
-	gl_FragColor = vec4(diffuseColor.xyz * (diffuseKoeff + gAmbientKoeff), 1);
+	gl_FragColor = vec4(diffuseColor.xyz * (diffuseKoeff + gAmbientKoeff), diffuseColor.w);
 }
