@@ -78,6 +78,7 @@ void CTest5::Render()
                                  0,
                                  mTex6,
                                  mShaderProgram1,
+                                 model,
                                  model_view,
                                  GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix());
     }
@@ -106,6 +107,7 @@ void CTest5::Render()
                                  0,
                                  mTex2,
                                  mShaderProgram1,
+                                 model,
                                  model_view,
                                  GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix());
     }
@@ -134,6 +136,7 @@ void CTest5::Render()
                                      i,
                                      texts[i],
                                      mShaderProgram1,
+                                     model,
                                      model_view,
                                      GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix());
         }
@@ -164,6 +167,7 @@ void CTest5::Render()
                                      i,
                                      mTex1,
                                      mShaderProgram1,
+                                     model,
                                      model_view,
                                      GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix());
         }
