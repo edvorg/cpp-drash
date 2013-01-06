@@ -49,9 +49,10 @@ public:
     CAnimator(CAnimator &&_src);
     CAnimator(T &_value_ref);
 
-    inline CAnimator &Set(const T &_src);
-    inline CAnimator &Set(T &&_src);
+    inline CAnimator &operator =(const T &_src);
+    inline CAnimator &operator =(T &&_src);
     void SetTarget(const T &_target, double _time, const AnimatorBehavior &_behavior);
+    inline void RemoveTarget();
 
     inline operator T &() const;
     inline const T &GetTarget() const;
@@ -67,6 +68,8 @@ private:
     double mTime = 0;
     double mTimeFull = 0;
     bool mTargetSet = false;
+
+    bool mValueUpdated = false;
 
     AnimatorBehavior mBehavior;
 };
@@ -84,17 +87,23 @@ CAnimator<T>::CAnimator(T &_value_ref):
 }
 
 template<class T>
-inline CAnimator<T> &CAnimator<T>::Set(const T &_src)
+inline CAnimator<T> &CAnimator<T>::operator =(const T &_src)
 {
     mValue = _src;
     mTargetSet = false;
+    mValueUpdated = true;
+
+    return *this;
 }
 
 template<class T>
-inline CAnimator<T> &CAnimator<T>::Set(T &&_src)
+inline CAnimator<T> &CAnimator<T>::operator =(T &&_src)
 {
     mValue = std::move(_src);
     mTargetSet = false;
+    mValueUpdated = true;
+
+    return *this;
 }
 
 template<class T>
@@ -106,6 +115,12 @@ void CAnimator<T>::SetTarget(const T &_target, double _time, const AnimatorBehav
     mTimeFull = _time;
     mBehavior = _behavior;
     mTargetSet = true;
+}
+
+template<class T>
+void CAnimator<T>::RemoveTarget()
+{
+    mTargetSet = false;
 }
 
 template<class T>
@@ -165,8 +180,15 @@ bool CAnimator<T>::Step(double _dt)
 
         return true;
     }
-
-    return false;
+    else if (mValueUpdated == true)
+	{
+        mValueUpdated = false;
+        return true;
+	}
+    else
+    {
+        return false;
+    }
 }
 
 } // namespace drash

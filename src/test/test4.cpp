@@ -74,11 +74,12 @@ bool CTest4::Init()
         LOG_INFO(_value);
     });
 
-    LOG_INFO("value is "<<mValueAnimator);
+    LOG_INFO("value is "<<mValueAnimator1);
     mValue = 33;
-    LOG_INFO("value is "<<mValueAnimator);
+    LOG_INFO("value is "<<mValueAnimator1);
 
-    mValueAnimator.SetTarget(100, 1.0f, AnimatorBehavior::Bounce);
+    mValueAnimator1 = 50;
+    mValueAnimator2.SetTarget(100, 2.0, AnimatorBehavior::Bounce);
 
     return true;
 }
@@ -87,9 +88,15 @@ void CTest4::Step(double _dt)
 {
     CApp::Step(_dt);
 
-    if (mValueAnimator.Step(_dt))
+    if (mValueAnimator1.Step(_dt))
     {
-        mTestSlider1.SetPercent(mValueAnimator / 100.0);
+        mTestSlider1.SetPercent(mValueAnimator1 / 100.0);
+        LOG_ERR("value updated (animator 1): "<<mValueAnimator1);
+    }
+    else if (mValueAnimator2.Step(_dt))
+    {
+        mTestSlider1.SetPercent(mValueAnimator2 / 100.0);
+        LOG_ERR("value updated (animator 2): "<<mValueAnimator2);
     }
 }
 

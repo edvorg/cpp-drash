@@ -49,7 +49,8 @@ private:
     ui::CUISlider mTestSlider1;
 
     float mValue = 77;
-    CAnimator<float> mValueAnimator = mValue;
+    CAnimator<float> mValueAnimator1 = mValue;
+    CAnimator<float> mValueAnimator2 = mValue;
 };
 
 } // namespace test
