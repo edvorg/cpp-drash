@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define DRASH_TEST_TEST5_H
 
 #include "test3.h"
+#include "../greng/pointlight.h"
 
 namespace drash
 {
@@ -38,6 +39,7 @@ class CTest5 : public CTest3
 public:
     CTest5() = default;
     virtual bool Init() override;
+    virtual void Step(double _dt) override;
     virtual void Render() override;
 
 protected:
@@ -47,6 +49,7 @@ private:
     void SetupTextures();
     void SetupShaders();
     void SetupProcessors();
+    void SetupLights();
 
     greng::CMesh *mMesh1 = nullptr;
     greng::CMesh *mMesh2 = nullptr;
@@ -62,6 +65,12 @@ private:
     greng::CVertexShader *mVertexShader1 = nullptr;
     greng::CFragmentShader *mFragmentShader1 = nullptr;
     greng::CShaderProgram *mShaderProgram1 = nullptr;
+    greng::CVertexShader *mVertexShader2 = nullptr;
+    greng::CFragmentShader *mFragmentShader2 = nullptr;
+    greng::CShaderProgram *mShaderProgram2 = nullptr;
+    greng::CPointLight mPointLight;
+
+    double mAngle = 0.0;
 };
 
 } // namespace test

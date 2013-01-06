@@ -22,41 +22,22 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#ifndef GRENG_MESHMANAGER_H
-#define GRENG_MESHMANAGER_H
+#ifndef GRENG_POINTLIGHT_H
+#define GRENG_POINTLIGHT_H
 
-#include "../misc/objectfactory.h"
+#include "../misc/vec3.h"
 
 namespace greng
 {
 
-class CMesh;
-
-class CMeshManager final
+class CPointLight
 {
 public:
-    constexpr static unsigned int mMeshesCountLimit = 1024;
+    CPointLight() = default;
 
-    CMeshManager();
-    CMeshManager(const CMeshManager &) = delete;
-    CMeshManager(CMeshManager &&) = delete;
-    CMeshManager &operator =(const CMeshManager &) = delete;
-    CMeshManager &operator =(CMeshManager &&) = delete;
-    ~CMeshManager();
-
-    CMesh *CreateMesh();
-    CMesh *CreateMeshFromObjFile(const char *_path);
-    CMesh *CreateMeshQuad();
-    CMesh *CreateMeshCube();
-    bool DestroyMesh(CMesh *_mesh);
-
-    void ComputeNormals(CMesh *_mesh);
-
-protected:
-private:
-    drash::CObjectFactory<CMesh> mMeshFactory;
+    drash::CVec3f mPosition = 0;
 };
 
 } // namespace greng
 
-#endif // GRENG_MESHMANAGER_H
+#endif // GRENG_POINTLIGHT_H

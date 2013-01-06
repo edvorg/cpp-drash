@@ -129,12 +129,16 @@ CMesh *CMeshManager::CreateMeshQuad()
 
     v1.mPos.Set(-1, -1, 0);
     v1.mUV.Set(0, 0);
+    v1.mNormal.Set(0, 0, 1);
     v2.mPos.Set(-1, 1, 0);
     v2.mUV.Set(0, 1);
+    v2.mNormal.Set(0, 0, 1);
     v3.mPos.Set(1, 1, 0);
     v3.mUV.Set(1, 1);
+    v3.mNormal.Set(0, 0, 1);
     v4.mPos.Set(1, -1, 0);
     v4.mUV.Set(1, 0);
+    v4.mNormal.Set(0, 0, 1);
 
     res->mVertices.push_back(v1);
     res->mVertices.push_back(v2);
@@ -202,11 +206,13 @@ CMesh *CMeshManager::CreateMeshCube()
         drash::CVec4f p2(-1,  1, 1, 1);
         drash::CVec4f p3( 1,  1, 1, 1);
         drash::CVec4f p4( 1, -1, 1, 1);
+        drash::CVec4f n1(0, 0, 1, 1);
 
         drash::CVec4f rp1 = p1;
         drash::CVec4f rp2 = p2;
         drash::CVec4f rp3 = p3;
         drash::CVec4f rp4 = p4;
+        drash::CVec4f rn1 = n1;
 
         drash::CMatrix4f m;
         if (drash::math::Abs(angles[i].mX) > 0.0001)
@@ -216,6 +222,7 @@ CMesh *CMeshManager::CreateMeshCube()
             drash::MatrixMultiply(m, p2, rp2);
             drash::MatrixMultiply(m, p3, rp3);
             drash::MatrixMultiply(m, p4, rp4);
+            drash::MatrixMultiply(m, n1, rn1);
         }
         else if (drash::math::Abs(angles[i].mY) > 0.0001)
         {
@@ -224,12 +231,17 @@ CMesh *CMeshManager::CreateMeshCube()
             drash::MatrixMultiply(m, p2, rp2);
             drash::MatrixMultiply(m, p3, rp3);
             drash::MatrixMultiply(m, p4, rp4);
+            drash::MatrixMultiply(m, n1, rn1);
         }
 
         v1.mPos = rp1;
+        v1.mNormal = rn1;
         v2.mPos = rp2;
+        v2.mNormal = rn1;
         v3.mPos = rp3;
+        v3.mNormal = rn1;
         v4.mPos = rp4;
+        v4.mNormal = rn1;
 
         res->mVertices.push_back(v1);
         res->mVertices.push_back(v2);
@@ -265,6 +277,33 @@ bool CMeshManager::DestroyMesh(CMesh *_mesh)
     mMeshFactory.DestroyObject(_mesh);
 
     return true;
+}
+
+void CMeshManager::ComputeNormals(CMesh *_mesh)
+{
+    unsigned int triangles_count = _mesh->mIndices.size() / 3;
+
+    for (unsigned int i = 0; i < triangles_count; i++)
+    {
+        drash::CVec3f v1 = _mesh->mVertices[_mesh->mIndices[i * 3]].mPos;
+        drash::CVec3f v2 = _mesh->mVertices[_mesh->mIndices[i * 3 + 1]].mPos;
+        drash::CVec3f v3 = _mesh->mVertices[_mesh->mIndices[i * 3 + 2]].mPos;
+
+        v2 -= v1;
+        v3 -= v1;
+
+        drash::Vec3Cross(v2, v3, v1);
+
+        v1.Normalize();
+
+        _mesh->mVertices[_mesh->mIndices[i * 3]].mNormal = v1;
+        _mesh->mVertices[_mesh->mIndices[i * 3 + 1]].mNormal = v1;
+        _mesh->mVertices[_mesh->mIndices[i * 3 + 2]].mNormal = v1;
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, _mesh->mVertexBufferId);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * _mesh->mVertices.size(), &_mesh->mVertices[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 } // namespace greng

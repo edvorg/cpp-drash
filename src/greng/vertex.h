@@ -38,6 +38,7 @@ public:
 
     drash::CVec3f mPos = drash::CVec3f(0);
     drash::CVec2f mUV = drash::CVec2f(0);
+    drash::CVec3f mNormal = drash::CVec3f(0);
     drash::CColor4f mColor = drash::CColor4f(1);
 
 protected:

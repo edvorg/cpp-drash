@@ -38,6 +38,7 @@ namespace greng
 class CMesh;
 class CTexture;
 class CShaderProgram;
+class CPointLight;
 
 class CRenderer
 {
@@ -60,8 +61,11 @@ public:
                     unsigned int _submesh,
                     const CTexture *_texture,
                     const CShaderProgram *_program,
+                    const drash::CMatrix4f &_model,
+                    const drash::CMatrix4f &_view,
                     const drash::CMatrix4f &_model_view,
-                    const drash::CMatrix4f &_proj_matrix);
+                    const drash::CMatrix4f &_proj_matrix,
+                    const CPointLight *_light);
 };
 
 } // namespace greng
