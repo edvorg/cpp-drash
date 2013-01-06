@@ -3,10 +3,11 @@
 uniform mat4 gModelViewMatrix;
 uniform mat4 gProjMatrix;
 
-varying vec2 texCoords;
+varying vec3 fragNormal;
 
 void main(void)
 {
 	gl_Position = gProjMatrix * gModelViewMatrix * gl_Vertex;
-	texCoords = gl_MultiTexCoord0.xy;
+	fragNormal = (gModelViewMatrix * vec4(gl_Normal, 0)).xyz;
+	fragNormal = normalize(fragNormal);
 }

@@ -1,10 +1,8 @@
 #version 120
 
-uniform sampler2D gTex1;
-
-varying vec2 texCoords;
+varying vec3 fragNormal;
 
 void main(void)
 {
-	gl_FragColor = texture2D(gTex1, texCoords);
+	gl_FragColor = vec4(0.5 + (fragNormal * 0.5), 1);
 }

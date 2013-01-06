@@ -105,6 +105,7 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
                            const CTexture *_texture,
                            const CShaderProgram *_program,
                            const drash::CMatrix4f &_model,
+                           const drash::CMatrix4f &_view,
                            const drash::CMatrix4f &_model_view,
                            const drash::CMatrix4f &_proj_matrix)
 {
@@ -149,6 +150,7 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
     glUseProgram(_program->mProgramId);
 
     int mloc = glGetUniformLocation(_program->mProgramId, "gModelMatrix");
+    int vloc = glGetUniformLocation(_program->mProgramId, "gViewMatrix");
     int mvloc = glGetUniformLocation(_program->mProgramId, "gModelViewMatrix");
     int ploc = glGetUniformLocation(_program->mProgramId, "gProjMatrix");
     int t1loc = glGetUniformLocation(_program->mProgramId, "gTex1");
@@ -160,6 +162,15 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
     else
     {
         LOG_ERR("CRenderer::RenderMesh(): Unable to find gModelMatrix attribute");
+    }
+
+    if (vloc != -1)
+    {
+        glUniformMatrix4fv(vloc, 1, GL_TRUE, _view.mData);
+    }
+    else
+    {
+        LOG_ERR("CRenderer::RenderMesh(): Unable to find gViewMatrix attribute");
     }
 
     if (mvloc != -1)

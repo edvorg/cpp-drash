@@ -279,4 +279,31 @@ bool CMeshManager::DestroyMesh(CMesh *_mesh)
     return true;
 }
 
+void CMeshManager::ComputeNormals(CMesh *_mesh)
+{
+    unsigned int triangles_count = _mesh->mIndices.size() / 3;
+
+    for (unsigned int i = 0; i < triangles_count; i++)
+    {
+        drash::CVec3f v1 = _mesh->mVertices[_mesh->mIndices[i * 3]].mPos;
+        drash::CVec3f v2 = _mesh->mVertices[_mesh->mIndices[i * 3 + 1]].mPos;
+        drash::CVec3f v3 = _mesh->mVertices[_mesh->mIndices[i * 3 + 2]].mPos;
+
+        v2 -= v1;
+        v3 -= v1;
+
+        drash::Vec3Cross(v2, v3, v1);
+
+        v1.Normalize();
+
+        _mesh->mVertices[_mesh->mIndices[i * 3]].mNormal = v1;
+        _mesh->mVertices[_mesh->mIndices[i * 3 + 1]].mNormal = v1;
+        _mesh->mVertices[_mesh->mIndices[i * 3 + 2]].mNormal = v1;
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, _mesh->mVertexBufferId);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * _mesh->mVertices.size(), &_mesh->mVertices[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 } // namespace greng

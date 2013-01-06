@@ -79,6 +79,7 @@ void CTest5::Render()
                                  mTex6,
                                  mShaderProgram1,
                                  model,
+                                 GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(),
                                  model_view,
                                  GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix());
     }
@@ -108,6 +109,7 @@ void CTest5::Render()
                                  mTex2,
                                  mShaderProgram1,
                                  model,
+                                 GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(),
                                  model_view,
                                  GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix());
     }
@@ -137,6 +139,7 @@ void CTest5::Render()
                                      texts[i],
                                      mShaderProgram1,
                                      model,
+                                     GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(),
                                      model_view,
                                      GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix());
         }
@@ -168,6 +171,7 @@ void CTest5::Render()
                                      mTex1,
                                      mShaderProgram1,
                                      model,
+                                     GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(),
                                      model_view,
                                      GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix());
         }
@@ -191,6 +195,8 @@ void CTest5::SetupMeshes()
     mMesh2 = GetMeshManager().CreateMeshQuad();
     mMesh3 = GetMeshManager().CreateMeshFromObjFile("mt.obj");
     mMesh4 = GetMeshManager().CreateMeshFromObjFile("player.obj");
+
+    GetMeshManager().ComputeNormals(mMesh3);
 
     CMatrix4f s;
     MatrixScale(s, CVec3f(0.1));

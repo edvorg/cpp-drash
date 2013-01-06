@@ -61,6 +61,7 @@ public:
                     const CTexture *_texture,
                     const CShaderProgram *_program,
                     const drash::CMatrix4f &_model,
+                    const drash::CMatrix4f &_view,
                     const drash::CMatrix4f &_model_view,
                     const drash::CMatrix4f &_proj_matrix);
 };

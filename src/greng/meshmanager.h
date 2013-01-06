@@ -50,6 +50,8 @@ public:
     CMesh *CreateMeshCube();
     bool DestroyMesh(CMesh *_mesh);
 
+    void ComputeNormals(CMesh *_mesh);
+
 protected:
 private:
     drash::CObjectFactory<CMesh> mMeshFactory;
