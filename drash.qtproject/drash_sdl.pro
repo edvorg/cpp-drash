@@ -127,5 +127,6 @@ HEADERS += \
     ../src/greng/fragmentshader.h \
     ../src/greng/fragmentshadermanager.h \
     ../src/greng/shaderprogram.h \
-    ../src/greng/shaderprogrammanager.h
+    ../src/greng/shaderprogrammanager.h \
+    ../src/greng/pointlight.h
 

@@ -109,7 +109,7 @@ CFragmentShader *CFragmentShaderManager::CreateShaderFromSource(const char *_sou
 
         glGetShaderInfoLog(res->mVertexShaderId, buffer_size - 1, &length, buffer);
 
-        LOG_ERR("CFragmentShaderManager::CreateShaderDummy(): glCompileShader failed");
+        LOG_ERR("CFragmentShaderManager::CreateShaderFromSource(): glCompileShader failed");
         LOG_ERR("Message: "<<buffer);
 
         DestroyShader(res);

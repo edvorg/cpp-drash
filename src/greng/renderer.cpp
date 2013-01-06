@@ -28,6 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "texture.h"
 #include "../misc/matrix4.h"
 #include "shaderprogram.h"
+#include "pointlight.h"
 
 namespace greng
 {
@@ -107,7 +108,8 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
                            const drash::CMatrix4f &_model,
                            const drash::CMatrix4f &_view,
                            const drash::CMatrix4f &_model_view,
-                           const drash::CMatrix4f &_proj_matrix)
+                           const drash::CMatrix4f &_proj_matrix,
+                           const CPointLight *_light)
 {
     if (_submesh >= _mesh->mMaterialOffsets.size() - 1)
     {
@@ -154,6 +156,7 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
     int mvloc = glGetUniformLocation(_program->mProgramId, "gModelViewMatrix");
     int ploc = glGetUniformLocation(_program->mProgramId, "gProjMatrix");
     int t1loc = glGetUniformLocation(_program->mProgramId, "gTex1");
+    int l1ploc = glGetUniformLocation(_program->mProgramId, "gLight1Position");
 
     if (mloc != -1)
     {
@@ -198,6 +201,15 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
     else
     {
         LOG_ERR("CRenderer::RenderMesh(): Unable to find gTex1 attribute");
+    }
+
+    if (l1ploc != -1)
+    {
+        glUniform3fv(l1ploc, 1, reinterpret_cast<const GLfloat*>(&_light->mPosition));
+    }
+    else
+    {
+        LOG_ERR("CRenderer::RenderMesh(): Unable to find gLight1Position attribute");
     }
 
     glDrawElements(GL_TRIANGLES,

@@ -117,7 +117,7 @@ CVertexShader *CVertexShaderManager::CreateShaderFromSource(const char *_source)
 
         glGetShaderInfoLog(res->mVertexShaderId, buffer_size - 1, &length, buffer);
 
-        LOG_ERR("CVertexShaderManager::CreateShaderDummy(): glCompileShader failed");
+        LOG_ERR("CVertexShaderManager::CreateShaderFromSource(): glCompileShader failed");
         LOG_ERR("Message: "<<buffer);
 
         DestroyShader(res);

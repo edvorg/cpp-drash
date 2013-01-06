@@ -44,20 +44,33 @@ bool CTest5::Init()
     SetupMeshes();
     SetupTextures();
     SetupShaders();
+    SetupLights();
 
     return true;
+}
+
+void CTest5::Step(double _dt)
+{
+    CTest3::Step(_dt);
+
+    mAngle += 0.5 * _dt;
+
+    while (mAngle > M_PI * 2.0)
+    {
+        mAngle -= M_PI * 2.0;
+    }
+
+    mPointLight.mPosition.mX = -50 + 200 * sin(mAngle);
 }
 
 void CTest5::Render()
 {
     CTest3::Render();
 
-    static float angle = 0;
-
     if (mMesh1 != nullptr)
     {
         CMatrix4f r;
-        MatrixRotationZ(r, angle);
+        MatrixRotationZ(r, mAngle);
 
         CMatrix4f s;
         MatrixScale(s, CVec3f(10));
@@ -77,17 +90,18 @@ void CTest5::Render()
         GetRenderer().RenderMesh(mMesh1,
                                  0,
                                  mTex6,
-                                 mShaderProgram1,
+                                 mShaderProgram2,
                                  model,
                                  GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(),
                                  model_view,
-                                 GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix());
+                                 GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix(),
+                                 &mPointLight);
     }
 
     if (mMesh2 != nullptr)
     {
         CMatrix4f r;
-        MatrixRotationZ(r, -angle);
+        MatrixRotationZ(r, -mAngle);
 
         CMatrix4f s;
         MatrixScale(s, CVec3f(10));
@@ -107,17 +121,18 @@ void CTest5::Render()
         GetRenderer().RenderMesh(mMesh2,
                                  0,
                                  mTex2,
-                                 mShaderProgram1,
+                                 mShaderProgram2,
                                  model,
                                  GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(),
                                  model_view,
-                                 GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix());
+                                 GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix(),
+                                 &mPointLight);
     }
 
     if (mMesh3 != nullptr)
     {
         CMatrix4f rangle;
-        MatrixRotationY(rangle, angle);
+        MatrixRotationY(rangle, mAngle);
 
         CMatrix4f model;
         MatrixMultiply(rangle, mMesh3ConstMatrix, model);
@@ -137,17 +152,18 @@ void CTest5::Render()
             GetRenderer().RenderMesh(mMesh3,
                                      i,
                                      texts[i],
-                                     mShaderProgram1,
+                                     mShaderProgram2,
                                      model,
                                      GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(),
                                      model_view,
-                                     GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix());
+                                     GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix(),
+                                     &mPointLight);
         }
     }
     if (mMesh4 != nullptr)
     {
         CMatrix4f r;
-        MatrixRotationY(r, -angle);
+        MatrixRotationY(r, -mAngle);
 
         CMatrix4f s;
         MatrixScale(s, CVec3f(1));
@@ -169,15 +185,16 @@ void CTest5::Render()
             GetRenderer().RenderMesh(mMesh4,
                                      i,
                                      mTex1,
-                                     mShaderProgram1,
+                                     mShaderProgram2,
                                      model,
                                      GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(),
                                      model_view,
-                                     GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix());
+                                     GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix(),
+                                     &mPointLight);
         }
     }
 
-    angle += 1.0 * GetCurrentTimeDelta();
+    GetDebugDrawSystem().DrawPoint(mPointLight.mPosition, 10, CColor4f(1, 1, 1, 1), false);
 }
 
 void CTest5::SetupCam()
@@ -197,6 +214,7 @@ void CTest5::SetupMeshes()
     mMesh4 = GetMeshManager().CreateMeshFromObjFile("player.obj");
 
     GetMeshManager().ComputeNormals(mMesh3);
+    GetMeshManager().ComputeNormals(mMesh4);
 
     CMatrix4f s;
     MatrixScale(s, CVec3f(0.1));
@@ -228,10 +246,18 @@ void CTest5::SetupShaders()
     mVertexShader1 = GetVertexShaderManager().CreateShaderFromFile("shader1.120.vs");
     mFragmentShader1 = GetFragmentShaderManager().CreateShaderFromFile("shader1.120.fs");
     mShaderProgram1 = GetShaderProgramManager().CreateProgram(mVertexShader1, mFragmentShader1);
+    mVertexShader2 = GetVertexShaderManager().CreateShaderFromFile("shader2.120.vs");
+    mFragmentShader2 = GetFragmentShaderManager().CreateShaderFromFile("shader2.120.fs");
+    mShaderProgram2 = GetShaderProgramManager().CreateProgram(mVertexShader2, mFragmentShader2);
 }
 
 void CTest5::SetupProcessors()
 {
+}
+
+void CTest5::SetupLights()
+{
+    mPointLight.mPosition.Set(-50, 100, 0);
 }
 
 } // namespace test
