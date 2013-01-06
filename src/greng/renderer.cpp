@@ -64,6 +64,7 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
 
+    glActiveTexture(GL_TEXTURE0);
     if (_texture == nullptr)
     {
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -142,11 +143,13 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
 
     int mvloc = glGetUniformLocation(_program->mProgramId, "gModelViewMatrix");
     int ploc = glGetUniformLocation(_program->mProgramId, "gProjMatrix");
+    int t1loc = glGetUniformLocation(_program->mProgramId, "gTex1");
 
-    if (mvloc != -1 && ploc != -1)
+    if (mvloc != -1 && ploc != -1 && t1loc != -1)
     {
         glUniformMatrix4fv(mvloc, 1, GL_TRUE, _model_view.mData);
         glUniformMatrix4fv(ploc, 1, GL_TRUE, _proj_matrix.mData);
+        glUniform1i(t1loc, 0);
 
         glDrawElements(GL_TRIANGLES,
                        _mesh->mMaterialOffsets[_submesh+1] - _mesh->mMaterialOffsets[_submesh],

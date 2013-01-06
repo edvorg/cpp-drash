@@ -103,7 +103,7 @@ CFragmentShader *CFragmentShaderManager::CreateShaderFromSource(const char *_sou
 
     if (status == GL_FALSE)
     {
-        const int buffer_size = 128;
+        const int buffer_size = 2048;
         char buffer[buffer_size];
         int length = 0;
 
