@@ -130,5 +130,6 @@ HEADERS += \
     ../src/greng/shaderprogram.h \
     ../src/greng/shaderprogrammanager.h \
     ../src/greng/pointlight.h \
-    ../src/test/test6.h
+    ../src/test/test6.h \
+    ../src/misc/animator.h
 

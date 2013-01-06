@@ -146,7 +146,8 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/greng/fragmentshadermanager.h \
     ../src/greng/shaderprogram.h \
     ../src/greng/shaderprogrammanager.h \
-    ../src/test/test6.h
+    ../src/test/test6.h \
+    ../src/misc/animator.h
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui
