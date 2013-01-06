@@ -54,7 +54,6 @@ private:
     greng::CMesh *mMesh1 = nullptr;
     greng::CMesh *mMesh2 = nullptr;
     greng::CMesh *mMesh3 = nullptr;
-    greng::CMesh *mMesh4 = nullptr;
     CMatrix4f mMesh3ConstMatrix;
     greng::CTexture *mTex1 = nullptr;
     greng::CTexture *mTex2 = nullptr;

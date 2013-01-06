@@ -22,14 +22,11 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "test.h"
+#ifndef DRASH_TEST_TEST6_H
+#define DRASH_TEST_TEST6_H
 
-#include "test1.h"
-#include "test2.h"
-#include "test3.h"
-#include "test4.h"
-#include "test5.h"
-#include "test6.h"
+#include "../app/app.h"
+#include "../greng/pointlight.h"
 
 namespace drash
 {
@@ -37,17 +34,36 @@ namespace drash
 namespace test
 {
 
-CApp *StartApp( const char *_name )
+class CTest6 : public CApp
 {
-    if ( strcmp(_name, "test1" ) == 0 ) return new CTest1();
-    if ( strcmp(_name, "test2") == 0) return new CTest2();
-    if ( strcmp(_name, "test3") == 0) return new CTest3();
-    if ( strcmp(_name, "test4") == 0) return new drash::test::CTest4;
-    if ( strcmp(_name, "test5") == 0) return new drash::test::CTest5;
-    if ( strcmp(_name, "test6") == 0) return new drash::test::CTest6;
-    return nullptr;
-}
+public:
+    CTest6() = default;
+
+protected:
+    bool Init() override;
+    void Step(double _dt) override;
+    void Render() override;
+
+private:
+    bool InitPlayer();
+    bool InitLight();
+    bool InitProcessors();
+
+    unsigned int mPlayer1Id = 0;
+    greng::CMesh *mPlayer1Mesh = nullptr;
+    greng::CTexture *mPlayer1Texture = nullptr;
+    greng::CVertexShader *mPlayer1VertexShader = nullptr;
+    greng::CFragmentShader *mPlayer1FragmentShader = nullptr;
+    greng::CShaderProgram * mPlayer1ShaderProgram = nullptr;
+    float mPlayer1Angle = 0.0f;
+    CVec3f mPlayer1OldPos;
+
+    greng::CPointLight mPointLight1;
+
+    float mAngle = 0;
+};
 
 } // namespace test
+} // namespace drash
 
-}// namespace drash
+#endif // DRASH_TEST_TEST6_H

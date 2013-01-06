@@ -25,6 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "test5.h"
 
 #include "../debugdrawsystem/camera.h"
+#include "../scene/player.h"
 
 namespace drash
 {
@@ -160,39 +161,6 @@ void CTest5::Render()
                                      &mPointLight);
         }
     }
-    if (mMesh4 != nullptr)
-    {
-        CMatrix4f r;
-        MatrixRotationY(r, -mAngle);
-
-        CMatrix4f s;
-        MatrixScale(s, CVec3f(1));
-
-        CMatrix4f rot;
-        MatrixMultiply(r, s, rot);
-
-        CMatrix4f transl;
-        MatrixTranslation(transl, CVec3f(200, 30, 0));
-
-        CMatrix4f model;
-        MatrixMultiply(transl, rot, model);
-
-        CMatrix4f model_view;
-        MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
-
-        for (unsigned int i = 0; i < 6; i++)
-        {
-            GetRenderer().RenderMesh(mMesh4,
-                                     i,
-                                     mTex1,
-                                     mShaderProgram2,
-                                     model,
-                                     GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(),
-                                     model_view,
-                                     GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix(),
-                                     &mPointLight);
-        }
-    }
 
     GetDebugDrawSystem().DrawPoint(mPointLight.mPosition, 10, CColor4f(1, 1, 1, 1), false);
 }
@@ -211,10 +179,8 @@ void CTest5::SetupMeshes()
     mMesh1 = GetMeshManager().CreateMeshCube();
     mMesh2 = GetMeshManager().CreateMeshQuad();
     mMesh3 = GetMeshManager().CreateMeshFromObjFile("mt.obj");
-    mMesh4 = GetMeshManager().CreateMeshFromObjFile("player.obj");
 
     GetMeshManager().ComputeNormals(mMesh3);
-    GetMeshManager().ComputeNormals(mMesh4);
 
     CMatrix4f s;
     MatrixScale(s, CVec3f(0.1));

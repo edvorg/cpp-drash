@@ -79,7 +79,8 @@ SOURCES += ../src/qt/main.cpp\
     ../src/greng/texturemanager.cpp \
     ../src/greng/vertexshadermanager.cpp \
     ../src/greng/fragmentshadermanager.cpp \
-    ../src/greng/shaderprogrammanager.cpp
+    ../src/greng/shaderprogrammanager.cpp \
+    ../src/test/test6.cpp
 
 HEADERS  += ../src/qt/gamewindow.h \
     ../src/qt/scenewidget.h \
@@ -144,7 +145,8 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/greng/fragmentshader.h \
     ../src/greng/fragmentshadermanager.h \
     ../src/greng/shaderprogram.h \
-    ../src/greng/shaderprogrammanager.h
+    ../src/greng/shaderprogrammanager.h \
+    ../src/test/test6.h
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui
