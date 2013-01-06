@@ -25,14 +25,149 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_ANIMATOR_H
 #define DRASH_ANIMATOR_H
 
+#include "math.h"
+
 namespace drash
 {
 
+enum class AnimatorBehavior : unsigned int
+{
+    Single = 0,
+    Loop = 1,
+    Bounce = 2
+};
+
+template<class T>
 class CAnimator
 {
 public:
-    CAnimator() = default;
+    CAnimator() = delete;
+    CAnimator(const CAnimator &_src) = delete;
+    CAnimator &operator =(const CAnimator &_src) = delete;
+    CAnimator &operator =(CAnimator &&_src) = delete;
+
+    CAnimator(CAnimator &&_src);
+    CAnimator(T &_value_ref);
+
+    inline CAnimator &Set(const T &_src);
+    inline CAnimator &Set(T &&_src);
+    void SetTarget(const T &_target, double _time, const AnimatorBehavior &_behavior);
+
+    inline operator T &() const;
+    inline const T &GetTarget() const;
+    inline bool IsTargetSet() const;
+
+    virtual bool Step(double _dt);
+
+private:
+    T& mValue;
+    T mFromValue;
+    T mTargetValue;
+
+    double mTime = 0;
+    double mTimeFull = 0;
+    bool mTargetSet = false;
+
+    AnimatorBehavior mBehavior;
 };
+
+template<class T>
+CAnimator<T>::CAnimator(CAnimator &&_src):
+    mValue(_src.mValue)
+{
+}
+
+template<class T>
+CAnimator<T>::CAnimator(T &_value_ref):
+    mValue(_value_ref)
+{
+}
+
+template<class T>
+inline CAnimator<T> &CAnimator<T>::Set(const T &_src)
+{
+    mValue = _src;
+    mTargetSet = false;
+}
+
+template<class T>
+inline CAnimator<T> &CAnimator<T>::Set(T &&_src)
+{
+    mValue = std::move(_src);
+    mTargetSet = false;
+}
+
+template<class T>
+void CAnimator<T>::SetTarget(const T &_target, double _time, const AnimatorBehavior &_behavior)
+{
+    mFromValue = mValue;
+    mTargetValue = _target;
+    mTime = 0;
+    mTimeFull = _time;
+    mBehavior = _behavior;
+    mTargetSet = true;
+}
+
+template<class T>
+inline CAnimator<T>::operator T &() const
+{
+    return mValue;
+}
+
+template<class T>
+inline const T &CAnimator<T>::GetTarget() const
+{
+    return mTargetSet == true ? mTargetValue : mValue;
+}
+
+template<class T>
+inline bool CAnimator<T>::IsTargetSet() const
+{
+    return mTargetSet;
+}
+
+template<class T>
+bool CAnimator<T>::Step(double _dt)
+{
+    if (mTargetSet == true)
+    {
+        mTime += _dt;
+
+        double k = drash::math::Min<float>(mTimeFull, mTime);
+
+        if (drash::math::Abs(mTimeFull - k) < 0.000001)
+        {
+            if (mBehavior == AnimatorBehavior::Single)
+            {
+                mValue = mTargetValue;
+                mTargetSet = false;
+            }
+            else if (mBehavior == AnimatorBehavior::Loop)
+            {
+                mValue = mFromValue;
+                mTime = 0;
+            }
+            else if (mBehavior == AnimatorBehavior::Bounce)
+            {
+                mValue = mTargetValue;
+                mTargetValue = mFromValue;
+                mFromValue = mValue;
+                mTime = 0;
+            }
+        }
+        else
+        {
+            mValue = mTargetValue;
+            mValue -= mFromValue;
+            mValue *= k / mTimeFull;
+            mValue += mFromValue;
+        }
+
+        return true;
+    }
+
+    return false;
+}
 
 } // namespace drash
 
