@@ -66,7 +66,8 @@ SOURCES += \
     ../src/greng/texturemanager.cpp \
     ../src/greng/vertexshadermanager.cpp \
     ../src/greng/fragmentshadermanager.cpp \
-    ../src/greng/shaderprogrammanager.cpp
+    ../src/greng/shaderprogrammanager.cpp \
+    ../src/test/test6.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -128,5 +129,6 @@ HEADERS += \
     ../src/greng/fragmentshadermanager.h \
     ../src/greng/shaderprogram.h \
     ../src/greng/shaderprogrammanager.h \
-    ../src/greng/pointlight.h
+    ../src/greng/pointlight.h \
+    ../src/test/test6.h
 

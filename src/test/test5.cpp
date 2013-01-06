@@ -47,11 +47,6 @@ bool CTest5::Init()
     SetupShaders();
     SetupLights();
 
-    if (GetPlayersSystem().EnumPlayers() != 0)
-    {
-        mOldPlayerPos = GetPlayersSystem().GetPlayers()[0]->GetPos().Get();
-    }
-
     return true;
 }
 
@@ -67,29 +62,6 @@ void CTest5::Step(double _dt)
     }
 
     mPointLight.mPosition.mX = -50 + 200 * sin(mAngle);
-
-    CVec2f dir(GetPlayersSystem().GetPlayers()[0]->GetPos().Get().mX - mOldPlayerPos.mX,
-               mOldPlayerPos.mZ - GetPlayersSystem().GetPlayers()[0]->GetPos().Get().mZ);
-
-    if (dir.Length() < 0.00001)
-    {
-        mPlayerAngle *= 0.99;
-    }
-    else
-    {
-        dir.Normalize();
-
-        mPlayerAngle = acos(dir.mX);
-
-        if (dir.mY < 0.0f)
-        {
-            mPlayerAngle *= -1.0f;
-        }
-
-        mOldPlayerPos = GetPlayersSystem().GetPlayers()[0]->GetPos().Get();
-
-        LOG_ERR(mPlayerAngle);
-    }
 }
 
 void CTest5::Render()
@@ -189,42 +161,6 @@ void CTest5::Render()
                                      &mPointLight);
         }
     }
-    if (mMesh4 != nullptr)
-    {
-        if (GetPlayersSystem().EnumPlayers() != 0)
-        {
-            CMatrix4f r;
-            MatrixRotationY(r, M_PI * 0.5 + mPlayerAngle);
-
-            CMatrix4f s;
-            MatrixScale(s, CVec3f(1));
-
-            CMatrix4f rot;
-            MatrixMultiply(r, s, rot);
-
-            CMatrix4f transl;
-            MatrixTranslation(transl, GetPlayersSystem().GetPlayers()[0]->GetPos().Get() - CVec3f(0, 1, 0));
-
-            CMatrix4f model;
-            MatrixMultiply(transl, rot, model);
-
-            CMatrix4f model_view;
-            MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
-
-            for (unsigned int i = 0; i < 6; i++)
-            {
-                GetRenderer().RenderMesh(mMesh4,
-                                         i,
-                                         mTex1,
-                                         mShaderProgram2,
-                                         model,
-                                         GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(),
-                                         model_view,
-                                         GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix(),
-                                         &mPointLight);
-            }
-        }
-    }
 
     GetDebugDrawSystem().DrawPoint(mPointLight.mPosition, 10, CColor4f(1, 1, 1, 1), false);
 }
@@ -243,10 +179,8 @@ void CTest5::SetupMeshes()
     mMesh1 = GetMeshManager().CreateMeshCube();
     mMesh2 = GetMeshManager().CreateMeshQuad();
     mMesh3 = GetMeshManager().CreateMeshFromObjFile("mt.obj");
-    mMesh4 = GetMeshManager().CreateMeshFromObjFile("player.obj");
 
     GetMeshManager().ComputeNormals(mMesh3);
-    GetMeshManager().ComputeNormals(mMesh4);
 
     CMatrix4f s;
     MatrixScale(s, CVec3f(0.1));
