@@ -25,7 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_TEST_TEST6_H
 #define DRASH_TEST_TEST6_H
 
-#include "../app/app.h"
+#include "test1.h"
 #include "../greng/pointlight.h"
 
 namespace drash
@@ -34,7 +34,7 @@ namespace drash
 namespace test
 {
 
-class CTest6 : public CApp
+class CTest6 : public CTest1
 {
 public:
     CTest6() = default;

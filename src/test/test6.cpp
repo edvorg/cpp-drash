@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../scene/figure.h"
 #include "../scene/player.h"
 #include "../debugdrawsystem/camera.h"
+#include "../scene/scene.h"
 
 namespace drash
 {
@@ -36,7 +37,7 @@ namespace test
 
 bool CTest6::Init()
 {
-    if (CApp::Init() == false)
+    if (CTest1::Init() == false)
     {
         return false;
     }
@@ -56,19 +57,19 @@ bool CTest6::Init()
         return false;
     }
 
-    CSceneObjectGeometry *g2 = GetTemplateSystem().CreateSceneObjectTemplate("platform");
+    CSceneObjectGeometry g2;
 
-    g2->mFigures.resize(1);
-    g2->mFigures[0].mDepth = 50;
-    g2->mFigures[0].mVertices.push_back(CVec2f(-50, 1));
-    g2->mFigures[0].mVertices.push_back(CVec2f(-50, -1));
-    g2->mFigures[0].mVertices.push_back(CVec2f(50, -1));
-    g2->mFigures[0].mVertices.push_back(CVec2f(50, 1));
+    g2.mFigures.resize(1);
+    g2.mFigures[0].mDepth = 50;
+    g2.mFigures[0].mVertices.push_back(CVec2f(-50, 1));
+    g2.mFigures[0].mVertices.push_back(CVec2f(-50, -1));
+    g2.mFigures[0].mVertices.push_back(CVec2f(50, -1));
+    g2.mFigures[0].mVertices.push_back(CVec2f(50, 1));
 
     CSceneObjectParams p2;
     p2.mDynamic = false;
 
-    if (GetTemplateSystem().CreateSceneObjectFromTemplate("platform", p2) == nullptr)
+    if (GetScene().CreateObject<CSceneObject>(g2, p2) == nullptr)
     {
         return false;
     }
@@ -86,7 +87,7 @@ bool CTest6::Init()
 
 void CTest6::Step(double _dt)
 {
-    CApp::Step(_dt);
+    CTest1::Step(_dt);
 
     mAngle += _dt;
 
@@ -141,14 +142,14 @@ void CTest6::Step(double _dt)
 
 void CTest6::Render()
 {
+    CTest1::Render();
+
     float new_angle = acos(mPlayer1MeshDir.mX);
 
     if (mPlayer1MeshDir.mY < 0.0f)
     {
         new_angle *= -1;
     }
-
-    CApp::Render();
 
     CMatrix4f r;
     MatrixRotationY(r, M_PI * 0.5 + new_angle);
@@ -189,24 +190,19 @@ void CTest6::Render()
 
 bool CTest6::InitPlayer()
 {
-    CSceneObjectGeometry *g1 = GetTemplateSystem().CreateSceneObjectTemplate("player");
+    CSceneObjectGeometry g1;
 
-    if (g1 == nullptr)
-    {
-        return false;
-    }
-
-    g1->mFigures.resize(1);
-    g1->mFigures[0].mVertices.push_back(CVec2f(-1, 1));
-    g1->mFigures[0].mVertices.push_back(CVec2f(-1, -1));
-    g1->mFigures[0].mVertices.push_back(CVec2f(1, -1));
-    g1->mFigures[0].mVertices.push_back(CVec2f(1, 1));
+    g1.mFigures.resize(1);
+    g1.mFigures[0].mVertices.push_back(CVec2f(-1, 1));
+    g1.mFigures[0].mVertices.push_back(CVec2f(-1, -1));
+    g1.mFigures[0].mVertices.push_back(CVec2f(1, -1));
+    g1.mFigures[0].mVertices.push_back(CVec2f(1, 1));
 
     CPlayerParams p1;
     p1.mFixedRotation = true;
     p1.mPos.Set(0, 10, 0);
 
-    mPlayer1Id = GetPlayersSystem().AddPlayer(*g1, p1);
+    mPlayer1Id = GetPlayersSystem().AddPlayer(g1, p1);
 
     if (mPlayer1Id == -1)
     {
@@ -262,6 +258,24 @@ bool CTest6::InitLight()
 
 bool CTest6::InitProcessors()
 {
+    GetEventSystem().SetMode("editor_mode");
+
+    GetEventSystem().SetProcessor("C-x", CAppEventProcessor(
+    [] () {},
+    [this] ()
+    {
+        GetEventSystem().SetMode("test6");
+    }));
+
+    GetEventSystem().SetMode("test6");
+
+    GetEventSystem().SetProcessor("C-x", CAppEventProcessor(
+    [] () {},
+    [this] ()
+    {
+        GetEventSystem().SetMode("editor_mode");
+    }));
+
     GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
     [this] ()
     {
