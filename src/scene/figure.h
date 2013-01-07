@@ -54,6 +54,7 @@ public:
 class CFigure
 {
 public:
+    friend class CScene;
     friend class CSceneObject;
 
     CSceneObject *GetSceneObject() const;

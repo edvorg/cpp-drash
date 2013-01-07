@@ -28,6 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../diag/logger.h"
 
 #include "sceneobject.h"
+#include "figure.h"
 #include "joint.h"
 
 #include <Box2D/Box2D.h>
@@ -114,14 +115,41 @@ void CScene::Step( double _dt )
 
     mLocked = true;
 
-    for ( unsigned int i = 0; i < mObjectsCount; )
+    for (unsigned int i = 0; i < mObjectsCount;)
     {
-        if ( mObjects[i]->mDead )
+        if (mObjects[i]->mDead)
         {
             DestroyObjectImpl(mObjects[i]);
         }
         else
         {
+            for (unsigned int j = 0; j < mObjects[i]->mFiguresCount; j++)
+            {
+                if (mObjects[i]->mFigures[j]->mDead == true)
+                {
+                    CSceneObjectGeometry g;
+                    g.mFigures.resize(1);
+                    g.mFigures[0].mVertices.resize(mObjects[i]->mFigures[j]->EnumVertices());
+                    g.mFigures[0].mZ = mObjects[i]->mFigures[j]->GetZ();
+                    g.mFigures[0].mDepth = mObjects[i]->mFigures[j]->GetDepth();
+                    memcpy(&*g.mFigures[0].mVertices.begin(),
+                           mObjects[i]->mFigures[j]->GetVertices(),
+                           sizeof(CVec2f) * mObjects[i]->mFigures[j]->EnumVertices());
+
+                    CSceneObjectParams p;
+                    p.mAngle = mObjects[i]->mAngle;
+                    p.mDynamic = true;
+                    p.mFixedRotation = false;
+                    p.mPos = mObjects[i]->mPos;
+
+                    CreateObject(g, p);
+
+                    mObjects[i]->DestroyFigure(mObjects[i]->mFigures[j]);
+
+                    break;
+                }
+            }
+
             mObjects[i]->Step(_dt);
             i++;
         }

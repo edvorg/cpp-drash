@@ -83,32 +83,6 @@ void CSceneObject::Step(double _dt)
 {
     mLifeTime += _dt;
 
-    for (unsigned int i = 0; i < mFiguresCount; i++)
-    {
-        if (mFigures[i]->mDead == true)
-        {
-            CSceneObjectGeometry g;
-            g.mFigures.resize(1);
-            g.mFigures[0].mVertices.resize(mFigures[i]->EnumVertices());
-            g.mFigures[0].mZ = mFigures[i]->GetZ();
-            g.mFigures[0].mDepth = mFigures[i]->GetDepth();
-            memcpy(&*g.mFigures[0].mVertices.begin(), mFigures[i]->GetVertices(), sizeof(CVec2f) * mFigures[i]->EnumVertices());
-
-            CSceneObjectParams p;
-            p.mAngle = mAngle;
-            p.mDynamic = true;
-            p.mFixedRotation = false;
-            p.mPos = mPos;
-
-//            TODO: move this code to CScene
-//            GetScene()->CreateObject<CSceneObject>(g, p);
-
-            DestroyFigure(mFigures[i]);
-
-            break;
-        }
-    }
-
     bool phys_pos_changed = false;
 
     if (mPosXYAnimator.Step(_dt))
