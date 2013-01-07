@@ -40,8 +40,9 @@ namespace test
 class CTest3 : public CTest1
 {
 public:
-    virtual ~CTest3() override {}
+    CTest3() = default;
 
+protected:
     virtual bool Init() override;
     virtual void Step(double _dt) override;
     virtual void Render() override;

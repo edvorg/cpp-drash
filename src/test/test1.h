@@ -38,8 +38,9 @@ namespace test
 class CTest1 : public CApp
 {
 public:
-    virtual ~CTest1() override {}
+    CTest1() = default;
 
+protected:
     virtual bool Init() override;
     virtual void Step(double _dt) override;
     virtual void Render() override;

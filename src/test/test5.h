@@ -38,6 +38,8 @@ class CTest5 : public CTest3
 {
 public:
     CTest5() = default;
+
+protected:
     virtual bool Init() override;
     virtual void Step(double _dt) override;
     virtual void Render() override;

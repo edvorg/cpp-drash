@@ -39,6 +39,8 @@ namespace test
 class CTest4 : public CApp
 {
 public:
+    CTest4() = default;
+
 protected:
     bool Init() override;
     void Step(double _dt) override;

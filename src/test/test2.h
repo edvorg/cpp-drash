@@ -37,8 +37,9 @@ namespace test
 class CTest2 : public CApp
 {
 public:
-    virtual ~CTest2() override {}
+    CTest2() = default;
 
+protected:
     virtual bool Init() override;
 
 private:
