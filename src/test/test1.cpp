@@ -67,7 +67,7 @@ void CTest1::Step(double _dt)
 
     if (mCurrentFigure != nullptr && mCurrentObject != nullptr)
     {
-        mCenter.Set(mCurrentFigure->GetVertices()[0], mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ());
+        mCenter.Set(mCurrentFigure->GetVertices()[0], mCurrentObject->GetPosZ() + mCurrentFigure->GetZ());
 
         for (unsigned int i = 1; i < mCurrentFigure->EnumVertices(); i++)
         {
@@ -200,8 +200,8 @@ void CTest1::Render()
                     CVec3f p1 = _split_intersection;
                     CVec3f p2 = _split_intersection;
 
-                    p1.mZ = mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ() - mCurrentFigure->GetDepth() * 0.5f;
-                    p2.mZ = mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ() + mCurrentFigure->GetDepth() * 0.5f;
+                    p1.mZ = mCurrentObject->GetPosZ() + mCurrentFigure->GetZ() - mCurrentFigure->GetDepth() * 0.5f;
+                    p2.mZ = mCurrentObject->GetPosZ() + mCurrentFigure->GetZ() + mCurrentFigure->GetDepth() * 0.5f;
 
                     GetDebugDrawSystem().DrawLine(p1, p2, 2, CColor4f(1, 1, 1), false);
                 };
@@ -471,10 +471,10 @@ void CTest1::BeginSplit()
 
         mSplitFigureMin.Set(mCurrentFigure->GetVertices()[0].mX,
                             mCurrentFigure->GetVertices()[0].mY,
-                            mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ());
+                            mCurrentObject->GetPosZ() + mCurrentFigure->GetZ());
         mSplitFigureMax.Set(mCurrentFigure->GetVertices()[0].mX,
                             mCurrentFigure->GetVertices()[0].mY,
-                            mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ());
+                            mCurrentObject->GetPosZ() + mCurrentFigure->GetZ());
 
         for (unsigned int i = 0; i < mCurrentFigure->EnumVertices(); i++)
         {
@@ -482,8 +482,8 @@ void CTest1::BeginSplit()
             mSplitFigureMax.mX = math::Max<float>(mSplitFigureMax.mX, mCurrentFigure->GetVertices()[i].mX);
             mSplitFigureMin.mY = math::Min<float>(mSplitFigureMin.mY, mCurrentFigure->GetVertices()[i].mY);
             mSplitFigureMax.mY = math::Max<float>(mSplitFigureMax.mY, mCurrentFigure->GetVertices()[i].mY);
-            mSplitFigureMin.mZ = math::Min<float>(mSplitFigureMin.mZ, mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ());
-            mSplitFigureMax.mZ = math::Max<float>(mSplitFigureMax.mZ, mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ());
+            mSplitFigureMin.mZ = math::Min<float>(mSplitFigureMin.mZ, mCurrentObject->GetPosZ() + mCurrentFigure->GetZ());
+            mSplitFigureMax.mZ = math::Max<float>(mSplitFigureMax.mZ, mCurrentObject->GetPosZ() + mCurrentFigure->GetZ());
         }
 
         mSplitFigureMin -= 10;
@@ -506,7 +506,7 @@ void CTest1::BeginSplit()
 
 void CTest1::DetectNewSplitPoint(const CVec2f &_p1, const CVec2f &_p2, unsigned int _index, const CRay &_r)
 {
-    float centerz = mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ();
+    float centerz = mCurrentObject->GetPosZ() + mCurrentFigure->GetZ();
 
     CPlane p;
     p.Set(CVec3f(_p1, centerz),
@@ -562,7 +562,7 @@ void CTest1::ComputeIntersections()
         CVec3f dir = mSplitPlanePoint1;
         dir -= mSplitPlanePoint4;
 
-        float centerz = mCurrentObject->GetPos().Get().mZ + mCurrentFigure->GetZ();
+        float centerz = mCurrentObject->GetPosZ() + mCurrentFigure->GetZ();
 
         r.SetPoint(CVec3f(mSplitPlanePoint4.Vec2(), centerz));
         r.SetDirection(dir);
@@ -653,10 +653,10 @@ void CTest1::EndSplit()
                 fp.mVertices.resize(mCurrentFigure->EnumVertices());
                 memcpy(&fp.mVertices[0], mCurrentFigure->GetVertices(), sizeof(CVec2f) * mCurrentFigure->EnumVertices());
 
-                float min = mCurrentObject->GetPos().Get().mZ +
+                float min = mCurrentObject->GetPosZ() +
                             mCurrentFigure->GetZ() +
                             0.5f * mCurrentFigure->GetDepth();
-                float max = mCurrentObject->GetPos().Get().mZ +
+                float max = mCurrentObject->GetPosZ() +
                             mCurrentFigure->GetZ() -
                             0.5f * mCurrentFigure->GetDepth();
 

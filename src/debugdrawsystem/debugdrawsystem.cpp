@@ -192,7 +192,7 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2f &_pos) const
 
             CPlane plane;
             plane.SetNormal(CVec3f(0, 0, 1));
-            plane.SetPoint(CVec3f(0, 0, cur_obj->GetPos().Get().mZ + cur_fgr->GetZ()));
+            plane.SetPoint(CVec3f(0, 0, cur_obj->GetPosZ() + cur_fgr->GetZ()));
 
             CVec3f pos;
             CastRay(_pos, plane, pos);
@@ -227,7 +227,7 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2f &_pos) const
 
             CPlane plane;
             plane.SetNormal(CVec3f(0, 0, 1));
-            plane.SetPoint(CVec3f(0, 0, cur_obj->GetPos().Get().mZ + cur_fgr->GetZ()));
+            plane.SetPoint(CVec3f(0, 0, cur_obj->GetPosZ() + cur_fgr->GetZ()));
 
             CVec3f pos;
             CastRay(_pos, plane, pos);
@@ -283,7 +283,7 @@ void CDebugDrawSystem::Draw() const
         glMatrixMode(GL_MODELVIEW);
         glLoadMatrixf(mViewMatrixTransposed.mData);
 
-        CVec2f pos = objects[i]->GetPos().Get().Vec2();
+        CVec2f pos = objects[i]->GetPos();
         glTranslatef(pos.mX,
                      pos.mY,
                      0);

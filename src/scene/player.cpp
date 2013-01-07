@@ -69,19 +69,13 @@ void CPlayer::OnBoom(const CExplosionParams &)
 
 void CPlayer::onEvent( const CPlayerEvent &_event )
 {
-    CVec3f new_target;
+    float new_target = 0;
+
     auto move = [&new_target, this] (const CVec3f &_dir)
     {
-        if (GetPos().IsTargetSet())
-        {
-            new_target = GetPos().GetTarget();
-        }
-        else
-        {
-            new_target = GetPos().Get();
-		}
-        new_target += _dir;
-        GetPos().SetTarget(new_target, 0.5, AnimationBehaviorSingle);
+        new_target = GetPosZ().GetTarget();
+        new_target += _dir.mZ;
+        GetPosZ().SetTarget(new_target, 0.5, AnimatorBehavior::Single);
     };
 
     switch ( _event.mType )
@@ -108,11 +102,17 @@ void CPlayer::onEvent( const CPlayerEvent &_event )
             break;
 
         case CPlayerEvent::PlayerActionMoveDeep:
-            move(CVec3f(0, 0, -0.1));
+            if (mJumpAllowed == true)
+            {
+                move(CVec3f(0, 0, -0.1));
+            }
             break;
 
         case CPlayerEvent::PlayerActionMoveOut:
-            move(CVec3f(0, 0, 0.1));
+            if (mJumpAllowed == true)
+            {
+                move(CVec3f(0, 0, 0.1));
+            }
             break;
     }
 }

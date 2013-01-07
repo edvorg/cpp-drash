@@ -103,7 +103,6 @@ HEADERS += \
     ../src/misc/graphics.h \
     ../src/misc/color4.h \
     ../src/misc/color3.h \
-    ../src/misc/animatedparam.h \
     ../src/joints/joint.h \
     ../src/greng/vertex.h \
     ../src/greng/renderer.h \

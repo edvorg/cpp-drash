@@ -26,7 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef COBJECTCAMERA_H
 #define COBJECTCAMERA_H
 
-#include "../misc/animatedparam.h"
+#include "../misc/animator.h"
 #include "../misc/vec3.h"
 #include "../misc/matrix4.h"
 
@@ -52,11 +52,11 @@ public:
     inline void SetOrtho(bool _ortho);
     inline bool IsOrtho() const;
 
-    inline CAnimatedParam<float> &GetOrthoWidth();
-    inline CAnimatedParam<float> &GetFov();
-    inline CAnimatedParam<float> &GetDepthOfView();
-    inline CAnimatedParam<CVec3f> &GetPos();
-    inline CAnimatedParam<CVec2f> &GetRotation();
+    inline CAnimator<float> &GetOrthoWidth();
+    inline CAnimator<float> &GetFov();
+    inline CAnimator<float> &GetDepthOfView();
+    inline CAnimator<CVec3f> &GetPos();
+    inline CAnimator<CVec2f> &GetRotation();
 
     void LookAt(const CVec3f &_point);
 
@@ -71,7 +71,7 @@ public:
     inline const CMatrix4f &GetProjectionMatrix() const;
 
 protected:        
-    CCamera(void);
+    CCamera(void) = default;
 
     bool Init(const CCameraParams &_params);
 
@@ -81,11 +81,16 @@ private:
     void ComputeMatrices();
 
     bool mOrtho = false;
-    CAnimatedParam<float> mOrthoWidth;
-    CAnimatedParam<float> mFov;
-    CAnimatedParam<float> mDepthOfView;
-    CAnimatedParam<CVec3f> mPos;
-    CAnimatedParam<CVec2f> mRotation;
+    float mOrthoWidth;
+    float mFov;
+    float mDepthOfView;
+    CVec3f mPos;
+    CVec2f mRotation;
+    CAnimator<float> mOrthoWidthAnimator = mOrthoWidth;
+    CAnimator<float> mFovAnimator = mFov;
+    CAnimator<float> mDepthOfViewAnimator = mDepthOfView;
+    CAnimator<CVec3f> mPosAnimator = mPos;
+    CAnimator<CVec2f> mRotationAnimator = mRotation;
 
     CMatrix4f mRotationMatrix;
     CMatrix4f mAntiRotationMatrix;
@@ -105,29 +110,29 @@ inline bool CCamera::IsOrtho() const
     return mOrtho;
 }
 
-inline CAnimatedParam<float> &CCamera::GetOrthoWidth()
+inline CAnimator<float> &CCamera::GetOrthoWidth()
 {
-    return mOrthoWidth;
+    return mOrthoWidthAnimator;
 }
 
-inline CAnimatedParam<float> &CCamera::GetFov()
+inline CAnimator<float> &CCamera::GetFov()
 {
-    return mFov;
+    return mFovAnimator;
 }
 
-inline CAnimatedParam<float> &CCamera::GetDepthOfView()
+inline CAnimator<float> &CCamera::GetDepthOfView()
 {
-    return mDepthOfView;
+    return mDepthOfViewAnimator;
 }
 
-inline CAnimatedParam<CVec3f> &CCamera::GetPos()
+inline CAnimator<CVec3f> &CCamera::GetPos()
 {
-    return mPos;
+    return mPosAnimator;
 }
 
-inline CAnimatedParam<CVec2f> &CCamera::GetRotation()
+inline CAnimator<CVec2f> &CCamera::GetRotation()
 {
-    return mRotation;
+    return mRotationAnimator;
 }
 
 inline const CMatrix4f &CCamera::GetRotationMatrix() const

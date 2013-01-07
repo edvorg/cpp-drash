@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define DRASH_ANIMATOR_H
 
 #include "math.h"
+#include <utility>
 
 namespace drash
 {
@@ -49,13 +50,18 @@ public:
     CAnimator(CAnimator &&_src);
     CAnimator(T &_value_ref);
 
-    inline CAnimator &operator =(const T &_src);
-    inline CAnimator &operator =(T &&_src);
+    CAnimator &operator =(const T &_src);
+    CAnimator &operator =(T &&_src);
+    CAnimator &Set(const T &_src);
+    CAnimator &Set(T &&_src);
     void SetTarget(const T &_target, double _time, const AnimatorBehavior &_behavior);
     inline void RemoveTarget();
 
-    inline operator T &() const;
+    inline operator const T &() const;
+    inline const T &Get() const;
     inline const T &GetTarget() const;
+    inline double GetTime() const;
+    inline double GetTimeRemains() const;
     inline bool IsTargetSet() const;
 
     virtual bool Step(double _dt);
@@ -87,7 +93,7 @@ CAnimator<T>::CAnimator(T &_value_ref):
 }
 
 template<class T>
-inline CAnimator<T> &CAnimator<T>::operator =(const T &_src)
+CAnimator<T> &CAnimator<T>::operator =(const T &_src)
 {
     mValue = _src;
     mTargetSet = false;
@@ -97,7 +103,27 @@ inline CAnimator<T> &CAnimator<T>::operator =(const T &_src)
 }
 
 template<class T>
-inline CAnimator<T> &CAnimator<T>::operator =(T &&_src)
+CAnimator<T> &CAnimator<T>::operator =(T &&_src)
+{
+    mValue = std::move(_src);
+    mTargetSet = false;
+    mValueUpdated = true;
+
+    return *this;
+}
+
+template<class T>
+CAnimator<T> &CAnimator<T>::Set(const T &_src)
+{
+    mValue = _src;
+    mTargetSet = false;
+    mValueUpdated = true;
+
+    return *this;
+}
+
+template<class T>
+CAnimator<T> &CAnimator<T>::Set(T &&_src)
 {
     mValue = std::move(_src);
     mTargetSet = false;
@@ -118,13 +144,19 @@ void CAnimator<T>::SetTarget(const T &_target, double _time, const AnimatorBehav
 }
 
 template<class T>
-void CAnimator<T>::RemoveTarget()
+inline void CAnimator<T>::RemoveTarget()
 {
     mTargetSet = false;
 }
 
 template<class T>
-inline CAnimator<T>::operator T &() const
+inline CAnimator<T>::operator const T &() const
+{
+    return mValue;
+}
+
+template<class T>
+inline const T &CAnimator<T>::Get() const
 {
     return mValue;
 }
@@ -133,6 +165,18 @@ template<class T>
 inline const T &CAnimator<T>::GetTarget() const
 {
     return mTargetSet == true ? mTargetValue : mValue;
+}
+
+template<class T>
+inline double CAnimator<T>::GetTime() const
+{
+    return mTime;
+}
+
+template<class T>
+inline double CAnimator<T>::GetTimeRemains() const
+{
+    return math::Clamp<double>(mTimeFull - mTime, 0, mTimeFull);
 }
 
 template<class T>

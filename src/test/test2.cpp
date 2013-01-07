@@ -136,14 +136,14 @@ void CTest2::SetProcessors()
         if (mSelectedObject != nullptr)
         {
               CPlane plane;
-              plane.SetPoint(CVec3f(mSelectedObject->GetPos().Get()));
+              plane.SetPoint(mSelectedObject->GetPos());
               plane.SetNormal(CVec3f(0, 0, 1));
 
               CVec3f pos;
 
               GetDebugDrawSystem().CastRay(GetCursorPos(), plane, pos);
 
-              mSelectedObject->GetPos().Set(pos);
+              mSelectedObject->SetPos(pos);
         }
     }));
 

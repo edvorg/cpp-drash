@@ -34,15 +34,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
-CSceneObject::CSceneObject(void):
-    mPos([this] (const CVec3f &_new_value)
-    {
-        mBody->SetTransform(CVec2ToB2Vec2(_new_value), mBody->GetAngle());
-    }),
-    mAngle([this] (const float &_new_value)
-    {
-        mBody->SetTransform(mBody->GetWorldPoint(b2Vec2(0, 0)), _new_value);
-    })
+CSceneObject::CSceneObject(void)
 {
     mDebugColor.mR = math::Rand<float>(0.35f, 0.9f, 0.01f);
     mDebugColor.mG = math::Rand<float>( 0.35f, 0.9f, 0.01f);
@@ -61,8 +53,9 @@ bool CSceneObject::Init(const GeometryT &_geometry, const CSceneObject::ParamsT 
         return false;
     }
 
-    mPos.Set(_params.mPos);
-    mAngle.Set(_params.mAngle);
+    mPosXYAnimator = _params.mPos;
+	mPosZAnimator = _params.mPos.mZ;
+    mAngleAnimator = _params.mAngle;
 
     mBody->SetTransform(CVec2ToB2Vec2(_params.mPos), _params.mAngle);
     mBody->SetActive(true);
@@ -112,10 +105,10 @@ void CSceneObject::Step(double _dt)
             memcpy(&*g.mFigures[0].mVertices.begin(), mFigures[i]->GetVertices(), sizeof(CVec2f) * mFigures[i]->EnumVertices());
 
             CSceneObjectParams p;
-            p.mAngle = mAngle.Get();
+            p.mAngle = mAngle;
             p.mDynamic = true;
             p.mFixedRotation = false;
-            p.mPos = mPos.Get();
+            p.mPos = mPos;
 
             GetScene()->CreateObject<CSceneObject>(g, p);
 
@@ -125,28 +118,65 @@ void CSceneObject::Step(double _dt)
         }
     }
 
-    if (mPos.IsTargetSet())
+    bool phys_pos_changed = false;
+
+    if (mPosXYAnimator.Step(_dt))
     {
-        mPos.Step(_dt);
-        CVec2f lv = mPos.GetTarget().Vec2();
-        lv -= mPos.Get().Vec2();
-        lv /= mPos.GetTimeRemains();
-        mBody->SetLinearVelocity(CVec2ToB2Vec2(lv));
+        if (mPosXYAnimator.IsTargetSet() == true)
+        {
+            CVec2f lv = mPosXYAnimator.GetTarget();
+            lv -= mPos;
+            lv /= mPosXYAnimator.GetTimeRemains();
+            mBody->SetLinearVelocity(CVec2ToB2Vec2(lv));
+        }
+        else
+        {
+            phys_pos_changed = true;
+        }
     }
     else
     {
-        mPos.Set(CVec3f(B2Vec2ToCVec2(mBody->GetWorldPoint(b2Vec2(0, 0))), mPos.Get().mZ));
+        mPos.Vec2() = B2Vec2ToCVec2(mBody->GetWorldPoint(b2Vec2(0, 0)));
     }
 
-    if (mAngle.IsTargetSet())
+    if (mPosZAnimator.Step(_dt))
     {
-        mAngle.Step(_dt);
-        float av = (mAngle.GetTarget() - mAngle.Get()) / mAngle.GetTimeRemains();
-        mBody->SetAngularVelocity(av);
+        for (auto i = mCurrentContacts.begin(); i != mCurrentContacts.end(); i++)
+        {
+            const CFigure *f1 = i->first;
+            const CFigure *f2 = i->second;
+
+            float z1 = f1->GetZ() + f1->GetSceneObject()->GetPosZ();
+            float z2 = f2->GetZ() + f2->GetSceneObject()->GetPosZ();
+
+            if (math::Abs(z1 - z2) > ((f1->GetDepth() + f2->GetDepth()) * 0.5f))
+            {
+                mBody->SetActive(false);
+                mBody->SetActive(true);
+            }
+        }
+    }
+
+    if (mAngleAnimator.Step(_dt))
+    {
+        if (mAngleAnimator.IsTargetSet())
+        {
+            float av = (mAngleAnimator.GetTarget() - mAngle) / mAngleAnimator.GetTimeRemains();
+            mBody->SetAngularVelocity(av);
+        }
+        else
+        {
+            phys_pos_changed = true;
+        }
     }
     else
     {
-        mAngle.Set(mBody->GetAngle());
+        mAngle = mBody->GetAngle();
+    }
+
+    if (phys_pos_changed)
+    {
+        mBody->SetTransform(CVec2ToB2Vec2(mPos), mAngle);
     }
 }
 
@@ -167,19 +197,27 @@ void CSceneObject::OnContactBegin(const CFigure *_f1, const CFigure *_f2)
             }
         }
     }
+
+    mCurrentContacts.insert(std::pair<const CFigure*, const CFigure*>(_f2, _f1));
 }
 
 void CSceneObject::OnContactPreSolve(const CFigure *, const CFigure *)
 {
 }
 
-void CSceneObject::OnContactEnd(const CFigure *, const CFigure *)
+void CSceneObject::OnContactEnd(const CFigure *, const CFigure *_f2)
 {
+    auto f = mCurrentContacts.find(_f2);
+
+    if (f != mCurrentContacts.end())
+    {
+        mCurrentContacts.erase(f);
+    }
 }
 
 void CSceneObject::OnBoom( const CExplosionParams &_boom )
 {
-    CVec2f dir(GetPos().Get().Vec2());
+    CVec2f dir(mPos);
     dir -= _boom.mPos.Vec2();
 
     float k = drash::math::Min( dir.Length(), _boom.mStregth )/ _boom.mStregth;
@@ -187,7 +225,7 @@ void CSceneObject::OnBoom( const CExplosionParams &_boom )
     dir.Normalize();
     dir *= k * _boom.mStregth;
 
-    ApplyLinearImpulse(dir, mPos.Get().Vec2());
+    ApplyLinearImpulse(dir, mPos);
 }
 
 void CSceneObject::DrawDebug() const
@@ -213,10 +251,10 @@ void CSceneObject::DrawDebug() const
 
                 DrawBody(&B2Vec2ToCVec2(*s->m_vertices),
                          s->GetVertexCount(),
-                         mPos.Get().mZ+local_z,
+                         mPos.mZ + local_z,
                          depth,
                          mDebugColor,
-                         mAngle.Get());
+                         mAngle);
             }
         }
         j++;
@@ -268,6 +306,12 @@ CFigure *CSceneObject::CreateFigure(const CFigureParams &_params)
     mFigures[mFiguresCount++] = figure;
 
     return figure;
+}
+
+void CSceneObject::SetPos(const CVec3f _pos)
+{
+    mPosXYAnimator.Set(_pos);
+    mPosZAnimator.Set(_pos.mZ);
 }
 
 void CSceneObject::DestroyFigure(CFigure *_figure)

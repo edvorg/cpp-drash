@@ -149,7 +149,7 @@ void EditorWindow::ZoomUp()
         qDebug() << "Zoom up!";
         CVec3f pos = mCurrentApp->GetDebugDrawSystem().GetActiveCam()->GetPos().GetTarget();
         pos.mZ += 10.0f;
-        mCurrentApp->GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimationBehaviorSingle);
+        mCurrentApp->GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
     }
 }
 
@@ -158,7 +158,7 @@ void EditorWindow::ZoomDown()
     if (mCurrentApp != nullptr){
         CVec3f pos = mCurrentApp->GetDebugDrawSystem().GetActiveCam()->GetPos().GetTarget();
         pos.mZ -= 10.0f;
-        mCurrentApp->GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimationBehaviorSingle);
+        mCurrentApp->GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
     }
 }
 
