@@ -32,8 +32,13 @@ namespace drash
 namespace test
 {
 
-CTest4::CTest4()
+bool CTest4::Init()
 {
+    if (CApp::Init() == false)
+    {
+        return false;
+    }
+
     mTestButton1.Connect(&GetUISystem());
 
     mTestButton1.SetClickHandler([] ()
@@ -68,10 +73,31 @@ CTest4::CTest4()
     {
         LOG_INFO(_value);
     });
+
+    LOG_INFO("value is "<<mValueAnimator1);
+    mValue = 33;
+    LOG_INFO("value is "<<mValueAnimator1);
+
+    mValueAnimator1 = 50;
+    mValueAnimator2.SetTarget(100, 2.0, AnimatorBehavior::Bounce);
+
+    return true;
 }
 
-void CTest4::Release()
+void CTest4::Step(double _dt)
 {
+    CApp::Step(_dt);
+
+    if (mValueAnimator1.Step(_dt))
+    {
+        mTestSlider1.SetPercent(mValueAnimator1 / 100.0);
+        LOG_ERR("value updated (animator 1): "<<mValueAnimator1);
+    }
+    else if (mValueAnimator2.Step(_dt))
+    {
+        mTestSlider1.SetPercent(mValueAnimator2 / 100.0);
+        LOG_ERR("value updated (animator 2): "<<mValueAnimator2);
+    }
 }
 
 } // namespace test

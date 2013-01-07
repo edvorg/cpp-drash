@@ -97,8 +97,8 @@ void CTest6::Step(double _dt)
 
     mPointLight1.mPosition.Set(sin(mAngle) * 40, 20, 0);
 
-    CVec2f dir(GetPlayersSystem().GetPlayers()[0]->GetPos().Get().mX - mPlayer1OldPos.mX,
-               mPlayer1OldPos.mZ - GetPlayersSystem().GetPlayers()[0]->GetPos().Get().mZ);
+    CVec2f dir(GetPlayersSystem().GetPlayers()[0]->GetPosXY().Get().mX - mPlayer1OldPos.mX,
+               mPlayer1OldPos.mZ - GetPlayersSystem().GetPlayers()[0]->GetPosZ());
 
     if (dir.Length() < 0.00001)
     {
@@ -117,7 +117,7 @@ void CTest6::Step(double _dt)
 
         mPlayer1Angle = 0.99 * mPlayer1Angle + 0.01 * new_angle;
 
-        mPlayer1OldPos = GetPlayersSystem().GetPlayers()[mPlayer1Id]->GetPos().Get();
+        mPlayer1OldPos = GetPlayersSystem().GetPlayers()[mPlayer1Id]->GetPos();
 
         LOG_ERR(mPlayer1Angle);
     }
@@ -137,7 +137,7 @@ void CTest6::Render()
     MatrixMultiply(r, s, rot);
 
     CMatrix4f transl;
-    MatrixTranslation(transl, GetPlayersSystem().GetPlayers()[mPlayer1Id]->GetPos().Get() - CVec3f(0, 1, 0));
+    MatrixTranslation(transl, GetPlayersSystem().GetPlayers()[mPlayer1Id]->GetPos() - CVec3f(0, 1, 0));
 
     CMatrix4f model;
     MatrixMultiply(transl, rot, model);

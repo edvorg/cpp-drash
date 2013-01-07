@@ -27,9 +27,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define CSCENEOBJECT_H
 
 #include <Box2D/Box2D.h>
-#include "../misc/animatedparam.h"
+#include "../misc/animator.h"
 #include "../misc/vec3.h"
 #include "../misc/color4.h"
+#include <map>
 
 namespace drash
 {
@@ -91,8 +92,11 @@ public:
     inline CVec2f GetWorldPoint(const CVec2f &_local_point) const;
     inline CVec2f GetMassCenter() const;
 
-    inline CAnimatedParam<CVec3f> &GetPos();
-    inline CAnimatedParam<float> &GetAngle();
+    void SetPos(const CVec3f _pos);
+    inline CAnimator<CVec2f> &GetPosXY();
+    inline CAnimator<float> &GetPosZ();
+    inline const CVec3f &GetPos() const;
+    inline CAnimator<float> &GetAngle();
 
     virtual void ComputeBoundingBox();
     inline const b2AABB &GetBoundingBox() const;
@@ -114,7 +118,7 @@ protected:
 
     virtual void OnContactBegin(const CFigure *_f1, const CFigure *_f2);
     virtual void OnContactPreSolve(const CFigure *, const CFigure *);
-    virtual void OnContactEnd(const CFigure *, const CFigure *);
+    virtual void OnContactEnd(const CFigure *, const CFigure *_f2);
     virtual void OnBoom( const CExplosionParams &_boom );
     virtual void DrawDebug() const;
 
@@ -140,15 +144,20 @@ private:
     unsigned int mFiguresCount = 0;
 
     /// world space postition in physics world
-    CAnimatedParam<CVec3f> mPos;
+    CVec3f mPos = 0;
+    CAnimator<CVec2f> mPosXYAnimator = mPos;
+    CAnimator<float> mPosZAnimator = mPos.mZ;
 
     /// rotation angle in radians
-    CAnimatedParam<float> mAngle;
+    float mAngle = 0;
+    CAnimator<float> mAngleAnimator = mAngle;
 
     /// color, used for debug rendering. will be removed
     CColor4f mDebugColor;
 
     float mLifeTime = 0.0f;
+
+    std::map<const CFigure*, const CFigure*> mCurrentContacts;
 };
 
 inline CScene *CSceneObject::GetScene()
@@ -226,14 +235,24 @@ inline CVec2f CSceneObject::GetMassCenter() const
     return B2Vec2ToCVec2(mBody->GetWorldCenter());
 }
 
-inline CAnimatedParam<CVec3f> &CSceneObject::GetPos()
+inline CAnimator<CVec2f> &CSceneObject::GetPosXY()
+{
+    return mPosXYAnimator;
+}
+
+inline CAnimator<float> &CSceneObject::GetPosZ()
+{
+    return mPosZAnimator;
+}
+
+inline const CVec3f &CSceneObject::GetPos() const
 {
     return mPos;
 }
 
-inline CAnimatedParam<float> &CSceneObject::GetAngle()
+inline CAnimator<float> &CSceneObject::GetAngle()
 {
-    return mAngle;
+    return mAngleAnimator;
 }
 
 inline const b2AABB &CSceneObject::GetBoundingBox() const

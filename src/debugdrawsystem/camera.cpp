@@ -30,7 +30,7 @@ namespace drash
 void CCamera::LookAt(const CVec3f &_point)
 {
     CVec3f dir = _point;
-    dir -= mPos.Get();
+    dir -= mPos;
 
     CVec2f dirx(-dir.mZ, -dir.mX);
     CVec2f diry(dirx.Length(), dir.mY);
@@ -48,7 +48,7 @@ void CCamera::LookAt(const CVec3f &_point)
         rot.mY = -rot.mY;
     }
 
-    mRotation.Set(rot);
+    mRotationAnimator = rot;
 }
 
 void CCamera::Forward(float _distance)
@@ -63,9 +63,9 @@ void CCamera::Forward(float _distance)
     dir.mZ *= _distance;
     dir.mW *= _distance;
 
-    CVec3f new_pos(mPos.Get());
+    CVec3f new_pos(mPos);
     new_pos += dir;
-    mPos.Set(new_pos);
+    mPosAnimator = new_pos;
 }
 
 void CCamera::Strafe(float _distance)
@@ -82,8 +82,8 @@ void CCamera::Strafe(float _distance)
     strafe_dir.mY *= _distance;
     strafe_dir.mZ *= _distance;
 
-    strafe_dir += mPos.Get();
-    mPos.Set(strafe_dir);
+    strafe_dir += mPos;
+    mPosAnimator = strafe_dir;
 }
 
 void CCamera::SetAspectRatio(float _aspect)
@@ -98,44 +98,48 @@ void CCamera::SetAspectRatio(float _aspect)
     ComputeMatrices();
 }
 
-CCamera::CCamera():
-    mPos([this] (const CVec3f &_new_pos)
-    {
-        ComputeMatrices();
-    }),
-    mRotation([this] (const CVec2f &_new_rotation)
-    {
-        ComputeMatrices();
-    })
-{
-}
-
 bool CCamera::Init(const CCameraParams &_params)
 {
-    mOrthoWidth.Set(_params.mOrthoWidth);
-    mFov.Set(_params.mFov);
-    mDepthOfView.Set(_params.mDepthOfView);
-    mPos.Set(_params.mPos);
-    mRotation.Set(_params.mRotation);
+    mOrthoWidthAnimator = _params.mOrthoWidth;
+    mFovAnimator = _params.mFov;
+    mDepthOfViewAnimator = _params.mDepthOfView;
+    mPosAnimator = _params.mPos;
+    mRotationAnimator = _params.mRotation;
 
     return true;
 }
 
 void CCamera::Step(double _dt)
 {
-    mOrthoWidth.Step(_dt);
-    mFov.Step(_dt);
-    mDepthOfView.Step(_dt);
+    bool compute_matrices = false;
 
-    if (mPos.IsTargetSet())
+    if (mOrthoWidthAnimator.Step(_dt))
     {
-        mPos.Step(_dt);
-        ComputeMatrices();
+        compute_matrices = true;
     }
 
-    if (mRotation.IsTargetSet())
+    if (mFovAnimator.Step(_dt))
     {
-        mRotation.Step(_dt);
+        compute_matrices = true;
+    }
+
+    if (mDepthOfViewAnimator.Step(_dt))
+    {
+        compute_matrices = true;
+    }
+
+    if (mPosAnimator.Step(_dt))
+    {
+        compute_matrices = true;
+    }
+
+    if (mRotationAnimator.Step(_dt))
+    {
+        compute_matrices = true;
+    }
+
+    if (compute_matrices == true)
+    {
         ComputeMatrices();
     }
 }
@@ -143,23 +147,23 @@ void CCamera::Step(double _dt)
 void CCamera::ComputeMatrices()
 {
     CMatrix4f rotx;
-    MatrixRotationX(rotx, -mRotation.Get().mX);
+    MatrixRotationX(rotx, -mRotation.mX);
 
     CMatrix4f roty;
-    MatrixRotationY(roty, -mRotation.Get().mY);
+    MatrixRotationY(roty, -mRotation.mY);
 
     MatrixMultiply(rotx, roty, mRotationMatrix);
-    MatrixRotationX(rotx, mRotation.Get().mX);
-    MatrixRotationY(roty, mRotation.Get().mY);
+    MatrixRotationX(rotx, mRotation.mX);
+    MatrixRotationY(roty, mRotation.mY);
     MatrixMultiply(roty, rotx, mAntiRotationMatrix);
 
-    CVec3f tv(-mPos.Get().mX, -mPos.Get().mY, -mPos.Get().mZ);
+    CVec3f tv(-mPos.mX, -mPos.mY, -mPos.mZ);
     CMatrix4f tm;
     MatrixTranslation(tm, tv);
 
     MatrixMultiply(mRotationMatrix, tm, mViewMatrix);
 
-    Matrix4Perspective(mProjectionMatrix, mFov.Get(), mAspectRatio, 1.0, mDepthOfView.Get() + 1.0f);
+    Matrix4Perspective(mProjectionMatrix, mFov, mAspectRatio, 1.0, mDepthOfView + 1.0f);
 }
 
 }// namespace drash

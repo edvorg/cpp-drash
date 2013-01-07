@@ -28,6 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../app/app.h"
 #include "../ui/uibutton.h"
 #include "../ui/uislider.h"
+#include "../misc/animator.h"
 
 namespace drash
 {
@@ -38,15 +39,18 @@ namespace test
 class CTest4 : public CApp
 {
 public:
-    CTest4();
-    virtual ~CTest4() override {}
-
-    virtual void Release() override;
+protected:
+    bool Init() override;
+    void Step(double _dt) override;
 
 private:
     ui::CUIButton mTestButton1;
     ui::CUIButton mTestButton2;
     ui::CUISlider mTestSlider1;
+
+    float mValue = 77;
+    CAnimator<float> mValueAnimator1 = mValue;
+    CAnimator<float> mValueAnimator2 = mValue;
 };
 
 } // namespace test

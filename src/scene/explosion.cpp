@@ -39,8 +39,8 @@ CExplosionParams::CExplosionParams():
 
 void CExplosion::ComputeBoundingBox()
 {
-    mBoundingBox.lowerBound.Set(GetPos().Get().mX - mParams.mRadius, GetPos().Get().mY - mParams.mRadius);
-    mBoundingBox.upperBound.Set(GetPos().Get().mX + mParams.mRadius, GetPos().Get().mZ + mParams.mRadius);
+    mBoundingBox.lowerBound.Set(GetPos().mX - mParams.mRadius, GetPos().mY - mParams.mRadius);
+    mBoundingBox.upperBound.Set(GetPos().mX + mParams.mRadius, GetPos().mY + mParams.mRadius);
 }
 
 CExplosion::CExplosion():
@@ -77,8 +77,8 @@ void CExplosion::Step(double _dt)
     {
         if (mParams.mRadius > 0.0f)
         {
-            CVec2f dist = GetScene()->GetObjects()[i]->GetPos().Get().Vec2();
-            dist -= this->GetPos().Get().Vec2();
+            CVec2f dist = GetScene()->GetObjects()[i]->GetPos();
+            dist -= this->GetPos();
 
             if (dist.LengthSquared() <= mParams.mRadius * mParams.mRadius)
             {

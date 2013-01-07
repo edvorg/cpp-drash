@@ -50,7 +50,7 @@ bool CTest3::Init()
     InitObjects();
 
     auto c = GetDebugDrawSystem().GetActiveCam();
-    c->GetPos().SetTarget(CVec3f(0, 50, 180), 1.0f, AnimationBehaviorSingle);
+    c->GetPos().SetTarget(CVec3f(0, 50, 180), 1.0f, AnimatorBehavior::Single);
     c->GetRotation().Set(CVec3f(-M_PI / 12, 0, 0));
 
     mSlider1.Connect(&GetUISystem());
@@ -93,11 +93,11 @@ void CTest3::Render()
     {
         mO1->ComputeBoundingBox();
         const b2AABB &b = mO1->GetBoundingBox();
-        CVec3f upper(B2Vec2ToCVec2(b.upperBound), mO1->GetPos().Get().mZ);
-        CVec3f lower(B2Vec2ToCVec2(b.lowerBound), mO1->GetPos().Get().mZ);
+        CVec3f upper(B2Vec2ToCVec2(b.upperBound), mO1->GetPosZ());
+        CVec3f lower(B2Vec2ToCVec2(b.lowerBound), mO1->GetPosZ());
         CColor4f col(1, 0, 0, 1);
-        CVec3f tmp1(upper.mX, lower.mY, mO1->GetPos().Get().mZ);
-        CVec3f tmp2(lower.mX, upper.mY, mO1->GetPos().Get().mZ);
+        CVec3f tmp1(upper.mX, lower.mY, mO1->GetPosZ());
+        CVec3f tmp2(lower.mX, upper.mY, mO1->GetPosZ());
         GetDebugDrawSystem().DrawLine(tmp1, upper, 1, col);
         GetDebugDrawSystem().DrawLine(tmp1, lower, 1, col);
         GetDebugDrawSystem().DrawLine(tmp2, upper, 1, col);
@@ -212,7 +212,7 @@ void CTest3::SetProcessors()
             }
             else if (mO2 != nullptr)
             {
-                GetScene().CreateJoint(mO1, mO2, mO1->GetPos().Get());
+                GetScene().CreateJoint(mO1, mO2, mO1->GetPos());
                 mO1 = nullptr;
                 mO2 = nullptr;
             }
@@ -236,7 +236,7 @@ void CTest3::SetProcessors()
         if (mMoveObject != nullptr)
         {
             CPlane p(PlaneXY);
-            p.SetPoint(mMoveObject->GetPos().Get());
+            p.SetPoint(mMoveObject->GetPos());
 
             CVec3f pos;
 
@@ -276,7 +276,7 @@ void CTest3::SetProcessors()
 
         pos.mZ += 10.0f;
 
-        GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimationBehaviorSingle);
+        GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
     }));
 
     GetEventSystem().SetProcessor("WHDN", CAppEventProcessor(
@@ -295,7 +295,7 @@ void CTest3::SetProcessors()
 
         pos.mZ -= 10.0f;
 
-        GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimationBehaviorSingle);
+        GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
     }));
 
     GetEventSystem().SetProcessor("C-q", CAppEventProcessor(

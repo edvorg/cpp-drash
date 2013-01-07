@@ -101,7 +101,7 @@ void CObjectEditorApp::Render()
             CFigure *figure = mCurrentObject->GetFigures()[i];
             for (unsigned int j = 0 ; j < figure->EnumVertices() ; j++)
             {
-                CVec3f position(figure->GetVertices()[j], mCurrentObject->GetPos().Get().mZ + figure->GetZ() + figure->GetDepth() * 0.5f);
+                CVec3f position(figure->GetVertices()[j], mCurrentObject->GetPosZ() + figure->GetZ() + figure->GetDepth() * 0.5f);
 
                 CColor4f color(1, 0.5, 0, 1);
 
@@ -125,7 +125,7 @@ void CObjectEditorApp::Render()
 
                 color.Col3().Set(255,155,0);
 
-                position.mZ = mCurrentObject->GetPos().Get().mZ + figure->GetZ() - figure->GetDepth() * 0.5f;
+                position.mZ = mCurrentObject->GetPosZ() + figure->GetZ() - figure->GetDepth() * 0.5f;
 
                 plane.SetPoint(position);
 
@@ -382,7 +382,7 @@ void CObjectEditorApp::SelectVertex()
 
         for (unsigned int j = 0 ; j < figure->EnumVertices() ; j++)
         {
-            CVec3f position(figure->GetVertices()[j], mCurrentObject->GetPos().Get().mZ + figure->GetZ() + figure->GetDepth() * 0.5f);
+            CVec3f position(figure->GetVertices()[j], mCurrentObject->GetPosZ() + figure->GetZ() + figure->GetDepth() * 0.5f);
 
             CPlane plane;
             plane.SetNormal(CVec3f(0, 0, 1));
@@ -403,7 +403,7 @@ void CObjectEditorApp::SelectVertex()
             }
             else
             {
-                position.mZ = mCurrentObject->GetPos().Get().mZ + figure->GetZ() - figure->GetDepth() * 0.5f;
+                position.mZ = mCurrentObject->GetPosZ() + figure->GetZ() - figure->GetDepth() * 0.5f;
 
                 plane.SetPoint(position);
 
@@ -443,8 +443,8 @@ void CObjectEditorApp::SaveCurrentObject()
 
 float CObjectEditorApp::GetCurDepth()
 {
-    float depth = drash::math::Abs(mCurrentObject->GetPos().Get().mZ
-       -GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
+    float depth = drash::math::Abs(mCurrentObject->GetPosZ() -
+                                   GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
     return depth;
 }
 
