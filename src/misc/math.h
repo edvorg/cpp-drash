@@ -66,6 +66,11 @@ T Rand(const T &_min, const T &_max, const T &_step)
            _min;
 }
 
+inline int Sign(double _value)
+{
+    return _value < 0.0 ? -1 : 1;
+}
+
 } // namespace math
 
 } // namespace drash

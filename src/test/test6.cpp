@@ -102,33 +102,36 @@ void CTest6::Step(double _dt)
 
     if (dir.Length() < 0.00001)
     {
-        mPlayer1Angle *= 0.99;
+        dir.Set(1, 0);
     }
     else
     {
         dir.Normalize();
-
-        float new_angle = acos(dir.mX);
-
-        if (dir.mY < 0.0f)
-        {
-            new_angle *= -1.0f;
-        }
-
-        mPlayer1Angle = 0.99 * mPlayer1Angle + 0.01 * new_angle;
-
-        mPlayer1OldPos = GetPlayersSystem().GetPlayers()[mPlayer1Id]->GetPos();
-
-        LOG_ERR(mPlayer1Angle);
     }
+
+    dir *= 0.05;
+
+    mPlayer1MeshDir.Normalize();
+    mPlayer1MeshDir *= 0.95;
+    mPlayer1MeshDir += dir;
+    mPlayer1MeshDir.Normalize();
+
+    mPlayer1OldPos = GetPlayersSystem().GetPlayers()[mPlayer1Id]->GetPos();
 }
 
 void CTest6::Render()
 {
+    float new_angle = acos(mPlayer1MeshDir.mX);
+
+    if (mPlayer1MeshDir.mY < 0.0f)
+    {
+        new_angle = 2.0 * M_PI - new_angle;
+    }
+
     CApp::Render();
 
     CMatrix4f r;
-    MatrixRotationY(r, M_PI * 0.5 + mPlayer1Angle);
+    MatrixRotationY(r, M_PI * 0.5 + new_angle);
 
     CMatrix4f s;
     MatrixScale(s, CVec3f(1));
