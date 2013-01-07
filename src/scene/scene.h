@@ -28,6 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../misc/vec2.h"
 #include "../misc/vec3.h"
+#include "../misc/objectfactory.h"
 
 class b2World;
 
@@ -60,8 +61,7 @@ public:
     // **************************************************
     // * main routines **********************************
 
-    CScene(void) = default;
-    ~CScene(void);
+    CScene(void);
 
     bool Init( const CSceneParams& _params );
     void Release(void);
@@ -74,15 +74,9 @@ public:
     // * working with objects ***************************
 
     CSceneObject* CreateObject(const CSceneObjectGeometry &_geometry, const CSceneObjectParams& _params );
-
-    void DestroyObject(CSceneObject *_obj);
-
+    bool DestroyObject(CSceneObject *_obj);
     inline CSceneObject * const * GetObjects(void) const;
-
-    /// returns total objects count
     inline unsigned int EnumObjects(void) const;
-
-    /// destroyes all objects
     void DestroyObjects(void);
 
     // **************************************************
@@ -97,24 +91,22 @@ protected:
 private:
     void DestroyObjectImpl(CSceneObject *_obj);
 
-    bool mInitialized = false;
     bool mLocked = false;
 
     b2World *mWorld = nullptr;
     CPhysObserver *mObserver = nullptr;
 
-    CSceneObject *mObjects[mObjectsCountLimit];
-    unsigned int mObjectsCount = 0;
+    CObjectFactory<CSceneObject> mObjectsFactory;
 };
 
 inline CSceneObject * const * CScene::GetObjects(void) const
 {
-    return mObjects;
+    return mObjectsFactory.GetObjects();
 }
 
 inline unsigned int CScene::EnumObjects(void) const
 {
-    return mObjectsCount;
+    return mObjectsFactory.EnumObjects();
 }
 
 } // namespace drash

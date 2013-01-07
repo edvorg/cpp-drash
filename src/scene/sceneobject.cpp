@@ -36,47 +36,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
-bool CSceneObject::Init(const GeometryT &_geometry, const CSceneObject::ParamsT &_params )
+bool CSceneObject::Init()
 {
-    if ( mBody == nullptr )
-    {
-        return false;
-    }
-
-    mPosXYAnimator = _params.mPos;
-	mPosZAnimator = _params.mPos.mZ;
-    mAngleAnimator = _params.mAngle;
-
-    mBody->SetTransform(CVec2ToB2Vec2(_params.mPos), _params.mAngle);
-    mBody->SetActive(true);
-    mBody->SetAwake(true);
-    mBody->SetSleepingAllowed(true);
-    mBody->SetUserData(this);
-    mBody->SetAngularDamping(0);
-    mBody->SetBullet(false);
-    mBody->SetFixedRotation( _params.mFixedRotation );
-    mBody->SetLinearDamping(0);
-    mBody->SetGravityScale(1.0f);
-    mBody->SetType( _params.mDynamic ?
-                    b2_dynamicBody :
-                    b2_kinematicBody );
-
-    for ( auto i = _geometry.mFigures.begin(), i_e = _geometry.mFigures.end(); i != i_e; i++ )
-    {
-        CreateFigure(*i);
-    }
-
     return true;
-}
-
-void CSceneObject::Release()
-{
-    while ( b2Fixture *f = mBody->GetFixtureList() )
-    {
-        delete reinterpret_cast<CFigure*>( f->GetUserData() );
-        f->SetUserData(nullptr);
-        mBody->DestroyFixture(f);
-    }
 }
 
 void CSceneObject::Step(double _dt)
@@ -143,6 +105,10 @@ void CSceneObject::Step(double _dt)
     {
         mBody->SetTransform(CVec2ToB2Vec2(mPos), mAngle);
     }
+}
+
+void CSceneObject::Release()
+{
 }
 
 void CSceneObject::OnContactBegin(const CFigure *_f1, const CFigure *_f2)

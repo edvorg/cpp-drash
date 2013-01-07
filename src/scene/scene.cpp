@@ -37,24 +37,14 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
-CScene::~CScene(void)
+CScene::CScene():
+    mObjectsFactory(mObjectsCountLimit, "CSceneObject")
 {
-    if ( mInitialized == true )
-    {
-        LOG_WARN( "CScene::~CScene(): "
-                  "Release() called automatically from destructor" );
-        Release();
-    }
 }
 
 bool CScene::Init( const CSceneParams &_params )
 {
-    if ( mInitialized == true )
-    {
-        LOG_WARN( "CScene::Init(): "
-                  "already initialized" );
-        return false;
-    }
+	Release();
 
     mObserver = new CPhysObserver();
     mWorld = new b2World(b2Vec2(0, 0));
@@ -65,92 +55,68 @@ bool CScene::Init( const CSceneParams &_params )
     mWorld->SetContinuousPhysics(false);
     mWorld->SetGravity(CVec2ToB2Vec2(_params.mGravity));
 
-    mInitialized = true;
-
     return true;
 }
 
 void CScene::Release(void)
 {
-    if ( mInitialized == false )
-    {
-        LOG_WARN( "CScene::Release(): "
-                  "already released" );
-        return;
-    }
-
-    if ( mObjectsCount != 0 )
-    {
-        LOG_WARN( "CScene::Release(): "<<
-                  mObjectsCount<<
-                  " object(s) haven't been destroyed. Autorelease" );
-
-        while( mObjectsCount != 0 )
+	if (mWorld != nullptr)
+	{
+        while (mWorld->GetJointCount())
         {
-            DestroyObject(mObjects[0]);
+            delete reinterpret_cast<CJoint*>(mWorld->GetJointList()->GetUserData());
+            mWorld->GetJointList()->SetUserData(nullptr);
+            mWorld->DestroyJoint(mWorld->GetJointList());
         }
-    }
 
-    while (mWorld->GetJointCount())
-    {
-        delete reinterpret_cast<CJoint*>(mWorld->GetJointList()->GetUserData());
-        mWorld->GetJointList()->SetUserData(nullptr);
-        mWorld->DestroyJoint(mWorld->GetJointList());
-    }
+        DestroyObjects();
 
-    delete mWorld;
+        delete mWorld;
+	}
+
     delete mObserver;
-
-    mInitialized = false;
 }
 
 void CScene::Step( double _dt )
 {
-    if ( mInitialized == false )
-    {
-        LOG_ERR( "CScene::Step(): "
-                 "this is not initialized" );
-        return;
-    }
-
     mLocked = true;
 
-    for (unsigned int i = 0; i < mObjectsCount;)
+    for (unsigned int i = 0; i < mObjectsFactory.EnumObjects();)
     {
-        if (mObjects[i]->mDead)
+        if (mObjectsFactory.GetObjects()[i]->mDead)
         {
-            DestroyObjectImpl(mObjects[i]);
+            DestroyObjectImpl(mObjectsFactory.GetObjects()[i]);
         }
         else
         {
-            for (unsigned int j = 0; j < mObjects[i]->mFiguresCount; j++)
+            for (unsigned int j = 0; j < mObjectsFactory.GetObjects()[i]->mFiguresCount; j++)
             {
-                if (mObjects[i]->mFigures[j]->mDead == true)
+                if (mObjectsFactory.GetObjects()[i]->mFigures[j]->mDead == true)
                 {
                     CSceneObjectGeometry g;
                     g.mFigures.resize(1);
-                    g.mFigures[0].mVertices.resize(mObjects[i]->mFigures[j]->EnumVertices());
-                    g.mFigures[0].mZ = mObjects[i]->mFigures[j]->GetZ();
-                    g.mFigures[0].mDepth = mObjects[i]->mFigures[j]->GetDepth();
+                    g.mFigures[0].mVertices.resize(mObjectsFactory.GetObjects()[i]->mFigures[j]->EnumVertices());
+                    g.mFigures[0].mZ = mObjectsFactory.GetObjects()[i]->mFigures[j]->GetZ();
+                    g.mFigures[0].mDepth = mObjectsFactory.GetObjects()[i]->mFigures[j]->GetDepth();
                     memcpy(&*g.mFigures[0].mVertices.begin(),
-                           mObjects[i]->mFigures[j]->GetVertices(),
-                           sizeof(CVec2f) * mObjects[i]->mFigures[j]->EnumVertices());
+                           mObjectsFactory.GetObjects()[i]->mFigures[j]->GetVertices(),
+                           sizeof(CVec2f) * mObjectsFactory.GetObjects()[i]->mFigures[j]->EnumVertices());
 
                     CSceneObjectParams p;
-                    p.mAngle = mObjects[i]->mAngle;
+                    p.mAngle = mObjectsFactory.GetObjects()[i]->mAngle;
                     p.mDynamic = true;
                     p.mFixedRotation = false;
-                    p.mPos = mObjects[i]->mPos;
+                    p.mPos = mObjectsFactory.GetObjects()[i]->mPos;
 
                     CreateObject(g, p);
 
-                    mObjects[i]->DestroyFigure(mObjects[i]->mFigures[j]);
+                    mObjectsFactory.GetObjects()[i]->DestroyFigure(mObjectsFactory.GetObjects()[i]->mFigures[j]);
 
                     break;
                 }
             }
 
-            mObjects[i]->Step(_dt);
+            mObjectsFactory.GetObjects()[i]->Step(_dt);
             i++;
         }
     }
@@ -162,19 +128,33 @@ void CScene::Step( double _dt )
 
 CSceneObject* CScene::CreateObject(const CSceneObjectGeometry &_geometry, const CSceneObjectParams& _params)
 {
-    if (mObjectsCount == mObjectsCountLimit)
-    {
-        LOG_ERR("CScene::CreateObject(): Achieved maximum Amount of Objects in scene");
-        return nullptr;
-    }
-
     if (mWorld->IsLocked())
     {
         LOG_ERR("CScene::CreateObject(): world is locked now");
         return nullptr;
     }
 
+    CSceneObject* res = mObjectsFactory.CreateObject();
+
+    if (res == nullptr)
+    {
+        return nullptr;
+    }
+
     b2BodyDef bdef;
+    bdef.position = CVec2ToB2Vec2(_params.mPos);
+    bdef.angle = _params.mAngle;
+    bdef.active = true;
+    bdef.awake = true;
+    bdef.allowSleep = true;
+    bdef.userData = res;
+    bdef.angularDamping = 0;
+    bdef.bullet = false;
+    bdef.fixedRotation = _params.mFixedRotation;
+    bdef.linearDamping = 0;
+    bdef.gravityScale = 1;
+    bdef.type = _params.mDynamic ? b2_dynamicBody : b2_kinematicBody;
+
     b2Body *b = mWorld->CreateBody(&bdef);
 
     if (b == nullptr)
@@ -183,31 +163,25 @@ CSceneObject* CScene::CreateObject(const CSceneObjectGeometry &_geometry, const 
         return nullptr;
     }
 
-    CSceneObject* res = new CSceneObject();
     res->mBody = b;
-    res->mBody->SetUserData(res);
-    res->mInternalId = mObjectsCount;
+    res->mPos = _params.mPos;
+    res->mAngle = _params.mAngle;
 
-    if (res->Init(_geometry, _params) == false)
+    for ( auto i = _geometry.mFigures.begin(), i_e = _geometry.mFigures.end(); i != i_e; i++ )
     {
-        LOG_ERR("CScene::CreateObject(): object init failed");
-        mWorld->DestroyBody(b);
-        delete res;
-        return nullptr;
+        res->CreateFigure(*i);
     }
-
-    mObjects[mObjectsCount] = res;
-    mObjectsCount++;
 
     return res;
 }
 
-void CScene::DestroyObject(CSceneObject *_obj)
+bool CScene::DestroyObject(CSceneObject *_obj)
 {
-    DRASH_ASSERT(_obj != nullptr &&
-                 "CScene::DestroyObject(): wrong pointer");
-    DRASH_ASSERT( mObjects[_obj->mInternalId] == _obj &&
-                  "CScene::DestroyObject(): something wrong with objects creation logic" );
+    if (mObjectsFactory.IsObject(_obj) == false)
+    {
+        LOG_ERR("CScene::DestroyObject(): invalid object taken");
+        return false;
+    }
 
     if (mLocked == false && mWorld->IsLocked() == false)
     {
@@ -217,13 +191,15 @@ void CScene::DestroyObject(CSceneObject *_obj)
     {
         _obj->mDead = true;
     }
+
+    return true;
 }
 
 void CScene::DestroyObjects(void)
 {
-    for (unsigned int i = 0 ; i < this->EnumObjects() ; i++)
+    while (mObjectsFactory.EnumObjects() != 0)
     {
-        DestroyObject(this->GetObjects()[i]);
+        DestroyObjectImpl(mObjectsFactory.GetObjects()[0]);
     }
 }
 
@@ -258,23 +234,21 @@ void CScene::SetGravity(const CVec2f &_g)
 
 void CScene::DestroyObjectImpl(CSceneObject *_obj)
 {
-    b2Body* body = _obj->mBody;
+    while (b2Fixture *f = _obj->mBody->GetFixtureList())
+    {
+        delete reinterpret_cast<CFigure*>(f->GetUserData());
+        f->SetUserData(nullptr);
+        _obj->mBody->DestroyFixture(f);
+    }
+
     _obj->mBody->SetActive(false);
     _obj->mBody->SetUserData(nullptr);
 
-    mObjectsCount--;
-    mObjects[_obj->mInternalId] = mObjects[mObjectsCount];
-    mObjects[mObjectsCount] = nullptr;
+    mWorld->DestroyBody(_obj->mBody);
 
-    if ( mObjects[_obj->mInternalId] != nullptr )
-    {
-        mObjects[_obj->mInternalId]->mInternalId = _obj->mInternalId;
-    }
+    _obj->mBody = nullptr;
 
-    _obj->Release();
-    delete _obj;
-
-    mWorld->DestroyBody(body);
+    mObjectsFactory.DestroyObject(_obj);
 }
 
 } // namespace drash

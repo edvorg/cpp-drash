@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CSCENEOBJECT_H
 #define CSCENEOBJECT_H
 
+#include "../misc/objectfactory.h"
 #include "../misc/animator.h"
 #include "../misc/vec3.h"
 #include "../misc/color4.h"
@@ -61,7 +62,7 @@ public:
     bool mFixedRotation = false;
 };
 
-class CSceneObject final
+class CSceneObject final : public CObjectFactory<CSceneObject>::CFactoryProduct
 {
 public:
     friend class CPhysObserver;
@@ -71,8 +72,7 @@ public:
 
     static const unsigned int mFiguresCountLimit = 16;
 
-    typedef CSceneObjectGeometry GeometryT;
-    typedef CSceneObjectParams ParamsT;
+    CSceneObject(void) = default;
 
     CFigure *CreateFigure(const CFigureParams &_params);
     void DestroyFigure(CFigure *_figure);
@@ -102,19 +102,16 @@ public:
     void DumpGeometry(CSceneObjectGeometry *_geometry) const;
 
 protected:
-    CSceneObject(void) = default;
-
-    bool Init( const GeometryT &_geometry, const ParamsT &_params );
-    void Release(void);
-
+private:
+    bool Init();
     void Step(double _dt);
+    void Release(void);
 
     void OnContactBegin(const CFigure *_f1, const CFigure *_f2);
     void OnContactPreSolve(const CFigure *, const CFigure *);
     void OnContactEnd(const CFigure *, const CFigure *_f2);
     void DrawDebug() const;
 
-private:
     b2Body* mBody = nullptr;
 
     //////////////////////////////////////////////////////
@@ -122,9 +119,6 @@ private:
 
     /// if flag is true, object will be destoyed with next CScene::Step() invokation
     bool mDead = false;
-
-    /// id. just for perfomance
-    int mInternalId = -1;
 
     //////////////////////////////////////////////
     /// figures factory //////////////////////////

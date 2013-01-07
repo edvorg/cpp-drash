@@ -58,7 +58,7 @@ public:
     bool DestroyObjectSafe(CFactoryProduct *_obj);
     void DestroyObject(CFactoryProduct *_obj);
     inline bool IsObject(CFactoryProduct *_obj) const;
-    inline T * const * GetObjects();
+    inline T * const * GetObjects() const;
     inline unsigned int EnumObjects() const;
 
 protected:
@@ -165,7 +165,7 @@ inline bool CObjectFactory<T>::IsObject(CObjectFactory::CFactoryProduct *_obj) c
 }
 
 template<class T>
-inline T * const * CObjectFactory<T>::GetObjects()
+inline T * const * CObjectFactory<T>::GetObjects() const
 {
     return mObjects;
 }
