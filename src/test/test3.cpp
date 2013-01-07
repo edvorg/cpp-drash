@@ -25,8 +25,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "test3.h"
 
 #include "../scene/scene.h"
-#include "../scene/explosion.h"
-#include "../scene/player.h"
+#include "../explosion/explosion.h"
+#include "../players/player.h"
 #include "../scene/figure.h"
 
 #include "../debugdrawsystem/camera.h"
@@ -89,21 +89,6 @@ void CTest3::Render()
 {
     CTest1::Render();
 
-    if (mO1 != nullptr)
-    {
-        mO1->ComputeBoundingBox();
-        const b2AABB &b = mO1->GetBoundingBox();
-        CVec3f upper(B2Vec2ToCVec2(b.upperBound), mO1->GetPosZ());
-        CVec3f lower(B2Vec2ToCVec2(b.lowerBound), mO1->GetPosZ());
-        CColor4f col(1, 0, 0, 1);
-        CVec3f tmp1(upper.mX, lower.mY, mO1->GetPosZ());
-        CVec3f tmp2(lower.mX, upper.mY, mO1->GetPosZ());
-        GetDebugDrawSystem().DrawLine(tmp1, upper, 1, col);
-        GetDebugDrawSystem().DrawLine(tmp1, lower, 1, col);
-        GetDebugDrawSystem().DrawLine(tmp2, upper, 1, col);
-        GetDebugDrawSystem().DrawLine(tmp2, lower, 1, col);
-    }
-
     CVec4f origin(40, 20, 0, 1);
     CVec4f pos(0, 0, 0, 1);
     CMatrix4f m;
@@ -138,85 +123,35 @@ void CTest3::SetProcessors()
     [] () {},
     [this] ()
     {
-        this->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveDeep ), 0 );
+        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::Deep);
     }));
 
     GetEventSystem().SetProcessor("a", CAppEventProcessor(
     [] () {},
     [this] ()
     {
-        this->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveLeft ), 0 );
+        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::Left);
     }));
 
     GetEventSystem().SetProcessor("s", CAppEventProcessor(
     [] () {},
     [this] ()
     {
-        this->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveOut ), 0 );
+        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::AntiDeep);
     }));
 
     GetEventSystem().SetProcessor("d", CAppEventProcessor(
     [] () {},
     [this] ()
     {
-        this->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionMoveRight ), 0 );
+        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::Right);
     }));
 
     GetEventSystem().SetProcessor("SPC", CAppEventProcessor(
     [] () {},
     [this] ()
     {
-        this->GetPlayersSystem().OnPlayerEvent( CPlayerEvent( CPlayerEvent::PlayerActionJump ), 0 );
-    }));
-
-    GetEventSystem().SetProcessor("LB", CAppEventProcessor(
-    [this] ()
-    {
-        CSceneObjectGeometry g;
-        CExplosionParams p;
-        p.mLifeTime = 1;
-        p.mStregth = -5;
-        p.mRadius = 200;
-
-        CPlane plane;
-        plane.SetNormal(CVec3f(0, 0, 1));
-        plane.SetPoint(CVec3f(0, 0, 0));
-
-        GetDebugDrawSystem().CastRay(GetCursorPos(), plane, p.mPos);
-
-        GetScene().CreateObject<CExplosion>(g, p);
-    }));
-
-    GetEventSystem().SetProcessor("RB", CAppEventProcessor(
-    [this] ()
-    {
-        if (mO1 == nullptr)
-        {
-            CFigure *f = GetDebugDrawSystem().FindFigure(GetCursorPos());
-            if (f != nullptr)
-            {
-                mO1 = f->GetSceneObject();
-            }
-        }
-        else if (mO2 == nullptr)
-        {
-            CFigure *f = GetDebugDrawSystem().FindFigure(GetCursorPos());
-            if (f != nullptr)
-            {
-                mO2 = f->GetSceneObject();
-            }
-
-            if (mO1 == mO2)
-            {
-                mO2 = nullptr;
-            }
-            else if (mO2 != nullptr)
-            {
-                GetScene().CreateJoint(mO1, mO2, mO1->GetPos());
-                mO1 = nullptr;
-                mO2 = nullptr;
-            }
-        }
+        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::Jump);
     }));
 
     GetEventSystem().SetProcessor("MB", CAppEventProcessor(
@@ -366,10 +301,10 @@ void CTest3::InitObjects()
     CSceneObjectParams sbp;
     sbp.mDynamic = false;
     sbp.mAngle = 0;
-    GetScene().CreateObject<CSceneObject>(sbg, sbp);
+    GetScene().CreateObject(sbg, sbp);
 
     sbp.mPos.Set(0, 600, 0);
-    GetScene().CreateObject<CSceneObject>(sbg, sbp);
+    GetScene().CreateObject(sbg, sbp);
 
     sbg.mFigures[0].mVertices.clear();
     sbg.mFigures.resize(1);
@@ -378,7 +313,7 @@ void CTest3::InitObjects()
     sbg.mFigures[0].mVertices.push_back( CVec2f( 5, 300 ) );
     sbg.mFigures[0].mVertices.push_back( CVec2f( -5, 300 ) );
     sbp.mPos.Set(-300, 300, 0);
-    GetScene().CreateObject<CSceneObject>(sbg, sbp);
+    GetScene().CreateObject(sbg, sbp);
 
     sbg.mFigures[0].mVertices.clear();
     sbg.mFigures.resize(1);
@@ -387,21 +322,22 @@ void CTest3::InitObjects()
     sbg.mFigures[0].mVertices.push_back( CVec2f( 5, 300 ) );
     sbg.mFigures[0].mVertices.push_back( CVec2f( -5, 300 ) );
     sbp.mPos.Set(300, 300, 0);
-    GetScene().CreateObject<CSceneObject>(sbg, sbp);
+    GetScene().CreateObject(sbg, sbp);
 
     CSceneObjectGeometry pg;
     pg.mFigures.resize(1);
     pg.mFigures[0].mMass = 3;
     CSceneObjectParams pp;
     pp.mPos.Set(-200, 100, 0);
-    GetScene().CreateObject<CSceneObject>(pg, pp)->SetLinearVelocity( CVec2f( 200, 0 ) );
+    GetScene().CreateObject(pg, pp)->SetLinearVelocity( CVec2f( 200, 0 ) );
 
     CSceneObjectGeometry ppg;
     ppg.mFigures.resize(1);
     ppg.mFigures[0].mDepth = 2;
     CPlayerParams ppp;
-    ppp.mPos.Set(0, 10, 0);
-    GetPlayersSystem().AddPlayer(ppg, ppp);
+    ppp.mSceneObjectParams.mPos.Set(0, 10, 0);
+    ppp.mVelocityLimit = 10;
+    GetPlayersSystem().CreatePlayer(ppg, ppp);
 }
 
 } // namespace test

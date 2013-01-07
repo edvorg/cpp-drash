@@ -23,14 +23,19 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include "figure.h"
-
 #include "sceneobject.h"
+#include <Box2D/Box2D.h>
 
 namespace drash
 {
 
 CFigureParams::CFigureParams()
 {
+}
+
+CSceneObject *CFigure::GetSceneObject() const
+{
+    return reinterpret_cast<CSceneObject*>(mFixture->GetBody()->GetUserData());
 }
 
 void CFigure::SetVertices(const CVec2f *_vertices, unsigned int _count)
@@ -70,6 +75,11 @@ unsigned int CFigure::EnumVertices() const
     return reinterpret_cast<b2PolygonShape*>(mFixture->GetShape())->GetVertexCount();
 }
 
+float CFigure::GetFriction() const
+{
+    return mFixture->GetFriction();
+}
+
 CLogger &operator <<(CLogger &_logger, const CFigure &_figure)
 {
     if (_figure.EnumVertices())
@@ -84,8 +94,9 @@ CLogger &operator <<(CLogger &_logger, const CFigure &_figure)
     return _logger;
 }
 
-CFigure::CFigure()
+bool CFigure::TestPoint(const CVec2f &_xy) const
 {
+    return mFixture->TestPoint(CVec2ToB2Vec2(_xy));
 }
 
 }// namespace drash

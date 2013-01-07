@@ -49,7 +49,7 @@ private:
     bool InitLight();
     bool InitProcessors();
 
-    unsigned int mPlayer1Id = 0;
+    CPlayer *mPlayer1 = nullptr;
     greng::CMesh *mPlayer1Mesh = nullptr;
     greng::CTexture *mPlayer1Texture = nullptr;
     greng::CVertexShader *mPlayer1VertexShader = nullptr;

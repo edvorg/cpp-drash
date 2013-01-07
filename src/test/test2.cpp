@@ -29,7 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../debugdrawsystem/camera.h"
 #include "../misc/plane.h"
 #include "../scene/sceneobject.h"
-#include "../scene/player.h"
+#include "../players/player.h"
 #include "../scene/figure.h"
 
 namespace drash
@@ -59,7 +59,7 @@ bool CTest2::Init()
     CSceneObjectParams p;
     p.mPos.mY = -25;
     p.mDynamic = false;
-    GetScene().CreateObject<CSceneObject>(g, p);
+    GetScene().CreateObject(g, p);
 
     CSceneObjectGeometry player_geometry;
     player_geometry.mFigures.resize(1);
@@ -68,9 +68,11 @@ bool CTest2::Init()
     player_geometry.mFigures[0].mVertices.push_back( CVec2f( 2, 5 ) );
     player_geometry.mFigures[0].mVertices.push_back( CVec2f( -2, 5 ) );
     player_geometry.mFigures[0].mDepth = 1;
+
     CPlayerParams player;
-    player.mPos.Set(0, -20, 0);
-    GetPlayersSystem().AddPlayer(player_geometry, player);
+    player.mSceneObjectParams.mPos.Set(0, -20, 0);
+
+    GetPlayersSystem().CreatePlayer(player_geometry, player);
 
     CSceneObjectGeometry tg;
     tg.mFigures.resize(1);
@@ -85,7 +87,7 @@ bool CTest2::Init()
     targetForFire.mPos.Set(-20, 0, 0);
     for (int i = 0 ; i < 10 ; i++)
     {
-        GetScene().CreateObject<CSceneObject>(tg, targetForFire);
+        GetScene().CreateObject(tg, targetForFire);
         targetForFire.mPos.Set(-20, 20 + i*20, 0);
     }
 

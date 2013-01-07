@@ -123,7 +123,7 @@ CSceneObject *CTemplateSystem::CreateSceneObjectFromTemplate(const std::string &
         LOG_ERR("Object" << _name.c_str() << "not found in CTemplateSystem");
         return nullptr;
     }
-    return GetScene()->CreateObject<CSceneObject>(*(iter->second), _params);
+    return GetScene()->CreateObject(*(iter->second), _params);
 }
 
 CSceneObjectGeometry *CTemplateSystem::FindTemplate(const std::string &_name)

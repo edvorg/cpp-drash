@@ -25,7 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "test6.h"
 #include "../scene/sceneobject.h"
 #include "../scene/figure.h"
-#include "../scene/player.h"
+#include "../players/player.h"
 #include "../debugdrawsystem/camera.h"
 #include "../scene/scene.h"
 
@@ -69,7 +69,7 @@ bool CTest6::Init()
     CSceneObjectParams p2;
     p2.mDynamic = false;
 
-    if (GetScene().CreateObject<CSceneObject>(g2, p2) == nullptr)
+    if (GetScene().CreateObject(g2, p2) == nullptr)
     {
         return false;
     }
@@ -98,8 +98,8 @@ void CTest6::Step(double _dt)
 
     mPointLight1.mPosition.Set(sin(mAngle) * 40, 20, 0);
 
-    CVec2f dir(GetPlayersSystem().GetPlayers()[0]->GetPosXY().Get().mX - mPlayer1OldPos.mX,
-               mPlayer1OldPos.mZ - GetPlayersSystem().GetPlayers()[0]->GetPosZ());
+    CVec2f dir(GetPlayersSystem().GetPlayers()[0]->GetSceneObject()->GetPosXY().Get().mX - mPlayer1OldPos.mX,
+               mPlayer1OldPos.mZ - GetPlayersSystem().GetPlayers()[0]->GetSceneObject()->GetPosZ());
 
     if (dir.LengthSquared() < 0.00001)
     {
@@ -120,11 +120,11 @@ void CTest6::Step(double _dt)
         CMatrix4f m;
         if (cross.mZ < 0.0)
         {
-            MatrixRotationZ(m, angle * -0.05);
+            MatrixRotationZ(m, angle * -0.02);
         }
         else
         {
-            MatrixRotationZ(m, angle * 0.05);
+            MatrixRotationZ(m, angle * 0.02);
         }
 
         CVec4f new_dir;
@@ -137,7 +137,7 @@ void CTest6::Step(double _dt)
         }
     }
 
-    mPlayer1OldPos = GetPlayersSystem().GetPlayers()[mPlayer1Id]->GetPos();
+    mPlayer1OldPos = mPlayer1->GetSceneObject()->GetPos();
 }
 
 void CTest6::Render()
@@ -161,7 +161,7 @@ void CTest6::Render()
     MatrixMultiply(r, s, rot);
 
     CMatrix4f transl;
-    MatrixTranslation(transl, GetPlayersSystem().GetPlayers()[mPlayer1Id]->GetPos() - CVec3f(0, 1, 0));
+    MatrixTranslation(transl, mPlayer1->GetSceneObject()->GetPos() - CVec3f(0, 1, 0));
 
     CMatrix4f model;
     MatrixMultiply(transl, rot, model);
@@ -199,12 +199,13 @@ bool CTest6::InitPlayer()
     g1.mFigures[0].mVertices.push_back(CVec2f(1, 1));
 
     CPlayerParams p1;
-    p1.mFixedRotation = true;
-    p1.mPos.Set(0, 10, 0);
+    p1.mVelocityLimit = 10;
+    p1.mSceneObjectParams.mFixedRotation = true;
+    p1.mSceneObjectParams.mPos.Set(0, 10, 0);
 
-    mPlayer1Id = GetPlayersSystem().AddPlayer(g1, p1);
+    mPlayer1 = GetPlayersSystem().CreatePlayer(g1, p1);
 
-    if (mPlayer1Id == -1)
+    if (mPlayer1 == nullptr)
     {
         return false;
     }
@@ -283,38 +284,38 @@ bool CTest6::InitProcessors()
     }));
 
     GetEventSystem().SetProcessor("w", CAppEventProcessor(
-    [this] () {},
+    [] () {},
     [this] ()
     {
-        GetPlayersSystem().OnPlayerEvent(CPlayerEvent::PlayerActionMoveDeep, mPlayer1Id);
+        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::Deep);
     }));
 
     GetEventSystem().SetProcessor("a", CAppEventProcessor(
-    [this] () {},
+    [] () {},
     [this] ()
     {
-        GetPlayersSystem().OnPlayerEvent(CPlayerEvent::PlayerActionMoveLeft, mPlayer1Id);
+        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::Left);
     }));
 
     GetEventSystem().SetProcessor("s", CAppEventProcessor(
-    [this] () {},
+    [] () {},
     [this] ()
     {
-        GetPlayersSystem().OnPlayerEvent(CPlayerEvent::PlayerActionMoveOut, mPlayer1Id);
+        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::AntiDeep);
     }));
 
     GetEventSystem().SetProcessor("d", CAppEventProcessor(
-    [this] () {},
+    [] () {},
     [this] ()
     {
-        GetPlayersSystem().OnPlayerEvent(CPlayerEvent::PlayerActionMoveRight, mPlayer1Id);
+        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::Right);
     }));
 
     GetEventSystem().SetProcessor("SPC", CAppEventProcessor(
-    [this] () {},
+    [] () {},
     [this] ()
     {
-        GetPlayersSystem().OnPlayerEvent(CPlayerEvent::PlayerActionJump, mPlayer1Id);
+        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::Jump);
     }));
 
     return true;

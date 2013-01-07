@@ -39,14 +39,7 @@ bool CApp::Init()
     CSceneParams params;
     params.mGravity.Set( 0, -9.8 );
 
-    if (mScene.Init(params) == false ||
-        mExplosionSystem.Init() == false ||
-        mPlayersSystem.Init() == false ||
-        mTemplateSystem.Init() == false ||
-        mDebugDrawSystem.Init() == false ||
-        mEventSystem.Init() == false ||
-        mUISystem.Init() == false ||
-        mRenderer.Init() == false)
+    if (mScene.Init(params) == false)
     {
         return false;
     }
@@ -56,6 +49,17 @@ bool CApp::Init()
     mTemplateSystem.SetScene(&mScene);
     mDebugDrawSystem.SetScene(&mScene);
     mUISystem.SetDebugDrawSystem(&mDebugDrawSystem);
+
+    if (mExplosionSystem.Init() == false ||
+        mPlayersSystem.Init() == false ||
+        mTemplateSystem.Init() == false ||
+        mDebugDrawSystem.Init() == false ||
+        mEventSystem.Init() == false ||
+        mUISystem.Init() == false ||
+        mRenderer.Init() == false)
+    {
+        return false;
+    }
 
     CCamera *cam = GetDebugDrawSystem().CreateCam(CCameraParams(), true);
 
@@ -90,19 +94,19 @@ void CApp::Step(double _dt)
 
 void CApp::Release()
 {
-    mExplosionSystem.SetScene(nullptr);
-    mPlayersSystem.SetScene(nullptr);
-    mTemplateSystem.SetScene(nullptr);
-    mDebugDrawSystem.SetScene(nullptr);
-    mUISystem.SetDebugDrawSystem(nullptr);
-
     mEventSystem.Release();
-    mScene.Release();
     mExplosionSystem.Release();
     mPlayersSystem.Release();
     mTemplateSystem.Release();
     mDebugDrawSystem.Release();
     mUISystem.Release();
+    mScene.Release();
+
+    mExplosionSystem.SetScene(nullptr);
+    mPlayersSystem.SetScene(nullptr);
+    mTemplateSystem.SetScene(nullptr);
+    mDebugDrawSystem.SetScene(nullptr);
+    mUISystem.SetDebugDrawSystem(nullptr);
 }
 
 void CApp::Render()

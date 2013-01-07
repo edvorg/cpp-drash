@@ -25,8 +25,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_VEC2_H
 #define DRASH_VEC2_H
 
-#include <Box2D/Box2D.h>
 #include "../diag/logger.h"
+#include <cmath>
+
+struct b2Vec2;
 
 namespace drash
 {
@@ -74,6 +76,9 @@ typedef CVec2<unsigned int, 0> CVec2ui;
 
 /// some global functions
 
+const b2Vec2 &CVec2ToB2Vec2(const CVec2f &_v);
+const CVec2f &B2Vec2ToCVec2(const b2Vec2 &_v);
+
 template<typename T, const int DEF_VAL>
 CVec2<T, DEF_VAL> operator +(const CVec2<T, DEF_VAL> &_v1, const CVec2<T, DEF_VAL> &_v2)
 {
@@ -92,27 +97,6 @@ CLogger &operator<<(CLogger& _logger, const CVec2<T, DEF_VAL> &_v)
     _logger<<'('<<_v.mX<<"; "<<_v.mY<<')';
     return _logger;
 }
-
-constexpr const unsigned int b2Vec2size = sizeof(b2Vec2);
-constexpr const unsigned int CVec2fsize = sizeof(CVec2f);
-
-#if b2Vec2size == CVec2fsize
-
-inline const b2Vec2 &CVec2ToB2Vec2(const CVec2f &_v)
-{
-    return reinterpret_cast<const b2Vec2 &>(_v);
-}
-
-inline const CVec2f &B2Vec2ToCVec2(const b2Vec2 &_v)
-{
-    return reinterpret_cast<const CVec2f &>(_v);
-}
-
-#else
-
-#error platform unsupported b2Vec2size != CVec2fsize
-
-#endif
 
 /// //////////////////// ///
 /// CVec2 implementation ///

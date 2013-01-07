@@ -27,9 +27,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define CTESTAPP_H
 
 #include "../scene/scene.h"
-#include "../subsystem/explosionsystem.h"
-#include "../subsystem/playerssystem.h"
-#include "../subsystem/templatesystem.h"
+#include "../explosion/explosionsystem.h"
+#include "../players/playerssystem.h"
+#include "../templates/templatesystem.h"
 #include "../debugdrawsystem/debugdrawsystem.h"
 #include "appeventsystem.h"
 #include "../ui/uisystem.h"
@@ -58,8 +58,6 @@ public:
     inline void SetQuitHandler(std::function<void ()> _handler);
 
     inline CScene &GetScene();
-    inline const CScene &GetScene() const;
-
     inline CAppEventSystem &GetEventSystem();
 	inline CExplosionSystem &GetExplosionSystem();
     inline CPlayersSystem &GetPlayersSystem();
@@ -91,7 +89,6 @@ private:
     CVec2f mCursorPos = CVec2f(0);
 
     CScene mScene;
-
     CExplosionSystem mExplosionSystem;
     CPlayersSystem mPlayersSystem;
     CTemplateSystem mTemplateSystem;
@@ -120,11 +117,6 @@ inline void CApp::SetQuitHandler(std::function<void ()> _handler)
 }
 
 inline CScene &CApp::GetScene()
-{
-    return mScene;
-}
-
-inline const CScene &CApp::GetScene() const
 {
     return mScene;
 }

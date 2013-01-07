@@ -22,24 +22,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#ifndef EXPLOSIONSYSTEM_H
-#define EXPLOSIONSYSTEM_H
-
-#include "subsystem.h"
+#include "player.h"
 
 namespace drash
 {
 
-class CExplosionSystem : public CSubsystem
-{
-public:    
-    CExplosionSystem() = default;
-
-    virtual bool Init() override;
-    virtual void Step(double) override;
-    virtual void Release() override;
-};
-
 }// namespace drash
-
-#endif // EXPLOSIONSYSTEM_H

@@ -33,23 +33,19 @@ SOURCES += \
     ../src/test/test2.cpp \
     ../src/test/test1.cpp \
     ../src/test/test.cpp \
-    ../src/subsystem/templatesystem.cpp \
-    ../src/subsystem/subsystem.cpp \
-    ../src/subsystem/playerssystem.cpp \
-    ../src/subsystem/explosionsystem.cpp \
+    ../src/templates/templatesystem.cpp \
+    ../src/players/playerssystem.cpp \
+    ../src/explosion/explosionsystem.cpp \
     ../src/scene/sceneobject.cpp \
     ../src/scene/scene.cpp \
-    ../src/scene/player.cpp \
+    ../src/players/player.cpp \
     ../src/scene/physobserver.cpp \
     ../src/scene/figure.cpp \
-    ../src/scene/explosion.cpp \
-    ../src/scene/destructiongraph.cpp \
     ../src/misc/segment2.cpp \
     ../src/misc/ray.cpp \
     ../src/misc/plane.cpp \
     ../src/misc/matrix4.cpp \
     ../src/misc/graphics.cpp \
-    ../src/joints/joint.cpp \
     ../src/greng/renderer.cpp \
     ../src/greng/meshmanager.cpp \
     ../src/diag/timer.cpp \
@@ -67,7 +63,9 @@ SOURCES += \
     ../src/greng/vertexshadermanager.cpp \
     ../src/greng/fragmentshadermanager.cpp \
     ../src/greng/shaderprogrammanager.cpp \
-    ../src/test/test6.cpp
+    ../src/test/test6.cpp \
+    ../src/misc/vec2.cpp \
+    ../src/scene/joint.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -81,17 +79,15 @@ HEADERS += \
     ../src/test/test2.h \
     ../src/test/test1.h \
     ../src/test/test.h \
-    ../src/subsystem/templatesystem.h \
-    ../src/subsystem/subsystem.h \
-    ../src/subsystem/playerssystem.h \
-    ../src/subsystem/explosionsystem.h \
+    ../src/templates/templatesystem.h \
+    ../src/players/playerssystem.h \
+    ../src/explosion/explosionsystem.h \
     ../src/scene/sceneobject.h \
     ../src/scene/scene.h \
-    ../src/scene/player.h \
+    ../src/players/player.h \
     ../src/scene/physobserver.h \
     ../src/scene/figure.h \
-    ../src/scene/explosion.h \
-    ../src/scene/destructiongraph.h \
+    ../src/explosion/explosion.h \
     ../src/misc/vec4.h \
     ../src/misc/vec3.h \
     ../src/misc/vec2.h \
@@ -103,7 +99,6 @@ HEADERS += \
     ../src/misc/graphics.h \
     ../src/misc/color4.h \
     ../src/misc/color3.h \
-    ../src/joints/joint.h \
     ../src/greng/vertex.h \
     ../src/greng/renderer.h \
     ../src/greng/meshmanager.h \
@@ -130,5 +125,6 @@ HEADERS += \
     ../src/greng/shaderprogrammanager.h \
     ../src/greng/pointlight.h \
     ../src/test/test6.h \
-    ../src/misc/animator.h
+    ../src/misc/animator.h \
+    ../src/scene/joint.h
 

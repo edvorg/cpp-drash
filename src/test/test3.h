@@ -50,8 +50,6 @@ protected:
 private:
     void SetProcessors();
     void InitObjects();
-    CSceneObject *mO1 = nullptr;
-    CSceneObject *mO2 = nullptr;
     CSceneObject *mMoveObject = nullptr;
 
     // gravity in y axis

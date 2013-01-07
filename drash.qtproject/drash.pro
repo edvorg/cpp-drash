@@ -34,21 +34,19 @@ SOURCES += ../src/qt/main.cpp\
         ../src/qt/gamewindow.cpp \
     ../src/qt/scenewidget.cpp \
     ../src/debugdrawsystem/camera.cpp \
-    ../src/scene/explosion.cpp \
     ../src/test/test.cpp \
-    ../src/subsystem/subsystem.cpp \
-    ../src/subsystem/explosionsystem.cpp \
-    ../src/subsystem/playerssystem.cpp \
+    ../src/explosion/explosionsystem.cpp \
+    ../src/players/playerssystem.cpp \
     ../src/editor/editorwindow.cpp \
     ../src/misc/graphics.cpp \
-    ../src/subsystem/templatesystem.cpp \
+    ../src/templates/templatesystem.cpp \
     ../src/scene/physobserver.cpp \
     ../src/scene/figure.cpp \
     ../src/debugdrawsystem/debugdrawsystem.cpp \
     ../src/app/app.cpp \
     ../src/app/appevent.cpp \
     ../src/editor/sceneeditor.cpp\
-   ../src/joints/joint.cpp \
+    ../src/scene/joint.cpp \
     ../src/app/appeventsystem.cpp \
     ../src/app/appeventprocessor.cpp \
     ../src/app/appeventcombination.cpp \
@@ -58,7 +56,6 @@ SOURCES += ../src/qt/main.cpp\
     ../src/ui/uiwidget.cpp \
     ../src/ui/uibutton.cpp \
     ../src/ui/uislider.cpp \
-    ../src/scene/destructiongraph.cpp \
     ../src/test/test5.cpp \
     ../src/misc/plane.cpp \
     ../src/misc/ray.cpp \
@@ -68,7 +65,7 @@ SOURCES += ../src/qt/main.cpp\
     ../src/test/test2.cpp \
     ../src/test/test1.cpp \
     ../src/scene/sceneobject.cpp \
-    ../src/scene/player.cpp \
+    ../src/players/player.cpp \
     ../src/editor/editorapp.cpp \
     ../src/diag/logger.cpp \
     ../src/diag/timer.cpp \
@@ -80,21 +77,21 @@ SOURCES += ../src/qt/main.cpp\
     ../src/greng/vertexshadermanager.cpp \
     ../src/greng/fragmentshadermanager.cpp \
     ../src/greng/shaderprogrammanager.cpp \
-    ../src/test/test6.cpp
+    ../src/test/test6.cpp \
+    ../src/misc/vec2.cpp
 
 HEADERS  += ../src/qt/gamewindow.h \
     ../src/qt/scenewidget.h \
     ../src/misc/math.h \
     ../src/misc/animator.h \
     ../src/debugdrawsystem/camera.h \
-    ../src/scene/explosion.h \
+    ../src/explosion/explosion.h \
     ../src/test/test.h \
     ../src/diag/assert.h \
-    ../src/subsystem/subsystem.h \
-    ../src/subsystem/explosionsystem.h \
-    ../src/subsystem/playerssystem.h \
+    ../src/explosion/explosionsystem.h \
+    ../src/players/playerssystem.h \
     ../src/editor/editorwindow.h \
-    ../src/subsystem/templatesystem.h \
+    ../src/templates/templatesystem.h \
     ../src/misc/graphics.h \
     ../src/scene/physobserver.h \
     ../src/scene/figure.h \
@@ -102,7 +99,7 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/app/app.h \
     ../src/app/appevent.h \
     ../src/editor/sceneeditor.h \
-    ../src/joints/joint.h \
+    ../src/scene/joint.h \
     ../src/app/appeventsystem.h \
     ../src/app/appeventprocessor.h \
     ../src/app/appeventcombination.h \
@@ -112,7 +109,6 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/ui/uiwidget.h \
     ../src/ui/uibutton.h \
     ../src/ui/uislider.h \
-    ../src/scene/destructiongraph.h \
     ../src/test/test5.h \
     ../src/misc/vec3.h \
     ../src/misc/plane.h \
@@ -123,7 +119,7 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/diag/logger.h \
     ../src/diag/timer.h \
     ../src/editor/editorapp.h \
-    ../src/scene/player.h \
+    ../src/players/player.h \
     ../src/scene/sceneobject.h \
     ../src/test/test2.h \
     ../src/test/test3.h \

@@ -22,28 +22,40 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "subsystem.h"
+#include "vec2.h"
 
-#include "../scene/scene.h"
+#include <Box2D/Box2D.h>
 
 namespace drash
 {
 
-void CSubsystem::SetScene(CScene *_scene)
+constexpr const unsigned int b2Vec2size = sizeof(b2Vec2);
+constexpr const unsigned int CVec2fsize = sizeof(CVec2f);
+
+static const b2Vec2 v1;
+static const CVec2f v2(0, 0);
+
+constexpr const void *p1 = &v1;
+constexpr const void *p2 = &v1.x;
+constexpr const void *p3 = &v2;
+constexpr const void *p4 = &v2.mX;
+
+#if (b2Vec2size == CVec2fsize && p1 == p2 && p3 == p4)
+
+const b2Vec2 &CVec2ToB2Vec2(const CVec2f &_v)
 {
-    if (mScene != nullptr)
-    {
-        mScene->DisconnectSubsystem(this);
-        mScene = nullptr;
-    }
-
-    if (_scene == nullptr)
-    {
-        return;
-    }
-
-    mScene = _scene;
-    mScene->ConnectSubsystem(this);
+    return reinterpret_cast<const b2Vec2 &>(_v);
 }
 
-}// namespace drash
+const CVec2f &B2Vec2ToCVec2(const b2Vec2 &_v)
+{
+    return reinterpret_cast<const CVec2f &>(_v);
+}
+
+#else
+
+#error platform unsupported b2Vec2size != CVec2fsize
+
+#endif
+
+} // namespace drash

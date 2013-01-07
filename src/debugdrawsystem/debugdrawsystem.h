@@ -25,7 +25,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DEBUGDRAWSYSTEM_H
 #define DEBUGDRAWSYSTEM_H
 
-#include "../subsystem/subsystem.h"
 #include <vector>
 #include "../misc/matrix4.h"
 #include "../misc/color4.h"
@@ -33,17 +32,18 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
+class CScene;
 class CCameraParams;
 class CCamera;
 class CPlane;
 class CFigure;
 
-class CDebugDrawSystem : public CSubsystem
+class CDebugDrawSystem final
 {
 public:
-    virtual bool Init() override;
-    virtual void Step(double _dt) override;
-    virtual void Release() override;
+    bool Init();
+    void Step(double _dt);
+    void Release();
 
     /// if _set_active is true, calls SetActiveCam() with created cam as param
     CCamera *CreateCam(const CCameraParams &_params, bool _set_active = false);
@@ -91,6 +91,10 @@ public:
     /// draws point giving world space coordinates
     void DrawPoint(const CVec3f &_p, float _size, const CColor4f &_col, bool _depth_test = true) const;
 
+    inline void SetScene(CScene *_scene);
+    inline CScene *GetScene();
+    inline const CScene *GetScene() const;
+
 protected:
 private:
     CCamera *mActiveCam = nullptr;
@@ -98,6 +102,8 @@ private:
     float mAspectRatio = 1;
     CMatrix4f mViewMatrixTransposed;
     CMatrix4f mProjectionMatrixTransposed;
+
+    CScene* mScene = nullptr;
 };
 
 inline CCamera *CDebugDrawSystem::GetActiveCam() const
@@ -108,6 +114,21 @@ inline CCamera *CDebugDrawSystem::GetActiveCam() const
 inline float CDebugDrawSystem::GetAspectRatio() const
 {
     return mAspectRatio;
+}
+
+inline void CDebugDrawSystem::SetScene(CScene *_scene)
+{
+    mScene = _scene;
+}
+
+inline CScene *CDebugDrawSystem::GetScene()
+{
+    return mScene;
+}
+
+inline const CScene *CDebugDrawSystem::GetScene() const
+{
+    return mScene;
 }
 
 }// namespace drash

@@ -197,7 +197,7 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2f &_pos) const
             CVec3f pos;
             CastRay(_pos, plane, pos);
 
-            if (cur_fgr->mFixture->TestPoint(CVec2ToB2Vec2(pos)))
+            if (cur_fgr->TestPoint(pos))
             {
                 res = cur_fgr;
                 pos -= mActiveCam->GetPos().Get();
@@ -232,7 +232,7 @@ CFigure *CDebugDrawSystem::FindFigure(const CVec2f &_pos) const
             CVec3f pos;
             CastRay(_pos, plane, pos);
 
-            if (cur_fgr->mFixture->TestPoint(CVec2ToB2Vec2(pos)))
+            if (cur_fgr->TestPoint(pos))
             {
                 pos -= mActiveCam->GetPos().Get();
 

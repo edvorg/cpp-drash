@@ -25,45 +25,69 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef PLAYERSSYSTEM_H
 #define PLAYERSSYSTEM_H
 
-#include "subsystem.h"
+#include "player.h"
 
 namespace drash
 {
 
+class CScene;
 class CSceneObjectGeometry;
-class CPlayerParams;
-class CPlayer;
-class CPlayerEvent;
 
-class CPlayersSystem : public CSubsystem
+enum class PlayerMessage : unsigned int
+{
+    Left,
+    Right,
+    Deep,
+    AntiDeep,
+    Jump,
+};
+
+class CPlayersSystem final
 {
 public:
-    virtual bool Init() override;
-    virtual void Step(double) override;
-    virtual void Release() override;
+    static const unsigned int mPlayersCountLimit = 2;
 
-    int AddPlayer(const CSceneObjectGeometry &_geometry, const CPlayerParams &_params);
-    void RemPlayer(int _player);
+    CPlayersSystem();
+
+    bool Init();
+    void Step(double);
+    void Release();
+
+    inline void SetScene(CScene *_scene);
+    inline CScene *GetScene();
+
+    CPlayer *CreatePlayer(const CSceneObjectGeometry &_g, const CPlayerParams &_p);
+    bool DestroyPlayer(CPlayer* _player);
+
     inline CPlayer * const * GetPlayers();
     inline unsigned int EnumPlayers() const;
 
-    void OnPlayerEvent( const CPlayerEvent & _event, unsigned int _playerId );
-
-    static const unsigned int mMaxPlayersCount = 10;
+    bool SendMessage(CPlayer *_player, const PlayerMessage &_message);
 
 private:
-    CPlayer *mPlayers[mMaxPlayersCount];
-    unsigned mPlayersCount = 0;
+    CObjectFactory<CPlayer> mPlayersFactory;
+
+    CScene* mScene = nullptr;
 };
 
-inline CPlayer * const * CPlayersSystem::GetPlayers()
+inline void CPlayersSystem::SetScene(CScene *_scene)
 {
-    return mPlayers;
+    mScene = _scene;
+}
+
+inline CScene *CPlayersSystem::GetScene()
+{
+    return mScene;
+}
+
+inline CPlayer *const*CPlayersSystem::GetPlayers()
+{
+    return mPlayersFactory.GetObjects();
 }
 
 inline unsigned int CPlayersSystem::EnumPlayers() const
 {
-    return mPlayersCount;
+    return mPlayersFactory.EnumObjects();
 }
 
 }// namespace drash

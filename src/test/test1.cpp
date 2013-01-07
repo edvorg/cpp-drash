@@ -35,6 +35,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../misc/plane.h"
 #include "../misc/ray.h"
 
+#include <cstring>
+
 namespace drash
 {
 
@@ -426,7 +428,7 @@ void CTest1::SetProcessors()
 
             CSceneObjectParams p;
             p.mDynamic = false;
-            mCurrentObject = GetScene().CreateObject<CSceneObject>(*mCurrentTemplate, p);
+            mCurrentObject = GetScene().CreateObject(*mCurrentTemplate, p);
             mCurrentObject->SetActive(false);
         }
         else
@@ -452,7 +454,7 @@ void CTest1::SetProcessors()
 
                     CSceneObjectParams p;
                     p.mDynamic = false;
-                    mCurrentObject = GetScene().CreateObject<CSceneObject>(*mCurrentTemplate, p);
+                    mCurrentObject = GetScene().CreateObject(*mCurrentTemplate, p);
                     mCurrentObject->SetActive(false);
 
                     break;
@@ -557,8 +559,6 @@ void CTest1::ComputeIntersections()
         r.SetPoint(mSplitPlanePoint4);
         mSplitPlane.CastRay(r, mSplitPlanePoint4);
 
-        mCurrentObject->GetColor().mA = 0.75;
-
         CVec3f dir = mSplitPlanePoint1;
         dir -= mSplitPlanePoint4;
 
@@ -590,8 +590,6 @@ void CTest1::EndSplit()
 
     if (mCurrentObject != nullptr)
     {
-        mCurrentObject->GetColor().mA = 1;
-
         if (mCurrentFigure != nullptr && mCurrentTemplate != nullptr)
         {
             if (mSplitDepth == false)
@@ -750,7 +748,7 @@ void CTest1::CamViewProcessors()
 
             CSceneObjectParams p;
             p.mDynamic = false;
-            mCurrentObject = GetScene().CreateObject<CSceneObject>(*mCurrentTemplate, p);
+            mCurrentObject = GetScene().CreateObject(*mCurrentTemplate, p);
             mCurrentObject->SetActive(false);
         }
         else
@@ -776,7 +774,7 @@ void CTest1::CamViewProcessors()
 
                     CSceneObjectParams p;
                     p.mDynamic = false;
-                    mCurrentObject = GetScene().CreateObject<CSceneObject>(*mCurrentTemplate, p);
+                    mCurrentObject = GetScene().CreateObject(*mCurrentTemplate, p);
                     mCurrentObject->SetActive(false);
 
                     break;
@@ -816,7 +814,7 @@ void CTest1::CompleteFigure()
 
         CSceneObjectParams p;
         p.mDynamic = false;
-        mCurrentObject = GetScene().CreateObject<CSceneObject>(*mCurrentTemplate, p);
+        mCurrentObject = GetScene().CreateObject(*mCurrentTemplate, p);
         mCurrentObject->SetActive(false);
 
         mVertices.clear();
@@ -854,7 +852,7 @@ void CTest1::DetachCurrentObject()
         {
             CSceneObjectParams p;
             p.mDynamic = false;
-            mCurrentObject = GetScene().CreateObject<CSceneObject>(*mCurrentTemplate, p);
+            mCurrentObject = GetScene().CreateObject(*mCurrentTemplate, p);
             mCurrentObject->SetActive(false);
         }
     }

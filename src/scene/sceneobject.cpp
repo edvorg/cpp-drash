@@ -27,24 +27,14 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "figure.h"
 #include "../diag/logger.h"
 #include "../diag/assert.h"
-#include "explosion.h"
+#include "../explosion/explosion.h"
 #include "../misc/graphics.h"
 #include "scene.h"
 
+#include <Box2D/Box2D.h>
+
 namespace drash
 {
-
-CSceneObject::CSceneObject(void)
-{
-    mDebugColor.mR = math::Rand<float>(0.35f, 0.9f, 0.01f);
-    mDebugColor.mG = math::Rand<float>( 0.35f, 0.9f, 0.01f);
-    mDebugColor.mB = math::Rand<float>(0.35f, 0.9f, 0.01f);
-}
-
-CSceneObject::~CSceneObject(void)
-{
-    Release();
-}
 
 bool CSceneObject::Init(const GeometryT &_geometry, const CSceneObject::ParamsT &_params )
 {
@@ -110,7 +100,8 @@ void CSceneObject::Step(double _dt)
             p.mFixedRotation = false;
             p.mPos = mPos;
 
-            GetScene()->CreateObject<CSceneObject>(g, p);
+//            TODO: move this code to CScene
+//            GetScene()->CreateObject<CSceneObject>(g, p);
 
             DestroyFigure(mFigures[i]);
 
@@ -215,19 +206,6 @@ void CSceneObject::OnContactEnd(const CFigure *, const CFigure *_f2)
     }
 }
 
-void CSceneObject::OnBoom( const CExplosionParams &_boom )
-{
-    CVec2f dir(mPos);
-    dir -= _boom.mPos.Vec2();
-
-    float k = drash::math::Min( dir.Length(), _boom.mStregth )/ _boom.mStregth;
-
-    dir.Normalize();
-    dir *= k * _boom.mStregth;
-
-    ApplyLinearImpulse(dir, mPos);
-}
-
 void CSceneObject::DrawDebug() const
 {
     unsigned int j = 0;
@@ -253,7 +231,7 @@ void CSceneObject::DrawDebug() const
                          s->GetVertexCount(),
                          mPos.mZ + local_z,
                          depth,
-                         mDebugColor,
+                         CColor4f(1.0f, 0.0f, 0.0f, 1.0f),
                          mAngle);
             }
         }
@@ -347,16 +325,59 @@ void CSceneObject::DestroyFigure(CFigure *_figure)
     delete _figure;
 }
 
-void CSceneObject::ComputeBoundingBox()
+void CSceneObject::SetDynamic( bool _dynamic )
 {
-    mBoundingBox.lowerBound = b2Vec2(FLT_MAX,FLT_MAX);
-    mBoundingBox.upperBound = b2Vec2(-FLT_MAX,-FLT_MAX);
-    b2Fixture* fixture = mBody->GetFixtureList();
-    while (fixture != nullptr)
-    {
-        mBoundingBox.Combine(mBoundingBox, fixture->GetAABB(0));
-        fixture = fixture->GetNext();
-    }
+    mBody->SetType( _dynamic ? b2_dynamicBody : b2_kinematicBody );
+}
+
+bool CSceneObject::IsDynamic() const
+{
+    return mBody->GetType() == b2_dynamicBody ? true : false;
+}
+
+void CSceneObject::ApplyLinearImpulse( const CVec2f &_dir, const CVec2f &_pos )
+{
+    mBody->ApplyLinearImpulse(CVec2ToB2Vec2(_dir), CVec2ToB2Vec2(_pos));
+}
+
+void CSceneObject::SetLinearVelocity(const CVec2f &_vel)
+{
+    mBody->SetLinearVelocity(CVec2ToB2Vec2(_vel));
+}
+
+CVec2f CSceneObject::GetLinearVelocity() const
+{
+    return B2Vec2ToCVec2(mBody->GetLinearVelocity());
+}
+
+void CSceneObject::SetAngularVelocity(float _vel)
+{
+    mBody->SetAngularVelocity(_vel);
+}
+
+float CSceneObject::GetAngularVelocity() const
+{
+    return mBody->GetAngularVelocity();
+}
+
+void CSceneObject::SetFixedRotation( bool _fixed )
+{
+    mBody->SetFixedRotation(_fixed);
+}
+
+void CSceneObject::SetActive(bool _active)
+{
+    mBody->SetActive(_active);
+}
+
+CVec2f CSceneObject::GetWorldPoint(const CVec2f &_local_point) const
+{
+    return B2Vec2ToCVec2(mBody->GetWorldPoint(CVec2ToB2Vec2(_local_point)));
+}
+
+CVec2f CSceneObject::GetMassCenter() const
+{
+    return B2Vec2ToCVec2(mBody->GetWorldCenter());
 }
 
 CLogger &operator <<(CLogger &_logger, const CSceneObject &_object)

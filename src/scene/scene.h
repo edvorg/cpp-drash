@@ -26,13 +26,17 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CSCENE_H
 #define CSCENE_H
 
-#include "physobserver.h"
 #include "../misc/vec2.h"
 #include "../misc/vec3.h"
+
+class b2World;
 
 namespace drash
 {
 
+class CPhysObserver;
+class CSceneObjectGeometry;
+class CSceneObjectParams;
 class CSceneObject;
 class CJoint;
 
@@ -42,9 +46,7 @@ public:
     CVec2f mGravity;
 };
 
-class CSubsystem;
-
-class CScene
+class CScene final
 {
 public:    
     // **************************************************
@@ -58,8 +60,8 @@ public:
     // **************************************************
     // * main routines **********************************
 
-    CScene(void);
-    virtual ~CScene(void);
+    CScene(void) = default;
+    ~CScene(void);
 
     bool Init( const CSceneParams& _params );
     void Release(void);
@@ -71,10 +73,7 @@ public:
     // **************************************************
     // * working with objects ***************************
 
-    /// T must extend CSceneObject class
-    /// Method excepts, that T has ParamsT and GeometryT typedefs
-    template < typename T >
-    T* CreateObject( const typename T::GeometryT &_geometry, const typename T::ParamsT& _params );
+    CSceneObject* CreateObject(const CSceneObjectGeometry &_geometry, const CSceneObjectParams& _params );
 
     void DestroyObject(CSceneObject *_obj);
 
@@ -92,21 +91,6 @@ public:
     CJoint *CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2, const CVec3f &_anchor);
     void DestroyJoint(CJoint *_joint);
 
-    // **************************************************
-    // * working with subsystems ************************
-
-    /// as we made a connection, _subsystem gets a pointer to our CScene instance
-    /// and starts interaction with it
-    void ConnectSubsystem(CSubsystem *_subsystem);
-
-    /// as we made disconnect _subsystem, we lose pointer to this CScene instance
-    void DisconnectSubsystem(CSubsystem *_subsystem);
-
-    inline CSubsystem * const * GetSubsystems(void) const;
-
-    /// returns total connected subsystems count
-    inline unsigned int EnumSubsystems(void) const;
-
     void SetGravity(const CVec2f &_g);
 
 protected:
@@ -116,59 +100,12 @@ private:
     bool mInitialized = false;
     bool mLocked = false;
 
-    b2World mWorld;
-    CPhysObserver mObserver;
+    b2World *mWorld = nullptr;
+    CPhysObserver *mObserver = nullptr;
 
     CSceneObject *mObjects[mObjectsCountLimit];
     unsigned int mObjectsCount = 0;
-
-    CSubsystem *mSubsystems[mSubsystemsCountLimit];
-    unsigned int mSubsystemsCount = 0;
 };
-
-template < typename T >
-T* CScene::CreateObject(const typename T::GeometryT &_geometry, const typename T::ParamsT& _params)
-{
-    if (mObjectsCount == mObjectsCountLimit)
-	{
-        LOG_ERR("CScene::CreateObject(): Achieved maximum Amount of Objects in scene");
-        return nullptr;
-    }
-
-    if (mWorld.IsLocked())
-    {
-        LOG_ERR("CScene::CreateObject(): world is locked now");
-        return nullptr;
-    }
-
-    b2BodyDef bdef;
-    b2Body *b = mWorld.CreateBody(&bdef);
-
-    if (b == nullptr)
-    {
-        LOG_ERR("CScene::CreateObject(): something wrong with box2d");
-        return nullptr;
-    }
-
-    T* res = new T();
-    res->mBody = b;
-    res->mBody->SetUserData(res);
-    res->mScene = this;
-    res->mInternalId = mObjectsCount;
-
-    if (res->Init(_geometry, _params) == false)
-    {
-        LOG_ERR("CScene::CreateObject(): object init failed");
-        mWorld.DestroyBody(b);
-        delete res;
-        return nullptr;
-    }
-
-    mObjects[mObjectsCount] = res;
-    mObjectsCount++;
-
-    return res;
-}
 
 inline CSceneObject * const * CScene::GetObjects(void) const
 {
@@ -178,16 +115,6 @@ inline CSceneObject * const * CScene::GetObjects(void) const
 inline unsigned int CScene::EnumObjects(void) const
 {
     return mObjectsCount;
-}
-
-inline CSubsystem * const * CScene::GetSubsystems(void) const
-{
-    return mSubsystems;
-}
-
-inline unsigned int CScene::EnumSubsystems(void) const
-{
-    return mSubsystemsCount;
 }
 
 } // namespace drash

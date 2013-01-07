@@ -22,44 +22,43 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#ifndef SUBSYSTEM_H
-#define SUBSYSTEM_H
+#pragma once
+#ifndef CPLAYER_H
+#define CPLAYER_H
+
+#include "../misc/objectfactory.h"
+#include "../scene/sceneobject.h"
 
 namespace drash
 {
 
-class CScene;
+class CSceneObject;
 
-/// As our CScene class writen for objects creation, deletion end connection,
-/// we need ability to extend CScene with different behaviors.
-/// For example: explosion system, players system, network system, sound system
-/// If objects creation is allowed, class instance must exist for whole life time
-/// of scene objects, created from this subsystem
-class CSubsystem
+class CPlayerParams final
 {
 public:
-    virtual bool Init() = 0;
-    virtual void Step(double _dt) = 0;
-    virtual void Release() = 0;
-
-    void SetScene(CScene *_scene);
-    inline CScene *GetScene();
-    inline const CScene *GetScene() const;
-
-private:
-    CScene *mScene = nullptr;
+    CSceneObjectParams mSceneObjectParams;
+    float mVelocityLimit = 1;
 };
 
-inline CScene *CSubsystem::GetScene()
+class CPlayer final : public CObjectFactory<CPlayer>::CFactoryProduct
 {
-    return mScene;
-}
+public:
+    friend class CPlayersSystem;
 
-inline const CScene *CSubsystem::GetScene() const
+    inline CSceneObject* GetSceneObject();
+
+protected:
+private:
+    CSceneObject *mSceneObject = nullptr;
+    float mVelocityLimit = 1;
+};
+
+inline CSceneObject *CPlayer::GetSceneObject()
 {
-    return mScene;
+    return mSceneObject;
 }
 
 }// namespace drash
 
-#endif // SUBSYSTEM_H
+#endif // CPLAYER_H

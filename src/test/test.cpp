@@ -31,6 +31,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "test5.h"
 #include "test6.h"
 
+#include <cstring>
+
 namespace drash
 {
 

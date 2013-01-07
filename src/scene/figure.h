@@ -28,6 +28,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include "../misc/vec2.h"
 
+class b2Fixture;
+
 namespace drash
 {
 
@@ -53,9 +55,8 @@ class CFigure
 {
 public:
     friend class CSceneObject;
-    friend class CDebugDrawSystem;
 
-    inline CSceneObject *GetSceneObject() const;
+    CSceneObject *GetSceneObject() const;
 
     void SetVertices(const CVec2f *_vertices, unsigned int _count);
     const CVec2f *GetVertices() const;
@@ -65,12 +66,14 @@ public:
     inline void SetZ(float _z);
     inline float GetDepth() const;
     inline void SetDepth(float _depth);
-    inline float GetFriction()const;
+    float GetFriction()const;
     friend CLogger &operator <<(CLogger &_logger, const CFigure &_figure);
+
+    bool TestPoint(const CVec2f &_xy) const;
 
 protected:
 private:
-    CFigure();
+    CFigure() = default;
 
     b2Fixture *mFixture = nullptr;
     float mZ = 0;
@@ -79,17 +82,6 @@ private:
     int mInternalId = -1;
     bool mDead = false;
 };
-
-inline float CFigure::GetFriction() const
-{
-    return mFixture->GetFriction();
-}
-
-inline CSceneObject *CFigure::GetSceneObject() const
-{
-
-    return reinterpret_cast<CSceneObject*>(mFixture->GetBody()->GetUserData());
-}
 
 inline float CFigure::GetZ() const
 {

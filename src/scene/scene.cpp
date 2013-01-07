@@ -26,23 +26,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../diag/assert.h"
 #include "../diag/logger.h"
-#include "../subsystem/subsystem.h"
 
 #include "sceneobject.h"
-#include "../joints/joint.h"
+#include "joint.h"
+
+#include <Box2D/Box2D.h>
+#include "physobserver.h"
 
 namespace drash
 {
-
-CScene::CScene(void):
-    mInitialized(false),
-    mLocked(false),
-    mWorld( b2Vec2( 0, 0 ) ),
-    mObserver(),
-    mObjectsCount(0),
-    mSubsystemsCount(0)
-{
-}
 
 CScene::~CScene(void)
 {
@@ -63,13 +55,17 @@ bool CScene::Init( const CSceneParams &_params )
         return false;
     }
 
-    mWorld.SetContactFilter(&mObserver);
-    mWorld.SetContactListener(&mObserver);
-    mWorld.SetAllowSleeping(true);
-    mWorld.SetContinuousPhysics(false);
-    mWorld.SetGravity(CVec2ToB2Vec2(_params.mGravity));
+    mObserver = new CPhysObserver();
+    mWorld = new b2World(b2Vec2(0, 0));
+
+    mWorld->SetContactFilter(mObserver);
+    mWorld->SetContactListener(mObserver);
+    mWorld->SetAllowSleeping(true);
+    mWorld->SetContinuousPhysics(false);
+    mWorld->SetGravity(CVec2ToB2Vec2(_params.mGravity));
 
     mInitialized = true;
+
     return true;
 }
 
@@ -94,12 +90,15 @@ void CScene::Release(void)
         }
     }
 
-    while (mWorld.GetJointCount())
+    while (mWorld->GetJointCount())
     {
-        delete reinterpret_cast<CJoint*>(mWorld.GetJointList()->GetUserData());
-        mWorld.GetJointList()->SetUserData(nullptr);
-        mWorld.DestroyJoint(mWorld.GetJointList());
+        delete reinterpret_cast<CJoint*>(mWorld->GetJointList()->GetUserData());
+        mWorld->GetJointList()->SetUserData(nullptr);
+        mWorld->DestroyJoint(mWorld->GetJointList());
     }
+
+    delete mWorld;
+    delete mObserver;
 
     mInitialized = false;
 }
@@ -130,7 +129,49 @@ void CScene::Step( double _dt )
 
     mLocked = false;
 
-    mWorld.Step( _dt, mVelocityIterations, mPositionIterations );
+    mWorld->Step( _dt, mVelocityIterations, mPositionIterations );
+}
+
+CSceneObject* CScene::CreateObject(const CSceneObjectGeometry &_geometry, const CSceneObjectParams& _params)
+{
+    if (mObjectsCount == mObjectsCountLimit)
+    {
+        LOG_ERR("CScene::CreateObject(): Achieved maximum Amount of Objects in scene");
+        return nullptr;
+    }
+
+    if (mWorld->IsLocked())
+    {
+        LOG_ERR("CScene::CreateObject(): world is locked now");
+        return nullptr;
+    }
+
+    b2BodyDef bdef;
+    b2Body *b = mWorld->CreateBody(&bdef);
+
+    if (b == nullptr)
+    {
+        LOG_ERR("CScene::CreateObject(): something wrong with box2d");
+        return nullptr;
+    }
+
+    CSceneObject* res = new CSceneObject();
+    res->mBody = b;
+    res->mBody->SetUserData(res);
+    res->mInternalId = mObjectsCount;
+
+    if (res->Init(_geometry, _params) == false)
+    {
+        LOG_ERR("CScene::CreateObject(): object init failed");
+        mWorld->DestroyBody(b);
+        delete res;
+        return nullptr;
+    }
+
+    mObjects[mObjectsCount] = res;
+    mObjectsCount++;
+
+    return res;
 }
 
 void CScene::DestroyObject(CSceneObject *_obj)
@@ -140,7 +181,7 @@ void CScene::DestroyObject(CSceneObject *_obj)
     DRASH_ASSERT( mObjects[_obj->mInternalId] == _obj &&
                   "CScene::DestroyObject(): something wrong with objects creation logic" );
 
-    if (mLocked == false && mWorld.IsLocked() == false)
+    if (mLocked == false && mWorld->IsLocked() == false)
     {
         DestroyObjectImpl(_obj);
     }
@@ -164,79 +205,27 @@ CJoint *CScene::CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2, const CVec
     jdef.Initialize(_obj1->mBody, _obj2->mBody, CVec2ToB2Vec2(_anchor.Vec2()));
 
     CJoint *res = new CJoint;
-    res->mJoint = mWorld.CreateJoint(&jdef);;
+    res->mJoint = mWorld->CreateJoint(&jdef);;
     res->mJoint->SetUserData(res);
     return res;
 }
 
 void CScene::DestroyJoint(CJoint *_joint)
 {
-    for (auto j=mWorld.GetJointList(); j!=nullptr; j=j->GetNext())
+    for (auto j=mWorld->GetJointList(); j!=nullptr; j=j->GetNext())
     {
         if (j->GetUserData() == _joint)
         {
             delete reinterpret_cast<CJoint*>(j->GetUserData());
-            mWorld.DestroyJoint(j);
+            mWorld->DestroyJoint(j);
             return;
         }
     }
-}
-
-void CScene::ConnectSubsystem(CSubsystem *_subsystem)
-{
-    if (_subsystem == nullptr)
-    {
-        return;
-    }
-
-    if (mSubsystemsCount >= mSubsystemsCountLimit)
-    {
-        LOG_ERR("CScene::AddSubsystem(): Unable to connect with subsystem. Connection count is maximal");
-        return;
-    }
-
-    for (unsigned int i=0; i<mSubsystemsCount; i++)
-    {
-        if (mSubsystems[i] == _subsystem)
-        {
-            LOG_WARN("CScene::AddSubsystem(): subsystem already connected");
-            return;
-        }
-    }
-
-    mSubsystems[mSubsystemsCount++] = _subsystem;
-}
-
-void CScene::DisconnectSubsystem(CSubsystem *_subsystem)
-{
-    if (_subsystem == nullptr)
-    {
-        return;
-    }
-
-    for (unsigned int i = 0; i < mSubsystemsCount; i++)
-    {
-        if (mSubsystems[i] == _subsystem)
-        {
-            if (mSubsystemsCount-- != 1)
-            {
-                mSubsystems[i] = mSubsystems[mSubsystemsCount];
-                mSubsystems[mSubsystemsCount] = nullptr;
-            }
-            else
-            {
-                mSubsystems[0] = nullptr;
-            }
-            return;
-        }
-    }
-
-    LOG_WARN("CScene::RemSubsystem(): subsystem is not connected");
 }
 
 void CScene::SetGravity(const CVec2f &_g)
 {
-    mWorld.SetGravity(CVec2ToB2Vec2(_g));
+    mWorld->SetGravity(CVec2ToB2Vec2(_g));
 }
 
 void CScene::DestroyObjectImpl(CSceneObject *_obj)
@@ -257,7 +246,7 @@ void CScene::DestroyObjectImpl(CSceneObject *_obj)
     _obj->Release();
     delete _obj;
 
-    mWorld.DestroyBody(body);
+    mWorld->DestroyBody(body);
 }
 
 } // namespace drash

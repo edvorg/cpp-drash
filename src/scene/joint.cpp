@@ -22,16 +22,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "destructiongraph.h"
-
-#include "../misc/math.h"
+#include "joint.h"
 
 namespace drash
 {
-
-CDestructionGraphNode::CDestructionGraphNode(unsigned int _value):
-    mValue(_value)
-{
-}
 
 } // namespace drash

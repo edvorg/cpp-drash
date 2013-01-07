@@ -25,26 +25,26 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef TEMPLATESYSTEM_H
 #define TEMPLATESYSTEM_H
 
-#include "subsystem.h"
 #include <map>
 #include <string>
 
 namespace drash
 {
 
+class CScene;
 class CSceneObjectGeometry;
 class CSceneObjectParams;
 class CSceneObject;
 
-class CTemplateSystem : public CSubsystem
+class CTemplateSystem final
 {
 public:
     typedef std::map<std::string,CSceneObjectGeometry*> SceneObjectTemplatesT;
     typedef std::pair<std::string,CSceneObjectGeometry*> MapSceneObjectItem;
 
-    virtual bool Init() override;
-    virtual void Step(double) override;
-    virtual void Release() override;
+    bool Init();
+    void Step(double);
+    void Release();
 
     /// template is just named CSceneObjectGeometry
     /// we can use it to create many instances of one object at any time we want
@@ -63,10 +63,25 @@ public:
     bool Load();
     bool Store();
 
+    inline void SetScene(CScene *_scene);
+    inline CScene *GetScene();
+
 protected:
 private:
     SceneObjectTemplatesT mSceneObjectTemplates;
+
+    CScene* mScene = nullptr;
 };
+
+inline void CTemplateSystem::SetScene(CScene *_scene)
+{
+    mScene = _scene;
+}
+
+inline CScene *CTemplateSystem::GetScene()
+{
+    return mScene;
+}
 
 }// namespace drash
 

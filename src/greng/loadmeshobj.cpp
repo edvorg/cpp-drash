@@ -28,6 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../misc/vec2.h"
 #include <fstream>
 #include <vector>
+#include <cstring>
 
 namespace greng
 {
@@ -35,9 +36,9 @@ namespace greng
 using drash::CLogger;
 using drash::CVec2f;
 
-void LoadVertices(CMesh* res, std::ifstream& f, unsigned int fsize);
-void LoadTexCoords(std::vector<CVec2f>& uv, std::ifstream& f, unsigned int fsize);
-void LoadFaces(CMesh* res, std::ifstream& f, unsigned int fsize, std::vector<CVec2f>& uv);
+void LoadVertices(CMesh* res, std::ifstream& f, unsigned int);
+void LoadTexCoords(std::vector<CVec2f>& uv, std::ifstream& f, unsigned int);
+void LoadFaces(CMesh* res, std::ifstream& f, unsigned int, std::vector<CVec2f>& uv);
 
 bool LoadMeshObj(const char *_path, CMesh *_mesh)
 {    
@@ -45,7 +46,7 @@ bool LoadMeshObj(const char *_path, CMesh *_mesh)
     if (!f.is_open())
     {
         LOG_ERR("LoadMeshObj(): failed to load "<<_path);
-        return NULL;
+        return false;
     }
 
     unsigned int fsize = 0;
@@ -57,7 +58,7 @@ bool LoadMeshObj(const char *_path, CMesh *_mesh)
     if (fsize == 0)
     {
         LOG_ERR("loadModelOBJ(): wrong size of "<<_path);
-        return NULL;
+        return false;
     }
 
     std::vector<CVec2f> uv;
@@ -87,7 +88,7 @@ void LoadVertex(CVertex& v, const char* buf)
     v.mColor.mA = 1;
 }
 
-void LoadVertices(CMesh *res, std::ifstream& f, unsigned int fsize)
+void LoadVertices(CMesh *res, std::ifstream& f, unsigned int)
 {
     f.clear(std::ios_base::goodbit);
     f.seekg(0, std::ios_base::beg);
@@ -175,7 +176,7 @@ void LoadFace(face& f, const char* buf)
     }
 }
 
-void LoadFaces(CMesh *res, std::ifstream& f, unsigned int fsize, std::vector<CVec2f> &uv)
+void LoadFaces(CMesh *res, std::ifstream& f, unsigned int, std::vector<CVec2f> &uv)
 {
     f.clear(std::ios_base::goodbit);
     f.seekg(0, std::ios_base::beg);
@@ -272,7 +273,7 @@ void LoadTexCoord(CVec2f& tc, const char* buf)
     tc.mY *= -1;
 }
 
-void LoadTexCoords(std::vector<CVec2f> &uv, std::ifstream& f, unsigned int fsize)
+void LoadTexCoords(std::vector<CVec2f> &uv, std::ifstream& f, unsigned int)
 {
     f.clear(std::ios_base::goodbit);
     f.seekg(0, std::ios_base::beg);
