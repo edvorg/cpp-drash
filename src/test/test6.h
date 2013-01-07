@@ -55,7 +55,6 @@ private:
     greng::CVertexShader *mPlayer1VertexShader = nullptr;
     greng::CFragmentShader *mPlayer1FragmentShader = nullptr;
     greng::CShaderProgram * mPlayer1ShaderProgram = nullptr;
-    float mPlayer1Angle = 0.0f;
     CVec2f mPlayer1MeshDir = CVec2f(1, 0);
     CVec3f mPlayer1OldPos;
 

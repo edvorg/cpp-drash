@@ -100,7 +100,7 @@ void CTest6::Step(double _dt)
     CVec2f dir(GetPlayersSystem().GetPlayers()[0]->GetPosXY().Get().mX - mPlayer1OldPos.mX,
                mPlayer1OldPos.mZ - GetPlayersSystem().GetPlayers()[0]->GetPosZ());
 
-    if (dir.Length() < 0.00001)
+    if (dir.LengthSquared() < 0.00001)
     {
         dir.Set(1, 0);
     }
@@ -109,12 +109,32 @@ void CTest6::Step(double _dt)
         dir.Normalize();
     }
 
-    dir *= 0.05;
+    float angle = acos(dir.mX * mPlayer1MeshDir.mX + dir.mY * mPlayer1MeshDir.mY);
 
-    mPlayer1MeshDir.Normalize();
-    mPlayer1MeshDir *= 0.95;
-    mPlayer1MeshDir += dir;
-    mPlayer1MeshDir.Normalize();
+    if (angle > 0.000001f)
+    {
+        CVec3f cross;
+        Vec3Cross(CVec3f(mPlayer1MeshDir, 0), CVec3f(dir, 0), cross);
+
+        CMatrix4f m;
+        if (cross.mZ < 0.0)
+        {
+            MatrixRotationZ(m, angle * -0.05);
+        }
+        else
+        {
+            MatrixRotationZ(m, angle * 0.05);
+        }
+
+        CVec4f new_dir;
+        MatrixMultiply(m, CVec4f(mPlayer1MeshDir, 0, 0), new_dir);
+        mPlayer1MeshDir = new_dir;
+
+        if (mPlayer1MeshDir.LengthSquared() > 0.00001f)
+        {
+            mPlayer1MeshDir.Normalize();
+        }
+    }
 
     mPlayer1OldPos = GetPlayersSystem().GetPlayers()[mPlayer1Id]->GetPos();
 }
@@ -125,7 +145,7 @@ void CTest6::Render()
 
     if (mPlayer1MeshDir.mY < 0.0f)
     {
-        new_angle = 2.0 * M_PI - new_angle;
+        new_angle *= -1;
     }
 
     CApp::Render();
