@@ -233,15 +233,15 @@ void CScene::SetGravity(const CVec2f &_g)
 }
 
 void CScene::DestroyObjectImpl(CSceneObject *_obj)
-{
+{    
+    _obj->mBody->SetActive(false);
+
     while (b2Fixture *f = _obj->mBody->GetFixtureList())
     {
         delete reinterpret_cast<CFigure*>(f->GetUserData());
         f->SetUserData(nullptr);
         _obj->mBody->DestroyFixture(f);
     }
-
-    _obj->mBody->SetActive(false);
     _obj->mBody->SetUserData(nullptr);
 
     mWorld->DestroyBody(_obj->mBody);
