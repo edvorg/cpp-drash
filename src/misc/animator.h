@@ -64,7 +64,7 @@ public:
     inline double GetTimeRemains() const;
     inline bool IsTargetSet() const;
 
-    virtual bool Step(double _dt);
+    bool Step(double _dt);
 
 private:
     T& mValue;

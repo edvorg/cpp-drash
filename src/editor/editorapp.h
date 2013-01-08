@@ -40,8 +40,6 @@ enum State {
 class CObjectEditorApp : public CApp
 {
 public:
-    virtual ~CObjectEditorApp() override {}
-
     virtual bool Init() override;
     virtual void Step(double _dt) override;
     inline virtual void Render() override;
