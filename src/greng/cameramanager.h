@@ -26,26 +26,52 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define GRENG_CAMERAMANAGER_H
 
 #include "../misc/objectfactory.h"
+#include "../misc/vec3.h"
 
 namespace greng
 {
 
+using drash::CVec3f;
 class CCamera;
+
+class CCameraParams
+{
+public:
+    bool mOrtho = false;
+    float mOrthoWidth = 1.0f;
+    float mFov = M_PI / 4.0f;
+    float mDepthOfView = 1000.0f;
+    CVec3f mPos;
+    CVec3f mRotation;
+};
 
 class CCameraManager
 {
 public:
+    static const unsigned int mCamerasCountLimit = 3;
+
+    CCameraManager();
+
     bool Init();
     void Release();
+    void Step(double _dt);
 
-    CCamera *CreateCamera();
+    CCamera *CreateCamera(const CCameraParams &_params);
     bool DestroyCamera(CCamera *_camera);
     inline CCamera * const * GetCameras() const;
     inline unsigned int EnumCameras() const;
 
+    /// aspect ratio is window width in pixels divided on widow height
+    void SetAspectRatio(float _ratio);
+
+    /// aspect ratio is window width in pixels divided on widow height
+    inline float GetAspectRatio() const;
+
 protected:
 private:
     drash::CObjectFactory<CCamera> mCameraFactory;
+
+    float mAspectRatio = 1;
 };
 
 inline CCamera *const*CCameraManager::GetCameras() const
@@ -56,6 +82,11 @@ inline CCamera *const*CCameraManager::GetCameras() const
 inline unsigned int CCameraManager::EnumCameras() const
 {
     return mCameraFactory.EnumObjects();
+}
+
+inline float CCameraManager::GetAspectRatio() const
+{
+    return mAspectRatio;
 }
 
 } // namespace greng

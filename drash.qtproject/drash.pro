@@ -38,11 +38,9 @@ SOURCES += ../src/qt/main.cpp\
     ../src/explosion/explosionsystem.cpp \
     ../src/players/playerssystem.cpp \
     ../src/editor/editorwindow.cpp \
-    ../src/misc/graphics.cpp \
     ../src/templates/templatesystem.cpp \
     ../src/scene/physobserver.cpp \
     ../src/scene/figure.cpp \
-    ../src/debugrenderer/debugdrawsystem.cpp \
     ../src/app/app.cpp \
     ../src/app/appevent.cpp \
     ../src/editor/sceneeditor.cpp\
@@ -80,7 +78,8 @@ SOURCES += ../src/qt/main.cpp\
     ../src/test/test6.cpp \
     ../src/misc/vec2.cpp \
     ../src/test/test7.cpp \
-    ../src/greng/cameramanager.cpp
+    ../src/greng/cameramanager.cpp \
+    ../src/debugrenderer/debugrenderer.cpp
 
 HEADERS  += ../src/qt/gamewindow.h \
     ../src/qt/scenewidget.h \
@@ -94,10 +93,8 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/players/playerssystem.h \
     ../src/editor/editorwindow.h \
     ../src/templates/templatesystem.h \
-    ../src/misc/graphics.h \
     ../src/scene/physobserver.h \
     ../src/scene/figure.h \
-    ../src/debugrenderer/debugdrawsystem.h \
     ../src/app/app.h \
     ../src/app/appevent.h \
     ../src/editor/sceneeditor.h \
@@ -148,7 +145,8 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/misc/animator.h \
     ../src/test/test7.h \
     ../src/greng/cameramanager.h \
-    ../src/greng/pointlight.h
+    ../src/greng/pointlight.h \
+    ../src/debugrenderer/debugrenderer.h
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui

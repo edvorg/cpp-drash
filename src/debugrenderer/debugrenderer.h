@@ -43,6 +43,7 @@ namespace drash
 {
 
 class CScene;
+class CFigure;
 
 class CDebugRenderer final
 {
@@ -66,6 +67,10 @@ public:
     bool Init();
     void Release();
     void Render() const;
+
+    /// finds objects, visible at specified postion in screen space coordinates
+    /// returns nearest one
+    CFigure *FindFigure(const greng::CCamera *_camera, const CVec2f &_pos) const;
 
 protected:
 private:

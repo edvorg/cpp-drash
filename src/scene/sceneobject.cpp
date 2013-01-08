@@ -28,7 +28,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../diag/logger.h"
 #include "../diag/assert.h"
 #include "../explosion/explosion.h"
-#include "../misc/graphics.h"
 #include "scene.h"
 
 #include <Box2D/Box2D.h>
@@ -143,39 +142,6 @@ void CSceneObject::OnContactEnd(const CFigure *, const CFigure *_f2)
     if (f != mCurrentContacts.end())
     {
         mCurrentContacts.erase(f);
-    }
-}
-
-void CSceneObject::DrawDebug() const
-{
-    unsigned int j = 0;
-    for ( b2Fixture *f = mBody->GetFixtureList(); f != nullptr; f = f->GetNext() )
-    {
-        if ( f->GetShape()->GetType() == b2Shape::e_polygon )
-        {
-            auto s = reinterpret_cast<b2PolygonShape*>( f->GetShape() );
-
-            if (s)
-            {
-                float depth = 1;
-                float local_z = 0;
-
-                if (f->GetUserData() != nullptr)
-                {
-                    CFigure *fg = reinterpret_cast<CFigure*>(f->GetUserData());
-                    depth = fg->GetDepth();
-                    local_z = fg->GetZ();
-                }
-
-                DrawBody(&B2Vec2ToCVec2(*s->m_vertices),
-                         s->GetVertexCount(),
-                         mPos.mZ + local_z,
-                         depth,
-                         CColor4f(1.0f, 0.0f, 0.0f, 1.0f),
-                         mAngle);
-            }
-        }
-        j++;
     }
 }
 

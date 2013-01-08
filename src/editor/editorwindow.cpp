@@ -94,8 +94,8 @@ bool EditorWindow::InitScene()
     }
 //    mObjectApp->GetDebugDrawSystem().GetActiveCam()->SetOrtho(true);
 //    mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetOrthoWidth().Set(120);
-    mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetPos().Set(CVec3f(0, 50, 100));
-    mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetRotation().Set(CVec3f(-M_PI / 6, 0, 0));
+    mObjectApp->GetCamera()->GetPos().Set(CVec3f(0, 50, 100));
+    mObjectApp->GetCamera()->GetRotation().Set(CVec3f(-M_PI / 6, 0, 0));
     ui->mScene->SetApp(mObjectApp);
     mCurrentApp = mObjectApp;
     return true;
@@ -147,18 +147,18 @@ void EditorWindow::ZoomUp()
 {
     if (mCurrentApp != nullptr){
         qDebug() << "Zoom up!";
-        CVec3f pos = mCurrentApp->GetDebugDrawSystem().GetActiveCam()->GetPos().GetTarget();
+        CVec3f pos = mObjectApp->GetCamera()->GetPos().GetTarget();
         pos.mZ += 10.0f;
-        mCurrentApp->GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
+        mObjectApp->GetCamera()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
     }
 }
 
 void EditorWindow::ZoomDown()
 {
     if (mCurrentApp != nullptr){
-        CVec3f pos = mCurrentApp->GetDebugDrawSystem().GetActiveCam()->GetPos().GetTarget();
+        CVec3f pos = mObjectApp->GetCamera()->GetPos().GetTarget();
         pos.mZ -= 10.0f;
-        mCurrentApp->GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
+        mObjectApp->GetCamera()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
     }
 }
 

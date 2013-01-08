@@ -69,6 +69,15 @@ bool CObjectEditorApp::Init()
     }
     SetProcessors();
 
+    greng::CCameraParams cp;
+    cp.mPos.Set(0, 0, 100);
+    mCamera = GetCameraManager().CreateCamera(cp);
+
+    if (mCamera == nullptr)
+    {
+        return false;
+    }
+
     return true;
 }
 
@@ -82,10 +91,10 @@ void CObjectEditorApp::Render()
     CApp::Render();
     if (mVertexs.size() != 0 && mState == BuildState) {
         for (unsigned int i = 1 ; i < mVertexs.size() ; i++) {
-            GetDebugDrawSystem().DrawLine(mVertexs[i-1],mVertexs[i], 1, CColor4f(0, 1, 0, 1));
+            GetRenderer().DrawLine(mVertexs[i-1],mVertexs[i], 1, CColor4f(0, 1, 0, 1));
         }
-        GetDebugDrawSystem().DrawLine(mVertexs[mVertexs.size() -1 ],GetCursorPos(), 1, CColor4f(0, 1, 0, 1));
-        GetDebugDrawSystem().DrawLine(mVertexs[0],GetCursorPos(), 1, CColor4f(0, 1, 0, 1));
+        GetRenderer().DrawLine(mVertexs[mVertexs.size() -1 ],GetCursorPos(), 1, CColor4f(0, 1, 0, 1));
+        GetRenderer().DrawLine(mVertexs[0],GetCursorPos(), 1, CColor4f(0, 1, 0, 1));
     }
     if (mState == StretchState) {
 //        qDebug() << "THIS!!!";
@@ -111,7 +120,7 @@ void CObjectEditorApp::Render()
                 plane.SetNormal(CVec3f(0, 0, 1));
                 plane.SetPoint(position);
 
-                GetDebugDrawSystem().CastRay(GetCursorPos(), plane, cursor_pos);
+                mCamera->CastRay(GetCursorPos(), plane, cursor_pos);
 
                 if (drash::math::Abs(position.mX -cursor_pos.mX) <= 1 &&
                         drash::math::Abs(position.mY -cursor_pos.mY) <= 1)
@@ -119,7 +128,7 @@ void CObjectEditorApp::Render()
                     color.Col3().Set(255,0,0);
                 }
 
-                GetDebugDrawSystem().DrawPoint(position, 10.0f, color);
+                GetRenderer().DrawPoint(position, 10.0f, color);
 
                 //
 
@@ -129,7 +138,7 @@ void CObjectEditorApp::Render()
 
                 plane.SetPoint(position);
 
-                GetDebugDrawSystem().CastRay(GetCursorPos(), plane, cursor_pos);
+                mCamera->CastRay(GetCursorPos(), plane, cursor_pos);
 
                 if (drash::math::Abs(position.mX -cursor_pos.mX) <= 1 &&
                         drash::math::Abs(position.mY -cursor_pos.mY) <= 1)
@@ -137,7 +146,7 @@ void CObjectEditorApp::Render()
                     color.Col3().Set(255,0,0);
                 }
 
-                GetDebugDrawSystem().DrawPoint(position, 10.0f, color);
+                GetRenderer().DrawPoint(position, 10.0f, color);
             }
         }
     }
@@ -168,7 +177,7 @@ void CObjectEditorApp::SetProcessors()
                 plane.SetPoint(CVec3f(0, 0, 0));
                 plane.SetNormal(CVec3f(0, 0, 1));
 
-                GetDebugDrawSystem().CastRay(GetCursorPos(), plane, mOldPositionCursor);
+                mCamera->CastRay(GetCursorPos(), plane, mOldPositionCursor);
 
                 if (mSelectedFigure == nullptr)
                     LOG_INFO("NOOOO");
@@ -250,7 +259,7 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
         plane.SetPoint(CVec3f(0, 0, 0));
 
         CVec3f vv;
-        GetDebugDrawSystem().CastRay(v, plane, vv);
+        mCamera->CastRay(v, plane, vv);
         v = vv;
     });
     param.mVertices = mVertexs;
@@ -296,8 +305,9 @@ void CObjectEditorApp::RemoveCurrentObject()
 
 CFigure *CObjectEditorApp::SelectFigure(const CVec2f &_pos)
 {
-    if (mCurrentObject != nullptr) {
-        return GetDebugDrawSystem().FindFigure(_pos);
+    if (mCurrentObject != nullptr)
+    {
+        return GetDebugRenderer().FindFigure(mCamera, _pos);
     }
 
     return nullptr;
@@ -315,7 +325,7 @@ void CObjectEditorApp::MoveFigure()
     plane.SetNormal(CVec3f(0, 0, 1));
     plane.SetPoint(CVec3f(0, 0, 0));
 
-    GetDebugDrawSystem().CastRay(GetCursorPos(), plane, pos);
+    mCamera->CastRay(GetCursorPos(), plane, pos);
 
     float disX = pos.mX - mOldPositionCursor.mX;
     float disY = pos.mY - mOldPositionCursor.mY;
@@ -356,7 +366,7 @@ void CObjectEditorApp::StretchFigure()
 
             CVec3f pos;
 
-            GetDebugDrawSystem().CastRay(posCur, plane, pos);
+            mCamera->CastRay(posCur, plane, pos);
 
             ver[i].Set(pos.mX,pos.mY);
         }
@@ -390,7 +400,7 @@ void CObjectEditorApp::SelectVertex()
 
             CVec3f cursor_pos;
 
-            GetDebugDrawSystem().CastRay(GetCursorPos(), plane, cursor_pos);
+            mCamera->CastRay(GetCursorPos(), plane, cursor_pos);
 
             if (drash::math::Abs(position.mX -cursor_pos.mX) <= 1.0f &&
                     drash::math::Abs(position.mY -cursor_pos.mY) <= 1.0f)
@@ -407,7 +417,7 @@ void CObjectEditorApp::SelectVertex()
 
                 plane.SetPoint(position);
 
-                GetDebugDrawSystem().CastRay(GetCursorPos(), plane, cursor_pos);
+                mCamera->CastRay(GetCursorPos(), plane, cursor_pos);
 
                 if (drash::math::Abs(position.mX -cursor_pos.mX) <= 1.0f &&
                         drash::math::Abs(position.mY -cursor_pos.mY) <= 1.0f)
@@ -444,7 +454,7 @@ void CObjectEditorApp::SaveCurrentObject()
 float CObjectEditorApp::GetCurDepth()
 {
     float depth = drash::math::Abs(mCurrentObject->GetPosZ() -
-                                   GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
+                                   mCamera->GetPos().Get().mZ);
     return depth;
 }
 

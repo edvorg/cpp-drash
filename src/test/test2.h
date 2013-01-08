@@ -47,6 +47,8 @@ private:
     CSceneObject *mSelectedObject = nullptr;
 
     greng::CPointLight mLight1;
+
+    greng::CCamera *mCamera = nullptr;
 };
 
 } // namespace test

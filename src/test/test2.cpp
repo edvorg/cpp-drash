@@ -45,16 +45,16 @@ bool CTest2::Init()
         return false;
     }
 
-    greng::CCameraParams c1p;
-    c1p.mPos.Set(0, 0, 300);
-    auto cam = GetDebugDrawSystem().CreateCam(c1p, true);
+    greng::CCameraParams cp;
+    cp.mPos.Set(0, 0, 300);
+    mCamera = GetCameraManager().CreateCamera(cp);
 
-    if (cam == nullptr)
+    if (mCamera == nullptr)
     {
         return false;
     }
 
-    GetDebugRenderer().SetCamera(cam);
+    GetDebugRenderer().SetCamera(mCamera);
 
     SetProcessors();
 
@@ -65,6 +65,7 @@ bool CTest2::Init()
     g.mFigures[0].mVertices.push_back( CVec2f( 300.0f, -5.0f ) );
     g.mFigures[0].mVertices.push_back( CVec2f( 300.0f, 5.0f ) );
     g.mFigures[0].mDepth = 5;
+
     CSceneObjectParams p;
     p.mPos.mY = -25;
     p.mDynamic = false;
@@ -127,7 +128,7 @@ void CTest2::SetProcessors()
 
         CSceneObjectParams p;
 
-        GetDebugDrawSystem().CastRay(GetCursorPos(), plane, p.mPos);
+        mCamera->CastRay(GetCursorPos(), plane, p.mPos);
 
         GetTemplateSystem().CreateSceneObjectFromTemplate("lambda_test", p);
     }));
@@ -139,7 +140,7 @@ void CTest2::SetProcessors()
     {
         // choose object here
 		mSelectedObject = nullptr;
-        CFigure *f = GetDebugDrawSystem().FindFigure(GetCursorPos());
+        CFigure *f = GetDebugRenderer().FindFigure(mCamera, GetCursorPos());
         if (f != nullptr)
 		{
 			mSelectedObject = f->GetSceneObject();
@@ -156,7 +157,7 @@ void CTest2::SetProcessors()
 
               CVec3f pos;
 
-              GetDebugDrawSystem().CastRay(GetCursorPos(), plane, pos);
+              mCamera->CastRay(GetCursorPos(), plane, pos);
 
               mSelectedObject->SetPos(pos);
         }

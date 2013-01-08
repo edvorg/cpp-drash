@@ -63,6 +63,8 @@ public:
     void ActiveStretchMode();
 
     void SaveCurrentObject();
+
+    inline greng::CCamera *GetCamera();
 private:
     float GetCurDepth();
 
@@ -102,6 +104,8 @@ private:
     int mVertexIndex = -1;
 
     bool mFrontSide = true;
+
+    greng::CCamera *mCamera = nullptr;
 };
 
 inline bool CObjectEditorApp::IsStartBuild()const {
@@ -121,6 +125,11 @@ inline void CObjectEditorApp::SetCurrentTemplateName(const std::string &_name){
 
 inline void CObjectEditorApp::SetTreeRefreshHandler(const std::function<void ()> &_han) {
     mTreeRefreshHandler = _han;
+}
+
+inline greng::CCamera *CObjectEditorApp::GetCamera()
+{
+    return mCamera;
 }
 
 }// namespace drash

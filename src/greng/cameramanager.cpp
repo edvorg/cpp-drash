@@ -23,7 +23,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include "cameramanager.h"
-
 #include "camera.h"
 
 #include "../diag/logger.h"
@@ -32,6 +31,11 @@ namespace greng
 {
 
 using drash::CLogger;
+
+CCameraManager::CCameraManager():
+    mCameraFactory(mCamerasCountLimit, "CCamera")
+{
+}
 
 bool CCameraManager::Init()
 {
@@ -48,7 +52,15 @@ void CCameraManager::Release()
     }
 }
 
-CCamera *CCameraManager::CreateCamera()
+void CCameraManager::Step(double _dt)
+{
+    for (unsigned int i = 0; i < mCameraFactory.EnumObjects(); i++)
+    {
+        mCameraFactory.GetObjects()[i]->Step(_dt);
+    }
+}
+
+CCamera *CCameraManager::CreateCamera(const CCameraParams &_params)
 {
     CCamera *res = mCameraFactory.CreateObject();
 
@@ -56,6 +68,13 @@ CCamera *CCameraManager::CreateCamera()
     {
         return nullptr;
     }
+
+    res->mAspectRatioAnimator = mAspectRatio;
+    res->mOrthoWidthAnimator = _params.mOrthoWidth;
+    res->mFovAnimator = _params.mFov;
+    res->mDepthOfViewAnimator = _params.mDepthOfView;
+    res->mPosAnimator = _params.mPos;
+    res->mRotationAnimator = _params.mRotation;
 
     return res;
 }
@@ -71,6 +90,21 @@ bool CCameraManager::DestroyCamera(CCamera *_camera)
     mCameraFactory.DestroyObject(_camera);
 
     return true;
+}
+
+void CCameraManager::SetAspectRatio(float _ratio)
+{
+    if (drash::math::Abs(_ratio) < 0.000001)
+    {
+        _ratio = 1.0f;
+    }
+
+    mAspectRatio = _ratio;
+
+    for (unsigned int i = 0; i < mCameraFactory.EnumObjects(); i++)
+    {
+        mCameraFactory.GetObjects()[i]->GetAspectRatio() = _ratio;
+    }
 }
 
 } // namespace greng

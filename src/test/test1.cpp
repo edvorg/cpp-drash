@@ -55,9 +55,9 @@ bool CTest1::Init()
         return false;
     }
 
-    greng::CCameraParams p;
-    p.mPos.Set(0, 0, 100);
-    mCamera = GetDebugDrawSystem().CreateCam(p, true);
+    greng::CCameraParams cp;
+    cp.mPos.Set(0, 0, 100);
+    mCamera = GetCameraManager().CreateCamera(cp);
 
     if (mCamera == nullptr)
     {
@@ -105,9 +105,9 @@ void CTest1::Step(double _dt)
         xy.SetPoint(mCenter);
 
         CVec3f r1;
-        GetDebugDrawSystem().CastRay(GetCursorPos(), xz, r1);
+        mCamera->CastRay(GetCursorPos(), xz, r1);
         CVec3f r2;
-        GetDebugDrawSystem().CastRay(GetCursorPos(), xy, r2);
+        mCamera->CastRay(GetCursorPos(), xy, r2);
 
         CVec2f dstz = r1;
         dstz -= mCenter.Vec2();
@@ -174,21 +174,21 @@ void CTest1::Render()
     {
         for (int i = 0; i < (int)mVertices.size() - 1; i++)
         {
-            GetDebugDrawSystem().DrawLine(mVertices[i], mVertices[i+1], 1, CColor4f(0, 1, 0, 1));
+            GetRenderer().DrawLine(mVertices[i], mVertices[i+1], 1, CColor4f(0, 1, 0, 1));
         }
-        GetDebugDrawSystem().DrawLine(mVertices[mVertices.size()-1],
-                                      GetCursorPos(),
-                                      1,
-                                      CColor4f(0, 1, 0, 1),
-                                      false);
-        GetDebugDrawSystem().DrawLine(mVertices[0], GetCursorPos(), 1, CColor4f(0, 1, 0, 1), false);
+        GetRenderer().DrawLine(mVertices[mVertices.size()-1],
+                               GetCursorPos(),
+                               1,
+                               CColor4f(0, 1, 0, 1),
+                               false);
+        GetRenderer().DrawLine(mVertices[0], GetCursorPos(), 1, CColor4f(0, 1, 0, 1), false);
     }
 
     if (mCurrentFigure != nullptr && mCurrentObject != nullptr)
     {
-        GetDebugDrawSystem().DrawLine(mCenter, mX, 1, CColor4f(1 * mAxisDrawK.mX, 0, 0, 1), false);
-        GetDebugDrawSystem().DrawLine(mCenter, mY, 1, CColor4f(0, 1 * mAxisDrawK.mY, 0, 1), false);
-        GetDebugDrawSystem().DrawLine(mCenter, mZ, 1, CColor4f(0, 0, 1 * mAxisDrawK.mZ, 1), false);
+        GetRenderer().DrawLine(GetCamera(), mCenter, mX, 1, CColor4f(1 * mAxisDrawK.mX, 0, 0, 1), false);
+        GetRenderer().DrawLine(GetCamera(), mCenter, mY, 1, CColor4f(0, 1 * mAxisDrawK.mY, 0, 1), false);
+        GetRenderer().DrawLine(GetCamera(), mCenter, mZ, 1, CColor4f(0, 0, 1 * mAxisDrawK.mZ, 1), false);
     }
 
     if (mSplitMode == true &&
@@ -198,16 +198,18 @@ void CTest1::Render()
     {
         if (mSplitDepth == false)
         {
-            GetDebugDrawSystem().DrawTriangle(mSplitPlanePoint1,
-                                              mSplitPlanePoint2,
-                                              mSplitPlanePoint4,
-                                              CColor4f(1, 0, 0.5, 0.5),
-                                              true);
-            GetDebugDrawSystem().DrawTriangle(mSplitPlanePoint4,
-                                              mSplitPlanePoint2,
-                                              mSplitPlanePoint3,
-                                              CColor4f(1, 0, 0.5, 0.5),
-                                              true);
+            GetRenderer().DrawTriangle(GetCamera(),
+                                       mSplitPlanePoint1,
+                                       mSplitPlanePoint2,
+                                       mSplitPlanePoint4,
+                                       CColor4f(1, 0, 0.5, 0.5),
+                                       true);
+            GetRenderer().DrawTriangle(GetCamera(),
+                                       mSplitPlanePoint4,
+                                       mSplitPlanePoint2,
+                                       mSplitPlanePoint3,
+                                       CColor4f(1, 0, 0.5, 0.5),
+                                       true);
 
             if (mSplitIntersectionsCount == 2)
             {
@@ -219,7 +221,7 @@ void CTest1::Render()
                     p1.mZ = mCurrentObject->GetPosZ() + mCurrentFigure->GetZ() - mCurrentFigure->GetDepth() * 0.5f;
                     p2.mZ = mCurrentObject->GetPosZ() + mCurrentFigure->GetZ() + mCurrentFigure->GetDepth() * 0.5f;
 
-                    GetDebugDrawSystem().DrawLine(p1, p2, 2, CColor4f(1, 1, 1), false);
+                    GetRenderer().DrawLine(GetCamera(), p1, p2, 2, CColor4f(1, 1, 1), false);
                 };
 
                 draw_split(mSplitIntersection1);
@@ -233,8 +235,8 @@ void CTest1::Render()
             CVec3f p3(mSplitFigureMax.Vec2(), mSplitFigureCenterZ);
             CVec3f p4(mSplitFigureMax.mX, mSplitFigureMin.mY, mSplitFigureCenterZ);
 
-            GetDebugDrawSystem().DrawTriangle(p1, p2, p4, CColor4f(1, 0, 0.5, 0.5), true);
-            GetDebugDrawSystem().DrawTriangle(p4, p2, p3, CColor4f(1, 0, 0.5, 0.5), true);
+            GetRenderer().DrawTriangle(GetCamera(), p1, p2, p4, CColor4f(1, 0, 0.5, 0.5), true);
+            GetRenderer().DrawTriangle(GetCamera(), p4, p2, p3, CColor4f(1, 0, 0.5, 0.5), true);
         }
     }
 }
@@ -281,14 +283,14 @@ void CTest1::SetProcessors()
             {
                 CPlane xy(PlaneXY);
                 xy.SetPoint(mCenter);
-                GetDebugDrawSystem().CastRay(GetCursorPos(), xy, mFigureMoveFirstClick);
+                mCamera->CastRay(GetCursorPos(), xy, mFigureMoveFirstClick);
                 mAxisMoving = mAxisOver;
             }
             else
             {
                 CPlane xz(PlaneXZ);
                 xz.SetPoint(mCenter);
-                GetDebugDrawSystem().CastRay(GetCursorPos(), xz, mFigureMoveFirstClick);
+                mCamera->CastRay(GetCursorPos(), xz, mFigureMoveFirstClick);
                 mAxisMoving = mAxisOver;
             }
         }
@@ -300,7 +302,7 @@ void CTest1::SetProcessors()
             CPlane xz(PlaneXZ);
             xz.SetPoint(mCenter);
             CVec3f new_pos;
-            GetDebugDrawSystem().CastRay(GetCursorPos(), xz, new_pos);
+            mCamera->CastRay(GetCursorPos(), xz, new_pos);
 
             CVec2f *v = new CVec2f[mCurrentFigure->EnumVertices()];
             for (unsigned int i = 0; i < mCurrentFigure->EnumVertices(); i++)
@@ -320,7 +322,7 @@ void CTest1::SetProcessors()
             CPlane xy(PlaneXY);
             xy.SetPoint(mCenter);
             CVec3f new_pos;
-            GetDebugDrawSystem().CastRay(GetCursorPos(), xy, new_pos);
+            mCamera->CastRay(GetCursorPos(), xy, new_pos);
 
             CVec2f *v = new CVec2f[mCurrentFigure->EnumVertices()];
             for (unsigned int i = 0; i < mCurrentFigure->EnumVertices(); i++)
@@ -340,7 +342,7 @@ void CTest1::SetProcessors()
             CPlane xz(PlaneXZ);
             xz.SetPoint(mCenter);
             CVec3f new_pos;
-            GetDebugDrawSystem().CastRay(GetCursorPos(), xz, new_pos);
+            mCamera->CastRay(GetCursorPos(), xz, new_pos);
 
             mCurrentFigure->SetZ(mCurrentFigure->GetZ() + new_pos.mZ - mFigureMoveFirstClick.mZ);
 
@@ -815,7 +817,7 @@ void CTest1::CompleteFigure()
 
             CVec3f pos;
 
-            GetDebugDrawSystem().CastRay(*i, plane, pos);
+            mCamera->CastRay(*i, plane, pos);
 
             *i = pos;
         }
@@ -874,7 +876,7 @@ void CTest1::DetachCurrentObject()
 
 void CTest1::SelectFigure()
 {
-    mCurrentFigure = GetDebugDrawSystem().FindFigure(GetCursorPos());
+    mCurrentFigure = GetDebugRenderer().FindFigure(mCamera, GetCursorPos());
 
     if (mCurrentFigure != nullptr)
     {
