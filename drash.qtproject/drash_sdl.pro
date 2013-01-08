@@ -67,7 +67,8 @@ SOURCES += \
     ../src/misc/vec2.cpp \
     ../src/scene/joint.cpp \
     ../src/test/test7.cpp \
-    ../src/greng/cameramanager.cpp
+    ../src/greng/cameramanager.cpp \
+    ../src/debugrenderer/debugrenderer.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -130,5 +131,6 @@ HEADERS += \
     ../src/misc/animator.h \
     ../src/scene/joint.h \
     ../src/test/test7.h \
-    ../src/greng/cameramanager.h
+    ../src/greng/cameramanager.h \
+    ../src/debugrenderer/debugrenderer.h
 

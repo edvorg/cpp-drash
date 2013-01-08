@@ -29,12 +29,18 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../misc/matrix4.h"
 #include "../misc/color4.h"
 
+namespace greng
+{
+
+class CCamera;
+class CCameraParams;
+
+} // namespace greng
+
 namespace drash
 {
 
 class CScene;
-class CCameraParams;
-class CCamera;
 class CPlane;
 class CFigure;
 
@@ -46,14 +52,11 @@ public:
     void Release();
 
     /// if _set_active is true, calls SetActiveCam() with created cam as param
-    CCamera *CreateCam(const CCameraParams &_params, bool _set_active = false);
-    void DestroyCam(CCamera *_cam);
+    greng::CCamera *CreateCam(const greng::CCameraParams &_params, bool _set_active = false);
+    void DestroyCam(greng::CCamera *_cam);
 
     /// activates cam. Draw() will render objects, using parameter of activated cam
-    void SetActiveCam(CCamera *_cam);
-
-    /// returns acticvated cam
-    inline CCamera *GetActiveCam() const;
+    void SetActiveCam(greng::CCamera *_cam);
 
     /// aspect ratio is window width in pixels divided on widow height
     /// you should use correct value for using coordinates conversion methods
@@ -97,19 +100,14 @@ public:
 
 protected:
 private:
-    CCamera *mActiveCam = nullptr;
-    std::vector<CCamera*> mCameras;
+    greng::CCamera *mActiveCam = nullptr;
+    std::vector<greng::CCamera*> mCameras;
     float mAspectRatio = 1;
     CMatrix4f mViewMatrixTransposed;
     CMatrix4f mProjectionMatrixTransposed;
 
     CScene* mScene = nullptr;
 };
-
-inline CCamera *CDebugDrawSystem::GetActiveCam() const
-{
-    return mActiveCam;
-}
 
 inline float CDebugDrawSystem::GetAspectRatio() const
 {

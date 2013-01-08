@@ -56,6 +56,8 @@ private:
     ui::CUISlider mSlider1;
     // gravity in x axis
     ui::CUISlider mSlider2;
+
+    greng::CPointLight mLight1;
 };
 
 } // namespace test

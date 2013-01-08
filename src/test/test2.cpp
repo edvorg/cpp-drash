@@ -45,7 +45,16 @@ bool CTest2::Init()
         return false;
     }
 
-    GetDebugDrawSystem().GetActiveCam()->GetPos().Set(CVec3f(0, 0, 300));
+    greng::CCameraParams c1p;
+    c1p.mPos.Set(0, 0, 300);
+    auto cam = GetDebugDrawSystem().CreateCam(c1p, true);
+
+    if (cam == nullptr)
+    {
+        return false;
+    }
+
+    GetDebugRenderer().SetCamera(cam);
 
     SetProcessors();
 
@@ -90,6 +99,10 @@ bool CTest2::Init()
         GetScene().CreateObject(tg, targetForFire);
         targetForFire.mPos.Set(-20, 20 + i*20, 0);
     }
+
+    mLight1.mPosition.Set(0, 30, 0);
+
+    GetDebugRenderer().SetLight(&mLight1);
 
     return true;
 }

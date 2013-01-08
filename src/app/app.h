@@ -31,6 +31,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../players/playerssystem.h"
 #include "../templates/templatesystem.h"
 #include "../debugrenderer/debugdrawsystem.h"
+#include "../debugrenderer/debugrenderer.h"
 #include "appeventsystem.h"
 #include "../ui/uisystem.h"
 #include "../greng/meshmanager.h"
@@ -63,6 +64,7 @@ public:
     inline CPlayersSystem &GetPlayersSystem();
     inline CTemplateSystem &GetTemplateSystem();
     inline CDebugDrawSystem &GetDebugDrawSystem();
+    inline CDebugRenderer &GetDebugRenderer();
     inline ui::CUISystem &GetUISystem();
     inline greng::CMeshManager &GetMeshManager();
     inline greng::CTextureManager &GetTextureManager();
@@ -93,6 +95,7 @@ private:
     CPlayersSystem mPlayersSystem;
     CTemplateSystem mTemplateSystem;
     CDebugDrawSystem mDebugDrawSystem;
+    CDebugRenderer mDebugRenderer;
     ui::CUISystem mUISystem;
     greng::CMeshManager mMeshManager;
     greng::CTextureManager mTextureManager;
@@ -144,6 +147,11 @@ inline CTemplateSystem &CApp::GetTemplateSystem()
 inline CDebugDrawSystem &CApp::GetDebugDrawSystem()
 {
     return mDebugDrawSystem;
+}
+
+inline CDebugRenderer &CApp::GetDebugRenderer()
+{
+    return mDebugRenderer;
 }
 
 inline ui::CUISystem &CApp::GetUISystem()

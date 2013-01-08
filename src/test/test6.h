@@ -58,9 +58,9 @@ private:
     CVec2f mPlayer1MeshDir = CVec2f(1, 0);
     CVec3f mPlayer1OldPos;
 
-    greng::CPointLight mPointLight1;
-
     float mAngle = 0;
+
+    greng::CPointLight mLight1;
 };
 
 } // namespace test

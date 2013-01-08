@@ -46,7 +46,6 @@ protected:
 
 protected:
 private:
-    void SetupCam();
     void SetupMeshes();
     void SetupTextures();
     void SetupShaders();
@@ -69,9 +68,10 @@ private:
     greng::CVertexShader *mVertexShader2 = nullptr;
     greng::CFragmentShader *mFragmentShader2 = nullptr;
     greng::CShaderProgram *mShaderProgram2 = nullptr;
-    greng::CPointLight mPointLight;
 
     double mAngle = 0.0;
+
+    greng::CPointLight mLight1;
 };
 
 } // namespace test
