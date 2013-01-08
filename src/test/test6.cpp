@@ -26,7 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../scene/sceneobject.h"
 #include "../scene/figure.h"
 #include "../players/player.h"
-#include "../debugdrawsystem/camera.h"
+#include "../greng/camera.h"
 #include "../scene/scene.h"
 
 namespace drash

@@ -33,7 +33,7 @@ CONFIG(release, debug|release) {
 SOURCES += ../src/qt/main.cpp\
         ../src/qt/gamewindow.cpp \
     ../src/qt/scenewidget.cpp \
-    ../src/debugdrawsystem/camera.cpp \
+    ../src/greng/camera.cpp \
     ../src/test/test.cpp \
     ../src/explosion/explosionsystem.cpp \
     ../src/players/playerssystem.cpp \
@@ -42,7 +42,7 @@ SOURCES += ../src/qt/main.cpp\
     ../src/templates/templatesystem.cpp \
     ../src/scene/physobserver.cpp \
     ../src/scene/figure.cpp \
-    ../src/debugdrawsystem/debugdrawsystem.cpp \
+    ../src/debugrenderer/debugdrawsystem.cpp \
     ../src/app/app.cpp \
     ../src/app/appevent.cpp \
     ../src/editor/sceneeditor.cpp\
@@ -79,13 +79,14 @@ SOURCES += ../src/qt/main.cpp\
     ../src/greng/shaderprogrammanager.cpp \
     ../src/test/test6.cpp \
     ../src/misc/vec2.cpp \
-    ../src/test/test7.cpp
+    ../src/test/test7.cpp \
+    ../src/greng/cameramanager.cpp
 
 HEADERS  += ../src/qt/gamewindow.h \
     ../src/qt/scenewidget.h \
     ../src/misc/math.h \
     ../src/misc/animator.h \
-    ../src/debugdrawsystem/camera.h \
+    ../src/greng/camera.h \
     ../src/explosion/explosion.h \
     ../src/test/test.h \
     ../src/diag/assert.h \
@@ -96,7 +97,7 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/misc/graphics.h \
     ../src/scene/physobserver.h \
     ../src/scene/figure.h \
-    ../src/debugdrawsystem/debugdrawsystem.h \
+    ../src/debugrenderer/debugdrawsystem.h \
     ../src/app/app.h \
     ../src/app/appevent.h \
     ../src/editor/sceneeditor.h \
@@ -145,7 +146,9 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/greng/shaderprogrammanager.h \
     ../src/test/test6.h \
     ../src/misc/animator.h \
-    ../src/test/test7.h
+    ../src/test/test7.h \
+    ../src/greng/cameramanager.h \
+    ../src/greng/pointlight.h
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui

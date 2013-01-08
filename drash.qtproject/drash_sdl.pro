@@ -50,8 +50,8 @@ SOURCES += \
     ../src/greng/meshmanager.cpp \
     ../src/diag/timer.cpp \
     ../src/diag/logger.cpp \
-    ../src/debugdrawsystem/debugdrawsystem.cpp \
-    ../src/debugdrawsystem/camera.cpp \
+    ../src/debugrenderer/debugdrawsystem.cpp \
+    ../src/greng/camera.cpp \
     ../src/app/appeventsystem.cpp \
     ../src/app/appeventprocessor.cpp \
     ../src/app/appeventcombination.cpp \
@@ -66,7 +66,8 @@ SOURCES += \
     ../src/test/test6.cpp \
     ../src/misc/vec2.cpp \
     ../src/scene/joint.cpp \
-    ../src/test/test7.cpp
+    ../src/test/test7.cpp \
+    ../src/greng/cameramanager.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -107,8 +108,8 @@ HEADERS += \
     ../src/diag/timer.h \
     ../src/diag/logger.h \
     ../src/diag/assert.h \
-    ../src/debugdrawsystem/debugdrawsystem.h \
-    ../src/debugdrawsystem/camera.h \
+    ../src/debugrenderer/debugdrawsystem.h \
+    ../src/greng/camera.h \
     ../src/app/appeventsystem.h \
     ../src/app/appeventprocessor.h \
     ../src/app/appeventcombination.h \
@@ -128,5 +129,6 @@ HEADERS += \
     ../src/test/test6.h \
     ../src/misc/animator.h \
     ../src/scene/joint.h \
-    ../src/test/test7.h
+    ../src/test/test7.h \
+    ../src/greng/cameramanager.h
 

@@ -30,7 +30,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <GL/gl.h>
 #endif
 
-#include "camera.h"
+#include "../greng/camera.h"
 #include "../misc/graphics.h"
 #include "../misc/plane.h"
 #include "../misc/ray.h"

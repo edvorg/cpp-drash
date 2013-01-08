@@ -30,7 +30,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../explosion/explosionsystem.h"
 #include "../players/playerssystem.h"
 #include "../templates/templatesystem.h"
-#include "../debugdrawsystem/debugdrawsystem.h"
+#include "../debugrenderer/debugdrawsystem.h"
 #include "appeventsystem.h"
 #include "../ui/uisystem.h"
 #include "../greng/meshmanager.h"
@@ -47,6 +47,7 @@ class CApp
 {
 public:
     CApp();
+    virtual ~CApp() { }
 
     virtual bool Init();
     virtual void Release();

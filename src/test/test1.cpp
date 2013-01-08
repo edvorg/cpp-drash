@@ -26,7 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../scene/scene.h"
 #include "../app/appeventprocessor.h"
-#include "../debugdrawsystem/camera.h"
+#include "../greng/camera.h"
 #include "../scene/figure.h"
 #include "../scene/sceneobject.h"
 

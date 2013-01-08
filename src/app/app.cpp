@@ -23,7 +23,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include "app.h"
-#include "../debugdrawsystem/camera.h"
+#include "../greng/camera.h"
 
 namespace drash
 {
