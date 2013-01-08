@@ -30,6 +30,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../misc/vec4.h"
 #include "../misc/matrix4.h"
 #include "../misc/math.h"
+#include <cstring>
 
 namespace greng
 {
@@ -251,6 +252,48 @@ CMesh *CMeshManager::CreateMeshCube()
 
     res->mMaterialOffsets.push_back(0);
     res->mMaterialOffsets.push_back(res->mIndices.size());
+
+    glBindBuffer(GL_ARRAY_BUFFER, res->mVertexBufferId);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * res->mVertices.size(), &res->mVertices[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, res->mIndexBufferId);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * res->mIndices.size(), &res->mIndices[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    return res;
+}
+
+CMesh *CMeshManager::CreateMeshFromVertices(const CVertex *_vertices,
+                                            unsigned int _vertices_count,
+                                            const unsigned int *_indices,
+                                            unsigned int _indices_count)
+{
+    if (_vertices == nullptr || _vertices_count == 0)
+    {
+        LOG_ERR("CMeshManager::CreateMeshFromVertices(): _vertices must be specified");
+        return nullptr;
+    }
+
+    if (_indices == nullptr || _indices_count == 0)
+    {
+        LOG_ERR("CMeshManager::CreateMeshFromVertices(): _indices must be specified");
+        return nullptr;
+    }
+
+    CMesh *res = CreateMesh();
+
+    if (res == nullptr)
+    {
+        return nullptr;
+    }
+
+    res->mVertices.resize(_vertices_count);
+    memcpy(&res->mVertices[0], _vertices, sizeof(CVertex) * _vertices_count);
+    res->mIndices.resize(_indices_count);
+    memcpy(&res->mIndices[0], _indices, sizeof(unsigned int) * _indices_count);
+
+    res->mMaterialOffsets.push_back(0);
+    res->mMaterialOffsets.push_back(_indices_count);
 
     glBindBuffer(GL_ARRAY_BUFFER, res->mVertexBufferId);
     glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * res->mVertices.size(), &res->mVertices[0], GL_STATIC_DRAW);
