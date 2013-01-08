@@ -46,6 +46,8 @@ protected:
     virtual void Render() override;
     virtual void Release() override;
 
+    inline greng::CCamera *GetCamera() const;
+
 private:
     void SetProcessors();
     void BeginSplit();
@@ -92,7 +94,15 @@ private:
     unsigned int mSplitIntersectionsCount = 0;
     bool mSplitDepth = false;
     float mSplitFigureCenterZ = 0;
+
+    greng::CCamera *mCamera = nullptr;
+    greng::CPointLight mLight1;
 };
+
+inline greng::CCamera *CTest1::GetCamera() const
+{
+    return mCamera;
+}
 
 } // namespace test
 

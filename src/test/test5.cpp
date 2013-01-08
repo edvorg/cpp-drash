@@ -24,7 +24,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "test5.h"
 
-#include "../debugdrawsystem/camera.h"
+#include "../greng/camera.h"
 #include "../players/player.h"
 
 namespace drash
@@ -40,12 +40,15 @@ bool CTest5::Init()
         return false;
     }
 
-    SetupCam();
     SetupProcessors();
     SetupMeshes();
     SetupTextures();
     SetupShaders();
     SetupLights();
+
+    mLight1.mPosition.Set(0, 50, 0);
+
+    GetDebugRenderer().SetLight(&mLight1);
 
     return true;
 }
@@ -61,7 +64,7 @@ void CTest5::Step(double _dt)
         mAngle -= M_PI * 2.0;
     }
 
-    mPointLight.mPosition.mX = -50 + 200 * sin(mAngle);
+    mLight1.mPosition.mX = -50 + 200 * sin(mAngle);
 }
 
 void CTest5::Render()
@@ -86,17 +89,17 @@ void CTest5::Render()
         MatrixMultiply(transl, rot, model);
 
         CMatrix4f model_view;
-        MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
+        MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
 
         GetRenderer().RenderMesh(mMesh1,
                                  0,
                                  mTex6,
                                  mShaderProgram2,
                                  model,
-                                 GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(),
+                                 GetCamera()->GetViewMatrix(),
                                  model_view,
-                                 GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix(),
-                                 &mPointLight);
+                                 GetCamera()->GetProjectionMatrix(),
+                                 &mLight1);
     }
 
     if (mMesh2 != nullptr)
@@ -117,17 +120,17 @@ void CTest5::Render()
         MatrixMultiply(transl, rot, model);
 
         CMatrix4f model_view;
-        MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
+        MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
 
         GetRenderer().RenderMesh(mMesh2,
                                  0,
                                  mTex2,
                                  mShaderProgram2,
                                  model,
-                                 GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(),
+                                 GetCamera()->GetViewMatrix(),
                                  model_view,
-                                 GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix(),
-                                 &mPointLight);
+                                 GetCamera()->GetProjectionMatrix(),
+                                 &mLight1);
     }
 
     if (mMesh3 != nullptr)
@@ -139,7 +142,7 @@ void CTest5::Render()
         MatrixMultiply(rangle, mMesh3ConstMatrix, model);
 
         CMatrix4f model_view;
-        MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
+        MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
 
         greng::CTexture *texts[3] =
         {
@@ -155,23 +158,14 @@ void CTest5::Render()
                                      texts[i],
                                      mShaderProgram2,
                                      model,
-                                     GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(),
+                                     GetCamera()->GetViewMatrix(),
                                      model_view,
-                                     GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix(),
-                                     &mPointLight);
+                                     GetCamera()->GetProjectionMatrix(),
+                                     &mLight1);
         }
     }
 
-    GetDebugDrawSystem().DrawPoint(mPointLight.mPosition, 10, CColor4f(1, 1, 1, 1), false);
-}
-
-void CTest5::SetupCam()
-{
-    auto cam = GetDebugDrawSystem().GetActiveCam();
-
-    if (cam != nullptr)
-    {
-    }
+    GetDebugDrawSystem().DrawPoint(mLight1.mPosition, 10, CColor4f(1, 1, 1, 1), false);
 }
 
 void CTest5::SetupMeshes()
@@ -223,7 +217,7 @@ void CTest5::SetupProcessors()
 
 void CTest5::SetupLights()
 {
-    mPointLight.mPosition.Set(-50, 100, 0);
+    mLight1.mPosition.Set(-50, 100, 0);
 }
 
 } // namespace test

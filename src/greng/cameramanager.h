@@ -22,35 +22,42 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#pragma once
-#ifndef CTESTAPP2_H
-#define CTESTAPP2_H
+#ifndef GRENG_CAMERAMANAGER_H
+#define GRENG_CAMERAMANAGER_H
 
-#include "../app/app.h"
+#include "../misc/objectfactory.h"
 
-namespace drash
+namespace greng
 {
 
-namespace test
-{
+class CCamera;
 
-class CTest2 : public CApp
+class CCameraManager
 {
 public:
-    CTest2() = default;
+    bool Init();
+    void Release();
+
+    CCamera *CreateCamera();
+    bool DestroyCamera(CCamera *_camera);
+    inline CCamera * const * GetCameras() const;
+    inline unsigned int EnumCameras() const;
 
 protected:
-    virtual bool Init() override;
-
 private:
-    void SetProcessors();
-    CSceneObject *mSelectedObject = nullptr;
-
-    greng::CPointLight mLight1;
+    drash::CObjectFactory<CCamera> mCameraFactory;
 };
 
-} // namespace test
+inline CCamera *const*CCameraManager::GetCameras() const
+{
+    return mCameraFactory.GetObjects();
+}
 
-}// namespace drash
+inline unsigned int CCameraManager::EnumCameras() const
+{
+    return mCameraFactory.EnumObjects();
+}
 
-#endif // CTESTAPP2_H
+} // namespace greng
+
+#endif // GRENG_CAMERAMANAGER_H

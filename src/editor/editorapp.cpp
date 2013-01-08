@@ -26,7 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QDebug>
 
-#include "../debugdrawsystem/camera.h"
+#include "../greng/camera.h"
 #include "../misc/plane.h"
 #include "../scene/figure.h"
 #include "../scene/sceneobject.h"

@@ -26,7 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../scene/sceneobject.h"
 #include "../scene/figure.h"
 #include "../players/player.h"
-#include "../debugdrawsystem/camera.h"
+#include "../greng/camera.h"
 #include "../scene/scene.h"
 
 namespace drash
@@ -74,13 +74,13 @@ bool CTest6::Init()
         return false;
     }
 
-    if (GetDebugDrawSystem().GetActiveCam() == nullptr)
+    if (GetCamera() == nullptr)
     {
         return false;
     }
 
-    GetDebugDrawSystem().GetActiveCam()->GetPos().Set(CVec3f(0, 75, 150));
-    GetDebugDrawSystem().GetActiveCam()->GetRotation().Set(CVec2f(-M_PI / 12.0, 0));
+    GetCamera()->GetPos().Set(CVec3f(0, 75, 150));
+    GetCamera()->GetRotation().Set(CVec2f(-M_PI / 12.0, 0));
 
     return true;
 }
@@ -96,7 +96,9 @@ void CTest6::Step(double _dt)
         mAngle -= M_PI * 2.0;
     }
 
-    mPointLight1.mPosition.Set(sin(mAngle) * 40, 20, 0);
+    mLight1.mPosition.Set(sin(mAngle) * 40, 20, 0);
+
+    GetDebugRenderer().SetLight(&mLight1);
 
     CVec2f dir(GetPlayersSystem().GetPlayers()[0]->GetSceneObject()->GetPosXY().Get().mX - mPlayer1OldPos.mX,
                mPlayer1OldPos.mZ - GetPlayersSystem().GetPlayers()[0]->GetSceneObject()->GetPosZ());
@@ -120,11 +122,11 @@ void CTest6::Step(double _dt)
         CMatrix4f m;
         if (cross.mZ < 0.0)
         {
-            MatrixRotationZ(m, angle * -0.02);
+            MatrixRotationZ(m, angle * -10.0 * _dt);
         }
         else
         {
-            MatrixRotationZ(m, angle * 0.02);
+            MatrixRotationZ(m, angle * 10.0 * _dt);
         }
 
         CVec4f new_dir;
@@ -167,7 +169,7 @@ void CTest6::Render()
     MatrixMultiply(transl, rot, model);
 
     CMatrix4f model_view;
-    MatrixMultiply(GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(), model, model_view);
+    MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
 
     for (unsigned int i = 0; i < 6; i++)
     {
@@ -176,13 +178,13 @@ void CTest6::Render()
                                  mPlayer1Texture,
                                  mPlayer1ShaderProgram,
                                  model,
-                                 GetDebugDrawSystem().GetActiveCam()->GetViewMatrix(),
+                                 GetCamera()->GetViewMatrix(),
                                  model_view,
-                                 GetDebugDrawSystem().GetActiveCam()->GetProjectionMatrix(),
-                                 &mPointLight1);
+                                 GetCamera()->GetProjectionMatrix(),
+                                 &mLight1);
     }
 
-    GetDebugDrawSystem().DrawPoint(mPointLight1.mPosition,
+    GetDebugDrawSystem().DrawPoint(mLight1.mPosition,
                                    10,
                                    CColor4f(1, 1, 1, 1),
                                    true);
@@ -252,7 +254,9 @@ bool CTest6::InitPlayer()
 
 bool CTest6::InitLight()
 {
-    mPointLight1.mPosition.Set(10, 10, 0);
+    mLight1.mPosition.Set(10, 10, 0);
+
+    GetDebugRenderer().SetLight(&mLight1);
 
     return true;
 }

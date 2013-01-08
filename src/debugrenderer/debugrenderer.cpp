@@ -22,102 +22,69 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "test7.h"
-#include <vector>
-#include "../greng/vertex.h"
+#include "debugrenderer.h"
+
+#include "../scene/scene.h"
+#include "../scene/sceneobject.h"
 #include "../scene/figure.h"
+
+#include "../misc/matrix4.h"
+
+#include "../greng/vertex.h"
+#include "../greng/meshmanager.h"
+#include "../greng/texturemanager.h"
+#include "../greng/renderer.h"
 #include "../greng/camera.h"
+
+namespace greng
+{
+    class CMesh;
+}
 
 namespace drash
 {
 
-namespace test
+bool CDebugRenderer::Init()
 {
-
-bool CTest7::Init()
-{
-    if (CTest3::Init() == false)
-    {
-        return false;
-    }
+    Release();
 
     if (InitTextures() == false)
     {
         return false;
     }
 
-    if (InitShaders() == false)
-    {
-        return false;
-    }
-
-    if (InitLights() == false)
-    {
-        return false;
-    }
-
-    mLight1.mPosition.Set(0, 30, 0);
-
-    GetDebugRenderer().SetLight(&mLight1);
-
     return true;
 }
 
-void CTest7::Step(double _dt)
+void CDebugRenderer::Release()
 {
-    CTest3::Step(_dt);
+}
 
-    mPointLight1PosAngle += _dt * 0.5;
-
-    while (mPointLight1PosAngle >= M_PI * 2.0)
+void CDebugRenderer::Render() const
+{
+    if (mCamera == nullptr)
     {
-        mPointLight1PosAngle -= M_PI * 2.0;
+        LOG_ERR("CDebugRenderer::Render(): mCamera is not set");
+        return;
     }
 
-    mLight1.mPosition.mX = 150 * sin(mPointLight1PosAngle);
-}
-
-bool CTest7::InitTextures()
-{
-    mDebugTexture = GetTextureManager().CreateTextureFromFile("wall5.png");
-
-    if (mDebugTexture == nullptr)
+    if (mShaderProgram == nullptr)
     {
-        return false;
+        LOG_ERR("CDebugRenderer::Render(): mShaderProgram is not set");
+        return;
     }
 
-    return true;
-}
-
-bool CTest7::InitShaders()
-{
-    greng::CVertexShader *v = GetVertexShaderManager().CreateShaderFromFile("shader2.120.vs");
-    greng::CFragmentShader *f = GetFragmentShaderManager().CreateShaderFromFile("shader2.120.fs");
-
-    mProgram = GetShaderProgramManager().CreateProgram(v, f);
-
-    if (mProgram == nullptr)
+    if (mLight == nullptr)
     {
-        return false;
+        LOG_ERR("CDebugRenderer::Render(): mLight is not set");
+        return;
     }
 
-    return true;
-}
-
-bool CTest7::InitLights()
-{
-    mLight1.mPosition.Set(0, 50, 0);
-
-    return true;
-}
-
-void CTest7::Render()
-{
-    unsigned int ic = GetScene().EnumObjects();
+    unsigned int ic = GetScene()->EnumObjects();
 
     for (unsigned int i = 0; i < ic; i++)
     {
-        CSceneObject *o = GetScene().GetObjects()[i];
+        CSceneObject *o = GetScene()->GetObjects()[i];
         unsigned int jc = o->EnumFigures();
 
         for (unsigned int j = 0; j < jc; j++)
@@ -222,12 +189,12 @@ void CTest7::Render()
                 mi.push_back(2 * kc + (kc - 1) * 4 + 3);
                 mi.push_back(2 * kc + (kc - 1) * 4 + 0);
 
-                m = GetMeshManager().CreateMeshFromVertices(&mv[0], mv.size(), &mi[0], mi.size());
+                m = GetMeshManager()->CreateMeshFromVertices(&mv[0], mv.size(), &mi[0], mi.size());
             }
 
             if (m != nullptr)
             {
-                GetMeshManager().ComputeNormals(m);
+                GetMeshManager()->ComputeNormals(m);
 
                 CMatrix4f rot;
                 MatrixRotationZ(rot, o->GetAngle());
@@ -241,22 +208,32 @@ void CTest7::Render()
                 CMatrix4f model_view;
                 MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
 
-                GetRenderer().RenderMesh(m,
+                GetRenderer()->RenderMesh(m,
                                          0,
-                                         mDebugTexture,
-                                         mProgram,
+                                         mTexture1,
+                                         mShaderProgram,
                                          model,
-                                         GetCamera()->GetViewMatrix(),
+                                         mCamera->GetViewMatrix(),
                                          model_view,
-                                         GetCamera()->GetProjectionMatrix(),
-                                         &mLight1);
+                                         mCamera->GetProjectionMatrix(),
+                                         mLight);
 
-                GetMeshManager().DestroyMesh(m);
+                GetMeshManager()->DestroyMesh(m);
             }
         }
     }
 }
 
-} // namespace test
+bool CDebugRenderer::InitTextures()
+{
+    mTexture1 = GetTextureManager()->CreateTextureFromFile("wall5.png");
+
+    if (mTexture1 == nullptr)
+    {
+        return false;
+    }
+
+    return true;
+}
 
 } // namespace drash

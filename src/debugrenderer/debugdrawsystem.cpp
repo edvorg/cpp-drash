@@ -30,7 +30,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <GL/gl.h>
 #endif
 
-#include "camera.h"
+#include "../greng/camera.h"
 #include "../misc/graphics.h"
 #include "../misc/plane.h"
 #include "../misc/ray.h"
@@ -76,9 +76,9 @@ void CDebugDrawSystem::Release()
 	mCameras.clear();
 }
 
-drash::CCamera *CDebugDrawSystem::CreateCam(const drash::CCameraParams &_params, bool _set_active)
+greng::CCamera *CDebugDrawSystem::CreateCam(const greng::CCameraParams &_params, bool _set_active)
 {
-    CCamera *res = new CCamera;
+    greng::CCamera *res = new greng::CCamera;
 
     if (res->Init(_params) == false)
     {
@@ -98,7 +98,7 @@ drash::CCamera *CDebugDrawSystem::CreateCam(const drash::CCameraParams &_params,
     return res;
 }
 
-void CDebugDrawSystem::DestroyCam(drash::CCamera *_cam)
+void CDebugDrawSystem::DestroyCam(greng::CCamera *_cam)
 {
     if (_cam == mActiveCam)
     {
@@ -116,7 +116,7 @@ void CDebugDrawSystem::DestroyCam(drash::CCamera *_cam)
     }
 }
 
-void CDebugDrawSystem::SetActiveCam(CCamera *_cam)
+void CDebugDrawSystem::SetActiveCam(greng::CCamera *_cam)
 {
     mActiveCam = _cam;
 

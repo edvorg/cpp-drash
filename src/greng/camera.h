@@ -26,12 +26,26 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef COBJECTCAMERA_H
 #define COBJECTCAMERA_H
 
+#include "../misc/objectfactory.h"
 #include "../misc/animator.h"
 #include "../misc/vec3.h"
 #include "../misc/matrix4.h"
 
 namespace drash
 {
+
+class CDebugDrawSystem;
+
+} // namespace drash
+
+namespace greng
+{
+
+using drash::CVec2f;
+using drash::CVec3f;
+using drash::CMatrix4f;
+using drash::CObjectFactory;
+using drash::CAnimator;
 
 class CCameraParams
 {
@@ -44,10 +58,13 @@ public:
     CVec3f mRotation;
 };
 
-class CCamera
+class CCamera final : public CObjectFactory<CCamera>::CFactoryProduct
 {
 public:
-    friend class CDebugDrawSystem;
+    friend class drash::CDebugDrawSystem;
+
+    bool Init(const CCameraParams &_params);
+    void Step(double _dt);
 
     inline void SetOrtho(bool _ortho);
     inline bool IsOrtho() const;
@@ -70,12 +87,7 @@ public:
     inline const CMatrix4f &GetViewMatrix() const;
     inline const CMatrix4f &GetProjectionMatrix() const;
 
-protected:        
-    CCamera(void) = default;
-
-    bool Init(const CCameraParams &_params);
-
-    void Step(double _dt);
+protected:
 
 private:
     void ComputeMatrices();
@@ -155,6 +167,6 @@ inline const CMatrix4f &CCamera::GetProjectionMatrix() const
     return mProjectionMatrix;
 }
 
-}// namespace drash
+}// namespace greng
 
 #endif // COBJECTCAMERA_H

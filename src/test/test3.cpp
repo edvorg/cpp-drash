@@ -29,7 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../players/player.h"
 #include "../scene/figure.h"
 
-#include "../debugdrawsystem/camera.h"
+#include "../greng/camera.h"
 #include "../misc/plane.h"
 
 namespace drash
@@ -49,7 +49,7 @@ bool CTest3::Init()
 
     InitObjects();
 
-    auto c = GetDebugDrawSystem().GetActiveCam();
+    auto c = GetCamera();
     c->GetPos().SetTarget(CVec3f(0, 50, 180), 1.0f, AnimatorBehavior::Single);
     c->GetRotation().Set(CVec3f(-M_PI / 12, 0, 0));
 
@@ -74,6 +74,10 @@ bool CTest3::Init()
     {
         GetScene().SetGravity(CVec2f(mSlider1.GetValue(), _value));
     });
+
+    mLight1.mPosition.Set(0, 40, 0);
+
+    GetDebugRenderer().SetLight(&mLight1);
 
     return true;
 }
@@ -200,18 +204,18 @@ void CTest3::SetProcessors()
     {
         CVec3f pos;
 
-        if (GetDebugDrawSystem().GetActiveCam()->GetPos().IsTargetSet())
+        if (GetCamera()->GetPos().IsTargetSet())
         {
-            pos = GetDebugDrawSystem().GetActiveCam()->GetPos().GetTarget();
+            pos = GetCamera()->GetPos().GetTarget();
         }
         else
         {
-            pos = GetDebugDrawSystem().GetActiveCam()->GetPos().Get();
+            pos = GetCamera()->GetPos().Get();
         }
 
         pos.mZ += 10.0f;
 
-        GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
+        GetCamera()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
     }));
 
     GetEventSystem().SetProcessor("WHDN", CAppEventProcessor(
@@ -219,18 +223,18 @@ void CTest3::SetProcessors()
     {
         CVec3f pos;
 
-        if (GetDebugDrawSystem().GetActiveCam()->GetPos().IsTargetSet())
+        if (GetCamera()->GetPos().IsTargetSet())
         {
-            pos = GetDebugDrawSystem().GetActiveCam()->GetPos().GetTarget();
+            pos = GetCamera()->GetPos().GetTarget();
         }
         else
         {
-            pos = GetDebugDrawSystem().GetActiveCam()->GetPos().Get();
+            pos = GetCamera()->GetPos().Get();
         }
 
         pos.mZ -= 10.0f;
 
-        GetDebugDrawSystem().GetActiveCam()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
+        GetCamera()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
     }));
 
     GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
@@ -245,10 +249,7 @@ void CTest3::SetProcessors()
     },
     [this] ()
     {
-        if (GetDebugDrawSystem().GetActiveCam() != nullptr)
-        {
-            GetDebugDrawSystem().GetActiveCam()->Forward(5);
-        }
+        GetCamera()->Forward(5);
     }));
 
     GetEventSystem().SetProcessor("q", CAppEventProcessor(
@@ -257,10 +258,7 @@ void CTest3::SetProcessors()
     },
     [this] ()
     {
-        if (GetDebugDrawSystem().GetActiveCam() != nullptr)
-        {
-            GetDebugDrawSystem().GetActiveCam()->Forward(-5);
-        }
+        GetCamera()->Forward(-5);
     }));
 
     GetEventSystem().SetProcessor("z", CAppEventProcessor(
@@ -269,10 +267,7 @@ void CTest3::SetProcessors()
     },
     [this] ()
     {
-        if (GetDebugDrawSystem().GetActiveCam() != nullptr)
-        {
-            GetDebugDrawSystem().GetActiveCam()->Strafe(5);
-        }
+        GetCamera()->Strafe(5);
     }));
 
     GetEventSystem().SetProcessor("c", CAppEventProcessor(
@@ -281,10 +276,7 @@ void CTest3::SetProcessors()
     },
     [this] ()
     {
-        if (GetDebugDrawSystem().GetActiveCam() != nullptr)
-        {
-            GetDebugDrawSystem().GetActiveCam()->Strafe(-5);
-        }
+        GetCamera()->Strafe(-5);
     }));
 }
 

@@ -22,35 +22,55 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#pragma once
-#ifndef CTESTAPP2_H
-#define CTESTAPP2_H
+#include "cameramanager.h"
 
-#include "../app/app.h"
+#include "camera.h"
 
-namespace drash
+#include "../diag/logger.h"
+
+namespace greng
 {
 
-namespace test
+using drash::CLogger;
+
+bool CCameraManager::Init()
 {
+    Release();
 
-class CTest2 : public CApp
+    return true;
+}
+
+void CCameraManager::Release()
 {
-public:
-    CTest2() = default;
+    while (mCameraFactory.EnumObjects() != 0)
+    {
+        DestroyCamera(mCameraFactory.GetObjects()[0]);
+    }
+}
 
-protected:
-    virtual bool Init() override;
+CCamera *CCameraManager::CreateCamera()
+{
+    CCamera *res = mCameraFactory.CreateObject();
 
-private:
-    void SetProcessors();
-    CSceneObject *mSelectedObject = nullptr;
+    if (res == nullptr)
+    {
+        return nullptr;
+    }
 
-    greng::CPointLight mLight1;
-};
+    return res;
+}
 
-} // namespace test
+bool CCameraManager::DestroyCamera(CCamera *_camera)
+{
+    if (mCameraFactory.IsObject(_camera) == false)
+    {
+        LOG_ERR("CCameraManager::DestroyCamera(): Invalid object taken");
+        return false;
+    }
 
-}// namespace drash
+    mCameraFactory.DestroyObject(_camera);
 
-#endif // CTESTAPP2_H
+    return true;
+}
+
+} // namespace greng

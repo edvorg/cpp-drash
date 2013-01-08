@@ -24,8 +24,56 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "camera.h"
 
-namespace drash
+namespace greng
 {
+
+using drash::CVec4f;
+
+bool CCamera::Init(const CCameraParams &_params)
+{
+    mOrthoWidthAnimator = _params.mOrthoWidth;
+    mFovAnimator = _params.mFov;
+    mDepthOfViewAnimator = _params.mDepthOfView;
+    mPosAnimator = _params.mPos;
+    mRotationAnimator = _params.mRotation;
+
+    return true;
+}
+
+void CCamera::Step(double _dt)
+{
+    bool compute_matrices = false;
+
+    if (mOrthoWidthAnimator.Step(_dt))
+    {
+        compute_matrices = true;
+    }
+
+    if (mFovAnimator.Step(_dt))
+    {
+        compute_matrices = true;
+    }
+
+    if (mDepthOfViewAnimator.Step(_dt))
+    {
+        compute_matrices = true;
+    }
+
+    if (mPosAnimator.Step(_dt))
+    {
+        compute_matrices = true;
+    }
+
+    if (mRotationAnimator.Step(_dt))
+    {
+        compute_matrices = true;
+    }
+
+    if (compute_matrices == true)
+    {
+        ComputeMatrices();
+    }
+}
 
 void CCamera::LookAt(const CVec3f &_point)
 {
@@ -88,7 +136,7 @@ void CCamera::Strafe(float _distance)
 
 void CCamera::SetAspectRatio(float _aspect)
 {
-    if (math::Abs(_aspect) < 0.000001)
+    if (drash::math::Abs(_aspect) < 0.000001)
     {
         _aspect = 1.0f;
     }
@@ -96,52 +144,6 @@ void CCamera::SetAspectRatio(float _aspect)
     mAspectRatio = _aspect;
 
     ComputeMatrices();
-}
-
-bool CCamera::Init(const CCameraParams &_params)
-{
-    mOrthoWidthAnimator = _params.mOrthoWidth;
-    mFovAnimator = _params.mFov;
-    mDepthOfViewAnimator = _params.mDepthOfView;
-    mPosAnimator = _params.mPos;
-    mRotationAnimator = _params.mRotation;
-
-    return true;
-}
-
-void CCamera::Step(double _dt)
-{
-    bool compute_matrices = false;
-
-    if (mOrthoWidthAnimator.Step(_dt))
-    {
-        compute_matrices = true;
-    }
-
-    if (mFovAnimator.Step(_dt))
-    {
-        compute_matrices = true;
-    }
-
-    if (mDepthOfViewAnimator.Step(_dt))
-    {
-        compute_matrices = true;
-    }
-
-    if (mPosAnimator.Step(_dt))
-    {
-        compute_matrices = true;
-    }
-
-    if (mRotationAnimator.Step(_dt))
-    {
-        compute_matrices = true;
-    }
-
-    if (compute_matrices == true)
-    {
-        ComputeMatrices();
-    }
 }
 
 void CCamera::ComputeMatrices()
@@ -166,4 +168,4 @@ void CCamera::ComputeMatrices()
     Matrix4Perspective(mProjectionMatrix, mFov, mAspectRatio, 1.0, mDepthOfView + 1.0f);
 }
 
-}// namespace drash
+}// namespace greng

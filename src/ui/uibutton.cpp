@@ -27,7 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "uisystem.h"
 #include "../misc/vec2.h"
 #include "../misc/math.h"
-#include "../debugdrawsystem/debugdrawsystem.h"
+#include "../debugrenderer/debugdrawsystem.h"
 #include "../misc/color4.h"
 
 namespace drash

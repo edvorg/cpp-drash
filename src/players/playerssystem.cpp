@@ -144,7 +144,7 @@ bool CPlayersSystem::SendMessage(CPlayer *_player, const PlayerMessage &_message
         break;
 
     case PlayerMessage::Jump:
-        _player->GetSceneObject()->ApplyLinearImpulse(CVec2f(0, 0.2),
+        _player->GetSceneObject()->ApplyLinearImpulse(CVec2f(0, 0.5),
                                                       _player->GetSceneObject()->GetMassCenter());
         break;
 

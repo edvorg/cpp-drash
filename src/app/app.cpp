@@ -23,7 +23,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include "app.h"
-#include "../debugdrawsystem/camera.h"
+#include "../greng/camera.h"
 
 namespace drash
 {
@@ -61,9 +61,22 @@ bool CApp::Init()
         return false;
     }
 
-    CCamera *cam = GetDebugDrawSystem().CreateCam(CCameraParams(), true);
+    greng::CVertexShader *vs = mVertexShaderManager.CreateShaderFromFile("shader2.120.vs");
+    greng::CFragmentShader *fs = mFragmentShaderManager.CreateShaderFromFile("shader2.120.fs");
+    greng::CShaderProgram *sp = mShaderProgramManager.CreateProgram(vs, fs);
 
-    if (cam == nullptr)
+    if (sp == nullptr)
+    {
+        return false;
+    }
+
+    mDebugRenderer.SetShaderProgram(sp);
+    mDebugRenderer.SetMeshManager(&mMeshManager);
+    mDebugRenderer.SetRenderer(&mRenderer);
+    mDebugRenderer.SetScene(&mScene);
+    mDebugRenderer.SetTextureManager(&mTextureManager);
+
+    if (mDebugRenderer.Init() == false)
     {
         return false;
     }
@@ -94,6 +107,7 @@ void CApp::Step(double _dt)
 
 void CApp::Release()
 {
+    mDebugRenderer.Release();
     mEventSystem.Release();
     mExplosionSystem.Release();
     mPlayersSystem.Release();
@@ -111,7 +125,7 @@ void CApp::Release()
 
 void CApp::Render()
 {
-    mDebugDrawSystem.Draw();
+    mDebugRenderer.Render();
     mUISystem.DebugDraw();
 }
 

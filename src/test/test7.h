@@ -47,8 +47,9 @@ private:
     greng::CTexture *mDebugTexture = nullptr;
     greng::CShaderProgram *mProgram = nullptr;
 
-    greng::CPointLight mPointLight1;
     float mPointLight1PosAngle = 0;
+
+    greng::CPointLight mLight1;
 };
 
 } // namespace test

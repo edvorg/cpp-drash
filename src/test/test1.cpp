@@ -26,7 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../scene/scene.h"
 #include "../app/appeventprocessor.h"
-#include "../debugdrawsystem/camera.h"
+#include "../greng/camera.h"
 #include "../scene/figure.h"
 #include "../scene/sceneobject.h"
 
@@ -55,7 +55,21 @@ bool CTest1::Init()
         return false;
     }
 
-    GetDebugDrawSystem().GetActiveCam()->GetPos().Set(CVec3f(0, 0, 100));
+    greng::CCameraParams p;
+    p.mPos.Set(0, 0, 100);
+    mCamera = GetDebugDrawSystem().CreateCam(p, true);
+
+    if (mCamera == nullptr)
+    {
+        return false;
+    }
+
+    mLight1.mPosition.Set(0, 0, 20);
+
+    GetDebugRenderer().SetCamera(mCamera);
+    GetDebugRenderer().SetLight(&mLight1);
+
+    GetDebugRenderer().SetLight(&mLight1);
 
     SetProcessors();
 
@@ -697,11 +711,11 @@ void CTest1::CamViewProcessors()
     {
         CVec2f new_pos = GetCursorPos();
 
-        CVec2f rot = GetDebugDrawSystem().GetActiveCam()->GetRotation().Get();
+        CVec2f rot = mCamera->GetRotation().Get();
         rot.mY -= new_pos.mX - mCamRotFirstClick.mX;
         rot.mX += new_pos.mY - mCamRotFirstClick.mY;
 
-        GetDebugDrawSystem().GetActiveCam()->GetRotation().Set(rot);
+        mCamera->GetRotation().Set(rot);
 
         mCamRotFirstClick = new_pos;
     }));
@@ -710,28 +724,28 @@ void CTest1::CamViewProcessors()
     [this] () {},
     [this] ()
     {
-        GetDebugDrawSystem().GetActiveCam()->Forward(500 * GetCurrentTimeDelta());
+        mCamera->Forward(500 * GetCurrentTimeDelta());
     }));
 
     GetEventSystem().SetProcessor("a", CAppEventProcessor(
     [this] () {},
     [this] ()
     {
-        GetDebugDrawSystem().GetActiveCam()->Strafe(500 * GetCurrentTimeDelta());
+        mCamera->Strafe(500 * GetCurrentTimeDelta());
     }));
 
     GetEventSystem().SetProcessor("s", CAppEventProcessor(
     [this] () {},
     [this] ()
     {
-        GetDebugDrawSystem().GetActiveCam()->Forward(-500 * GetCurrentTimeDelta());
+        mCamera->Forward(-500 * GetCurrentTimeDelta());
     }));
 
     GetEventSystem().SetProcessor("d", CAppEventProcessor(
     [this] () {},
     [this] ()
     {
-        GetDebugDrawSystem().GetActiveCam()->Strafe(-500 * GetCurrentTimeDelta());
+        mCamera->Strafe(-500 * GetCurrentTimeDelta());
     }));
 
     GetEventSystem().SetProcessor("q", CAppEventProcessor(
