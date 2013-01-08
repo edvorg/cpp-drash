@@ -131,11 +131,6 @@ void CUISystem::EndEvent()
     }
 }
 
-void CUISystem::SetDebugDrawSystem(CDebugDrawSystem *_system)
-{
-    mDebugDrawSystem = _system;
-}
-
 void CUISystem::Step(double _dt)
 {
     for (unsigned int i = 0; i < mControlsCount; i++)

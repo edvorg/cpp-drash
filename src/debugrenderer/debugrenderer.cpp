@@ -35,6 +35,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/texturemanager.h"
 #include "../greng/renderer.h"
 #include "../greng/camera.h"
+#include "../misc/plane.h"
 
 namespace greng
 {
@@ -222,6 +223,87 @@ void CDebugRenderer::Render() const
             }
         }
     }
+}
+
+CFigure *CDebugRenderer::FindFigure(const greng::CCamera *_camera, const CVec2f &_pos) const
+{
+    if (_camera == nullptr)
+    {
+        return nullptr;
+    }
+
+    CFigure *res = nullptr;
+
+    unsigned int i = 0;
+    bool brk = false;
+    float z_nearest = 0;
+
+    for (i = 0; i < GetScene()->EnumObjects(); i++)
+    {
+        CSceneObject *cur_obj = GetScene()->GetObjects()[i];
+
+        for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++)
+        {
+            CFigure *cur_fgr = cur_obj->GetFigures()[j];
+
+            CPlane plane;
+            plane.SetNormal(CVec3f(0, 0, 1));
+            plane.SetPoint(CVec3f(0, 0, cur_obj->GetPosZ() + cur_fgr->GetZ()));
+
+            CVec3f pos;
+            _camera->CastRay(_pos, plane, pos);
+
+            if (cur_fgr->TestPoint(pos))
+            {
+                res = cur_fgr;
+                pos -= _camera->GetPos().Get();
+                z_nearest = pos.LengthSquared();
+                brk = true;
+            }
+
+            if (brk == true)
+            {
+                break;
+            }
+        }
+
+        if (brk == true)
+        {
+            break;
+        }
+    }
+
+    for (; i < GetScene()->EnumObjects(); i++)
+    {
+        CSceneObject *cur_obj = GetScene()->GetObjects()[i];
+
+        for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++)
+        {
+            CFigure *cur_fgr = cur_obj->GetFigures()[j];
+
+            CPlane plane;
+            plane.SetNormal(CVec3f(0, 0, 1));
+            plane.SetPoint(CVec3f(0, 0, cur_obj->GetPosZ() + cur_fgr->GetZ()));
+
+            CVec3f pos;
+            _camera->CastRay(_pos, plane, pos);
+
+            if (cur_fgr->TestPoint(pos))
+            {
+                pos -= _camera->GetPos().Get();
+
+                float z = pos.LengthSquared();
+
+                if (z_nearest > z)
+                {
+                    res = cur_fgr;
+                    z_nearest = z;
+                }
+            }
+        }
+    }
+
+    return res;
 }
 
 bool CDebugRenderer::InitTextures()

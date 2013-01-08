@@ -98,7 +98,7 @@ void CTest3::Render()
     CMatrix4f m;
     MatrixRotationX(m, angle);
     MatrixMultiply(m, origin, pos);
-    GetDebugDrawSystem().DrawPoint(pos, 10, CColor4f(1, 0, 0), false);
+    GetRenderer().DrawPoint(GetCamera(), pos, 10, CColor4f(1, 0, 0), false);
 
     angle += 0.01;
 }
@@ -163,7 +163,7 @@ void CTest3::SetProcessors()
     {
         if (mMoveObject == nullptr)
         {
-            CFigure *f = GetDebugDrawSystem().FindFigure(GetCursorPos());
+            CFigure *f = GetDebugRenderer().FindFigure(GetCamera(), GetCursorPos());
             if (f != nullptr)
             {
                 mMoveObject = f->GetSceneObject();
@@ -179,7 +179,7 @@ void CTest3::SetProcessors()
 
             CVec3f pos;
 
-            GetDebugDrawSystem().CastRay(GetCursorPos(), p, pos);
+            GetCamera()->CastRay(GetCursorPos(), p, pos);
 
             pos.Vec2() -= mMoveObject->GetMassCenter();
             pos *= 10;
@@ -293,18 +293,10 @@ void CTest3::InitObjects()
     CSceneObjectParams sbp;
     sbp.mDynamic = false;
     sbp.mAngle = 0;
+    sbp.mPos.Set(0, -30, 0);
     GetScene().CreateObject(sbg, sbp);
 
-    sbp.mPos.Set(0, 600, 0);
-    GetScene().CreateObject(sbg, sbp);
-
-    sbg.mFigures[0].mVertices.clear();
-    sbg.mFigures.resize(1);
-    sbg.mFigures[0].mVertices.push_back( CVec2f( -5, -300 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2f( 5, -300 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2f( 5, 300 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2f( -5, 300 ) );
-    sbp.mPos.Set(-300, 300, 0);
+    sbp.mPos.Set(0, 570, 0);
     GetScene().CreateObject(sbg, sbp);
 
     sbg.mFigures[0].mVertices.clear();
@@ -313,7 +305,16 @@ void CTest3::InitObjects()
     sbg.mFigures[0].mVertices.push_back( CVec2f( 5, -300 ) );
     sbg.mFigures[0].mVertices.push_back( CVec2f( 5, 300 ) );
     sbg.mFigures[0].mVertices.push_back( CVec2f( -5, 300 ) );
-    sbp.mPos.Set(300, 300, 0);
+    sbp.mPos.Set(-300, 270, 0);
+    GetScene().CreateObject(sbg, sbp);
+
+    sbg.mFigures[0].mVertices.clear();
+    sbg.mFigures.resize(1);
+    sbg.mFigures[0].mVertices.push_back( CVec2f( -5, -300 ) );
+    sbg.mFigures[0].mVertices.push_back( CVec2f( 5, -300 ) );
+    sbg.mFigures[0].mVertices.push_back( CVec2f( 5, 300 ) );
+    sbg.mFigures[0].mVertices.push_back( CVec2f( -5, 300 ) );
+    sbp.mPos.Set(300, 270, 0);
     GetScene().CreateObject(sbg, sbp);
 
     CSceneObjectGeometry pg;

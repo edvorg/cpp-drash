@@ -47,16 +47,15 @@ bool CApp::Init()
     mExplosionSystem.SetScene(&mScene);
     mPlayersSystem.SetScene(&mScene);
     mTemplateSystem.SetScene(&mScene);
-    mDebugDrawSystem.SetScene(&mScene);
-    mUISystem.SetDebugDrawSystem(&mDebugDrawSystem);
+    mUISystem.SetRenderer(&mRenderer);
 
     if (mExplosionSystem.Init() == false ||
         mPlayersSystem.Init() == false ||
         mTemplateSystem.Init() == false ||
-        mDebugDrawSystem.Init() == false ||
         mEventSystem.Init() == false ||
         mUISystem.Init() == false ||
-        mRenderer.Init() == false)
+        mRenderer.Init() == false ||
+        mCameraManager.Init() == false)
     {
         return false;
     }
@@ -96,31 +95,30 @@ void CApp::Step(double _dt)
 
     mCurrentTimeDelta = _dt;
 
+    mCameraManager.Step(_dt);
     mEventSystem.Process();
     mScene.Step(_dt);
     mExplosionSystem.Step(_dt);
     mPlayersSystem.Step(_dt);
     mTemplateSystem.Step(_dt);
-    mDebugDrawSystem.Step(_dt);
     mUISystem.Step(_dt);
 }
 
 void CApp::Release()
 {
+    mCameraManager.Release();
     mDebugRenderer.Release();
     mEventSystem.Release();
     mExplosionSystem.Release();
     mPlayersSystem.Release();
     mTemplateSystem.Release();
-    mDebugDrawSystem.Release();
     mUISystem.Release();
     mScene.Release();
 
     mExplosionSystem.SetScene(nullptr);
     mPlayersSystem.SetScene(nullptr);
     mTemplateSystem.SetScene(nullptr);
-    mDebugDrawSystem.SetScene(nullptr);
-    mUISystem.SetDebugDrawSystem(nullptr);
+    mUISystem.SetRenderer(nullptr);
 }
 
 void CApp::Render()

@@ -45,12 +45,10 @@ SOURCES += \
     ../src/misc/ray.cpp \
     ../src/misc/plane.cpp \
     ../src/misc/matrix4.cpp \
-    ../src/misc/graphics.cpp \
     ../src/greng/renderer.cpp \
     ../src/greng/meshmanager.cpp \
     ../src/diag/timer.cpp \
     ../src/diag/logger.cpp \
-    ../src/debugrenderer/debugdrawsystem.cpp \
     ../src/greng/camera.cpp \
     ../src/app/appeventsystem.cpp \
     ../src/app/appeventprocessor.cpp \
@@ -99,7 +97,6 @@ HEADERS += \
     ../src/misc/plane.h \
     ../src/misc/matrix4.h \
     ../src/misc/math.h \
-    ../src/misc/graphics.h \
     ../src/misc/color4.h \
     ../src/misc/color3.h \
     ../src/greng/vertex.h \
@@ -109,7 +106,6 @@ HEADERS += \
     ../src/diag/timer.h \
     ../src/diag/logger.h \
     ../src/diag/assert.h \
-    ../src/debugrenderer/debugdrawsystem.h \
     ../src/greng/camera.h \
     ../src/app/appeventsystem.h \
     ../src/app/appeventprocessor.h \

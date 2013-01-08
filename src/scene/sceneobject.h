@@ -68,7 +68,6 @@ public:
     friend class CPhysObserver;
     friend class CScene;
     friend class CExplosion;
-    friend class CDebugDrawSystem;
 
     static const unsigned int mFiguresCountLimit = 16;
 
@@ -110,7 +109,6 @@ private:
     void OnContactBegin(const CFigure *_f1, const CFigure *_f2);
     void OnContactPreSolve(const CFigure *, const CFigure *);
     void OnContactEnd(const CFigure *, const CFigure *_f2);
-    void DrawDebug() const;
 
     b2Body* mBody = nullptr;
 

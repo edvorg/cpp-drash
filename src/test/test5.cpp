@@ -165,7 +165,7 @@ void CTest5::Render()
         }
     }
 
-    GetDebugDrawSystem().DrawPoint(mLight1.mPosition, 10, CColor4f(1, 1, 1, 1), false);
+    GetRenderer().DrawPoint(GetCamera(), mLight1.mPosition, 10, CColor4f(1, 1, 1, 1), false);
 }
 
 void CTest5::SetupMeshes()

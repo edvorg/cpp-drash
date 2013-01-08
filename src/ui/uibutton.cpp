@@ -27,7 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "uisystem.h"
 #include "../misc/vec2.h"
 #include "../misc/math.h"
-#include "../debugrenderer/debugdrawsystem.h"
+#include "../greng/renderer.h"
 #include "../misc/color4.h"
 
 namespace drash
@@ -71,13 +71,13 @@ void CUIButton::Connect(CUISystem *_system)
         GetUISystem()->UISpaceToScreenSpace(GetPos().mX + GetSize().mX, GetPos().mY + GetSize().mY, p3);
         GetUISystem()->UISpaceToScreenSpace(GetPos().mX + GetSize().mX, GetPos().mY, p4);
 
-        GetUISystem()->GetDebugDrawSystem()->DrawTriangle(p4, p2, p1, c);
-        GetUISystem()->GetDebugDrawSystem()->DrawTriangle(p3, p2, p4, c);
+        GetUISystem()->GetRenderer()->DrawTriangle(p4, p2, p1, c);
+        GetUISystem()->GetRenderer()->DrawTriangle(p3, p2, p4, c);
 
-        GetUISystem()->GetDebugDrawSystem()->DrawLine(p1, p2, 1, c);
-        GetUISystem()->GetDebugDrawSystem()->DrawLine(p3, p2, 1, c);
-        GetUISystem()->GetDebugDrawSystem()->DrawLine(p3, p4, 1, c);
-        GetUISystem()->GetDebugDrawSystem()->DrawLine(p1, p4, 1, c);
+        GetUISystem()->GetRenderer()->DrawLine(p1, p2, 1, c);
+        GetUISystem()->GetRenderer()->DrawLine(p3, p2, 1, c);
+        GetUISystem()->GetRenderer()->DrawLine(p3, p4, 1, c);
+        GetUISystem()->GetRenderer()->DrawLine(p1, p4, 1, c);
     });
 
     SetPressHandler([this] ()

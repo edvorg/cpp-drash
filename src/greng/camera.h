@@ -34,7 +34,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
-class CDebugDrawSystem;
+class CPlane;
 
 } // namespace drash
 
@@ -47,23 +47,11 @@ using drash::CMatrix4f;
 using drash::CObjectFactory;
 using drash::CAnimator;
 
-class CCameraParams
+class CCamera : public CObjectFactory<CCamera>::CFactoryProduct
 {
 public:
-    bool mOrtho = false;
-    float mOrthoWidth = 1.0f;
-    float mFov = M_PI / 4.0f;
-    float mDepthOfView = 1000.0f;
-    CVec3f mPos;
-    CVec3f mRotation;
-};
+    friend class CCameraManager;
 
-class CCamera final : public CObjectFactory<CCamera>::CFactoryProduct
-{
-public:
-    friend class drash::CDebugDrawSystem;
-
-    bool Init(const CCameraParams &_params);
     void Step(double _dt);
 
     inline void SetOrtho(bool _ortho);
@@ -73,19 +61,23 @@ public:
     inline CAnimator<float> &GetFov();
     inline CAnimator<float> &GetDepthOfView();
     inline CAnimator<CVec3f> &GetPos();
+    inline const CAnimator<CVec3f> &GetPos() const;
     inline CAnimator<CVec2f> &GetRotation();
+    inline CAnimator<float> &GetAspectRatio();
 
     void LookAt(const CVec3f &_point);
 
     void Forward(float _distance);
     void Strafe(float _distance);
 
-    void SetAspectRatio(float _aspect);
-
     inline const CMatrix4f &GetRotationMatrix() const;
     inline const CMatrix4f &GetAntiRotationMatrix() const;
     inline const CMatrix4f &GetViewMatrix() const;
+    inline const CMatrix4f &GetViewMatrixTransposed() const;
     inline const CMatrix4f &GetProjectionMatrix() const;
+    inline const CMatrix4f &GetProjectionMatrixTransposed() const;
+
+    void CastRay(const CVec2f &_pos, const drash::CPlane &_plane, CVec3f &_result) const;
 
 protected:
 
@@ -109,7 +101,11 @@ private:
     CMatrix4f mViewMatrix;
     CMatrix4f mProjectionMatrix;
 
+    CMatrix4f mViewMatrixTransposed;
+    CMatrix4f mProjectionMatrixTransposed;
+
     float mAspectRatio = 1.0f;
+    CAnimator<float> mAspectRatioAnimator = mAspectRatio;
 };
 
 inline void CCamera::SetOrtho(bool _ortho)
@@ -142,9 +138,19 @@ inline CAnimator<CVec3f> &CCamera::GetPos()
     return mPosAnimator;
 }
 
+inline const CAnimator<CVec3f> &CCamera::GetPos() const
+{
+    return mPosAnimator;
+}
+
 inline CAnimator<CVec2f> &CCamera::GetRotation()
 {
     return mRotationAnimator;
+}
+
+inline CAnimator<float> &CCamera::GetAspectRatio()
+{
+    return mAspectRatioAnimator;
 }
 
 inline const CMatrix4f &CCamera::GetRotationMatrix() const
@@ -162,9 +168,19 @@ inline const CMatrix4f &CCamera::GetViewMatrix() const
     return mViewMatrix;
 }
 
+inline const CMatrix4f &CCamera::GetViewMatrixTransposed() const
+{
+    return mViewMatrixTransposed;
+}
+
 inline const CMatrix4f &CCamera::GetProjectionMatrix() const
 {
     return mProjectionMatrix;
+}
+
+inline const CMatrix4f &CCamera::GetProjectionMatrixTransposed() const
+{
+    return mProjectionMatrixTransposed;
 }
 
 }// namespace greng

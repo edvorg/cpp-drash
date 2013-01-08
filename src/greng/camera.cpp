@@ -23,22 +23,13 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include "camera.h"
+#include "../misc/ray.h"
+#include "../misc/plane.h"
 
 namespace greng
 {
 
 using drash::CVec4f;
-
-bool CCamera::Init(const CCameraParams &_params)
-{
-    mOrthoWidthAnimator = _params.mOrthoWidth;
-    mFovAnimator = _params.mFov;
-    mDepthOfViewAnimator = _params.mDepthOfView;
-    mPosAnimator = _params.mPos;
-    mRotationAnimator = _params.mRotation;
-
-    return true;
-}
 
 void CCamera::Step(double _dt)
 {
@@ -65,6 +56,11 @@ void CCamera::Step(double _dt)
     }
 
     if (mRotationAnimator.Step(_dt))
+    {
+        compute_matrices = true;
+    }
+
+    if (mAspectRatioAnimator.Step(_dt))
     {
         compute_matrices = true;
     }
@@ -134,16 +130,26 @@ void CCamera::Strafe(float _distance)
     mPosAnimator = strafe_dir;
 }
 
-void CCamera::SetAspectRatio(float _aspect)
+void CCamera::CastRay(const CVec2f &_pos, const drash::CPlane &_plane, CVec3f &_result) const
 {
-    if (drash::math::Abs(_aspect) < 0.000001)
-    {
-        _aspect = 1.0f;
-    }
+    double c = 1.0 / cos(mFov / 2.0); // hypotenuse
 
-    mAspectRatio = _aspect;
+    double frame_height = 2.0 * sqrt(c*c - 1.0);
+    double frame_width = frame_height * mAspectRatio;
 
-    ComputeMatrices();
+    CVec2f pos = _pos;
+
+    pos.mX *= frame_width;
+    pos.mY *= frame_height;
+
+    CVec4f dir(pos, -1, 1);
+    CVec4f tmp;
+    MatrixMultiply(mAntiRotationMatrix, dir, tmp);
+
+    drash::CRay r;
+    r.SetPoint(mPos);
+    r.SetDirection(tmp);
+    _plane.CastRay(r, _result);
 }
 
 void CCamera::ComputeMatrices()
@@ -166,6 +172,12 @@ void CCamera::ComputeMatrices()
     MatrixMultiply(mRotationMatrix, tm, mViewMatrix);
 
     Matrix4Perspective(mProjectionMatrix, mFov, mAspectRatio, 1.0, mDepthOfView + 1.0f);
+
+    mViewMatrixTransposed = mViewMatrix;
+    mViewMatrixTransposed.Transpose();
+
+    mProjectionMatrixTransposed = mProjectionMatrix;
+    mProjectionMatrixTransposed.Transpose();
 }
 
 }// namespace greng

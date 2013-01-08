@@ -27,10 +27,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../misc/vec2.h"
 
-namespace drash
+namespace greng
 {
 
-class CDebugDrawSystem;
+class CRenderer;
+
+}
+
+namespace drash
+{
 
 namespace ui
 {
@@ -67,8 +72,8 @@ public:
     void BeginEvent();
     void EndEvent();
 
-    void SetDebugDrawSystem(CDebugDrawSystem *_system);
-    inline CDebugDrawSystem *GetDebugDrawSystem() const;
+    void SetRenderer(greng::CRenderer *_renderer);
+    inline greng::CRenderer *GetRenderer() const;
 
     void Step(double _dt);
     void DebugDraw() const;
@@ -87,7 +92,7 @@ private:
 
     CUIControl *mPressedControl = nullptr;
 
-    CDebugDrawSystem *mDebugDrawSystem = nullptr;
+    greng::CRenderer *mRenderer = nullptr;
 };
 
 inline int CUISystem::GetCursorPosX() const
@@ -100,9 +105,14 @@ inline int CUISystem::GetCursorPosY() const
     return mCursorY;
 }
 
-inline CDebugDrawSystem *CUISystem::GetDebugDrawSystem() const
+inline void CUISystem::SetRenderer(greng::CRenderer *_renderer)
 {
-    return mDebugDrawSystem;
+    mRenderer = _renderer;
+}
+
+inline greng::CRenderer *CUISystem::GetRenderer() const
+{
+    return mRenderer;
 }
 
 } // namepsace ui

@@ -55,9 +55,9 @@ public:
     ~CObjectFactory();
 
     T* CreateObject();
-    bool DestroyObjectSafe(CFactoryProduct *_obj);
-    void DestroyObject(CFactoryProduct *_obj);
-    inline bool IsObject(CFactoryProduct *_obj) const;
+    bool DestroyObjectSafe(T *_obj);
+    void DestroyObject(T *_obj);
+    inline bool IsObject(T *_obj) const;
     inline T * const * GetObjects() const;
     inline unsigned int EnumObjects() const;
 
@@ -126,7 +126,7 @@ T *CObjectFactory<T>::CreateObject()
 }
 
 template<class T>
-bool CObjectFactory<T>::DestroyObjectSafe(CObjectFactory::CFactoryProduct *_obj)
+bool CObjectFactory<T>::DestroyObjectSafe(T *_obj)
 {
     if (IsObject(_obj) == false)
     {
@@ -142,24 +142,24 @@ bool CObjectFactory<T>::DestroyObjectSafe(CObjectFactory::CFactoryProduct *_obj)
 }
 
 template<class T>
-void CObjectFactory<T>::DestroyObject(CFactoryProduct *_obj)
+void CObjectFactory<T>::DestroyObject(T *_obj)
 {
-    if (_obj->mInternalId < --mObjectsCount)
+    if (reinterpret_cast<CFactoryProduct*>(_obj)->mInternalId < --mObjectsCount)
     {
-        mObjects[_obj->mInternalId] = mObjects[mObjectsCount];
-        mObjects[_obj->mInternalId]->mInternalId = _obj->mInternalId;
+        mObjects[reinterpret_cast<CFactoryProduct*>(_obj)->mInternalId] = mObjects[mObjectsCount];
+        reinterpret_cast<CFactoryProduct*>(mObjects[reinterpret_cast<CFactoryProduct*>(_obj)->mInternalId])->mInternalId = reinterpret_cast<CFactoryProduct*>(_obj)->mInternalId;
         mObjects[mObjectsCount] = nullptr;
     }
     else
     {
-        mObjects[_obj->mInternalId] = nullptr;
+        mObjects[reinterpret_cast<CFactoryProduct*>(_obj)->mInternalId] = nullptr;
     }
 
-    delete _obj;
+    delete reinterpret_cast<CFactoryProduct*>(_obj);
 }
 
 template<class T>
-inline bool CObjectFactory<T>::IsObject(CObjectFactory::CFactoryProduct *_obj) const
+inline bool CObjectFactory<T>::IsObject(T *_obj) const
 {
     return _obj != nullptr && _obj->mInternalId < mObjectsCount && _obj == mObjects[_obj->mInternalId];
 }

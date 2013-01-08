@@ -184,10 +184,11 @@ void CTest6::Render()
                                  &mLight1);
     }
 
-    GetDebugDrawSystem().DrawPoint(mLight1.mPosition,
-                                   10,
-                                   CColor4f(1, 1, 1, 1),
-                                   true);
+    GetRenderer().DrawPoint(GetCamera(),
+                            mLight1.mPosition,
+                            10,
+                            CColor4f(1, 1, 1, 1),
+                            true);
 }
 
 bool CTest6::InitPlayer()
@@ -195,6 +196,7 @@ bool CTest6::InitPlayer()
     CSceneObjectGeometry g1;
 
     g1.mFigures.resize(1);
+    g1.mFigures[0].mDepth = 2;
     g1.mFigures[0].mVertices.push_back(CVec2f(-1, 1));
     g1.mFigures[0].mVertices.push_back(CVec2f(-1, -1));
     g1.mFigures[0].mVertices.push_back(CVec2f(1, -1));

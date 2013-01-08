@@ -26,11 +26,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CTESTAPP_H
 #define CTESTAPP_H
 
-#include "../scene/scene.h"
 #include "../explosion/explosionsystem.h"
 #include "../players/playerssystem.h"
+#include "../scene/scene.h"
 #include "../templates/templatesystem.h"
-#include "../debugrenderer/debugdrawsystem.h"
 #include "../debugrenderer/debugrenderer.h"
 #include "appeventsystem.h"
 #include "../ui/uisystem.h"
@@ -40,6 +39,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/fragmentshadermanager.h"
 #include "../greng/shaderprogrammanager.h"
 #include "../greng/renderer.h"
+#include "../greng/cameramanager.h"
 
 namespace drash
 {
@@ -63,7 +63,6 @@ public:
 	inline CExplosionSystem &GetExplosionSystem();
     inline CPlayersSystem &GetPlayersSystem();
     inline CTemplateSystem &GetTemplateSystem();
-    inline CDebugDrawSystem &GetDebugDrawSystem();
     inline CDebugRenderer &GetDebugRenderer();
     inline ui::CUISystem &GetUISystem();
     inline greng::CMeshManager &GetMeshManager();
@@ -72,6 +71,7 @@ public:
     inline greng::CFragmentShaderManager &GetFragmentShaderManager();
     inline greng::CShaderProgramManager &GetShaderProgramManager();
     inline greng::CRenderer &GetRenderer();
+    inline greng::CCameraManager &GetCameraManager();
 
     /// used to make CApp childs about mouse moving event
     /// use this from your CApp back end (Qt, SDL, etc.)
@@ -94,7 +94,6 @@ private:
     CExplosionSystem mExplosionSystem;
     CPlayersSystem mPlayersSystem;
     CTemplateSystem mTemplateSystem;
-    CDebugDrawSystem mDebugDrawSystem;
     CDebugRenderer mDebugRenderer;
     ui::CUISystem mUISystem;
     greng::CMeshManager mMeshManager;
@@ -103,6 +102,7 @@ private:
     greng::CFragmentShaderManager mFragmentShaderManager;
     greng::CShaderProgramManager mShaderProgramManager;
     greng::CRenderer mRenderer;
+    greng::CCameraManager mCameraManager;
 
     std::function<void ()> mQuitHandler = [] () {};
     bool mQuit = false;
@@ -144,11 +144,6 @@ inline CTemplateSystem &CApp::GetTemplateSystem()
     return mTemplateSystem;
 }
 
-inline CDebugDrawSystem &CApp::GetDebugDrawSystem()
-{
-    return mDebugDrawSystem;
-}
-
 inline CDebugRenderer &CApp::GetDebugRenderer()
 {
     return mDebugRenderer;
@@ -187,6 +182,11 @@ inline greng::CShaderProgramManager &CApp::GetShaderProgramManager()
 inline greng::CRenderer &CApp::GetRenderer()
 {
     return mRenderer;
+}
+
+inline greng::CCameraManager &CApp::GetCameraManager()
+{
+    return mCameraManager;
 }
 
 inline void CApp::SetCursorPos(const CVec2f &_pos)

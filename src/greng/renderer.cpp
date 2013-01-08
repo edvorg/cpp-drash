@@ -29,6 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../misc/matrix4.h"
 #include "shaderprogram.h"
 #include "pointlight.h"
+#include "camera.h"
 
 namespace greng
 {
@@ -230,6 +231,214 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
     glDisableClientState(GL_COLOR_ARRAY);
 
     glDisable(GL_TEXTURE_2D);
+}
+
+void CRenderer::DrawTriangle(const CVec2f &_p1,
+                             const CVec2f &_p2,
+                             const CVec2f &_p3,
+                             const CColor4f &_col,
+                             bool _depth_test) const
+{
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-0.5, 0.5, -0.5, 0.5, 1, -1);
+
+    if (_depth_test == true)
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
+    glDisable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glBegin(GL_TRIANGLES);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
+    glVertex2f(_p1.mX, _p1.mY);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
+    glVertex2f(_p2.mX, _p2.mY);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
+    glVertex2f(_p3.mX, _p3.mY);
+    glEnd();
+}
+
+void CRenderer::DrawTriangle(const CCamera *_camera, const CVec3f &_p1,
+                             const CVec3f &_p2,
+                             const CVec3f &_p3,
+                             const CColor4f &_col,
+                             bool _depth_test) const
+{
+    if (_camera == nullptr)
+    {
+        LOG_ERR("CRenderer::DrawTriangle(): _camera is not specified");
+        return;
+    }
+
+    if (_depth_test == true)
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
+    glDisable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixf(_camera->GetViewMatrixTransposed().mData);
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixf(_camera->GetProjectionMatrixTransposed().mData);
+
+    glBegin(GL_TRIANGLES);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
+    glVertex3f(_p1.mX, _p1.mY, _p1.mZ);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
+    glVertex3f(_p2.mX, _p2.mY, _p2.mZ);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
+    glVertex3f(_p3.mX, _p3.mY, _p3.mZ);
+    glEnd();
+}
+
+void CRenderer::DrawLine(const CVec2f &_p1,
+                         const CVec2f &_p2,
+                         float _width,
+                         const CColor4f &_col,
+                         bool _depth_test) const
+{
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-0.5, 0.5, -0.5, 0.5, 1, -1);
+
+    if (_depth_test == true)
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glLineWidth(_width);
+
+    glBegin(GL_LINES);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
+    glVertex2f(_p1.mX, _p1.mY);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
+    glVertex2f(_p2.mX, _p2.mY);
+    glEnd();
+}
+
+void CRenderer::DrawLine(const CCamera *_camera, const CVec3f &_p1,
+                         const CVec3f &_p2,
+                         float _width,
+                         const CColor4f &_col,
+                         bool _depth_test) const
+{
+    if (_camera == nullptr)
+    {
+        return;
+    }
+
+    if (_depth_test == true)
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixf(_camera->GetViewMatrixTransposed().mData);
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixf(_camera->GetProjectionMatrixTransposed().mData);
+
+    glLineWidth(_width);
+
+    glBegin(GL_LINES);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
+    glVertex3f(_p1.mX, _p1.mY, _p1.mZ);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
+    glVertex3f(_p2.mX, _p2.mY, _p2.mZ);
+    glEnd();
+}
+
+void CRenderer::DrawPoint(const CVec2f &_p,
+                          float _size,
+                          const CColor4f &_col,
+                          bool _depth_test) const
+{
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-0.5, 0.5, -0.5, 0.5, 1, -1);
+
+    if (_depth_test == true)
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glPointSize(_size);
+
+    glBegin(GL_POINTS);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
+    glVertex2f(_p.mX, _p.mY);
+    glEnd();
+}
+
+void CRenderer::DrawPoint(const CCamera *_camera,
+                          const CVec3f &_p,
+                          float _size,
+                          const CColor4f &_col,
+                          bool _depth_test) const
+{
+    if (_camera == nullptr)
+    {
+        return;
+    }
+
+    if (_depth_test == true)
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixf(_camera->GetViewMatrixTransposed().mData);
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixf(_camera->GetProjectionMatrixTransposed().mData);
+
+    glPointSize(_size);
+
+    glBegin(GL_POINTS);
+    glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
+    glVertex3f(_p.mX, _p.mY, _p.mZ);
+    glEnd();
 }
 
 } // namespace greng
