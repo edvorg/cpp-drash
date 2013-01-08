@@ -78,7 +78,8 @@ SOURCES += ../src/qt/main.cpp\
     ../src/greng/fragmentshadermanager.cpp \
     ../src/greng/shaderprogrammanager.cpp \
     ../src/test/test6.cpp \
-    ../src/misc/vec2.cpp
+    ../src/misc/vec2.cpp \
+    ../src/test/test7.cpp
 
 HEADERS  += ../src/qt/gamewindow.h \
     ../src/qt/scenewidget.h \
@@ -143,7 +144,8 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/greng/shaderprogram.h \
     ../src/greng/shaderprogrammanager.h \
     ../src/test/test6.h \
-    ../src/misc/animator.h
+    ../src/misc/animator.h \
+    ../src/test/test7.h
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui

@@ -47,7 +47,6 @@ class CApp
 {
 public:
     CApp();
-    virtual ~CApp() {}
 
     virtual bool Init();
     virtual void Release();

@@ -31,6 +31,7 @@ namespace greng
 {
 
 class CMesh;
+class CVertex;
 
 class CMeshManager final
 {
@@ -48,6 +49,10 @@ public:
     CMesh *CreateMeshFromObjFile(const char *_path);
     CMesh *CreateMeshQuad();
     CMesh *CreateMeshCube();
+    CMesh *CreateMeshFromVertices(const CVertex *_vertices,
+                                  unsigned int _vertices_count,
+                                  const unsigned int *_indices,
+                                  unsigned int _indices_count);
     bool DestroyMesh(CMesh *_mesh);
 
     void ComputeNormals(CMesh *_mesh);

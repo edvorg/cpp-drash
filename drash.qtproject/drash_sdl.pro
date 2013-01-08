@@ -65,7 +65,8 @@ SOURCES += \
     ../src/greng/shaderprogrammanager.cpp \
     ../src/test/test6.cpp \
     ../src/misc/vec2.cpp \
-    ../src/scene/joint.cpp
+    ../src/scene/joint.cpp \
+    ../src/test/test7.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -126,5 +127,6 @@ HEADERS += \
     ../src/greng/pointlight.h \
     ../src/test/test6.h \
     ../src/misc/animator.h \
-    ../src/scene/joint.h
+    ../src/scene/joint.h \
+    ../src/test/test7.h
 
