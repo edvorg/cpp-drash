@@ -2,7 +2,7 @@
 /*
 
 drash GPL Source Code
-Copyright (C) 2012 Edward Knyshov, Yuriy Shatilin.
+Copyright (C) 2012-2013 Edward Knyshov, Yuriy Shatilin.
 
 This file is part of the drash GPL Source Code (drash Source Code).
 
@@ -95,10 +95,10 @@ void CTest5::Render()
                                  0,
                                  mTex6,
                                  mShaderProgram2,
-                                 model,
-                                 GetCamera()->GetViewMatrix(),
-                                 model_view,
-                                 GetCamera()->GetProjectionMatrix(),
+                                 &model,
+                                 nullptr,
+                                 &model_view,
+                                 &GetCamera()->GetProjectionMatrix(),
                                  &mLight1);
     }
 
@@ -126,10 +126,10 @@ void CTest5::Render()
                                  0,
                                  mTex2,
                                  mShaderProgram2,
-                                 model,
-                                 GetCamera()->GetViewMatrix(),
-                                 model_view,
-                                 GetCamera()->GetProjectionMatrix(),
+                                 &model,
+                                 nullptr,
+                                 &model_view,
+                                 &GetCamera()->GetProjectionMatrix(),
                                  &mLight1);
     }
 
@@ -157,10 +157,10 @@ void CTest5::Render()
                                      i,
                                      texts[i],
                                      mShaderProgram2,
-                                     model,
-                                     GetCamera()->GetViewMatrix(),
-                                     model_view,
-                                     GetCamera()->GetProjectionMatrix(),
+                                     &model,
+                                     nullptr,
+                                     &model_view,
+                                     &GetCamera()->GetProjectionMatrix(),
                                      &mLight1);
         }
     }

@@ -2,7 +2,7 @@
 /*
 
 drash GPL Source Code
-Copyright (C) 2013 Edward Knyshov, Yuriy Shatilin.
+Copyright (C) 2012-2013 Edward Knyshov, Yuriy Shatilin.
 
 This file is part of the drash GPL Source Code (drash Source Code).
 
@@ -48,6 +48,9 @@ public:
     void ClickBegin();
     void ClickPressing();
     void ClickEnd();
+
+    inline void SetSize(float _size);
+
 private:
 
     greng::CCamera * mCurrentCamera = nullptr;
@@ -72,11 +75,18 @@ private:
 
     CVec2f mCursorPos;
 
-    float mLineSize = 1.0f;
+    float mLineSizeWorld = 1.0f;
+    float mLineSizeScreen = 0.05;
 };
+
 
 inline CVec3f CMoveablePoint::GetCenter() const{
     return mCenter;
+}
+
+inline void CMoveablePoint::SetSize(float _size)
+{
+    mLineSizeScreen = math::Abs(_size);
 }
 
 } // namespace drash

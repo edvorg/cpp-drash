@@ -2,7 +2,7 @@
 /*
 
 drash GPL Source Code
-Copyright (C) 2012 Edward Knyshov, Yuriy Shatilin.
+Copyright (C) 2012-2013 Edward Knyshov, Yuriy Shatilin.
 
 This file is part of the drash GPL Source Code (drash Source Code).
 
@@ -75,6 +75,8 @@ CCamera *CCameraManager::CreateCamera(const CCameraParams &_params)
     res->mDepthOfViewAnimator = _params.mDepthOfView;
     res->mPosAnimator = _params.mPos;
     res->mRotationAnimator = _params.mRotation;
+
+    res->ComputeMatrices();
 
     return res;
 }

@@ -2,7 +2,7 @@
 /*
 
 drash GPL Source Code
-Copyright (C) 2012 Edward Knyshov, Yuriy Shatilin.
+Copyright (C) 2012-2013 Edward Knyshov, Yuriy Shatilin.
 
 This file is part of the drash GPL Source Code (drash Source Code).
 
@@ -63,16 +63,11 @@ public:
     void RenderMesh(const CMesh *_mesh,
                     unsigned int _submesh,
                     const CTexture *_texture,
-                    const drash::CMatrix4f &_model_view);
-
-    void RenderMesh(const CMesh *_mesh,
-                    unsigned int _submesh,
-                    const CTexture *_texture,
                     const CShaderProgram *_program,
-                    const drash::CMatrix4f &_model,
-                    const drash::CMatrix4f &_view,
-                    const drash::CMatrix4f &_model_view,
-                    const drash::CMatrix4f &_proj_matrix,
+                    const drash::CMatrix4f *_model,
+                    const drash::CMatrix4f *_view,
+                    const drash::CMatrix4f *_model_view,
+                    const drash::CMatrix4f *_proj_matrix,
                     const CPointLight *_light);
 
     /// draws triangle giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) and color

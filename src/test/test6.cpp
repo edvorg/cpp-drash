@@ -2,7 +2,7 @@
 /*
 
 drash GPL Source Code
-Copyright (C) 2012 Edward Knyshov, Yuriy Shatilin.
+Copyright (C) 2012-2013 Edward Knyshov, Yuriy Shatilin.
 
 This file is part of the drash GPL Source Code (drash Source Code).
 
@@ -177,10 +177,10 @@ void CTest6::Render()
                                  i,
                                  mPlayer1Texture,
                                  mPlayer1ShaderProgram,
-                                 model,
-                                 GetCamera()->GetViewMatrix(),
-                                 model_view,
-                                 GetCamera()->GetProjectionMatrix(),
+                                 &model,
+                                 nullptr,
+                                 &model_view,
+                                 &GetCamera()->GetProjectionMatrix(),
                                  &mLight1);
     }
 
