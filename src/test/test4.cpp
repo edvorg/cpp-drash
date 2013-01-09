@@ -94,7 +94,7 @@ bool CTest4::Init()
         return false;
     }
 
-    mPoint.mCurrentCamera = camera;
+    mPoint.SetCamera(camera);
     mPoint.SetCenter(mTestPoint);
 
     GetEventSystem().SetProcessor("LB", CAppEventProcessor(

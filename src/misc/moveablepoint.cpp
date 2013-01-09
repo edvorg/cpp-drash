@@ -39,7 +39,7 @@ CMoveablePoint::CMoveablePoint(CVec3f _point, greng::CCamera *_camera):
 }
 
 
-void CMoveablePoint::Colculate()
+void CMoveablePoint::Calculate()
 {
     mX = mCenter;
     mY = mCenter;
@@ -169,7 +169,7 @@ void CMoveablePoint::Render(greng::CRenderer &_render )
 void CMoveablePoint::SetCursorPos(const CVec2f &_pos)
 {
     mCursorPos = _pos;
-    Colculate();
+    Calculate();
 }
 
 } // namespace drash

@@ -52,7 +52,7 @@ private:
     greng::CCamera * mCurrentCamera = nullptr;
 
 
-    void Colculate();
+    void Calculate();
 
     greng::CCamera * GetCamera();
 

@@ -57,8 +57,6 @@ private:
 
     CVec3f mTestPoint;
     CMoveablePoint mPoint;
-
-    greng::CCamera *mCamera = nullptr;
 };
 
 } // namespace test
