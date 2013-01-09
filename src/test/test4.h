@@ -29,7 +29,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../ui/uibutton.h"
 #include "../ui/uislider.h"
 #include "../misc/animator.h"
-
+#include "../misc/moveablepoint.h"
+#include "../greng/camera.h"
 namespace drash
 {
 
@@ -44,7 +45,7 @@ public:
 protected:
     bool Init() override;
     void Step(double _dt) override;
-
+    virtual void Render() override;
 private:
     ui::CUIButton mTestButton1;
     ui::CUIButton mTestButton2;
@@ -53,6 +54,9 @@ private:
     float mValue = 77;
     CAnimator<float> mValueAnimator1 = mValue;
     CAnimator<float> mValueAnimator2 = mValue;
+
+    CVec3f mTestPoint;
+    CMoveablePoint mPoint;
 };
 
 } // namespace test

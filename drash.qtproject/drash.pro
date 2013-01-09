@@ -79,7 +79,8 @@ SOURCES += ../src/qt/main.cpp\
     ../src/misc/vec2.cpp \
     ../src/test/test7.cpp \
     ../src/greng/cameramanager.cpp \
-    ../src/debugrenderer/debugrenderer.cpp
+    ../src/debugrenderer/debugrenderer.cpp \
+    ../src/misc/moveablepoint.cpp
 
 HEADERS  += ../src/qt/gamewindow.h \
     ../src/qt/scenewidget.h \
@@ -146,7 +147,8 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/test/test7.h \
     ../src/greng/cameramanager.h \
     ../src/greng/pointlight.h \
-    ../src/debugrenderer/debugrenderer.h
+    ../src/debugrenderer/debugrenderer.h \
+    ../src/misc/moveablepoint.h
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui

@@ -62,7 +62,7 @@ extern const CPlane PlaneXZ;
 
 inline const CVec3f &CPlane::GetPoint() const
 {
-    return mNormal;
+    return mPoint;
 }
 
 inline const CVec3f &CPlane::GetNormal() const

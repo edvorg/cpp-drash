@@ -83,6 +83,8 @@ private:
     void ChangeMode();
 
     void SelectVertex();
+
+    void ColculateAxis();
 private:
     CSceneObject *mCurrentObject = nullptr;
 
@@ -106,6 +108,10 @@ private:
     bool mFrontSide = true;
 
     greng::CCamera *mCamera = nullptr;
+
+    greng::CPointLight mPointLight;
+
+    CVec3f TestPoint;
 };
 
 inline bool CObjectEditorApp::IsStartBuild()const {
@@ -116,8 +122,6 @@ inline void CObjectEditorApp::ActiveMoveMode() {
     mState = MoveState;
     ChangeMode();
 }
-
-
 
 inline void CObjectEditorApp::SetCurrentTemplateName(const std::string &_name){
     mCurrentTemplateName = _name;
