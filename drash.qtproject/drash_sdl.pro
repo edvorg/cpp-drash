@@ -66,7 +66,8 @@ SOURCES += \
     ../src/scene/joint.cpp \
     ../src/test/test7.cpp \
     ../src/greng/cameramanager.cpp \
-    ../src/debugrenderer/debugrenderer.cpp
+    ../src/debugrenderer/debugrenderer.cpp \
+    ../src/misc/moveablepoint.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -128,5 +129,6 @@ HEADERS += \
     ../src/scene/joint.h \
     ../src/test/test7.h \
     ../src/greng/cameramanager.h \
-    ../src/debugrenderer/debugrenderer.h
+    ../src/debugrenderer/debugrenderer.h \
+    ../src/misc/moveablepoint.h
 

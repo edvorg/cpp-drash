@@ -37,11 +37,12 @@ public:
     CMoveablePoint();
     CMoveablePoint(CVec3f _point, greng::CCamera *_camera);
 
-    inline void SetCenter(const CVec3f &_center);
+    void SetCenter(const CVec3f &_center);
+    void SetCamera(greng::CCamera * _camera);
 
+    void Step(double);
     void Render(greng::CRenderer &_render);
 
-    inline void SetCamera(greng::CCamera * _camera);
     void SetCursorPos(const CVec2f &_pos);
 
     void ClickBegin();
@@ -71,19 +72,8 @@ private:
 
     CVec2f mCursorPos;
 
+    float mLineSize = 1.0f;
 };
-
-
-inline void CMoveablePoint::SetCenter(const CVec3f &_center)
-{
-    mCenter = _center;
-
-}
-
-inline void CMoveablePoint::SetCamera(greng::CCamera *_camera)
-{
-    mCurrentCamera = _camera;
-}
 
 } // namespace drash
 #endif // MOVEABLEPOINT_H

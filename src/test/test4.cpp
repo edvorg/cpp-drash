@@ -117,17 +117,7 @@ void CTest4::Step(double _dt)
 {
     CApp::Step(_dt);
     mPoint.SetCursorPos(GetCursorPos());
-//    if (mValueAnimator1.Step(_dt))
-//    {
-//        mTestSlider1.SetPercent(mValueAnimator1 / 100.0);
-//        LOG_ERR("value updated (animator 1): "<<mValueAnimator1);
-//    }
-//    else if (mValueAnimator2.Step(_dt))
-//    {
-//        mTestSlider1.SetPercent(mValueAnimator2 / 100.0);
-//        LOG_ERR("value updated (animator 2): "<<mValueAnimator2);
-//    }
-
+    mPoint.Step(_dt);
 }
 
 void CTest4::Render()
