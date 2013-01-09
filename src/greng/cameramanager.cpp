@@ -76,6 +76,8 @@ CCamera *CCameraManager::CreateCamera(const CCameraParams &_params)
     res->mPosAnimator = _params.mPos;
     res->mRotationAnimator = _params.mRotation;
 
+    res->ComputeMatrices();
+
     return res;
 }
 
