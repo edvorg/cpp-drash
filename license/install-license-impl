@@ -10,13 +10,21 @@ if [ ! -f "$1" ] ; then
     exit 1
 fi
 
-LICENSE_INSTALLED="false"
+LICENSE_INSTALLED="true"
 
 TMP=`cat $1 | grep '// DRASH_LICENSE_BEGIN' | wc -l`
 
 if [ "$TMP" != "" ] ; then
-    if (( $TMP >= 1 )) ; then
-	LICENSE_INSTALLED="true"
+    if (( $TMP < 1 )) ; then
+		LICENSE_INSTALLED="false"
+    fi
+fi
+
+TMP=`cat $1 | grep '// DRASH_LICENSE_END' | wc -l`
+
+if [ "$TMP" != "" ] ; then
+    if (( $TMP < 1 )) ; then
+		LICENSE_INSTALLED="false"
     fi
 fi
 
@@ -31,5 +39,10 @@ if [ "$LICENSE_INSTALLED" == "false" ] ; then
     rm $1.tmp
 elif [ "$LICENSE_INSTALLED" == "true" ] ; then
     echo updating license in $1
-	# TODO: implement this
+    LINES_COUNT=`cat $1 | wc -l`
+    cat $1 | grep -B $LINES_COUNT '// DRASH_LICENSE_BEGIN' > $1.tmp
+    cat ./license/license.txt >> $1.tmp
+    cat $1 | grep -A $LINES_COUNT '// DRASH_LICENSE_END' >> $1.tmp
+    cat $1.tmp > $1
+    rm $1.tmp
 fi
