@@ -66,7 +66,7 @@ void CMoveablePoint::Step(double)
     p.SetNormal(normal_transformed);
 
     CVec2f p1(0, 0);
-    CVec2f p2(0.1, 0);
+    CVec2f p2(mLineSizeScreen, 0);
 
     CVec3f wp1;
     CVec3f wp2;
@@ -76,15 +76,15 @@ void CMoveablePoint::Step(double)
 
     wp1 -= wp2;
 
-    mLineSize = wp1.Length();
+    mLineSizeWorld = wp1.Length();
 
     mX = mCenter;
     mY = mCenter;
     mZ = mCenter;
 
-    mX.mX += mLineSize;
-    mY.mY += mLineSize;
-    mZ.mZ += mLineSize;
+    mX.mX += mLineSizeWorld;
+    mY.mY += mLineSizeWorld;
+    mZ.mZ += mLineSizeWorld;
 }
 
 void CMoveablePoint::Render(greng::CRenderer &_render )
@@ -196,17 +196,17 @@ void CMoveablePoint::Calculate()
     mAxisOver = 0;
     mAxisDrawK.Set(1, 1, 1);
 
-    if (dstz.Length() < mLineSize * 0.1)
+    if (dstz.Length() < mLineSizeWorld * 0.1)
     {
         mAxisDrawK.mZ *= 0.5;
         mAxisOver = 3;
     }
-    else if (dstx.Length() < mLineSize * 0.1)
+    else if (dstx.Length() < mLineSizeWorld * 0.1)
     {
         mAxisDrawK.mX *= 0.5;
         mAxisOver = 1;
     }
-    else if (dsty.Length() < mLineSize * 0.1)
+    else if (dsty.Length() < mLineSizeWorld * 0.1)
     {
         mAxisDrawK.mY *= 0.5;
         mAxisOver = 2;

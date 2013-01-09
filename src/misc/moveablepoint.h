@@ -48,6 +48,9 @@ public:
     void ClickBegin();
     void ClickPressing();
     void ClickEnd();
+
+    inline void SetSize(float _size);
+
 private:
 
     greng::CCamera * mCurrentCamera = nullptr;
@@ -72,8 +75,14 @@ private:
 
     CVec2f mCursorPos;
 
-    float mLineSize = 1.0f;
+    float mLineSizeWorld = 1.0f;
+    float mLineSizeScreen = 0.05;
 };
+
+inline void CMoveablePoint::SetSize(float _size)
+{
+    mLineSizeScreen = math::Abs(_size);
+}
 
 } // namespace drash
 #endif // MOVEABLEPOINT_H
