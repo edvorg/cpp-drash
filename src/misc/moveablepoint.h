@@ -39,7 +39,7 @@ public:
 
     void SetCenter(const CVec3f &_center);
     void SetCamera(greng::CCamera * _camera);
-
+    inline CVec3f GetCenter()const;
     void Step(double);
     void Render(greng::CRenderer &_render);
 
@@ -74,6 +74,10 @@ private:
 
     float mLineSize = 1.0f;
 };
+
+inline CVec3f CMoveablePoint::GetCenter() const{
+    return mCenter;
+}
 
 } // namespace drash
 #endif // MOVEABLEPOINT_H

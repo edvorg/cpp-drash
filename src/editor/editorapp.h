@@ -26,13 +26,14 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define CEDITORAPP_H
 
 #include "../app/app.h"
+#include "../misc/moveablepoint.h"
 
 namespace drash {
-
 
 enum State {
     BuildState,
     MoveState,
+    MoveOfAxisState,
     StretchState,
     Simple
 };
@@ -62,6 +63,8 @@ public:
 
     void ActiveStretchMode();
 
+    void ActiveMoveOfAxisMode();
+
     void SaveCurrentObject();
 
     inline greng::CCamera *GetCamera();
@@ -84,7 +87,9 @@ private:
 
     void SelectVertex();
 
-    void ColculateAxis();
+    void SettingCenterFigure();
+
+    void MoveOfAxis();
 private:
     CSceneObject *mCurrentObject = nullptr;
 
@@ -111,7 +116,10 @@ private:
 
     greng::CPointLight mPointLight;
 
-    CVec3f TestPoint;
+    CMoveablePoint mMoveablePoint;
+
+    CVec3f mOldCenterFigure;
+
 };
 
 inline bool CObjectEditorApp::IsStartBuild()const {
@@ -120,6 +128,11 @@ inline bool CObjectEditorApp::IsStartBuild()const {
 
 inline void CObjectEditorApp::ActiveMoveMode() {
     mState = MoveState;
+    ChangeMode();
+}
+
+inline void CObjectEditorApp::ActiveMoveOfAxisMode() {
+    mState = MoveOfAxisState;
     ChangeMode();
 }
 
