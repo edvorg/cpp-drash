@@ -83,6 +83,8 @@ private:
     void ChangeMode();
 
     void SelectVertex();
+
+    void ColculateAxis();
 private:
     CSceneObject *mCurrentObject = nullptr;
 
@@ -108,6 +110,8 @@ private:
     greng::CCamera *mCamera = nullptr;
 
     greng::CPointLight mPointLight;
+
+    CVec3f TestPoint;
 };
 
 inline bool CObjectEditorApp::IsStartBuild()const {

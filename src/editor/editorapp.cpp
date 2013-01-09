@@ -121,15 +121,6 @@ void CObjectEditorApp::Render()
         GetRenderer().DrawLine(mVertexs[0],GetCursorPos(), 1, CColor4f(0, 1, 0, 1));
     }
     if (mState == StretchState && mCurrentObject != nullptr) {
-//        qDebug() << "THIS!!!";
-//        for (auto iter = mFigurePoints.begin() ; iter != mFigurePoints.end() ; iter++){
-//            CVec2f position = **iter;
-//            float depth = drash::math::Abs(mCurrentObject->GetPos().Get().mZ
-//                        -GetDebugDrawSystem().GetActiveCam()->GetPos().Get().mZ);
-//            GetDebugDrawSystem().WorldSpaceToScreenSpace(position,depth);
-////                qDebug() << position.x << " " << position.y;
-//            GetDebugDrawSystem().DrawPoint(position,10,b2Color(255,155,0));
-//        }
         for (unsigned int i = 0 ; i < mCurrentObject->EnumFigures() ; i++ ) {
             CFigure *figure = mCurrentObject->GetFigures()[i];
             for (unsigned int j = 0 ; j < figure->EnumVertices() ; j++)
@@ -453,6 +444,14 @@ void CObjectEditorApp::SelectVertex()
             }
         }
     }
+}
+
+void CObjectEditorApp::ColculateAxis()
+{
+    if (mCurrentObject == nullptr) {
+        return;
+    }
+
 }
 
 void CObjectEditorApp::ActiveStretchMode()

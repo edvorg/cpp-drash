@@ -32,6 +32,8 @@ namespace drash
 namespace test
 {
 
+using namespace greng;
+
 bool CTest4::Init()
 {
     if (CApp::Init() == false)
@@ -81,23 +83,57 @@ bool CTest4::Init()
     mValueAnimator1 = 50;
     mValueAnimator2.SetTarget(100, 2.0, AnimatorBehavior::Bounce);
 
+
+    mTestPoint.Set(0.0f,0.0f,0.0f);
+    CCameraParams params;
+    params.mPos.Set(10,10,10.0f);
+    params.mRotation.Set(-M_PI/4, M_PI/4, 0);
+    CCamera *camera = GetCameraManager().CreateCamera(params);
+
+    if (camera == nullptr) {
+        return false;
+    }
+
+    mPoint.mCurrentCamera = camera;
+    mPoint.SetCenter(mTestPoint);
+
+    GetEventSystem().SetProcessor("LB", CAppEventProcessor(
+    [this] () {
+        mPoint.ClickBegin();
+    },
+    [this] () {
+        mPoint.ClickPressing();
+    },
+    [this] () {
+        mPoint.ClickEnd();
+    }
+    ));
+
+    GetDebugRenderer().SetCamera(camera);
     return true;
 }
 
 void CTest4::Step(double _dt)
 {
     CApp::Step(_dt);
+    mPoint.SetCursorPos(GetCursorPos());
+//    if (mValueAnimator1.Step(_dt))
+//    {
+//        mTestSlider1.SetPercent(mValueAnimator1 / 100.0);
+//        LOG_ERR("value updated (animator 1): "<<mValueAnimator1);
+//    }
+//    else if (mValueAnimator2.Step(_dt))
+//    {
+//        mTestSlider1.SetPercent(mValueAnimator2 / 100.0);
+//        LOG_ERR("value updated (animator 2): "<<mValueAnimator2);
+//    }
 
-    if (mValueAnimator1.Step(_dt))
-    {
-        mTestSlider1.SetPercent(mValueAnimator1 / 100.0);
-        LOG_ERR("value updated (animator 1): "<<mValueAnimator1);
-    }
-    else if (mValueAnimator2.Step(_dt))
-    {
-        mTestSlider1.SetPercent(mValueAnimator2 / 100.0);
-        LOG_ERR("value updated (animator 2): "<<mValueAnimator2);
-    }
+}
+
+void CTest4::Render()
+{
+    CApp::Render();
+    mPoint.Render(GetRenderer());
 }
 
 } // namespace test
