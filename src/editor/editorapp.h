@@ -106,6 +106,8 @@ private:
     bool mFrontSide = true;
 
     greng::CCamera *mCamera = nullptr;
+
+    greng::CPointLight mPointLight;
 };
 
 inline bool CObjectEditorApp::IsStartBuild()const {
@@ -116,8 +118,6 @@ inline void CObjectEditorApp::ActiveMoveMode() {
     mState = MoveState;
     ChangeMode();
 }
-
-
 
 inline void CObjectEditorApp::SetCurrentTemplateName(const std::string &_name){
     mCurrentTemplateName = _name;

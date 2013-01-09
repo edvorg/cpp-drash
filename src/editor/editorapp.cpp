@@ -31,6 +31,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../scene/figure.h"
 #include "../scene/sceneobject.h"
 
+using namespace greng;
+
 namespace drash {
 
 bool CObjectEditorApp::Init()
@@ -73,10 +75,30 @@ bool CObjectEditorApp::Init()
     cp.mPos.Set(0, 0, 100);
     mCamera = GetCameraManager().CreateCamera(cp);
 
+
     if (mCamera == nullptr)
     {
         return false;
     }
+    this->GetDebugRenderer().SetCamera(mCamera);
+
+    greng::CVertexShader *v = GetVertexShaderManager().CreateShaderFromFile("shader2.120.vs");
+    greng::CFragmentShader *f = GetFragmentShaderManager().CreateShaderFromFile("shader2.120.fs");
+
+    CShaderProgram* shaderProgram = GetShaderProgramManager().CreateProgram(v, f);
+
+    if (shaderProgram == nullptr)
+    {
+        return false;
+    }
+
+    GetDebugRenderer().SetShaderProgram(shaderProgram);
+
+    mPointLight.mPosition = GetCamera()->GetPos();
+
+    GetDebugRenderer().SetLight(&mPointLight);
+
+    mTreeRefreshHandler();
 
     return true;
 }
@@ -84,6 +106,8 @@ bool CObjectEditorApp::Init()
 void CObjectEditorApp::Step(double _dt)
 {
     CApp::Step(_dt);
+
+    mPointLight.mPosition = GetCamera()->GetPos();
 }
 
 void CObjectEditorApp::Render()
@@ -96,7 +120,7 @@ void CObjectEditorApp::Render()
         GetRenderer().DrawLine(mVertexs[mVertexs.size() -1 ],GetCursorPos(), 1, CColor4f(0, 1, 0, 1));
         GetRenderer().DrawLine(mVertexs[0],GetCursorPos(), 1, CColor4f(0, 1, 0, 1));
     }
-    if (mState == StretchState) {
+    if (mState == StretchState && mCurrentObject != nullptr) {
 //        qDebug() << "THIS!!!";
 //        for (auto iter = mFigurePoints.begin() ; iter != mFigurePoints.end() ; iter++){
 //            CVec2f position = **iter;
@@ -110,27 +134,25 @@ void CObjectEditorApp::Render()
             CFigure *figure = mCurrentObject->GetFigures()[i];
             for (unsigned int j = 0 ; j < figure->EnumVertices() ; j++)
             {
-                CVec3f position(figure->GetVertices()[j], mCurrentObject->GetPosZ() + figure->GetZ() + figure->GetDepth() * 0.5f);
+                CVec3f position(figure->GetVertices()[j],
+                                mCurrentObject->GetPosZ() + figure->GetZ() + figure->GetDepth() * 0.5f);
 
                 CColor4f color(1, 0.5, 0, 1);
-
-                CVec3f cursor_pos;
 
                 CPlane plane;
                 plane.SetNormal(CVec3f(0, 0, 1));
                 plane.SetPoint(position);
 
-                mCamera->CastRay(GetCursorPos(), plane, cursor_pos);
+                CVec3f cursor_pos;
 
+                mCamera->CastRay(GetCursorPos(), plane, cursor_pos);
                 if (drash::math::Abs(position.mX -cursor_pos.mX) <= 1 &&
                         drash::math::Abs(position.mY -cursor_pos.mY) <= 1)
                 {
                     color.Col3().Set(255,0,0);
                 }
 
-                GetRenderer().DrawPoint(position, 10.0f, color);
-
-                //
+                GetRenderer().DrawPoint(mCamera,position, 10.0f, color);
 
                 color.Col3().Set(255,155,0);
 
@@ -146,7 +168,7 @@ void CObjectEditorApp::Render()
                     color.Col3().Set(255,0,0);
                 }
 
-                GetRenderer().DrawPoint(position, 10.0f, color);
+                GetRenderer().DrawPoint(mCamera,position, 10.0f, color);
             }
         }
     }
@@ -445,8 +467,9 @@ void CObjectEditorApp::SaveCurrentObject()
         return;
     }
 
-//    TODO: fix this
-//    GetTemplateSystem().ChangeGeometry( mCurrentObject->GetGeometry(), mCurrentTemplateName );
+    CSceneObjectGeometry * geometry = new CSceneObjectGeometry();
+    mCurrentObject->DumpGeometry(geometry);
+    GetTemplateSystem().ChangeGeometry( geometry, mCurrentTemplateName );
 
     ShowObject(mCurrentTemplateName);
 }

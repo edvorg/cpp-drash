@@ -64,7 +64,7 @@ EditorWindow::EditorWindow(QWidget *parent) :
     this->startTimer(0);
     this->ui->mTreeObjects->clear();
     //this->ui->mTreeObjects->setColumnCount(2);
-    UpdateTreeObject();
+//    UpdateTreeObject();
 
     mObjectApp->SetTreeRefreshHandler([this]()
     {
@@ -86,18 +86,20 @@ bool EditorWindow::InitScene()
     params.mGravity.Set( 0.0f, -9.8f );
     mObjectApp = new CObjectEditorApp();
     if (mObjectApp == nullptr) {
+        LOG_ERR("Editor window can't init");
         return false;
     }
 
-    if (mObjectApp->Init() == false) {
-        return false;
-    }
+//    if (mObjectApp->Init() == false) {
+//        LOG_ERR("Editor window can't init");
+//        return false;
+//    }
 //    mObjectApp->GetDebugDrawSystem().GetActiveCam()->SetOrtho(true);
 //    mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetOrthoWidth().Set(120);
-    mObjectApp->GetCamera()->GetPos().Set(CVec3f(0, 50, 100));
-    mObjectApp->GetCamera()->GetRotation().Set(CVec3f(-M_PI / 6, 0, 0));
     ui->mScene->SetApp(mObjectApp);
     mCurrentApp = mObjectApp;
+//    mObjectApp->GetCamera()->GetPos().Set(CVec3f(0, 50, 100));
+//    mObjectApp->GetCamera()->GetRotation().Set(CVec3f(-M_PI / 6, 0, 0));
     return true;
 }
 
@@ -247,11 +249,12 @@ bool EditorWindow::UpdateTreeObject()
        QTreeWidgetItem *objectItem = new QTreeWidgetItem(ui->mTreeObjects,
                                                       QStringList(QString::fromStdString(item->first)));
        ui->mTreeObjects->addTopLevelItem(objectItem);
-//       const CSceneObjectGeometry &ii = *(item->second);
+
        const CSceneObjectGeometry &geo = *(item->second);
        const std::vector<CFigureParams> &mF = geo.mFigures;
        for (auto fig = mF.begin() ; fig != mF.end() ; fig++) {
            CFigureParams par = *fig;
+
            QString vecs("");
            vecs.append("[");
            for (unsigned int i = 0 ; i < par.mVertices.size() ; i++) {
