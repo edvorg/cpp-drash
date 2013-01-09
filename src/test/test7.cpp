@@ -245,10 +245,10 @@ void CTest7::Render()
                                          0,
                                          mDebugTexture,
                                          mProgram,
-                                         model,
-                                         GetCamera()->GetViewMatrix(),
-                                         model_view,
-                                         GetCamera()->GetProjectionMatrix(),
+                                         &model,
+                                         nullptr,
+                                         &model_view,
+                                         &GetCamera()->GetProjectionMatrix(),
                                          &mLight1);
 
                 GetMeshManager().DestroyMesh(m);

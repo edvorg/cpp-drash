@@ -213,10 +213,10 @@ void CDebugRenderer::Render() const
                                          0,
                                          mTexture1,
                                          mShaderProgram,
-                                         model,
-                                         mCamera->GetViewMatrix(),
-                                         model_view,
-                                         mCamera->GetProjectionMatrix(),
+                                         &model,
+                                         nullptr,
+                                         &model_view,
+                                         &mCamera->GetProjectionMatrix(),
                                          mLight);
 
                 GetMeshManager()->DestroyMesh(m);

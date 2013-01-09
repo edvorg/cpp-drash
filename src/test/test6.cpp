@@ -177,10 +177,10 @@ void CTest6::Render()
                                  i,
                                  mPlayer1Texture,
                                  mPlayer1ShaderProgram,
-                                 model,
-                                 GetCamera()->GetViewMatrix(),
-                                 model_view,
-                                 GetCamera()->GetProjectionMatrix(),
+                                 &model,
+                                 nullptr,
+                                 &model_view,
+                                 &GetCamera()->GetProjectionMatrix(),
                                  &mLight1);
     }
 
