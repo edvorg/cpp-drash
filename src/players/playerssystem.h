@@ -25,13 +25,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef PLAYERSSYSTEM_H
 #define PLAYERSSYSTEM_H
 
-#include "player.h"
+#include "../misc/objectfactory.h"
 
 namespace drash
 {
 
 class CScene;
 class CSceneObjectGeometry;
+class CPlayer;
+class CPlayerParams;
 
 enum class PlayerMessage : unsigned int
 {
@@ -48,6 +50,7 @@ public:
     static const unsigned int mPlayersCountLimit = 2;
 
     CPlayersSystem();
+    ~CPlayersSystem();
 
     bool Init();
     void Step(double);

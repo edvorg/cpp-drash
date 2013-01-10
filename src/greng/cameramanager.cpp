@@ -37,6 +37,10 @@ CCameraManager::CCameraManager():
 {
 }
 
+CCameraManager::~CCameraManager()
+{
+}
+
 bool CCameraManager::Init()
 {
     Release();

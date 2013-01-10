@@ -25,10 +25,12 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_LEVEL_H
 #define DRASH_LEVEL_H
 
+#include "../misc/objectfactory.h"
+
 namespace drash
 {
 
-class CLevel
+class CLevel : public CObjectFactory<CLevel>::CFactoryProduct
 {
 public:
     CLevel() = default;

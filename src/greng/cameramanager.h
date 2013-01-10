@@ -51,6 +51,7 @@ public:
     static const unsigned int mCamerasCountLimit = 3;
 
     CCameraManager();
+    ~CCameraManager();
 
     bool Init();
     void Release();

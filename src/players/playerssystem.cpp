@@ -24,8 +24,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "playerssystem.h"
 
-#include "../diag/logger.h"
 #include "../players/player.h"
+#include "../diag/logger.h"
 #include "../scene/scene.h"
 
 namespace drash
@@ -33,6 +33,10 @@ namespace drash
 
 CPlayersSystem::CPlayersSystem():
     mPlayersFactory(mPlayersCountLimit, "CPlayer")
+{
+}
+
+CPlayersSystem::~CPlayersSystem()
 {
 }
 

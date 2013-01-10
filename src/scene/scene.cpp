@@ -42,6 +42,10 @@ CScene::CScene():
 {
 }
 
+CScene::~CScene()
+{
+}
+
 bool CScene::Init( const CSceneParams &_params )
 {
 	Release();

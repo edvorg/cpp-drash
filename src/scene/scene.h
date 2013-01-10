@@ -62,6 +62,7 @@ public:
     // * main routines **********************************
 
     CScene(void);
+    ~CScene(void);
 
     bool Init( const CSceneParams& _params );
     void Release(void);

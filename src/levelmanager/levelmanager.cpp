@@ -23,8 +23,43 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include "levelmanager.h"
+#include "level.h"
 
 namespace drash
 {
+
+CLevelManager::CLevelManager():
+    mLevelFactory(mLevelsCountLimit, "CLevel")
+{
+}
+
+CLevelManager::~CLevelManager()
+{
+}
+
+CLevel *CLevelManager::CreateLevel()
+{
+    CLevel *res = mLevelFactory.CreateObject();
+
+    if (res == nullptr)
+    {
+        return nullptr;
+    }
+
+    return res;
+}
+
+bool CLevelManager::DestroyLevel(CLevel *_level)
+{
+    if (mLevelFactory.IsObject(_level) == false)
+    {
+        LOG_ERR("CLevelManager::DestroyLevel(): invalid level taken");
+        return false;
+    }
+
+    mLevelFactory.DestroyObject(_level);
+
+    return true;
+}
 
 } // namespace drash

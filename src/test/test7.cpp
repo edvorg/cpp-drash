@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/vertex.h"
 #include "../scene/figure.h"
 #include "../greng/camera.h"
+#include "../scene/sceneobject.h"
 
 namespace drash
 {

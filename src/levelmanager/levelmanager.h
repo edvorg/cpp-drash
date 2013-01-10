@@ -25,14 +25,37 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_LEVELMANAGER_H
 #define DRASH_LEVELMANAGER_H
 
+#include "../misc/objectfactory.h"
+
 namespace drash
 {
+
+class CScene;
+class CLevel;
 
 class CLevelManager
 {
 public:
-    CLevelManager() = default;
+    static const unsigned int mLevelsCountLimit = 10;
+
+    CLevelManager();
+    ~CLevelManager();
+
+    inline void SetScene(CScene *_scene);
+
+    CLevel *CreateLevel();
+    bool DestroyLevel(CLevel *_level);
+
+private:
+    CScene *mScene = nullptr;
+
+    CObjectFactory<CLevel> mLevelFactory;
 };
+
+inline void CLevelManager::SetScene(CScene *_scene)
+{
+    mScene = _scene;
+}
 
 } // namespace drash
 

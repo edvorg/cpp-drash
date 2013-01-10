@@ -144,18 +144,18 @@ bool CObjectFactory<T>::DestroyObjectSafe(T *_obj)
 template<class T>
 void CObjectFactory<T>::DestroyObject(T *_obj)
 {
-    if (reinterpret_cast<CFactoryProduct*>(_obj)->mInternalId < --mObjectsCount)
+    if (_obj->mInternalId < --mObjectsCount)
     {
-        mObjects[reinterpret_cast<CFactoryProduct*>(_obj)->mInternalId] = mObjects[mObjectsCount];
-        reinterpret_cast<CFactoryProduct*>(mObjects[reinterpret_cast<CFactoryProduct*>(_obj)->mInternalId])->mInternalId = reinterpret_cast<CFactoryProduct*>(_obj)->mInternalId;
+        mObjects[_obj->mInternalId] = mObjects[mObjectsCount];
+        mObjects[_obj->mInternalId]->mInternalId = _obj->mInternalId;
         mObjects[mObjectsCount] = nullptr;
     }
     else
     {
-        mObjects[reinterpret_cast<CFactoryProduct*>(_obj)->mInternalId] = nullptr;
+        mObjects[_obj->mInternalId] = nullptr;
     }
 
-    delete reinterpret_cast<CFactoryProduct*>(_obj);
+    delete _obj;
 }
 
 template<class T>
