@@ -56,6 +56,7 @@ private:
     greng::CMesh *mMesh1 = nullptr;
     greng::CMesh *mMesh2 = nullptr;
     greng::CMesh *mMesh3 = nullptr;
+    greng::CMesh *mMesh4 = nullptr;
     CMatrix4f mMesh3ConstMatrix;
     greng::CTexture *mTex1 = nullptr;
     greng::CTexture *mTex2 = nullptr;
@@ -63,6 +64,7 @@ private:
     greng::CTexture *mTex4 = nullptr;
     greng::CTexture *mTex5 = nullptr;
     greng::CTexture *mTex6 = nullptr;
+    greng::CTexture *mTex7 = nullptr;
     greng::CVertexShader *mVertexShader1 = nullptr;
     greng::CFragmentShader *mFragmentShader1 = nullptr;
     greng::CShaderProgram *mShaderProgram1 = nullptr;

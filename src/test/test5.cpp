@@ -165,6 +165,44 @@ void CTest5::Render()
         }
     }
 
+    if (mMesh4 != nullptr)
+    {
+        CMatrix4f rangle;
+        MatrixRotationY(rangle, mAngle);
+
+        CMatrix4f model_1;
+        MatrixMultiply(rangle, mMesh3ConstMatrix, model_1);
+
+        CMatrix4f trans;
+        MatrixTranslation(trans, CVec3f(-150, 0, 0));
+
+        CMatrix4f model;
+        MatrixMultiply(trans, model_1, model);
+
+        CMatrix4f model_view;
+        MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
+
+        greng::CTexture *texts[3] =
+        {
+            mTex7,
+            mTex7,
+            mTex7
+        };
+
+        for (unsigned int i = 0; i < 3; i++)
+        {
+            GetRenderer().RenderMesh(mMesh4,
+                                     i,
+                                     texts[i],
+                                     mShaderProgram2,
+                                     &model,
+                                     nullptr,
+                                     &model_view,
+                                     &GetCamera()->GetProjectionMatrix(),
+                                     &mLight1);
+        }
+    }
+
     GetRenderer().DrawPoint(GetCamera(), mLight1.mPosition, 10, CColor4f(1, 1, 1, 1), false);
 }
 
@@ -173,8 +211,10 @@ void CTest5::SetupMeshes()
     mMesh1 = GetMeshManager().CreateMeshCube();
     mMesh2 = GetMeshManager().CreateMeshQuad();
     mMesh3 = GetMeshManager().CreateMeshFromObjFile("mt.obj");
+    mMesh4 = GetMeshManager().CreateMeshFromObjFile("RB-BumbleBee.obj");
 
     GetMeshManager().ComputeNormals(mMesh3);
+    GetMeshManager().ComputeNormals(mMesh4);
 
     CMatrix4f s;
     MatrixScale(s, CVec3f(0.1));
@@ -199,6 +239,7 @@ void CTest5::SetupTextures()
     mTex4 = GetTextureManager().CreateTextureFromFile("RB_MegatronHead_MATINST.png");
     mTex5 = GetTextureManager().CreateTextureFromFile("RB_MegatronArmFeet_MATINST.png");
     mTex6 = GetTextureManager().CreateTextureFromFile("wall5.png");
+    mTex7 = GetTextureManager().CreateTextureFromFile("RB_Bumblebee_TEXTSET_Color_NormX.png");
 }
 
 void CTest5::SetupShaders()

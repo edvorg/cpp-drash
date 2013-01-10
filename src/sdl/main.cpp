@@ -36,8 +36,8 @@ EventKey ConvertKey(SDLKey _key);
 EventKey ConvertButton(int _button);
 void WindowSpaceToScreenSpace(CVec2f &_from);
 
-const double gWindowWidth = 800;
-const double gWindowHeight = 600;
+const double gWindowWidth = 1366;
+const double gWindowHeight = 700;
 
 int main(int _argc, char **_argv)
 {
