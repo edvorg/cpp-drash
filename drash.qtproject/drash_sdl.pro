@@ -67,7 +67,9 @@ SOURCES += \
     ../src/test/test7.cpp \
     ../src/greng/cameramanager.cpp \
     ../src/debugrenderer/debugrenderer.cpp \
-    ../src/misc/moveablepoint.cpp
+    ../src/misc/moveablepoint.cpp \
+    ../src/levelmanager/level.cpp \
+    ../src/levelmanager/levelmanager.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -130,5 +132,7 @@ HEADERS += \
     ../src/test/test7.h \
     ../src/greng/cameramanager.h \
     ../src/debugrenderer/debugrenderer.h \
-    ../src/misc/moveablepoint.h
+    ../src/misc/moveablepoint.h \
+    ../src/levelmanager/level.h \
+    ../src/levelmanager/levelmanager.h
 

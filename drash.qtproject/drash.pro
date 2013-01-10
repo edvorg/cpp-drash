@@ -80,7 +80,9 @@ SOURCES += ../src/qt/main.cpp\
     ../src/test/test7.cpp \
     ../src/greng/cameramanager.cpp \
     ../src/debugrenderer/debugrenderer.cpp \
-    ../src/misc/moveablepoint.cpp
+    ../src/misc/moveablepoint.cpp \
+    ../src/levelmanager/level.cpp \
+    ../src/levelmanager/levelmanager.cpp
 
 HEADERS  += ../src/qt/gamewindow.h \
     ../src/qt/scenewidget.h \
@@ -148,7 +150,9 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/greng/cameramanager.h \
     ../src/greng/pointlight.h \
     ../src/debugrenderer/debugrenderer.h \
-    ../src/misc/moveablepoint.h
+    ../src/misc/moveablepoint.h \
+    ../src/levelmanager/level.h \
+    ../src/levelmanager/levelmanager.h
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui
