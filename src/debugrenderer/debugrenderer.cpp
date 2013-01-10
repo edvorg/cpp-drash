@@ -128,8 +128,8 @@ void CDebugRenderer::Render() const
                     mv[k].mUV -= min.Vec2();
                     mv[kc + k].mUV -= min.Vec2();
 
-                    mv[k].mUV /= 10;
-                    mv[kc + k].mUV /= 10;
+                    mv[k].mUV *= mTexCoordsScale;
+                    mv[kc + k].mUV *= mTexCoordsScale;
                 }
 
                 for (unsigned int k = 2; k < kc; k++)
@@ -159,9 +159,9 @@ void CDebugRenderer::Render() const
                     tmp -= f->GetVertices()[k];
 
                     mv[2 * kc + (k - 1) * 4 + 0].mUV.Set(0, 0);
-                    mv[2 * kc + (k - 1) * 4 + 1].mUV.Set(0, math::Abs(max.mZ - min.mZ) / 10.0f);
-                    mv[2 * kc + (k - 1) * 4 + 2].mUV.Set(tmp.Length() / 10.0f, math::Abs(max.mZ - min.mZ) / 10.0f);
-                    mv[2 * kc + (k - 1) * 4 + 3].mUV.Set(tmp.Length() / 10.0f, 0);
+                    mv[2 * kc + (k - 1) * 4 + 1].mUV.Set(0, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
+                    mv[2 * kc + (k - 1) * 4 + 2].mUV.Set(tmp.Length() * mTexCoordsScale, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
+                    mv[2 * kc + (k - 1) * 4 + 3].mUV.Set(tmp.Length() * mTexCoordsScale, 0);
 
                     mi.push_back(2 * kc + (k - 1) * 4 + 0);
                     mi.push_back(2 * kc + (k - 1) * 4 + 1);
@@ -179,9 +179,9 @@ void CDebugRenderer::Render() const
                 tmp -= f->GetVertices()[0];
 
                 mv[2 * kc + (kc - 1) * 4 + 0].mUV.Set(0, 0);
-                mv[2 * kc + (kc - 1) * 4 + 1].mUV.Set(0, math::Abs(max.mZ - min.mZ) / 10.0f);
-                mv[2 * kc + (kc - 1) * 4 + 2].mUV.Set(tmp.Length() / 10.0f, math::Abs(max.mZ - min.mZ) / 10.0f);
-                mv[2 * kc + (kc - 1) * 4 + 3].mUV.Set(tmp.Length() / 10.0f, 0);
+                mv[2 * kc + (kc - 1) * 4 + 1].mUV.Set(0, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
+                mv[2 * kc + (kc - 1) * 4 + 2].mUV.Set(tmp.Length() * mTexCoordsScale, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
+                mv[2 * kc + (kc - 1) * 4 + 3].mUV.Set(tmp.Length() * mTexCoordsScale, 0);
 
                 mi.push_back(2 * kc + (kc - 1) * 4 + 0);
                 mi.push_back(2 * kc + (kc - 1) * 4 + 1);
@@ -308,7 +308,7 @@ CFigure *CDebugRenderer::FindFigure(const greng::CCamera *_camera, const CVec2f 
 
 bool CDebugRenderer::InitTextures()
 {
-    mTexture1 = GetTextureManager()->CreateTextureFromFile("wall5.png");
+    mTexture1 = GetTextureManager()->CreateTextureFromFile("wall2_diffuse.png");
 
     if (mTexture1 == nullptr)
     {

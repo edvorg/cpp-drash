@@ -64,6 +64,8 @@ public:
     inline void SetLight(greng::CPointLight *_light);
     inline greng::CPointLight *GetLight() const;
 
+    inline void SetTexCoordsScale(float _scale);
+
     bool Init();
     void Release();
     void Render() const;
@@ -85,6 +87,8 @@ private:
     greng::CCamera *mCamera = nullptr;
     greng::CPointLight *mLight = nullptr;
     greng::CTexture *mTexture1 = nullptr;
+
+    float mTexCoordsScale = 1.0 / 40.0;
 };
 
 inline void CDebugRenderer::SetScene(CScene *_scene)
@@ -155,6 +159,11 @@ inline void CDebugRenderer::SetLight(greng::CPointLight *_light)
 inline greng::CPointLight *CDebugRenderer::GetLight() const
 {
     return mLight;
+}
+
+inline void CDebugRenderer::SetTexCoordsScale(float _scale)
+{
+    mTexCoordsScale = _scale;
 }
 
 } // namespace drash
