@@ -39,7 +39,7 @@ public:
 
     void SetCenter(const CVec3f &_center);
     void SetCamera(greng::CCamera * _camera);
-
+    inline CVec3f GetCenter()const;
     void Step(double);
     void Render(greng::CRenderer &_render);
 
@@ -78,6 +78,11 @@ private:
     float mLineSizeWorld = 1.0f;
     float mLineSizeScreen = 0.05;
 };
+
+
+inline CVec3f CMoveablePoint::GetCenter() const{
+    return mCenter;
+}
 
 inline void CMoveablePoint::SetSize(float _size)
 {

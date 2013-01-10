@@ -138,6 +138,13 @@ void EditorWindow::MoveActive()
     }
 }
 
+void EditorWindow::MoveOfAxisActive()
+{
+    if (mMoveOfAxisActiveAction->isChecked()) {
+        mObjectApp->ActiveMoveOfAxisMode();
+    }
+}
+
 void EditorWindow::StretchActive()
 {
     if (mStretchActiveAction->isChecked()) {
@@ -147,21 +154,44 @@ void EditorWindow::StretchActive()
 
 void EditorWindow::ZoomUp()
 {
-    if (mCurrentApp != nullptr){
-        qDebug() << "Zoom up!";
-        CVec3f pos = mObjectApp->GetCamera()->GetPos().GetTarget();
-        pos.mZ += 10.0f;
-        mObjectApp->GetCamera()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
-    }
+     mObjectApp->GetCamera()->Forward(10);
+    //    if (mCurrentApp != nullptr){
+//        CVec3f pos;
+
+//        if (mObjectApp->GetCamera()->GetPos().IsTargetSet())
+//        {
+//            pos = mObjectApp->GetCamera()->GetPos().GetTarget();
+//        }
+//        else
+//        {
+//            pos = mObjectApp->GetCamera()->GetPos().Get();
+//        }
+
+//        pos.mZ += 10.0f;
+
+//        mObjectApp->GetCamera()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
+//    }
 }
 
 void EditorWindow::ZoomDown()
 {
-    if (mCurrentApp != nullptr){
-        CVec3f pos = mObjectApp->GetCamera()->GetPos().GetTarget();
-        pos.mZ -= 10.0f;
-        mObjectApp->GetCamera()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
-    }
+    mObjectApp->GetCamera()->Forward(-10);
+//    if (mCurrentApp != nullptr){
+//        CVec3f pos;
+
+//        if (mObjectApp->GetCamera()->GetPos().IsTargetSet())
+//        {
+//            pos = mObjectApp->GetCamera()->GetPos().GetTarget();
+//        }
+//        else
+//        {
+//            pos = mObjectApp->GetCamera()->GetPos().Get();
+//        }
+
+//        pos.mZ -= 10.0f;
+
+//        mObjectApp->GetCamera()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
+//    }
 }
 
 void EditorWindow::CreateActions()
@@ -194,6 +224,14 @@ void EditorWindow::CreateActions()
     connect(mMoveActiveAction,SIGNAL(changed()),
             this,SLOT(MoveActive()));
     mModeActions.addAction(mMoveActiveAction);
+
+    mMoveOfAxisActiveAction = new QAction("Move Of Axis Figure", this);
+    mMoveOfAxisActiveAction->setCheckable(true);
+    mMoveOfAxisActiveAction->setShortcut(tr("Ctrl+A"));
+    listActions << mMoveOfAxisActiveAction;
+    connect(mMoveOfAxisActiveAction,SIGNAL(changed()),
+            this,SLOT(MoveOfAxisActive()));
+    mModeActions.addAction(mMoveOfAxisActiveAction);
 
     mStretchActiveAction = new QAction("Stretch active", this);
     mStretchActiveAction->setCheckable(true);

@@ -82,11 +82,11 @@ private:
     QAction *mSaveAction;
     QAction *mMoveActiveAction;
     QAction *mStretchActiveAction;
+    QAction *mMoveOfAxisActiveAction;
     QAction *mNewFigureAction;
     QAction *mNewObjectAction;
     QAction *mZoomUpAction;
     QAction *mZoomDownAction;
-
     QActionGroup mModeActions;
 
     // Slots for Actions
@@ -94,9 +94,11 @@ private slots:
     void CreateNewObject();
     void AddNewFigure();
     void MoveActive();
+    void MoveOfAxisActive();
     void StretchActive();
     void ZoomUp();
     void ZoomDown();
+
     // GuiObjects
 private:
     QLabel *mLabelOfStatusBar;

@@ -71,8 +71,9 @@ bool CObjectEditorApp::Init()
     }
     SetProcessors();
 
-    greng::CCameraParams cp;
-    cp.mPos.Set(0, 0, 100);
+    CCameraParams cp;
+    cp.mPos.Set(10,10,10.0f);
+    cp.mRotation.Set(-M_PI/4, M_PI/4, 0);
     mCamera = GetCameraManager().CreateCamera(cp);
 
 
@@ -99,7 +100,7 @@ bool CObjectEditorApp::Init()
     GetDebugRenderer().SetLight(&mPointLight);
 
     mTreeRefreshHandler();
-
+    mMoveablePoint.SetCamera(mCamera);
     return true;
 }
 
@@ -108,6 +109,11 @@ void CObjectEditorApp::Step(double _dt)
     CApp::Step(_dt);
 
     mPointLight.mPosition = GetCamera()->GetPos();
+
+    if (mState == MoveOfAxisState && mSelectedFigure != nullptr) {
+        mMoveablePoint.SetCursorPos(GetCursorPos());
+        mMoveablePoint.Step(_dt);
+    }
 }
 
 void CObjectEditorApp::Render()
@@ -163,6 +169,10 @@ void CObjectEditorApp::Render()
             }
         }
     }
+
+    if (mState == MoveOfAxisState && mSelectedFigure != nullptr) {
+        mMoveablePoint.Render(GetRenderer());
+    }
 }
 
 void CObjectEditorApp::StartBuild()
@@ -198,9 +208,13 @@ void CObjectEditorApp::SetProcessors()
                 break;
             }
             case StretchState:{
-                //mCurrentFigureVertex = GetCursorPos();
                 SelectVertex();
-                //StretchFigure();
+                break;
+            }
+            case MoveOfAxisState: {
+                if (mSelectedFigure != nullptr) {
+                    mMoveablePoint.ClickBegin();
+                }
                 break;
             }
             case Simple:
@@ -211,9 +225,15 @@ void CObjectEditorApp::SetProcessors()
     [this] ()
     {
         if (mSelectedFigure != nullptr && mState == MoveState) {
-            LOG_INFO("Move figure now");
+//            LOG_INFO("Move figure now");
             MoveFigure();
         }
+
+        if (mSelectedFigure != nullptr && mState == MoveOfAxisState) {
+            mMoveablePoint.ClickPressing();
+            MoveOfAxis();
+        }
+
         if (mState == StretchState) {
             StretchFigure();
         }
@@ -224,11 +244,16 @@ void CObjectEditorApp::SetProcessors()
             mSelectedFigure = nullptr;
             SaveCurrentObject();
         }
+        if (mState == MoveOfAxisState && mSelectedFigure != nullptr) {
+            mMoveablePoint.ClickEnd();
+            SaveCurrentObject();
+        }
         if (mState == StretchState) {
             mSelectedFigure = nullptr;
             SaveCurrentObject();
             mVertexIndex = -1;
         }
+
     }
     ));
 
@@ -239,6 +264,14 @@ void CObjectEditorApp::SetProcessors()
             case BuildState:
                 BuildFigure(mCurrentTemplateName);
                 break;
+            case MoveOfAxisState:{
+                mSelectedFigure = SelectFigure(GetCursorPos());
+
+                if (mSelectedFigure == nullptr)
+                    LOG_INFO("NOOOO 2");
+                SettingCenterFigure();
+                break;
+            }
             case MoveState:
                 break;
             case StretchState:
@@ -395,6 +428,8 @@ void CObjectEditorApp::StretchFigure()
 void CObjectEditorApp::ChangeMode()
 {
     mVertexs.clear();
+    mSelectedFigure = nullptr;
+    SaveCurrentObject();
 }
 
 void CObjectEditorApp::SelectVertex()
@@ -446,12 +481,60 @@ void CObjectEditorApp::SelectVertex()
     }
 }
 
-void CObjectEditorApp::ColculateAxis()
+void CObjectEditorApp::SettingCenterFigure()
 {
-    if (mCurrentObject == nullptr) {
+    if (mSelectedFigure == nullptr) {
         return;
     }
 
+    CVec3f center;
+
+    center.Set(mSelectedFigure->GetVertices()[0], mCurrentObject->GetPosZ() + mSelectedFigure->GetZ());
+
+    for (unsigned int i = 1; i < mSelectedFigure->EnumVertices(); i++)
+    {
+        center.Vec2() += mSelectedFigure->GetVertices()[i];
+    }
+
+    center.Vec2() /= CVec2f(mSelectedFigure->EnumVertices());
+
+    mMoveablePoint.SetCenter(center);
+    mOldCenterFigure = center;
+}
+
+void CObjectEditorApp::MoveOfAxis()
+{
+    if (mSelectedFigure == nullptr) {
+        return;
+    }
+    qDebug() << "Move of Axis";
+    CVec3f pos;
+
+    CPlane plane;
+    plane.SetNormal(CVec3f(0, 0, 1));
+    plane.SetPoint(CVec3f(0, 0, 0));
+
+    mCamera->CastRay(GetCursorPos(), plane, pos);
+    CVec3f newCenter = mMoveablePoint.GetCenter();
+    float disX = newCenter.mX - mOldCenterFigure.mX;
+    float disY = newCenter.mY - mOldCenterFigure.mY;
+    mOldPositionCursor = pos;
+
+    const CVec2f* v = mSelectedFigure->GetVertices();
+    CVec2f* new_vertices = new CVec2f[mSelectedFigure->EnumVertices()];
+    for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++)
+    {
+        new_vertices[i] = v[i];
+        new_vertices[i].mX += disX;
+        new_vertices[i].mY += disY;
+    }
+
+    mSelectedFigure->SetVertices(new_vertices, mSelectedFigure->EnumVertices());
+    delete[] new_vertices;
+
+    mSelectedFigure->SetZ(mSelectedFigure->GetZ() + newCenter.mZ - mOldCenterFigure.mZ);
+    mOldCenterFigure = newCenter;
+    //SettingCenterFigure();
 }
 
 void CObjectEditorApp::ActiveStretchMode()
