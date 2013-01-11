@@ -46,6 +46,7 @@ namespace Ui
 }
 
 class QStatusBar;
+class QTreeWidget;
 
 class EditorWindow : public QMainWindow
 {
@@ -56,10 +57,6 @@ public:
     ~EditorWindow();
     
 private slots:
-
-    void on_mTreeObjects_itemDoubleClicked(QTreeWidgetItem *item, int column);
-
-    void on_mTreeObjects_itemClicked(QTreeWidgetItem *item, int column);
 
     void on_mTreeObjects_itemSelectionChanged();
 
@@ -117,7 +114,7 @@ private:
 private:
     void CreateActions();
 
-    bool UpdateTreeObject();
+    bool UpdateTreeObject(QTreeWidget *_tree, drash::CApp *_app);
 
     drash::CTimer mTimer;
 
@@ -126,7 +123,6 @@ private:
 private:
     QHBoxLayout * mLayoutForScene;
 
-    void SetSceneWidget(SceneWidget * _widget);
 public:
 
 };

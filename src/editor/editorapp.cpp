@@ -196,7 +196,6 @@ void CObjectEditorApp::SetProcessors()
                 plane.SetNormal(CVec3f(0, 0, 1));
 
                 mCamera->CastRay(GetCursorPos(), plane, mOldPositionCursor);
-
                 break;
             }
             case StretchState:{
@@ -244,7 +243,7 @@ void CObjectEditorApp::SetProcessors()
             SaveCurrentObject();
             mVertexIndex = -1;
         }
-
+        mTreeRefreshHandler();
     }
     ));
 
@@ -423,7 +422,9 @@ void CObjectEditorApp::RemoveCurrentObject()
     if (mCurrentObject != nullptr) {
         GetScene().DestroyObject(mCurrentObject);
         mCurrentObject = nullptr;
+        mTreeRefreshHandler();
     }
+
 }
 
 CFigure *CObjectEditorApp::SelectFigure(const CVec2f &_pos)

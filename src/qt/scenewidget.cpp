@@ -130,12 +130,10 @@ void SceneWidget::initializeGL()
 
     if (mApp != nullptr)
     {
-        if (mNeedInit == true) {
             if (mApp->Init() == false)
             {
                 mApp = nullptr;
             }
-        }
     }
 }
 

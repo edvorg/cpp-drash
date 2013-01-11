@@ -48,7 +48,7 @@ public:
     virtual void resizeGL( int _w, int _h ) override;
     virtual void paintGL() override;
 
-    inline void SetApp( drash::CApp *_app, bool _needInit = true);
+    inline void SetApp(drash::CApp *_app);
     inline drash::CApp *GetApp();
 
 protected:
@@ -66,13 +66,11 @@ protected:
 private:
     drash::CVec2f WidgetSpaceToScreenSpace(const drash::CVec2f& _from) const;
 
-    bool mNeedInit = true;
 };
 
-inline void SceneWidget::SetApp(drash::CApp *_app, bool _needInit)
+inline void SceneWidget::SetApp(drash::CApp *_app)
 {
     mApp = _app;
-    mNeedInit = _needInit;
 }
 
 inline drash::CApp *SceneWidget::GetApp()

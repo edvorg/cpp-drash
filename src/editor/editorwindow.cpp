@@ -72,7 +72,7 @@ EditorWindow::EditorWindow(QWidget *parent) :
 
     mObjectApp->SetTreeRefreshHandler([this]()
     {
-        this->UpdateTreeObject();
+        this->UpdateTreeObject(ui->mTreeObjects,mObjectApp);
     });
 
     this->startTimer(0);
@@ -83,6 +83,8 @@ EditorWindow::~EditorWindow()
     delete ui;
     mObjectApp->Release();
     delete mObjectApp;
+    mSceneApp->Release();
+    delete mSceneApp;
 }
 
 bool EditorWindow::InitScene()
@@ -156,7 +158,7 @@ void EditorWindow::StretchActive()
 
 void EditorWindow::ZoomUp()
 {
-     mCurrentApp->GetDebugRenderer().GetCamera()->Forward(10);
+     //mCurrentApp->GetDebugRenderer().GetCamera()->Forward(10);
     //    if (mCurrentApp != nullptr){
 //        CVec3f pos;
 
@@ -177,7 +179,7 @@ void EditorWindow::ZoomUp()
 
 void EditorWindow::ZoomDown()
 {
-    mCurrentApp->GetDebugRenderer().GetCamera()->Forward(-10);
+    //mCurrentApp->GetDebugRenderer().GetCamera()->Forward(-10);
 //    if (mCurrentApp != nullptr){
 //        CVec3f pos;
 
@@ -243,17 +245,17 @@ void EditorWindow::CreateActions()
             this,SLOT(StretchActive()));
     mModeActions.addAction(mStretchActiveAction);
 
-    mZoomUpAction = new QAction("+", this);
-    mZoomUpAction->setShortcut(tr("Ctrl+="));
-    listActions << mZoomUpAction;
-    connect(mZoomUpAction,SIGNAL(triggered()),
-            this,SLOT(ZoomUp()));
+//    mZoomUpAction = new QAction("+", this);
+//    mZoomUpAction->setShortcut(tr("Ctrl+="));
+//    listActions << mZoomUpAction;
+//    connect(mZoomUpAction,SIGNAL(triggered()),
+//            this,SLOT(ZoomUp()));
 
-    mZoomDownAction = new QAction("-",this);
-    mZoomDownAction->setShortcut(tr("Ctrl+-"));
-    listActions << mZoomDownAction;
-    connect(mZoomDownAction,SIGNAL(triggered()),
-            this,SLOT(ZoomDown()));
+//    mZoomDownAction = new QAction("-",this);
+//    mZoomDownAction->setShortcut(tr("Ctrl+-"));
+//    listActions << mZoomDownAction;
+//    connect(mZoomDownAction,SIGNAL(triggered()),
+//            this,SLOT(ZoomDown()));
 
     ui->toolBar->addActions(listActions);
 
@@ -274,21 +276,21 @@ void EditorWindow::CreateActions()
 
 void EditorWindow::SaveObject()
 {
-    mObjectApp->SaveCurrentObject();
+//    mObjectApp->SaveCurrentObject();
 
-    UpdateTreeObject();
+//    UpdateTreeObject();
 }
 
-bool EditorWindow::UpdateTreeObject()
+bool EditorWindow::UpdateTreeObject(QTreeWidget *_tree, drash::CApp *_app)
 {
-    ui->mTreeObjects->clear();
+    _tree->clear();
     QList<QTreeWidgetItem*> list;
-    CTemplateSystem tSys= mObjectApp->GetTemplateSystem();
+    CTemplateSystem tSys= _app->GetTemplateSystem();
     for (auto item = tSys.GetSceneObjectTemplates().begin();
          item != tSys.GetSceneObjectTemplates().end() ; item++) {
-       QTreeWidgetItem *objectItem = new QTreeWidgetItem(ui->mTreeObjects,
+       QTreeWidgetItem *objectItem = new QTreeWidgetItem(_tree,
                                                       QStringList(QString::fromStdString(item->first)));
-       ui->mTreeObjects->addTopLevelItem(objectItem);
+       _tree->addTopLevelItem(objectItem);
 
        const CSceneObjectGeometry &geo = *(item->second);
        const std::vector<CFigureParams> &mF = geo.mFigures;
@@ -308,11 +310,10 @@ bool EditorWindow::UpdateTreeObject()
                vecs.append(")");
            }
            vecs.append("]");
-//           QTreeWidgetItem *itemFig =
            new QTreeWidgetItem(objectItem,QStringList(vecs));
        }
     }
-    mMoveActiveAction->setChecked(true);
+    //mMoveActiveAction->setChecked(true);
     return true;
 }
 
@@ -321,29 +322,6 @@ void EditorWindow::AddFigure()
     std::string nameTemplate = ui->mTreeObjects->selectedItems().at(0)->text(0).toStdString();
 
     mObjectApp->BuildFigure(nameTemplate);
-}
-
-void EditorWindow::SetSceneWidget(SceneWidget *_widget)
-{
-//    if (mCurrentSceneWidget == _widget) {
-//        return;
-//    }
-
-//    mLayoutForScene->removeWidget(mCurrentSceneWidget);
-//    mLayoutForScene->addWidget(_widget);
-//    mCurrentSceneWidget = _widget;
-//    qDebug() << " widget changed ";
-}
-
-
-void EditorWindow::on_mTreeObjects_itemDoubleClicked(QTreeWidgetItem *item, int column)
-{
-
-}
-
-void EditorWindow::on_mTreeObjects_itemClicked(QTreeWidgetItem *item, int column)
-{
-
 }
 
 void EditorWindow::on_mTreeObjects_itemSelectionChanged()
@@ -372,7 +350,7 @@ void EditorWindow::Remove_Object()
     if (item->parent() == nullptr) {
         //qDebug() << "Object created";
         mObjectApp->GetTemplateSystem().RemoveSceneObjectTemplate(item->text(0).toStdString());
-        UpdateTreeObject();
+        UpdateTreeObject(ui->mTreeObjects,mObjectApp);
         //mObjectApp->ShowObject(item->text(0).toStdString());
         //mCurrentObject = mObjectApp->GetTemplateSystem().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
     }
@@ -385,41 +363,12 @@ void EditorWindow::on_mManageWidget_currentChanged(int index)
         mWidgetForScene->hide();
         mWidgetForObjects->show();
         mCurrentSceneWidget = mWidgetForObjects;
-//        ui->mScene = mWidgetForObjects;
-//        mCurrentSceneWidget->hide();
-//        mLayoutForScene->removeWidget(mCurrentSceneWidget);
-//        delete mCurrentSceneWidget;
-//        bool init = false;
-//        if (mObjectApp == nullptr) {
-//            mObjectApp = new CObjectEditorApp();
-//            init = true;
-//            mObjectApp->SetTreeRefreshHandler([this]()
-//            {
-//                this->UpdateTreeObject();
-//            });
-//        }
-//        mCurrentSceneWidget = new SceneWidget(this);
-//        mCurrentSceneWidget->SetApp(mObjectApp,init);
-//        mLayoutForScene->addWidget(mCurrentSceneWidget);
-//        //SetSceneWidget(mWidgetForObjects);
-//        mCurrentApp = mObjectApp;
-        //ui->mScene->SetApp(mObjectApp);
     } else if (index == 1) {
         mWidgetForObjects->hide();
         mWidgetForScene->show();
         mCurrentSceneWidget = mWidgetForScene;
-//        mCurrentSceneWidget->hide();
-//        mLayoutForScene->removeWidget(mCurrentSceneWidget);
-//        delete mCurrentSceneWidget;
-//        bool init = false;
-//        if (mSceneApp == nullptr) {
-//            mSceneApp = new CSceneEditorApp();
-//            init = true;
-//        }
-//        mCurrentSceneWidget = new SceneWidget(this);
-//        mCurrentSceneWidget->SetApp(mSceneApp, init);
-//        mCurrentApp = mSceneApp;
-//        mLayoutForScene->addWidget(mCurrentSceneWidget);
-        //ui->mScene->SetApp(mSceneApp);
+        mObjectApp->GetTemplateSystem().Store();
+        mSceneApp->GetTemplateSystem().Load();
+        UpdateTreeObject(ui->mTreeTemplates,mSceneApp);
     }
 }
