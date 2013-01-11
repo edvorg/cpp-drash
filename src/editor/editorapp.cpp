@@ -35,41 +35,19 @@ using namespace greng;
 
 namespace drash {
 
+// const
+const float CObjectEditorApp::MOVING_SPEED = 60.0f;
+
+
 bool CObjectEditorApp::Init()
 {
     if (CApp::Init() == false) {
         return false;
     }
 
-    auto t = GetTemplateSystem().CreateSceneObjectTemplate("name1");
-    if (t != nullptr)
-    {
-        t->mFigures.resize(1);
-        t->mFigures[0].mVertices.push_back(CVec2f(-2, -1));
-        t->mFigures[0].mVertices.push_back(CVec2f(2, -1));
-        t->mFigures[0].mVertices.push_back(CVec2f(1, 1));
-        t->mFigures[0].mVertices.push_back(CVec2f(-1, 1));
-    }
-    t = GetTemplateSystem().CreateSceneObjectTemplate("name2");
-    if (t != nullptr)
-    {
-        t->mFigures.resize(1);
-        t->mFigures[0].mVertices.push_back(CVec2f(2, 1));
-        t->mFigures[0].mVertices.push_back(CVec2f(-2, 1));
-        t->mFigures[0].mVertices.push_back(CVec2f(-1, -1));
-        t->mFigures[0].mVertices.push_back(CVec2f(1, -1));
-    }
-    t = GetTemplateSystem().CreateSceneObjectTemplate("ground");
-    if (t != nullptr)
-    {
-        t->mFigures.resize(1);
-        t->mFigures[0].mDepth = 10;
-        t->mFigures[0].mVertices.push_back(CVec2f(50, 5));
-        t->mFigures[0].mVertices.push_back(CVec2f(-50, 5));
-        t->mFigures[0].mVertices.push_back(CVec2f(-50, -5));
-        t->mFigures[0].mVertices.push_back(CVec2f(50, -5));
-    }
     SetProcessors();
+    SetCameraProcessors();
+    GetTemplateSystem().Load();
 
     CCameraParams cp;
     cp.mPos.Set(10,10,10.0f);
@@ -81,10 +59,11 @@ bool CObjectEditorApp::Init()
     {
         return false;
     }
+
     this->GetDebugRenderer().SetCamera(mCamera);
 
-    greng::CVertexShader *v = GetVertexShaderManager().CreateShaderFromFile("shader2.120.vs");
-    greng::CFragmentShader *f = GetFragmentShaderManager().CreateShaderFromFile("shader2.120.fs");
+    greng::CVertexShader *v = GetVertexShaderManager().CreateShaderFromFile("shaders/shader2.120.vs");
+    greng::CFragmentShader *f = GetFragmentShaderManager().CreateShaderFromFile("shaders/shader2.120.fs");
 
     CShaderProgram* shaderProgram = GetShaderProgramManager().CreateProgram(v, f);
 
@@ -101,6 +80,8 @@ bool CObjectEditorApp::Init()
 
     mTreeRefreshHandler();
     mMoveablePoint.SetCamera(mCamera);
+
+    mTimer.Reset(true);
     return true;
 }
 
@@ -108,12 +89,15 @@ void CObjectEditorApp::Step(double _dt)
 {
     CApp::Step(_dt);
 
+    mTimer.Tick();
+
     mPointLight.mPosition = GetCamera()->GetPos();
 
     if (mState == MoveOfAxisState && mSelectedFigure != nullptr) {
         mMoveablePoint.SetCursorPos(GetCursorPos());
         mMoveablePoint.Step(_dt);
     }
+
 }
 
 void CObjectEditorApp::Render()
@@ -175,6 +159,12 @@ void CObjectEditorApp::Render()
     }
 }
 
+void CObjectEditorApp::Release()
+{
+    GetTemplateSystem().Store();
+    CApp::Release();
+}
+
 void CObjectEditorApp::StartBuild()
 {
     mState = BuildState;
@@ -183,10 +173,11 @@ void CObjectEditorApp::StartBuild()
 
 void CObjectEditorApp::SetProcessors()
 {
+
     GetEventSystem().SetProcessor("LB", CAppEventProcessor(
     [this] ()
     {
-        LOG_INFO("Click !!! " << mState);
+//        LOG_INFO("Click !!! " << mState);
         switch ( mState ) {
             case BuildState:{
                 if (mCurrentObject != nullptr)
@@ -201,9 +192,6 @@ void CObjectEditorApp::SetProcessors()
                 plane.SetNormal(CVec3f(0, 0, 1));
 
                 mCamera->CastRay(GetCursorPos(), plane, mOldPositionCursor);
-
-                if (mSelectedFigure == nullptr)
-                    LOG_INFO("NOOOO");
 
                 break;
             }
@@ -225,7 +213,6 @@ void CObjectEditorApp::SetProcessors()
     [this] ()
     {
         if (mSelectedFigure != nullptr && mState == MoveState) {
-//            LOG_INFO("Move figure now");
             MoveFigure();
         }
 
@@ -281,6 +268,58 @@ void CObjectEditorApp::SetProcessors()
         }
     }
     ));
+}
+
+void CObjectEditorApp::SetCameraProcessors()
+{
+
+    GetEventSystem().SetProcessor("MB", CAppEventProcessor(
+    [this] ()
+    {
+        mCamRotFirstClick = GetCursorPos();
+    },
+    [this] ()
+    {
+        CVec2f new_pos = GetCursorPos();
+
+        CVec2f rot = mCamera->GetRotation().Get();
+        rot.mY -= new_pos.mX - mCamRotFirstClick.mX;
+        rot.mX += new_pos.mY - mCamRotFirstClick.mY;
+
+        mCamera->GetRotation().Set(rot);
+
+        mCamRotFirstClick = new_pos;
+    }));
+
+    GetEventSystem().SetProcessor("w", CAppEventProcessor(
+    [this] () {},
+    [this] ()
+    {
+        mCamera->Forward(MOVING_SPEED * mTimer.GetDeltaTime());
+    },
+    [this]{}
+    ));
+
+    GetEventSystem().SetProcessor("a", CAppEventProcessor(
+    [this] () {},
+    [this] ()
+    {
+        mCamera->Strafe(MOVING_SPEED * mTimer.GetDeltaTime());
+    }));
+
+    GetEventSystem().SetProcessor("s", CAppEventProcessor(
+    [this] () {},
+    [this] ()
+    {
+        mCamera->Forward(-MOVING_SPEED * mTimer.GetDeltaTime());
+    }));
+
+    GetEventSystem().SetProcessor("d", CAppEventProcessor(
+    [this] () {},
+    [this] ()
+    {
+        mCamera->Strafe(-MOVING_SPEED * mTimer.GetDeltaTime());
+    }));
 }
 
 bool CObjectEditorApp::BuildFigure(const std::string &_objectName)

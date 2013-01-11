@@ -27,7 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../app/app.h"
 #include "../misc/moveablepoint.h"
-
+#include "../diag/timer.h"
 namespace drash {
 
 enum State {
@@ -44,7 +44,7 @@ public:
     virtual bool Init() override;
     virtual void Step(double _dt) override;
     inline virtual void Render() override;
-
+    virtual void Release() override;
     void StartBuild();
 
     inline bool IsStartBuild()const;
@@ -68,10 +68,14 @@ public:
     void SaveCurrentObject();
 
     inline greng::CCamera *GetCamera();
+
+//    SceneWidget *mSceneWidget = nullptr;
 private:
     float GetCurDepth();
 
     void SetProcessors();
+
+    void SetCameraProcessors();
 
     bool ValidateFigure();
 
@@ -90,6 +94,7 @@ private:
     void SettingCenterFigure();
 
     void MoveOfAxis();
+
 private:
     CSceneObject *mCurrentObject = nullptr;
 
@@ -105,8 +110,9 @@ private:
 
     CVec3f mOldPositionCursor = CVec3f(0);
 
-//    bool StetchBegin = false;
     CVec2f mCurrentFigureVertex;
+
+    CVec2f mCamRotFirstClick;
 
     int mVertexIndex = -1;
 
@@ -120,6 +126,9 @@ private:
 
     CVec3f mOldCenterFigure;
 
+    CTimer mTimer;
+
+    static const float MOVING_SPEED;
 };
 
 inline bool CObjectEditorApp::IsStartBuild()const {
