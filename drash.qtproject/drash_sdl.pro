@@ -69,7 +69,9 @@ SOURCES += \
     ../src/misc/moveablepoint.cpp \
     ../src/levelmanager/level.cpp \
     ../src/levelmanager/levelmanager.cpp \
-    ../src/test/test8.cpp
+    ../src/test/test8.cpp \
+    ../src/misc/rotationablepoint.cpp \
+    ../src/test/test9.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -134,5 +136,7 @@ HEADERS += \
     ../src/misc/moveablepoint.h \
     ../src/levelmanager/level.h \
     ../src/levelmanager/levelmanager.h \
-    ../src/test/test8.h
+    ../src/test/test8.h \
+    ../src/misc/rotationablepoint.h \
+    ../src/test/test9.h
 

@@ -40,7 +40,7 @@ public:
     CTest8() = default;
 
 private:
-    bool Init() override;
+    virtual bool Init() override;
     bool InitUI();
     bool InitLevels();
     bool InitCamera();

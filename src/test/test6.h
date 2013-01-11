@@ -40,9 +40,9 @@ public:
     CTest6() = default;
 
 protected:
-    bool Init() override;
-    void Step(double _dt) override;
-    void Render() override;
+    virtual bool Init() override;
+    virtual void Step(double _dt) override;
+    virtual void Render() override;
 
 private:
     bool InitPlayer();
