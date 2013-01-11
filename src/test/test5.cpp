@@ -210,8 +210,8 @@ void CTest5::SetupMeshes()
 {
     mMesh1 = GetMeshManager().CreateMeshCube();
     mMesh2 = GetMeshManager().CreateMeshQuad();
-    mMesh3 = GetMeshManager().CreateMeshFromObjFile("mt.obj");
-    mMesh4 = GetMeshManager().CreateMeshFromObjFile("RB-BumbleBee.obj");
+    mMesh3 = GetMeshManager().CreateMeshFromObjFile("assets/mt.obj");
+    mMesh4 = GetMeshManager().CreateMeshFromObjFile("assets/RB-BumbleBee.obj");
 
     GetMeshManager().ComputeNormals(mMesh3);
     GetMeshManager().ComputeNormals(mMesh4);
@@ -234,21 +234,21 @@ void CTest5::SetupMeshes()
 void CTest5::SetupTextures()
 {
     mTex1 = GetTextureManager().CreateTextureDummy();
-    mTex2 = GetTextureManager().CreateTextureFromFile("tux.png");
-    mTex3 = GetTextureManager().CreateTextureFromFile("RB_MegatronBodyT2_MATINST.png");
-    mTex4 = GetTextureManager().CreateTextureFromFile("RB_MegatronHead_MATINST.png");
-    mTex5 = GetTextureManager().CreateTextureFromFile("RB_MegatronArmFeet_MATINST.png");
-    mTex6 = GetTextureManager().CreateTextureFromFile("wall5.png");
-    mTex7 = GetTextureManager().CreateTextureFromFile("RB_Bumblebee_TEXTSET_Color_NormX.png");
+    mTex2 = GetTextureManager().CreateTextureFromFile("assets/tux.png");
+    mTex3 = GetTextureManager().CreateTextureFromFile("assets/RB_MegatronBodyT2_MATINST.png");
+    mTex4 = GetTextureManager().CreateTextureFromFile("assets/RB_MegatronHead_MATINST.png");
+    mTex5 = GetTextureManager().CreateTextureFromFile("assets/RB_MegatronArmFeet_MATINST.png");
+    mTex6 = GetTextureManager().CreateTextureFromFile("assets/wall5.png");
+    mTex7 = GetTextureManager().CreateTextureFromFile("assets/RB_Bumblebee_TEXTSET_Color_NormX.png");
 }
 
 void CTest5::SetupShaders()
 {
-    mVertexShader1 = GetVertexShaderManager().CreateShaderFromFile("shader1.120.vs");
-    mFragmentShader1 = GetFragmentShaderManager().CreateShaderFromFile("shader1.120.fs");
+    mVertexShader1 = GetVertexShaderManager().CreateShaderFromFile("shaders/shader1.120.vs");
+    mFragmentShader1 = GetFragmentShaderManager().CreateShaderFromFile("shaders/shader1.120.fs");
     mShaderProgram1 = GetShaderProgramManager().CreateProgram(mVertexShader1, mFragmentShader1);
-    mVertexShader2 = GetVertexShaderManager().CreateShaderFromFile("shader2.120.vs");
-    mFragmentShader2 = GetFragmentShaderManager().CreateShaderFromFile("shader2.120.fs");
+    mVertexShader2 = GetVertexShaderManager().CreateShaderFromFile("shaders/shader2.120.vs");
+    mFragmentShader2 = GetFragmentShaderManager().CreateShaderFromFile("shaders/shader2.120.fs");
     mShaderProgram2 = GetShaderProgramManager().CreateProgram(mVertexShader2, mFragmentShader2);
 }
 

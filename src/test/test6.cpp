@@ -214,7 +214,7 @@ bool CTest6::InitPlayer()
         return false;
     }
 
-    mPlayer1Mesh = GetMeshManager().CreateMeshFromObjFile("player.obj");
+    mPlayer1Mesh = GetMeshManager().CreateMeshFromObjFile("assets/player.obj");
 
     if (mPlayer1Mesh == nullptr)
     {
@@ -230,14 +230,14 @@ bool CTest6::InitPlayer()
         return false;
     }
 
-    mPlayer1VertexShader = GetVertexShaderManager().CreateShaderFromFile("shader2.120.vs");
+    mPlayer1VertexShader = GetVertexShaderManager().CreateShaderFromFile("shaders/shader2.120.vs");
 
     if (mPlayer1VertexShader == nullptr)
     {
         return false;
     }
 
-    mPlayer1FragmentShader = GetFragmentShaderManager().CreateShaderFromFile("shader2.120.fs");
+    mPlayer1FragmentShader = GetFragmentShaderManager().CreateShaderFromFile("shaders/shader2.120.fs");
 
     if (mPlayer1FragmentShader == nullptr)
     {

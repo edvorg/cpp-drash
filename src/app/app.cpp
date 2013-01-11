@@ -60,8 +60,8 @@ bool CApp::Init()
         return false;
     }
 
-    greng::CVertexShader *vs = mVertexShaderManager.CreateShaderFromFile("shader2.120.vs");
-    greng::CFragmentShader *fs = mFragmentShaderManager.CreateShaderFromFile("shader2.120.fs");
+    greng::CVertexShader *vs = mVertexShaderManager.CreateShaderFromFile("shaders/shader2.120.vs");
+    greng::CFragmentShader *fs = mFragmentShaderManager.CreateShaderFromFile("shaders/shader2.120.fs");
     greng::CShaderProgram *sp = mShaderProgramManager.CreateProgram(vs, fs);
 
     if (sp == nullptr)

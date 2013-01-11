@@ -80,7 +80,7 @@ void CTest7::Step(double _dt)
 
 bool CTest7::InitTextures()
 {
-    mDebugTexture = GetTextureManager().CreateTextureFromFile("wall5.png");
+    mDebugTexture = GetTextureManager().CreateTextureFromFile("assets/wall5.png");
 
     if (mDebugTexture == nullptr)
     {
@@ -92,8 +92,8 @@ bool CTest7::InitTextures()
 
 bool CTest7::InitShaders()
 {
-    greng::CVertexShader *v = GetVertexShaderManager().CreateShaderFromFile("shader2.120.vs");
-    greng::CFragmentShader *f = GetFragmentShaderManager().CreateShaderFromFile("shader2.120.fs");
+    greng::CVertexShader *v = GetVertexShaderManager().CreateShaderFromFile("shaders/shader2.120.vs");
+    greng::CFragmentShader *f = GetFragmentShaderManager().CreateShaderFromFile("shaders/shader2.120.fs");
 
     mProgram = GetShaderProgramManager().CreateProgram(v, f);
 

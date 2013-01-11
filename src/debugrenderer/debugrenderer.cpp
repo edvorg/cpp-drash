@@ -308,7 +308,7 @@ CFigure *CDebugRenderer::FindFigure(const greng::CCamera *_camera, const CVec2f 
 
 bool CDebugRenderer::InitTextures()
 {
-    mTexture1 = GetTextureManager()->CreateTextureFromFile("wall2_diffuse.png");
+    mTexture1 = GetTextureManager()->CreateTextureFromFile("assets/wall2_diffuse.png");
 
     if (mTexture1 == nullptr)
     {
