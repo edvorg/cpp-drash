@@ -57,7 +57,7 @@ EditorWindow::EditorWindow(QWidget *parent) :
 
     this->setWindowTitle("DRASH Editor");
 
-    if (this->InitScene()) {
+    if (this->InitScene() == false) {
         close();
     }
 
@@ -90,16 +90,9 @@ bool EditorWindow::InitScene()
         return false;
     }
 
-//    if (mObjectApp->Init() == false) {
-//        LOG_ERR("Editor window can't init");
-//        return false;
-//    }
-//    mObjectApp->GetDebugDrawSystem().GetActiveCam()->SetOrtho(true);
-//    mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetOrthoWidth().Set(120);
     ui->mScene->SetApp(mObjectApp);
     mCurrentApp = mObjectApp;
-//    mObjectApp->GetCamera()->GetPos().Set(CVec3f(0, 50, 100));
-//    mObjectApp->GetCamera()->GetRotation().Set(CVec3f(-M_PI / 6, 0, 0));
+    //mObjectApp->mSceneWidget = ui->mScene;
     return true;
 }
 
@@ -107,7 +100,7 @@ void EditorWindow::timerEvent(QTimerEvent *)
 {
     mTimer.Tick();
 
-    if (mObjectApp != nullptr)
+    if (mObjectApp != nullptr && ui->mScene->GetApp() != nullptr)
     {
         mObjectApp->Step(0);
     }

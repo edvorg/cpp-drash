@@ -22,58 +22,18 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#ifndef MATH_H
-#define MATH_H
+#ifndef SCENEEDITORAPP_H
+#define SCENEEDITORAPP_H
 
-#include <cstdlib>
+#include "../app/app.h"
 
-namespace drash
+namespace drash {
+
+class CSceneEditorApp : public CApp
 {
-
-namespace math
-{
-
-template<typename T>
-inline const T &Max(const T &_a, const T &_b)
-{
-    return _a > _b ? _a : _b;
-}
-
-template<typename T>
-inline const T &Min(const T &_a, const T &_b)
-{
-    return _a < _b ? _a : _b;
-}
-
-template<typename T>
-inline const T &Clamp(const T &_val, const T &_min, const T &_max)
-{
-    return Max( Min( _val, _max ), _min );
-}
-
-template<typename T>
-inline T Abs(const T &_val)
-{
-    return _val < 0 ? -_val : _val;
-}
-
-template<typename T>
-T Rand(const T &_min, const T &_max, const T &_step)
-{
-    return ::rand() %
-           static_cast<int>( ( _max - _min ) / _step + 1 ) *
-           _step +
-           _min;
-}
-
-template<typename T>
-inline int Sign(T _value)
-{
-    return _value < 0.0 ? -1 : 1;
-}
-
-} // namespace math
+public:
+    CSceneEditorApp();
+};
 
 } // namespace drash
-
-#endif // MATH_H
+#endif // SCENEEDITORAPP_H

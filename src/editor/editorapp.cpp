@@ -35,41 +35,19 @@ using namespace greng;
 
 namespace drash {
 
+// const
+const float CObjectEditorApp::MOVING_SPEED = 60.0f;
+
+
 bool CObjectEditorApp::Init()
 {
     if (CApp::Init() == false) {
         return false;
     }
 
-    auto t = GetTemplateSystem().CreateSceneObjectTemplate("name1");
-    if (t != nullptr)
-    {
-        t->mFigures.resize(1);
-        t->mFigures[0].mVertices.push_back(CVec2f(-2, -1));
-        t->mFigures[0].mVertices.push_back(CVec2f(2, -1));
-        t->mFigures[0].mVertices.push_back(CVec2f(1, 1));
-        t->mFigures[0].mVertices.push_back(CVec2f(-1, 1));
-    }
-    t = GetTemplateSystem().CreateSceneObjectTemplate("name2");
-    if (t != nullptr)
-    {
-        t->mFigures.resize(1);
-        t->mFigures[0].mVertices.push_back(CVec2f(2, 1));
-        t->mFigures[0].mVertices.push_back(CVec2f(-2, 1));
-        t->mFigures[0].mVertices.push_back(CVec2f(-1, -1));
-        t->mFigures[0].mVertices.push_back(CVec2f(1, -1));
-    }
-    t = GetTemplateSystem().CreateSceneObjectTemplate("ground");
-    if (t != nullptr)
-    {
-        t->mFigures.resize(1);
-        t->mFigures[0].mDepth = 10;
-        t->mFigures[0].mVertices.push_back(CVec2f(50, 5));
-        t->mFigures[0].mVertices.push_back(CVec2f(-50, 5));
-        t->mFigures[0].mVertices.push_back(CVec2f(-50, -5));
-        t->mFigures[0].mVertices.push_back(CVec2f(50, -5));
-    }
     SetProcessors();
+    SetCameraProcessors();
+    GetTemplateSystem().Load();
 
     CCameraParams cp;
     cp.mPos.Set(10,10,10.0f);
@@ -81,10 +59,11 @@ bool CObjectEditorApp::Init()
     {
         return false;
     }
+
     this->GetDebugRenderer().SetCamera(mCamera);
 
-    greng::CVertexShader *v = GetVertexShaderManager().CreateShaderFromFile("shader2.120.vs");
-    greng::CFragmentShader *f = GetFragmentShaderManager().CreateShaderFromFile("shader2.120.fs");
+    greng::CVertexShader *v = GetVertexShaderManager().CreateShaderFromFile("shaders/shader2.120.vs");
+    greng::CFragmentShader *f = GetFragmentShaderManager().CreateShaderFromFile("shaders/shader2.120.fs");
 
     CShaderProgram* shaderProgram = GetShaderProgramManager().CreateProgram(v, f);
 
@@ -101,6 +80,8 @@ bool CObjectEditorApp::Init()
 
     mTreeRefreshHandler();
     mMoveablePoint.SetCamera(mCamera);
+
+    mTimer.Reset(true);
     return true;
 }
 
@@ -108,12 +89,15 @@ void CObjectEditorApp::Step(double _dt)
 {
     CApp::Step(_dt);
 
+    mTimer.Tick();
+
     mPointLight.mPosition = GetCamera()->GetPos();
 
     if (mState == MoveOfAxisState && mSelectedFigure != nullptr) {
         mMoveablePoint.SetCursorPos(GetCursorPos());
         mMoveablePoint.Step(_dt);
     }
+
 }
 
 void CObjectEditorApp::Render()
@@ -175,6 +159,12 @@ void CObjectEditorApp::Render()
     }
 }
 
+void CObjectEditorApp::Release()
+{
+    GetTemplateSystem().Store();
+    CApp::Release();
+}
+
 void CObjectEditorApp::StartBuild()
 {
     mState = BuildState;
@@ -183,14 +173,18 @@ void CObjectEditorApp::StartBuild()
 
 void CObjectEditorApp::SetProcessors()
 {
+
     GetEventSystem().SetProcessor("LB", CAppEventProcessor(
     [this] ()
     {
-        LOG_INFO("Click !!! " << mState);
+//        LOG_INFO("Click !!! " << mState);
         switch ( mState ) {
             case BuildState:{
                 if (mCurrentObject != nullptr)
                     mVertexs.push_back(GetCursorPos());
+                if ( IsConvex() == false ) {
+                    mVertexs.pop_back();
+                }
                 break;
             }
             case MoveState:{
@@ -201,9 +195,6 @@ void CObjectEditorApp::SetProcessors()
                 plane.SetNormal(CVec3f(0, 0, 1));
 
                 mCamera->CastRay(GetCursorPos(), plane, mOldPositionCursor);
-
-                if (mSelectedFigure == nullptr)
-                    LOG_INFO("NOOOO");
 
                 break;
             }
@@ -225,7 +216,6 @@ void CObjectEditorApp::SetProcessors()
     [this] ()
     {
         if (mSelectedFigure != nullptr && mState == MoveState) {
-//            LOG_INFO("Move figure now");
             MoveFigure();
         }
 
@@ -267,8 +257,8 @@ void CObjectEditorApp::SetProcessors()
             case MoveOfAxisState:{
                 mSelectedFigure = SelectFigure(GetCursorPos());
 
-                if (mSelectedFigure == nullptr)
-                    LOG_INFO("NOOOO 2");
+//                if (mSelectedFigure == nullptr)
+//                    LOG_INFO("NOOOO 2");
                 SettingCenterFigure();
                 break;
             }
@@ -283,20 +273,76 @@ void CObjectEditorApp::SetProcessors()
     ));
 }
 
+void CObjectEditorApp::SetCameraProcessors()
+{
+
+    GetEventSystem().SetProcessor("MB", CAppEventProcessor(
+    [this] ()
+    {
+        mCamRotFirstClick = GetCursorPos();
+    },
+    [this] ()
+    {
+        CVec2f new_pos = GetCursorPos();
+
+        CVec2f rot = mCamera->GetRotation().Get();
+        rot.mY -= new_pos.mX - mCamRotFirstClick.mX;
+        rot.mX += new_pos.mY - mCamRotFirstClick.mY;
+
+        mCamera->GetRotation().Set(rot);
+
+        mCamRotFirstClick = new_pos;
+    }));
+
+    GetEventSystem().SetProcessor("w", CAppEventProcessor(
+    [this] () {},
+    [this] ()
+    {
+        mCamera->Forward(MOVING_SPEED * mTimer.GetDeltaTime());
+    },
+    [this]{}
+    ));
+
+    GetEventSystem().SetProcessor("a", CAppEventProcessor(
+    [this] () {},
+    [this] ()
+    {
+        mCamera->Strafe(MOVING_SPEED * mTimer.GetDeltaTime());
+    }));
+
+    GetEventSystem().SetProcessor("s", CAppEventProcessor(
+    [this] () {},
+    [this] ()
+    {
+        mCamera->Forward(-MOVING_SPEED * mTimer.GetDeltaTime());
+    }));
+
+    GetEventSystem().SetProcessor("d", CAppEventProcessor(
+    [this] () {},
+    [this] ()
+    {
+        mCamera->Strafe(-MOVING_SPEED * mTimer.GetDeltaTime());
+    }));
+}
+
 bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
 {
     if (mVertexs.size() < 3 || mCurrentObject == nullptr) {
         return false;
     }
     if (ValidateFigure() == false) {
-        LOG_ERR("This figure can't build");
-        return false;
+        std::reverse(mVertexs.begin() , mVertexs.end());
+        if (ValidateFigure() == false) {
+            LOG_ERR("This figure can't build, canceled");
+            return false;
+        }
     }
 
     auto obj = GetTemplateSystem().FindTemplate(_objectName);
     if (obj == nullptr) {
         return false;
     }
+
     CFigureParams param;
     std::for_each(mVertexs.begin() , mVertexs.end() , [this] (CVec2f &v)
     {
@@ -338,6 +384,36 @@ void CObjectEditorApp::ShowObject(const std::string &_name)
 // TODO: Implements this!
 bool CObjectEditorApp::ValidateFigure()
 {
+    if (mVertexs.size() < 3 ) {
+        return false;
+    }
+
+    /// Box2d code
+
+    float area = 0.0f;
+
+    CVec2f pRef(0.0f, 0.0f);
+
+    std::vector<drash::CVec2f> & vs = mVertexs;
+
+    for (unsigned int i = 0; i < vs.size(); ++i)
+    {
+            CVec2f p1 = pRef;
+            CVec2f p2 = vs[i];
+            CVec2f p3 = i + 1 < vs.size() ? vs[i+1] : vs[0];
+
+            CVec2f e1 = p2 - p1;
+            CVec2f e2 = p3 - p1;
+            float D = e1.mX * e2.mY - e1.mY * e2.mX;
+            float triangleArea = 0.5f * D;
+            area += triangleArea;
+    }
+    const float espilion = 1.19209289550781250000e-7F;
+
+    if (area <= espilion) {
+        return false;
+    }
+
     return true;
 }
 
@@ -534,7 +610,28 @@ void CObjectEditorApp::MoveOfAxis()
 
     mSelectedFigure->SetZ(mSelectedFigure->GetZ() + newCenter.mZ - mOldCenterFigure.mZ);
     mOldCenterFigure = newCenter;
-    //SettingCenterFigure();
+}
+
+
+bool CObjectEditorApp::IsConvex() const
+{
+    if (mVertexs.size() <= 3)
+        return true;
+
+    int res = math::Sign((mVertexs[1].mX - mVertexs[0].mX) * (mVertexs[2].mY-mVertexs[0].mY) -
+            (mVertexs[2].mX - mVertexs[0].mX) * (mVertexs[1].mY-mVertexs[0].mY) );
+
+    const int N = mVertexs.size();
+
+    for (int i = 1; i < N; i++){
+        float buf = (mVertexs[(i+1)%N].mX - mVertexs[i].mX) * (mVertexs[(i+2)%N].mY-mVertexs[i].mY) -
+                (mVertexs[(i+2)%N].mX - mVertexs[i].mX) * (mVertexs[(i+1)%N].mY-mVertexs[i].mY);
+        if ( res != math::Sign(buf) ) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void CObjectEditorApp::ActiveStretchMode()
