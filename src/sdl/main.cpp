@@ -36,8 +36,8 @@ EventKey ConvertKey(SDLKey _key);
 EventKey ConvertButton(int _button);
 void WindowSpaceToScreenSpace(CVec2f &_from);
 
-const double gWindowWidth = 1366;
-const double gWindowHeight = 700;
+static double gWindowWidth = 1366;
+static double gWindowHeight = 700;
 
 int main(int _argc, char **_argv)
 {
@@ -74,6 +74,8 @@ int main(int _argc, char **_argv)
         LOG_ERR("SDL_SetVideoMode() failed");
         fail = true;
     }
+
+    glViewport(0, 0, gWindowWidth, gWindowHeight);
 
     if (glewInit() != GLEW_OK)
     {
@@ -179,6 +181,23 @@ int main(int _argc, char **_argv)
                     else if (e.type == SDL_MOUSEMOTION)
                     {
                         update_cursor(e.motion.x, e.motion.y);
+                    }
+                    else if (e.type == SDL_VIDEORESIZE)
+                    {
+                        gWindowWidth = e.resize.w;
+                        gWindowHeight = e.resize.h;
+                        if (SDL_SetVideoMode(gWindowWidth, gWindowHeight, 32, SDL_HWSURFACE |
+                                             SDL_OPENGL |
+                                             SDL_GL_DOUBLEBUFFER) == nullptr)
+                        {
+                            LOG_ERR("SDL_SetVideoMode() failed");
+                            exit = true;
+                        }
+
+                        glViewport(0, 0, gWindowWidth, gWindowHeight);
+                        app->GetCameraManager().SetAspectRatio(gWindowWidth / gWindowHeight);
+                        app->GetUISystem().SetAspectRatio(gWindowWidth / gWindowHeight);
+                        app->GetUISystem().SetWidth(gWindowWidth);
                     }
                 }
 
