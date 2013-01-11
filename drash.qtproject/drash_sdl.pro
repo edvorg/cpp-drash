@@ -41,7 +41,6 @@ SOURCES += \
     ../src/players/player.cpp \
     ../src/scene/physobserver.cpp \
     ../src/scene/figure.cpp \
-    ../src/misc/segment2.cpp \
     ../src/misc/ray.cpp \
     ../src/misc/plane.cpp \
     ../src/misc/matrix4.cpp \
@@ -96,7 +95,6 @@ HEADERS += \
     ../src/misc/vec4.h \
     ../src/misc/vec3.h \
     ../src/misc/vec2.h \
-    ../src/misc/segment2.h \
     ../src/misc/ray.h \
     ../src/misc/plane.h \
     ../src/misc/matrix4.h \

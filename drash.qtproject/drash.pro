@@ -67,7 +67,6 @@ SOURCES += ../src/qt/main.cpp\
     ../src/editor/editorapp.cpp \
     ../src/diag/logger.cpp \
     ../src/diag/timer.cpp \
-    ../src/misc/segment2.cpp \
     ../src/greng/meshmanager.cpp \
     ../src/greng/renderer.cpp \
     ../src/greng/loadmeshobj.cpp \
@@ -128,7 +127,6 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/test/test3.h \
     ../src/scene/scene.h \
     ../src/test/test1.h \
-    ../src/misc/segment2.h \
     ../src/misc/color3.h \
     ../src/misc/color4.h \
     ../src/greng/meshmanager.h \
