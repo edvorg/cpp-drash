@@ -82,7 +82,7 @@ SOURCES += ../src/qt/main.cpp\
     ../src/misc/moveablepoint.cpp \
     ../src/levelmanager/level.cpp \
     ../src/levelmanager/levelmanager.cpp \
-    ../src/test/test8.cpp
+    ../src/test/test8.cpp \
     ../src/editor/sceneeditorapp.cpp
 
 HEADERS  += ../src/qt/gamewindow.h \
@@ -153,7 +153,7 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/misc/moveablepoint.h \
     ../src/levelmanager/level.h \
     ../src/levelmanager/levelmanager.h \
-    ../src/test/test8.h
+    ../src/test/test8.h \
     ../src/editor/sceneeditorapp.h
 
 FORMS    += ../src/qt/gamewindow.ui \
