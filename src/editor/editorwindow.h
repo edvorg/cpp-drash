@@ -27,8 +27,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QMainWindow>
 #include "../diag/timer.h"
+#include "../qt/scenewidget.h"
 #include <QActionGroup>
-
+#include <QHBoxLayout>
 class QTreeWidgetItem;
 class QLabel;
 
@@ -36,6 +37,7 @@ namespace drash
 {
     class CObjectEditorApp;
     class CApp;
+    class CSceneEditorApp;
 }
 
 namespace Ui
@@ -67,16 +69,20 @@ private slots:
 private:
     Ui::EditorWindow *ui;
     bool InitScene();
-    drash::CObjectEditorApp  *mObjectApp = nullptr;
-
+    drash::CObjectEditorApp  * mObjectApp = nullptr;
+    drash::CSceneEditorApp * mSceneApp = nullptr;
     drash::CApp * mCurrentApp = nullptr;
 
-    void timerEvent(QTimerEvent *) override;
+    virtual void timerEvent(QTimerEvent *) override;
 
+    SceneWidget * mWidgetForScene = nullptr;
+    SceneWidget * mWidgetForObjects = nullptr;
+    SceneWidget * mCurrentSceneWidget = nullptr;
     //drash::CSceneObject * mCurrentObject = nullptr;
 
     // Actions
 private:
+    // for editor object
     QAction *mQuit;
     QAction *mRemoveAction;
     QAction *mSaveAction;
@@ -91,16 +97,21 @@ private:
 
     // Slots for Actions
 private slots:
+    // for edtitor object
     void CreateNewObject();
     void AddNewFigure();
     void MoveActive();
     void MoveOfAxisActive();
     void StretchActive();
+
+
     void ZoomUp();
     void ZoomDown();
 
-    // GuiObjects
+    void on_mManageWidget_currentChanged(int index);
+
 private:
+    // GuiObjects
     QLabel *mLabelOfStatusBar;
 
 private:
@@ -111,6 +122,11 @@ private:
     drash::CTimer mTimer;
 
     void AddFigure();
+
+private:
+    QHBoxLayout * mLayoutForScene;
+
+    void SetSceneWidget(SceneWidget * _widget);
 public:
 
 };

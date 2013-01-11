@@ -45,6 +45,7 @@ public:
     virtual void Step(double _dt) override;
     inline virtual void Render() override;
     virtual void Release() override;
+
     void StartBuild();
 
     inline bool IsStartBuild()const;
@@ -159,5 +160,5 @@ inline greng::CCamera *CObjectEditorApp::GetCamera()
     return mCamera;
 }
 
-}// namespace drash
+} // namespace drash
 #endif // CEDITORAPP_H

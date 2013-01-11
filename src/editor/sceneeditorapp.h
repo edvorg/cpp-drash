@@ -33,6 +33,15 @@ class CSceneEditorApp : public CApp
 {
 public:
     CSceneEditorApp();
+
+    virtual bool Init() override;
+    virtual void Step(double _dt) override;
+    inline virtual void Render() override;
+    virtual void Release() override;
+
+private:
+    void SetProcessors();
+
 };
 
 } // namespace drash

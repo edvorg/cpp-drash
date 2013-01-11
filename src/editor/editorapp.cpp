@@ -82,6 +82,7 @@ bool CObjectEditorApp::Init()
     mMoveablePoint.SetCamera(mCamera);
 
     mTimer.Reset(true);
+
     return true;
 }
 
@@ -583,7 +584,6 @@ void CObjectEditorApp::MoveOfAxis()
     if (mSelectedFigure == nullptr) {
         return;
     }
-    qDebug() << "Move of Axis";
     CVec3f pos;
 
     CPlane plane;

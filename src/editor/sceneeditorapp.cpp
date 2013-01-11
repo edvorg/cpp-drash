@@ -23,10 +23,35 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include "sceneeditorapp.h"
-
+#include "../scene/sceneobject.h"
 namespace drash {
 
 CSceneEditorApp::CSceneEditorApp()
+{
+}
+
+bool CSceneEditorApp::Init()
+{
+    CApp::Init();
+    //GetTemplateSystem().CreateSceneObjectFromTemplate("Object1",CSceneObjectParams());
+}
+
+void CSceneEditorApp::Step(double _dt)
+{
+    CApp::Step(_dt);
+}
+
+void CSceneEditorApp::Render()
+{
+    CApp::Render();
+}
+
+void CSceneEditorApp::Release()
+{
+    CApp::Release();
+}
+
+void CSceneEditorApp::SetProcessors()
 {
 }
 

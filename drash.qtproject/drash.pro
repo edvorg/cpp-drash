@@ -43,7 +43,6 @@ SOURCES += ../src/qt/main.cpp\
     ../src/scene/figure.cpp \
     ../src/app/app.cpp \
     ../src/app/appevent.cpp \
-    ../src/editor/sceneeditor.cpp\
     ../src/scene/joint.cpp \
     ../src/app/appeventsystem.cpp \
     ../src/app/appeventprocessor.cpp \
@@ -101,7 +100,6 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/scene/figure.h \
     ../src/app/app.h \
     ../src/app/appevent.h \
-    ../src/editor/sceneeditor.h \
     ../src/scene/joint.h \
     ../src/app/appeventsystem.h \
     ../src/app/appeventprocessor.h \

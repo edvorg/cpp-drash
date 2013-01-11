@@ -38,6 +38,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../misc/vec2.h"
 #include "../greng/camera.h"
 #include "editorapp.h"
+#include "sceneeditorapp.h"
 
 #include <vector>
 #include <string>
@@ -57,20 +58,24 @@ EditorWindow::EditorWindow(QWidget *parent) :
 
     this->setWindowTitle("DRASH Editor");
 
+    mLayoutForScene = new QHBoxLayout();
+    ui->mSpike->setLayout(mLayoutForScene);
+
     if (this->InitScene() == false) {
         close();
     }
 
-    this->startTimer(0);
     this->ui->mTreeObjects->clear();
-    //this->ui->mTreeObjects->setColumnCount(2);
-//    UpdateTreeObject();
+
+    mWidgetForScene->hide();
+    mCurrentSceneWidget = mWidgetForObjects;
 
     mObjectApp->SetTreeRefreshHandler([this]()
     {
         this->UpdateTreeObject();
     });
 
+    this->startTimer(0);
 }
 
 EditorWindow::~EditorWindow()
@@ -84,15 +89,19 @@ bool EditorWindow::InitScene()
 {
     drash::CSceneParams params;
     params.mGravity.Set( 0.0f, -9.8f );
-    mObjectApp = new CObjectEditorApp();
-    if (mObjectApp == nullptr) {
-        LOG_ERR("Editor window can't init");
-        return false;
-    }
 
-    ui->mScene->SetApp(mObjectApp);
-    mCurrentApp = mObjectApp;
-    //mObjectApp->mSceneWidget = ui->mScene;
+    mSceneApp = new CSceneEditorApp();
+    mObjectApp = new CObjectEditorApp();
+
+    mWidgetForObjects = new SceneWidget(this);
+    mWidgetForScene = new SceneWidget(this);
+    mWidgetForObjects->SetApp(mObjectApp);
+    mWidgetForScene->SetApp(mSceneApp);
+
+    mLayoutForScene->addWidget(mWidgetForObjects);
+    mLayoutForScene->addWidget(mWidgetForScene);
+
+    ui->mManageWidget->setCurrentIndex(0);
     return true;
 }
 
@@ -100,12 +109,12 @@ void EditorWindow::timerEvent(QTimerEvent *)
 {
     mTimer.Tick();
 
-    if (mObjectApp != nullptr && ui->mScene->GetApp() != nullptr)
+    if (mCurrentSceneWidget->GetApp() != nullptr)
     {
-        mObjectApp->Step(0);
+        mCurrentSceneWidget->GetApp()->Step(0);
     }
 
-    ui->mScene->updateGL();
+    mCurrentSceneWidget->updateGL();
 }
 
 void EditorWindow::CreateNewObject()
@@ -147,7 +156,7 @@ void EditorWindow::StretchActive()
 
 void EditorWindow::ZoomUp()
 {
-     mObjectApp->GetCamera()->Forward(10);
+     mCurrentApp->GetDebugRenderer().GetCamera()->Forward(10);
     //    if (mCurrentApp != nullptr){
 //        CVec3f pos;
 
@@ -168,7 +177,7 @@ void EditorWindow::ZoomUp()
 
 void EditorWindow::ZoomDown()
 {
-    mObjectApp->GetCamera()->Forward(-10);
+    mCurrentApp->GetDebugRenderer().GetCamera()->Forward(-10);
 //    if (mCurrentApp != nullptr){
 //        CVec3f pos;
 
@@ -314,6 +323,18 @@ void EditorWindow::AddFigure()
     mObjectApp->BuildFigure(nameTemplate);
 }
 
+void EditorWindow::SetSceneWidget(SceneWidget *_widget)
+{
+//    if (mCurrentSceneWidget == _widget) {
+//        return;
+//    }
+
+//    mLayoutForScene->removeWidget(mCurrentSceneWidget);
+//    mLayoutForScene->addWidget(_widget);
+//    mCurrentSceneWidget = _widget;
+//    qDebug() << " widget changed ";
+}
+
 
 void EditorWindow::on_mTreeObjects_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
@@ -354,5 +375,51 @@ void EditorWindow::Remove_Object()
         UpdateTreeObject();
         //mObjectApp->ShowObject(item->text(0).toStdString());
         //mCurrentObject = mObjectApp->GetTemplateSystem().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
+    }
+}
+
+void EditorWindow::on_mManageWidget_currentChanged(int index)
+{
+//    qDebug() << " Changed " << index ;
+    if (index == 0) {
+        mWidgetForScene->hide();
+        mWidgetForObjects->show();
+        mCurrentSceneWidget = mWidgetForObjects;
+//        ui->mScene = mWidgetForObjects;
+//        mCurrentSceneWidget->hide();
+//        mLayoutForScene->removeWidget(mCurrentSceneWidget);
+//        delete mCurrentSceneWidget;
+//        bool init = false;
+//        if (mObjectApp == nullptr) {
+//            mObjectApp = new CObjectEditorApp();
+//            init = true;
+//            mObjectApp->SetTreeRefreshHandler([this]()
+//            {
+//                this->UpdateTreeObject();
+//            });
+//        }
+//        mCurrentSceneWidget = new SceneWidget(this);
+//        mCurrentSceneWidget->SetApp(mObjectApp,init);
+//        mLayoutForScene->addWidget(mCurrentSceneWidget);
+//        //SetSceneWidget(mWidgetForObjects);
+//        mCurrentApp = mObjectApp;
+        //ui->mScene->SetApp(mObjectApp);
+    } else if (index == 1) {
+        mWidgetForObjects->hide();
+        mWidgetForScene->show();
+        mCurrentSceneWidget = mWidgetForScene;
+//        mCurrentSceneWidget->hide();
+//        mLayoutForScene->removeWidget(mCurrentSceneWidget);
+//        delete mCurrentSceneWidget;
+//        bool init = false;
+//        if (mSceneApp == nullptr) {
+//            mSceneApp = new CSceneEditorApp();
+//            init = true;
+//        }
+//        mCurrentSceneWidget = new SceneWidget(this);
+//        mCurrentSceneWidget->SetApp(mSceneApp, init);
+//        mCurrentApp = mSceneApp;
+//        mLayoutForScene->addWidget(mCurrentSceneWidget);
+        //ui->mScene->SetApp(mSceneApp);
     }
 }
