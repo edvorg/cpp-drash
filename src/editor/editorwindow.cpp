@@ -29,6 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <QStringList>
 #include <QLabel>
 #include <QStatusBar>
+#include <QToolBar>
 #include <QDebug>
 
 #include "../scene/scene.h"
@@ -51,8 +52,14 @@ EditorWindow::EditorWindow(QWidget *parent) :
     mModeActions(parent)
 {
     ui->setupUi(this);
+
+    mSceneToolbar = new QToolBar(this);
+    mObjectToolBar = new QToolBar(this);
+    this->addToolBar(mSceneToolbar);
+    this->addToolBar(mObjectToolBar);
     CreateActions();
     mModeActions.setExclusive(true);
+
     mLabelOfStatusBar = new QLabel("Editor Object");
     this->statusBar()->addWidget(mLabelOfStatusBar);
 
@@ -75,6 +82,7 @@ EditorWindow::EditorWindow(QWidget *parent) :
         this->UpdateTreeObject(ui->mTreeObjects,mObjectApp);
     });
 
+    mSceneToolbar->hide();
     this->startTimer(0);
 }
 
@@ -245,6 +253,12 @@ void EditorWindow::CreateActions()
             this,SLOT(StretchActive()));
     mModeActions.addAction(mStretchActiveAction);
 
+    mRemoveAction = new QAction("Remove Object", this);
+    mRemoveAction->setShortcut(tr("Ctrl+D"));
+    listActions << mRemoveAction;
+    connect(mRemoveAction,SIGNAL(triggered()),
+            this, SLOT(Remove_Object()));
+
 //    mZoomUpAction = new QAction("+", this);
 //    mZoomUpAction->setShortcut(tr("Ctrl+="));
 //    listActions << mZoomUpAction;
@@ -257,13 +271,8 @@ void EditorWindow::CreateActions()
 //    connect(mZoomDownAction,SIGNAL(triggered()),
 //            this,SLOT(ZoomDown()));
 
-    ui->toolBar->addActions(listActions);
+    mObjectToolBar->addActions(listActions);
 
-    mRemoveAction = new QAction("Remove Object", this);
-    mRemoveAction->setShortcut(tr("Ctrl+D"));
-    ui->toolBar->addAction(mRemoveAction);
-    connect(mRemoveAction,SIGNAL(triggered()),
-            this, SLOT(Remove_Object()));
 
 //    mSaveAction = new QAction("Save Object", this);
 //    mSaveAction->setShortcut(tr("Ctrl+S"));
@@ -363,6 +372,8 @@ void EditorWindow::on_mManageWidget_currentChanged(int index)
         mWidgetForScene->hide();
         mWidgetForObjects->show();
         mCurrentSceneWidget = mWidgetForObjects;
+        mSceneToolbar->hide();
+        mObjectToolBar->show();
     } else if (index == 1) {
         mWidgetForObjects->hide();
         mWidgetForScene->show();
@@ -370,5 +381,7 @@ void EditorWindow::on_mManageWidget_currentChanged(int index)
         mObjectApp->GetTemplateSystem().Store();
         mSceneApp->GetTemplateSystem().Load();
         UpdateTreeObject(ui->mTreeTemplates,mSceneApp);
+        mObjectToolBar->hide();
+        mSceneToolbar->show();
     }
 }

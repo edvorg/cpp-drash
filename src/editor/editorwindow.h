@@ -111,6 +111,9 @@ private:
     // GuiObjects
     QLabel *mLabelOfStatusBar;
 
+    QToolBar * mObjectToolBar;
+    QToolBar * mSceneToolbar;
+
 private:
     void CreateActions();
 
