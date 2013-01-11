@@ -83,6 +83,11 @@ void CScene::Release(void)
 
 void CScene::Step( double _dt )
 {
+    if (mPaused == true)
+    {
+        return;
+    }
+
     mLocked = true;
 
     for (unsigned int i = 0; i < mObjectsFactory.EnumObjects();)

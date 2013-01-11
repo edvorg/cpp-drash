@@ -40,6 +40,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/shaderprogrammanager.h"
 #include "../greng/renderer.h"
 #include "../greng/cameramanager.h"
+#include "../levelmanager/levelmanager.h"
 
 namespace drash
 {
@@ -65,6 +66,7 @@ public:
     inline CTemplateSystem &GetTemplateSystem();
     inline CDebugRenderer &GetDebugRenderer();
     inline ui::CUISystem &GetUISystem();
+    inline CLevelManager &GetLevelManager();
     inline greng::CMeshManager &GetMeshManager();
     inline greng::CTextureManager &GetTextureManager();
     inline greng::CVertexShaderManager &GetVertexShaderManager();
@@ -96,6 +98,7 @@ private:
     CTemplateSystem mTemplateSystem;
     CDebugRenderer mDebugRenderer;
     ui::CUISystem mUISystem;
+    CLevelManager mLevelManager;
     greng::CMeshManager mMeshManager;
     greng::CTextureManager mTextureManager;
     greng::CVertexShaderManager mVertexShaderManager;
@@ -152,6 +155,11 @@ inline CDebugRenderer &CApp::GetDebugRenderer()
 inline ui::CUISystem &CApp::GetUISystem()
 {
     return mUISystem;
+}
+
+inline CLevelManager &CApp::GetLevelManager()
+{
+    return mLevelManager;
 }
 
 inline greng::CMeshManager &CApp::GetMeshManager()

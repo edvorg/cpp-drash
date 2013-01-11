@@ -88,6 +88,8 @@ public:
 
     void SetGravity(const CVec2f &_g);
 
+    inline void SetPaused(bool _paused);
+
 protected:
 private:
     void DestroyObjectImpl(CSceneObject *_obj);
@@ -98,6 +100,8 @@ private:
     CPhysObserver *mObserver = nullptr;
 
     CObjectFactory<CSceneObject> mObjectsFactory;
+
+    bool mPaused = false;
 };
 
 inline CSceneObject * const * CScene::GetObjects(void) const
@@ -108,6 +112,11 @@ inline CSceneObject * const * CScene::GetObjects(void) const
 inline unsigned int CScene::EnumObjects(void) const
 {
     return mObjectsFactory.EnumObjects();
+}
+
+inline void CScene::SetPaused(bool _paused)
+{
+    mPaused = _paused;
 }
 
 } // namespace drash
