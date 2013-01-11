@@ -82,7 +82,9 @@ SOURCES += ../src/qt/main.cpp\
     ../src/levelmanager/level.cpp \
     ../src/levelmanager/levelmanager.cpp \
     ../src/test/test8.cpp \
-    ../src/editor/sceneeditorapp.cpp
+    ../src/editor/sceneeditorapp.cpp \
+    ../src/misc/rotationablepoint.cpp \
+    ../src/test/test9.cpp
 
 HEADERS  += ../src/qt/gamewindow.h \
     ../src/qt/scenewidget.h \
@@ -152,7 +154,9 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/levelmanager/level.h \
     ../src/levelmanager/levelmanager.h \
     ../src/test/test8.h \
-    ../src/editor/sceneeditorapp.h
+    ../src/editor/sceneeditorapp.h \
+    ../src/misc/rotationablepoint.h \
+    ../src/test/test9.h
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui

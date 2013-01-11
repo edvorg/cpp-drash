@@ -31,6 +31,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../misc/animator.h"
 #include "../misc/moveablepoint.h"
 #include "../greng/camera.h"
+
 namespace drash
 {
 
@@ -43,9 +44,10 @@ public:
     CTest4() = default;
 
 protected:
-    bool Init() override;
-    void Step(double _dt) override;
+    virtual bool Init() override;
+    virtual void Step(double _dt) override;
     virtual void Render() override;
+
 private:
     ui::CUIButton mTestButton1;
     ui::CUIButton mTestButton2;
