@@ -169,7 +169,7 @@ void SceneWidget::paintGL()
 void SceneWidget::mousePressEvent( QMouseEvent *_event )
 {
     QGLWidget::mousePressEvent(_event);
-
+    setFocus();
     if (mApp == nullptr)
     {
         return;

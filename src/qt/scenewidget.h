@@ -43,7 +43,6 @@ public:
 
     /// converts coordinates from window space (0,0)..(mWidth, mHeight)
     /// to screen space (-0.5, -0.5)..(0.5, 0.5)
-    drash::CVec2f WidgetSpaceToScreenSpace(const drash::CVec2f& _from) const;
 
     virtual void initializeGL() override;
     virtual void resizeGL( int _w, int _h ) override;
@@ -63,6 +62,9 @@ protected:
     drash::CApp *mApp = nullptr;
     float mWidth = 1.0f;
     float mHeight = 1.0f;
+
+private:
+    drash::CVec2f WidgetSpaceToScreenSpace(const drash::CVec2f& _from) const;
 };
 
 inline void SceneWidget::SetApp(drash::CApp *_app)
