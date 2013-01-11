@@ -69,7 +69,8 @@ SOURCES += \
     ../src/debugrenderer/debugrenderer.cpp \
     ../src/misc/moveablepoint.cpp \
     ../src/levelmanager/level.cpp \
-    ../src/levelmanager/levelmanager.cpp
+    ../src/levelmanager/levelmanager.cpp \
+    ../src/test/test8.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -134,5 +135,6 @@ HEADERS += \
     ../src/debugrenderer/debugrenderer.h \
     ../src/misc/moveablepoint.h \
     ../src/levelmanager/level.h \
-    ../src/levelmanager/levelmanager.h
+    ../src/levelmanager/levelmanager.h \
+    ../src/test/test8.h
 

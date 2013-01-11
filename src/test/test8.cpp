@@ -22,18 +22,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "test.h"
-
-#include "test1.h"
-#include "test2.h"
-#include "test3.h"
-#include "test4.h"
-#include "test5.h"
-#include "test6.h"
-#include "test7.h"
 #include "test8.h"
-
-#include <cstring>
 
 namespace drash
 {
@@ -41,19 +30,6 @@ namespace drash
 namespace test
 {
 
-CApp *StartApp(const char *_name)
-{
-    if (strcmp(_name, "test1") == 0) return new CTest1;
-    if (strcmp(_name, "test2") == 0) return new CTest2;
-    if (strcmp(_name, "test3") == 0) return new CTest3;
-    if (strcmp(_name, "test4") == 0) return new CTest4;
-    if (strcmp(_name, "test5") == 0) return new CTest5;
-    if (strcmp(_name, "test6") == 0) return new CTest6;
-    if (strcmp(_name, "test7") == 0) return new CTest7;
-    if (strcmp(_name, "test8") == 0) return new CTest8;
-    return nullptr;
-}
-
 } // namespace test
 
-}// namespace drash
+} // namespace drash
