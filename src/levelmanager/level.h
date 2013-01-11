@@ -26,14 +26,32 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define DRASH_LEVEL_H
 
 #include "../misc/objectfactory.h"
+#include "../scene/sceneobject.h"
+#include <vector>
+#include <map>
 
 namespace drash
 {
 
+using std::map;
+using std::string;
+using std::vector;
+using std::pair;
+
 class CLevel : public CObjectFactory<CLevel>::CFactoryProduct
 {
 public:
+    friend class CLevelManager;
+
+    typedef std::map<string, CSceneObjectParams> LEVEL_NODE;
+
     CLevel() = default;
+
+    CSceneObjectParams *AddObject(const std::string &_template,
+                                  const std::string &_name);
+
+private:
+    map<string, LEVEL_NODE> mObjects;
 };
 
 } // namespace drash

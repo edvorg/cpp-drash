@@ -24,9 +24,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "levelmanager.h"
 #include "level.h"
+#include "../scene/scene.h"
+#include "../scene/sceneobject.h"
+#include "../diag/logger.h"
+#include "../templates/templatesystem.h"
 
 namespace drash
 {
+
+using drash::CLogger;
 
 CLevelManager::CLevelManager():
     mLevelFactory(mLevelsCountLimit, "CLevel")
@@ -35,6 +41,26 @@ CLevelManager::CLevelManager():
 
 CLevelManager::~CLevelManager()
 {
+}
+
+bool CLevelManager::Init()
+{
+    if (mScene == nullptr)
+    {
+        return false;
+    }
+
+    Release();
+
+    return true;
+}
+
+void CLevelManager::Release()
+{
+    while (mLevelFactory.EnumObjects() != 0)
+    {
+        DestroyLevel(mLevelFactory.GetObjects()[0]);
+    }
 }
 
 CLevel *CLevelManager::CreateLevel()
@@ -58,6 +84,36 @@ bool CLevelManager::DestroyLevel(CLevel *_level)
     }
 
     mLevelFactory.DestroyObject(_level);
+
+    return true;
+}
+
+bool CLevelManager::StartLevel(CLevel *_level)
+{
+    if (mLevelFactory.IsObject(_level) == false)
+    {
+        LOG_ERR("CLevelManager::StartLevel(): invalid level taken");
+        return false;
+    }
+
+    mScene->DestroyObjects();
+
+    for (auto i = _level->mObjects.begin(); i != _level->mObjects.end(); i++)
+    {
+        CSceneObjectGeometry *g = mTemplateSystem->FindTemplate(i->first);
+
+        if (g != nullptr)
+        {
+            for (auto j = i->second.begin(); j != i->second.end(); j++)
+            {
+                mScene->CreateObject(*g, j->second);
+            }
+        }
+        else
+        {
+            LOG_ERR("CLevelManager::StartLevel(): template '"<<i->first.c_str()<<"' doesn't exists");
+        }
+    }
 
     return true;
 }

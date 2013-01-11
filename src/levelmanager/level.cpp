@@ -27,4 +27,25 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
+CSceneObjectParams *CLevel::AddObject(const std::string &_template,
+                                      const std::string &_name)
+{
+    auto template_objects = mObjects.find(_template);
+
+    if (template_objects == mObjects.end())
+    {
+        template_objects = mObjects.insert(pair<string, CLevel::LEVEL_NODE>(_template, CLevel::LEVEL_NODE())).first;
+    }
+
+    auto object = template_objects->second.find(_name);
+
+    if (object != template_objects->second.end())
+    {
+        LOG_ERR("CLevel::AddObject(): object "<<_name.c_str()<<" already exists");
+        return nullptr;
+    }
+
+    return &template_objects->second.insert(pair<string, CSceneObjectParams>(_name, CSceneObjectParams())).first->second;
+}
+
 } // namespace drash

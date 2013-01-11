@@ -48,6 +48,8 @@ bool CApp::Init()
     mPlayersSystem.SetScene(&mScene);
     mTemplateSystem.SetScene(&mScene);
     mUISystem.SetRenderer(&mRenderer);
+    mLevelManager.SetScene(&mScene);
+    mLevelManager.SetTemplateSystem(&mTemplateSystem);
 
     if (mExplosionSystem.Init() == false ||
         mPlayersSystem.Init() == false ||
@@ -55,7 +57,8 @@ bool CApp::Init()
         mEventSystem.Init() == false ||
         mUISystem.Init() == false ||
         mRenderer.Init() == false ||
-        mCameraManager.Init() == false)
+        mCameraManager.Init() == false ||
+        mLevelManager.Init() == false)
     {
         return false;
     }
@@ -106,6 +109,7 @@ void CApp::Step(double _dt)
 
 void CApp::Release()
 {
+    mLevelManager.Release();
     mCameraManager.Release();
     mDebugRenderer.Release();
     mEventSystem.Release();

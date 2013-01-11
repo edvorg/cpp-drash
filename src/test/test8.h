@@ -25,7 +25,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_TEST_TEST8_H
 #define DRASH_TEST_TEST8_H
 
-#include "test1.h"
+#include "../app/app.h"
+#include "../ui/uibutton.h"
 
 namespace drash
 {
@@ -33,10 +34,23 @@ namespace drash
 namespace test
 {
 
-class CTest8 : public CTest1
+class CTest8 : public CApp
 {
 public:
     CTest8() = default;
+
+private:
+    bool Init() override;
+    bool InitUI();
+    bool InitLevels();
+    bool InitCamera();
+    bool InitLights();
+
+    ui::CUIButton mButton1;
+    ui::CUIButton mButton2;
+    CLevel *mLevel1 = nullptr;
+    CLevel *mLevel2 = nullptr;
+    greng::CPointLight mLight1;
 };
 
 } // namespace test
