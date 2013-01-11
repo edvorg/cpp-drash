@@ -90,12 +90,6 @@ bool EditorWindow::InitScene()
         return false;
     }
 
-//    if (mObjectApp->Init() == false) {
-//        LOG_ERR("Editor window can't init");
-//        return false;
-//    }
-//    mObjectApp->GetDebugDrawSystem().GetActiveCam()->SetOrtho(true);
-//    mObjectApp->GetDebugDrawSystem().GetActiveCam()->GetOrthoWidth().Set(120);
     ui->mScene->SetApp(mObjectApp);
     mCurrentApp = mObjectApp;
     //mObjectApp->mSceneWidget = ui->mScene;

@@ -182,6 +182,9 @@ void CObjectEditorApp::SetProcessors()
             case BuildState:{
                 if (mCurrentObject != nullptr)
                     mVertexs.push_back(GetCursorPos());
+                if ( IsConvex() == false ) {
+                    mVertexs.pop_back();
+                }
                 break;
             }
             case MoveState:{
@@ -254,8 +257,8 @@ void CObjectEditorApp::SetProcessors()
             case MoveOfAxisState:{
                 mSelectedFigure = SelectFigure(GetCursorPos());
 
-                if (mSelectedFigure == nullptr)
-                    LOG_INFO("NOOOO 2");
+//                if (mSelectedFigure == nullptr)
+//                    LOG_INFO("NOOOO 2");
                 SettingCenterFigure();
                 break;
             }
@@ -328,14 +331,18 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
         return false;
     }
     if (ValidateFigure() == false) {
-        LOG_ERR("This figure can't build");
-        return false;
+        std::reverse(mVertexs.begin() , mVertexs.end());
+        if (ValidateFigure() == false) {
+            LOG_ERR("This figure can't build, canceled");
+            return false;
+        }
     }
 
     auto obj = GetTemplateSystem().FindTemplate(_objectName);
     if (obj == nullptr) {
         return false;
     }
+
     CFigureParams param;
     std::for_each(mVertexs.begin() , mVertexs.end() , [this] (CVec2f &v)
     {
@@ -377,6 +384,36 @@ void CObjectEditorApp::ShowObject(const std::string &_name)
 // TODO: Implements this!
 bool CObjectEditorApp::ValidateFigure()
 {
+    if (mVertexs.size() < 3 ) {
+        return false;
+    }
+
+    /// Box2d code
+
+    float area = 0.0f;
+
+    CVec2f pRef(0.0f, 0.0f);
+
+    std::vector<drash::CVec2f> & vs = mVertexs;
+
+    for (unsigned int i = 0; i < vs.size(); ++i)
+    {
+            CVec2f p1 = pRef;
+            CVec2f p2 = vs[i];
+            CVec2f p3 = i + 1 < vs.size() ? vs[i+1] : vs[0];
+
+            CVec2f e1 = p2 - p1;
+            CVec2f e2 = p3 - p1;
+            float D = e1.mX * e2.mY - e1.mY * e2.mX;
+            float triangleArea = 0.5f * D;
+            area += triangleArea;
+    }
+    const float espilion = 1.19209289550781250000e-7F;
+
+    if (area <= espilion) {
+        return false;
+    }
+
     return true;
 }
 
@@ -573,7 +610,28 @@ void CObjectEditorApp::MoveOfAxis()
 
     mSelectedFigure->SetZ(mSelectedFigure->GetZ() + newCenter.mZ - mOldCenterFigure.mZ);
     mOldCenterFigure = newCenter;
-    //SettingCenterFigure();
+}
+
+
+bool CObjectEditorApp::IsConvex() const
+{
+    if (mVertexs.size() <= 3)
+        return true;
+
+    int res = math::Sign((mVertexs[1].mX - mVertexs[0].mX) * (mVertexs[2].mY-mVertexs[0].mY) -
+            (mVertexs[2].mX - mVertexs[0].mX) * (mVertexs[1].mY-mVertexs[0].mY) );
+
+    const int N = mVertexs.size();
+
+    for (int i = 1; i < N; i++){
+        float buf = (mVertexs[(i+1)%N].mX - mVertexs[i].mX) * (mVertexs[(i+2)%N].mY-mVertexs[i].mY) -
+                (mVertexs[(i+2)%N].mX - mVertexs[i].mX) * (mVertexs[(i+1)%N].mY-mVertexs[i].mY);
+        if ( res != math::Sign(buf) ) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void CObjectEditorApp::ActiveStretchMode()

@@ -66,7 +66,8 @@ T Rand(const T &_min, const T &_max, const T &_step)
            _min;
 }
 
-inline int Sign(double _value)
+template<typename T>
+inline int Sign(T _value)
 {
     return _value < 0.0 ? -1 : 1;
 }

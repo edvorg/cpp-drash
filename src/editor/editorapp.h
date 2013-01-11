@@ -95,6 +95,7 @@ private:
 
     void MoveOfAxis();
 
+    bool IsConvex()const;
 private:
     CSceneObject *mCurrentObject = nullptr;
 
