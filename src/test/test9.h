@@ -2,6 +2,7 @@
 #define DRASH_TEST_TEST9_H
 
 #include "../app/app.h"
+#include "../misc/rotationablepoint.h"
 
 namespace drash
 {
@@ -16,10 +17,16 @@ public:
 
 private:
     virtual bool Init() override;
+    virtual void Step(double _dt) override;
+    virtual void Render() override;
     bool InitCamera();
     bool InitLights();
+    bool InitRotationablePoint();
 
     greng::CPointLight mLight1;
+    greng::CCamera *mCamera = nullptr;
+
+    CRotationablePoint mPoint1;
 };
 
 } // namespace test
