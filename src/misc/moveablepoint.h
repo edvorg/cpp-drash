@@ -25,9 +25,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef MOVEABLEPOINT_H
 #define MOVEABLEPOINT_H
 
-#include "vec3.h"
 #include "../greng/camera.h"
 #include "../greng/renderer.h"
+
 namespace drash{
 
 class CMoveablePoint

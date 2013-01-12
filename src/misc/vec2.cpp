@@ -22,8 +22,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "vec2.h"
-
 #include <Box2D/Box2D.h>
 
 namespace drash

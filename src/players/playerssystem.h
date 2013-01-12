@@ -25,8 +25,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef PLAYERSSYSTEM_H
 #define PLAYERSSYSTEM_H
 
-#include "../misc/objectfactory.h"
-
 namespace drash
 {
 

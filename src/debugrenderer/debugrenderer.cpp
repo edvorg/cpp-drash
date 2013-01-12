@@ -27,15 +27,11 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../scene/scene.h"
 #include "../scene/sceneobject.h"
 #include "../scene/figure.h"
-
-#include "../misc/matrix4.h"
-
 #include "../greng/vertex.h"
 #include "../greng/meshmanager.h"
 #include "../greng/texturemanager.h"
 #include "../greng/renderer.h"
 #include "../greng/camera.h"
-#include "../misc/plane.h"
 
 namespace greng
 {

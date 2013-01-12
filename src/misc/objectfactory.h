@@ -26,7 +26,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define DRASH_OBJECTFACTORY_H
 
 #include "../diag/logger.h"
-#include <string>
 
 namespace drash
 {

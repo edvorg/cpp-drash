@@ -26,28 +26,23 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef COBJECTCAMERA_H
 #define COBJECTCAMERA_H
 
-#include "../misc/objectfactory.h"
-#include "../misc/animator.h"
-#include "../misc/vec3.h"
-#include "../misc/matrix4.h"
-
 namespace drash
 {
 
 class CPlane;
+class CMatrix4f;
 
 } // namespace drash
 
 namespace greng
 {
 
+using drash::CAnimator;
 using drash::CVec2f;
 using drash::CVec3f;
 using drash::CMatrix4f;
-using drash::CObjectFactory;
-using drash::CAnimator;
 
-class CCamera : public CObjectFactory<CCamera>::CFactoryProduct
+class CCamera : public drash::CObjectFactory<CCamera>::CFactoryProduct
 {
 public:
     friend class CCameraManager;

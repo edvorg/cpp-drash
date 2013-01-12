@@ -25,7 +25,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_ANIMATOR_H
 #define DRASH_ANIMATOR_H
 
-#include "math.h"
 #include <utility>
 
 namespace drash
@@ -164,7 +163,14 @@ inline const T &CAnimator<T>::Get() const
 template<class T>
 inline const T &CAnimator<T>::GetTarget() const
 {
-    return mTargetSet == true ? mTargetValue : mValue;
+    if (mTargetSet == true)
+    {
+        return mTargetValue;
+    }
+    else
+    {
+        return mValue;
+    }
 }
 
 template<class T>

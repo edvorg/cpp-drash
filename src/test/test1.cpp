@@ -29,12 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/camera.h"
 #include "../scene/figure.h"
 #include "../scene/sceneobject.h"
-
 #include <sstream>
-
-#include "../misc/plane.h"
-#include "../misc/ray.h"
-
 #include <cstring>
 
 namespace drash

@@ -26,7 +26,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define SCENEWIDGET_H
 
 #include <QGLWidget>
-#include "../misc/vec2.h"
 
 namespace drash
 {

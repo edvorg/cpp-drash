@@ -26,7 +26,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "renderer.h"
 #include "mesh.h"
 #include "texture.h"
-#include "../misc/matrix4.h"
 #include "shaderprogram.h"
 #include "pointlight.h"
 #include "camera.h"

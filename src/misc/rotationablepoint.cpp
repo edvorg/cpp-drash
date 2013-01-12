@@ -1,9 +1,3 @@
-#include "rotationablepoint.h"
-
-#include "../misc/vec4.h"
-#include "../misc/matrix4.h"
-#include "../misc/plane.h"
-
 #include "../greng/renderer.h"
 #include "../greng/camera.h"
 

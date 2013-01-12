@@ -21,6 +21,10 @@ CONFIG(release, debug|release) {
     QMAKE_CXXFLAGS += -O2
 }
 
+CONFIG += precompile_header
+
+PRECOMPILED_HEADER = ../src/precompiled.h
+
 SOURCES += \
     ../src/ui/uiwidget.cpp \
     ../src/ui/uisystem.cpp \
@@ -138,5 +142,6 @@ HEADERS += \
     ../src/levelmanager/levelmanager.h \
     ../src/test/test8.h \
     ../src/misc/rotationablepoint.h \
-    ../src/test/test9.h
+    ../src/test/test9.h \
+    precompiled.h
 

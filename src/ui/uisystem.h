@@ -25,8 +25,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_UISYSTEM_H
 #define DRASH_UISYSTEM_H
 
-#include "../misc/vec2.h"
-
 namespace greng
 {
 

@@ -2,7 +2,6 @@
 #define DRASH_TEST_TEST9_H
 
 #include "../app/app.h"
-#include "../misc/rotationablepoint.h"
 
 namespace drash
 {

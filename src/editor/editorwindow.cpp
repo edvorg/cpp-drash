@@ -36,13 +36,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../scene/figure.h"
 #include "../scene/sceneobject.h"
 #include "../templates/templatesystem.h"
-#include "../misc/vec2.h"
 #include "../greng/camera.h"
 #include "editorapp.h"
 #include "sceneeditorapp.h"
-
-#include <vector>
-#include <string>
 
 using namespace drash;
 

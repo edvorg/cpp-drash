@@ -25,7 +25,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "uisystem.h"
 
 #include "uicontrol.h"
-#include "../misc/vec2.h"
 
 namespace drash
 {

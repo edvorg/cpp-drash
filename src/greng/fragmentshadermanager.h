@@ -25,8 +25,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRENG_FRAGMENTSHADERMANAGER_H
 #define GRENG_FRAGMENTSHADERMANAGER_H
 
-#include "../misc/objectfactory.h"
-
 namespace greng
 {
 

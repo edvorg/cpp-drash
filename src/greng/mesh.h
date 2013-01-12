@@ -25,10 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRENG_MESH_H
 #define GRENG_MESH_H
 
-#include <vector>
-#include <string>
 #include "vertex.h"
-#include "../misc/objectfactory.h"
 
 namespace greng
 {

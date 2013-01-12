@@ -25,8 +25,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRENG_POINTLIGHT_H
 #define GRENG_POINTLIGHT_H
 
-#include "../misc/vec3.h"
-
 namespace greng
 {
 

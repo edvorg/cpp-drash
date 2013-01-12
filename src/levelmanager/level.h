@@ -25,10 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_LEVEL_H
 #define DRASH_LEVEL_H
 
-#include "../misc/objectfactory.h"
 #include "../scene/sceneobject.h"
-#include <vector>
-#include <map>
 
 namespace drash
 {
