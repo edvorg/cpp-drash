@@ -82,6 +82,8 @@ bool CLevel::Store(const string &_filename) const
     }
 
     out.close();
+
+    return true;
 }
 
 bool CLevel::Load(const string &_filename)
@@ -121,6 +123,8 @@ bool CLevel::Load(const string &_filename)
     }
 
     in.close();
+
+    return true;
 }
 
 } // namespace drash
