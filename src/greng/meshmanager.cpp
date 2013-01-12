@@ -27,9 +27,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "mesh.h"
 #include "../diag/logger.h"
 #include "loadmeshobj.h"
-#include "../misc/vec4.h"
-#include "../misc/matrix4.h"
-#include "../misc/math.h"
 #include <cstring>
 
 namespace greng

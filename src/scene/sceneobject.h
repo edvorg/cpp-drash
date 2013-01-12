@@ -26,13 +26,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CSCENEOBJECT_H
 #define CSCENEOBJECT_H
 
-#include "../misc/objectfactory.h"
-#include "../misc/animator.h"
-#include "../misc/vec3.h"
-#include "../misc/color4.h"
-#include <map>
-#include <vector>
-
 class b2Body;
 
 namespace drash

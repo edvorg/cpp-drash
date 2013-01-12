@@ -25,9 +25,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRENG_VERTEX_H
 #define GRENG_VERTEX_H
 
-#include "../misc/vec3.h"
-#include "../misc/color4.h"
-
 namespace greng
 {
 

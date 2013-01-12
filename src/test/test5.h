@@ -27,7 +27,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "test3.h"
 #include "../greng/pointlight.h"
-#include "../misc/matrix4.h"
 
 namespace drash
 {

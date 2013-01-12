@@ -29,6 +29,9 @@ CONFIG(release, debug|release) {
     QMAKE_CXXFLAGS += -O2
 }
 
+CONFIG += precompile_header
+
+PRECOMPILED_HEADER = ../src/precompiled.h
 
 SOURCES += ../src/qt/main.cpp\
         ../src/qt/gamewindow.cpp \
@@ -156,7 +159,8 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/test/test8.h \
     ../src/editor/sceneeditorapp.h \
     ../src/misc/rotationablepoint.h \
-    ../src/test/test9.h
+    ../src/test/test9.h \
+    ../src/precompiled.h
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui

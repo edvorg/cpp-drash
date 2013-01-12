@@ -1,8 +1,6 @@
 #ifndef DRASH_ROTATIONABLEPOINT_H
 #define DRASH_ROTATIONABLEPOINT_H
 
-#include "../misc/vec3.h"
-
 namespace greng
 {
 

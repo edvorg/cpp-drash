@@ -25,10 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "uibutton.h"
 
 #include "uisystem.h"
-#include "../misc/vec2.h"
-#include "../misc/math.h"
 #include "../greng/renderer.h"
-#include "../misc/color4.h"
 
 namespace drash
 {

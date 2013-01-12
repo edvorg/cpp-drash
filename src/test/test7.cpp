@@ -23,7 +23,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include "test7.h"
-#include <vector>
 #include "../greng/vertex.h"
 #include "../scene/figure.h"
 #include "../greng/camera.h"

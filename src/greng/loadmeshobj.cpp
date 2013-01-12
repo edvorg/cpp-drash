@@ -25,9 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "loadmeshobj.h"
 #include "mesh.h"
 #include "../diag/logger.h"
-#include "../misc/vec2.h"
 #include <fstream>
-#include <vector>
 #include <cstring>
 
 namespace greng

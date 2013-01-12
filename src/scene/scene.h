@@ -26,10 +26,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CSCENE_H
 #define CSCENE_H
 
-#include "../misc/vec2.h"
-#include "../misc/vec3.h"
-#include "../misc/objectfactory.h"
-
 class b2World;
 
 namespace drash

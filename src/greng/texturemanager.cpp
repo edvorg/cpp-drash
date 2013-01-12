@@ -25,7 +25,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "texturemanager.h"
 #include "texture.h"
 #include "../diag/logger.h"
-#include "../misc/color4.h"
 #include <GL/glew.h>
 #include <SDL/SDL_image.h>
 

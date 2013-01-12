@@ -25,9 +25,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef FIGURE_H
 #define FIGURE_H
 
-#include <vector>
-#include "../misc/vec2.h"
-
 class b2Fixture;
 
 namespace drash

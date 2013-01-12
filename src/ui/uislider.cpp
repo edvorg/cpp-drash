@@ -26,7 +26,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "uisystem.h"
 #include "../greng/renderer.h"
-#include "../misc/math.h"
 
 namespace drash
 {

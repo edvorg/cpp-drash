@@ -25,8 +25,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_LEVELMANAGER_H
 #define DRASH_LEVELMANAGER_H
 
-#include "../misc/objectfactory.h"
-
 namespace drash
 {
 

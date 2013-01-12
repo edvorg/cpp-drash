@@ -26,7 +26,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define DRASH_UIWIDGET_H
 
 #include <functional>
-#include "../misc/vec2.h"
 
 namespace drash
 {
