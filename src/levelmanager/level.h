@@ -40,12 +40,16 @@ class CLevel : public CObjectFactory<CLevel>::CFactoryProduct
 public:
     friend class CLevelManager;
 
-    typedef std::map<string, CSceneObjectParams> LEVEL_NODE;
+    typedef map<string, CSceneObjectParams> LEVEL_NODE;
 
     CLevel() = default;
 
     CSceneObjectParams *AddObject(const std::string &_template,
                                   const std::string &_name);
+
+    bool Store(const string &_filename)const;
+
+    bool Load(const string &_filename);
 
 private:
     map<string, LEVEL_NODE> mObjects;

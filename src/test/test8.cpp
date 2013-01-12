@@ -34,6 +34,14 @@ namespace drash
 namespace test
 {
 
+void CTest8::Release()
+{
+    GetTemplateSystem().Store();
+    mLevel1->Store("level1");
+    mLevel2->Store("level2");
+    CApp::Release();
+}
+
 bool CTest8::Init()
 {
     if (CApp::Init() == false ||
@@ -44,7 +52,7 @@ bool CTest8::Init()
     {
         return false;
     }
-
+    GetTemplateSystem().Load();
     return true;
 }
 
@@ -84,6 +92,9 @@ bool CTest8::InitLevels()
     mLevel1 = GetLevelManager().CreateLevel();
     mLevel2 = GetLevelManager().CreateLevel();
 
+    mLevel1->Load("level1");
+    mLevel2->Load("level2");
+    return true;
     if (mLevel1 == nullptr ||
         mLevel2 == nullptr)
     {

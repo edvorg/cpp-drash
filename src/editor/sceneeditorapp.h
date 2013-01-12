@@ -39,6 +39,8 @@ public:
     inline virtual void Render() override;
     virtual void Release() override;
 
+    void UpdateTemplateSystem();
+
 private:
     void SetProcessors();
 

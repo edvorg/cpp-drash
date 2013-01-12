@@ -51,6 +51,11 @@ void CSceneEditorApp::Release()
     CApp::Release();
 }
 
+void CSceneEditorApp::UpdateTemplateSystem()
+{
+    GetTemplateSystem().Load();
+}
+
 void CSceneEditorApp::SetProcessors()
 {
 }
