@@ -87,7 +87,7 @@ bool CObjectEditorApp::Init()
 
 void CObjectEditorApp::Step(double _dt)
 {
-    CApp::Step(_dt);
+    CApp::Step(0);
 
     mTimer.Tick();
 
@@ -379,8 +379,6 @@ void CObjectEditorApp::ShowObject(const std::string &_name)
     mCurrentObject = obj;
 }
 
-
-// TODO: Implements this!
 bool CObjectEditorApp::ValidateFigure()
 {
     if (mVertexs.size() < 3 ) {
