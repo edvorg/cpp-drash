@@ -41,6 +41,8 @@ namespace drash
 
 class CScene;
 class CFigure;
+class CSceneObjectGeometry;
+class CSceneObjectParams;
 
 class CDebugRenderer final
 {
@@ -58,6 +60,8 @@ public:
     bool Init();
     void Release();
     void Render() const;
+
+    void RenderObject(drash::CSceneObjectGeometry *_geometry, drash::CSceneObjectParams *_params);
 
     /// finds objects, visible at specified postion in screen space coordinates
     /// returns nearest one

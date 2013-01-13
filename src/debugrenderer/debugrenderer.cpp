@@ -223,6 +223,147 @@ void CDebugRenderer::Render() const
     }
 }
 
+void CDebugRenderer::RenderObject(CSceneObjectGeometry *_geometry, CSceneObjectParams *_params)
+{
+    for (unsigned int i = 0; i < _geometry->mFigures.size(); i++)
+    {
+        auto &f = _geometry->mFigures[i];
+        unsigned int kc = f.mVertices.size();
+
+        std::vector<greng::CVertex> mv;
+        std::vector<unsigned int> mi;
+
+        greng::CMesh *m = nullptr;
+
+        if (kc >= 3)
+        {
+            CVec3f min(f.mVertices[0], f.mZ - 0.5f * f.mDepth);
+            CVec3f max(f.mVertices[0], f.mZ + 0.5f * f.mDepth);
+
+            for (unsigned int k = 1; k < kc; k++)
+            {
+                min.mX = math::Min<float>(min.mX, f.mVertices[k].mX);
+                min.mY = math::Min<float>(min.mY, f.mVertices[k].mY);
+                max.mX = math::Max<float>(max.mX, f.mVertices[k].mX);
+                max.mY = math::Max<float>(max.mY, f.mVertices[k].mY);
+            }
+
+            max.Vec2() -= min.Vec2();
+
+            mv.resize(kc * 2 + kc * 4);
+
+            // front and back faces
+
+            for (unsigned int k = 0; k < kc; k++)
+            {
+                mv[k].mPos = CVec3f(f.mVertices[k], max.mZ);
+                mv[kc + k].mPos = CVec3f(f.mVertices[k], min.mZ);
+
+                mv[k].mUV = mv[k].mPos;
+                mv[kc + k].mUV = mv[kc + k].mPos;
+
+                mv[k].mUV -= min.Vec2();
+                mv[kc + k].mUV -= min.Vec2();
+
+                mv[k].mUV *= mTexCoordsScale;
+                mv[kc + k].mUV *= mTexCoordsScale;
+            }
+
+            for (unsigned int k = 2; k < kc; k++)
+            {
+                mi.push_back(0);
+                mi.push_back(k - 1);
+                mi.push_back(k);
+            }
+
+            for (unsigned int k = 2; k < kc; k++)
+            {
+                mi.push_back(kc);
+                mi.push_back(kc + k);
+                mi.push_back(kc + k - 1);
+            }
+
+            // sides
+
+            for (unsigned int k = 1; k < kc; k++)
+            {
+                mv[2 * kc + (k - 1) * 4 + 0].mPos = CVec3f(f.mVertices[k - 1], max.mZ);
+                mv[2 * kc + (k - 1) * 4 + 1].mPos = CVec3f(f.mVertices[k - 1], min.mZ);
+                mv[2 * kc + (k - 1) * 4 + 2].mPos = CVec3f(f.mVertices[k], min.mZ);
+                mv[2 * kc + (k - 1) * 4 + 3].mPos = CVec3f(f.mVertices[k], max.mZ);
+
+                CVec2f tmp = f.mVertices[k - 1];
+                tmp -= f.mVertices[k];
+
+                mv[2 * kc + (k - 1) * 4 + 0].mUV.Set(0, 0);
+                mv[2 * kc + (k - 1) * 4 + 1].mUV.Set(0, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
+                mv[2 * kc + (k - 1) * 4 + 2].mUV.Set(tmp.Length() * mTexCoordsScale, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
+                mv[2 * kc + (k - 1) * 4 + 3].mUV.Set(tmp.Length() * mTexCoordsScale, 0);
+
+                mi.push_back(2 * kc + (k - 1) * 4 + 0);
+                mi.push_back(2 * kc + (k - 1) * 4 + 1);
+                mi.push_back(2 * kc + (k - 1) * 4 + 2);
+                mi.push_back(2 * kc + (k - 1) * 4 + 2);
+                mi.push_back(2 * kc + (k - 1) * 4 + 3);
+                mi.push_back(2 * kc + (k - 1) * 4 + 0);
+            }
+            mv[2 * kc + (kc - 1) * 4 + 0].mPos = CVec3f(f.mVertices[kc - 1], max.mZ);
+            mv[2 * kc + (kc - 1) * 4 + 1].mPos = CVec3f(f.mVertices[kc - 1], min.mZ);
+            mv[2 * kc + (kc - 1) * 4 + 2].mPos = CVec3f(f.mVertices[0], min.mZ);
+            mv[2 * kc + (kc - 1) * 4 + 3].mPos = CVec3f(f.mVertices[0], max.mZ);
+
+            CVec2f tmp = f.mVertices[kc - 1];
+            tmp -= f.mVertices[0];
+
+            mv[2 * kc + (kc - 1) * 4 + 0].mUV.Set(0, 0);
+            mv[2 * kc + (kc - 1) * 4 + 1].mUV.Set(0, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
+            mv[2 * kc + (kc - 1) * 4 + 2].mUV.Set(tmp.Length() * mTexCoordsScale, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
+            mv[2 * kc + (kc - 1) * 4 + 3].mUV.Set(tmp.Length() * mTexCoordsScale, 0);
+
+            mi.push_back(2 * kc + (kc - 1) * 4 + 0);
+            mi.push_back(2 * kc + (kc - 1) * 4 + 1);
+            mi.push_back(2 * kc + (kc - 1) * 4 + 2);
+            mi.push_back(2 * kc + (kc - 1) * 4 + 2);
+            mi.push_back(2 * kc + (kc - 1) * 4 + 3);
+            mi.push_back(2 * kc + (kc - 1) * 4 + 0);
+
+            m = mGrengSystems->GetMeshManager().CreateMeshFromVertices(&mv[0], mv.size(), &mi[0], mi.size());
+        }
+
+        if (m != nullptr)
+        {
+            mGrengSystems->GetMeshManager().ComputeNormals(m);
+
+            CMatrix4f rot;
+            MatrixRotationZ(rot, _params->mAngle);
+
+            CMatrix4f trans;
+            MatrixTranslation(trans, _params->mPos);
+
+            CMatrix4f model;
+            MatrixMultiply(trans, rot, model);
+
+            CMatrix4f model_view;
+            MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
+
+            greng::CTexture *textures[2] = { mTexture1Diffuse, mTexture1Normal };
+
+            mGrengSystems->GetRenderer().RenderMesh(m,
+                                     0,
+                                     textures,
+                                     2,
+                                     mShaderProgram,
+                                     &model,
+                                     nullptr,
+                                     &model_view,
+                                     &mCamera->GetProjectionMatrix(),
+                                     mLight);
+
+            mGrengSystems->GetMeshManager().DestroyMesh(m);
+        }
+    }
+}
+
 CFigure *CDebugRenderer::FindFigure(const greng::CCamera *_camera, const CVec2f &_pos) const
 {
     if (_camera == nullptr)
