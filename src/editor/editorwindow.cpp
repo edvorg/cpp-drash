@@ -31,6 +31,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <QStatusBar>
 #include <QToolBar>
 #include <QDebug>
+#include <QFileDialog>
+#include <QMessageBox>
 
 #include "../scene/scene.h"
 #include "../scene/figure.h"
@@ -39,6 +41,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/camera.h"
 #include "editorapp.h"
 #include "sceneeditorapp.h"
+#include "../levelmanager/level.h"
 
 using namespace drash;
 
@@ -55,7 +58,8 @@ EditorWindow::EditorWindow(QWidget *parent) :
     this->addToolBar(mObjectToolBar);
     CreateActions();
     mModeActions.setExclusive(true);
-
+    connect(&mModeActions,SIGNAL(selected(QAction*)),
+            this,SLOT(ChangeMode(QAction*)));
     mLabelOfStatusBar = new QLabel("Editor Object");
     this->statusBar()->addWidget(mLabelOfStatusBar);
 
@@ -75,10 +79,15 @@ EditorWindow::EditorWindow(QWidget *parent) :
 
     mObjectApp->SetTreeRefreshHandler([this]()
     {
-        this->UpdateTreeObject(ui->mTreeObjects,mObjectApp);
+        this->UpdateTreeTemplates(ui->mTreeObjects,mObjectApp);
+    });
+
+    mSceneApp->SetTreeRefreshHandler([this](){
+        this->UpdateTreeSceneObjects();
     });
 
     mSceneToolbar->hide();
+    mTimer.Reset(true);
     this->startTimer(0);
 }
 
@@ -108,6 +117,10 @@ bool EditorWindow::InitScene()
     mLayoutForScene->addWidget(mWidgetForScene);
 
     ui->mManageWidget->setCurrentIndex(0);
+    if (mWidgetForObjects->GetApp() == nullptr ||
+        mWidgetForScene->GetApp() == nullptr) {
+        return false;
+    }
     return true;
 }
 
@@ -117,7 +130,7 @@ void EditorWindow::timerEvent(QTimerEvent *)
 
     if (mCurrentSceneWidget->GetApp() != nullptr)
     {
-        mCurrentSceneWidget->GetApp()->Step(0);
+        mCurrentSceneWidget->GetApp()->Step(mTimer.GetDeltaTime());
     }
 
     mCurrentSceneWidget->updateGL();
@@ -126,7 +139,7 @@ void EditorWindow::timerEvent(QTimerEvent *)
 void EditorWindow::CreateNewObject()
 {
     QString str_name("Object");
-    str_name +=QString::number(mObjectApp->GetTemplateSystem().GetSceneObjectTemplates().size()+1);
+    str_name += QString::number(mObjectApp->GetTemplateSystem().GetSceneObjectTemplates().size()+1);
     QTreeWidgetItem *newItem = new QTreeWidgetItem(ui->mTreeObjects,QStringList(str_name));
     newItem->setSelected(true);
     mObjectApp->AddNewObjectToTemplate(str_name.toStdString());
@@ -158,6 +171,11 @@ void EditorWindow::StretchActive()
     if (mStretchActiveAction->isChecked()) {
         mObjectApp->ActiveStretchMode();
     }
+}
+
+void EditorWindow::ChangeMode(QAction *_action)
+{
+    mLabelOfStatusBar->setText(_action->text());
 }
 
 void EditorWindow::ZoomUp()
@@ -199,7 +217,61 @@ void EditorWindow::ZoomDown()
 //        pos.mZ -= 10.0f;
 
 //        mObjectApp->GetCamera()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
-//    }
+    //    }
+}
+
+void EditorWindow::OpenLevel()
+{
+//    qDebug() << "Open file";
+    QString name = QFileDialog::getOpenFileName(this,"Open level file");
+    if (mSceneApp->LoadLevel(name.toStdString()) == true) {
+        mLabelOfStatusBar->setText("Level load from " + name);
+    } else {
+        QMessageBox::critical(this,"Error", "Level not load. See log file");
+    }
+}
+
+void EditorWindow::SaveLevel()
+{
+//    qDebug() << " Save file";
+    if (mSceneApp->IsSetLevel() == false) {
+        QMessageBox::critical(this,"Error", "Level is not set now!!");
+        return;
+    }
+    if (mSceneApp->IsSetFileName() == false) {
+        SaveLevelAs();
+    } else {
+        if (mSceneApp->SaveLevel() == false) {
+            QMessageBox::critical(this,"Error", "Level is not save. See log file");
+        } else {
+            mLabelOfStatusBar->setText("Level saved in " +
+                                       QString::fromStdString(mSceneApp->GetLevelFileName()));
+        }
+    }
+}
+
+void EditorWindow::SaveLevelAs()
+{
+    if (mSceneApp->IsSetLevel() == false) {
+        QMessageBox::critical(this,"Error", "Level is not set now!!");
+        return;
+    }
+    QString name = QFileDialog::getSaveFileName(this,"Choose file for saving");
+    if (mSceneApp->SaveLevelAs(name.toStdString()) == false) {
+        QMessageBox::critical(this,"Error", "Level is not save. See log file");
+    } else {
+        mLabelOfStatusBar->setText("Level saved in " + name);
+    }
+}
+
+void EditorWindow::PlayLevel()
+{
+    mSceneApp->StartCurrentLevel();
+}
+
+void EditorWindow::PauseLevel()
+{
+    mSceneApp->PauseLevel();
 }
 
 void EditorWindow::CreateActions()
@@ -269,24 +341,45 @@ void EditorWindow::CreateActions()
 
     mObjectToolBar->addActions(listActions);
 
+    // Actions for editor scene
+    listActions.clear();
 
+    mOpenLevelAction = new QAction("Open Level", this);
+    listActions << mOpenLevelAction;
+    connect(mOpenLevelAction,SIGNAL(triggered()),
+            this, SLOT(OpenLevel()));
+
+    mSaveLevelAction = new QAction("Save Level", this);
+    listActions << mSaveLevelAction;
+    connect(mSaveLevelAction,SIGNAL(triggered()),
+            this,SLOT(SaveLevel()));
+
+    mSaveLevelAsAction = new QAction("Save As Level", this);
+    listActions << mSaveLevelAsAction;
+    connect(mSaveLevelAsAction, SIGNAL(triggered()) ,
+            this,SLOT(SaveLevelAs()));
+
+    mPlayLevelAction = new QAction("Start Level", this);
+    listActions << mPlayLevelAction;
+    connect(mPlayLevelAction, SIGNAL(triggered()) ,
+            this,SLOT(PlayLevel()));
+
+    mPauseLevelAction = new QAction("Pause Level", this);
+    listActions << mPauseLevelAction;
+    connect(mPauseLevelAction, SIGNAL(triggered()) ,
+            this, SLOT(PauseLevel()));
+
+    mSceneToolbar->addActions(listActions);
 //    mSaveAction = new QAction("Save Object", this);
 //    mSaveAction->setShortcut(tr("Ctrl+S"));
 //    ui->toolBar->addAction(mSaveAction);
 //    connect(mSaveAction, SIGNAL(triggered()),
 //            this,SLOT(SaveObject()));
 
-
 }
 
-void EditorWindow::SaveObject()
-{
-//    mObjectApp->SaveCurrentObject();
 
-//    UpdateTreeObject();
-}
-
-bool EditorWindow::UpdateTreeObject(QTreeWidget *_tree, drash::CApp *_app)
+bool EditorWindow::UpdateTreeTemplates(QTreeWidget *_tree, drash::CApp *_app)
 {
     _tree->clear();
     QList<QTreeWidgetItem*> list;
@@ -322,11 +415,20 @@ bool EditorWindow::UpdateTreeObject(QTreeWidget *_tree, drash::CApp *_app)
     return true;
 }
 
-void EditorWindow::AddFigure()
+void EditorWindow::UpdateTreeSceneObjects()
 {
-    std::string nameTemplate = ui->mTreeObjects->selectedItems().at(0)->text(0).toStdString();
+    ui->mTreeSceneObjects->clear();
+    QTreeWidget * tree = ui->mTreeSceneObjects;
+    for (const auto & headitem : mSceneApp->GetCurrentLevel()->GetObjects()) {
+        QTreeWidgetItem *templateItem = new QTreeWidgetItem(tree,
+                                        QStringList(QString::fromStdString(headitem.first)));
 
-    mObjectApp->BuildFigure(nameTemplate);
+        tree->addTopLevelItem(templateItem);
+        for (const auto &item : headitem.second) {
+            QString objectname = QString::fromStdString(item.first);
+            new QTreeWidgetItem(templateItem,QStringList(objectname));
+        }
+    }
 }
 
 void EditorWindow::on_mTreeObjects_itemSelectionChanged()
@@ -355,7 +457,7 @@ void EditorWindow::Remove_Object()
     if (item->parent() == nullptr) {
         //qDebug() << "Object created";
         mObjectApp->GetTemplateSystem().RemoveSceneObjectTemplate(item->text(0).toStdString());
-        UpdateTreeObject(ui->mTreeObjects,mObjectApp);
+        UpdateTreeTemplates(ui->mTreeObjects,mObjectApp);
         //mObjectApp->ShowObject(item->text(0).toStdString());
         //mCurrentObject = mObjectApp->GetTemplateSystem().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
     }
@@ -376,7 +478,7 @@ void EditorWindow::on_mManageWidget_currentChanged(int index)
         mCurrentSceneWidget = mWidgetForScene;
         mObjectApp->GetTemplateSystem().Store();
         mSceneApp->GetTemplateSystem().Load();
-        UpdateTreeObject(ui->mTreeTemplates,mSceneApp);
+        UpdateTreeTemplates(ui->mTreeTemplates,mSceneApp);
         mObjectToolBar->hide();
         mSceneToolbar->show();
     }

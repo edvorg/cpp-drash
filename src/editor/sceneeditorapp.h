@@ -41,10 +41,66 @@ public:
 
     void UpdateTemplateSystem();
 
+    bool LoadLevel(const std::string &_filename);
+
+    bool SaveLevelAs(const std::string &_filename);
+
+    void StartCurrentLevel();
+
+    //
+    inline bool SaveLevel();
+
+    inline bool IsSetFileName()const;
+    inline bool IsSetLevel() const;
+    inline CLevel * GetCurrentLevel() const;
+    inline std::string GetLevelFileName() const;
+
+    inline void SetTreeRefreshHandler(const std::function<void ()> & _han);
+    inline void PauseLevel();
 private:
     void SetProcessors();
 
+    bool InitCamera();
+    bool InitPointLight();
+
+    std::string mFileNameLevel = "";
+
+    CLevel * mCurrentLevel = nullptr;
+    greng::CPointLight mLight1;
+    greng::CCamera *mCamera = nullptr;
+
+    std::function<void ()> mTreeRefreshHandler = [] () {};
+
+    bool mPlayLevel = false;
 };
+
+inline bool CSceneEditorApp::IsSetFileName()const {
+    return mFileNameLevel != "";
+}
+
+inline bool CSceneEditorApp::SaveLevel() {
+    return SaveLevelAs(mFileNameLevel);
+}
+
+inline CLevel * CSceneEditorApp::GetCurrentLevel() const {
+    return mCurrentLevel;
+}
+
+inline std::string CSceneEditorApp::GetLevelFileName() const {
+    return mFileNameLevel;
+}
+
+inline bool CSceneEditorApp::IsSetLevel() const {
+    return mCurrentLevel != nullptr;
+}
+
+inline void CSceneEditorApp::SetTreeRefreshHandler(const std::function<void ()> &_han) {
+    mTreeRefreshHandler = _han;
+}
+
+inline void CSceneEditorApp::PauseLevel() {
+    mPlayLevel = false;
+}
 
 } // namespace drash
 #endif // SCENEEDITORAPP_H
