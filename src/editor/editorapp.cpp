@@ -61,18 +61,6 @@ bool CObjectEditorApp::Init()
 
     this->GetDebugRenderer().SetCamera(mCamera);
 
-    greng::CVertexShader *v = GetVertexShaderManager().CreateShaderFromFile("shaders/shader2.120.vs");
-    greng::CFragmentShader *f = GetFragmentShaderManager().CreateShaderFromFile("shaders/shader2.120.fs");
-
-    CShaderProgram* shaderProgram = GetShaderProgramManager().CreateProgram(v, f);
-
-    if (shaderProgram == nullptr)
-    {
-        return false;
-    }
-
-    GetDebugRenderer().SetShaderProgram(shaderProgram);
-
     mPointLight.mPosition = GetCamera()->GetPos();
 
     GetDebugRenderer().SetLight(&mPointLight);
