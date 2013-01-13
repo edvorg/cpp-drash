@@ -47,6 +47,17 @@ CMeshManager::~CMeshManager()
     }
 }
 
+bool CMeshManager::Init()
+{
+    Release();
+
+    return true;
+}
+
+void CMeshManager::Release()
+{
+}
+
 CMesh *CMeshManager::CreateMesh()
 {
     CMesh *res = mMeshFactory.CreateObject();

@@ -147,7 +147,7 @@ void SceneWidget::resizeGL( int _w, int _h )
 
     if (mApp != nullptr)
     {
-        mApp->GetCameraManager().SetAspectRatio(mWidth / mHeight);
+        mApp->GetGrengSystems().GetCameraManager().SetAspectRatio(mWidth / mHeight);
         mApp->GetUISystem().SetAspectRatio(mWidth / mHeight);
     }
 }

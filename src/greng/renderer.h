@@ -56,6 +56,7 @@ public:
     ~CRenderer() = default;
 
     bool Init();
+    void Release();
 
     void RenderMesh(const CMesh *_mesh,
                     unsigned int _submesh,

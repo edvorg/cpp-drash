@@ -22,38 +22,43 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#ifndef DRASH_TEST_TEST9_H
-#define DRASH_TEST_TEST9_H
+#include "grengsystemsset.h"
 
-#include "../app/app.h"
-
-namespace drash
+namespace greng
 {
 
-namespace test
+bool CGrengSystemsSet::Init()
 {
+    Release();
 
-class CTest9 : public CApp
+    if (mRenderer.Init() == false ||
+            mCameraManager.Init() == false ||
+            mMeshManager.Init() == false ||
+            mTextureManager.Init() == false ||
+            mVertexShaderManager.Init() == false ||
+            mFragmentShaderManager.Init() == false ||
+            mShaderProgramManager.Init() == false)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+void CGrengSystemsSet::Step(double _dt)
 {
-public:
-    CTest9() = default;
+    mCameraManager.Step(_dt);
+}
 
-private:
-    virtual bool Init() override;
-    virtual void Step(double _dt) override;
-    virtual void Render() override;
-    bool InitCamera();
-    bool InitLights();
-    bool InitRotationablePoint();
+void CGrengSystemsSet::Release()
+{
+    mVertexShaderManager.Release();
+    mFragmentShaderManager.Release();
+    mShaderProgramManager.Release();
+    mTextureManager.Release();
+    mMeshManager.Release();
+    mCameraManager.Release();
+    mRenderer.Release();
+}
 
-    greng::CPointLight mLight1;
-    greng::CCamera *mCamera = nullptr;
-
-    CRotationablePoint mPoint1;
-};
-
-} // namespace test
-
-} // namespace drash
-
-#endif // DRASH_TEST_TEST9_H
+} // namespace greng

@@ -34,14 +34,6 @@ namespace drash
 namespace test
 {
 
-void CTest8::Release()
-{
-    GetTemplateSystem().Store();
-    mLevel1->Store("level1");
-    mLevel2->Store("level2");
-    CApp::Release();
-}
-
 bool CTest8::Init()
 {
     if (CApp::Init() == false ||
@@ -54,6 +46,19 @@ bool CTest8::Init()
     }
     GetTemplateSystem().Load();
     return true;
+}
+
+void CTest8::Render()
+{
+    CApp::Render();
+}
+
+void CTest8::Release()
+{
+    GetTemplateSystem().Store();
+    mLevel1->Store("level1");
+    mLevel2->Store("level2");
+    CApp::Release();
 }
 
 bool CTest8::InitUI()
@@ -153,7 +158,7 @@ bool CTest8::InitCamera()
     greng::CCameraParams p;
     p.mPos.Set(0, 0, 10);
     p.mFov = M_PI / 6.0;
-    auto c = GetCameraManager().CreateCamera(p);
+    auto c = GetGrengSystems().GetCameraManager().CreateCamera(p);
     GetDebugRenderer().SetCamera(c);
 
     return true;

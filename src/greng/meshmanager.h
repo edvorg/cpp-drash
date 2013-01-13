@@ -43,6 +43,9 @@ public:
     CMeshManager &operator =(CMeshManager &&) = delete;
     ~CMeshManager();
 
+    bool Init();
+    void Release();
+
     CMesh *CreateMesh();
     CMesh *CreateMeshFromObjFile(const char *_path);
     CMesh *CreateMeshQuad();

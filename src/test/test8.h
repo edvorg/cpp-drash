@@ -38,9 +38,11 @@ class CTest8 : public CApp
 {
 public:
     CTest8() = default;
-    virtual void Release() override;
 private:
     virtual bool Init() override;
+    virtual void Render() override;
+    virtual void Release() override;
+
     bool InitUI();
     bool InitLevels();
     bool InitCamera();

@@ -51,7 +51,7 @@ bool CObjectEditorApp::Init()
     CCameraParams cp;
     cp.mPos.Set(10,10,10.0f);
     cp.mRotation.Set(-M_PI/4, M_PI/4, 0);
-    mCamera = GetCameraManager().CreateCamera(cp);
+    mCamera = GetGrengSystems().GetCameraManager().CreateCamera(cp);
 
 
     if (mCamera == nullptr)
@@ -114,25 +114,25 @@ void CObjectEditorApp::Render()
             p4.mX -= grid_size_half.mX;
             p4.mZ -= grid_size_half.mY;
 
-            GetRenderer().DrawLine(mCamera,
+            GetGrengSystems().GetRenderer().DrawLine(mCamera,
                                    p1,
                                    p2,
                                    1,
                                    mGridColor,
                                    true);
-            GetRenderer().DrawLine(mCamera,
+            GetGrengSystems().GetRenderer().DrawLine(mCamera,
                                    p2,
                                    p3,
                                    1,
                                    mGridColor,
                                    true);
-            GetRenderer().DrawLine(mCamera,
+            GetGrengSystems().GetRenderer().DrawLine(mCamera,
                                    p3,
                                    p4,
                                    1,
                                    mGridColor,
                                    true);
-            GetRenderer().DrawLine(mCamera,
+            GetGrengSystems().GetRenderer().DrawLine(mCamera,
                                    p4,
                                    p1,
                                    1,
@@ -141,14 +141,14 @@ void CObjectEditorApp::Render()
         }
     }
 
-    GetRenderer().DrawLine(mCamera,
+    GetGrengSystems().GetRenderer().DrawLine(mCamera,
                            CVec3f(- segments_counts.mX * mGridSegmentSize / 2, 0, 0),
                            CVec3f(- 1 + segments_counts.mX * mGridSegmentSize / 2, 0, 0),
                            2,
                            CColor4f(0, 0, 0, 1),
                            false);
 
-    GetRenderer().DrawLine(mCamera,
+    GetGrengSystems().GetRenderer().DrawLine(mCamera,
                            CVec3f(0, 0, - segments_counts.mY * mGridSegmentSize / 2),
                            CVec3f(0, 0, - 1 + segments_counts.mY * mGridSegmentSize / 2),
                            2,
@@ -159,10 +159,10 @@ void CObjectEditorApp::Render()
 
     if (mVertexs.size() != 0 && mState == BuildState) {
         for (unsigned int i = 1 ; i < mVertexs.size() ; i++) {
-            GetRenderer().DrawLine(mVertexs[i-1],mVertexs[i], 1, CColor4f(0, 1, 0, 1));
+            GetGrengSystems().GetRenderer().DrawLine(mVertexs[i-1],mVertexs[i], 1, CColor4f(0, 1, 0, 1));
         }
-        GetRenderer().DrawLine(mVertexs[mVertexs.size() -1 ],GetCursorPos(), 1, CColor4f(0, 1, 0, 1));
-        GetRenderer().DrawLine(mVertexs[0],GetCursorPos(), 1, CColor4f(0, 1, 0, 1));
+        GetGrengSystems().GetRenderer().DrawLine(mVertexs[mVertexs.size() -1 ],GetCursorPos(), 1, CColor4f(0, 1, 0, 1));
+        GetGrengSystems().GetRenderer().DrawLine(mVertexs[0],GetCursorPos(), 1, CColor4f(0, 1, 0, 1));
     }
     if (mState == StretchState && mCurrentObject != nullptr) {
         for (unsigned int i = 0 ; i < mCurrentObject->EnumFigures() ; i++ ) {
@@ -187,7 +187,7 @@ void CObjectEditorApp::Render()
                     color.Col3().Set(255,0,0);
                 }
 
-                GetRenderer().DrawPoint(mCamera,position, 10.0f, color);
+                GetGrengSystems().GetRenderer().DrawPoint(mCamera,position, 10.0f, color);
 
                 color.Col3().Set(255,155,0);
 
@@ -203,13 +203,13 @@ void CObjectEditorApp::Render()
                     color.Col3().Set(255,0,0);
                 }
 
-                GetRenderer().DrawPoint(mCamera,position, 10.0f, color);
+                GetGrengSystems().GetRenderer().DrawPoint(mCamera,position, 10.0f, color);
             }
         }
     }
 
     if (mState == MoveOfAxisState && mSelectedFigure != nullptr) {
-        mMoveablePoint.Render(GetRenderer());
+        mMoveablePoint.Render(GetGrengSystems().GetRenderer());
     }
 }
 

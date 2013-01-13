@@ -37,7 +37,13 @@ using drash::CLogger;
 
 bool CRenderer::Init()
 {
+    Release();
+
     return true;
+}
+
+void CRenderer::Release()
+{
 }
 
 void CRenderer::RenderMesh(const CMesh *_mesh,

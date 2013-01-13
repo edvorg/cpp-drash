@@ -42,6 +42,9 @@ public:
     CFragmentShaderManager &operator =(CFragmentShaderManager &&) = delete;
     ~CFragmentShaderManager();
 
+    bool Init();
+    void Release();
+
     CFragmentShader *CreateShader();
     CFragmentShader *CreateShaderDummy();
     CFragmentShader *CreateShaderFromSource(const char *_source);

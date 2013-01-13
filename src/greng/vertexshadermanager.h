@@ -42,6 +42,9 @@ public:
     CVertexShaderManager &operator =(CVertexShaderManager &&) = delete;
     ~CVertexShaderManager();
 
+    bool Init();
+    void Release();
+
     CVertexShader *CreateShader();
     CVertexShader *CreateShaderDummy();
     CVertexShader *CreateShaderFromSource(const char *_source);

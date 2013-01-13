@@ -52,7 +52,7 @@ bool CTest1::Init()
 
     greng::CCameraParams cp;
     cp.mPos.Set(0, 0, 100);
-    mCamera = GetCameraManager().CreateCamera(cp);
+    mCamera = GetGrengSystems().GetCameraManager().CreateCamera(cp);
 
     if (mCamera == nullptr)
     {
@@ -169,21 +169,21 @@ void CTest1::Render()
     {
         for (int i = 0; i < (int)mVertices.size() - 1; i++)
         {
-            GetRenderer().DrawLine(mVertices[i], mVertices[i+1], 1, CColor4f(0, 1, 0, 1));
+            GetGrengSystems().GetRenderer().DrawLine(mVertices[i], mVertices[i+1], 1, CColor4f(0, 1, 0, 1));
         }
-        GetRenderer().DrawLine(mVertices[mVertices.size()-1],
+        GetGrengSystems().GetRenderer().DrawLine(mVertices[mVertices.size()-1],
                                GetCursorPos(),
                                1,
                                CColor4f(0, 1, 0, 1),
                                false);
-        GetRenderer().DrawLine(mVertices[0], GetCursorPos(), 1, CColor4f(0, 1, 0, 1), false);
+        GetGrengSystems().GetRenderer().DrawLine(mVertices[0], GetCursorPos(), 1, CColor4f(0, 1, 0, 1), false);
     }
 
     if (mCurrentFigure != nullptr && mCurrentObject != nullptr)
     {
-        GetRenderer().DrawLine(GetCamera(), mCenter, mX, 1, CColor4f(1 * mAxisDrawK.mX, 0, 0, 1), false);
-        GetRenderer().DrawLine(GetCamera(), mCenter, mY, 1, CColor4f(0, 1 * mAxisDrawK.mY, 0, 1), false);
-        GetRenderer().DrawLine(GetCamera(), mCenter, mZ, 1, CColor4f(0, 0, 1 * mAxisDrawK.mZ, 1), false);
+        GetGrengSystems().GetRenderer().DrawLine(GetCamera(), mCenter, mX, 1, CColor4f(1 * mAxisDrawK.mX, 0, 0, 1), false);
+        GetGrengSystems().GetRenderer().DrawLine(GetCamera(), mCenter, mY, 1, CColor4f(0, 1 * mAxisDrawK.mY, 0, 1), false);
+        GetGrengSystems().GetRenderer().DrawLine(GetCamera(), mCenter, mZ, 1, CColor4f(0, 0, 1 * mAxisDrawK.mZ, 1), false);
     }
 
     if (mSplitMode == true &&
@@ -193,13 +193,13 @@ void CTest1::Render()
     {
         if (mSplitDepth == false)
         {
-            GetRenderer().DrawTriangle(GetCamera(),
+            GetGrengSystems().GetRenderer().DrawTriangle(GetCamera(),
                                        mSplitPlanePoint1,
                                        mSplitPlanePoint2,
                                        mSplitPlanePoint4,
                                        CColor4f(1, 0, 0.5, 0.5),
                                        true);
-            GetRenderer().DrawTriangle(GetCamera(),
+            GetGrengSystems().GetRenderer().DrawTriangle(GetCamera(),
                                        mSplitPlanePoint4,
                                        mSplitPlanePoint2,
                                        mSplitPlanePoint3,
@@ -216,7 +216,7 @@ void CTest1::Render()
                     p1.mZ = mCurrentObject->GetPosZ() + mCurrentFigure->GetZ() - mCurrentFigure->GetDepth() * 0.5f;
                     p2.mZ = mCurrentObject->GetPosZ() + mCurrentFigure->GetZ() + mCurrentFigure->GetDepth() * 0.5f;
 
-                    GetRenderer().DrawLine(GetCamera(), p1, p2, 2, CColor4f(1, 1, 1), false);
+                    GetGrengSystems().GetRenderer().DrawLine(GetCamera(), p1, p2, 2, CColor4f(1, 1, 1), false);
                 };
 
                 draw_split(mSplitIntersection1);
@@ -230,8 +230,8 @@ void CTest1::Render()
             CVec3f p3(mSplitFigureMax.Vec2(), mSplitFigureCenterZ);
             CVec3f p4(mSplitFigureMax.mX, mSplitFigureMin.mY, mSplitFigureCenterZ);
 
-            GetRenderer().DrawTriangle(GetCamera(), p1, p2, p4, CColor4f(1, 0, 0.5, 0.5), true);
-            GetRenderer().DrawTriangle(GetCamera(), p4, p2, p3, CColor4f(1, 0, 0.5, 0.5), true);
+            GetGrengSystems().GetRenderer().DrawTriangle(GetCamera(), p1, p2, p4, CColor4f(1, 0, 0.5, 0.5), true);
+            GetGrengSystems().GetRenderer().DrawTriangle(GetCamera(), p4, p2, p3, CColor4f(1, 0, 0.5, 0.5), true);
         }
     }
 }

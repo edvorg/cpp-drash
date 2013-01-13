@@ -88,7 +88,7 @@ bool CTest4::Init()
     CCameraParams params;
     params.mPos.Set(10,10,10.0f);
     params.mRotation.Set(-M_PI/4, M_PI/4, 0);
-    CCamera *camera = GetCameraManager().CreateCamera(params);
+    CCamera *camera = GetGrengSystems().GetCameraManager().CreateCamera(params);
 
     if (camera == nullptr) {
         return false;
@@ -123,7 +123,7 @@ void CTest4::Step(double _dt)
 void CTest4::Render()
 {
     CApp::Render();
-    mPoint.Render(GetRenderer());
+    mPoint.Render(GetGrengSystems().GetRenderer());
 }
 
 } // namespace test

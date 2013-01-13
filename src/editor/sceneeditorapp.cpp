@@ -119,7 +119,7 @@ bool CSceneEditorApp::InitCamera()
     greng::CCameraParams p;
     p.mPos.Set(10,10,10.0f);
     p.mRotation.Set(-M_PI/4, M_PI/4, 0);
-    mCamera = GetCameraManager().CreateCamera(p);
+    mCamera = GetGrengSystems().GetCameraManager().CreateCamera(p);
     GetDebugRenderer().SetCamera(mCamera);
 
     return true;

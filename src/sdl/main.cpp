@@ -126,7 +126,7 @@ int main(int _argc, char **_argv)
         if (app->Init() == true)
         {
             glViewport(0, 0, gWindowWidth, gWindowHeight);
-            app->GetCameraManager().SetAspectRatio(gWindowWidth / gWindowHeight);
+            app->GetGrengSystems().GetCameraManager().SetAspectRatio(gWindowWidth / gWindowHeight);
             app->GetUISystem().SetAspectRatio(gWindowWidth / gWindowHeight);
             app->GetUISystem().SetWidth(gWindowWidth);
 
@@ -195,7 +195,7 @@ int main(int _argc, char **_argv)
                         }
 
                         glViewport(0, 0, gWindowWidth, gWindowHeight);
-                        app->GetCameraManager().SetAspectRatio(gWindowWidth / gWindowHeight);
+                        app->GetGrengSystems().GetCameraManager().SetAspectRatio(gWindowWidth / gWindowHeight);
                         app->GetUISystem().SetAspectRatio(gWindowWidth / gWindowHeight);
                         app->GetUISystem().SetWidth(gWindowWidth);
                     }
