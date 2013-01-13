@@ -173,7 +173,7 @@ void CTest6::Render()
 
     for (unsigned int i = 0; i < 6; i++)
     {
-        GetRenderer().RenderMesh(mPlayer1Mesh,
+        GetGrengSystems().GetRenderer().RenderMesh(mPlayer1Mesh,
                                  i,
                                  &mPlayer1Texture,
                                  1,
@@ -185,7 +185,7 @@ void CTest6::Render()
                                  &mLight1);
     }
 
-    GetRenderer().DrawPoint(GetCamera(),
+    GetGrengSystems().GetRenderer().DrawPoint(GetCamera(),
                             mLight1.mPosition,
                             10,
                             CColor4f(1, 1, 1, 1),
@@ -215,37 +215,37 @@ bool CTest6::InitPlayer()
         return false;
     }
 
-    mPlayer1Mesh = GetMeshManager().CreateMeshFromObjFile("assets/player.obj");
+    mPlayer1Mesh = GetGrengSystems().GetMeshManager().CreateMeshFromObjFile("assets/player.obj");
 
     if (mPlayer1Mesh == nullptr)
     {
         return false;
     }
 
-    GetMeshManager().ComputeNormals(mPlayer1Mesh);
+    GetGrengSystems().GetMeshManager().ComputeNormals(mPlayer1Mesh);
 
-    mPlayer1Texture = GetTextureManager().CreateTextureDummy();
+    mPlayer1Texture = GetGrengSystems().GetTextureManager().CreateTextureDummy();
 
     if (mPlayer1Texture == nullptr)
     {
         return false;
     }
 
-    mPlayer1VertexShader = GetVertexShaderManager().CreateShaderFromFile("shaders/shader2.120.vs");
+    mPlayer1VertexShader = GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile("shaders/shader2.120.vs");
 
     if (mPlayer1VertexShader == nullptr)
     {
         return false;
     }
 
-    mPlayer1FragmentShader = GetFragmentShaderManager().CreateShaderFromFile("shaders/shader2.120.fs");
+    mPlayer1FragmentShader = GetGrengSystems().GetFragmentShaderManager().CreateShaderFromFile("shaders/shader2.120.fs");
 
     if (mPlayer1FragmentShader == nullptr)
     {
         return false;
     }
 
-    mPlayer1ShaderProgram = GetShaderProgramManager().CreateProgram(mPlayer1VertexShader, mPlayer1FragmentShader);
+    mPlayer1ShaderProgram = GetGrengSystems().GetShaderProgramManager().CreateProgram(mPlayer1VertexShader, mPlayer1FragmentShader);
 
     if (mPlayer1ShaderProgram == nullptr)
     {

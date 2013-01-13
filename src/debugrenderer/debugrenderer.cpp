@@ -28,13 +28,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../scene/sceneobject.h"
 #include "../scene/figure.h"
 #include "../greng/vertex.h"
-#include "../greng/meshmanager.h"
-#include "../greng/texturemanager.h"
-#include "../greng/renderer.h"
 #include "../greng/camera.h"
-#include "../greng/vertexshadermanager.h"
-#include "../greng/fragmentshadermanager.h"
-#include "../greng/shaderprogrammanager.h"
+#include "../greng/grengsystemsset.h"
 
 namespace greng
 {
@@ -190,12 +185,12 @@ void CDebugRenderer::Render() const
                 mi.push_back(2 * kc + (kc - 1) * 4 + 3);
                 mi.push_back(2 * kc + (kc - 1) * 4 + 0);
 
-                m = mMeshManager->CreateMeshFromVertices(&mv[0], mv.size(), &mi[0], mi.size());
+                m = mGrengSystems->GetMeshManager().CreateMeshFromVertices(&mv[0], mv.size(), &mi[0], mi.size());
             }
 
             if (m != nullptr)
             {
-                mMeshManager->ComputeNormals(m);
+                mGrengSystems->GetMeshManager().ComputeNormals(m);
 
                 CMatrix4f rot;
                 MatrixRotationZ(rot, o->GetAngle());
@@ -211,7 +206,7 @@ void CDebugRenderer::Render() const
 
                 greng::CTexture *textures[2] = { mTexture1Diffuse, mTexture1Normal };
 
-                mRenderer->RenderMesh(m,
+                mGrengSystems->GetRenderer().RenderMesh(m,
                                          0,
                                          textures,
                                          2,
@@ -222,7 +217,7 @@ void CDebugRenderer::Render() const
                                          &mCamera->GetProjectionMatrix(),
                                          mLight);
 
-                mMeshManager->DestroyMesh(m);
+                mGrengSystems->GetMeshManager().DestroyMesh(m);
             }
         }
     }
@@ -311,8 +306,8 @@ CFigure *CDebugRenderer::FindFigure(const greng::CCamera *_camera, const CVec2f 
 
 bool CDebugRenderer::InitTextures()
 {
-    mTexture1Diffuse = mTextureManager->CreateTextureFromFile("assets/wall4.jpg");
-    mTexture1Normal = mTextureManager->CreateTextureFromFile("assets/wall1_normal.png");
+    mTexture1Diffuse = mGrengSystems->GetTextureManager().CreateTextureFromFile("assets/wall4.jpg");
+    mTexture1Normal = mGrengSystems->GetTextureManager().CreateTextureFromFile("assets/wall1_normal.png");
 
     if (mTexture1Diffuse == nullptr ||
         mTexture1Normal == nullptr)
@@ -325,9 +320,9 @@ bool CDebugRenderer::InitTextures()
 
 bool CDebugRenderer::InitShaders()
 {
-    greng::CVertexShader *vs = mVertexShaderManager->CreateShaderFromFile("shaders/shader3.120.vs");
-    greng::CFragmentShader *fs = mFragmentShaderManager->CreateShaderFromFile("shaders/shader3.120.fs");
-    mShaderProgram = mShaderProgramManager->CreateProgram(vs, fs);
+    greng::CVertexShader *vs = mGrengSystems->GetVertexShaderManager().CreateShaderFromFile("shaders/shader3.120.vs");
+    greng::CFragmentShader *fs = mGrengSystems->GetFragmentShaderManager().CreateShaderFromFile("shaders/shader3.120.fs");
+    mShaderProgram = mGrengSystems->GetShaderProgramManager().CreateProgram(vs, fs);
 
     if (mShaderProgram == nullptr)
     {

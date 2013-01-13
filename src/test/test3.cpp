@@ -96,7 +96,7 @@ void CTest3::Render()
     CMatrix4f m;
     MatrixRotationX(m, angle);
     MatrixMultiply(m, origin, pos);
-    GetRenderer().DrawPoint(GetCamera(), pos, 10, CColor4f(1, 0, 0), false);
+    GetGrengSystems().GetRenderer().DrawPoint(GetCamera(), pos, 10, CColor4f(1, 0, 0), false);
 
     angle += 0.01;
 }

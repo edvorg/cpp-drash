@@ -42,6 +42,9 @@ public:
     CTextureManager &operator =(CTextureManager &&) = delete;
     ~CTextureManager();
 
+    bool Init();
+    void Release();
+
     CTexture *CreateTexture();
     CTexture *CreateTextureFromFile(const char *_path);
     CTexture *CreateTextureDummy();

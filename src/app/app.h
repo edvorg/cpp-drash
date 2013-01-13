@@ -33,13 +33,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../debugrenderer/debugrenderer.h"
 #include "appeventsystem.h"
 #include "../ui/uisystem.h"
-#include "../greng/meshmanager.h"
-#include "../greng/texturemanager.h"
-#include "../greng/vertexshadermanager.h"
-#include "../greng/fragmentshadermanager.h"
-#include "../greng/shaderprogrammanager.h"
-#include "../greng/renderer.h"
-#include "../greng/cameramanager.h"
+#include "../greng/grengsystemsset.h"
 #include "../levelmanager/levelmanager.h"
 
 namespace drash
@@ -67,13 +61,7 @@ public:
     inline CDebugRenderer &GetDebugRenderer();
     inline ui::CUISystem &GetUISystem();
     inline CLevelManager &GetLevelManager();
-    inline greng::CMeshManager &GetMeshManager();
-    inline greng::CTextureManager &GetTextureManager();
-    inline greng::CVertexShaderManager &GetVertexShaderManager();
-    inline greng::CFragmentShaderManager &GetFragmentShaderManager();
-    inline greng::CShaderProgramManager &GetShaderProgramManager();
-    inline greng::CRenderer &GetRenderer();
-    inline greng::CCameraManager &GetCameraManager();
+    inline greng::CGrengSystemsSet &GetGrengSystems();
 
     /// used to make CApp childs about mouse moving event
     /// use this from your CApp back end (Qt, SDL, etc.)
@@ -99,13 +87,7 @@ private:
     CDebugRenderer mDebugRenderer;
     ui::CUISystem mUISystem;
     CLevelManager mLevelManager;
-    greng::CMeshManager mMeshManager;
-    greng::CTextureManager mTextureManager;
-    greng::CVertexShaderManager mVertexShaderManager;
-    greng::CFragmentShaderManager mFragmentShaderManager;
-    greng::CShaderProgramManager mShaderProgramManager;
-    greng::CRenderer mRenderer;
-    greng::CCameraManager mCameraManager;
+    greng::CGrengSystemsSet mGrengSystems;
 
     std::function<void ()> mQuitHandler = [] () {};
     bool mQuit = false;
@@ -162,39 +144,9 @@ inline CLevelManager &CApp::GetLevelManager()
     return mLevelManager;
 }
 
-inline greng::CMeshManager &CApp::GetMeshManager()
+inline greng::CGrengSystemsSet &CApp::GetGrengSystems()
 {
-    return mMeshManager;
-}
-
-inline greng::CTextureManager &CApp::GetTextureManager()
-{
-    return mTextureManager;
-}
-
-inline greng::CVertexShaderManager &CApp::GetVertexShaderManager()
-{
-    return mVertexShaderManager;
-}
-
-inline greng::CFragmentShaderManager &CApp::GetFragmentShaderManager()
-{
-    return mFragmentShaderManager;
-}
-
-inline greng::CShaderProgramManager &CApp::GetShaderProgramManager()
-{
-    return mShaderProgramManager;
-}
-
-inline greng::CRenderer &CApp::GetRenderer()
-{
-    return mRenderer;
-}
-
-inline greng::CCameraManager &CApp::GetCameraManager()
-{
-    return mCameraManager;
+    return mGrengSystems;
 }
 
 inline void CApp::SetCursorPos(const CVec2f &_pos)

@@ -30,15 +30,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace greng
 {
 
-class CRenderer;
-class CMeshManager;
-class CTextureManager;
 class CTexture;
 class CCamera;
-class CVertexShaderManager;
-class CFragmentShaderManager;
-class CShaderProgramManager;
-class CShaderProgram;
+class CGrengSystemsSet;
 
 }
 
@@ -52,12 +46,7 @@ class CDebugRenderer final
 {
 public:
     inline void SetScene(CScene *_scene);
-    inline void SetRenderer(greng::CRenderer *_renderer);
-    inline void SetMeshManager(greng::CMeshManager *_mesh_manager);
-    inline void SetTextureManager(greng::CTextureManager *_texture_manager);
-    inline void SetVertexShaderManager(greng::CVertexShaderManager *_vertex_shader_manager);
-    inline void SetFragmentShaderManager(greng::CFragmentShaderManager *_fragment_shader_manager);
-    inline void SetShaderProgramManager(greng::CShaderProgramManager *_shader_program_manager);
+    inline void SetGrengSystems(greng::CGrengSystemsSet *_greng_systems);
 
     inline void SetCamera(greng::CCamera *_camera);
     inline greng::CCamera *GetCamera() const;
@@ -80,12 +69,7 @@ private:
     bool InitShaders();
 
     CScene* mScene = nullptr;
-    greng::CRenderer *mRenderer = nullptr;
-    greng::CMeshManager *mMeshManager = nullptr;
-    greng::CTextureManager *mTextureManager = nullptr;
-    greng::CVertexShaderManager *mVertexShaderManager = nullptr;
-    greng::CFragmentShaderManager *mFragmentShaderManager = nullptr;
-    greng::CShaderProgramManager *mShaderProgramManager = nullptr;
+    greng::CGrengSystemsSet *mGrengSystems = nullptr;
 
     greng::CShaderProgram *mShaderProgram = nullptr;
     greng::CCamera *mCamera = nullptr;
@@ -101,34 +85,9 @@ inline void CDebugRenderer::SetScene(CScene *_scene)
     mScene = _scene;
 }
 
-inline void CDebugRenderer::SetRenderer(greng::CRenderer *_renderer)
+inline void CDebugRenderer::SetGrengSystems(greng::CGrengSystemsSet *_greng_systems)
 {
-    mRenderer = _renderer;
-}
-
-inline void CDebugRenderer::SetMeshManager(greng::CMeshManager *_mesh_manager)
-{
-    mMeshManager = _mesh_manager;
-}
-
-inline void CDebugRenderer::SetTextureManager(greng::CTextureManager *_texture_manager)
-{
-    mTextureManager = _texture_manager;
-}
-
-inline void CDebugRenderer::SetVertexShaderManager(greng::CVertexShaderManager *_vertex_shader_manager)
-{
-    mVertexShaderManager = _vertex_shader_manager;
-}
-
-inline void CDebugRenderer::SetFragmentShaderManager(greng::CFragmentShaderManager *_fragment_shader_manager)
-{
-    mFragmentShaderManager = _fragment_shader_manager;
-}
-
-inline void CDebugRenderer::SetShaderProgramManager(greng::CShaderProgramManager *_shader_program_manager)
-{
-    mShaderProgramManager = _shader_program_manager;
+    mGrengSystems = _greng_systems;
 }
 
 inline void CDebugRenderer::SetCamera(greng::CCamera *_camera)

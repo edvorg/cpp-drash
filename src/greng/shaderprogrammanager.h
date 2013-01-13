@@ -44,6 +44,9 @@ public:
     CShaderProgramManager &operator =(CShaderProgramManager &&) = delete;
     ~CShaderProgramManager();
 
+    bool Init();
+    void Release();
+
     CShaderProgram *CreateProgram();
     CShaderProgram *CreateProgram(CVertexShader *_vs, CFragmentShader *_fs);
     bool DestroyProgram(CShaderProgram *_program);

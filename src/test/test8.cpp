@@ -153,7 +153,7 @@ bool CTest8::InitCamera()
     greng::CCameraParams p;
     p.mPos.Set(0, 0, 10);
     p.mFov = M_PI / 6.0;
-    auto c = GetCameraManager().CreateCamera(p);
+    auto c = GetGrengSystems().GetCameraManager().CreateCamera(p);
     GetDebugRenderer().SetCamera(c);
 
     return true;

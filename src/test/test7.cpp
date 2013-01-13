@@ -79,7 +79,7 @@ void CTest7::Step(double _dt)
 
 bool CTest7::InitTextures()
 {
-    mDebugTexture = GetTextureManager().CreateTextureFromFile("assets/wall5.png");
+    mDebugTexture = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/wall5.png");
 
     if (mDebugTexture == nullptr)
     {
@@ -91,10 +91,10 @@ bool CTest7::InitTextures()
 
 bool CTest7::InitShaders()
 {
-    greng::CVertexShader *v = GetVertexShaderManager().CreateShaderFromFile("shaders/shader2.120.vs");
-    greng::CFragmentShader *f = GetFragmentShaderManager().CreateShaderFromFile("shaders/shader2.120.fs");
+    greng::CVertexShader *v = GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile("shaders/shader2.120.vs");
+    greng::CFragmentShader *f = GetGrengSystems().GetFragmentShaderManager().CreateShaderFromFile("shaders/shader2.120.fs");
 
-    mProgram = GetShaderProgramManager().CreateProgram(v, f);
+    mProgram = GetGrengSystems().GetShaderProgramManager().CreateProgram(v, f);
 
     if (mProgram == nullptr)
     {
@@ -222,12 +222,12 @@ void CTest7::Render()
                 mi.push_back(2 * kc + (kc - 1) * 4 + 3);
                 mi.push_back(2 * kc + (kc - 1) * 4 + 0);
 
-                m = GetMeshManager().CreateMeshFromVertices(&mv[0], mv.size(), &mi[0], mi.size());
+                m = GetGrengSystems().GetMeshManager().CreateMeshFromVertices(&mv[0], mv.size(), &mi[0], mi.size());
             }
 
             if (m != nullptr)
             {
-                GetMeshManager().ComputeNormals(m);
+                GetGrengSystems().GetMeshManager().ComputeNormals(m);
 
                 CMatrix4f rot;
                 MatrixRotationZ(rot, o->GetAngle());
@@ -241,7 +241,7 @@ void CTest7::Render()
                 CMatrix4f model_view;
                 MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
 
-                GetRenderer().RenderMesh(m,
+                GetGrengSystems().GetRenderer().RenderMesh(m,
                                          0,
                                          &mDebugTexture,
                                          1,
@@ -252,7 +252,7 @@ void CTest7::Render()
                                          &GetCamera()->GetProjectionMatrix(),
                                          &mLight1);
 
-                GetMeshManager().DestroyMesh(m);
+                GetGrengSystems().GetMeshManager().DestroyMesh(m);
             }
         }
     }

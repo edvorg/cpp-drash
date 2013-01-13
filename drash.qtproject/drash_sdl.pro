@@ -75,7 +75,8 @@ SOURCES += \
     ../src/levelmanager/levelmanager.cpp \
     ../src/test/test8.cpp \
     ../src/misc/rotationablepoint.cpp \
-    ../src/test/test9.cpp
+    ../src/test/test9.cpp \
+    ../src/greng/grengsystemsset.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -144,5 +145,6 @@ HEADERS += \
     ../src/misc/rotationablepoint.h \
     ../src/test/test9.h \
     precompiled.h \
-    ../src/precompiled.h
+    ../src/precompiled.h \
+    ../src/greng/grengsystemsset.h
 

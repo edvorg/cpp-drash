@@ -46,6 +46,17 @@ CTextureManager::~CTextureManager()
     }
 }
 
+bool CTextureManager::Init()
+{
+    Release();
+
+    return true;
+}
+
+void CTextureManager::Release()
+{
+}
+
 CTexture *CTextureManager::CreateTexture()
 {    
     CTexture *res = mTextureFactory.CreateObject();

@@ -46,6 +46,17 @@ CShaderProgramManager::~CShaderProgramManager()
     }
 }
 
+bool CShaderProgramManager::Init()
+{
+    Release();
+
+    return true;
+}
+
+void CShaderProgramManager::Release()
+{
+}
+
 CShaderProgram *CShaderProgramManager::CreateProgram()
 {
     CShaderProgram *res = mProgramFactory.CreateObject();

@@ -46,6 +46,17 @@ CFragmentShaderManager::~CFragmentShaderManager()
     }
 }
 
+bool CFragmentShaderManager::Init()
+{
+    Release();
+
+    return true;
+}
+
+void CFragmentShaderManager::Release()
+{
+}
+
 CFragmentShader *CFragmentShaderManager::CreateShader()
 {
     CFragmentShader *res = mShaderFactory.CreateObject();

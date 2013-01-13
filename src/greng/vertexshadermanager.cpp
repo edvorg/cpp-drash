@@ -45,6 +45,17 @@ CVertexShaderManager::~CVertexShaderManager()
     }
 }
 
+bool CVertexShaderManager::Init()
+{
+    Release();
+
+    return true;
+}
+
+void CVertexShaderManager::Release()
+{
+}
+
 CVertexShader *CVertexShaderManager::CreateShader()
 {
     CVertexShader *res = mShaderFactory.CreateObject();

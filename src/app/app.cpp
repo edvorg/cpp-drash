@@ -39,6 +39,11 @@ bool CApp::Init()
     CSceneParams params;
     params.mGravity.Set( 0, -9.8 );
 
+    if (mGrengSystems.Init() == false)
+    {
+        return false;
+    }
+
     if (mScene.Init(params) == false)
     {
         return false;
@@ -47,7 +52,7 @@ bool CApp::Init()
     mExplosionSystem.SetScene(&mScene);
     mPlayersSystem.SetScene(&mScene);
     mTemplateSystem.SetScene(&mScene);
-    mUISystem.SetRenderer(&mRenderer);
+    mUISystem.SetRenderer(&GetGrengSystems().GetRenderer());
     mLevelManager.SetScene(&mScene);
     mLevelManager.SetTemplateSystem(&mTemplateSystem);
 
@@ -56,20 +61,13 @@ bool CApp::Init()
         mTemplateSystem.Init() == false ||
         mEventSystem.Init() == false ||
         mUISystem.Init() == false ||
-        mRenderer.Init() == false ||
-        mCameraManager.Init() == false ||
         mLevelManager.Init() == false)
     {
         return false;
     }
 
-    mDebugRenderer.SetMeshManager(&mMeshManager);
-    mDebugRenderer.SetRenderer(&mRenderer);
+    mDebugRenderer.SetGrengSystems(&mGrengSystems);
     mDebugRenderer.SetScene(&mScene);
-    mDebugRenderer.SetTextureManager(&mTextureManager);
-    mDebugRenderer.SetVertexShaderManager(&mVertexShaderManager);
-    mDebugRenderer.SetFragmentShaderManager(&mFragmentShaderManager);
-    mDebugRenderer.SetShaderProgramManager(&mShaderProgramManager);
 
     if (mDebugRenderer.Init() == false)
     {
@@ -91,7 +89,7 @@ void CApp::Step(double _dt)
 
     mCurrentTimeDelta = _dt;
 
-    mCameraManager.Step(_dt);
+    mGrengSystems.Step(_dt);
     mEventSystem.Process();
     mScene.Step(_dt);
     mExplosionSystem.Step(_dt);
@@ -103,7 +101,6 @@ void CApp::Step(double _dt)
 void CApp::Release()
 {
     mLevelManager.Release();
-    mCameraManager.Release();
     mDebugRenderer.Release();
     mEventSystem.Release();
     mExplosionSystem.Release();
@@ -111,11 +108,7 @@ void CApp::Release()
     mTemplateSystem.Release();
     mUISystem.Release();
     mScene.Release();
-
-    mExplosionSystem.SetScene(nullptr);
-    mPlayersSystem.SetScene(nullptr);
-    mTemplateSystem.SetScene(nullptr);
-    mUISystem.SetRenderer(nullptr);
+    mGrengSystems.Release();
 }
 
 void CApp::Render()

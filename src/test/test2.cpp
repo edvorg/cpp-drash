@@ -46,7 +46,7 @@ bool CTest2::Init()
 
     greng::CCameraParams cp;
     cp.mPos.Set(0, 0, 300);
-    mCamera = GetCameraManager().CreateCamera(cp);
+    mCamera = GetGrengSystems().GetCameraManager().CreateCamera(cp);
 
     if (mCamera == nullptr)
     {
