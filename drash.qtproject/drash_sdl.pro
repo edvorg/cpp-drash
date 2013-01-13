@@ -143,5 +143,6 @@ HEADERS += \
     ../src/test/test8.h \
     ../src/misc/rotationablepoint.h \
     ../src/test/test9.h \
-    precompiled.h
+    precompiled.h \
+    ../src/precompiled.h
 

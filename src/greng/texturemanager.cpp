@@ -131,6 +131,30 @@ CTexture *CTextureManager::CreateTextureDummy()
     return res;
 }
 
+CTexture *CTextureManager::CreateTextureWhite()
+{
+    CTexture *res = CreateTexture();
+
+    if (res == nullptr)
+    {
+        return nullptr;
+    }
+
+    drash::CColor4f data[4];
+    data[0].Set(1, 1, 1, 1);
+    data[1].Set(1, 1, 1, 1);
+    data[2].Set(1, 1, 1, 1);
+    data[3].Set(1, 1, 1, 1);
+
+    glBindTexture(GL_TEXTURE_2D, res->mTextureBufferId);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_FLOAT, data);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    return res;
+}
+
 bool CTextureManager::DestroyTexture(CTexture *_texture)
 {
     if (mTextureFactory.IsObject(_texture) == false)

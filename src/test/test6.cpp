@@ -175,7 +175,8 @@ void CTest6::Render()
     {
         GetRenderer().RenderMesh(mPlayer1Mesh,
                                  i,
-                                 mPlayer1Texture,
+                                 &mPlayer1Texture,
+                                 1,
                                  mPlayer1ShaderProgram,
                                  &model,
                                  nullptr,

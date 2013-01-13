@@ -42,7 +42,8 @@ bool CRenderer::Init()
 
 void CRenderer::RenderMesh(const CMesh *_mesh,
                            unsigned int _submesh,
-                           const CTexture *_texture,
+                           const CTexture * const *_textures,
+                           unsigned int _textures_count,
                            const CShaderProgram *_program,
                            const drash::CMatrix4f *_model,
                            const drash::CMatrix4f *_view,
@@ -68,15 +69,6 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
     glEnableClientState(GL_NORMAL_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
 
-    if (_texture == nullptr)
-    {
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-    else
-    {
-        glBindTexture(GL_TEXTURE_2D, _texture->mTextureBufferId);
-    }
-
     glBindBuffer(GL_ARRAY_BUFFER, _mesh->mVertexBufferId);
     glVertexPointer(3, GL_FLOAT, sizeof(CVertex), nullptr);
     glTexCoordPointer(2, GL_FLOAT, sizeof(CVertex), reinterpret_cast<GLvoid*>(sizeof(drash::CVec3f)));
@@ -89,6 +81,39 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->mIndexBufferId);
 
     glUseProgram(_program->mProgramId);
+
+    static const unsigned int textures_count_limit = 3;
+    _textures_count = drash::math::Min<unsigned int>(_textures_count, textures_count_limit);
+
+    if (_textures == nullptr)
+    {
+        for (unsigned int i = 0; i < _textures_count; i++)
+        {
+            glActiveTexture(GL_TEXTURE0 + i);
+            glBindTexture(GL_TEXTURE_2D, 0);
+        }
+    }
+    else
+    {
+        for (unsigned int i = 0; i < _textures_count; i++)
+        {
+            glActiveTexture(GL_TEXTURE0 + i);
+            glBindTexture(GL_TEXTURE_2D, _textures[i]->mTextureBufferId);
+
+            std::ostringstream os;
+            os<<"gTex"<<i+1;
+
+            int t1loc = glGetUniformLocation(_program->mProgramId, os.str().c_str());
+            if (t1loc != -1)
+            {
+                glUniform1i(t1loc, i);
+            }
+            else
+            {
+                LOG_ERR("CRenderer::RenderMesh(): Unable to find "<<os.str().c_str()<<" attribute");
+            }
+        }
+    }
 
     if (_model != nullptr)
     {
@@ -140,16 +165,6 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
         {
             LOG_ERR("CRenderer::RenderMesh(): Unable to find gProjMatrix attribute");
         }
-    }
-
-    int t1loc = glGetUniformLocation(_program->mProgramId, "gTex1");
-    if (t1loc != -1)
-    {
-        glUniform1i(t1loc, 0);
-    }
-    else
-    {
-        LOG_ERR("CRenderer::RenderMesh(): Unable to find gTex1 attribute");
     }
 
     if (_light != nullptr)
