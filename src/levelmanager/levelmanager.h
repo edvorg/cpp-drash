@@ -32,6 +32,7 @@ class CScene;
 class CLevel;
 class CSceneObjectParams;
 class CTemplateSystem;
+class CSceneObject;
 
 class CLevelManager
 {
@@ -50,8 +51,8 @@ public:
     CLevel *CreateLevel();
     bool DestroyLevel(CLevel *_level);
 
+    bool StartLevel(CLevel *_level, std::map<CSceneObject *, CSceneObjectParams *> &_map);
     bool StartLevel(CLevel *_level);
-
 private:
     CScene *mScene = nullptr;
     CTemplateSystem *mTemplateSystem = nullptr;

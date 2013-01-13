@@ -34,6 +34,7 @@ enum State {
     MoveState,
     MoveOfAxisState,
     StretchState,
+    DeleteFigure,
     Simple
 };
 
@@ -51,7 +52,7 @@ public:
 
     bool BuildFigure(const std::string &_objectName);
 
-    void AddNewObjectToTemplate(const std::string &_name);
+    bool AddNewObjectToTemplate(const std::string &_name);
 
     void ShowObject(const std::string &_name);
 

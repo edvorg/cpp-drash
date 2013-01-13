@@ -261,6 +261,10 @@ void CObjectEditorApp::SetProcessors()
                 }
                 break;
             }
+            case DeleteFigure:{
+
+                break;
+            }
             case Simple:
                 mSelectedFigure = nullptr;
                 break;
@@ -286,17 +290,20 @@ void CObjectEditorApp::SetProcessors()
         if (mState == MoveState) {
             mSelectedFigure = nullptr;
             SaveCurrentObject();
+//            mTreeRefreshHandler();
         }
         if (mState == MoveOfAxisState && mSelectedFigure != nullptr) {
             mMoveablePoint.ClickEnd();
             SaveCurrentObject();
+//            mTreeRefreshHandler();
         }
         if (mState == StretchState) {
             mSelectedFigure = nullptr;
             SaveCurrentObject();
             mVertexIndex = -1;
+//            mTreeRefreshHandler();
         }
-        mTreeRefreshHandler();
+
     }
     ));
 
@@ -324,6 +331,27 @@ void CObjectEditorApp::SetProcessors()
         }
     }
     ));
+
+    GetEventSystem().SetProcessor("WHUP",CAppEventProcessor(
+    [this](){
+        if (mCurrentObject != nullptr) {
+            for (int i = 0 ; i < mCurrentObject->EnumFigures() ; i++) {
+                CFigure *fig = mCurrentObject->GetFigures()[i];
+                fig->SetDepth(fig->GetDepth()+0.5);
+            }
+        }
+    }));
+    GetEventSystem().SetProcessor("WHDN",CAppEventProcessor(
+    [this](){
+        if (mCurrentObject != nullptr) {
+            for (int i = 0 ; i < mCurrentObject->EnumFigures() ; i++) {
+                CFigure *fig = mCurrentObject->GetFigures()[i];
+                if (fig->GetDepth()-0.5 > 0.01) {
+                    fig->SetDepth(fig->GetDepth()-0.5);
+                }
+            }
+        }
+    }));
 }
 
 void CObjectEditorApp::SetCameraProcessors()
@@ -418,10 +446,13 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
     return true;
 }
 
-void CObjectEditorApp::AddNewObjectToTemplate(const std::string &_name)
+bool CObjectEditorApp::AddNewObjectToTemplate(const std::string &_name)
 {
-    GetTemplateSystem().CreateSceneObjectTemplate(_name);
+    if (GetTemplateSystem().CreateSceneObjectTemplate(_name) == nullptr ) {
+        return false;
+    }
     ShowObject(_name);
+    return true;
 }
 
 void CObjectEditorApp::ShowObject(const std::string &_name)
@@ -473,7 +504,6 @@ void CObjectEditorApp::RemoveCurrentObject()
     if (mCurrentObject != nullptr) {
         GetScene().DestroyObject(mCurrentObject);
         mCurrentObject = nullptr;
-        mTreeRefreshHandler();
     }
 
 }

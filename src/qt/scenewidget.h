@@ -58,6 +58,10 @@ protected:
     virtual void keyReleaseEvent(QKeyEvent *_event) override;
     virtual void wheelEvent( QWheelEvent *_event ) override;
 
+    virtual void dropEvent(QDropEvent *_event) override;
+    virtual void dragMoveEvent(QDragMoveEvent *_event) override;
+    virtual void dragEnterEvent(QDragEnterEvent *_event) override;
+
     drash::CApp *mApp = nullptr;
     float mWidth = 1.0f;
     float mHeight = 1.0f;

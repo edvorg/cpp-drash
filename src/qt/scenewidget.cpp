@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "scenewidget.h"
 
 #include <QMouseEvent>
+#include <QDebug>
 
 #include "../app/app.h"
 #include "../app/appevent.h"
@@ -88,6 +89,7 @@ SceneWidget::SceneWidget(QWidget *parent) :
     QGLWidget(parent)
 {
     setMouseTracking(true);
+    setAcceptDrops(true);
 }
 
 SceneWidget::~SceneWidget()
@@ -115,11 +117,12 @@ void SceneWidget::initializeGL()
 
     int img_flags = IMG_INIT_PNG;
 
-    if (IMG_Init(img_flags) != img_flags)
-    {
-        mApp = nullptr;
-        return;
-    }
+//    if (IMG_Init(img_flags) != img_flags)
+//    {
+//        mApp = nullptr;
+//        return;
+//    }
+
 
     if (glewInit() != GLEW_OK)
     {
@@ -129,10 +132,10 @@ void SceneWidget::initializeGL()
 
     if (mApp != nullptr)
     {
-            if (mApp->Init() == false)
-            {
-                mApp = nullptr;
-            }
+        if (mApp->Init() == false)
+        {
+            mApp = nullptr;
+        }
     }
 }
 
@@ -258,4 +261,47 @@ void SceneWidget::wheelEvent( QWheelEvent *_event )
 
     mApp->GetEventSystem().BeginEvent(CAppEvent(_event->delta() > 0 ? EventKeyWheelUp : EventKeyWheelDown));
     mApp->GetEventSystem().EndEvent(CAppEvent(_event->delta() > 0 ? EventKeyWheelUp : EventKeyWheelDown));
+}
+
+void SceneWidget::dropEvent(QDropEvent *_event)
+{
+    qDebug() << "Drop event " <<_event->mimeData()->text();
+//    QMimeData data = *_event->mimeData();"application/x-qabstractitemmodeldatalist"
+    qDebug() << _event->mimeData()->formats();
+    QByteArray ar = _event->mimeData()->data("application/x-qabstractitemmodeldatalist");
+//    QString str(ar);
+//    qDebug() << str;
+    QDataStream stream(&ar,QIODevice::ReadOnly);
+    QMap<int, QVariant> roleDataMap;
+    while (!stream.atEnd()) {
+        stream >> roleDataMap;
+    }
+
+    foreach(int i , roleDataMap.keys()) {
+        qDebug() <<i <<" "<< roleDataMap[i].toString();
+    }
+    _event->accept();
+}
+
+void SceneWidget::dragMoveEvent(QDragMoveEvent *_event)
+{
+    qDebug() << "drag move";
+
+    QByteArray ar = _event->mimeData()->data("application/x-qabstractitemmodeldatalist");
+    QDataStream stream(&ar,QIODevice::ReadOnly);
+    QMap<int, QVariant> roleDataMap;
+    while (!stream.atEnd()) {
+        stream >> roleDataMap;
+    }
+
+    foreach(int i , roleDataMap.keys()) {
+        qDebug() <<i <<" "<< roleDataMap[i].toString();
+    }
+    _event->acceptProposedAction();
+}
+
+void SceneWidget::dragEnterEvent(QDragEnterEvent *_event)
+{
+    qDebug() << "drag Enter";
+    _event->acceptProposedAction();
 }

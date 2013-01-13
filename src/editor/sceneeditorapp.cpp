@@ -25,6 +25,12 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "sceneeditorapp.h"
 #include "../scene/sceneobject.h"
 #include "../levelmanager/level.h"
+#include "../diag/logger.h"
+
+#include <QDebug>
+
+using namespace greng;
+using namespace std;
 
 namespace drash {
 
@@ -34,27 +40,56 @@ CSceneEditorApp::CSceneEditorApp()
 
 bool CSceneEditorApp::Init()
 {
-    CApp::Init();
+
+    if (CApp::Init() == false) {
+        return false;
+    }
+
     if (InitCamera() == false ||
         InitPointLight() == false) {
         return false;
     }
+
+    SetProcessors();
+    SetCameraProcessors();
+
+    mTimer.Reset(true);
+//    mMoveablePoint.SetSize(100);
     return true;
     //GetTemplateSystem().CreateSceneObjectFromTemplate("Object1",CSceneObjectParams());
 }
 
 void CSceneEditorApp::Step(double _dt)
 {
+    mTimer.Tick();
     if (mPlayLevel == true ){
         CApp::Step(_dt);
     } else {
         CApp::Step(0);
+    }
+    if (mSelectedObject != nullptr){
+        mMoveablePoint.SetCursorPos(GetCursorPos());
+        mMoveablePoint.Step(_dt);
     }
 }
 
 void CSceneEditorApp::Render()
 {
     CApp::Render();
+//    if (mPlayLevel == false && mCurrentLevel != nullptr) {
+//        for (const auto &headitem : mCurrentLevel->GetObjects()) {
+//            string templatename = headitem.first;
+//            CSceneObjectGeometry *g = GetTemplateSystem().FindTemplate(templatename);
+//            for (const auto &item : headitem.second) {
+//                CSceneObjectParams params = item.second;
+//                GetDebugRenderer().RenderObject(g,&params);
+//            }
+//        }
+//    }
+    if (mSelectedObject != nullptr) {
+        mMoveablePoint.Render(GetGrengSystems().GetRenderer());
+    }
+
 }
 
 void CSceneEditorApp::Release()
@@ -74,6 +109,7 @@ bool CSceneEditorApp::LoadLevel(const std::string &_filename)
         mCurrentLevel = nullptr;
     }
 
+    mSelectedObject = nullptr;
     mCurrentLevel = GetLevelManager().CreateLevel();
 
     if (mCurrentLevel == nullptr) {
@@ -87,7 +123,7 @@ bool CSceneEditorApp::LoadLevel(const std::string &_filename)
     mFileNameLevel = _filename;
 
     mTreeRefreshHandler();
-    GetLevelManager().StartLevel(mCurrentLevel);
+    GetLevelManager().StartLevel(mCurrentLevel,mObjectParams);
     mPlayLevel = false;
     return true;
     //GetLevelManager().StartLevel(level);
@@ -102,16 +138,153 @@ bool CSceneEditorApp::SaveLevelAs(const std::string &_filename)
     return mCurrentLevel->Store(_filename);
 }
 
+bool CSceneEditorApp::NewLevel()
+{
+    mSelectedObject = nullptr;
+    if (mCurrentLevel != nullptr) {
+        GetLevelManager().DestroyLevel(mCurrentLevel);
+    }
+    mCurrentLevel = GetLevelManager().CreateLevel();
+    if (mCurrentLevel == nullptr) {
+        return false;
+    }
+    GetLevelManager().StartLevel(mCurrentLevel);
+    return true;
+}
+
 void CSceneEditorApp::StartCurrentLevel()
 {
     if (mCurrentLevel != nullptr) {
         mPlayLevel = true;
-        //GetLevelManager().StartLevel(mCurrentLevel);
+        mSelectedObject = nullptr;
+//        GetLevelManager().StartLevel(mCurrentLevel);
     }
+}
+
+void CSceneEditorApp::AddObject(const std::string &_name)
+{
+    if (mCurrentLevel == nullptr) {
+        return;
+    }
+
+    CSceneObjectGeometry *obj = GetTemplateSystem().FindTemplate(_name);
+    if (obj == nullptr) {
+        LOG_ERR(_name.c_str()  << " not found in Template System");
+        return;
+    }
+
+    CSceneObjectParams params;
+    //GetTemplateSystem().CreateSceneObjectFromTemplate(_name,params);
+    std::ostringstream is;
+    is << "object" << mCurrentLevel->GetObjects().size();
+    CSceneObjectParams *p = mCurrentLevel->AddObject(_name,is.str());
+    GetLevelManager().StartLevel(mCurrentLevel,mObjectParams);
+//    p->mPos
 }
 
 void CSceneEditorApp::SetProcessors()
 {
+    GetEventSystem().SetProcessor("RB",CAppEventProcessor(
+    [this]() {
+        if (mPlayLevel == true) {
+            return;
+        }
+        mSelectedObject = SelectObject();
+        if (mSelectedObject != nullptr) {
+            mOldpositon = mSelectedObject->GetPos();
+            mMoveablePoint.SetCenter(mOldpositon);
+            qDebug() << "Object found";
+        } else {
+        }
+    }
+    ));
+    GetEventSystem().SetProcessor("LB",CAppEventProcessor(
+    [this]() {
+        if (mPlayLevel == true) {
+            return;
+        }
+//        mSelectedFigure = SelectFigure(GetCursorPos());
+
+//        CPlane plane;
+//        plane.SetPoint(CVec3f(0, 0, 0));
+//        plane.SetNormal(CVec3f(0, 0, 1));
+
+//        mCamera->CastRay(GetCursorPos(), plane, mOldPositionCursor);
+//        break;
+//        mSelectedObject = SelectObject();
+        if (mSelectedObject != nullptr) {
+            mMoveablePoint.ClickBegin();
+        }
+    } ,
+    [this]() {
+        if (mPlayLevel == true) {
+            return;
+        }
+        if (mSelectedObject != nullptr) {
+            mMoveablePoint.ClickPressing();
+            MoveOfAxis();
+        }
+    },
+    [this] () {
+        if (mPlayLevel == true) {
+            return;
+        }
+        if (mSelectedObject != nullptr) {
+            mMoveablePoint.ClickEnd();
+        }
+    }
+    ));
+}
+
+void CSceneEditorApp::SetCameraProcessors()
+{
+    GetEventSystem().SetProcessor("MB", CAppEventProcessor(
+    [this] ()
+    {
+        mCamRotFirstClick = GetCursorPos();
+    },
+    [this] ()
+    {
+        CVec2f new_pos = GetCursorPos();
+
+        CVec2f rot = mCamera->GetRotation().Get();
+        rot.mY -= new_pos.mX - mCamRotFirstClick.mX;
+        rot.mX += new_pos.mY - mCamRotFirstClick.mY;
+
+        mCamera->GetRotation().Set(rot);
+
+        mCamRotFirstClick = new_pos;
+    }));
+
+    GetEventSystem().SetProcessor("w", CAppEventProcessor(
+    [this] () {},
+    [this] ()
+    {
+        mCamera->Forward(MOVING_SPEED * mTimer.GetDeltaTime());
+    },
+    [this]{}
+    ));
+
+    GetEventSystem().SetProcessor("a", CAppEventProcessor(
+    [this] () {},
+    [this] ()
+    {
+        mCamera->Strafe(MOVING_SPEED * mTimer.GetDeltaTime());
+    }));
+
+    GetEventSystem().SetProcessor("s", CAppEventProcessor(
+    [this] () {},
+    [this] ()
+    {
+        mCamera->Forward(-MOVING_SPEED * mTimer.GetDeltaTime());
+    }));
+
+    GetEventSystem().SetProcessor("d", CAppEventProcessor(
+    [this] () {},
+    [this] ()
+    {
+        mCamera->Strafe(-MOVING_SPEED * mTimer.GetDeltaTime());
+    }));
 }
 
 bool CSceneEditorApp::InitCamera()
@@ -122,6 +295,8 @@ bool CSceneEditorApp::InitCamera()
     mCamera = GetGrengSystems().GetCameraManager().CreateCamera(p);
     GetDebugRenderer().SetCamera(mCamera);
 
+    mMoveablePoint.SetCamera(mCamera);
+
     return true;
 }
 
@@ -130,6 +305,57 @@ bool CSceneEditorApp::InitPointLight()
     mLight1.mPosition.Set(0, 10, 0);
     GetDebugRenderer().SetLight(&mLight1);
     return true;
+}
+
+void CSceneEditorApp::StoreParams()
+{
+    if (mCurrentLevel == nullptr) {
+        return;
+    }
+    mObjectParams.clear();
+
+}
+
+CSceneObject *CSceneEditorApp::SelectObject()
+{
+    return GetDebugRenderer().FindObject(mCamera,GetCursorPos());
+
+    //CVec3f cursorpos;
+    //CPlane plane;
+    //mCamera->CastRay(GetCursorPos(),);
+//    for (const auto &headitem : mCurrentLevel->GetObjects()) {
+//        //string templatename = headitem.first;
+//        //CSceneObjectGeometry *g = GetTemplateSystem().FindTemplate(templatename);
+//        for (const auto &item : headitem.second) {
+//            CSceneObjectParams params = item.second;
+
+//            //GetDebugRenderer().RenderObject(g,&params);
+//        }
+//    }
+}
+
+void CSceneEditorApp::MoveOfAxis()
+{
+    mSelectedObject->SetPos(mMoveablePoint.GetCenter());
+    mOldpositon = mMoveablePoint.GetCenter();
+    auto iter = mObjectParams.find(mSelectedObject);
+    if (iter != mObjectParams.end()) {
+        CSceneObjectParams *p = iter->second;
+        p->mPos = mSelectedObject->GetPos();
+    }
+}
+
+void CSceneEditorApp::StopLevel()
+{
+    mPlayLevel = false;
+    GetLevelManager().StartLevel(mCurrentLevel,mObjectParams);
+}
+
+void CSceneEditorApp::ResetLevel()
+{
+    if (mCurrentLevel != nullptr) {
+        GetLevelManager().StartLevel(mCurrentLevel,mObjectParams);
+    }
 }
 
 } // namspace drash
