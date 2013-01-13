@@ -130,6 +130,10 @@ private:
     CTimer mTimer;
 
     static const float MOVING_SPEED;
+
+    CColor4f mGridColor = CColor4f(0.8, 0.8, 0.8, 1);
+    int mGridSegmentSize = 1;
+    CVec2i mGridSize = CVec2i(20, 20);
 };
 
 inline bool CObjectEditorApp::IsStartBuild()const {
