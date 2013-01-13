@@ -60,9 +60,6 @@ private slots:
 
     void on_mTreeObjects_itemSelectionChanged();
 
-    void Remove_Object();
-
-    void SaveObject();
 private:
     Ui::EditorWindow *ui;
     bool InitScene();
@@ -82,7 +79,7 @@ private:
     // for editor object
     QAction *mQuit;
     QAction *mRemoveAction;
-    QAction *mSaveAction;
+//    QAction *mSaveAction;
     QAction *mMoveActiveAction;
     QAction *mStretchActiveAction;
     QAction *mMoveOfAxisActiveAction;
@@ -92,6 +89,12 @@ private:
     QAction *mZoomDownAction;
     QActionGroup mModeActions;
 
+    // for editor scene
+    QAction * mOpenLevelAction;
+    QAction * mSaveLevelAction;
+    QAction * mSaveLevelAsAction;
+    QAction * mPlayLevelAction;
+    QAction * mPauseLevelAction;
     // Slots for Actions
 private slots:
     // for edtitor object
@@ -100,11 +103,19 @@ private slots:
     void MoveActive();
     void MoveOfAxisActive();
     void StretchActive();
+    void Remove_Object();
 
+    void ChangeMode(QAction *_action);
 
     void ZoomUp();
     void ZoomDown();
 
+    // for editor scene
+    void OpenLevel();
+    void SaveLevel();
+    void SaveLevelAs();
+    void PlayLevel();
+    void PauseLevel();
     void on_mManageWidget_currentChanged(int index);
 
 private:
@@ -117,7 +128,9 @@ private:
 private:
     void CreateActions();
 
-    bool UpdateTreeObject(QTreeWidget *_tree, drash::CApp *_app);
+    bool UpdateTreeTemplates(QTreeWidget *_tree, drash::CApp *_app);
+
+    void UpdateTreeSceneObjects();
 
     drash::CTimer mTimer;
 
