@@ -32,6 +32,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/texturemanager.h"
 #include "../greng/renderer.h"
 #include "../greng/camera.h"
+#include "../greng/vertexshadermanager.h"
+#include "../greng/fragmentshadermanager.h"
+#include "../greng/shaderprogrammanager.h"
 
 namespace greng
 {
@@ -45,7 +48,8 @@ bool CDebugRenderer::Init()
 {
     Release();
 
-    if (InitTextures() == false)
+    if (InitTextures() == false ||
+        InitShaders() == false)
     {
         return false;
     }
@@ -77,11 +81,11 @@ void CDebugRenderer::Render() const
         return;
     }
 
-    unsigned int ic = GetScene()->EnumObjects();
+    unsigned int ic = mScene->EnumObjects();
 
     for (unsigned int i = 0; i < ic; i++)
     {
-        CSceneObject *o = GetScene()->GetObjects()[i];
+        CSceneObject *o = mScene->GetObjects()[i];
         unsigned int jc = o->EnumFigures();
 
         for (unsigned int j = 0; j < jc; j++)
@@ -186,12 +190,12 @@ void CDebugRenderer::Render() const
                 mi.push_back(2 * kc + (kc - 1) * 4 + 3);
                 mi.push_back(2 * kc + (kc - 1) * 4 + 0);
 
-                m = GetMeshManager()->CreateMeshFromVertices(&mv[0], mv.size(), &mi[0], mi.size());
+                m = mMeshManager->CreateMeshFromVertices(&mv[0], mv.size(), &mi[0], mi.size());
             }
 
             if (m != nullptr)
             {
-                GetMeshManager()->ComputeNormals(m);
+                mMeshManager->ComputeNormals(m);
 
                 CMatrix4f rot;
                 MatrixRotationZ(rot, o->GetAngle());
@@ -205,9 +209,12 @@ void CDebugRenderer::Render() const
                 CMatrix4f model_view;
                 MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
 
-                GetRenderer()->RenderMesh(m,
+                greng::CTexture *textures[2] = { mTexture1Diffuse, mTexture1Normal };
+
+                mRenderer->RenderMesh(m,
                                          0,
-                                         mTexture1,
+                                         textures,
+                                         2,
                                          mShaderProgram,
                                          &model,
                                          nullptr,
@@ -215,7 +222,7 @@ void CDebugRenderer::Render() const
                                          &mCamera->GetProjectionMatrix(),
                                          mLight);
 
-                GetMeshManager()->DestroyMesh(m);
+                mMeshManager->DestroyMesh(m);
             }
         }
     }
@@ -234,9 +241,9 @@ CFigure *CDebugRenderer::FindFigure(const greng::CCamera *_camera, const CVec2f 
     bool brk = false;
     float z_nearest = 0;
 
-    for (i = 0; i < GetScene()->EnumObjects(); i++)
+    for (i = 0; i < mScene->EnumObjects(); i++)
     {
-        CSceneObject *cur_obj = GetScene()->GetObjects()[i];
+        CSceneObject *cur_obj = mScene->GetObjects()[i];
 
         for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++)
         {
@@ -269,9 +276,9 @@ CFigure *CDebugRenderer::FindFigure(const greng::CCamera *_camera, const CVec2f 
         }
     }
 
-    for (; i < GetScene()->EnumObjects(); i++)
+    for (; i < mScene->EnumObjects(); i++)
     {
-        CSceneObject *cur_obj = GetScene()->GetObjects()[i];
+        CSceneObject *cur_obj = mScene->GetObjects()[i];
 
         for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++)
         {
@@ -304,9 +311,25 @@ CFigure *CDebugRenderer::FindFigure(const greng::CCamera *_camera, const CVec2f 
 
 bool CDebugRenderer::InitTextures()
 {
-    mTexture1 = GetTextureManager()->CreateTextureFromFile("assets/wall2_diffuse.png");
+    mTexture1Diffuse = mTextureManager->CreateTextureFromFile("assets/wall4.jpg");
+    mTexture1Normal = mTextureManager->CreateTextureFromFile("assets/wall1_normal.png");
 
-    if (mTexture1 == nullptr)
+    if (mTexture1Diffuse == nullptr ||
+        mTexture1Normal == nullptr)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool CDebugRenderer::InitShaders()
+{
+    greng::CVertexShader *vs = mVertexShaderManager->CreateShaderFromFile("shaders/shader3.120.vs");
+    greng::CFragmentShader *fs = mFragmentShaderManager->CreateShaderFromFile("shaders/shader3.120.fs");
+    mShaderProgram = mShaderProgramManager->CreateProgram(vs, fs);
+
+    if (mShaderProgram == nullptr)
     {
         return false;
     }

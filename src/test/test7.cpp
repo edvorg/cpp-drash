@@ -243,7 +243,8 @@ void CTest7::Render()
 
                 GetRenderer().RenderMesh(m,
                                          0,
-                                         mDebugTexture,
+                                         &mDebugTexture,
+                                         1,
                                          mProgram,
                                          &model,
                                          nullptr,

@@ -35,6 +35,9 @@ class CMeshManager;
 class CTextureManager;
 class CTexture;
 class CCamera;
+class CVertexShaderManager;
+class CFragmentShaderManager;
+class CShaderProgramManager;
 class CShaderProgram;
 
 }
@@ -49,16 +52,13 @@ class CDebugRenderer final
 {
 public:
     inline void SetScene(CScene *_scene);
-    inline CScene *GetScene() const;
     inline void SetRenderer(greng::CRenderer *_renderer);
-    inline greng::CRenderer *GetRenderer() const;
     inline void SetMeshManager(greng::CMeshManager *_mesh_manager);
-    inline greng::CMeshManager *GetMeshManager() const;
     inline void SetTextureManager(greng::CTextureManager *_texture_manager);
-    inline greng::CTextureManager *GetTextureManager() const;
+    inline void SetVertexShaderManager(greng::CVertexShaderManager *_vertex_shader_manager);
+    inline void SetFragmentShaderManager(greng::CFragmentShaderManager *_fragment_shader_manager);
+    inline void SetShaderProgramManager(greng::CShaderProgramManager *_shader_program_manager);
 
-    inline void SetShaderProgram(greng::CShaderProgram *_shader_program);
-    inline greng::CShaderProgram *GetShaderProgram() const;
     inline void SetCamera(greng::CCamera *_camera);
     inline greng::CCamera *GetCamera() const;
     inline void SetLight(greng::CPointLight *_light);
@@ -77,16 +77,21 @@ public:
 protected:
 private:
     bool InitTextures();
+    bool InitShaders();
 
     CScene* mScene = nullptr;
     greng::CRenderer *mRenderer = nullptr;
     greng::CMeshManager *mMeshManager = nullptr;
     greng::CTextureManager *mTextureManager = nullptr;
+    greng::CVertexShaderManager *mVertexShaderManager = nullptr;
+    greng::CFragmentShaderManager *mFragmentShaderManager = nullptr;
+    greng::CShaderProgramManager *mShaderProgramManager = nullptr;
 
     greng::CShaderProgram *mShaderProgram = nullptr;
     greng::CCamera *mCamera = nullptr;
     greng::CPointLight *mLight = nullptr;
-    greng::CTexture *mTexture1 = nullptr;
+    greng::CTexture *mTexture1Diffuse = nullptr;
+    greng::CTexture *mTexture1Normal = nullptr;
 
     float mTexCoordsScale = 1.0 / 40.0;
 };
@@ -96,19 +101,9 @@ inline void CDebugRenderer::SetScene(CScene *_scene)
     mScene = _scene;
 }
 
-inline CScene *CDebugRenderer::GetScene() const
-{
-    return mScene;
-}
-
 inline void CDebugRenderer::SetRenderer(greng::CRenderer *_renderer)
 {
     mRenderer = _renderer;
-}
-
-inline greng::CRenderer *CDebugRenderer::GetRenderer() const
-{
-    return mRenderer;
 }
 
 inline void CDebugRenderer::SetMeshManager(greng::CMeshManager *_mesh_manager)
@@ -116,29 +111,24 @@ inline void CDebugRenderer::SetMeshManager(greng::CMeshManager *_mesh_manager)
     mMeshManager = _mesh_manager;
 }
 
-inline greng::CMeshManager *CDebugRenderer::GetMeshManager() const
-{
-    return mMeshManager;
-}
-
 inline void CDebugRenderer::SetTextureManager(greng::CTextureManager *_texture_manager)
 {
     mTextureManager = _texture_manager;
 }
 
-inline greng::CTextureManager *CDebugRenderer::GetTextureManager() const
+inline void CDebugRenderer::SetVertexShaderManager(greng::CVertexShaderManager *_vertex_shader_manager)
 {
-    return mTextureManager;
+    mVertexShaderManager = _vertex_shader_manager;
 }
 
-inline void CDebugRenderer::SetShaderProgram(greng::CShaderProgram *_shader_program)
+inline void CDebugRenderer::SetFragmentShaderManager(greng::CFragmentShaderManager *_fragment_shader_manager)
 {
-    mShaderProgram = _shader_program;
+    mFragmentShaderManager = _fragment_shader_manager;
 }
 
-inline greng::CShaderProgram *CDebugRenderer::GetShaderProgram() const
+inline void CDebugRenderer::SetShaderProgramManager(greng::CShaderProgramManager *_shader_program_manager)
 {
-    return mShaderProgram;
+    mShaderProgramManager = _shader_program_manager;
 }
 
 inline void CDebugRenderer::SetCamera(greng::CCamera *_camera)

@@ -59,7 +59,7 @@ public:
 
     void RenderMesh(const CMesh *_mesh,
                     unsigned int _submesh,
-                    const CTexture *_texture,
+                    const CTexture * const *_textures, unsigned int _textures_count,
                     const CShaderProgram *_program,
                     const drash::CMatrix4f *_model,
                     const drash::CMatrix4f *_view,

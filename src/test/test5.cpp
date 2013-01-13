@@ -64,7 +64,8 @@ void CTest5::Step(double _dt)
         mAngle -= M_PI * 2.0;
     }
 
-    mLight1.mPosition.mX = -50 + 200 * sin(mAngle);
+    mLight1.mPosition.mX = 200 * sin(mAngle);
+    mLight1.mPosition.mZ = 50;
 }
 
 void CTest5::Render()
@@ -93,7 +94,8 @@ void CTest5::Render()
 
         GetRenderer().RenderMesh(mMesh1,
                                  0,
-                                 mTex6,
+                                 &mTex6,
+                                 1,
                                  mShaderProgram2,
                                  &model,
                                  nullptr,
@@ -124,7 +126,8 @@ void CTest5::Render()
 
         GetRenderer().RenderMesh(mMesh2,
                                  0,
-                                 mTex2,
+                                 &mTex2,
+                                 1,
                                  mShaderProgram2,
                                  &model,
                                  nullptr,
@@ -155,7 +158,8 @@ void CTest5::Render()
         {
             GetRenderer().RenderMesh(mMesh3,
                                      i,
-                                     texts[i],
+                                     &texts[i],
+                                     1,
                                      mShaderProgram2,
                                      &model,
                                      nullptr,
@@ -193,7 +197,8 @@ void CTest5::Render()
         {
             GetRenderer().RenderMesh(mMesh4,
                                      i,
-                                     texts[i],
+                                     &texts[i],
+                                     1,
                                      mShaderProgram2,
                                      &model,
                                      nullptr,
