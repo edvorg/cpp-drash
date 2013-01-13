@@ -102,7 +102,73 @@ void CObjectEditorApp::Step(double _dt)
 
 void CObjectEditorApp::Render()
 {
+    CVec2i segments_counts(mGridSize.mX, mGridSize.mY);
+    segments_counts /= mGridSegmentSize;
+
+    CVec2f grid_size_half(mGridSize.mX, mGridSize.mY);
+    grid_size_half /= 2;
+
+    for (unsigned int i = 1; i < segments_counts.mX; i++)
+    {
+        for (unsigned int j = 1; j < segments_counts.mY; j++)
+        {
+            CVec3f p1(i * mGridSegmentSize, 0, j * mGridSegmentSize);
+            CVec3f p2(i * mGridSegmentSize, 0, (j - 1) * mGridSegmentSize);
+            CVec3f p3((i - 1) * mGridSegmentSize, 0, (j - 1) * mGridSegmentSize);
+            CVec3f p4((i - 1) * mGridSegmentSize, 0, j * mGridSegmentSize);
+
+            p1.mX -= grid_size_half.mX;
+            p1.mZ -= grid_size_half.mY;
+            p2.mX -= grid_size_half.mX;
+            p2.mZ -= grid_size_half.mY;
+            p3.mX -= grid_size_half.mX;
+            p3.mZ -= grid_size_half.mY;
+            p4.mX -= grid_size_half.mX;
+            p4.mZ -= grid_size_half.mY;
+
+            GetRenderer().DrawLine(mCamera,
+                                   p1,
+                                   p2,
+                                   1,
+                                   mGridColor,
+                                   true);
+            GetRenderer().DrawLine(mCamera,
+                                   p2,
+                                   p3,
+                                   1,
+                                   mGridColor,
+                                   true);
+            GetRenderer().DrawLine(mCamera,
+                                   p3,
+                                   p4,
+                                   1,
+                                   mGridColor,
+                                   true);
+            GetRenderer().DrawLine(mCamera,
+                                   p4,
+                                   p1,
+                                   1,
+                                   mGridColor,
+                                   true);
+        }
+    }
+
+    GetRenderer().DrawLine(mCamera,
+                           CVec3f(- segments_counts.mX * mGridSegmentSize / 2, 0, 0),
+                           CVec3f(- 1 + segments_counts.mX * mGridSegmentSize / 2, 0, 0),
+                           2,
+                           CColor4f(0, 0, 0, 1),
+                           false);
+
+    GetRenderer().DrawLine(mCamera,
+                           CVec3f(0, 0, - segments_counts.mY * mGridSegmentSize / 2),
+                           CVec3f(0, 0, - 1 + segments_counts.mY * mGridSegmentSize / 2),
+                           2,
+                           CColor4f(0, 0, 0, 1),
+                           false);
+
     CApp::Render();
+
     if (mVertexs.size() != 0 && mState == BuildState) {
         for (unsigned int i = 1 ; i < mVertexs.size() ; i++) {
             GetRenderer().DrawLine(mVertexs[i-1],mVertexs[i], 1, CColor4f(0, 1, 0, 1));
