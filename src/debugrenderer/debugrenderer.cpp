@@ -91,102 +91,10 @@ void CDebugRenderer::Render() const
             std::vector<greng::CVertex> mv;
             std::vector<unsigned int> mi;
 
-            greng::CMesh *m = nullptr;
-
-            if (kc >= 3)
-            {
-                CVec3f min(f->GetVertices()[0], f->GetZ() - 0.5f * f->GetDepth());
-                CVec3f max(f->GetVertices()[0], f->GetZ() + 0.5f * f->GetDepth());
-
-                for (unsigned int k = 1; k < kc; k++)
-                {
-                    min.mX = math::Min<float>(min.mX, f->GetVertices()[k].mX);
-                    min.mY = math::Min<float>(min.mY, f->GetVertices()[k].mY);
-                    max.mX = math::Max<float>(max.mX, f->GetVertices()[k].mX);
-                    max.mY = math::Max<float>(max.mY, f->GetVertices()[k].mY);
-                }
-
-                max.Vec2() -= min.Vec2();
-
-                mv.resize(kc * 2 + kc * 4);
-
-                // front and back faces
-
-                for (unsigned int k = 0; k < kc; k++)
-                {
-                    mv[k].mPos = CVec3f(f->GetVertices()[k], max.mZ);
-                    mv[kc + k].mPos = CVec3f(f->GetVertices()[k], min.mZ);
-
-                    mv[k].mUV = mv[k].mPos;
-                    mv[kc + k].mUV = mv[kc + k].mPos;
-
-                    mv[k].mUV -= min.Vec2();
-                    mv[kc + k].mUV -= min.Vec2();
-
-                    mv[k].mUV *= mTexCoordsScale;
-                    mv[kc + k].mUV *= mTexCoordsScale;
-                }
-
-                for (unsigned int k = 2; k < kc; k++)
-                {
-                    mi.push_back(0);
-                    mi.push_back(k - 1);
-                    mi.push_back(k);
-                }
-
-                for (unsigned int k = 2; k < kc; k++)
-                {
-                    mi.push_back(kc);
-                    mi.push_back(kc + k);
-                    mi.push_back(kc + k - 1);
-                }
-
-                // sides
-
-                for (unsigned int k = 1; k < kc; k++)
-                {
-                    mv[2 * kc + (k - 1) * 4 + 0].mPos = CVec3f(f->GetVertices()[k - 1], max.mZ);
-                    mv[2 * kc + (k - 1) * 4 + 1].mPos = CVec3f(f->GetVertices()[k - 1], min.mZ);
-                    mv[2 * kc + (k - 1) * 4 + 2].mPos = CVec3f(f->GetVertices()[k], min.mZ);
-                    mv[2 * kc + (k - 1) * 4 + 3].mPos = CVec3f(f->GetVertices()[k], max.mZ);
-
-                    CVec2f tmp = f->GetVertices()[k - 1];
-                    tmp -= f->GetVertices()[k];
-
-                    mv[2 * kc + (k - 1) * 4 + 0].mUV.Set(0, 0);
-                    mv[2 * kc + (k - 1) * 4 + 1].mUV.Set(0, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
-                    mv[2 * kc + (k - 1) * 4 + 2].mUV.Set(tmp.Length() * mTexCoordsScale, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
-                    mv[2 * kc + (k - 1) * 4 + 3].mUV.Set(tmp.Length() * mTexCoordsScale, 0);
-
-                    mi.push_back(2 * kc + (k - 1) * 4 + 0);
-                    mi.push_back(2 * kc + (k - 1) * 4 + 1);
-                    mi.push_back(2 * kc + (k - 1) * 4 + 2);
-                    mi.push_back(2 * kc + (k - 1) * 4 + 2);
-                    mi.push_back(2 * kc + (k - 1) * 4 + 3);
-                    mi.push_back(2 * kc + (k - 1) * 4 + 0);
-                }
-                mv[2 * kc + (kc - 1) * 4 + 0].mPos = CVec3f(f->GetVertices()[kc - 1], max.mZ);
-                mv[2 * kc + (kc - 1) * 4 + 1].mPos = CVec3f(f->GetVertices()[kc - 1], min.mZ);
-                mv[2 * kc + (kc - 1) * 4 + 2].mPos = CVec3f(f->GetVertices()[0], min.mZ);
-                mv[2 * kc + (kc - 1) * 4 + 3].mPos = CVec3f(f->GetVertices()[0], max.mZ);
-
-                CVec2f tmp = f->GetVertices()[kc - 1];
-                tmp -= f->GetVertices()[0];
-
-                mv[2 * kc + (kc - 1) * 4 + 0].mUV.Set(0, 0);
-                mv[2 * kc + (kc - 1) * 4 + 1].mUV.Set(0, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
-                mv[2 * kc + (kc - 1) * 4 + 2].mUV.Set(tmp.Length() * mTexCoordsScale, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
-                mv[2 * kc + (kc - 1) * 4 + 3].mUV.Set(tmp.Length() * mTexCoordsScale, 0);
-
-                mi.push_back(2 * kc + (kc - 1) * 4 + 0);
-                mi.push_back(2 * kc + (kc - 1) * 4 + 1);
-                mi.push_back(2 * kc + (kc - 1) * 4 + 2);
-                mi.push_back(2 * kc + (kc - 1) * 4 + 2);
-                mi.push_back(2 * kc + (kc - 1) * 4 + 3);
-                mi.push_back(2 * kc + (kc - 1) * 4 + 0);
-
-                m = mGrengSystems->GetMeshManager().CreateMeshFromVertices(&mv[0], mv.size(), &mi[0], mi.size());
-            }
+            greng::CMesh *m = CreateMesh(f->GetVertices(),
+                                         f->EnumVertices(),
+                                         f->GetZ(),
+                                         f->GetDepth());
 
             if (m != nullptr)
             {
@@ -227,108 +135,10 @@ void CDebugRenderer::RenderObject(CSceneObjectGeometry *_geometry, CSceneObjectP
 {
     for (unsigned int i = 0; i < _geometry->mFigures.size(); i++)
     {
-        auto &f = _geometry->mFigures[i];
-        unsigned int kc = f.mVertices.size();
-
-        std::vector<greng::CVertex> mv;
-        std::vector<unsigned int> mi;
-
-        greng::CMesh *m = nullptr;
-
-        if (kc >= 3)
-        {
-            CVec3f min(f.mVertices[0], f.mZ - 0.5f * f.mDepth);
-            CVec3f max(f.mVertices[0], f.mZ + 0.5f * f.mDepth);
-
-            for (unsigned int k = 1; k < kc; k++)
-            {
-                min.mX = math::Min<float>(min.mX, f.mVertices[k].mX);
-                min.mY = math::Min<float>(min.mY, f.mVertices[k].mY);
-                max.mX = math::Max<float>(max.mX, f.mVertices[k].mX);
-                max.mY = math::Max<float>(max.mY, f.mVertices[k].mY);
-            }
-
-            max.Vec2() -= min.Vec2();
-
-            mv.resize(kc * 2 + kc * 4);
-
-            // front and back faces
-
-            for (unsigned int k = 0; k < kc; k++)
-            {
-                mv[k].mPos = CVec3f(f.mVertices[k], max.mZ);
-                mv[kc + k].mPos = CVec3f(f.mVertices[k], min.mZ);
-
-                mv[k].mUV = mv[k].mPos;
-                mv[kc + k].mUV = mv[kc + k].mPos;
-
-                mv[k].mUV -= min.Vec2();
-                mv[kc + k].mUV -= min.Vec2();
-
-                mv[k].mUV *= mTexCoordsScale;
-                mv[kc + k].mUV *= mTexCoordsScale;
-            }
-
-            for (unsigned int k = 2; k < kc; k++)
-            {
-                mi.push_back(0);
-                mi.push_back(k - 1);
-                mi.push_back(k);
-            }
-
-            for (unsigned int k = 2; k < kc; k++)
-            {
-                mi.push_back(kc);
-                mi.push_back(kc + k);
-                mi.push_back(kc + k - 1);
-            }
-
-            // sides
-
-            for (unsigned int k = 1; k < kc; k++)
-            {
-                mv[2 * kc + (k - 1) * 4 + 0].mPos = CVec3f(f.mVertices[k - 1], max.mZ);
-                mv[2 * kc + (k - 1) * 4 + 1].mPos = CVec3f(f.mVertices[k - 1], min.mZ);
-                mv[2 * kc + (k - 1) * 4 + 2].mPos = CVec3f(f.mVertices[k], min.mZ);
-                mv[2 * kc + (k - 1) * 4 + 3].mPos = CVec3f(f.mVertices[k], max.mZ);
-
-                CVec2f tmp = f.mVertices[k - 1];
-                tmp -= f.mVertices[k];
-
-                mv[2 * kc + (k - 1) * 4 + 0].mUV.Set(0, 0);
-                mv[2 * kc + (k - 1) * 4 + 1].mUV.Set(0, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
-                mv[2 * kc + (k - 1) * 4 + 2].mUV.Set(tmp.Length() * mTexCoordsScale, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
-                mv[2 * kc + (k - 1) * 4 + 3].mUV.Set(tmp.Length() * mTexCoordsScale, 0);
-
-                mi.push_back(2 * kc + (k - 1) * 4 + 0);
-                mi.push_back(2 * kc + (k - 1) * 4 + 1);
-                mi.push_back(2 * kc + (k - 1) * 4 + 2);
-                mi.push_back(2 * kc + (k - 1) * 4 + 2);
-                mi.push_back(2 * kc + (k - 1) * 4 + 3);
-                mi.push_back(2 * kc + (k - 1) * 4 + 0);
-            }
-            mv[2 * kc + (kc - 1) * 4 + 0].mPos = CVec3f(f.mVertices[kc - 1], max.mZ);
-            mv[2 * kc + (kc - 1) * 4 + 1].mPos = CVec3f(f.mVertices[kc - 1], min.mZ);
-            mv[2 * kc + (kc - 1) * 4 + 2].mPos = CVec3f(f.mVertices[0], min.mZ);
-            mv[2 * kc + (kc - 1) * 4 + 3].mPos = CVec3f(f.mVertices[0], max.mZ);
-
-            CVec2f tmp = f.mVertices[kc - 1];
-            tmp -= f.mVertices[0];
-
-            mv[2 * kc + (kc - 1) * 4 + 0].mUV.Set(0, 0);
-            mv[2 * kc + (kc - 1) * 4 + 1].mUV.Set(0, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
-            mv[2 * kc + (kc - 1) * 4 + 2].mUV.Set(tmp.Length() * mTexCoordsScale, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
-            mv[2 * kc + (kc - 1) * 4 + 3].mUV.Set(tmp.Length() * mTexCoordsScale, 0);
-
-            mi.push_back(2 * kc + (kc - 1) * 4 + 0);
-            mi.push_back(2 * kc + (kc - 1) * 4 + 1);
-            mi.push_back(2 * kc + (kc - 1) * 4 + 2);
-            mi.push_back(2 * kc + (kc - 1) * 4 + 2);
-            mi.push_back(2 * kc + (kc - 1) * 4 + 3);
-            mi.push_back(2 * kc + (kc - 1) * 4 + 0);
-
-            m = mGrengSystems->GetMeshManager().CreateMeshFromVertices(&mv[0], mv.size(), &mi[0], mi.size());
-        }
+        greng::CMesh *m = CreateMesh(&_geometry->mFigures[i].mVertices[0],
+                                     _geometry->mFigures[i].mVertices.size(),
+                                     _geometry->mFigures[i].mZ,
+                                     _geometry->mFigures[i].mDepth);
 
         if (m != nullptr)
         {
@@ -471,6 +281,119 @@ bool CDebugRenderer::InitShaders()
     }
 
     return true;
+}
+
+greng::CMesh *CDebugRenderer::CreateMesh(const CVec2f *_vertices,
+                                         unsigned int _vertices_count,
+                                         float _z,
+                                         float _depth) const
+{
+    if (_vertices == nullptr)
+    {
+        return nullptr;
+    }
+
+    greng::CMesh *m = nullptr;
+
+    std::vector<greng::CVertex> mv;
+    std::vector<unsigned int> mi;
+
+    if (_vertices_count >= 3)
+    {
+        CVec3f min(_vertices[0], _z - 0.5f * _depth);
+        CVec3f max(_vertices[0], _z + 0.5f * _depth);
+
+        for (unsigned int k = 1; k < _vertices_count; k++)
+        {
+            min.mX = math::Min<float>(min.mX, _vertices[k].mX);
+            min.mY = math::Min<float>(min.mY, _vertices[k].mY);
+            max.mX = math::Max<float>(max.mX, _vertices[k].mX);
+            max.mY = math::Max<float>(max.mY, _vertices[k].mY);
+        }
+
+        max.Vec2() -= min.Vec2();
+
+        mv.resize(_vertices_count * 2 + _vertices_count * 4);
+
+        // front and back faces
+
+        for (unsigned int k = 0; k < _vertices_count; k++)
+        {
+            mv[k].mPos = CVec3f(_vertices[k], max.mZ);
+            mv[_vertices_count + k].mPos = CVec3f(_vertices[k], min.mZ);
+
+            mv[k].mUV = mv[k].mPos;
+            mv[_vertices_count + k].mUV = mv[_vertices_count + k].mPos;
+
+            mv[k].mUV -= min.Vec2();
+            mv[_vertices_count + k].mUV -= min.Vec2();
+
+            mv[k].mUV *= mTexCoordsScale;
+            mv[_vertices_count + k].mUV *= mTexCoordsScale;
+        }
+
+        for (unsigned int k = 2; k < _vertices_count; k++)
+        {
+            mi.push_back(0);
+            mi.push_back(k - 1);
+            mi.push_back(k);
+        }
+
+        for (unsigned int k = 2; k < _vertices_count; k++)
+        {
+            mi.push_back(_vertices_count);
+            mi.push_back(_vertices_count + k);
+            mi.push_back(_vertices_count + k - 1);
+        }
+
+        // sides
+
+        for (unsigned int k = 1; k < _vertices_count; k++)
+        {
+            mv[2 * _vertices_count + (k - 1) * 4 + 0].mPos = CVec3f(_vertices[k - 1], max.mZ);
+            mv[2 * _vertices_count + (k - 1) * 4 + 1].mPos = CVec3f(_vertices[k - 1], min.mZ);
+            mv[2 * _vertices_count + (k - 1) * 4 + 2].mPos = CVec3f(_vertices[k], min.mZ);
+            mv[2 * _vertices_count + (k - 1) * 4 + 3].mPos = CVec3f(_vertices[k], max.mZ);
+
+            CVec2f tmp = _vertices[k - 1];
+            tmp -= _vertices[k];
+
+            mv[2 * _vertices_count + (k - 1) * 4 + 0].mUV.Set(0, 0);
+            mv[2 * _vertices_count + (k - 1) * 4 + 1].mUV.Set(0, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
+            mv[2 * _vertices_count + (k - 1) * 4 + 2].mUV.Set(tmp.Length() * mTexCoordsScale, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
+            mv[2 * _vertices_count + (k - 1) * 4 + 3].mUV.Set(tmp.Length() * mTexCoordsScale, 0);
+
+            mi.push_back(2 * _vertices_count + (k - 1) * 4 + 0);
+            mi.push_back(2 * _vertices_count + (k - 1) * 4 + 1);
+            mi.push_back(2 * _vertices_count + (k - 1) * 4 + 2);
+            mi.push_back(2 * _vertices_count + (k - 1) * 4 + 2);
+            mi.push_back(2 * _vertices_count + (k - 1) * 4 + 3);
+            mi.push_back(2 * _vertices_count + (k - 1) * 4 + 0);
+        }
+        mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 0].mPos = CVec3f(_vertices[_vertices_count - 1], max.mZ);
+        mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 1].mPos = CVec3f(_vertices[_vertices_count - 1], min.mZ);
+        mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 2].mPos = CVec3f(_vertices[0], min.mZ);
+        mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 3].mPos = CVec3f(_vertices[0], max.mZ);
+
+        CVec2f tmp = _vertices[_vertices_count - 1];
+        tmp -= _vertices[0];
+
+        mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 0].mUV.Set(0, 0);
+        mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 1].mUV.Set(0, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
+        mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 2].mUV.Set(tmp.Length() * mTexCoordsScale, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
+        mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 3].mUV.Set(tmp.Length() * mTexCoordsScale, 0);
+
+        mi.push_back(2 * _vertices_count + (_vertices_count - 1) * 4 + 0);
+        mi.push_back(2 * _vertices_count + (_vertices_count - 1) * 4 + 1);
+        mi.push_back(2 * _vertices_count + (_vertices_count - 1) * 4 + 2);
+        mi.push_back(2 * _vertices_count + (_vertices_count - 1) * 4 + 2);
+        mi.push_back(2 * _vertices_count + (_vertices_count - 1) * 4 + 3);
+        mi.push_back(2 * _vertices_count + (_vertices_count - 1) * 4 + 0);
+
+        m = mGrengSystems->GetMeshManager().CreateMeshFromVertices(&mv[0], mv.size(), &mi[0], mi.size());
+    }
+
+    return m;
 }
 
 } // namespace drash

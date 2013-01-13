@@ -72,6 +72,11 @@ private:
     bool InitTextures();
     bool InitShaders();
 
+    greng::CMesh* CreateMesh(const CVec2f *_vertices,
+                             unsigned int _vertices_count,
+                             float _z,
+                             float _depth) const;
+
     CScene* mScene = nullptr;
     greng::CGrengSystemsSet *mGrengSystems = nullptr;
 
