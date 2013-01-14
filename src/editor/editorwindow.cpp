@@ -534,3 +534,12 @@ void EditorWindow::on_mTreeTemplates_doubleClicked(const QModelIndex &index)
     std::string nameobject = ui->mTreeTemplates->currentItem()->text(0).toStdString();
     mSceneApp->AddObject(nameobject);
 }
+
+void EditorWindow::on_mTreeSceneObjects_clicked(const QModelIndex &index)
+{
+    QTreeWidgetItem * item = ui->mTreeSceneObjects->selectedItems().at(0);
+    if (item->parent() != nullptr) {
+        mSceneApp->LookObject(item->parent()->text(0).toStdString(),
+                              item->text(0).toStdString());
+    }
+}

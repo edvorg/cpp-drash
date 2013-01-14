@@ -339,6 +339,7 @@ void CObjectEditorApp::SetProcessors()
                 CFigure *fig = mCurrentObject->GetFigures()[i];
                 fig->SetDepth(fig->GetDepth()+0.5);
             }
+            SaveCurrentObject();
         }
     }));
     GetEventSystem().SetProcessor("WHDN",CAppEventProcessor(
@@ -350,6 +351,7 @@ void CObjectEditorApp::SetProcessors()
                     fig->SetDepth(fig->GetDepth()-0.5);
                 }
             }
+            SaveCurrentObject();
         }
     }));
 }

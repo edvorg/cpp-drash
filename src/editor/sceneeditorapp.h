@@ -66,6 +66,8 @@ public:
     void StopLevel();
 
     void ResetLevel();
+
+    void LookObject(const std::string &_templatename,const std::string &_objectname);
 private:
     void SetProcessors();
     void SetCameraProcessors();

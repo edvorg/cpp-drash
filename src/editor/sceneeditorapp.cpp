@@ -179,6 +179,7 @@ void CSceneEditorApp::AddObject(const std::string &_name)
     is << "object" << mCurrentLevel->GetObjects().size();
     CSceneObjectParams *p = mCurrentLevel->AddObject(_name,is.str());
     GetLevelManager().StartLevel(mCurrentLevel,mObjectParams);
+    mTreeRefreshHandler();
 //    p->mPos
 }
 
@@ -203,19 +204,10 @@ void CSceneEditorApp::SetProcessors()
         if (mPlayLevel == true) {
             return;
         }
-//        mSelectedFigure = SelectFigure(GetCursorPos());
-
-//        CPlane plane;
-//        plane.SetPoint(CVec3f(0, 0, 0));
-//        plane.SetNormal(CVec3f(0, 0, 1));
-
-//        mCamera->CastRay(GetCursorPos(), plane, mOldPositionCursor);
-//        break;
-//        mSelectedObject = SelectObject();
         if (mSelectedObject != nullptr) {
             mMoveablePoint.ClickBegin();
         }
-    } ,
+    },
     [this]() {
         if (mPlayLevel == true) {
             return;
@@ -234,6 +226,25 @@ void CSceneEditorApp::SetProcessors()
         }
     }
     ));
+
+    GetEventSystem().SetProcessor("C-LB",CAppEventProcessor(
+    [this](){
+        if (mPlayLevel){
+            return;
+        }
+        CSceneObject * temp = SelectObject();
+        if (temp != nullptr) {
+            auto iter = mObjectParams.find(temp);
+            if (iter != mObjectParams.end()) {
+                CSceneObjectParams *p = iter->second;
+                //qDebug() << "this";
+                p->mDynamic = false;
+//                StartCurrentLevel();
+                ResetLevel();
+                //p->mPos = mSelectedObject->GetPos();
+            }
+        }
+    }));
 }
 
 void CSceneEditorApp::SetCameraProcessors()
@@ -348,13 +359,29 @@ void CSceneEditorApp::MoveOfAxis()
 void CSceneEditorApp::StopLevel()
 {
     mPlayLevel = false;
-    GetLevelManager().StartLevel(mCurrentLevel,mObjectParams);
+    ResetLevel();
+//    GetLevelManager().StartLevel(mCurrentLevel,mObjectParams);
 }
 
 void CSceneEditorApp::ResetLevel()
 {
     if (mCurrentLevel != nullptr) {
         GetLevelManager().StartLevel(mCurrentLevel,mObjectParams);
+    }
+}
+
+void CSceneEditorApp::LookObject(const std::string &_templatename, const std::string &_objectname)
+{
+    if (mCurrentLevel != nullptr) {
+        auto headiter = mCurrentLevel->GetObjects().find(_templatename);
+        if (headiter != mCurrentLevel->GetObjects().end()) {
+//            qDebug() << "Look";
+            auto iter = headiter->second.find(_objectname);
+            if (iter != headiter->second.end()) {
+                CSceneObjectParams p = iter->second;
+                mCamera->LookAt(p.mPos);
+            }
+        }
     }
 }
 

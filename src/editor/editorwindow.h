@@ -127,14 +127,14 @@ private slots:
 
     void on_mTreeTemplates_doubleClicked(const QModelIndex &index);
 
+    void on_mTreeSceneObjects_clicked(const QModelIndex &index);
+
 private:
     // GuiObjects
     QLabel *mLabelOfStatusBar;
 
     QToolBar * mObjectToolBar;
     QToolBar * mSceneToolbar;
-
-    bool fuck = false;
 
 private:
     void CreateActions();
