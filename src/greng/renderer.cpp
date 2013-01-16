@@ -219,7 +219,11 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
 
     glUseProgram(0);
 
-    glBindTexture(GL_TEXTURE_2D, 0);
+    for (unsigned int i = 0; i < _textures_count; i++)
+    {
+        glActiveTexture(GL_TEXTURE0 + i);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
