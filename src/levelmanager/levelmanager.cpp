@@ -28,6 +28,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../scene/sceneobject.h"
 #include "../diag/logger.h"
 #include "../templates/templatesystem.h"
+#include <map>
+
 
 namespace drash
 {
@@ -88,6 +90,37 @@ bool CLevelManager::DestroyLevel(CLevel *_level)
     return true;
 }
 
+bool CLevelManager::StartLevel(CLevel *_level, std::map<CSceneObject*,CSceneObjectParams*> &_map)
+{
+    if (mLevelFactory.IsObject(_level) == false)
+    {
+        LOG_ERR("CLevelManager::StartLevel(): invalid level taken");
+        return false;
+    }
+
+    mScene->DestroyObjects();
+    _map.clear();
+    for (auto i = _level->mObjects.begin(); i != _level->mObjects.end(); i++)
+    {
+        CSceneObjectGeometry *g = mTemplateSystem->FindTemplate(i->first);
+
+        if (g != nullptr)
+        {
+            for (auto j = i->second.begin(); j != i->second.end(); j++)
+            {
+                auto obj = mScene->CreateObject(*g, j->second);
+                _map.insert(std::pair<CSceneObject*,CSceneObjectParams*>(obj,&(j->second)));
+            }
+        }
+        else
+        {
+            LOG_ERR("CLevelManager::StartLevel(): template '"<<i->first.c_str()<<"' doesn't exists");
+        }
+    }
+
+    return true;
+}
+
 bool CLevelManager::StartLevel(CLevel *_level)
 {
     if (mLevelFactory.IsObject(_level) == false)
@@ -106,7 +139,8 @@ bool CLevelManager::StartLevel(CLevel *_level)
         {
             for (auto j = i->second.begin(); j != i->second.end(); j++)
             {
-                mScene->CreateObject(*g, j->second);
+                auto obj = mScene->CreateObject(*g, j->second);
+                //_map.insert(std::pair<CSceneObject*,CSceneObjectParams*>(obj,&(j->second)));
             }
         }
         else

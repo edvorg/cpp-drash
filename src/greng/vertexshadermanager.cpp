@@ -149,10 +149,11 @@ CVertexShader *CVertexShaderManager::CreateShaderFromFile(const char *_path)
 
     if (in.is_open() == false)
     {
+        LOG_ERR("CVertexShaderManager::CreateShaderFromFile(): unable to load vertex shader \""<<_path<<"\"");
         return nullptr;
     }
 
-    const unsigned int buffer_size = 1024;
+    const unsigned int buffer_size = 4096;
     char buffer[buffer_size] = "";
     in.read(buffer, buffer_size - 1);
 

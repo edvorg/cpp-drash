@@ -43,6 +43,7 @@ class CScene;
 class CFigure;
 class CSceneObjectGeometry;
 class CSceneObjectParams;
+class CSceneObject;
 
 class CDebugRenderer final
 {
@@ -66,7 +67,7 @@ public:
     /// finds objects, visible at specified postion in screen space coordinates
     /// returns nearest one
     CFigure *FindFigure(const greng::CCamera *_camera, const CVec2f &_pos) const;
-
+    CSceneObject * FindObject(const greng::CCamera *_camera, const CVec2f &_pos) const;
 protected:
 private:
     bool InitTextures();

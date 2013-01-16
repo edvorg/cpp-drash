@@ -47,6 +47,7 @@ namespace Ui
 
 class QStatusBar;
 class QTreeWidget;
+class QModelIndex;
 
 class EditorWindow : public QMainWindow
 {
@@ -95,6 +96,9 @@ private:
     QAction * mSaveLevelAsAction;
     QAction * mPlayLevelAction;
     QAction * mPauseLevelAction;
+    QAction * mStopLevelAction;
+    QAction * mNewLevelAction;
+
     // Slots for Actions
 private slots:
     // for edtitor object
@@ -116,7 +120,14 @@ private slots:
     void SaveLevelAs();
     void PlayLevel();
     void PauseLevel();
+    void StopLevel();
+
+    void NewLevel();
     void on_mManageWidget_currentChanged(int index);
+
+    void on_mTreeTemplates_doubleClicked(const QModelIndex &index);
+
+    void on_mTreeSceneObjects_clicked(const QModelIndex &index);
 
 private:
     // GuiObjects

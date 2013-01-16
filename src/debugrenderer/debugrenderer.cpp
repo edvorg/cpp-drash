@@ -99,6 +99,7 @@ void CDebugRenderer::Render() const
             if (m != nullptr)
             {
                 mGrengSystems->GetMeshManager().ComputeNormals(m);
+                mGrengSystems->GetMeshManager().ComputeTangentSpace(m);
 
                 CMatrix4f rot;
                 MatrixRotationZ(rot, o->GetAngle());
@@ -143,6 +144,7 @@ void CDebugRenderer::RenderObject(CSceneObjectGeometry *_geometry, CSceneObjectP
         if (m != nullptr)
         {
             mGrengSystems->GetMeshManager().ComputeNormals(m);
+            mGrengSystems->GetMeshManager().ComputeTangentSpace(m);
 
             CMatrix4f rot;
             MatrixRotationZ(rot, _params->mAngle);
@@ -255,10 +257,91 @@ CFigure *CDebugRenderer::FindFigure(const greng::CCamera *_camera, const CVec2f 
     return res;
 }
 
+CSceneObject *CDebugRenderer::FindObject(const greng::CCamera *_camera, const CVec2f &_pos) const
+{
+    if (_camera == nullptr)
+    {
+        return nullptr;
+    }
+
+    CSceneObject *res = nullptr;
+
+    unsigned int i = 0;
+    bool brk = false;
+    float z_nearest = 0;
+
+    for (i = 0; i < mScene->EnumObjects(); i++)
+    {
+        CSceneObject *cur_obj = mScene->GetObjects()[i];
+
+        for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++)
+        {
+            CFigure *cur_fgr = cur_obj->GetFigures()[j];
+
+            CPlane plane;
+            plane.SetNormal(CVec3f(0, 0, 1));
+            plane.SetPoint(CVec3f(0, 0, cur_obj->GetPosZ() + cur_fgr->GetZ()));
+
+            CVec3f pos;
+            _camera->CastRay(_pos, plane, pos);
+
+            if (cur_fgr->TestPoint(pos))
+            {
+                res = cur_obj;
+                pos -= _camera->GetPos().Get();
+                z_nearest = pos.LengthSquared();
+                brk = true;
+            }
+
+            if (brk == true)
+            {
+                break;
+            }
+        }
+
+        if (brk == true)
+        {
+            break;
+        }
+    }
+
+    for (; i < mScene->EnumObjects(); i++)
+    {
+        CSceneObject *cur_obj = mScene->GetObjects()[i];
+
+        for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++)
+        {
+            CFigure *cur_fgr = cur_obj->GetFigures()[j];
+
+            CPlane plane;
+            plane.SetNormal(CVec3f(0, 0, 1));
+            plane.SetPoint(CVec3f(0, 0, cur_obj->GetPosZ() + cur_fgr->GetZ()));
+
+            CVec3f pos;
+            _camera->CastRay(_pos, plane, pos);
+
+            if (cur_fgr->TestPoint(pos))
+            {
+                pos -= _camera->GetPos().Get();
+
+                float z = pos.LengthSquared();
+
+                if (z_nearest > z)
+                {
+                    res = cur_obj;
+                    z_nearest = z;
+                }
+            }
+        }
+    }
+
+    return res;
+}
+
 bool CDebugRenderer::InitTextures()
 {
-    mTexture1Diffuse = mGrengSystems->GetTextureManager().CreateTextureFromFile("assets/wall4.jpg");
-    mTexture1Normal = mGrengSystems->GetTextureManager().CreateTextureFromFile("assets/wall1_normal.png");
+    mTexture1Diffuse = mGrengSystems->GetTextureManager().CreateTextureFromFile("assets/wall5.png");
+    mTexture1Normal = mGrengSystems->GetTextureManager().CreateTextureFromFile("assets/wall2_normal.png");
 
     if (mTexture1Diffuse == nullptr ||
         mTexture1Normal == nullptr)

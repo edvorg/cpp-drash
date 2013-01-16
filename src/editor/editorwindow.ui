@@ -45,21 +45,6 @@
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QTreeWidget" name="mTreeObjects">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>256</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectItems</enum>
-          </property>
           <column>
            <property name="text">
             <string notr="true">1</string>
@@ -89,6 +74,21 @@
         </item>
         <item>
          <widget class="QTreeWidget" name="mTreeTemplates">
+          <property name="dragEnabled">
+           <bool>true</bool>
+          </property>
+          <property name="dragDropOverwriteMode">
+           <bool>true</bool>
+          </property>
+          <property name="dragDropMode">
+           <enum>QAbstractItemView::DragOnly</enum>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <attribute name="headerVisible">
+           <bool>false</bool>
+          </attribute>
           <column>
            <property name="text">
             <string notr="true">1</string>

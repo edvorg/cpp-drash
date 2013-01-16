@@ -65,7 +65,8 @@ void CTest5::Step(double _dt)
     }
 
     mLight1.mPosition.mX = 200 * sin(mAngle);
-    mLight1.mPosition.mZ = 50;
+    mLight1.mPosition.mY = 30;
+    mLight1.mPosition.mZ = 200 * cos(mAngle);
 }
 
 void CTest5::Render()

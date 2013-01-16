@@ -26,6 +26,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define SCENEEDITORAPP_H
 
 #include "../app/app.h"
+#include "../misc/moveablepoint.h"
+#include "../diag/timer.h"
 
 namespace drash {
 
@@ -36,7 +38,7 @@ public:
 
     virtual bool Init() override;
     virtual void Step(double _dt) override;
-    inline virtual void Render() override;
+    virtual void Render() override;
     virtual void Release() override;
 
     void UpdateTemplateSystem();
@@ -45,7 +47,11 @@ public:
 
     bool SaveLevelAs(const std::string &_filename);
 
+    bool NewLevel();
+
     void StartCurrentLevel();
+
+    void AddObject(const std::string &_name);
 
     //
     inline bool SaveLevel();
@@ -57,8 +63,15 @@ public:
 
     inline void SetTreeRefreshHandler(const std::function<void ()> & _han);
     inline void PauseLevel();
+    void StopLevel();
+
+    void ResetLevel();
+
+    void LookObject(const std::string &_templatename,const std::string &_objectname);
 private:
     void SetProcessors();
+    void SetCameraProcessors();
+
 
     bool InitCamera();
     bool InitPointLight();
@@ -72,6 +85,28 @@ private:
     std::function<void ()> mTreeRefreshHandler = [] () {};
 
     bool mPlayLevel = false;
+
+    CSceneObject * mSelectedObject = nullptr;
+
+    //CSceneObjectParams * mSelectedObject = nullptr;
+
+    CMoveablePoint mMoveablePoint;
+
+    CVec3f mOldpositon;
+
+    CTimer mTimer;
+
+    CVec2f mCamRotFirstClick;
+
+    static const int MOVING_SPEED = 15;
+
+    std::map<CSceneObject*, CSceneObjectParams*> mObjectParams;
+
+    void StoreParams();
+
+private:
+    CSceneObject * SelectObject();
+    void MoveOfAxis();
 };
 
 inline bool CSceneEditorApp::IsSetFileName()const {
@@ -101,6 +136,7 @@ inline void CSceneEditorApp::SetTreeRefreshHandler(const std::function<void ()> 
 inline void CSceneEditorApp::PauseLevel() {
     mPlayLevel = false;
 }
+
 
 } // namespace drash
 #endif // SCENEEDITORAPP_H

@@ -90,6 +90,7 @@ CTexture *CTextureManager::CreateTextureFromFile(const char *_path)
 
     if (s == nullptr)
     {
+        LOG_ERR("CTextureManager::CreateTextureFromFile(): unable to load texture \""<<_path<<"\"");
         DestroyTexture(res);
         return nullptr;
     }

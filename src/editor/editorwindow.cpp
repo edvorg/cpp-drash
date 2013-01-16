@@ -56,10 +56,12 @@ EditorWindow::EditorWindow(QWidget *parent) :
     mObjectToolBar = new QToolBar(this);
     this->addToolBar(mSceneToolbar);
     this->addToolBar(mObjectToolBar);
+
     CreateActions();
     mModeActions.setExclusive(true);
     connect(&mModeActions,SIGNAL(selected(QAction*)),
             this,SLOT(ChangeMode(QAction*)));
+
     mLabelOfStatusBar = new QLabel("Editor Object");
     this->statusBar()->addWidget(mLabelOfStatusBar);
 
@@ -72,22 +74,28 @@ EditorWindow::EditorWindow(QWidget *parent) :
         close();
     }
 
-    this->ui->mTreeObjects->clear();
-
-    mWidgetForScene->hide();
     mCurrentSceneWidget = mWidgetForObjects;
+
+    this->ui->mTreeObjects->clear();
 
     mObjectApp->SetTreeRefreshHandler([this]()
     {
         this->UpdateTreeTemplates(ui->mTreeObjects,mObjectApp);
+        mMoveActiveAction->setChecked(true);
     });
 
-    mSceneApp->SetTreeRefreshHandler([this](){
+    mSceneApp->SetTreeRefreshHandler([this]()
+    {
         this->UpdateTreeSceneObjects();
     });
 
     mSceneToolbar->hide();
     mTimer.Reset(true);
+
+    ui->mTreeTemplates->setDragEnabled(true);
+//    emit mMoveActiveAction->trigger();
+//    ui->mTreeTemplates->setDragDropMode(QAbstractItemView::InternalMove);
+    mWidgetForScene->hide();
     this->startTimer(0);
 }
 
@@ -110,27 +118,34 @@ bool EditorWindow::InitScene()
 
     mWidgetForObjects = new SceneWidget(this);
     mWidgetForScene = new SceneWidget(this);
-    mWidgetForObjects->SetApp(mObjectApp);
     mWidgetForScene->SetApp(mSceneApp);
+    mWidgetForObjects->SetApp(mObjectApp);
 
-    mLayoutForScene->addWidget(mWidgetForObjects);
     mLayoutForScene->addWidget(mWidgetForScene);
-
+    mLayoutForScene->addWidget(mWidgetForObjects);
+    mWidgetForScene->show();
     ui->mManageWidget->setCurrentIndex(0);
     if (mWidgetForObjects->GetApp() == nullptr ||
         mWidgetForScene->GetApp() == nullptr) {
         return false;
     }
+
     return true;
 }
 
 void EditorWindow::timerEvent(QTimerEvent *)
 {
+//    if (fuck == false) {
+//        mWidgetForScene->hide();
+//        fuck = true;
+//    }
     mTimer.Tick();
 
     if (mCurrentSceneWidget->GetApp() != nullptr)
     {
         mCurrentSceneWidget->GetApp()->Step(mTimer.GetDeltaTime());
+    } else {
+        close();
     }
 
     mCurrentSceneWidget->updateGL();
@@ -138,11 +153,19 @@ void EditorWindow::timerEvent(QTimerEvent *)
 
 void EditorWindow::CreateNewObject()
 {
-    QString str_name("Object");
+    QString str_name;
+    int i = 0;
+    do {
+        str_name = "Object";
+        str_name += QString::number(mObjectApp->GetTemplateSystem().GetSceneObjectTemplates().size()+1+i);
+        i++;
+    } while (mObjectApp->AddNewObjectToTemplate(str_name.toStdString()) == false);
+
     str_name += QString::number(mObjectApp->GetTemplateSystem().GetSceneObjectTemplates().size()+1);
     QTreeWidgetItem *newItem = new QTreeWidgetItem(ui->mTreeObjects,QStringList(str_name));
+    ui->mTreeObjects->addTopLevelItem(newItem);
     newItem->setSelected(true);
-    mObjectApp->AddNewObjectToTemplate(str_name.toStdString());
+    UpdateTreeTemplates(ui->mTreeObjects, mObjectApp);
 }
 
 void EditorWindow::AddNewFigure()
@@ -274,6 +297,18 @@ void EditorWindow::PauseLevel()
     mSceneApp->PauseLevel();
 }
 
+void EditorWindow::StopLevel()
+{
+    mSceneApp->StopLevel();
+}
+
+void EditorWindow::NewLevel()
+{
+    if (mSceneApp->NewLevel() == true) {
+        mLabelOfStatusBar->setText("Created new level");
+    }
+}
+
 void EditorWindow::CreateActions()
 {
     mQuit = new QAction("Quit",this);
@@ -361,13 +396,23 @@ void EditorWindow::CreateActions()
 
     mPlayLevelAction = new QAction("Start Level", this);
     listActions << mPlayLevelAction;
-    connect(mPlayLevelAction, SIGNAL(triggered()) ,
+    connect(mPlayLevelAction, SIGNAL(triggered()),
             this,SLOT(PlayLevel()));
 
     mPauseLevelAction = new QAction("Pause Level", this);
     listActions << mPauseLevelAction;
     connect(mPauseLevelAction, SIGNAL(triggered()) ,
             this, SLOT(PauseLevel()));
+
+    mStopLevelAction = new QAction("Stop Level", this);
+    listActions << mStopLevelAction;
+    connect(mStopLevelAction,SIGNAL(triggered()),
+            this,SLOT(StopLevel()));
+
+    mNewLevelAction = new QAction("New Level", this);
+    listActions.push_front(mNewLevelAction);
+    connect(mNewLevelAction, SIGNAL(triggered()),
+            this, SLOT(NewLevel()));
 
     mSceneToolbar->addActions(listActions);
 //    mSaveAction = new QAction("Save Object", this);
@@ -411,7 +456,6 @@ bool EditorWindow::UpdateTreeTemplates(QTreeWidget *_tree, drash::CApp *_app)
            new QTreeWidgetItem(objectItem,QStringList(vecs));
        }
     }
-    //mMoveActiveAction->setChecked(true);
     return true;
 }
 
@@ -481,5 +525,21 @@ void EditorWindow::on_mManageWidget_currentChanged(int index)
         UpdateTreeTemplates(ui->mTreeTemplates,mSceneApp);
         mObjectToolBar->hide();
         mSceneToolbar->show();
+        mSceneApp->ResetLevel();
+    }
+}
+
+void EditorWindow::on_mTreeTemplates_doubleClicked(const QModelIndex &index)
+{
+    std::string nameobject = ui->mTreeTemplates->currentItem()->text(0).toStdString();
+    mSceneApp->AddObject(nameobject);
+}
+
+void EditorWindow::on_mTreeSceneObjects_clicked(const QModelIndex &index)
+{
+    QTreeWidgetItem * item = ui->mTreeSceneObjects->selectedItems().at(0);
+    if (item->parent() != nullptr) {
+        mSceneApp->LookObject(item->parent()->text(0).toStdString(),
+                              item->text(0).toStdString());
     }
 }
