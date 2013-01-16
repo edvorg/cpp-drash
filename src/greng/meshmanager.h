@@ -57,6 +57,7 @@ public:
     bool DestroyMesh(CMesh *_mesh);
 
     void ComputeNormals(CMesh *_mesh);
+    void ComputeTangentSpace(CMesh *_mesh);
 
 protected:
 private:

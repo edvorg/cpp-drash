@@ -108,6 +108,7 @@ CMesh *CMeshManager::CreateMeshFromObjFile(const char *_path)
 
     if (LoadMeshObj(_path, res) == false)
     {
+        LOG_ERR("CMeshManager::CreateMeshFromObjFile(): unable to load mesh \""<<_path<<"\"");
         DestroyMesh(res);
         return nullptr;
     }
@@ -332,6 +333,12 @@ bool CMeshManager::DestroyMesh(CMesh *_mesh)
 
 void CMeshManager::ComputeNormals(CMesh *_mesh)
 {
+    if (_mesh == nullptr)
+    {
+        LOG_ERR("CMeshManager::ComputeNormals() invalid mesh taken");
+        return;
+    }
+
     unsigned int triangles_count = _mesh->mIndices.size() / 3;
 
     for (unsigned int i = 0; i < triangles_count; i++)
@@ -350,6 +357,67 @@ void CMeshManager::ComputeNormals(CMesh *_mesh)
         _mesh->mVertices[_mesh->mIndices[i * 3]].mNormal = v1;
         _mesh->mVertices[_mesh->mIndices[i * 3 + 1]].mNormal = v1;
         _mesh->mVertices[_mesh->mIndices[i * 3 + 2]].mNormal = v1;
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, _mesh->mVertexBufferId);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * _mesh->mVertices.size(), &_mesh->mVertices[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void CMeshManager::ComputeTangentSpace(CMesh *_mesh)
+{
+    if (_mesh == nullptr)
+    {
+        LOG_ERR("CMeshManager::ComputeTangentSpace() invalid mesh taken");
+        return;
+    }
+
+    unsigned int triangles_count = _mesh->mIndices.size() / 3;
+
+    for (unsigned int i = 0; i < triangles_count; i++)
+    {
+        CVertex &v1 = _mesh->mVertices[_mesh->mIndices[i * 3]];
+        CVertex &v2 = _mesh->mVertices[_mesh->mIndices[i * 3 + 1]];
+        CVertex &v3 = _mesh->mVertices[_mesh->mIndices[i * 3 + 2]];
+
+        CVec3f q1 = v2.mPos;
+        CVec3f q2 = v3.mPos;
+
+        q1 -= v1.mPos;
+        q2 -= v1.mPos;
+
+        CVec2f st1 = v2.mUV;
+        CVec2f st2 = v3.mUV;
+
+        st1 -= v1.mUV;
+        st2 -= v1.mUV;
+
+        CVec3f tangent;
+        CVec3f binormal;
+
+        tangent.mX = st2.mY * q1.mX - st1.mY * q2.mX;
+        tangent.mY = st2.mY * q1.mY - st1.mY * q2.mY;
+        tangent.mZ = st2.mY * q1.mZ - st1.mY * q2.mZ;
+
+        binormal.mX = - st2.mX * q1.mX + st1.mX * q2.mX;
+        binormal.mY = - st2.mX * q1.mY + st1.mX * q2.mY;
+        binormal.mZ = - st2.mX * q1.mZ + st1.mX * q2.mZ;
+
+        float k = 1.0 / (st1.mX * st2.mY - st2.mX * st1.mY);
+
+        tangent *= k;
+        binormal *= k;
+
+        tangent.Normalize();
+        binormal.Normalize();
+
+        v1.mTangent = tangent;
+        v2.mTangent = tangent;
+        v3.mTangent = tangent;
+
+        v1.mBinormal = binormal;
+        v2.mBinormal = binormal;
+        v3.mBinormal = binormal;
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, _mesh->mVertexBufferId);

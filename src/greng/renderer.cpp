@@ -88,6 +88,29 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
 
     glUseProgram(_program->mProgramId);
 
+    int tangent_loc = glGetAttribLocation(_program->mProgramId, "gTangent");
+
+    if (tangent_loc != -1)
+    {
+        glEnableVertexAttribArray(tangent_loc);
+        glVertexAttribPointer(tangent_loc, 3, GL_FLOAT, 1, sizeof(CVertex), reinterpret_cast<GLvoid*>(sizeof(drash::CVec3f) +
+                                                                                                      sizeof(drash::CVec2f) +
+                                                                                                      sizeof(drash::CVec3f) +
+                                                                                                      sizeof(drash::CColor4f)));
+    }
+
+    int binormal_loc = glGetAttribLocation(_program->mProgramId, "gBinormal");
+
+    if (binormal_loc != -1)
+    {
+        glEnableVertexAttribArray(binormal_loc);
+        glVertexAttribPointer(binormal_loc, 3, GL_FLOAT, 1, sizeof(CVertex), reinterpret_cast<GLvoid*>(sizeof(drash::CVec3f) +
+                                                                                                       sizeof(drash::CVec2f) +
+                                                                                                       sizeof(drash::CVec3f) +
+                                                                                                       sizeof(drash::CColor4f) +
+                                                                                                       sizeof(drash::CVec3f)));
+    }
+
     static const unsigned int textures_count_limit = 3;
     _textures_count = drash::math::Min<unsigned int>(_textures_count, textures_count_limit);
 
@@ -190,6 +213,9 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
                    _mesh->mMaterialOffsets[_submesh+1] - _mesh->mMaterialOffsets[_submesh],
                    GL_UNSIGNED_INT,
                    reinterpret_cast<const GLvoid*>(sizeof(unsigned int) * _mesh->mMaterialOffsets[_submesh]));
+
+    glDisableVertexAttribArray(tangent_loc);
+    glDisableVertexAttribArray(binormal_loc);
 
     glUseProgram(0);
 

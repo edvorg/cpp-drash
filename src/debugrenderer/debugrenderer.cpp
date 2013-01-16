@@ -99,6 +99,7 @@ void CDebugRenderer::Render() const
             if (m != nullptr)
             {
                 mGrengSystems->GetMeshManager().ComputeNormals(m);
+                mGrengSystems->GetMeshManager().ComputeTangentSpace(m);
 
                 CMatrix4f rot;
                 MatrixRotationZ(rot, o->GetAngle());
@@ -143,6 +144,7 @@ void CDebugRenderer::RenderObject(CSceneObjectGeometry *_geometry, CSceneObjectP
         if (m != nullptr)
         {
             mGrengSystems->GetMeshManager().ComputeNormals(m);
+            mGrengSystems->GetMeshManager().ComputeTangentSpace(m);
 
             CMatrix4f rot;
             MatrixRotationZ(rot, _params->mAngle);
@@ -338,8 +340,8 @@ CSceneObject *CDebugRenderer::FindObject(const greng::CCamera *_camera, const CV
 
 bool CDebugRenderer::InitTextures()
 {
-    mTexture1Diffuse = mGrengSystems->GetTextureManager().CreateTextureFromFile("assets/wall4.jpg");
-    mTexture1Normal = mGrengSystems->GetTextureManager().CreateTextureFromFile("assets/wall1_normal.png");
+    mTexture1Diffuse = mGrengSystems->GetTextureManager().CreateTextureFromFile("assets/wall5.png");
+    mTexture1Normal = mGrengSystems->GetTextureManager().CreateTextureFromFile("assets/wall2_normal.png");
 
     if (mTexture1Diffuse == nullptr ||
         mTexture1Normal == nullptr)
