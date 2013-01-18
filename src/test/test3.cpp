@@ -282,7 +282,7 @@ void CTest3::InitObjects()
 {
     CSceneObjectGeometry sbg;
     sbg.mFigures.resize(1);
-    sbg.mFigures[0].mDepth = 40;
+    sbg.mFigures[0].mDepth = 200;
     sbg.mFigures[0].mRestitution = 0.0;
     sbg.mFigures[0].mVertices.push_back( CVec2f( -300, -5 ) );
     sbg.mFigures[0].mVertices.push_back( CVec2f( 300, -5 ) );

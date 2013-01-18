@@ -65,7 +65,7 @@ void CTest5::Step(double _dt)
     }
 
     mLight1.mPosition.mX = 200 * sin(mAngle);
-    mLight1.mPosition.mY = 30;
+    mLight1.mPosition.mY = 50;
     mLight1.mPosition.mZ = 200 * cos(mAngle);
 }
 
@@ -161,12 +161,13 @@ void CTest5::Render()
                                      i,
                                      &texts[i * 2],
                                      2,
-                                     mShaderProgram3,
+                                     mShaderProgram4,
                                      &model,
                                      nullptr,
                                      &model_view,
                                      &GetCamera()->GetProjectionMatrix(),
-                                     &mLight1);
+                                     &mLight1,
+                                     &GetCamera()->GetPos().Get());
         }
     }
 
@@ -200,12 +201,13 @@ void CTest5::Render()
                                      i,
                                      &texts[i * 2],
                                      2,
-                                     mShaderProgram3,
+                                     mShaderProgram4,
                                      &model,
                                      nullptr,
                                      &model_view,
                                      &GetCamera()->GetProjectionMatrix(),
-                                     &mLight1);
+                                     &mLight1,
+                                     &GetCamera()->GetPos().Get());
         }
     }
 
@@ -264,6 +266,9 @@ void CTest5::SetupShaders()
     mVertexShader3 = GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile("shaders/shader3.120.vs");
     mFragmentShader3 = GetGrengSystems().GetFragmentShaderManager().CreateShaderFromFile("shaders/shader3.120.fs");
     mShaderProgram3 = GetGrengSystems().GetShaderProgramManager().CreateProgram(mVertexShader3, mFragmentShader3);
+    mVertexShader4 = GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile("shaders/shader4.120.vs");
+    mFragmentShader4 = GetGrengSystems().GetFragmentShaderManager().CreateShaderFromFile("shaders/shader4.120.fs");
+    mShaderProgram4 = GetGrengSystems().GetShaderProgramManager().CreateProgram(mVertexShader4, mFragmentShader4);
 }
 
 void CTest5::SetupProcessors()

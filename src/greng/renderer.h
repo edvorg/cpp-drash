@@ -66,7 +66,8 @@ public:
                     const drash::CMatrix4f *_view,
                     const drash::CMatrix4f *_model_view,
                     const drash::CMatrix4f *_proj_matrix,
-                    const CPointLight *_light);
+                    const CPointLight *_light,
+                    const CVec3f *_view_pos = nullptr);
 
     /// draws triangle giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) and color
     void DrawTriangle(const CVec2f &_p1,

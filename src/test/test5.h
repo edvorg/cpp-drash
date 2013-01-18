@@ -77,6 +77,9 @@ private:
     greng::CVertexShader *mVertexShader3 = nullptr;
     greng::CFragmentShader *mFragmentShader3 = nullptr;
     greng::CShaderProgram *mShaderProgram3 = nullptr;
+    greng::CVertexShader *mVertexShader4 = nullptr;
+    greng::CFragmentShader *mFragmentShader4 = nullptr;
+    greng::CShaderProgram *mShaderProgram4 = nullptr;
 
     double mAngle = 0.0;
 
