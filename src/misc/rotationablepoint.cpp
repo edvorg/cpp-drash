@@ -167,22 +167,7 @@ void CRotationablePoint::Render()
     CMatrix4f rot;
     MatrixMultiply(rotx, rot_yz, rot);
 
-    for (unsigned int i = 0; i < segments; i++)
-    {
-        CVec4f p1(radius * cos(angle), radius * sin(angle), 0, 0);
-        CVec4f p2(radius * cos(angle + angle_delta), radius * sin(angle + angle_delta), 0, 0);
-
-        CVec4f p1_transposed;
-        CVec4f p2_transposed;
-
-        MatrixMultiply(rot, p1, p1_transposed);
-        MatrixMultiply(rot, p2, p2_transposed);
-
-        mRenderer->DrawLine(mCamera, p1_transposed, p2_transposed, 1, CColor4f(0, 0, 1, mAxisOvered == 3 ? 0.5 : 1), false);
-
-        angle += angle_delta;
-    }
-
+    // Draw lines
     CVec4f x(1, 0, 0, 0);
 
     CVec4f x_transposed;
@@ -193,24 +178,6 @@ void CRotationablePoint::Render()
     x_transposed.Vec3() += mPoint;
 
     mRenderer->DrawLine(mCamera, mPoint, x_transposed, 1, CColor4f(1, 0, 0, 1), false);
-
-    ///
-
-    for (unsigned int i = 0; i < segments; i++)
-    {
-        CVec4f p1(radius * cos(angle), 0, - radius * sin(angle), 0);
-        CVec4f p2(radius * cos(angle + angle_delta), 0, - radius * sin(angle + angle_delta), 0);
-
-        CVec4f p1_transposed;
-        CVec4f p2_transposed;
-
-        MatrixMultiply(rot, p1, p1_transposed);
-        MatrixMultiply(rot, p2, p2_transposed);
-
-        mRenderer->DrawLine(mCamera, p1_transposed, p2_transposed, 1, CColor4f(0, 1, 0, mAxisOvered == 2 ? 0.5 : 1), false);
-
-        angle += angle_delta;
-    }
 
     CVec4f z(0, 0, 1, 0);
 
@@ -223,23 +190,6 @@ void CRotationablePoint::Render()
 
     mRenderer->DrawLine(mCamera, mPoint, z_transposed, 1, CColor4f(0, 0, 1, 1), false);
 
-    ///
-
-    for (unsigned int i = 0; i < segments; i++)
-    {
-        CVec4f p1(0, radius * sin(angle), - radius * cos(angle), 0);
-        CVec4f p2(0, radius * sin(angle + angle_delta), - radius * cos(angle + angle_delta), 0);
-
-        CVec4f p1_transposed;
-        CVec4f p2_transposed;
-
-        MatrixMultiply(rot, p1, p1_transposed);
-        MatrixMultiply(rot, p2, p2_transposed);
-
-        mRenderer->DrawLine(mCamera, p1_transposed, p2_transposed, 1, CColor4f(1, 0, 0, mAxisOvered == 1 ? 0.5 : 1), false);
-
-        angle += angle_delta;
-    }
 
     CVec4f y(0, 1, 0, 0);
 
@@ -251,6 +201,64 @@ void CRotationablePoint::Render()
     y_transposed.Vec3() += mPoint;
 
     mRenderer->DrawLine(mCamera, mPoint, y_transposed, 1, CColor4f(0, 1, 0, 1), false);
+
+    if (mAxisOX == true) {
+        for (unsigned int i = 0; i < segments; i++)
+        {
+            CVec4f p1(0, radius * sin(angle), - radius * cos(angle), 0);
+            CVec4f p2(0, radius * sin(angle + angle_delta), - radius * cos(angle + angle_delta), 0);
+
+            CVec4f p1_transposed;
+            CVec4f p2_transposed;
+
+            MatrixMultiply(rot, p1, p1_transposed);
+            MatrixMultiply(rot, p2, p2_transposed);
+
+            mRenderer->DrawLine(mCamera, p1_transposed, p2_transposed, 1, CColor4f(1, 0, 0, mAxisOvered == 1 ? 0.5 : 1), false);
+
+            angle += angle_delta;
+        }
+    }
+
+
+    ///
+    if (mAxisOZ == true) {
+        for (unsigned int i = 0; i < segments; i++)
+        {
+            CVec4f p1(radius * cos(angle), radius * sin(angle), 0, 0);
+            CVec4f p2(radius * cos(angle + angle_delta), radius * sin(angle + angle_delta), 0, 0);
+
+            CVec4f p1_transposed;
+            CVec4f p2_transposed;
+
+            MatrixMultiply(rot, p1, p1_transposed);
+            MatrixMultiply(rot, p2, p2_transposed);
+
+            mRenderer->DrawLine(mCamera, p1_transposed, p2_transposed, 1, CColor4f(0, 0, 1, mAxisOvered == 3 ? 0.5 : 1), false);
+
+            angle += angle_delta;
+        }
+    }
+
+    ///
+    if (mAxisOY == true) {
+        for (unsigned int i = 0; i < segments; i++)
+        {
+            CVec4f p1(radius * cos(angle), 0, - radius * sin(angle), 0);
+            CVec4f p2(radius * cos(angle + angle_delta), 0, - radius * sin(angle + angle_delta), 0);
+
+            CVec4f p1_transposed;
+            CVec4f p2_transposed;
+
+            MatrixMultiply(rot, p1, p1_transposed);
+            MatrixMultiply(rot, p2, p2_transposed);
+
+            mRenderer->DrawLine(mCamera, p1_transposed, p2_transposed, 1, CColor4f(0, 1, 0, mAxisOvered == 2 ? 0.5 : 1), false);
+
+            angle += angle_delta;
+        }
+    }
+
 }
 
 void CRotationablePoint::Release()
@@ -259,7 +267,12 @@ void CRotationablePoint::Release()
 
 void CRotationablePoint::RotateBegin()
 {
-    mAxisRotating = mAxisOvered;
+    if ( (mAxisOvered == 1 && mAxisOX == true) ||
+        (mAxisOvered == 2 && mAxisOY == true) ||
+        (mAxisOvered == 3 && mAxisOZ == true)) {
+
+        mAxisRotating = mAxisOvered;
+    }
 }
 
 void CRotationablePoint::RotateEnd()
