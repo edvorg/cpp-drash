@@ -208,7 +208,6 @@ void CSceneEditorApp::SetProcessors()
         if (mSelectedObject != nullptr) {
             mOldpositon = mSelectedObject->GetPos();
             mMoveablePoint.SetCenter(mOldpositon);
-            qDebug() << "Object found";
         } else {
         }
     }

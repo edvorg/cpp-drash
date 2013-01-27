@@ -223,6 +223,7 @@ inline void CObjectEditorApp::ActiveSplitFigureMode() {
 inline void CObjectEditorApp::ActiveSplitObjectMode() {
     ChangeMode();
     mState = SplitObjectState;
+    BeginSplit();
 }
 
 } // namespace drash

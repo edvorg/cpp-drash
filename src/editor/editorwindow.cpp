@@ -358,6 +358,21 @@ void EditorWindow::CreateActions()
             this,SLOT(MoveOfAxisActive()));
     mModeActions.addAction(mMoveOfAxisActiveAction);
 
+    mSplitFigureActiveAction = new QAction("Split Figure",this);
+    mSplitFigureActiveAction->setCheckable(true);
+    mSplitFigureActiveAction->setShortcut(tr("Ctrl+E"));
+    listActions << mSplitFigureActiveAction;
+    connect(mSplitFigureActiveAction,SIGNAL(changed()),
+            this,SLOT(SplitActive()));
+    mModeActions.addAction(mSplitFigureActiveAction);
+
+    mSplitObjectActiveAction = new QAction("Split Object", this);
+    mSplitObjectActiveAction->setCheckable(true);
+    listActions << mSplitObjectActiveAction;
+    connect(mSplitObjectActiveAction,SIGNAL(changed()),
+            this,SLOT(SplitActive()));
+    mModeActions.addAction(mSplitObjectActiveAction);
+
     mStretchActiveAction = new QAction("Stretch active", this);
     mStretchActiveAction->setCheckable(true);
     mStretchActiveAction->setShortcut(tr("Ctrl+W"));
@@ -371,6 +386,7 @@ void EditorWindow::CreateActions()
     listActions << mRemoveAction;
     connect(mRemoveAction,SIGNAL(triggered()),
             this, SLOT(Remove_Object()));
+
 
 //    mZoomUpAction = new QAction("+", this);
 //    mZoomUpAction->setShortcut(tr("Ctrl+="));
@@ -494,9 +510,7 @@ void EditorWindow::on_mTreeObjects_itemSelectionChanged()
         return;
     }
     if (item->parent() == nullptr) {
-        qDebug() << "Object created";
         mObjectApp->ShowObject(item->text(0).toStdString());
-        //mCurrentObject = mObjectApp->GetTemplateSystem().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
     }
 }
 
@@ -514,6 +528,15 @@ void EditorWindow::Remove_Object()
         UpdateTreeTemplates(ui->mTreeObjects,mObjectApp);
         //mObjectApp->ShowObject(item->text(0).toStdString());
         //mCurrentObject = mObjectApp->GetTemplateSystem().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
+    }
+}
+
+void EditorWindow::SplitActive()
+{
+    if (mSplitFigureActiveAction->isChecked() == true) {
+        mObjectApp->ActiveSplitFigureMode();
+    } else if (mSplitObjectActiveAction->isChecked() == true ) {
+        mObjectApp->ActiveSplitObjectMode();
     }
 }
 
@@ -541,8 +564,8 @@ void EditorWindow::on_mManageWidget_currentChanged(int index)
 
 void EditorWindow::on_mTreeTemplates_doubleClicked(const QModelIndex &index)
 {
-    std::string nameobject = ui->mTreeTemplates->currentItem()->text(0).toStdString();
-    mSceneApp->AddObject(nameobject, CVec3f(0,0,0));
+//    std::string nameobject = ui->mTreeTemplates->currentItem()->text(0).toStdString();
+//    mSceneApp->AddObject(nameobject, CVec3f(0,0,0));
 }
 
 void EditorWindow::on_mTreeSceneObjects_clicked(const QModelIndex &index)

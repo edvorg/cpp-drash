@@ -86,10 +86,14 @@ private:
     QAction *mMoveOfAxisActiveAction;
     QAction *mNewFigureAction;
     QAction *mNewObjectAction;
-    QAction *mZoomUpAction;
-    QAction *mZoomDownAction;
+    QAction *mSplitFigureActiveAction;
+    QAction *mSplitObjectActiveAction;
     QActionGroup mModeActions;
 
+
+
+    QAction *mZoomUpAction;
+    QAction *mZoomDownAction;
     // for editor scene
     QAction * mOpenLevelAction;
     QAction * mSaveLevelAction;
@@ -108,6 +112,8 @@ private slots:
     void MoveOfAxisActive();
     void StretchActive();
     void Remove_Object();
+    void SplitActive();
+
 
     void ChangeMode(QAction *_action);
 

@@ -274,6 +274,10 @@ void CObjectEditorApp::SetProcessors()
                 }
                 break;
             }
+            case SplitObjectState: {
+                EndSplit();
+                break;
+            }
             case Simple:
                 mSelectedFigure = nullptr;
                 break;
@@ -797,10 +801,10 @@ bool Intersect(const CVec2f &_p1,
 
 void CObjectEditorApp::BeginSplit()
 {
-    if (mState == SplitFigureState){
+    if (mState == SplitFigureState) {
         if (mCurrentObject != nullptr && mSelectedFigure != nullptr)
         {
-            mSplitMode = true;
+//            mSplitMode = true;
 
             mSplitMin.Set(mSelectedFigure->GetVertices()[0].mX,
                                 mSelectedFigure->GetVertices()[0].mY,
@@ -809,7 +813,7 @@ void CObjectEditorApp::BeginSplit()
                                 mSelectedFigure->GetVertices()[0].mY,
                                 mCurrentObject->GetPosZ() + mSelectedFigure->GetZ());
 
-            for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++)
+            for (unsigned int i = 1; i < mSelectedFigure->EnumVertices(); i++)
             {
                 mSplitMin.mX = math::Min<float>(mSplitMin.mX, mSelectedFigure->GetVertices()[i].mX);
                 mSplitMax.mX = math::Max<float>(mSplitMax.mX, mSelectedFigure->GetVertices()[i].mX);
@@ -835,11 +839,56 @@ void CObjectEditorApp::BeginSplit()
             mSplitFigureContext.mFigure = mSelectedFigure;
             ComputeIntersections(mSplitFigureContext);
         }
-
     }
     else
     {
+        //--
+        if (mCurrentObject != nullptr){
+            if (mCurrentObject->EnumFigures() != 0){
 
+                mSplitMin.Set(mCurrentObject->GetFigures()[0]->GetVertices()[0].mX,
+                                    mCurrentObject->GetFigures()[0]->GetVertices()[0].mY,
+                                    mCurrentObject->GetPosZ() + mCurrentObject->GetFigures()[0]->GetZ());
+                mSplitMax.Set(mCurrentObject->GetFigures()[0]->GetVertices()[0].mX,
+                                    mCurrentObject->GetFigures()[0]->GetVertices()[0].mY,
+                                    mCurrentObject->GetPosZ() +mCurrentObject->GetFigures()[0]->GetZ());
+
+                float maxDepth = mCurrentObject->GetFigures()[0]->GetDepth();
+//                float minDepth = mCurrentObject->GetFigures()[0]->GetDepth();
+
+                for (int i = 0 ; i < mCurrentObject->EnumFigures() ; i++) {
+                    CFigure * figure = mCurrentObject->GetFigures()[i];
+                    for (unsigned int i = 1; i < figure->EnumVertices(); i++)
+                    {
+                        mSplitMin.mX = math::Min<float>(mSplitMin.mX, figure->GetVertices()[i].mX);
+                        mSplitMax.mX = math::Max<float>(mSplitMax.mX, figure->GetVertices()[i].mX);
+                        mSplitMin.mY = math::Min<float>(mSplitMin.mY, figure->GetVertices()[i].mY);
+                        mSplitMax.mY = math::Max<float>(mSplitMax.mY, figure->GetVertices()[i].mY);
+                        mSplitMin.mZ = math::Min<float>(mSplitMin.mZ, mCurrentObject->GetPosZ() + figure->GetZ());
+                        mSplitMax.mZ = math::Max<float>(mSplitMax.mZ, mCurrentObject->GetPosZ() + figure->GetZ());
+                    }
+                    maxDepth = math::Max<float>(maxDepth,figure->GetDepth());
+                    SplitContext context;
+                    context.mFigure = figure;
+                    mObjectContexts.push_back(context);
+                }
+                mSplitMin.mZ -= maxDepth * 0.5;
+                mSplitMax.mZ += maxDepth * 0.5;
+                mSplitMin -= 1;
+                mSplitMax += 1;
+
+                mSplitPlane.SetNormal(CVec3f(0, 1, 0));
+                mSplitPlane.SetPoint(CVec3f(0.5f * (mSplitMin.mX + mSplitMax.mX),
+                                            0.5f * (mSplitMin.mY + mSplitMax.mY),
+                                            0.5f * (mSplitMin.mZ + mSplitMax.mZ)));
+
+                ComputeSplitPlanePoints();
+                for (SplitContext &context : mObjectContexts) {
+                    ComputeIntersections(context);
+                }
+            }
+        }
+        //--
     }
 
 }
@@ -852,7 +901,7 @@ void CObjectEditorApp::DetectNewSplitPoint(const CVec2f &_p1, const CVec2f &_p2,
         return;
     }
 
-    float centerz = mCurrentObject->GetPosZ() + mSelectedFigure->GetZ();
+    float centerz = mCurrentObject->GetPosZ() + _context.mFigure->GetZ();
 
     CPlane p;
     p.Set(CVec3f(_p1, centerz),
@@ -910,7 +959,7 @@ void CObjectEditorApp::ComputeIntersections(SplitContext &_context) const
         CVec3f dir = mSplitPlanePoint1;
         dir -= mSplitPlanePoint4;
 
-        float centerz = mCurrentObject->GetPosZ() + mSelectedFigure->GetZ();
+        float centerz = mCurrentObject->GetPosZ() + _context.mFigure->GetZ();
 
         CRay r;
         r.SetPoint(CVec3f(mSplitPlanePoint4.Vec2(), centerz));
@@ -918,15 +967,15 @@ void CObjectEditorApp::ComputeIntersections(SplitContext &_context) const
 
         _context.mSplitIntersectionsCount = 0;
 
-        if (mSelectedFigure->EnumVertices() != 0)
+        if (_context.mFigure->EnumVertices() != 0)
         {
-            for (unsigned int i = 1; i < mSelectedFigure->EnumVertices(); i++)
+            for (unsigned int i = 1; i <_context.mFigure->EnumVertices(); i++)
             {
-                DetectNewSplitPoint(mSelectedFigure->GetVertices()[i-1], mSelectedFigure->GetVertices()[i], i-1, r, _context);
+                DetectNewSplitPoint(_context.mFigure->GetVertices()[i-1], _context.mFigure->GetVertices()[i], i-1, r, _context);
             }
-            DetectNewSplitPoint(mSelectedFigure->GetVertices()[mSelectedFigure->EnumVertices()-1],
-                                mSelectedFigure->GetVertices()[0],
-                                mSelectedFigure->EnumVertices()-1,
+            DetectNewSplitPoint(_context.mFigure->GetVertices()[_context.mFigure->EnumVertices()-1],
+                                _context.mFigure->GetVertices()[0],
+                                _context.mFigure->EnumVertices()-1,
                                 r,_context);
         }
     }
@@ -940,7 +989,9 @@ void CObjectEditorApp::EndSplit()
         mObjectContexts.clear();
         mObjectContexts.push_back(mSplitFigureContext);
     }
+
     for (SplitContext &context : mObjectContexts){
+
         if (context.mFigure == nullptr) {
             continue;
         }
@@ -963,6 +1014,7 @@ void CObjectEditorApp::EndSplit()
             {
                 fp.mVertices[i] = context.mFigure->GetVertices()[i];
             }
+
             fp.mVertices[i++] = context.mSplitIntersection1;
             fp.mVertices[i++] = context.mSplitIntersection2;
             for (i = context.mSplitIntersection2Index + 1; i < context.mFigure->EnumVertices(); i++)
@@ -989,7 +1041,7 @@ void CObjectEditorApp::EndSplit()
 
             mCurrentObject->CreateFigure(fp);
 
-            mCurrentObject->DestroyFigure(mSelectedFigure);
+            mCurrentObject->DestroyFigure(context.mFigure);
 
             CSceneObjectGeometry * geometry = new CSceneObjectGeometry();
             mCurrentObject->DumpGeometry(geometry);
@@ -1002,7 +1054,6 @@ void CObjectEditorApp::EndSplit()
 void CObjectEditorApp::RenderSplitPlane()
 {
     if ( (mState != SplitFigureState && mState != SplitObjectState)
-            || mSelectedFigure == nullptr
             || mCurrentObject == nullptr)
     {
         return;
