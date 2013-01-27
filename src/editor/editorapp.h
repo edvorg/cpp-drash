@@ -37,8 +37,28 @@ enum State {
     MoveOfAxisState,
     StretchState,
     DeleteFigure,
+    SplitFigureState,
+    SplitObjectState,
     Simple
 };
+
+
+struct SplitContext {
+
+    CVec3f mSplitIntersection1;
+    unsigned mSplitIntersection1Index = 0;
+    CVec3f mSplitIntersection2;
+    unsigned mSplitIntersection2Index = 0;
+    unsigned int mSplitIntersectionsCount = 0;
+
+//    CVec3f mSplitFigureMin;
+//    CVec3f mSplitFigureMax;
+//    CVec3f * mSplitFigureMin = nullptr;
+//    CVec3f * mSplitFigureMax = nullptr;
+    CFigure * mFigure = nullptr;
+
+};
+
 
 class CObjectEditorApp : public CApp
 {
@@ -64,6 +84,10 @@ public:
 
     inline void ActiveMoveMode();
 
+    inline void ActiveSplitFigureMode();
+
+    inline void ActiveSplitObjectMode();
+
     void ActiveStretchMode();
 
     void ActiveMoveOfAxisMode();
@@ -72,7 +96,7 @@ public:
 
     inline greng::CCamera *GetCamera();
 
-//    SceneWidget *mSceneWidget = nullptr;
+    void ComputeSplitPlanePoints();
 private:
     float GetCurDepth();
 
@@ -137,6 +161,31 @@ private:
     CColor4f mGridColor = CColor4f(0.8, 0.8, 0.8, 1);
     int mGridSegmentSize = 1;
     CVec2i mGridSize = CVec2i(20, 20);
+
+
+    // for Split
+
+    CVec3f mSplitMin;
+    CVec3f mSplitMax;
+    bool mSplitMode = false;
+    CPlane mSplitPlane;
+    CVec3f mSplitPlanePoint1;
+    CVec3f mSplitPlanePoint2;
+    CVec3f mSplitPlanePoint3;
+    CVec3f mSplitPlanePoint4;
+
+
+    std::vector<SplitContext> mObjectContexts;
+    SplitContext mSplitFigureContext;
+
+
+    void BeginSplit();
+    void DetectNewSplitPoint(const CVec2f &_p1, const CVec2f &_p2, unsigned int _index, const CRay &_r, SplitContext &_context) const;
+    void ComputeIntersections(SplitContext &_context) const;
+    void EndSplit();
+
+    void RenderSplitPlane();
+
 };
 
 inline bool CObjectEditorApp::IsStartBuild()const {
@@ -166,5 +215,16 @@ inline greng::CCamera *CObjectEditorApp::GetCamera()
     return mCamera;
 }
 
+inline void CObjectEditorApp::ActiveSplitFigureMode() {
+    ChangeMode();
+    mState = SplitFigureState;
+}
+
+inline void CObjectEditorApp::ActiveSplitObjectMode() {
+    ChangeMode();
+    mState = SplitObjectState;
+}
+
 } // namespace drash
+
 #endif // CEDITORAPP_H
