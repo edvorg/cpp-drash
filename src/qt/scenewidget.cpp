@@ -272,6 +272,19 @@ void SceneWidget::dropEvent(QDropEvent *_event)
 void SceneWidget::dragMoveEvent(QDragMoveEvent *_event)
 {
     _event->accept();
+//    QGLWidget::mouseMoveEvent(_event);
+
+    if (mApp == nullptr)
+    {
+        return;
+    }
+    CVec2f pos = WidgetSpaceToScreenSpace(CVec2f(_event->pos().x(),
+                                               _event->pos().y()));
+    mApp->SetCursorPos(pos);
+    int x = 0;
+    int y = 0;
+    mApp->GetUISystem().ScreenSpaceToUISpace(pos, x, y);
+    mApp->GetUISystem().SetCursorPos(x, y);
 }
 
 void SceneWidget::dragEnterEvent(QDragEnterEvent *_event)
