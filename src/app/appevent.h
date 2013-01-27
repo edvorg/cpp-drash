@@ -54,6 +54,7 @@ enum EventKey : unsigned int
     EventKeyMiddleButton,
     EventKeyWheelUp,
     EventKeyWheelDown,
+    EventDragDrop
 };
 
 class CAppEvent
