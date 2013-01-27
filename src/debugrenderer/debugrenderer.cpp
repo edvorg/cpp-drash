@@ -127,14 +127,14 @@ void CDebugRenderer::Render() const
     }
 }
 
-void CDebugRenderer::RenderObject(CSceneObjectGeometry *_geometry, CSceneObjectParams *_params)
+void CDebugRenderer::RenderObject(const CSceneObjectGeometry &_geometry, const CSceneObjectParams &_params)
 {
-    for (unsigned int i = 0; i < _geometry->mFigures.size(); i++)
+    for (unsigned int i = 0; i < _geometry.mFigures.size(); i++)
     {
-        greng::CMesh *m = CreateMesh(&_geometry->mFigures[i].mVertices[0],
-                                     _geometry->mFigures[i].mVertices.size(),
-                                     _geometry->mFigures[i].mZ,
-                                     _geometry->mFigures[i].mDepth);
+        greng::CMesh *m = CreateMesh(&_geometry.mFigures[i].mVertices[0],
+                                     _geometry.mFigures[i].mVertices.size(),
+                                     _geometry.mFigures[i].mZ,
+                                     _geometry.mFigures[i].mDepth);
 
         if (m != nullptr)
         {
@@ -142,10 +142,10 @@ void CDebugRenderer::RenderObject(CSceneObjectGeometry *_geometry, CSceneObjectP
             mGrengSystems->GetMeshManager().ComputeTangentSpace(m);
 
             CMatrix4f rot;
-            MatrixRotationZ(rot, _params->mAngle);
+            MatrixRotationZ(rot, _params.mAngle);
 
             CMatrix4f trans;
-            MatrixTranslation(trans, _params->mPos);
+            MatrixTranslation(trans, _params.mPos);
 
             CMatrix4f model;
             MatrixMultiply(trans, rot, model);

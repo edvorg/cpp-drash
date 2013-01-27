@@ -63,7 +63,7 @@ public:
     void Release();
     void Render() const;
 
-    void RenderObject(drash::CSceneObjectGeometry *_geometry, drash::CSceneObjectParams *_params);
+    void RenderObject(const CSceneObjectGeometry &_geometry, const CSceneObjectParams &_params);
 
     /// finds objects, visible at specified postion in screen space coordinates
     /// returns nearest one
