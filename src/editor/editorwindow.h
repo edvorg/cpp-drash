@@ -86,6 +86,7 @@ private:
     QAction *mMoveOfAxisActiveAction;
     QAction *mNewFigureAction;
     QAction *mNewObjectAction;
+    QAction *mDeleteModeActiveAction;
     QAction *mSplitFigureActiveAction;
     QAction *mSplitObjectActiveAction;
     QActionGroup mModeActions;
@@ -113,7 +114,7 @@ private slots:
     void StretchActive();
     void Remove_Object();
     void SplitActive();
-
+    void DeleteModeActive();
 
     void ChangeMode(QAction *_action);
 

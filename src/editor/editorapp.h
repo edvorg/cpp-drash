@@ -84,6 +84,8 @@ public:
 
     inline void ActiveSplitObjectMode();
 
+    inline void ActiveDeleteMode();
+
     void ActiveStretchMode();
 
     void ActiveMoveOfAxisMode();
@@ -181,6 +183,9 @@ private:
 
     void RenderSplitPlane();
 
+    CRotationablePoint mRotationPoint;
+
+    void SplitRotateStep(double _dt);
 };
 
 inline bool CObjectEditorApp::IsStartBuild()const {
@@ -219,6 +224,11 @@ inline void CObjectEditorApp::ActiveSplitObjectMode() {
     ChangeMode();
     mState = SplitObjectState;
     BeginSplit();
+}
+
+inline void CObjectEditorApp::ActiveDeleteMode() {
+    ChangeMode();
+    mState = DeleteFigure;
 }
 
 } // namespace drash

@@ -381,6 +381,14 @@ void EditorWindow::CreateActions()
             this,SLOT(StretchActive()));
     mModeActions.addAction(mStretchActiveAction);
 
+    mDeleteModeActiveAction = new QAction("Delete mode", this);
+    mDeleteModeActiveAction->setCheckable(true);
+    mDeleteModeActiveAction->setShortcut(tr("Ctrl+D"));
+    listActions << mDeleteModeActiveAction;
+    connect(mDeleteModeActiveAction,SIGNAL(changed()),
+            this,SLOT(DeleteModeActive()));
+    mModeActions.addAction(mDeleteModeActiveAction);
+
     mRemoveAction = new QAction("Remove Object", this);
     mRemoveAction->setShortcut(tr("Ctrl+D"));
     listActions << mRemoveAction;
@@ -537,6 +545,13 @@ void EditorWindow::SplitActive()
         mObjectApp->ActiveSplitFigureMode();
     } else if (mSplitObjectActiveAction->isChecked() == true ) {
         mObjectApp->ActiveSplitObjectMode();
+    }
+}
+
+void EditorWindow::DeleteModeActive()
+{
+    if (mDeleteModeActiveAction->isCheckable() == true) {
+        mObjectApp->ActiveDeleteMode();
     }
 }
 

@@ -62,6 +62,8 @@ public:
     inline void SetAxisOY(const bool _val);
     inline void SetAxisOZ(const bool _val);
 
+    inline const CVec3f& GetRotation() const;
+
 private:
     CVec2f mCursorPos = CVec2f(0);
 
@@ -120,6 +122,9 @@ inline void CRotationablePoint::SetAxisOZ(const bool _val)
     mAxisOZ = _val;
 }
 
+inline const CVec3f& CRotationablePoint::GetRotation() const{
+    return mRotation;
+}
 
 } // namespace drash
 

@@ -67,8 +67,13 @@ bool CObjectEditorApp::Init()
     GetDebugRenderer().SetTexCoordsScale(0.5);
 
     mTreeRefreshHandler();
-    mMoveablePoint.SetCamera(mCamera);
 
+    mMoveablePoint.SetCamera(mCamera);
+    mRotationPoint.SetCamera(mCamera);
+    mRotationPoint.SetRenderer(&GetGrengSystems().GetRenderer());
+    mRotationPoint.Init();
+    mRotationPoint.SetAxisOX(false);
+    mRotationPoint.SetAxisOY(false);
     mTimer.Reset(true);
 
     return true;
@@ -85,6 +90,10 @@ void CObjectEditorApp::Step(double _dt)
     if (mState == MoveOfAxisState && mSelectedFigure != nullptr) {
         mMoveablePoint.SetCursorPos(GetCursorPos());
         mMoveablePoint.Step(_dt);
+    }
+
+    if (mState == SplitFigureState || mState == SplitObjectState) {
+        SplitRotateStep(_dt);
     }
 
 }
@@ -214,11 +223,23 @@ void CObjectEditorApp::Render()
     }
 
     RenderSplitPlane();
+
+    if (mState == SplitObjectState) {
+        mRotationPoint.Render();
+        mMoveablePoint.Render(GetGrengSystems().GetRenderer());
+    }
+
+    if (mState == SplitFigureState && mSelectedFigure != nullptr) {
+        mRotationPoint.Render();
+        mMoveablePoint.Render(GetGrengSystems().GetRenderer());
+    }
+
 }
 
 void CObjectEditorApp::Release()
 {
     GetTemplateSystem().Store();
+    mRotationPoint.Release();
     CApp::Release();
 }
 
@@ -234,6 +255,9 @@ void CObjectEditorApp::SetProcessors()
     GetEventSystem().SetProcessor("LB", CAppEventProcessor(
     [this] ()
     {
+        if (mCurrentObject == nullptr){
+            return;
+        }
         switch ( mState ) {
             case BuildState:{
                 if (mCurrentObject != nullptr)
@@ -264,17 +288,21 @@ void CObjectEditorApp::SetProcessors()
                 break;
             }
             case DeleteFigure:{
-
-                break;
-            }
-            case SplitFigureState: {
-                if (mSelectedFigure != nullptr) {
-                    EndSplit();
+                CFigure *fig = SelectFigure(GetCursorPos());
+                if (fig != nullptr) {
+                    mCurrentObject->DestroyFigure(fig);
+                    SaveCurrentObject();
                 }
                 break;
             }
-            case SplitObjectState: {
-                EndSplit();
+            case SplitFigureState:{
+                mRotationPoint.RotateBegin();
+                mMoveablePoint.ClickBegin();
+                break;
+            }
+            case SplitObjectState:{
+                mRotationPoint.RotateBegin();
+                mMoveablePoint.ClickBegin();
                 break;
             }
             case Simple:
@@ -296,6 +324,11 @@ void CObjectEditorApp::SetProcessors()
         if (mState == StretchState) {
             StretchFigure();
         }
+
+        if (mState == SplitFigureState || mState == SplitObjectState) {
+//            mRotationPoint.RotateEnd();
+            mMoveablePoint.ClickPressing();
+        }
     },
     [this] ()
     {
@@ -313,6 +346,10 @@ void CObjectEditorApp::SetProcessors()
             mVertexIndex = -1;
         }
 
+        if (mState == SplitFigureState || mState == SplitObjectState) {
+            mRotationPoint.RotateEnd();
+            mMoveablePoint.ClickEnd();
+        }
     }
     ));
 
@@ -335,6 +372,16 @@ void CObjectEditorApp::SetProcessors()
                 }
                 break;
             }
+//            case SplitFigureState: {
+//                if (mSelectedFigure != nullptr) {
+//                    EndSplit();
+//                }
+//                break;
+//            }
+//            case SplitObjectState: {
+//                EndSplit();
+//                break;
+//            }
             case MoveState:
                 break;
             case StretchState:
@@ -358,13 +405,19 @@ void CObjectEditorApp::SetProcessors()
     GetEventSystem().SetProcessor("WHDN",CAppEventProcessor(
     [this](){
         if (mCurrentObject != nullptr) {
-            for (int i = 0 ; i < mCurrentObject->EnumFigures() ; i++) {
+            for (unsigned int i = 0 ; i < mCurrentObject->EnumFigures() ; i++) {
                 CFigure *fig = mCurrentObject->GetFigures()[i];
                 if (fig->GetDepth()-0.5 > 0.01) {
                     fig->SetDepth(fig->GetDepth()-0.5);
                 }
             }
             SaveCurrentObject();
+        }
+    }));
+    GetEventSystem().SetProcessor("SPC",CAppEventProcessor(
+    [this](){
+        if (mState == SplitFigureState || mState == SplitObjectState) {
+            EndSplit();
         }
     }));
 }
@@ -878,7 +931,10 @@ void CObjectEditorApp::BeginSplit()
         }
         //--
     }
+    mRotationPoint.SetPoint(mSplitPlane.GetPoint());
+    mRotationPoint.SetRotation(CVec3f(0.0f, 0.0f, 0.0f));
 
+    mMoveablePoint.SetCenter(mSplitPlane.GetPoint());
 }
 
 void CObjectEditorApp::DetectNewSplitPoint(const CVec2f &_p1, const CVec2f &_p2,
@@ -1077,6 +1133,33 @@ void CObjectEditorApp::RenderSplitPlane()
             draw_split(mSplitFigureContext.mSplitIntersection2);
         }
     }
+}
+
+void CObjectEditorApp::SplitRotateStep(double _dt)
+{
+    if (mState == SplitFigureState && mSelectedFigure == nullptr) {
+        return;
+    }
+    mRotationPoint.SetCursorPos(GetCursorPos());
+    mRotationPoint.Step(_dt);
+    mMoveablePoint.SetCursorPos(GetCursorPos());
+    mMoveablePoint.Step(_dt);
+
+    mRotationPoint.SetPoint(mMoveablePoint.GetCenter());
+    float angle = mRotationPoint.GetRotation().mZ;
+    double cs = cos(M_PI/2 + angle);
+    double ss = sin(M_PI/2 + angle);
+    mSplitPlane.SetNormal(CVec3f(cs,ss,0));
+    mSplitPlane.SetPoint(mMoveablePoint.GetCenter());
+    ComputeSplitPlanePoints();
+    if (mState == SplitFigureState) {
+        ComputeIntersections(mSplitFigureContext);
+    } else {
+        for (SplitContext &context : mObjectContexts) {
+            ComputeIntersections(context);
+        }
+    }
+
 }
 
 
