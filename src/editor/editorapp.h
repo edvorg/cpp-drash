@@ -51,10 +51,6 @@ struct SplitContext {
     unsigned mSplitIntersection2Index = 0;
     unsigned int mSplitIntersectionsCount = 0;
 
-//    CVec3f mSplitFigureMin;
-//    CVec3f mSplitFigureMax;
-//    CVec3f * mSplitFigureMin = nullptr;
-//    CVec3f * mSplitFigureMax = nullptr;
     CFigure * mFigure = nullptr;
 
 };
@@ -167,7 +163,6 @@ private:
 
     CVec3f mSplitMin;
     CVec3f mSplitMax;
-    bool mSplitMode = false;
     CPlane mSplitPlane;
     CVec3f mSplitPlanePoint1;
     CVec3f mSplitPlanePoint2;
