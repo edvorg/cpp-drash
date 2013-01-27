@@ -223,6 +223,35 @@ CJoint *CScene::CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2, const CVec
     return res;
 }
 
+CJoint *CScene::CreateJointDistance(CSceneObject *_obj1, CSceneObject *_obj2, const CVec3f &_anchor1, const CVec3f &_anchor2, float _length)
+{
+    b2DistanceJointDef jdef;
+    jdef.Initialize(_obj1->mBody, _obj2->mBody, CVec2ToB2Vec2(_anchor1.Vec2()), CVec2ToB2Vec2(_anchor2.Vec2()));
+    jdef.length = _length;
+
+    CJoint *res = new CJoint;
+    res->mJoint = mWorld->CreateJoint(&jdef);;
+    res->mJoint->SetUserData(res);
+    return res;
+}
+
+CJoint *CScene::CreateJointRope(CSceneObject *_obj1, CSceneObject *_obj2, const CVec3f &_anchor1, const CVec3f &_anchor2, float _length)
+{
+    b2RopeJointDef jdef;
+    jdef.maxLength = _length;
+    jdef.localAnchorA = CVec2ToB2Vec2(_anchor1.Vec2());
+    jdef.localAnchorB = CVec2ToB2Vec2(_anchor2.Vec2());
+    jdef.bodyA = _obj1->mBody;
+    jdef.bodyB = _obj2->mBody;
+    jdef.type = e_ropeJoint;
+    jdef.collideConnected = false;
+
+    CJoint *res = new CJoint;
+    res->mJoint = mWorld->CreateJoint(&jdef);;
+    res->mJoint->SetUserData(res);
+    return res;
+}
+
 void CScene::DestroyJoint(CJoint *_joint)
 {
     for (auto j=mWorld->GetJointList(); j!=nullptr; j=j->GetNext())

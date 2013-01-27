@@ -28,6 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "texture.h"
 #include "shaderprogram.h"
 #include "pointlight.h"
+#include "spotlight.h"
 #include "camera.h"
 
 namespace greng
@@ -56,6 +57,7 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
                            const drash::CMatrix4f *_model_view,
                            const drash::CMatrix4f *_proj_matrix,
                            const CPointLight *_light,
+                           const CSpotLight *_spot_light,
                            const CVec3f *_view_pos)
 {
     if (_submesh >= _mesh->mMaterialOffsets.size() - 1)
@@ -220,6 +222,29 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
         else
         {
             LOG_ERR("CRenderer::RenderMesh(): Unable to find gLight1Position attribute");
+        }
+    }
+
+    if (_spot_light != nullptr)
+    {
+        int sl1ploc = glGetUniformLocation(_program->mProgramId, "gLight1Position");
+        if (sl1ploc != -1)
+        {
+            glUniform3fv(sl1ploc, 1, reinterpret_cast<const GLfloat*>(&_spot_light->mPosition));
+        }
+        else
+        {
+            LOG_ERR("CRenderer::RenderMesh(): Unable to find gLight1Position attribute");
+        }
+
+        int sl1dloc = glGetUniformLocation(_program->mProgramId, "gLight1Direction");
+        if (sl1dloc != -1)
+        {
+            glUniform3fv(sl1dloc, 1, reinterpret_cast<const GLfloat*>(&_spot_light->mDirection));
+        }
+        else
+        {
+            LOG_ERR("CRenderer::RenderMesh(): Unable to find gLight1Direction attribute");
         }
     }
 

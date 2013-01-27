@@ -76,7 +76,9 @@ SOURCES += \
     ../src/test/test8.cpp \
     ../src/misc/rotationablepoint.cpp \
     ../src/test/test9.cpp \
-    ../src/greng/grengsystemsset.cpp
+    ../src/greng/grengsystemsset.cpp \
+    ../src/test/test10.cpp \
+    ../src/greng/spotlight.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -146,5 +148,7 @@ HEADERS += \
     ../src/test/test9.h \
     precompiled.h \
     ../src/precompiled.h \
-    ../src/greng/grengsystemsset.h
+    ../src/greng/grengsystemsset.h \
+    ../src/test/test10.h \
+    ../src/greng/spotlight.h
 

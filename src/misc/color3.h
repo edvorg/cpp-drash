@@ -42,10 +42,10 @@ template<class T, T (*DEF_VAL_FUNC) (unsigned int _comp_index)>
 class CColor3
 {
 public:
-    explicit CColor3() = default;
-    explicit CColor3(const CColor3 &_rgb);
-    explicit CColor3(const T &_rgb);
-    explicit CColor3(const T &_r, const T &_g, const T &_b);
+    CColor3() = default;
+    CColor3(const CColor3 &_rgb);
+    CColor3(const T &_rgb);
+    CColor3(const T &_r, const T &_g, const T &_b);
 
     CColor3 &Set(const T &_r, const T &_g, const T &_b);
 

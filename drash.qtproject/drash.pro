@@ -88,7 +88,9 @@ SOURCES += ../src/qt/main.cpp\
     ../src/editor/sceneeditorapp.cpp \
     ../src/misc/rotationablepoint.cpp \
     ../src/test/test9.cpp \
-    ../src/greng/grengsystemsset.cpp
+    ../src/greng/grengsystemsset.cpp \
+    ../src/test/test10.cpp \
+    ../src/greng/spotlight.cpp
 
 HEADERS  += ../src/qt/gamewindow.h \
     ../src/qt/scenewidget.h \
@@ -162,7 +164,9 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/misc/rotationablepoint.h \
     ../src/test/test9.h \
     ../src/precompiled.h \
-    ../src/greng/grengsystemsset.h
+    ../src/greng/grengsystemsset.h \
+    ../src/test/test10.h \
+    ../src/greng/spotlight.h
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui

@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define DRASH_TEST_TEST9_H
 
 #include "../app/app.h"
+#include "../greng/pointlight.h"
 
 namespace drash
 {

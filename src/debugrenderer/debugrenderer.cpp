@@ -64,15 +64,9 @@ void CDebugRenderer::Render() const
         return;
     }
 
-    if (mShaderProgram == nullptr)
+    if (mLight == nullptr && mSpotLight1 == nullptr)
     {
-        LOG_ERR("CDebugRenderer::Render(): mShaderProgram is not set");
-        return;
-    }
-
-    if (mLight == nullptr)
-    {
-        LOG_ERR("CDebugRenderer::Render(): mLight is not set");
+        LOG_ERR("CDebugRenderer::Render(): neither mLight nor mSpotLight1 is set");
         return;
     }
 
@@ -118,12 +112,13 @@ void CDebugRenderer::Render() const
                                          0,
                                          textures,
                                          2,
-                                         mShaderProgram,
+                                         mLight == nullptr ? mShaderProgram1 : mShaderProgram2,
                                          &model,
                                          nullptr,
                                          &model_view,
                                          &mCamera->GetProjectionMatrix(),
                                          mLight,
+                                         mSpotLight1,
                                          &mCamera->GetPos().Get());
 
                 mGrengSystems->GetMeshManager().DestroyMesh(m);
@@ -164,12 +159,14 @@ void CDebugRenderer::RenderObject(CSceneObjectGeometry *_geometry, CSceneObjectP
                                      0,
                                      textures,
                                      2,
-                                     mShaderProgram,
+                                     mLight == nullptr ? mShaderProgram1 : mShaderProgram2,
                                      &model,
                                      nullptr,
                                      &model_view,
                                      &mCamera->GetProjectionMatrix(),
-                                     mLight);
+                                     mLight,
+									 mSpotLight1,
+								     &mCamera->GetPos().Get());
 
             mGrengSystems->GetMeshManager().DestroyMesh(m);
         }
@@ -354,11 +351,14 @@ bool CDebugRenderer::InitTextures()
 
 bool CDebugRenderer::InitShaders()
 {
-    greng::CVertexShader *vs = mGrengSystems->GetVertexShaderManager().CreateShaderFromFile("shaders/shader4.120.vs");
-    greng::CFragmentShader *fs = mGrengSystems->GetFragmentShaderManager().CreateShaderFromFile("shaders/shader4.120.fs");
-    mShaderProgram = mGrengSystems->GetShaderProgramManager().CreateProgram(vs, fs);
+    greng::CVertexShader *vs = mGrengSystems->GetVertexShaderManager().CreateShaderFromFile("shaders/shader5.120.vs");
+    greng::CFragmentShader *fs = mGrengSystems->GetFragmentShaderManager().CreateShaderFromFile("shaders/shader5.120.fs");
+    mShaderProgram1 = mGrengSystems->GetShaderProgramManager().CreateProgram(vs, fs);
+    vs = mGrengSystems->GetVertexShaderManager().CreateShaderFromFile("shaders/shader4.120.vs");
+    fs = mGrengSystems->GetFragmentShaderManager().CreateShaderFromFile("shaders/shader4.120.fs");
+    mShaderProgram2 = mGrengSystems->GetShaderProgramManager().CreateProgram(vs, fs);
 
-    if (mShaderProgram == nullptr)
+    if (mShaderProgram1 == nullptr && mShaderProgram2 == nullptr)
     {
         return false;
     }
