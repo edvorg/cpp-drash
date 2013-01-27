@@ -63,6 +63,7 @@ EditorWindow::EditorWindow(QWidget *parent) :
             this,SLOT(ChangeMode(QAction*)));
 
     mLabelOfStatusBar = new QLabel("Editor Object");
+
     this->statusBar()->addWidget(mLabelOfStatusBar);
 
     this->setWindowTitle("DRASH Editor");
@@ -93,9 +94,18 @@ EditorWindow::EditorWindow(QWidget *parent) :
     mTimer.Reset(true);
 
     ui->mTreeTemplates->setDragEnabled(true);
+//    ui->mTreeTemplates->setDragDropMode();
 //    emit mMoveActiveAction->trigger();
 //    ui->mTreeTemplates->setDragDropMode(QAbstractItemView::InternalMove);
     mWidgetForScene->hide();
+    mSceneApp->SetGetSelectedHandler([this](){
+        QTreeWidgetItem * item = ui->mTreeTemplates->currentItem();
+        if (item->parent() == NULL) {
+            return item->text(0).toStdString();
+        } else {
+            return std::string("");
+        }
+    });
     this->startTimer(0);
 }
 
@@ -532,7 +542,7 @@ void EditorWindow::on_mManageWidget_currentChanged(int index)
 void EditorWindow::on_mTreeTemplates_doubleClicked(const QModelIndex &index)
 {
     std::string nameobject = ui->mTreeTemplates->currentItem()->text(0).toStdString();
-    mSceneApp->AddObject(nameobject);
+    mSceneApp->AddObject(nameobject, CVec3f(0,0,0));
 }
 
 void EditorWindow::on_mTreeSceneObjects_clicked(const QModelIndex &index)
