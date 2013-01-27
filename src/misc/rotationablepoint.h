@@ -58,6 +58,10 @@ public:
 
     float radius = 2;
 
+    inline void SetAxisOX(const bool _val);
+    inline void SetAxisOY(const bool _val);
+    inline void SetAxisOZ(const bool _val);
+
 private:
     CVec2f mCursorPos = CVec2f(0);
 
@@ -69,6 +73,11 @@ private:
 
     unsigned int mAxisOvered = 0;
     unsigned int mAxisRotating = 0;
+
+
+    bool mAxisOX = true;
+    bool mAxisOY = true;
+    bool mAxisOZ = true;
 };
 
 inline void CRotationablePoint::SetRenderer(greng::CRenderer *_renderer)
@@ -95,6 +104,22 @@ inline void CRotationablePoint::SetCursorPos(const CVec2f &_pos)
 {
     mCursorPos = _pos;
 }
+
+inline void CRotationablePoint::SetAxisOX(const bool _val)
+{
+    mAxisOX = _val;
+}
+
+inline void CRotationablePoint::SetAxisOY(const bool _val)
+{
+    mAxisOY = _val;
+}
+
+inline void CRotationablePoint::SetAxisOZ(const bool _val)
+{
+    mAxisOZ = _val;
+}
+
 
 } // namespace drash
 
