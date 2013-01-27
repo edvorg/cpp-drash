@@ -65,6 +65,7 @@ public:
     inline const CVec3f& GetRotation() const;
 
 private:
+    CVec3f mRotationDelta;
     CVec2f mCursorPos = CVec2f(0);
 
     greng::CRenderer *mRenderer = nullptr;

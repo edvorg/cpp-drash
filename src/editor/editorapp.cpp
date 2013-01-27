@@ -296,11 +296,13 @@ void CObjectEditorApp::SetProcessors()
                 break;
             }
             case SplitFigureState:{
+                mRotationPoint.SetCursorPos(GetCursorPos());
                 mRotationPoint.RotateBegin();
                 mMoveablePoint.ClickBegin();
                 break;
             }
             case SplitObjectState:{
+                mRotationPoint.SetCursorPos(GetCursorPos());
                 mRotationPoint.RotateBegin();
                 mMoveablePoint.ClickBegin();
                 break;
