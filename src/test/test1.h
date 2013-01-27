@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define TESTEDITORAPP_H
 
 #include "../app/app.h"
+#include "../greng/pointlight.h"
 
 namespace drash
 {

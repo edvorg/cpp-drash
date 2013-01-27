@@ -167,6 +167,7 @@ void CTest5::Render()
                                      &model_view,
                                      &GetCamera()->GetProjectionMatrix(),
                                      &mLight1,
+                                     nullptr,
                                      &GetCamera()->GetPos().Get());
         }
     }
@@ -207,6 +208,7 @@ void CTest5::Render()
                                      &model_view,
                                      &GetCamera()->GetProjectionMatrix(),
                                      &mLight1,
+                                     nullptr,
                                      &GetCamera()->GetPos().Get());
         }
     }

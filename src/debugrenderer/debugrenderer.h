@@ -25,14 +25,14 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_DEBUGRENDERER_H
 #define DRASH_DEBUGRENDERER_H
 
-#include "../greng/pointlight.h"
-
 namespace greng
 {
 
 class CTexture;
 class CCamera;
 class CGrengSystemsSet;
+class CPointLight;
+class CSpotLight;
 
 }
 
@@ -55,6 +55,7 @@ public:
     inline greng::CCamera *GetCamera() const;
     inline void SetLight(greng::CPointLight *_light);
     inline greng::CPointLight *GetLight() const;
+    inline void SetSpotLight(greng::CSpotLight *_light);
 
     inline void SetTexCoordsScale(float _scale);
 
@@ -81,9 +82,11 @@ private:
     CScene* mScene = nullptr;
     greng::CGrengSystemsSet *mGrengSystems = nullptr;
 
-    greng::CShaderProgram *mShaderProgram = nullptr;
+    greng::CShaderProgram *mShaderProgram1 = nullptr;
+    greng::CShaderProgram *mShaderProgram2 = nullptr;
     greng::CCamera *mCamera = nullptr;
     greng::CPointLight *mLight = nullptr;
+    greng::CSpotLight *mSpotLight1 = nullptr;
     greng::CTexture *mTexture1Diffuse = nullptr;
     greng::CTexture *mTexture1Normal = nullptr;
 
@@ -118,6 +121,11 @@ inline void CDebugRenderer::SetLight(greng::CPointLight *_light)
 inline greng::CPointLight *CDebugRenderer::GetLight() const
 {
     return mLight;
+}
+
+inline void CDebugRenderer::SetSpotLight(greng::CSpotLight *_light)
+{
+    mSpotLight1 = _light;
 }
 
 inline void CDebugRenderer::SetTexCoordsScale(float _scale)

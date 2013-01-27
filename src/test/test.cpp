@@ -33,6 +33,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "test7.h"
 #include "test8.h"
 #include "test9.h"
+#include "test10.h"
 
 #include <cstring>
 
@@ -53,6 +54,7 @@ CApp *StartApp(const char *_name)
     if (strcmp(_name, "test7") == 0) return new CTest7;
     if (strcmp(_name, "test8") == 0) return new CTest8;
     if (strcmp(_name, "test9") == 0) return new CTest9;
+    if (strcmp(_name, "test10") == 0) return new CTest10;
     return nullptr;
 }
 

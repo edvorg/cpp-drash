@@ -40,6 +40,7 @@ class CMesh;
 class CTexture;
 class CShaderProgram;
 class CPointLight;
+class CSpotLight;
 
 using drash::CVec2f;
 using drash::CVec3f;
@@ -67,6 +68,7 @@ public:
                     const drash::CMatrix4f *_model_view,
                     const drash::CMatrix4f *_proj_matrix,
                     const CPointLight *_light,
+                    const CSpotLight *_spot_light = nullptr,
                     const CVec3f *_view_pos = nullptr);
 
     /// draws triangle giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) and color

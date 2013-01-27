@@ -27,6 +27,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../app/app.h"
 #include "../diag/timer.h"
+#include "../greng/pointlight.h"
+
 namespace drash {
 
 enum State {
