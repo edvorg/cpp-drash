@@ -86,7 +86,6 @@ void CDebugRenderer::Render() const
         for (unsigned int j = 0; j < jc; j++)
         {
             CFigure *f = o->GetFigures()[j];
-            unsigned int kc = f->EnumVertices();
 
             std::vector<greng::CVertex> mv;
             std::vector<unsigned int> mi;
@@ -124,7 +123,8 @@ void CDebugRenderer::Render() const
                                          nullptr,
                                          &model_view,
                                          &mCamera->GetProjectionMatrix(),
-                                         mLight);
+                                         mLight,
+                                         &mCamera->GetPos().Get());
 
                 mGrengSystems->GetMeshManager().DestroyMesh(m);
             }
@@ -354,8 +354,8 @@ bool CDebugRenderer::InitTextures()
 
 bool CDebugRenderer::InitShaders()
 {
-    greng::CVertexShader *vs = mGrengSystems->GetVertexShaderManager().CreateShaderFromFile("shaders/shader3.120.vs");
-    greng::CFragmentShader *fs = mGrengSystems->GetFragmentShaderManager().CreateShaderFromFile("shaders/shader3.120.fs");
+    greng::CVertexShader *vs = mGrengSystems->GetVertexShaderManager().CreateShaderFromFile("shaders/shader4.120.vs");
+    greng::CFragmentShader *fs = mGrengSystems->GetFragmentShaderManager().CreateShaderFromFile("shaders/shader4.120.fs");
     mShaderProgram = mGrengSystems->GetShaderProgramManager().CreateProgram(vs, fs);
 
     if (mShaderProgram == nullptr)

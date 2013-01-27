@@ -65,7 +65,7 @@ void CTest5::Step(double _dt)
     }
 
     mLight1.mPosition.mX = 200 * sin(mAngle);
-    mLight1.mPosition.mY = 30;
+    mLight1.mPosition.mY = 50;
     mLight1.mPosition.mZ = 200 * cos(mAngle);
 }
 
@@ -140,7 +140,7 @@ void CTest5::Render()
     if (mMesh3 != nullptr)
     {
         CMatrix4f rangle;
-        MatrixRotationY(rangle, mAngle);
+        MatrixRotationY(rangle, 0);
 
         CMatrix4f model;
         MatrixMultiply(rangle, mMesh3ConstMatrix, model);
@@ -148,32 +148,33 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
 
-        greng::CTexture *texts[3] =
+        greng::CTexture *texts[6] =
         {
-            mTex4,
-            mTex3,
-            mTex5
+            mTex4, mTex4normal,
+            mTex3, mTex3normal,
+            mTex5, mTex5normal
         };
 
         for (unsigned int i = 0; i < 3; i++)
         {
             GetGrengSystems().GetRenderer().RenderMesh(mMesh3,
                                      i,
-                                     &texts[i],
-                                     1,
-                                     mShaderProgram2,
+                                     &texts[i * 2],
+                                     2,
+                                     mShaderProgram4,
                                      &model,
                                      nullptr,
                                      &model_view,
                                      &GetCamera()->GetProjectionMatrix(),
-                                     &mLight1);
+                                     &mLight1,
+                                     &GetCamera()->GetPos().Get());
         }
     }
 
     if (mMesh4 != nullptr)
     {
         CMatrix4f rangle;
-        MatrixRotationY(rangle, mAngle);
+        MatrixRotationY(rangle, 0);
 
         CMatrix4f model_1;
         MatrixMultiply(rangle, mMesh3ConstMatrix, model_1);
@@ -187,25 +188,26 @@ void CTest5::Render()
         CMatrix4f model_view;
         MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
 
-        greng::CTexture *texts[3] =
+        greng::CTexture *texts[6] =
         {
-            mTex7,
-            mTex7,
-            mTex7
+            mTex7, mTex7normal,
+            mTex7, mTex7normal,
+            mTex7, mTex7normal,
         };
 
         for (unsigned int i = 0; i < 3; i++)
         {
             GetGrengSystems().GetRenderer().RenderMesh(mMesh4,
                                      i,
-                                     &texts[i],
-                                     1,
-                                     mShaderProgram2,
+                                     &texts[i * 2],
+                                     2,
+                                     mShaderProgram4,
                                      &model,
                                      nullptr,
                                      &model_view,
                                      &GetCamera()->GetProjectionMatrix(),
-                                     &mLight1);
+                                     &mLight1,
+                                     &GetCamera()->GetPos().Get());
         }
     }
 
@@ -220,6 +222,7 @@ void CTest5::SetupMeshes()
     mMesh4 = GetGrengSystems().GetMeshManager().CreateMeshFromObjFile("assets/RB-BumbleBee.obj");
 
     GetGrengSystems().GetMeshManager().ComputeNormals(mMesh3);
+    GetGrengSystems().GetMeshManager().ComputeTangentSpace(mMesh3);
     GetGrengSystems().GetMeshManager().ComputeNormals(mMesh4);
 
     CMatrix4f s;
@@ -242,10 +245,14 @@ void CTest5::SetupTextures()
     mTex1 = GetGrengSystems().GetTextureManager().CreateTextureDummy();
     mTex2 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/tux.png");
     mTex3 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/RB_MegatronBodyT2_MATINST.png");
+    mTex3normal = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/mt_body_normal.png");
     mTex4 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/RB_MegatronHead_MATINST.png");
+    mTex4normal = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/mt_head_normal.png");
     mTex5 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/RB_MegatronArmFeet_MATINST.png");
+    mTex5normal = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/mt_arm_normal.png");
     mTex6 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/wall5.png");
     mTex7 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/RB_Bumblebee_TEXTSET_Color_NormX.png");
+    mTex7normal = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/bb_normal.png");
 }
 
 void CTest5::SetupShaders()
@@ -256,6 +263,12 @@ void CTest5::SetupShaders()
     mVertexShader2 = GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile("shaders/shader2.120.vs");
     mFragmentShader2 = GetGrengSystems().GetFragmentShaderManager().CreateShaderFromFile("shaders/shader2.120.fs");
     mShaderProgram2 = GetGrengSystems().GetShaderProgramManager().CreateProgram(mVertexShader2, mFragmentShader2);
+    mVertexShader3 = GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile("shaders/shader3.120.vs");
+    mFragmentShader3 = GetGrengSystems().GetFragmentShaderManager().CreateShaderFromFile("shaders/shader3.120.fs");
+    mShaderProgram3 = GetGrengSystems().GetShaderProgramManager().CreateProgram(mVertexShader3, mFragmentShader3);
+    mVertexShader4 = GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile("shaders/shader4.120.vs");
+    mFragmentShader4 = GetGrengSystems().GetFragmentShaderManager().CreateShaderFromFile("shaders/shader4.120.fs");
+    mShaderProgram4 = GetGrengSystems().GetShaderProgramManager().CreateProgram(mVertexShader4, mFragmentShader4);
 }
 
 void CTest5::SetupProcessors()

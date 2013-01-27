@@ -55,7 +55,8 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
                            const drash::CMatrix4f *_view,
                            const drash::CMatrix4f *_model_view,
                            const drash::CMatrix4f *_proj_matrix,
-                           const CPointLight *_light)
+                           const CPointLight *_light,
+                           const CVec3f *_view_pos)
 {
     if (_submesh >= _mesh->mMaterialOffsets.size() - 1)
     {
@@ -154,6 +155,19 @@ void CRenderer::RenderMesh(const CMesh *_mesh,
         else
         {
             LOG_ERR("CRenderer::RenderMesh(): Unable to find gModelMatrix attribute");
+        }
+    }
+
+    if (_view_pos != nullptr)
+    {
+        int vploc = glGetUniformLocation(_program->mProgramId, "gViewPosition");
+        if (vploc != -1)
+        {
+            glUniform3fv(vploc, 1, reinterpret_cast<const GLfloat*>(_view_pos));
+        }
+        else
+        {
+            LOG_ERR("CRenderer::RenderMesh(): Unable to find gViewPosition attribute");
         }
     }
 
