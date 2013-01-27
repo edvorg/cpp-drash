@@ -179,9 +179,18 @@ void CSceneEditorApp::AddObject(const std::string &_name, const CVec3f &_pos)
 
     std::ostringstream is;
 
-    is << "object" << mCurrentLevel->GetObjects().size();
+    is << "object" ;
+    if (mCurrentLevel->GetObjects().find(_name) != mCurrentLevel->GetObjects().end()) {
+        is << mCurrentLevel->GetObjects().at(_name).size();
+    } else {
+        is << "0";
+    }
 
+    qDebug() << is.str().c_str();
     CSceneObjectParams *p = mCurrentLevel->AddObject(_name,is.str());
+    if (p == nullptr) {
+        return;
+    }
     p->mPos = _pos;
     GetLevelManager().StartLevel(mCurrentLevel,mObjectParams);
 
@@ -242,11 +251,8 @@ void CSceneEditorApp::SetProcessors()
             auto iter = mObjectParams.find(temp);
             if (iter != mObjectParams.end()) {
                 CSceneObjectParams *p = iter->second;
-                //qDebug() << "this";
                 p->mDynamic = false;
-//                StartCurrentLevel();
                 ResetLevel();
-                //p->mPos = mSelectedObject->GetPos();
             }
         }
     }));
@@ -307,12 +313,10 @@ void CSceneEditorApp::SetDragDropProcessors()
 {
     GetEventSystem().SetProcessor("DRDP",CAppEventProcessor(
     [this]() {
-        //qDebug() << "Enter Drag";
         mDragTemplateName = mGetSelectedTemplateHandler();
         mDragNow = true;
     },
     [this] () {
-        //qDebug() << "move drag";
     },
     [this]() {
         CPlane plane;
