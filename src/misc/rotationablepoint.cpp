@@ -214,6 +214,9 @@ void CRotationablePoint::Render()
             MatrixMultiply(rot, p1, p1_transposed);
             MatrixMultiply(rot, p2, p2_transposed);
 
+            p1_transposed.Vec3() += mPoint;
+            p2_transposed.Vec3() += mPoint;
+
             mRenderer->DrawLine(mCamera, p1_transposed, p2_transposed, 1, CColor4f(1, 0, 0, mAxisOvered == 1 ? 0.5 : 1), false);
 
             angle += angle_delta;
@@ -234,6 +237,9 @@ void CRotationablePoint::Render()
             MatrixMultiply(rot, p1, p1_transposed);
             MatrixMultiply(rot, p2, p2_transposed);
 
+            p1_transposed.Vec3() += mPoint;
+            p2_transposed.Vec3() += mPoint;
+
             mRenderer->DrawLine(mCamera, p1_transposed, p2_transposed, 1, CColor4f(0, 0, 1, mAxisOvered == 3 ? 0.5 : 1), false);
 
             angle += angle_delta;
@@ -252,6 +258,9 @@ void CRotationablePoint::Render()
 
             MatrixMultiply(rot, p1, p1_transposed);
             MatrixMultiply(rot, p2, p2_transposed);
+
+            p1_transposed.Vec3() += mPoint;
+            p2_transposed.Vec3() += mPoint;
 
             mRenderer->DrawLine(mCamera, p1_transposed, p2_transposed, 1, CColor4f(0, 1, 0, mAxisOvered == 2 ? 0.5 : 1), false);
 
