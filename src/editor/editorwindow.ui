@@ -36,7 +36,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -45,9 +45,17 @@
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QTreeWidget" name="mTreeObjects">
+          <property name="columnCount">
+           <number>2</number>
+          </property>
           <column>
            <property name="text">
             <string notr="true">1</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string notr="true">2</string>
            </property>
           </column>
          </widget>
@@ -86,12 +94,20 @@
           <property name="selectionMode">
            <enum>QAbstractItemView::SingleSelection</enum>
           </property>
+          <property name="columnCount">
+           <number>2</number>
+          </property>
           <attribute name="headerVisible">
            <bool>false</bool>
           </attribute>
           <column>
            <property name="text">
             <string notr="true">1</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string notr="true">2</string>
            </property>
           </column>
          </widget>
@@ -136,6 +152,7 @@
         <height>441</height>
        </size>
       </property>
+      <zorder>mManageWidget</zorder>
      </widget>
     </item>
    </layout>

@@ -51,13 +51,13 @@ public:
 
     bool Load(const string &_filename);
 
-    inline map<string,LEVEL_NODE> GetObjects()const;
+    inline const map<string, LEVEL_NODE> &GetObjects()const;
 
 private:
     map<string, LEVEL_NODE> mObjects;
 };
 
-inline map<string,CLevel::LEVEL_NODE> CLevel::GetObjects() const {
+inline const map<string,CLevel::LEVEL_NODE> &CLevel::GetObjects() const {
     return mObjects;
 }
 

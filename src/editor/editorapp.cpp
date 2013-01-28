@@ -64,10 +64,16 @@ bool CObjectEditorApp::Init()
     mPointLight.mPosition = GetCamera()->GetPos();
 
     GetDebugRenderer().SetLight(&mPointLight);
+    GetDebugRenderer().SetTexCoordsScale(0.5);
 
     mTreeRefreshHandler();
-    mMoveablePoint.SetCamera(mCamera);
 
+    mMoveablePoint.SetCamera(mCamera);
+    mRotationPoint.SetCamera(mCamera);
+    mRotationPoint.SetRenderer(&GetGrengSystems().GetRenderer());
+    mRotationPoint.Init();
+    mRotationPoint.SetAxisOX(false);
+    mRotationPoint.SetAxisOY(false);
     mTimer.Reset(true);
 
     return true;
@@ -84,6 +90,10 @@ void CObjectEditorApp::Step(double _dt)
     if (mState == MoveOfAxisState && mSelectedFigure != nullptr) {
         mMoveablePoint.SetCursorPos(GetCursorPos());
         mMoveablePoint.Step(_dt);
+    }
+
+    if (mState == SplitFigureState || mState == SplitObjectState) {
+        SplitRotateStep(_dt);
     }
 
 }
@@ -211,11 +221,25 @@ void CObjectEditorApp::Render()
     if (mState == MoveOfAxisState && mSelectedFigure != nullptr) {
         mMoveablePoint.Render(GetGrengSystems().GetRenderer());
     }
+
+    RenderSplitPlane();
+
+    if (mState == SplitObjectState) {
+        mRotationPoint.Render();
+        mMoveablePoint.Render(GetGrengSystems().GetRenderer());
+    }
+
+    if (mState == SplitFigureState && mSelectedFigure != nullptr) {
+        mRotationPoint.Render();
+        mMoveablePoint.Render(GetGrengSystems().GetRenderer());
+    }
+
 }
 
 void CObjectEditorApp::Release()
 {
     GetTemplateSystem().Store();
+    mRotationPoint.Release();
     CApp::Release();
 }
 
@@ -231,7 +255,9 @@ void CObjectEditorApp::SetProcessors()
     GetEventSystem().SetProcessor("LB", CAppEventProcessor(
     [this] ()
     {
-//        LOG_INFO("Click !!! " << mState);
+        if (mCurrentObject == nullptr){
+            return;
+        }
         switch ( mState ) {
             case BuildState:{
                 if (mCurrentObject != nullptr)
@@ -262,7 +288,23 @@ void CObjectEditorApp::SetProcessors()
                 break;
             }
             case DeleteFigure:{
-
+                CFigure *fig = SelectFigure(GetCursorPos());
+                if (fig != nullptr) {
+                    mCurrentObject->DestroyFigure(fig);
+                    SaveCurrentObject();
+                }
+                break;
+            }
+            case SplitFigureState:{
+                mRotationPoint.SetCursorPos(GetCursorPos());
+                mRotationPoint.RotateBegin();
+                mMoveablePoint.ClickBegin();
+                break;
+            }
+            case SplitObjectState:{
+                mRotationPoint.SetCursorPos(GetCursorPos());
+                mRotationPoint.RotateBegin();
+                mMoveablePoint.ClickBegin();
                 break;
             }
             case Simple:
@@ -284,26 +326,32 @@ void CObjectEditorApp::SetProcessors()
         if (mState == StretchState) {
             StretchFigure();
         }
+
+        if (mState == SplitFigureState || mState == SplitObjectState) {
+//            mRotationPoint.RotateEnd();
+            mMoveablePoint.ClickPressing();
+        }
     },
     [this] ()
     {
         if (mState == MoveState) {
             mSelectedFigure = nullptr;
             SaveCurrentObject();
-//            mTreeRefreshHandler();
         }
         if (mState == MoveOfAxisState && mSelectedFigure != nullptr) {
             mMoveablePoint.ClickEnd();
             SaveCurrentObject();
-//            mTreeRefreshHandler();
         }
         if (mState == StretchState) {
             mSelectedFigure = nullptr;
             SaveCurrentObject();
             mVertexIndex = -1;
-//            mTreeRefreshHandler();
         }
 
+        if (mState == SplitFigureState || mState == SplitObjectState) {
+            mRotationPoint.RotateEnd();
+            mMoveablePoint.ClickEnd();
+        }
     }
     ));
 
@@ -316,12 +364,26 @@ void CObjectEditorApp::SetProcessors()
                 break;
             case MoveOfAxisState:{
                 mSelectedFigure = SelectFigure(GetCursorPos());
-
-//                if (mSelectedFigure == nullptr)
-//                    LOG_INFO("NOOOO 2");
                 SettingCenterFigure();
                 break;
             }
+            case SplitFigureState: {
+                mSelectedFigure = SelectFigure(GetCursorPos());
+                if (mSelectedFigure != nullptr) {
+                    BeginSplit();
+                }
+                break;
+            }
+//            case SplitFigureState: {
+//                if (mSelectedFigure != nullptr) {
+//                    EndSplit();
+//                }
+//                break;
+//            }
+//            case SplitObjectState: {
+//                EndSplit();
+//                break;
+//            }
             case MoveState:
                 break;
             case StretchState:
@@ -345,13 +407,19 @@ void CObjectEditorApp::SetProcessors()
     GetEventSystem().SetProcessor("WHDN",CAppEventProcessor(
     [this](){
         if (mCurrentObject != nullptr) {
-            for (int i = 0 ; i < mCurrentObject->EnumFigures() ; i++) {
+            for (unsigned int i = 0 ; i < mCurrentObject->EnumFigures() ; i++) {
                 CFigure *fig = mCurrentObject->GetFigures()[i];
                 if (fig->GetDepth()-0.5 > 0.01) {
                     fig->SetDepth(fig->GetDepth()-0.5);
                 }
             }
             SaveCurrentObject();
+        }
+    }));
+    GetEventSystem().SetProcessor("SPC",CAppEventProcessor(
+    [this](){
+        if (mState == SplitFigureState || mState == SplitObjectState) {
+            EndSplit();
         }
     }));
 }
@@ -563,7 +631,7 @@ void CObjectEditorApp::StretchFigure()
         if (i == (unsigned int)mVertexIndex)
         {
             CVec2f posCur = GetCursorPos();
-            qDebug() << posCur.mX << " " << posCur.mY;
+            // qDebug() << posCur.mX << " " << posCur.mY;
 
             float tmp = mSelectedFigure->GetDepth() * 0.5;
 
@@ -591,6 +659,7 @@ void CObjectEditorApp::ChangeMode()
     mVertexs.clear();
     mSelectedFigure = nullptr;
     SaveCurrentObject();
+    mObjectContexts.clear();
 }
 
 void CObjectEditorApp::SelectVertex()
@@ -718,6 +787,7 @@ bool CObjectEditorApp::IsConvex() const
     return true;
 }
 
+
 void CObjectEditorApp::ActiveStretchMode()
 {
     mState = StretchState;
@@ -742,6 +812,361 @@ float CObjectEditorApp::GetCurDepth()
     float depth = drash::math::Abs(mCurrentObject->GetPosZ() -
                                    mCamera->GetPos().Get().mZ);
     return depth;
+}
+
+
+// For Split mode
+
+float Area(const CVec2f &_p1,
+           const CVec2f &_p2,
+           const CVec2f &_p3)
+{
+    return (_p2.mX - _p1.mX) * (_p3.mY - _p1.mY) -
+           (_p2.mY - _p1.mY) * (_p3.mX - _p1.mX);
+}
+
+float Intersect_1(float _x,
+                  float _y,
+                  float _a,
+                  float _b)
+{
+    if (_x > _y) std::swap(_x, _y);
+    if (_a > _b) std::swap(_a, _b);
+    return math::Max(_x, _a) <= math::Min(_y, _b);
+}
+
+bool Intersect(const CVec2f &_p1,
+               const CVec2f &_p2,
+               const CVec2f &_p3,
+               const CVec2f &_p4)
+{
+    return Intersect_1(_p1.mX, _p2.mX, _p3.mX, _p4.mX) &&
+           Intersect_1(_p1.mY, _p2.mY, _p3.mY, _p4.mY) &&
+           Area(_p1, _p2, _p3) * Area(_p1, _p2, _p4) <= 0 &&
+           Area(_p3, _p4, _p1) * Area(_p3, _p4, _p2) <= 0;
+}
+
+void CObjectEditorApp::BeginSplit()
+{
+    if (mState == SplitFigureState) {
+        if (mCurrentObject != nullptr && mSelectedFigure != nullptr)
+        {
+
+            mSplitMin.Set(mSelectedFigure->GetVertices()[0].mX,
+                                mSelectedFigure->GetVertices()[0].mY,
+                                mCurrentObject->GetPosZ() + mSelectedFigure->GetZ());
+            mSplitMax.Set(mSelectedFigure->GetVertices()[0].mX,
+                                mSelectedFigure->GetVertices()[0].mY,
+                                mCurrentObject->GetPosZ() + mSelectedFigure->GetZ());
+
+            for (unsigned int i = 1; i < mSelectedFigure->EnumVertices(); i++)
+            {
+                mSplitMin.mX = math::Min<float>(mSplitMin.mX, mSelectedFigure->GetVertices()[i].mX);
+                mSplitMax.mX = math::Max<float>(mSplitMax.mX, mSelectedFigure->GetVertices()[i].mX);
+                mSplitMin.mY = math::Min<float>(mSplitMin.mY, mSelectedFigure->GetVertices()[i].mY);
+                mSplitMax.mY = math::Max<float>(mSplitMax.mY, mSelectedFigure->GetVertices()[i].mY);
+                mSplitMin.mZ = math::Min<float>(mSplitMin.mZ, mCurrentObject->GetPosZ() + mSelectedFigure->GetZ());
+                mSplitMax.mZ = math::Max<float>(mSplitMax.mZ, mCurrentObject->GetPosZ() + mSelectedFigure->GetZ());
+            }
+
+            mSplitMin.mZ -= mSelectedFigure->GetDepth() * 0.5;
+            mSplitMax.mZ += mSelectedFigure->GetDepth() * 0.5;
+            mSplitMin -= 1;
+            mSplitMax += 1;
+
+            mSplitPlane.SetNormal(CVec3f(0, 1, 0));
+            mSplitPlane.SetPoint(CVec3f(0.5f * (mSplitMin.mX + mSplitMax.mX),
+                                        0.5f * (mSplitMin.mY + mSplitMax.mY),
+                                        0.5f * (mSplitMin.mZ + mSplitMax.mZ)));
+
+            ComputeSplitPlanePoints();
+            mSplitFigureContext.mFigure = mSelectedFigure;
+            mObjectContexts.push_back(mSplitFigureContext);
+            ComputeIntersections(mSplitFigureContext);
+        }
+    }
+    else
+    {
+        //--
+        if (mCurrentObject != nullptr){
+            if (mCurrentObject->EnumFigures() != 0){
+
+                mSplitMin.Set(mCurrentObject->GetFigures()[0]->GetVertices()[0].mX,
+                                    mCurrentObject->GetFigures()[0]->GetVertices()[0].mY,
+                                    mCurrentObject->GetPosZ() + mCurrentObject->GetFigures()[0]->GetZ());
+                mSplitMax.Set(mCurrentObject->GetFigures()[0]->GetVertices()[0].mX,
+                                    mCurrentObject->GetFigures()[0]->GetVertices()[0].mY,
+                                    mCurrentObject->GetPosZ() +mCurrentObject->GetFigures()[0]->GetZ());
+
+                float maxDepth = mCurrentObject->GetFigures()[0]->GetDepth();
+
+                for (int i = 0 ; i < mCurrentObject->EnumFigures() ; i++) {
+                    CFigure * figure = mCurrentObject->GetFigures()[i];
+                    for (unsigned int i = 1; i < figure->EnumVertices(); i++)
+                    {
+                        mSplitMin.mX = math::Min<float>(mSplitMin.mX, figure->GetVertices()[i].mX);
+                        mSplitMax.mX = math::Max<float>(mSplitMax.mX, figure->GetVertices()[i].mX);
+                        mSplitMin.mY = math::Min<float>(mSplitMin.mY, figure->GetVertices()[i].mY);
+                        mSplitMax.mY = math::Max<float>(mSplitMax.mY, figure->GetVertices()[i].mY);
+                        mSplitMin.mZ = math::Min<float>(mSplitMin.mZ, mCurrentObject->GetPosZ() + figure->GetZ());
+                        mSplitMax.mZ = math::Max<float>(mSplitMax.mZ, mCurrentObject->GetPosZ() + figure->GetZ());
+                    }
+                    maxDepth = math::Max<float>(maxDepth,figure->GetDepth());
+                    SplitContext context;
+                    context.mFigure = figure;
+                    mObjectContexts.push_back(context);
+                }
+                mSplitMin.mZ -= maxDepth * 0.5;
+                mSplitMax.mZ += maxDepth * 0.5;
+                mSplitMin -= 1;
+                mSplitMax += 1;
+
+                mSplitPlane.SetNormal(CVec3f(0, 1, 0));
+                mSplitPlane.SetPoint(CVec3f(0.5f * (mSplitMin.mX + mSplitMax.mX),
+                                            0.5f * (mSplitMin.mY + mSplitMax.mY),
+                                            0.5f * (mSplitMin.mZ + mSplitMax.mZ)));
+
+                ComputeSplitPlanePoints();
+                for (SplitContext &context : mObjectContexts) {
+                    ComputeIntersections(context);
+                }
+            }
+        }
+        //--
+    }
+    mRotationPoint.SetPoint(mSplitPlane.GetPoint());
+    mRotationPoint.SetRotation(CVec3f(0.0f, 0.0f, 0.0f));
+
+    mMoveablePoint.SetCenter(mSplitPlane.GetPoint());
+}
+
+void CObjectEditorApp::DetectNewSplitPoint(const CVec2f &_p1, const CVec2f &_p2,
+                                           unsigned int _index, const CRay &_r,
+                                           SplitContext &_context) const
+{
+    if (mCurrentObject == nullptr) {
+        return;
+    }
+
+    float centerz = mCurrentObject->GetPosZ() + _context.mFigure->GetZ();
+
+    CPlane p;
+    p.Set(CVec3f(_p1, centerz),
+          CVec3f(_p2, centerz),
+          CVec3f(_p2, centerz - 1));
+
+    CVec3f p1;
+    CVec3f p2;
+    p.CastRay(_r, p1);
+    p2 = p1;
+
+    if (_context.mSplitIntersectionsCount == 0)
+    {
+        _context.mSplitIntersection1 = p1;
+        _context.mSplitIntersection1Index = _index;
+    }
+    else if (_context.mSplitIntersectionsCount == 1)
+    {
+        _context.mSplitIntersection2 = p1;
+        _context.mSplitIntersection2Index = _index;
+    }
+
+    if (Intersect(_p1, _p2, mSplitPlanePoint4, mSplitPlanePoint1))
+    {
+        _context.mSplitIntersectionsCount++;
+    }
+}
+
+void CObjectEditorApp::ComputeSplitPlanePoints()
+{
+    CRay r;
+
+    mSplitPlanePoint1.Set(mSplitMin.mX, 0, mSplitMax.mZ);
+    mSplitPlanePoint2.Set(mSplitMin.mX, 0, mSplitMin.mZ);
+    mSplitPlanePoint3.Set(mSplitMax.mX, 0, mSplitMin.mZ);
+    mSplitPlanePoint4.Set(mSplitMax.mX, 0, mSplitMax.mZ);
+
+    r.SetDirection(CVec3f(0, -1, 0));
+
+    r.SetPoint(mSplitPlanePoint1);
+    mSplitPlane.CastRay(r, mSplitPlanePoint1);
+    r.SetPoint(mSplitPlanePoint2);
+    mSplitPlane.CastRay(r, mSplitPlanePoint2);
+    r.SetPoint(mSplitPlanePoint3);
+    mSplitPlane.CastRay(r, mSplitPlanePoint3);
+    r.SetPoint(mSplitPlanePoint4);
+    mSplitPlane.CastRay(r, mSplitPlanePoint4);
+}
+
+void CObjectEditorApp::ComputeIntersections(SplitContext &_context) const
+{
+
+    if (_context.mFigure != nullptr)
+    {
+        CVec3f dir = mSplitPlanePoint1;
+        dir -= mSplitPlanePoint4;
+
+        float centerz = mCurrentObject->GetPosZ() + _context.mFigure->GetZ();
+
+        CRay r;
+        r.SetPoint(CVec3f(mSplitPlanePoint4.Vec2(), centerz));
+        r.SetDirection(dir);
+
+        _context.mSplitIntersectionsCount = 0;
+
+        if (_context.mFigure->EnumVertices() != 0)
+        {
+            for (unsigned int i = 1; i <_context.mFigure->EnumVertices(); i++)
+            {
+                DetectNewSplitPoint(_context.mFigure->GetVertices()[i-1], _context.mFigure->GetVertices()[i], i-1, r, _context);
+            }
+            DetectNewSplitPoint(_context.mFigure->GetVertices()[_context.mFigure->EnumVertices()-1],
+                                _context.mFigure->GetVertices()[0],
+                                _context.mFigure->EnumVertices()-1,
+                                r,_context);
+        }
+    }
+}
+
+void CObjectEditorApp::EndSplit()
+{
+
+    if (mState == SplitFigureState) {
+        mObjectContexts.clear();
+        mObjectContexts.push_back(mSplitFigureContext);
+    }
+
+    for (SplitContext &context : mObjectContexts){
+
+        if (context.mFigure == nullptr) {
+            continue;
+        }
+
+        if (context.mSplitIntersectionsCount == 2)
+        {
+            unsigned int fsize = context.mSplitIntersection1Index +
+                                 2 +
+                                 context.mFigure->EnumVertices() -
+                                 context.mSplitIntersection2Index;
+
+            CFigureParams fp;
+            fp.mVertices.resize(fsize);
+            fp.mDepth = context.mFigure->GetDepth();
+            fp.mZ = context.mFigure->GetZ();
+
+            unsigned int i = 0;
+
+            for (; i <= context.mSplitIntersection1Index; i++)
+            {
+                fp.mVertices[i] = context.mFigure->GetVertices()[i];
+            }
+
+            fp.mVertices[i++] = context.mSplitIntersection1;
+            fp.mVertices[i++] = context.mSplitIntersection2;
+            for (i = context.mSplitIntersection2Index + 1; i < context.mFigure->EnumVertices(); i++)
+            {
+                fp.mVertices[i] = context.mFigure->GetVertices()[i];
+            }
+
+            mCurrentObject->CreateFigure(fp);
+
+            fsize = context.mSplitIntersection2Index -
+                    context.mSplitIntersection1Index +
+                    2;
+
+            fp.mVertices.clear();
+            fp.mVertices.resize(fsize);
+
+            i = 0;
+            fp.mVertices[i++] = context.mSplitIntersection1;
+            for (unsigned int j = context.mSplitIntersection1Index + 1; j <= context.mSplitIntersection2Index; j++)
+            {
+                fp.mVertices[i++] = context.mFigure->GetVertices()[j];
+            }
+            fp.mVertices[i] = context.mSplitIntersection2;
+
+            mCurrentObject->CreateFigure(fp);
+
+            mCurrentObject->DestroyFigure(context.mFigure);
+
+            CSceneObjectGeometry * geometry = new CSceneObjectGeometry();
+            mCurrentObject->DumpGeometry(geometry);
+            GetTemplateSystem().ChangeGeometry( geometry, mCurrentTemplateName );
+        }
+    }
+    mTreeRefreshHandler();
+}
+
+void CObjectEditorApp::RenderSplitPlane()
+{
+    if ( (mState != SplitFigureState && mState != SplitObjectState)
+            || mCurrentObject == nullptr)
+    {
+        return;
+    }
+
+    if (mState == SplitFigureState && mSelectedFigure == nullptr) {
+        return;
+    }
+
+    GetGrengSystems().GetRenderer().DrawTriangle(GetCamera(),
+                               mSplitPlanePoint1,
+                               mSplitPlanePoint2,
+                               mSplitPlanePoint4,
+                               CColor4f(1, 0, 0.5, 0.5),
+                               true);
+    GetGrengSystems().GetRenderer().DrawTriangle(GetCamera(),
+                               mSplitPlanePoint4,
+                               mSplitPlanePoint2,
+                               mSplitPlanePoint3,
+                               CColor4f(1, 0, 0.5, 0.5),
+                               true);
+
+    for (SplitContext &context : mObjectContexts){
+        if (context.mSplitIntersectionsCount == 2)
+        {
+            auto draw_split = [&] (CVec3f _split_intersection)
+            {
+                CVec3f p1 = _split_intersection;
+                CVec3f p2 = _split_intersection;
+
+                p1.mZ = mCurrentObject->GetPosZ() + context.mFigure->GetZ() - context.mFigure->GetDepth() * 0.5f;
+                p2.mZ = mCurrentObject->GetPosZ() + context.mFigure->GetZ() + context.mFigure->GetDepth() * 0.5f;
+
+                GetGrengSystems().GetRenderer().DrawLine(GetCamera(), p1, p2, 2, CColor4f(1, 1, 1), false);
+            };
+
+            draw_split(context.mSplitIntersection1);
+            draw_split(context.mSplitIntersection2);
+        }
+    }
+}
+
+void CObjectEditorApp::SplitRotateStep(double _dt)
+{
+    if (mState == SplitFigureState && mSelectedFigure == nullptr) {
+        return;
+    }
+    mRotationPoint.SetCursorPos(GetCursorPos());
+    mRotationPoint.Step(_dt);
+    mMoveablePoint.SetCursorPos(GetCursorPos());
+    mMoveablePoint.Step(_dt);
+
+    mRotationPoint.SetPoint(mMoveablePoint.GetCenter());
+    float angle = mRotationPoint.GetRotation().mZ;
+    double cs = cos(M_PI/2 + angle);
+    double ss = sin(M_PI/2 + angle);
+    mSplitPlane.SetNormal(CVec3f(cs,ss,0));
+    mSplitPlane.SetPoint(mMoveablePoint.GetCenter());
+    ComputeSplitPlanePoints();
+    if (mState == SplitFigureState) {
+        ComputeIntersections(mSplitFigureContext);
+    } else {
+        for (SplitContext &context : mObjectContexts) {
+            ComputeIntersections(context);
+        }
+    }
+
 }
 
 

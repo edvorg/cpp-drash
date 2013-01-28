@@ -116,6 +116,9 @@ std::string CAppEvent::ToString() const
     case EventKeyWheelDown:
         return std::string("WHDN");
 
+    case EventDragDrop:
+        return std::string("DRDP");
+
     default:
         return std::string("<unknown key>");
     }
@@ -214,6 +217,10 @@ void CAppEvent::FromString(const std::string &_str)
     else if (_str == "WHDN")
     {
         this->mKey = EventKeyWheelDown;
+    }
+    else if (_str == "DRDP")
+    {
+        this->mKey = EventDragDrop;
     }
     else
     {

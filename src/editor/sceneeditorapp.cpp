@@ -52,7 +52,7 @@ bool CSceneEditorApp::Init()
 
     SetProcessors();
     SetCameraProcessors();
-
+    SetDragDropProcessors();
     mTimer.Reset(true);
 //    mMoveablePoint.SetSize(100);
     return true;
@@ -86,10 +86,12 @@ void CSceneEditorApp::Render()
 //            }
 //        }
 //    }
+
     if (mSelectedObject != nullptr) {
         mMoveablePoint.Render(GetGrengSystems().GetRenderer());
     }
 
+    RenderDragTemplate();
 }
 
 void CSceneEditorApp::Release()
@@ -157,13 +159,13 @@ void CSceneEditorApp::StartCurrentLevel()
     if (mCurrentLevel != nullptr) {
         mPlayLevel = true;
         mSelectedObject = nullptr;
-//        GetLevelManager().StartLevel(mCurrentLevel);
     }
 }
 
-void CSceneEditorApp::AddObject(const std::string &_name)
+void CSceneEditorApp::AddObject(const std::string &_name, const CVec3f &_pos)
 {
     if (mCurrentLevel == nullptr) {
+        LOG_WARN("Not set current level");
         return;
     }
 
@@ -173,14 +175,26 @@ void CSceneEditorApp::AddObject(const std::string &_name)
         return;
     }
 
-    CSceneObjectParams params;
-    //GetTemplateSystem().CreateSceneObjectFromTemplate(_name,params);
+    qDebug() << "Add object";
+
     std::ostringstream is;
-    is << "object" << mCurrentLevel->GetObjects().size();
+
+    is << "object" ;
+    if (mCurrentLevel->GetObjects().find(_name) != mCurrentLevel->GetObjects().end()) {
+        is << mCurrentLevel->GetObjects().at(_name).size();
+    } else {
+        is << "0";
+    }
+
+    qDebug() << is.str().c_str();
     CSceneObjectParams *p = mCurrentLevel->AddObject(_name,is.str());
+    if (p == nullptr) {
+        return;
+    }
+    p->mPos = _pos;
     GetLevelManager().StartLevel(mCurrentLevel,mObjectParams);
+
     mTreeRefreshHandler();
-//    p->mPos
 }
 
 void CSceneEditorApp::SetProcessors()
@@ -194,7 +208,6 @@ void CSceneEditorApp::SetProcessors()
         if (mSelectedObject != nullptr) {
             mOldpositon = mSelectedObject->GetPos();
             mMoveablePoint.SetCenter(mOldpositon);
-            qDebug() << "Object found";
         } else {
         }
     }
@@ -237,11 +250,8 @@ void CSceneEditorApp::SetProcessors()
             auto iter = mObjectParams.find(temp);
             if (iter != mObjectParams.end()) {
                 CSceneObjectParams *p = iter->second;
-                //qDebug() << "this";
                 p->mDynamic = false;
-//                StartCurrentLevel();
                 ResetLevel();
-                //p->mPos = mSelectedObject->GetPos();
             }
         }
     }));
@@ -298,6 +308,31 @@ void CSceneEditorApp::SetCameraProcessors()
     }));
 }
 
+void CSceneEditorApp::SetDragDropProcessors()
+{
+    GetEventSystem().SetProcessor("DRDP",CAppEventProcessor(
+    [this]() {
+        mDragTemplateName = mGetSelectedTemplateHandler();
+        mDragNow = true;
+    },
+    [this] () {
+    },
+    [this]() {
+        CPlane plane;
+        plane.SetNormal(CVec3f(0, 0, 1));
+        plane.SetPoint(CVec3f(0, 0, 0));
+
+        CVec3f position;
+        CVec2f cpos = GetCursorPos();
+        mCamera->CastRay(cpos, plane, position);
+        AddObject(mDragTemplateName,position);
+
+        mDragNow = false;
+        mDragTemplateName = "";
+    }
+    ));
+}
+
 bool CSceneEditorApp::InitCamera()
 {
     greng::CCameraParams p;
@@ -325,6 +360,34 @@ void CSceneEditorApp::StoreParams()
     }
     mObjectParams.clear();
 
+}
+
+void CSceneEditorApp::RenderDragTemplate()
+{
+    if ( mDragNow == false ) {
+        return;
+    }
+    if (mDragTemplateName != "") {
+        CSceneObjectGeometry * g = GetTemplateSystem().FindTemplate(mDragTemplateName);
+        if (g == nullptr) {
+            return;
+        }
+
+        CSceneObjectParams params;
+        CVec3f position;
+        CVec2f cpos = GetCursorPos();
+
+        CPlane plane;
+        plane.SetNormal(CVec3f(0, 0, 1));
+        plane.SetPoint(CVec3f(0, 0, 0));
+
+//        LOG_INFO(cpos);
+        mCamera->CastRay(cpos, plane, position);
+//        v = vv;
+        params.mPos = position;
+//        LOG_INFO(position);
+        GetDebugRenderer().RenderObject(*g,params);
+    }
 }
 
 CSceneObject *CSceneEditorApp::SelectObject()
@@ -375,7 +438,6 @@ void CSceneEditorApp::LookObject(const std::string &_templatename, const std::st
     if (mCurrentLevel != nullptr) {
         auto headiter = mCurrentLevel->GetObjects().find(_templatename);
         if (headiter != mCurrentLevel->GetObjects().end()) {
-//            qDebug() << "Look";
             auto iter = headiter->second.find(_objectname);
             if (iter != headiter->second.end()) {
                 CSceneObjectParams p = iter->second;

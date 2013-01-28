@@ -127,6 +127,7 @@ void CRotationablePoint::Step(double)
 
             mRotation.mZ = acos(xy_proj.mX);
             mRotation.mZ = (xy_proj.mY > 0.000001f ? mRotation.mZ : -mRotation.mZ);
+            mRotation.mZ -= mRotationDelta.mZ;
         }
         else if (mAxisRotating == 2)
         {
@@ -134,6 +135,7 @@ void CRotationablePoint::Step(double)
 
             mRotation.mY = acos(xz_proj.mZ);
             mRotation.mY = (xz_proj.mX > 0.000001f ? mRotation.mY : -mRotation.mY);
+            mRotation.mY -= mRotationDelta.mY;
         }
         else if (mAxisRotating == 1)
         {
@@ -141,6 +143,7 @@ void CRotationablePoint::Step(double)
 
             mRotation.mX = acos(yz_proj.mZ);
             mRotation.mX = (yz_proj.mY < -0.000001f ? mRotation.mX : -mRotation.mX);
+            mRotation.mX -= mRotationDelta.mX;
         }
     }
 }
@@ -214,6 +217,9 @@ void CRotationablePoint::Render()
             MatrixMultiply(rot, p1, p1_transposed);
             MatrixMultiply(rot, p2, p2_transposed);
 
+            p1_transposed.Vec3() += mPoint;
+            p2_transposed.Vec3() += mPoint;
+
             mRenderer->DrawLine(mCamera, p1_transposed, p2_transposed, 1, CColor4f(1, 0, 0, mAxisOvered == 1 ? 0.5 : 1), false);
 
             angle += angle_delta;
@@ -234,6 +240,9 @@ void CRotationablePoint::Render()
             MatrixMultiply(rot, p1, p1_transposed);
             MatrixMultiply(rot, p2, p2_transposed);
 
+            p1_transposed.Vec3() += mPoint;
+            p2_transposed.Vec3() += mPoint;
+
             mRenderer->DrawLine(mCamera, p1_transposed, p2_transposed, 1, CColor4f(0, 0, 1, mAxisOvered == 3 ? 0.5 : 1), false);
 
             angle += angle_delta;
@@ -252,6 +261,9 @@ void CRotationablePoint::Render()
 
             MatrixMultiply(rot, p1, p1_transposed);
             MatrixMultiply(rot, p2, p2_transposed);
+
+            p1_transposed.Vec3() += mPoint;
+            p2_transposed.Vec3() += mPoint;
 
             mRenderer->DrawLine(mCamera, p1_transposed, p2_transposed, 1, CColor4f(0, 1, 0, mAxisOvered == 2 ? 0.5 : 1), false);
 
@@ -272,6 +284,84 @@ void CRotationablePoint::RotateBegin()
         (mAxisOvered == 3 && mAxisOZ == true)) {
 
         mAxisRotating = mAxisOvered;
+
+        CMatrix4f rotx;
+        MatrixRotationX(rotx, mRotation.mX);
+
+        CMatrix4f rotz;
+        MatrixRotationZ(rotz, mRotation.mZ);
+
+        CMatrix4f roty;
+        MatrixRotationY(roty, mRotation.mY);
+
+        CMatrix4f rot_yz;
+        MatrixMultiply(roty, rotz, rot_yz);
+
+        CMatrix4f rot;
+        MatrixMultiply(rotx, rot_yz, rot);
+
+        CVec4f xy_normal(0, 0, 1, 0);
+        CVec4f xy_normal_transposed;
+        MatrixMultiply(rot, xy_normal, xy_normal_transposed);
+
+        CVec4f xz_normal(0, 1, 0, 0);
+        CVec4f xz_normal_transposed;
+        MatrixMultiply(rot, xz_normal, xz_normal_transposed);
+
+        CVec4f yz_normal(1, 0, 0, 0);
+        CVec4f yz_normal_transposed;
+        MatrixMultiply(rot, yz_normal, yz_normal_transposed);
+
+        CPlane xy;
+        xy.SetPoint(mPoint);
+        xy.SetNormal(xy_normal_transposed);
+
+        CPlane xz;
+        xz.SetPoint(mPoint);
+        xz.SetNormal(xz_normal_transposed);
+
+        CPlane yz;
+        yz.SetPoint(mPoint);
+        yz.SetNormal(yz_normal_transposed);
+
+        CVec3f xy_proj;
+        mCamera->CastRay(mCursorPos, xy, xy_proj);
+
+        CVec3f xz_proj;
+        mCamera->CastRay(mCursorPos, xz, xz_proj);
+
+        CVec3f yz_proj;
+        mCamera->CastRay(mCursorPos, yz, yz_proj);
+
+        xy_proj -= mPoint;
+        xz_proj -= mPoint;
+        yz_proj -= mPoint;
+
+        mRotationDelta = mRotation;
+
+        if (mAxisRotating == 3)
+        {
+            xy_proj.Normalize();
+
+            mRotationDelta.mZ = acos(xy_proj.mX);
+            mRotationDelta.mZ = (xy_proj.mY > 0.000001f ? mRotationDelta.mZ : -mRotationDelta.mZ);
+        }
+        else if (mAxisRotating == 2)
+        {
+            xz_proj.Normalize();
+
+            mRotationDelta.mY = acos(xz_proj.mZ);
+            mRotationDelta.mY = (xz_proj.mX > 0.000001f ? mRotationDelta.mY : -mRotationDelta.mY);
+        }
+        else if (mAxisRotating == 1)
+        {
+            yz_proj.Normalize();
+
+            mRotationDelta.mX = acos(yz_proj.mZ);
+            mRotationDelta.mX = (yz_proj.mY < -0.000001f ? mRotationDelta.mX : -mRotationDelta.mX);
+        }
+
+        mRotationDelta -= mRotation;
     }
 }
 

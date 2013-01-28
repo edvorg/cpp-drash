@@ -265,43 +265,30 @@ void SceneWidget::wheelEvent( QWheelEvent *_event )
 
 void SceneWidget::dropEvent(QDropEvent *_event)
 {
-    qDebug() << "Drop event " <<_event->mimeData()->text();
-//    QMimeData data = *_event->mimeData();"application/x-qabstractitemmodeldatalist"
-    qDebug() << _event->mimeData()->formats();
-    QByteArray ar = _event->mimeData()->data("application/x-qabstractitemmodeldatalist");
-//    QString str(ar);
-//    qDebug() << str;
-    QDataStream stream(&ar,QIODevice::ReadOnly);
-    QMap<int, QVariant> roleDataMap;
-    while (!stream.atEnd()) {
-        stream >> roleDataMap;
-    }
-
-    foreach(int i , roleDataMap.keys()) {
-        qDebug() <<i <<" "<< roleDataMap[i].toString();
-    }
+    mApp->GetEventSystem().EndEvent(CAppEvent(EventDragDrop));
     _event->accept();
 }
 
 void SceneWidget::dragMoveEvent(QDragMoveEvent *_event)
 {
-    qDebug() << "drag move";
+    _event->accept();
+//    QGLWidget::mouseMoveEvent(_event);
 
-    QByteArray ar = _event->mimeData()->data("application/x-qabstractitemmodeldatalist");
-    QDataStream stream(&ar,QIODevice::ReadOnly);
-    QMap<int, QVariant> roleDataMap;
-    while (!stream.atEnd()) {
-        stream >> roleDataMap;
+    if (mApp == nullptr)
+    {
+        return;
     }
-
-    foreach(int i , roleDataMap.keys()) {
-        qDebug() <<i <<" "<< roleDataMap[i].toString();
-    }
-    _event->acceptProposedAction();
+    CVec2f pos = WidgetSpaceToScreenSpace(CVec2f(_event->pos().x(),
+                                               _event->pos().y()));
+    mApp->SetCursorPos(pos);
+    int x = 0;
+    int y = 0;
+    mApp->GetUISystem().ScreenSpaceToUISpace(pos, x, y);
+    mApp->GetUISystem().SetCursorPos(x, y);
 }
 
 void SceneWidget::dragEnterEvent(QDragEnterEvent *_event)
 {
-    qDebug() << "drag Enter";
-    _event->acceptProposedAction();
+    mApp->GetEventSystem().BeginEvent(CAppEvent(EventDragDrop));
+    _event->accept();
 }

@@ -52,7 +52,7 @@ public:
 
     void StartCurrentLevel();
 
-    void AddObject(const std::string &_name);
+    void AddObject(const std::string &_name, const CVec3f &_pos);
 
     //
     inline bool SaveLevel();
@@ -63,6 +63,7 @@ public:
     inline std::string GetLevelFileName() const;
 
     inline void SetTreeRefreshHandler(const std::function<void ()> & _han);
+    inline void SetGetSelectedHandler(const std::function<std::string ()> & _han);
     inline void PauseLevel();
     void StopLevel();
 
@@ -72,7 +73,7 @@ public:
 private:
     void SetProcessors();
     void SetCameraProcessors();
-
+    void SetDragDropProcessors();
 
     bool InitCamera();
     bool InitPointLight();
@@ -84,7 +85,7 @@ private:
     greng::CCamera *mCamera = nullptr;
 
     std::function<void ()> mTreeRefreshHandler = [] () {};
-
+    std::function<std::string ()> mGetSelectedTemplateHandler = [] () { return std::string(""); };
     bool mPlayLevel = false;
 
     CSceneObject * mSelectedObject = nullptr;
@@ -104,6 +105,10 @@ private:
     std::map<CSceneObject*, CSceneObjectParams*> mObjectParams;
 
     void StoreParams();
+
+    void RenderDragTemplate();
+    bool mDragNow = false;
+    std::string mDragTemplateName = "";
 
 private:
     CSceneObject * SelectObject();
@@ -132,6 +137,10 @@ inline bool CSceneEditorApp::IsSetLevel() const {
 
 inline void CSceneEditorApp::SetTreeRefreshHandler(const std::function<void ()> &_han) {
     mTreeRefreshHandler = _han;
+}
+
+inline void CSceneEditorApp::SetGetSelectedHandler(const std::function<std::string ()> & _han) {
+    mGetSelectedTemplateHandler = _han;
 }
 
 inline void CSceneEditorApp::PauseLevel() {
