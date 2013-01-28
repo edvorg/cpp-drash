@@ -881,6 +881,7 @@ void CObjectEditorApp::BeginSplit()
 
             ComputeSplitPlanePoints();
             mSplitFigureContext.mFigure = mSelectedFigure;
+            mObjectContexts.push_back(mSplitFigureContext);
             ComputeIntersections(mSplitFigureContext);
         }
     }
@@ -1104,6 +1105,10 @@ void CObjectEditorApp::RenderSplitPlane()
         return;
     }
 
+    if (mState == SplitFigureState && mSelectedFigure == nullptr) {
+        return;
+    }
+
     GetGrengSystems().GetRenderer().DrawTriangle(GetCamera(),
                                mSplitPlanePoint1,
                                mSplitPlanePoint2,
@@ -1117,22 +1122,22 @@ void CObjectEditorApp::RenderSplitPlane()
                                CColor4f(1, 0, 0.5, 0.5),
                                true);
 
-    if (mState == SplitFigureState) {
-        if (mSplitFigureContext.mSplitIntersectionsCount == 2)
+    for (SplitContext &context : mObjectContexts){
+        if (context.mSplitIntersectionsCount == 2)
         {
             auto draw_split = [&] (CVec3f _split_intersection)
             {
                 CVec3f p1 = _split_intersection;
                 CVec3f p2 = _split_intersection;
 
-                p1.mZ = mCurrentObject->GetPosZ() + mSelectedFigure->GetZ() - mSelectedFigure->GetDepth() * 0.5f;
-                p2.mZ = mCurrentObject->GetPosZ() + mSelectedFigure->GetZ() + mSelectedFigure->GetDepth() * 0.5f;
+                p1.mZ = mCurrentObject->GetPosZ() + context.mFigure->GetZ() - context.mFigure->GetDepth() * 0.5f;
+                p2.mZ = mCurrentObject->GetPosZ() + context.mFigure->GetZ() + context.mFigure->GetDepth() * 0.5f;
 
                 GetGrengSystems().GetRenderer().DrawLine(GetCamera(), p1, p2, 2, CColor4f(1, 1, 1), false);
             };
 
-            draw_split(mSplitFigureContext.mSplitIntersection1);
-            draw_split(mSplitFigureContext.mSplitIntersection2);
+            draw_split(context.mSplitIntersection1);
+            draw_split(context.mSplitIntersection2);
         }
     }
 }
