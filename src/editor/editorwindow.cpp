@@ -187,7 +187,7 @@ void EditorWindow::AddNewFigure()
 
 void EditorWindow::MoveActive()
 {
-    if (mMoveActiveAction->isChecked()) {
+    if (mMoveActiveAction->isChecked() == true) {
         mObjectApp->ActiveMoveMode();
     }
 }
@@ -206,51 +206,16 @@ void EditorWindow::StretchActive()
     }
 }
 
+void EditorWindow::DeleteModeActive()
+{
+    if (mDeleteModeActiveAction->isChecked() == true) {
+        mObjectApp->ActiveDeleteMode();
+    }
+}
+
 void EditorWindow::ChangeMode(QAction *_action)
 {
-    mLabelOfStatusBar->setText(_action->text());
-}
-
-void EditorWindow::ZoomUp()
-{
-     //mCurrentApp->GetDebugRenderer().GetCamera()->Forward(10);
-    //    if (mCurrentApp != nullptr){
-//        CVec3f pos;
-
-//        if (mObjectApp->GetCamera()->GetPos().IsTargetSet())
-//        {
-//            pos = mObjectApp->GetCamera()->GetPos().GetTarget();
-//        }
-//        else
-//        {
-//            pos = mObjectApp->GetCamera()->GetPos().Get();
-//        }
-
-//        pos.mZ += 10.0f;
-
-//        mObjectApp->GetCamera()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
-//    }
-}
-
-void EditorWindow::ZoomDown()
-{
-    //mCurrentApp->GetDebugRenderer().GetCamera()->Forward(-10);
-//    if (mCurrentApp != nullptr){
-//        CVec3f pos;
-
-//        if (mObjectApp->GetCamera()->GetPos().IsTargetSet())
-//        {
-//            pos = mObjectApp->GetCamera()->GetPos().GetTarget();
-//        }
-//        else
-//        {
-//            pos = mObjectApp->GetCamera()->GetPos().Get();
-//        }
-
-//        pos.mZ -= 10.0f;
-
-//        mObjectApp->GetCamera()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
-    //    }
+    mLabelOfStatusBar->setText(_action->text() );//+" "+  ui->mTreeObjects->currentItem()->text(0));
 }
 
 void EditorWindow::OpenLevel()
@@ -296,6 +261,7 @@ void EditorWindow::SaveLevelAs()
         mLabelOfStatusBar->setText("Level saved in " + name);
     }
 }
+
 
 void EditorWindow::PlayLevel()
 {
@@ -396,18 +362,6 @@ void EditorWindow::CreateActions()
             this, SLOT(Remove_Object()));
 
 
-//    mZoomUpAction = new QAction("+", this);
-//    mZoomUpAction->setShortcut(tr("Ctrl+="));
-//    listActions << mZoomUpAction;
-//    connect(mZoomUpAction,SIGNAL(triggered()),
-//            this,SLOT(ZoomUp()));
-
-//    mZoomDownAction = new QAction("-",this);
-//    mZoomDownAction->setShortcut(tr("Ctrl+-"));
-//    listActions << mZoomDownAction;
-//    connect(mZoomDownAction,SIGNAL(triggered()),
-//            this,SLOT(ZoomDown()));
-
     mObjectToolBar->addActions(listActions);
 
     // Actions for editor scene
@@ -449,11 +403,6 @@ void EditorWindow::CreateActions()
             this, SLOT(NewLevel()));
 
     mSceneToolbar->addActions(listActions);
-//    mSaveAction = new QAction("Save Object", this);
-//    mSaveAction->setShortcut(tr("Ctrl+S"));
-//    ui->toolBar->addAction(mSaveAction);
-//    connect(mSaveAction, SIGNAL(triggered()),
-//            this,SLOT(SaveObject()));
 
 }
 
@@ -464,31 +413,33 @@ bool EditorWindow::UpdateTreeTemplates(QTreeWidget *_tree, drash::CApp *_app)
     QList<QTreeWidgetItem*> list;
     CTemplateSystem tSys= _app->GetTemplateSystem();
     for (auto item = tSys.GetSceneObjectTemplates().begin();
-         item != tSys.GetSceneObjectTemplates().end() ; item++) {
-       QTreeWidgetItem *objectItem = new QTreeWidgetItem(_tree,
+        item != tSys.GetSceneObjectTemplates().end() ; item++) {
+
+        QTreeWidgetItem *objectItem = new QTreeWidgetItem(_tree,
                                                       QStringList(QString::fromStdString(item->first)));
-       _tree->addTopLevelItem(objectItem);
+        _tree->addTopLevelItem(objectItem);
 
-       const CSceneObjectGeometry &geo = *(item->second);
-       const std::vector<CFigureParams> &mF = geo.mFigures;
-       for (auto fig = mF.begin() ; fig != mF.end() ; fig++) {
-           CFigureParams par = *fig;
+        const CSceneObjectGeometry &geo = *(item->second);
+        const std::vector<CFigureParams> &mF = geo.mFigures;
+        objectItem->setText(1,QString::number(mF.size()));
+//       for (auto fig = mF.begin() ; fig != mF.end() ; fig++) {
+//           CFigureParams par = *fig;
 
-           QString vecs("");
-           vecs.append("[");
-           for (unsigned int i = 0 ; i < par.mVertices.size() ; i++) {
-               if (i != 0) vecs.append(",");
-               vecs.append("(");
-               QString x = QString::number(par.mVertices[i].mX);
-               vecs.append(x);
-               vecs.append(",");
-               QString y = QString::number(par.mVertices[i].mY);
-               vecs.append(y);
-               vecs.append(")");
-           }
-           vecs.append("]");
-           new QTreeWidgetItem(objectItem,QStringList(vecs));
-       }
+//           QString vecs("");
+//           vecs.append("[");
+//           for (unsigned int i = 0 ; i < par.mVertices.size() ; i++) {
+//               if (i != 0) vecs.append(",");
+//               vecs.append("(");
+//               QString x = QString::number(par.mVertices[i].mX);
+//               vecs.append(x);
+//               vecs.append(",");
+//               QString y = QString::number(par.mVertices[i].mY);
+//               vecs.append(y);
+//               vecs.append(")");
+//           }
+//           vecs.append("]");
+//           new QTreeWidgetItem(objectItem,QStringList(vecs));
+//       }
     }
     return true;
 }
@@ -545,13 +496,6 @@ void EditorWindow::SplitActive()
         mObjectApp->ActiveSplitFigureMode();
     } else if (mSplitObjectActiveAction->isChecked() == true ) {
         mObjectApp->ActiveSplitObjectMode();
-    }
-}
-
-void EditorWindow::DeleteModeActive()
-{
-    if (mDeleteModeActiveAction->isCheckable() == true) {
-        mObjectApp->ActiveDeleteMode();
     }
 }
 

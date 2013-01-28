@@ -193,8 +193,8 @@ inline bool CObjectEditorApp::IsStartBuild()const {
 }
 
 inline void CObjectEditorApp::ActiveMoveMode() {
-    mState = MoveState;
     ChangeMode();
+    mState = MoveState;
 }
 
 inline void CObjectEditorApp::ActiveMoveOfAxisMode() {

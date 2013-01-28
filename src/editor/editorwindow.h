@@ -80,7 +80,6 @@ private:
     // for editor object
     QAction *mQuit;
     QAction *mRemoveAction;
-//    QAction *mSaveAction;
     QAction *mMoveActiveAction;
     QAction *mStretchActiveAction;
     QAction *mMoveOfAxisActiveAction;
@@ -92,9 +91,6 @@ private:
     QActionGroup mModeActions;
 
 
-
-    QAction *mZoomUpAction;
-    QAction *mZoomDownAction;
     // for editor scene
     QAction * mOpenLevelAction;
     QAction * mSaveLevelAction;
@@ -117,9 +113,6 @@ private slots:
     void DeleteModeActive();
 
     void ChangeMode(QAction *_action);
-
-    void ZoomUp();
-    void ZoomDown();
 
     // for editor scene
     void OpenLevel();
