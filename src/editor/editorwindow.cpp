@@ -356,7 +356,7 @@ void EditorWindow::CreateActions()
     mModeActions.addAction(mDeleteModeActiveAction);
 
     mRemoveAction = new QAction("Remove Object", this);
-    mRemoveAction->setShortcut(tr("Ctrl+D"));
+    mRemoveAction->setShortcut(tr("Ctrl+R"));
     listActions << mRemoveAction;
     connect(mRemoveAction,SIGNAL(triggered()),
             this, SLOT(Remove_Object()));
