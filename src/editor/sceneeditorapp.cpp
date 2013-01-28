@@ -312,8 +312,12 @@ void CSceneEditorApp::SetDragDropProcessors()
 {
     GetEventSystem().SetProcessor("DRDP",CAppEventProcessor(
     [this]() {
-        mDragTemplateName = mGetSelectedTemplateHandler();
-        mDragNow = true;
+
+        if (mCurrentLevel != nullptr) {
+            mDragTemplateName = mGetSelectedTemplateHandler();
+            mDragNow = true;
+        }
+
     },
     [this] () {
     },
@@ -364,6 +368,9 @@ void CSceneEditorApp::StoreParams()
 
 void CSceneEditorApp::RenderDragTemplate()
 {
+    if (mCurrentLevel == nullptr) {
+        return;
+    }
     if ( mDragNow == false ) {
         return;
     }
