@@ -193,17 +193,23 @@ void CMoveablePoint::Calculate()
     mAxisOver = 0;
     mAxisDrawK.Set(1, 1, 1);
 
-    if (dstz.Length() < mLineSizeWorld * 0.1)
+    if (dstz.Length() < mLineSizeWorld * 0.1 &&
+        mCenter.mZ < r1.mZ &&
+        r1.mZ < mCenter.mZ + mLineSizeWorld)
     {
         mAxisDrawK.mZ *= 0.5;
         mAxisOver = 3;
     }
-    else if (dstx.Length() < mLineSizeWorld * 0.1)
+    else if (dstx.Length() < mLineSizeWorld * 0.1 &&
+             mCenter.mX < r1.mX &&
+             r1.mX < mCenter.mX + mLineSizeWorld)
     {
         mAxisDrawK.mX *= 0.5;
         mAxisOver = 1;
     }
-    else if (dsty.Length() < mLineSizeWorld * 0.1)
+    else if (dsty.Length() < mLineSizeWorld * 0.1 &&
+             mCenter.mY < r2.mY &&
+             r2.mY < mCenter.mY + mLineSizeWorld)
     {
         mAxisDrawK.mY *= 0.5;
         mAxisOver = 2;
