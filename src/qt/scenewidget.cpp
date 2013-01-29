@@ -292,3 +292,10 @@ void SceneWidget::dragEnterEvent(QDragEnterEvent *_event)
     mApp->GetEventSystem().BeginEvent(CAppEvent(EventDragDrop));
     _event->accept();
 }
+
+void SceneWidget::dragLeaveEvent(QDragLeaveEvent *_event)
+{
+    mApp->GetEventSystem().BeginEvent(CAppEvent(EventDragLeave));
+    mApp->GetEventSystem().EndEvent(CAppEvent(EventDragLeave));
+    _event->accept();
+}

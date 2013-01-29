@@ -134,6 +134,7 @@ bool CSceneEditorApp::LoadLevel(const std::string &_filename)
 bool CSceneEditorApp::SaveLevelAs(const std::string &_filename)
 {
     if (mCurrentLevel == nullptr) {
+        LOG_ERR("Level not saved, because not created.");
         return false;
     }
 
@@ -175,8 +176,6 @@ void CSceneEditorApp::AddObject(const std::string &_name, const CVec3f &_pos)
         return;
     }
 
-    qDebug() << "Add object";
-
     std::ostringstream is;
 
     is << "object" ;
@@ -186,7 +185,7 @@ void CSceneEditorApp::AddObject(const std::string &_name, const CVec3f &_pos)
         is << "0";
     }
 
-    qDebug() << is.str().c_str();
+//    qDebug() << is.str().c_str();
     CSceneObjectParams *p = mCurrentLevel->AddObject(_name,is.str());
     if (p == nullptr) {
         return;
@@ -331,6 +330,13 @@ void CSceneEditorApp::SetDragDropProcessors()
         mCamera->CastRay(cpos, plane, position);
         AddObject(mDragTemplateName,position);
 
+        mDragNow = false;
+        mDragTemplateName = "";
+    }
+    ));
+
+    GetEventSystem().SetProcessor("DRL",CAppEventProcessor(
+    [this]() {
         mDragNow = false;
         mDragTemplateName = "";
     }

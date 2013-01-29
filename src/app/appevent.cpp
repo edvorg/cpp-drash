@@ -118,7 +118,8 @@ std::string CAppEvent::ToString() const
 
     case EventDragDrop:
         return std::string("DRDP");
-
+    case EventDragLeave:
+        return std::string("DRL");
     default:
         return std::string("<unknown key>");
     }
@@ -221,6 +222,10 @@ void CAppEvent::FromString(const std::string &_str)
     else if (_str == "DRDP")
     {
         this->mKey = EventDragDrop;
+    }
+    else if (_str == "DRL")
+    {
+        this->mKey = EventDragLeave;
     }
     else
     {
