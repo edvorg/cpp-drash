@@ -117,11 +117,11 @@ void SceneWidget::initializeGL()
 
     int img_flags = IMG_INIT_PNG;
 
-//    if (IMG_Init(img_flags) != img_flags)
-//    {
-//        mApp = nullptr;
-//        return;
-//    }
+    if (IMG_Init(img_flags) != img_flags)
+    {
+        mApp = nullptr;
+        return;
+    }
 
 
     if (glewInit() != GLEW_OK)
@@ -265,6 +265,7 @@ void SceneWidget::wheelEvent( QWheelEvent *_event )
 
 void SceneWidget::dropEvent(QDropEvent *_event)
 {
+    qDebug() << "Drop event";
     mApp->GetEventSystem().EndEvent(CAppEvent(EventDragDrop));
     _event->accept();
 }
@@ -289,13 +290,21 @@ void SceneWidget::dragMoveEvent(QDragMoveEvent *_event)
 
 void SceneWidget::dragEnterEvent(QDragEnterEvent *_event)
 {
+    qDebug() << "Drag eneter event";
+
     mApp->GetEventSystem().BeginEvent(CAppEvent(EventDragDrop));
+
     _event->accept();
 }
 
 void SceneWidget::dragLeaveEvent(QDragLeaveEvent *_event)
 {
+    qDebug() << "Drag leave event";
+
     mApp->GetEventSystem().BeginEvent(CAppEvent(EventDragLeave));
     mApp->GetEventSystem().EndEvent(CAppEvent(EventDragLeave));
-    _event->accept();
+
+    mApp->GetEventSystem().CancelEvent(CAppEvent(EventDragDrop));
+
+    _event->ignore();
 }

@@ -82,6 +82,7 @@ void CSceneEditorApp::Step(double _dt)
         mMoveablePoint.Step(_dt);
         mRotationablePoint.Step(_dt);
 
+        MoveOfAxis();
         RatateObject();
     }
 }
@@ -240,7 +241,6 @@ void CSceneEditorApp::SetProcessors()
         }
         if (mSelectedObject != nullptr) {
             mMoveablePoint.ClickPressing();
-            MoveOfAxis();
         }
     },
     [this] () {
@@ -326,12 +326,12 @@ void CSceneEditorApp::SetCameraProcessors()
 
 void CSceneEditorApp::SetDragDropProcessors()
 {
-//    GetEventSystem().SetProcessor("DRL",CAppEventProcessor(
-//    [this]() {
-//        mDragNow = false;
-//        //mDragTemplateName = "";
-//    }
-//    ));
+    GetEventSystem().SetProcessor("DRL",CAppEventProcessor(
+    [this]() {
+        mDragNow = false;
+        //mDragTemplateName = "";
+    }
+    ));
 
     GetEventSystem().SetProcessor("DRDP",CAppEventProcessor(
     [this]() {
@@ -391,15 +391,12 @@ void CSceneEditorApp::RatateObject()
         return;
     }
 
-//    mSelectedObject->GetAngle()
     auto iter = mObjectParams.find(mSelectedObject);
     if (iter == mObjectParams.end()) {
         return;
     }
 
     CSceneObjectParams *params = iter->second;
-//    float anglex = mRotationablePoint.GetRotation().mX;
-//    float angley = mRotationablePoint.GetRotation().mY;
     float anglez = mRotationablePoint.GetRotation().mZ;
     params->mAngle = anglez;
     mSelectedObject->GetAngle().Set(anglez);
