@@ -26,7 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define SCENEEDITORAPP_H
 
 #include "../app/app.h"
-#include "../misc/moveablepoint.h"
+
 #include "../diag/timer.h"
 #include "../greng/pointlight.h"
 
@@ -93,6 +93,9 @@ private:
     //CSceneObjectParams * mSelectedObject = nullptr;
 
     CMoveablePoint mMoveablePoint;
+    CRotationablePoint mRotationablePoint;
+    void RatateObject();
+    void RenderPoints();
 
     CVec3f mOldpositon;
 
