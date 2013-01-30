@@ -169,6 +169,13 @@ void CAppEventSystem::Process()
             c->mProcessor.Begin();
         }
 
+        if (c->mState & STATE_CANCEL)
+        {
+            c->mState = STATE_NORMAL;
+            i = mCurrentCombinations.erase(i);
+            continue;
+        }
+
         if (c->mState & STATE_END)
         {
             c->mProcessor.End();
@@ -235,6 +242,39 @@ void CAppEventSystem::EndEvent(const CAppEvent &_event)
             }
 
             (*i)->mState |= STATE_END;
+        }
+    }
+}
+
+void CAppEventSystem::CancelEvent(const CAppEvent &_event)
+{
+    mCurrentState.RemoveEvent(_event);
+
+    // find key combinations, thas is not intersect current events state
+
+    for (auto i = mCurrentCombinations.begin(); i != mCurrentCombinations.end(); i++)
+    {
+        if (mCurrentState.ContainsCombination((*i)->mCombination) == false)
+        {
+            // if this tree node's combination is last one to be removed, look for his childs
+
+            if (mCurrentCombinations.size() == 1)
+            {
+                if ((*i)->mChilds.size() != 0)
+                {
+                    // if it has any - try to process next combinations from this tree node
+
+                    mCurrentNode = *i;
+                }
+                else
+                {
+                    // fall back to combinations tree root
+
+                    mCurrentNode = mCurrentModeRoot;
+                }
+            }
+
+            (*i)->mState |= STATE_CANCEL;
         }
     }
 }
