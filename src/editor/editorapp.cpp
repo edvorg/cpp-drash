@@ -328,7 +328,6 @@ void CObjectEditorApp::SetProcessors()
         }
 
         if (mState == SplitFigureState || mState == SplitObjectState) {
-//            mRotationPoint.RotateEnd();
             mMoveablePoint.ClickPressing();
         }
     },
@@ -729,6 +728,9 @@ void CObjectEditorApp::SettingCenterFigure()
     center.Vec2() /= CVec2f(mSelectedFigure->EnumVertices());
 
     mMoveablePoint.SetCenter(center);
+    mMoveablePoint.SetAxisOX(true);
+    mMoveablePoint.SetAxisOY(true);
+    mMoveablePoint.SetAxisOZ(true);
     mOldCenterFigure = center;
 }
 
@@ -938,6 +940,11 @@ void CObjectEditorApp::BeginSplit()
     mRotationPoint.SetRotation(CVec3f(0.0f, 0.0f, 0.0f));
 
     mMoveablePoint.SetCenter(mSplitPlane.GetPoint());
+
+    mMoveablePoint.SetAxisOX(false);
+    mMoveablePoint.SetAxisOY(true);
+    mMoveablePoint.SetAxisOZ(false);
+
 }
 
 void CObjectEditorApp::DetectNewSplitPoint(const CVec2f &_p1, const CVec2f &_p2,
