@@ -76,6 +76,8 @@ bool CObjectEditorApp::Init()
     mRotationPoint.SetAxisOY(false);
     mTimer.Reset(true);
 
+    LOG_INFO("EditorObject App initzializeted");
+
     return true;
 }
 
@@ -106,9 +108,9 @@ void CObjectEditorApp::Render()
     CVec2f grid_size_half(mGridSize.mX, mGridSize.mY);
     grid_size_half /= 2;
 
-    for (unsigned int i = 1; i < segments_counts.mX; i++)
+    for (unsigned int i = 1 ; i < (unsigned int)segments_counts.mX; i++)
     {
-        for (unsigned int j = 1; j < segments_counts.mY; j++)
+        for (unsigned int j = 1; j < (unsigned int)segments_counts.mY; j++)
         {
             CVec3f p1(i * mGridSegmentSize, 0, j * mGridSegmentSize);
             CVec3f p2(i * mGridSegmentSize, 0, (j - 1) * mGridSegmentSize);
@@ -373,6 +375,8 @@ void CObjectEditorApp::SetProcessors()
                 }
                 break;
             }
+            case SplitObjectState:
+                break;
 //            case SplitFigureState: {
 //                if (mSelectedFigure != nullptr) {
 //                    EndSplit();
@@ -387,6 +391,8 @@ void CObjectEditorApp::SetProcessors()
                 break;
             case StretchState:
                 break;
+            case DeleteFigure:
+                break;
             case Simple:
                 break;
         }
@@ -396,7 +402,7 @@ void CObjectEditorApp::SetProcessors()
     GetEventSystem().SetProcessor("WHUP",CAppEventProcessor(
     [this](){
         if (mCurrentObject != nullptr) {
-            for (int i = 0 ; i < mCurrentObject->EnumFigures() ; i++) {
+            for (unsigned int i = 0 ; i < mCurrentObject->EnumFigures() ; i++) {
                 CFigure *fig = mCurrentObject->GetFigures()[i];
                 fig->SetDepth(fig->GetDepth()+0.5);
             }
@@ -659,6 +665,39 @@ void CObjectEditorApp::ChangeMode()
     mSelectedFigure = nullptr;
     SaveCurrentObject();
     mObjectContexts.clear();
+
+    std::string logstr = "";
+
+    switch (mState) {
+    case MoveState:
+        logstr = "Moving";
+        break;
+    case StretchState:
+        logstr = "Stretch";
+        break;
+    case MoveOfAxisState:
+        logstr = "Moving of Axis";
+        break;
+    case BuildState:
+        logstr = "Building";
+        break;
+    case DeleteFigure:
+        logstr = "Deleting";
+        break;
+    case SplitFigureState:
+        logstr = "Spliting figure";
+        break;
+    case SplitObjectState:
+        logstr = "Spliting object";
+        break;
+    default:
+        break;
+    }
+
+    if (logstr != "") {
+        LOG_INFO(logstr << " mode active");
+    }
+
 }
 
 void CObjectEditorApp::SelectVertex()
@@ -902,7 +941,7 @@ void CObjectEditorApp::BeginSplit()
 
                 float maxDepth = mCurrentObject->GetFigures()[0]->GetDepth();
 
-                for (int i = 0 ; i < mCurrentObject->EnumFigures() ; i++) {
+                for (unsigned int i = 0 ; i < mCurrentObject->EnumFigures() ; i++) {
                     CFigure * figure = mCurrentObject->GetFigures()[i];
                     for (unsigned int i = 1; i < figure->EnumVertices(); i++)
                     {

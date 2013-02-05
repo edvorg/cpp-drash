@@ -31,33 +31,35 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-enum State {
-    BuildState,
-    MoveState,
-    MoveOfAxisState,
-    StretchState,
-    DeleteFigure,
-    SplitFigureState,
-    SplitObjectState,
-    Simple
-};
-
-
-struct SplitContext {
-
-    CVec3f mSplitIntersection1;
-    unsigned mSplitIntersection1Index = 0;
-    CVec3f mSplitIntersection2;
-    unsigned mSplitIntersection2Index = 0;
-    unsigned int mSplitIntersectionsCount = 0;
-
-    CFigure * mFigure = nullptr;
-
-};
 
 
 class CObjectEditorApp : public CApp
 {
+
+public:
+    enum State {
+        BuildState,
+        MoveState,
+        MoveOfAxisState,
+        StretchState,
+        DeleteFigure,
+        SplitFigureState,
+        SplitObjectState,
+        Simple
+    };
+
+private:
+    struct SplitContext {
+        CVec3f mSplitIntersection1;
+        unsigned mSplitIntersection1Index = 0;
+        CVec3f mSplitIntersection2;
+        unsigned mSplitIntersection2Index = 0;
+        unsigned int mSplitIntersectionsCount = 0;
+
+        CFigure * mFigure = nullptr;
+
+    };
+
 public:
     virtual bool Init() override;
     virtual void Step(double _dt) override;
@@ -75,26 +77,19 @@ public:
     void ShowObject(const std::string &_name);
 
     inline void SetCurrentTemplateName(const std::string & _name);
-
     inline void SetTreeRefreshHandler(const std::function<void ()> &_han);
 
     inline void ActiveMoveMode();
-
     inline void ActiveSplitFigureMode();
-
     inline void ActiveSplitObjectMode();
-
     inline void ActiveDeleteMode();
-
     void ActiveStretchMode();
-
     void ActiveMoveOfAxisMode();
 
     void SaveCurrentObject();
 
     inline greng::CCamera *GetCamera();
 
-    void ComputeSplitPlanePoints();
 private:
     float GetCurDepth();
 
@@ -113,21 +108,15 @@ private:
     void StretchFigure();
 
     void ChangeMode();
-
     void SelectVertex();
-
     void SettingCenterFigure();
-
     void MoveOfAxis();
-
     bool IsConvex()const;
+
 private:
     CSceneObject *mCurrentObject = nullptr;
-
     State mState = Simple;
-
     std::string mCurrentTemplateName = "";
-
     std::function<void ()> mTreeRefreshHandler = [] () {};
 
     std::vector<drash::CVec2f> mVertexs;
@@ -182,6 +171,7 @@ private:
     void EndSplit();
 
     void RenderSplitPlane();
+    void ComputeSplitPlanePoints();
 
     CRotationablePoint mRotationPoint;
 
@@ -193,8 +183,9 @@ inline bool CObjectEditorApp::IsStartBuild()const {
 }
 
 inline void CObjectEditorApp::ActiveMoveMode() {
-    ChangeMode();
     mState = MoveState;
+    ChangeMode();    
+//    LOG_INFO("Moving mode Active");
 }
 
 inline void CObjectEditorApp::ActiveMoveOfAxisMode() {
@@ -216,19 +207,19 @@ inline greng::CCamera *CObjectEditorApp::GetCamera()
 }
 
 inline void CObjectEditorApp::ActiveSplitFigureMode() {
-    ChangeMode();
     mState = SplitFigureState;
+    ChangeMode();
 }
 
 inline void CObjectEditorApp::ActiveSplitObjectMode() {
-    ChangeMode();
     mState = SplitObjectState;
+    ChangeMode();
     BeginSplit();
 }
 
 inline void CObjectEditorApp::ActiveDeleteMode() {
-    ChangeMode();
     mState = DeleteFigure;
+    ChangeMode();
 }
 
 } // namespace drash
