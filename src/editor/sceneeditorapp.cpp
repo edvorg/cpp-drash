@@ -54,7 +54,16 @@ bool CSceneEditorApp::Init()
     SetCameraProcessors();
     SetDragDropProcessors();
     mTimer.Reset(true);
+
 //    mMoveablePoint.SetSize(100);
+    mRotationablePoint.Init();
+    mRotationablePoint.SetRenderer(&GetGrengSystems().GetRenderer());
+
+    mRotationablePoint.SetCamera(mCamera);
+
+    mRotationablePoint.SetAxisOX(false);
+    mRotationablePoint.SetAxisOY(false);
+
     return true;
     //GetTemplateSystem().CreateSceneObjectFromTemplate("Object1",CSceneObjectParams());
 }
@@ -69,7 +78,12 @@ void CSceneEditorApp::Step(double _dt)
     }
     if (mSelectedObject != nullptr){
         mMoveablePoint.SetCursorPos(GetCursorPos());
+        mRotationablePoint.SetCursorPos(GetCursorPos());
         mMoveablePoint.Step(_dt);
+        mRotationablePoint.Step(_dt);
+
+        MoveOfAxis();
+        RatateObject();
     }
 }
 
@@ -87,16 +101,14 @@ void CSceneEditorApp::Render()
 //        }
 //    }
 
-    if (mSelectedObject != nullptr) {
-        mMoveablePoint.Render(GetGrengSystems().GetRenderer());
-    }
-
     RenderDragTemplate();
+    RenderPoints();
 }
 
 void CSceneEditorApp::Release()
 {
     CApp::Release();
+    mRotationablePoint.Release();
 }
 
 void CSceneEditorApp::UpdateTemplateSystem()
@@ -134,6 +146,7 @@ bool CSceneEditorApp::LoadLevel(const std::string &_filename)
 bool CSceneEditorApp::SaveLevelAs(const std::string &_filename)
 {
     if (mCurrentLevel == nullptr) {
+        LOG_ERR("Level not saved, because not created.");
         return false;
     }
 
@@ -175,8 +188,6 @@ void CSceneEditorApp::AddObject(const std::string &_name, const CVec3f &_pos)
         return;
     }
 
-    qDebug() << "Add object";
-
     std::ostringstream is;
 
     is << "object" ;
@@ -186,7 +197,7 @@ void CSceneEditorApp::AddObject(const std::string &_name, const CVec3f &_pos)
         is << "0";
     }
 
-    qDebug() << is.str().c_str();
+//    qDebug() << is.str().c_str();
     CSceneObjectParams *p = mCurrentLevel->AddObject(_name,is.str());
     if (p == nullptr) {
         return;
@@ -208,10 +219,12 @@ void CSceneEditorApp::SetProcessors()
         if (mSelectedObject != nullptr) {
             mOldpositon = mSelectedObject->GetPos();
             mMoveablePoint.SetCenter(mOldpositon);
-        } else {
+            mRotationablePoint.SetPoint(mOldpositon);
+            mRotationablePoint.SetRotation(CVec3f(0,0,mSelectedObject->GetAngle().Get()));
         }
     }
     ));
+
     GetEventSystem().SetProcessor("LB",CAppEventProcessor(
     [this]() {
         if (mPlayLevel == true) {
@@ -219,6 +232,7 @@ void CSceneEditorApp::SetProcessors()
         }
         if (mSelectedObject != nullptr) {
             mMoveablePoint.ClickBegin();
+            mRotationablePoint.RotateBegin();
         }
     },
     [this]() {
@@ -227,7 +241,6 @@ void CSceneEditorApp::SetProcessors()
         }
         if (mSelectedObject != nullptr) {
             mMoveablePoint.ClickPressing();
-            MoveOfAxis();
         }
     },
     [this] () {
@@ -236,12 +249,14 @@ void CSceneEditorApp::SetProcessors()
         }
         if (mSelectedObject != nullptr) {
             mMoveablePoint.ClickEnd();
+            mRotationablePoint.RotateEnd();
         }
     }
     ));
 
     GetEventSystem().SetProcessor("C-LB",CAppEventProcessor(
-    [this](){
+    [this]() {
+
         if (mPlayLevel){
             return;
         }
@@ -254,7 +269,8 @@ void CSceneEditorApp::SetProcessors()
                 ResetLevel();
             }
         }
-    }));
+    }
+    ));
 }
 
 void CSceneEditorApp::SetCameraProcessors()
@@ -310,25 +326,40 @@ void CSceneEditorApp::SetCameraProcessors()
 
 void CSceneEditorApp::SetDragDropProcessors()
 {
+    GetEventSystem().SetProcessor("DRL",CAppEventProcessor(
+    [this]() {
+        mDragNow = false;
+        //mDragTemplateName = "";
+    }
+    ));
+
     GetEventSystem().SetProcessor("DRDP",CAppEventProcessor(
     [this]() {
-        mDragTemplateName = mGetSelectedTemplateHandler();
-        mDragNow = true;
+        if (mCurrentLevel != nullptr) {
+            //qDebug() << "Proccess enter";
+            mDragTemplateName = mGetSelectedTemplateHandler();
+            mDragNow = true;
+        }
+
     },
     [this] () {
     },
     [this]() {
-        CPlane plane;
-        plane.SetNormal(CVec3f(0, 0, 1));
-        plane.SetPoint(CVec3f(0, 0, 0));
 
-        CVec3f position;
-        CVec2f cpos = GetCursorPos();
-        mCamera->CastRay(cpos, plane, position);
-        AddObject(mDragTemplateName,position);
+        if (mDragNow == true){
+            CPlane plane;
+            plane.SetNormal(CVec3f(0, 0, 1));
+            plane.SetPoint(CVec3f(0, 0, 0));
 
-        mDragNow = false;
-        mDragTemplateName = "";
+            CVec3f position;
+            CVec2f cpos = GetCursorPos();
+            mCamera->CastRay(cpos, plane, position);
+            AddObject(mDragTemplateName,position);
+
+            mDragNow = false;
+            mDragTemplateName = "";
+        }
+
     }
     ));
 }
@@ -353,6 +384,35 @@ bool CSceneEditorApp::InitPointLight()
     return true;
 }
 
+void CSceneEditorApp::RatateObject()
+{
+
+    if (mSelectedObject == nullptr) {
+        return;
+    }
+
+    auto iter = mObjectParams.find(mSelectedObject);
+    if (iter == mObjectParams.end()) {
+        return;
+    }
+
+    CSceneObjectParams *params = iter->second;
+    float anglez = mRotationablePoint.GetRotation().mZ;
+    params->mAngle = anglez;
+    mSelectedObject->GetAngle().Set(anglez);
+
+}
+
+void CSceneEditorApp::RenderPoints()
+{
+    if (mSelectedObject == nullptr) {
+        return;
+    }
+
+    mMoveablePoint.Render(GetGrengSystems().GetRenderer());
+    mRotationablePoint.Render();
+}
+
 void CSceneEditorApp::StoreParams()
 {
     if (mCurrentLevel == nullptr) {
@@ -364,9 +424,13 @@ void CSceneEditorApp::StoreParams()
 
 void CSceneEditorApp::RenderDragTemplate()
 {
+    if (mCurrentLevel == nullptr) {
+        return;
+    }
     if ( mDragNow == false ) {
         return;
     }
+    //qDebug() << mDragTemplateName.c_str();
     if (mDragTemplateName != "") {
         CSceneObjectGeometry * g = GetTemplateSystem().FindTemplate(mDragTemplateName);
         if (g == nullptr) {
@@ -412,6 +476,7 @@ void CSceneEditorApp::MoveOfAxis()
 {
     mSelectedObject->SetPos(mMoveablePoint.GetCenter());
     mOldpositon = mMoveablePoint.GetCenter();
+    mRotationablePoint.SetPoint(mMoveablePoint.GetCenter());
     auto iter = mObjectParams.find(mSelectedObject);
     if (iter != mObjectParams.end()) {
         CSceneObjectParams *p = iter->second;

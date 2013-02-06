@@ -215,7 +215,7 @@ void EditorWindow::DeleteModeActive()
 
 void EditorWindow::ChangeMode(QAction *_action)
 {
-    mLabelOfStatusBar->setText(_action->text() );//+" "+  ui->mTreeObjects->currentItem()->text(0));
+    mLabelOfStatusBar->setText(_action->text() );
 }
 
 void EditorWindow::OpenLevel()
@@ -521,13 +521,7 @@ void EditorWindow::on_mManageWidget_currentChanged(int index)
     }
 }
 
-void EditorWindow::on_mTreeTemplates_doubleClicked(const QModelIndex &index)
-{
-//    std::string nameobject = ui->mTreeTemplates->currentItem()->text(0).toStdString();
-//    mSceneApp->AddObject(nameobject, CVec3f(0,0,0));
-}
-
-void EditorWindow::on_mTreeSceneObjects_clicked(const QModelIndex &index)
+void EditorWindow::on_mTreeSceneObjects_clicked(const QModelIndex &)
 {
     QTreeWidgetItem * item = ui->mTreeSceneObjects->selectedItems().at(0);
     if (item->parent() != nullptr) {

@@ -51,7 +51,15 @@ public:
 
     inline void SetSize(float _size);
 
+    inline void SetAxisOX(bool _val);
+    inline void SetAxisOY(bool _val);
+    inline void SetAxisOZ(bool _val);
+
 private:
+
+    bool mAxisOX = true;
+    bool mAxisOY = true;
+    bool mAxisOZ = true;
 
     greng::CCamera * mCurrentCamera = nullptr;
 
@@ -87,6 +95,18 @@ inline CVec3f CMoveablePoint::GetCenter() const{
 inline void CMoveablePoint::SetSize(float _size)
 {
     mLineSizeScreen = math::Abs(_size);
+}
+
+inline void CMoveablePoint::SetAxisOX(bool _val) {
+    mAxisOX = _val;
+}
+
+inline void CMoveablePoint::SetAxisOY(bool _val) {
+    mAxisOY = _val;
+}
+
+inline void CMoveablePoint::SetAxisOZ(bool _val) {
+    mAxisOZ = _val;
 }
 
 } // namespace drash

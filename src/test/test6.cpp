@@ -28,6 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../players/player.h"
 #include "../greng/camera.h"
 #include "../scene/scene.h"
+#include "../levelmanager/level.h"
 
 namespace drash
 {
@@ -37,50 +38,17 @@ namespace test
 
 bool CTest6::Init()
 {
-    if (CTest1::Init() == false)
+    if (CTest1::Init() == false ||
+        InitCamera() == false ||
+        InitLevel() == false ||
+        InitPlayer() == false ||
+        InitLight() == false ||
+        InitProcessors() == false)
     {
         return false;
     }
 
-    if (InitPlayer() == false)
-    {
-        return false;
-    }
-
-    if (InitLight() == false)
-    {
-        return false;
-    }
-
-    if (InitProcessors() == false)
-    {
-        return false;
-    }
-
-    CSceneObjectGeometry g2;
-
-    g2.mFigures.resize(1);
-    g2.mFigures[0].mDepth = 50;
-    g2.mFigures[0].mVertices.push_back(CVec2f(-50, 1));
-    g2.mFigures[0].mVertices.push_back(CVec2f(-50, -1));
-    g2.mFigures[0].mVertices.push_back(CVec2f(50, -1));
-    g2.mFigures[0].mVertices.push_back(CVec2f(50, 1));
-
-    CSceneObjectParams p2;
-    p2.mDynamic = false;
-
-    if (GetScene().CreateObject(g2, p2) == nullptr)
-    {
-        return false;
-    }
-
-    if (GetCamera() == nullptr)
-    {
-        return false;
-    }
-
-    GetCamera()->GetPos().Set(CVec3f(0, 75, 150));
-    GetCamera()->GetRotation().Set(CVec2f(-M_PI / 12.0, 0));
+    GetDebugRenderer().SetTexCoordsScale(0.5);
 
     return true;
 }
@@ -140,6 +108,13 @@ void CTest6::Step(double _dt)
     }
 
     mPlayer1OldPos = mPlayer1->GetSceneObject()->GetPos();
+
+    if (mFollowPlayer == true)
+    {
+        CVec3f t = GetCamera()->GetPos().GetTarget();
+        t.mX = mPlayer1->GetSceneObject()->GetPos().mX;
+        GetCamera()->GetPos().SetTarget(t, 1.0, AnimatorBehavior::Single);
+    }
 }
 
 void CTest6::Render()
@@ -157,13 +132,13 @@ void CTest6::Render()
     MatrixRotationY(r, M_PI * 0.5 + new_angle);
 
     CMatrix4f s;
-    MatrixScale(s, CVec3f(1));
+    MatrixScale(s, CVec3f(0.4));
 
     CMatrix4f rot;
     MatrixMultiply(r, s, rot);
 
     CMatrix4f transl;
-    MatrixTranslation(transl, mPlayer1->GetSceneObject()->GetPos() - CVec3f(0, 1, 0));
+    MatrixTranslation(transl, mPlayer1->GetSceneObject()->GetPos() - CVec3f(0, 0.4, 0));
 
     CMatrix4f model;
     MatrixMultiply(transl, rot, model);
@@ -189,7 +164,29 @@ void CTest6::Render()
                             mLight1.mPosition,
                             10,
                             CColor4f(1, 1, 1, 1),
-                            true);
+                                              true);
+}
+
+bool CTest6::InitCamera()
+{
+    GetCamera()->GetPos().Set(CVec3f(0, 15, 30));
+    GetCamera()->GetRotation().Set(CVec2f(-M_PI / 12.0, 0));
+
+    return true;
+}
+
+bool CTest6::InitLevel()
+{
+    CLevel *l = GetLevelManager().CreateLevel();
+
+    if (l == nullptr)
+    {
+        return false;
+    }
+
+    l->Load("demo_level.dlvl");
+
+    return GetLevelManager().StartLevel(l);
 }
 
 bool CTest6::InitPlayer()
@@ -197,11 +194,11 @@ bool CTest6::InitPlayer()
     CSceneObjectGeometry g1;
 
     g1.mFigures.resize(1);
-    g1.mFigures[0].mDepth = 2;
-    g1.mFigures[0].mVertices.push_back(CVec2f(-1, 1));
-    g1.mFigures[0].mVertices.push_back(CVec2f(-1, -1));
-    g1.mFigures[0].mVertices.push_back(CVec2f(1, -1));
-    g1.mFigures[0].mVertices.push_back(CVec2f(1, 1));
+    g1.mFigures[0].mDepth = 0.8;
+    g1.mFigures[0].mVertices.push_back(CVec2f(0, 0.4));
+    g1.mFigures[0].mVertices.push_back(CVec2f(-0.4, -0.2));
+    g1.mFigures[0].mVertices.push_back(CVec2f(0, -0.4));
+    g1.mFigures[0].mVertices.push_back(CVec2f(0.4, -0.2));
 
     CPlayerParams p1;
     p1.mVelocityLimit = 10;
@@ -272,6 +269,7 @@ bool CTest6::InitProcessors()
     [] () {},
     [this] ()
     {
+        mFollowPlayer = true;
         GetEventSystem().SetMode("test6");
     }));
 
@@ -281,6 +279,7 @@ bool CTest6::InitProcessors()
     [] () {},
     [this] ()
     {
+        mFollowPlayer = false;
         GetEventSystem().SetMode("editor_mode");
     }));
 
@@ -294,7 +293,7 @@ bool CTest6::InitProcessors()
     [] () {},
     [this] ()
     {
-        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::Deep);
+//        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::Deep);
     }));
 
     GetEventSystem().SetProcessor("a", CAppEventProcessor(
@@ -308,7 +307,7 @@ bool CTest6::InitProcessors()
     [] () {},
     [this] ()
     {
-        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::AntiDeep);
+//        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::AntiDeep);
     }));
 
     GetEventSystem().SetProcessor("d", CAppEventProcessor(

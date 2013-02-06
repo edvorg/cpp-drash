@@ -35,6 +35,7 @@ namespace drash
 #define STATE_BEGIN 0x02
 #define STATE_PROCESSING 0x04
 #define STATE_END 0x08
+#define STATE_CANCEL 0x10
 
 class CAppEvent;
 
@@ -69,6 +70,7 @@ public:
 
     void BeginEvent(const CAppEvent &_event);
     void EndEvent(const CAppEvent &_event);
+    void CancelEvent(const CAppEvent &_event);
 
 protected:
 private:

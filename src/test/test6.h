@@ -45,6 +45,8 @@ protected:
     virtual void Render() override;
 
 private:
+    bool InitCamera();
+    bool InitLevel();
     bool InitPlayer();
     bool InitLight();
     bool InitProcessors();
@@ -59,6 +61,8 @@ private:
     CVec3f mPlayer1OldPos;
 
     float mAngle = 0;
+
+    bool mFollowPlayer = true;
 
     greng::CPointLight mLight1;
 };

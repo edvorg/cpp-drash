@@ -61,6 +61,7 @@ protected:
     virtual void dropEvent(QDropEvent *_event) override;
     virtual void dragMoveEvent(QDragMoveEvent *_event) override;
     virtual void dragEnterEvent(QDragEnterEvent *_event) override;
+    virtual void dragLeaveEvent(QDragLeaveEvent *_event) override;
 
     drash::CApp *mApp = nullptr;
     float mWidth = 1.0f;
