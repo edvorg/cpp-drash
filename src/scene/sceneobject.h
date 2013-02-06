@@ -62,7 +62,7 @@ public:
     friend class CScene;
     friend class CExplosion;
 
-    static const unsigned int mFiguresCountLimit = 16;
+    static const unsigned int mFiguresCountLimit = 32;
 
     CSceneObject(void) = default;
 
