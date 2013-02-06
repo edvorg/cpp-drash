@@ -125,9 +125,7 @@ private slots:
     void NewLevel();
     void on_mManageWidget_currentChanged(int index);
 
-    void on_mTreeTemplates_doubleClicked(const QModelIndex &index);
-
-    void on_mTreeSceneObjects_clicked(const QModelIndex &index);
+    void on_mTreeSceneObjects_clicked(const QModelIndex &);
 
 private:
     // GuiObjects

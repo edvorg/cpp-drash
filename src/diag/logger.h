@@ -47,6 +47,8 @@ public:
     CLogger& operator<<( float _v );
     CLogger& operator<<( double _v );
 
+    inline CLogger& operator<<( const std::string &_str );
+
     static const std::string Tail();
 
 private:
@@ -56,6 +58,11 @@ private:
 
     static std::ostringstream mTailStream;
 };
+
+inline CLogger& CLogger::operator<<(const std::string &_str)
+{
+    return (*this) << _str.c_str();
+}
 
 #define LOG_ERR_PREFIX "[E]: "
 #define LOG_WARN_PREFIX "[W]: "

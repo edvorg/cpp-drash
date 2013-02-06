@@ -84,14 +84,14 @@ void CMoveablePoint::Step(double)
     mZ.mZ += mLineSizeWorld;
 }
 
-void CMoveablePoint::Render(greng::CRenderer &_render )
+void CMoveablePoint::Render( greng::CRenderer &_render )
 {
     if (mCurrentCamera == nullptr) {
         return;
     }
-   _render.DrawLine(GetCamera(), mCenter, mX, 1, CColor4f(1 * mAxisDrawK.mX, 0, 0, 1), false);
-   _render.DrawLine(GetCamera(), mCenter, mY, 1, CColor4f(0, 1 * mAxisDrawK.mY, 0, 1), false);
-   _render.DrawLine(GetCamera(), mCenter, mZ, 1, CColor4f(0, 0, 1 * mAxisDrawK.mZ, 1), false);
+   _render.DrawLine(GetCamera(), mCenter, mX, 1, CColor4f(1 * mAxisDrawK.mX+10, 0, 0, 1), false);
+   _render.DrawLine(GetCamera(), mCenter, mY, 1, CColor4f(0, 1 * mAxisDrawK.mY+10, 0, 1), false);
+   _render.DrawLine(GetCamera(), mCenter, mZ, 1, CColor4f(0, 0, 1 * mAxisDrawK.mZ+10, 1), false);
 }
 
 greng::CCamera *CMoveablePoint::GetCamera()
@@ -193,21 +193,21 @@ void CMoveablePoint::Calculate()
     mAxisOver = 0;
     mAxisDrawK.Set(1, 1, 1);
 
-    if (dstz.Length() < mLineSizeWorld * 0.1 &&
+    if (mAxisOZ == true && dstz.Length() < mLineSizeWorld * 0.1 &&
         mCenter.mZ < r1.mZ &&
         r1.mZ < mCenter.mZ + mLineSizeWorld)
     {
         mAxisDrawK.mZ *= 0.5;
         mAxisOver = 3;
     }
-    else if (dstx.Length() < mLineSizeWorld * 0.1 &&
+    else if (mAxisOX == true && dstx.Length() < mLineSizeWorld * 0.1 &&
              mCenter.mX < r1.mX &&
              r1.mX < mCenter.mX + mLineSizeWorld)
     {
         mAxisDrawK.mX *= 0.5;
         mAxisOver = 1;
     }
-    else if (dsty.Length() < mLineSizeWorld * 0.1 &&
+    else if (mAxisOY == true && dsty.Length() < mLineSizeWorld * 0.1 &&
              mCenter.mY < r2.mY &&
              r2.mY < mCenter.mY + mLineSizeWorld)
     {
