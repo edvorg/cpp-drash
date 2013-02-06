@@ -38,6 +38,7 @@ namespace drash
     class CObjectEditorApp;
     class CApp;
     class CSceneEditorApp;
+    class CSceneObjectParams;
 }
 
 namespace Ui
@@ -127,6 +128,12 @@ private slots:
 
     void on_mTreeSceneObjects_clicked(const QModelIndex &);
 
+    void on_mCheckBoxDynamic_clicked();
+
+    void on_mCheckBoxFixedRotation_clicked();
+
+    void on_mAngleBox_valueChanged(double arg1);
+
 private:
     // GuiObjects
     QLabel *mLabelOfStatusBar;
@@ -144,6 +151,9 @@ private:
     drash::CTimer mTimer;
 
     void AddFigure();
+    void SetObjectParams(const drash::CSceneObjectParams &_params);
+    drash::CSceneObjectParams GetObjectParams() const;
+
 
 private:
     QHBoxLayout * mLayoutForScene;

@@ -70,6 +70,19 @@ public:
     void ResetLevel();
 
     void LookObject(const std::string &_templatename,const std::string &_objectname);
+
+    void SetDynamicParam(bool _val);
+    void SetFixedRotationParam(bool _val);
+    void SetAngleParams(float _angle);
+
+    inline bool IsChangedParams() const;
+    inline void ResetChangedFlag();
+
+    float GetAngleParams()const;
+
+    inline bool IsObjectSelected() const;
+
+    drash::CSceneObjectParams GetSelectedParams()const;
 private:
     void SetProcessors();
     void SetCameraProcessors();
@@ -77,6 +90,8 @@ private:
 
     bool InitCamera();
     bool InitPointLight();
+    bool InitSpecialPoint();
+
 
     std::string mFileNameLevel = "";
 
@@ -87,6 +102,7 @@ private:
     std::function<void ()> mTreeRefreshHandler = [] () {};
     std::function<std::string ()> mGetSelectedTemplateHandler = [] () { return std::string(""); };
     bool mPlayLevel = false;
+    bool mChangedParams = false;
 
     CSceneObject * mSelectedObject = nullptr;
 
@@ -150,6 +166,16 @@ inline void CSceneEditorApp::PauseLevel() {
     mPlayLevel = false;
 }
 
+inline bool CSceneEditorApp::IsObjectSelected() const{
+    return mSelectedObject != nullptr;
+}
 
+inline bool CSceneEditorApp::IsChangedParams() const {
+    return mChangedParams;
+}
+
+inline void CSceneEditorApp::ResetChangedFlag() {
+    mChangedParams = false;
+}
 } // namespace drash
 #endif // SCENEEDITORAPP_H
