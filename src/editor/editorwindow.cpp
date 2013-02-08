@@ -107,6 +107,14 @@ EditorWindow::EditorWindow(QWidget *parent) :
         }
     });
 
+    mObjectApp->SetGetSelectedHandler([this](){
+        QTreeWidgetItem * item = ui->mTreeObjects->currentItem();
+        if (item->parent() == NULL) {
+            return item->text(0).toStdString();
+        } else {
+            return std::string("");
+        }
+    });
     ui->mParamsPanel->hide();
 
     this->startTimer(0);
@@ -225,9 +233,25 @@ void EditorWindow::DeleteModeActive()
     }
 }
 
+void EditorWindow::CombineFigureModeActive()
+{
+    if (mCombineFiguresMode->isChecked() == true) {
+        ui->mTreeObjects->setDragEnabled(true);
+        mDragActivated = true;
+    } else {
+        ui->mTreeObjects->setDragEnabled(false);
+        mDragActivated = false;
+    }
+}
+
 void EditorWindow::ChangeMode(QAction *_action)
 {
     mLabelOfStatusBar->setText(_action->text() );
+//    if (_action == mCombineFiguresMode && _action->isChecked()) {
+//        mDragActivated = true;
+//    } else {
+//        mDragActivated = false;
+//    }
 }
 
 void EditorWindow::OpenLevel()
@@ -367,6 +391,13 @@ void EditorWindow::CreateActions()
             this,SLOT(DeleteModeActive()));
     mModeActions.addAction(mDeleteModeActiveAction);
 
+    mCombineFiguresMode = new QAction("Combine", this);
+    mCombineFiguresMode->setCheckable(true);
+    listActions << mCombineFiguresMode;
+    connect(mCombineFiguresMode,SIGNAL(changed()),
+            this, SLOT(CombineFigureModeActive()));
+    mModeActions.addAction(mCombineFiguresMode);
+
     mRemoveAction = new QAction("Remove Object", this);
     mRemoveAction->setShortcut(tr("Ctrl+R"));
     listActions << mRemoveAction;
@@ -474,6 +505,9 @@ void EditorWindow::UpdateTreeSceneObjects()
 
 void EditorWindow::on_mTreeObjects_itemSelectionChanged()
 {
+    if (mDragActivated == true) {
+        return;
+    }
     QTreeWidgetItem *item = nullptr;
     if (ui->mTreeObjects->selectedItems().size() != 0) {
         item = ui->mTreeObjects->selectedItems().at(0);
@@ -543,6 +577,7 @@ void EditorWindow::on_mManageWidget_currentChanged(int index)
 
 void EditorWindow::on_mTreeSceneObjects_clicked(const QModelIndex &)
 {
+
     QTreeWidgetItem * item = ui->mTreeSceneObjects->selectedItems().at(0);
     if (item->parent() != nullptr) {
         mSceneApp->LookObject(item->parent()->text(0).toStdString(),
