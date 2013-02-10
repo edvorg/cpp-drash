@@ -40,7 +40,7 @@ class CSceneObjectGeometry final
 {
 public:
     std::vector<CFigureParams> mFigures;
-    std::vector<std::vector<unsigned int>> mDestructionGraph;
+    std::vector<unsigned int> mDestructionGraph;
 
 protected:
 private:
