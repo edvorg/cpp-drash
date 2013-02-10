@@ -38,6 +38,7 @@ namespace drash
     class CObjectEditorApp;
     class CApp;
     class CSceneEditorApp;
+    class CSceneObjectParams;
 }
 
 namespace Ui
@@ -75,6 +76,8 @@ private:
     SceneWidget * mCurrentSceneWidget = nullptr;
     //drash::CSceneObject * mCurrentObject = nullptr;
 
+    bool mDragActivated = false;
+
     // Actions
 private:
     // for editor object
@@ -89,6 +92,7 @@ private:
     QAction *mSplitFigureActiveAction;
     QAction *mSplitObjectActiveAction;
     QActionGroup mModeActions;
+    QAction * mCombineFiguresMode;
 
 
     // for editor scene
@@ -100,6 +104,8 @@ private:
     QAction * mStopLevelAction;
     QAction * mNewLevelAction;
 
+
+    // for other
     // Slots for Actions
 private slots:
     // for edtitor object
@@ -111,6 +117,7 @@ private slots:
     void Remove_Object();
     void SplitActive();
     void DeleteModeActive();
+    void CombineFigureModeActive();
 
     void ChangeMode(QAction *_action);
 
@@ -126,6 +133,12 @@ private slots:
     void on_mManageWidget_currentChanged(int index);
 
     void on_mTreeSceneObjects_clicked(const QModelIndex &);
+
+    void on_mCheckBoxDynamic_clicked();
+
+    void on_mCheckBoxFixedRotation_clicked();
+
+    void on_mAngleBox_valueChanged(double arg1);
 
 private:
     // GuiObjects
@@ -144,6 +157,9 @@ private:
     drash::CTimer mTimer;
 
     void AddFigure();
+    void SetObjectParams(const drash::CSceneObjectParams &_params);
+    drash::CSceneObjectParams GetObjectParams() const;
+
 
 private:
     QHBoxLayout * mLayoutForScene;

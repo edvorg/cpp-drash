@@ -78,6 +78,7 @@ public:
 
     inline void SetCurrentTemplateName(const std::string & _name);
     inline void SetTreeRefreshHandler(const std::function<void ()> &_han);
+    inline void SetGetSelectedHandler(const std::function<std::string ()> &_han);
 
     inline void ActiveMoveMode();
     inline void ActiveSplitFigureMode();
@@ -94,11 +95,10 @@ private:
     float GetCurDepth();
 
     void SetProcessors();
-
     void SetCameraProcessors();
+    void SetDragDrop();
 
     bool ValidateFigure();
-
     void RemoveCurrentObject();
 
     CFigure * SelectFigure(const CVec2f &_pos);
@@ -114,6 +114,14 @@ private:
     bool IsConvex()const;
 
 private:
+    // Drag and Drop
+    std::function<std::string ()> mGetSelectedTemplateHandler = [] () { return std::string(""); };
+    CSceneObjectGeometry * mDragTemplate = nullptr;
+    bool mDragNow = false;
+    void DrawDragTemplate();
+    void ApplyDrop();
+
+    // For current object
     CSceneObject *mCurrentObject = nullptr;
     State mState = Simple;
     std::string mCurrentTemplateName = "";
@@ -220,6 +228,10 @@ inline void CObjectEditorApp::ActiveSplitObjectMode() {
 inline void CObjectEditorApp::ActiveDeleteMode() {
     mState = DeleteFigure;
     ChangeMode();
+}
+
+inline void CObjectEditorApp::SetGetSelectedHandler(const std::function<std::string ()> &_han) {
+    mGetSelectedTemplateHandler = _han;
 }
 
 } // namespace drash

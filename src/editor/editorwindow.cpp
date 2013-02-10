@@ -106,6 +106,17 @@ EditorWindow::EditorWindow(QWidget *parent) :
             return std::string("");
         }
     });
+
+    mObjectApp->SetGetSelectedHandler([this](){
+        QTreeWidgetItem * item = ui->mTreeObjects->currentItem();
+        if (item->parent() == NULL) {
+            return item->text(0).toStdString();
+        } else {
+            return std::string("");
+        }
+    });
+    ui->mParamsPanel->hide();
+
     this->startTimer(0);
 }
 
@@ -135,6 +146,7 @@ bool EditorWindow::InitScene()
     mLayoutForScene->addWidget(mWidgetForObjects);
     mWidgetForScene->show();
     ui->mManageWidget->setCurrentIndex(0);
+
     if (mWidgetForObjects->GetApp() == nullptr ||
         mWidgetForScene->GetApp() == nullptr) {
         return false;
@@ -145,10 +157,6 @@ bool EditorWindow::InitScene()
 
 void EditorWindow::timerEvent(QTimerEvent *)
 {
-//    if (fuck == false) {
-//        mWidgetForScene->hide();
-//        fuck = true;
-//    }
     mTimer.Tick();
 
     if (mCurrentSceneWidget->GetApp() != nullptr)
@@ -156,6 +164,18 @@ void EditorWindow::timerEvent(QTimerEvent *)
         mCurrentSceneWidget->GetApp()->Step(mTimer.GetDeltaTime());
     } else {
         close();
+    }
+
+    if (mCurrentSceneWidget == mWidgetForScene) {
+        if (mSceneApp->IsObjectSelected() == true) {
+            ui->mParamsPanel->setEnabled(true);
+            if ( mSceneApp->IsChangedParams() == true ) {
+                SetObjectParams(mSceneApp->GetSelectedParams());
+                //ui->mAngleBox->setValue((double)mSceneApp->GetAngleParams());
+            }
+        } else {
+            ui->mParamsPanel->setEnabled(false);
+        }
     }
 
     mCurrentSceneWidget->updateGL();
@@ -213,9 +233,25 @@ void EditorWindow::DeleteModeActive()
     }
 }
 
+void EditorWindow::CombineFigureModeActive()
+{
+    if (mCombineFiguresMode->isChecked() == true) {
+        ui->mTreeObjects->setDragEnabled(true);
+        mDragActivated = true;
+    } else {
+        ui->mTreeObjects->setDragEnabled(false);
+        mDragActivated = false;
+    }
+}
+
 void EditorWindow::ChangeMode(QAction *_action)
 {
     mLabelOfStatusBar->setText(_action->text() );
+//    if (_action == mCombineFiguresMode && _action->isChecked()) {
+//        mDragActivated = true;
+//    } else {
+//        mDragActivated = false;
+//    }
 }
 
 void EditorWindow::OpenLevel()
@@ -355,6 +391,13 @@ void EditorWindow::CreateActions()
             this,SLOT(DeleteModeActive()));
     mModeActions.addAction(mDeleteModeActiveAction);
 
+    mCombineFiguresMode = new QAction("Combine", this);
+    mCombineFiguresMode->setCheckable(true);
+    listActions << mCombineFiguresMode;
+    connect(mCombineFiguresMode,SIGNAL(changed()),
+            this, SLOT(CombineFigureModeActive()));
+    mModeActions.addAction(mCombineFiguresMode);
+
     mRemoveAction = new QAction("Remove Object", this);
     mRemoveAction->setShortcut(tr("Ctrl+R"));
     listActions << mRemoveAction;
@@ -462,6 +505,9 @@ void EditorWindow::UpdateTreeSceneObjects()
 
 void EditorWindow::on_mTreeObjects_itemSelectionChanged()
 {
+    if (mDragActivated == true) {
+        return;
+    }
     QTreeWidgetItem *item = nullptr;
     if (ui->mTreeObjects->selectedItems().size() != 0) {
         item = ui->mTreeObjects->selectedItems().at(0);
@@ -508,6 +554,9 @@ void EditorWindow::on_mManageWidget_currentChanged(int index)
         mCurrentSceneWidget = mWidgetForObjects;
         mSceneToolbar->hide();
         mObjectToolBar->show();
+
+        ui->mParamsPanel->hide();
+
     } else if (index == 1) {
         mWidgetForObjects->hide();
         mWidgetForScene->show();
@@ -516,16 +565,55 @@ void EditorWindow::on_mManageWidget_currentChanged(int index)
         mSceneApp->GetTemplateSystem().Load();
         UpdateTreeTemplates(ui->mTreeTemplates,mSceneApp);
         mObjectToolBar->hide();
+
         mSceneToolbar->show();
+
+        ui->mParamsPanel->show();
+        ui->mParamsPanel->setEnabled(false);
+
         mSceneApp->ResetLevel();
     }
 }
 
 void EditorWindow::on_mTreeSceneObjects_clicked(const QModelIndex &)
 {
+
     QTreeWidgetItem * item = ui->mTreeSceneObjects->selectedItems().at(0);
     if (item->parent() != nullptr) {
         mSceneApp->LookObject(item->parent()->text(0).toStdString(),
                               item->text(0).toStdString());
     }
+}
+
+
+CSceneObjectParams EditorWindow::GetObjectParams() const
+{
+    CSceneObjectParams buff;
+    buff.mDynamic = ui->mCheckBoxDynamic->isChecked();
+    buff.mAngle = (float)ui->mAngleBox->value();
+    buff.mFixedRotation = ui->mCheckBoxFixedRotation->isChecked();
+    return buff;
+}
+
+void EditorWindow::on_mCheckBoxDynamic_clicked()
+{
+    mSceneApp->SetDynamicParam(ui->mCheckBoxDynamic->isChecked());
+}
+
+void EditorWindow::on_mCheckBoxFixedRotation_clicked()
+{
+    mSceneApp->SetFixedRotationParam(ui->mCheckBoxFixedRotation->isChecked());
+}
+
+void EditorWindow::on_mAngleBox_valueChanged(double arg1)
+{
+    mSceneApp->SetAngleParams((float) arg1);
+}
+
+
+void EditorWindow::SetObjectParams(const CSceneObjectParams &_params)
+{
+    ui->mAngleBox->setValue(_params.mAngle);
+    ui->mCheckBoxDynamic->setChecked(_params.mDynamic);
+    ui->mCheckBoxFixedRotation->setChecked(_params.mFixedRotation);
 }

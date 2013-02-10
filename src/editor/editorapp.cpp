@@ -46,6 +46,7 @@ bool CObjectEditorApp::Init()
 
     SetProcessors();
     SetCameraProcessors();
+    SetDragDrop();
     GetTemplateSystem().Load();
 
     CCameraParams cp;
@@ -235,6 +236,8 @@ void CObjectEditorApp::Render()
         mRotationPoint.Render();
         mMoveablePoint.Render(GetGrengSystems().GetRenderer());
     }
+
+    DrawDragTemplate();
 
 }
 
@@ -479,6 +482,42 @@ void CObjectEditorApp::SetCameraProcessors()
     {
         mCamera->Strafe(-MOVING_SPEED * mTimer.GetDeltaTime());
     }));
+}
+
+void CObjectEditorApp::SetDragDrop()
+{
+    GetEventSystem().SetProcessor("DRL",CAppEventProcessor(
+    [this]() {
+        mDragNow = false;
+        mDragTemplate = nullptr;
+    }
+    ));
+
+    GetEventSystem().SetProcessor("DRDP",CAppEventProcessor(
+    [this]() {
+        if (mCurrentObject == nullptr) {
+            return;
+        }
+//        qDebug() << "Proccess enter";
+        mDragTemplate = GetTemplateSystem().
+                FindTemplate(mGetSelectedTemplateHandler());
+        if (mDragTemplate != nullptr) {
+            mDragNow = true;
+        } else {
+            mDragNow = false;
+        }
+    },
+    [this] () {
+    },
+    [this]() {
+
+        if (mDragNow == true){
+            ApplyDrop();
+            mDragNow = false;
+        }
+
+    }
+    ));
 }
 
 bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
@@ -1215,5 +1254,60 @@ void CObjectEditorApp::SplitRotateStep(double _dt)
 
 }
 
+void CObjectEditorApp::DrawDragTemplate()
+{
+    if (mDragNow == false ||
+        mDragTemplate == nullptr) {
+        return;
+    }
+//    qDebug() << "Draw drag Template";
+    CSceneObjectParams params;
+    CVec3f position;
+    CVec2f cpos = GetCursorPos();
+
+    CPlane plane;
+    plane.SetNormal(CVec3f(0, 0, 1));
+    plane.SetPoint(CVec3f(0, 0, 0));
+
+    mCamera->CastRay(cpos, plane, position);
+    params.mPos = position;
+    GetDebugRenderer().RenderObject(*mDragTemplate,params);
+}
+
+void CObjectEditorApp::ApplyDrop()
+{
+    if (mDragTemplate == nullptr)  {
+        return;
+    }
+
+//    CSceneObjectGeometry a;
+    /*
+     *    std::vector<CFigureParams> mFigures;
+    std::vector<std::vector<unsigned int>> mDestructionGraph;
+     */
+
+    CPlane plane;
+    plane.SetNormal(CVec3f(0, 0, 1));
+    plane.SetPoint(CVec3f(0, 0, 0));
+
+    CVec3f position;
+    CVec2f cpos = GetCursorPos();
+    mCamera->CastRay(cpos, plane, position);
+
+    CSceneObjectGeometry * currg = GetTemplateSystem().FindTemplate(mCurrentTemplateName);
+
+    for (CFigureParams figure: mDragTemplate->mFigures) {
+        for (auto & v: figure.mVertices) {
+            v.Set(v.mX + position.mX, v.mY + position.mY);
+            qDebug() << v.mX << " " << v.mY;
+        }
+//        qDebug() << "add figure";
+        currg->mFigures.push_back(figure);
+    }
+    qDebug() << mCurrentTemplateName.c_str();
+    ShowObject(mCurrentTemplateName);
+    mTreeRefreshHandler();
+}
 
 }// namespace drash
+
