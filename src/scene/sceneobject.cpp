@@ -115,7 +115,7 @@ void CSceneObject::OnContactBegin(const CFigure *_f1, const CFigure *_f2)
     CVec3f speed(_f2->GetSceneObject()->GetLinearVelocity(), 0);
     speed.Vec2() -= _f1->GetSceneObject()->GetLinearVelocity();
 
-    if (speed.LengthSquared() > 3000 &&/* mLifeTime > 1 &&*/ mFiguresCount > 1)
+    if (IsDynamic() && speed.LengthSquared() > 50 && mFiguresCount > 1)
     {
         for (unsigned int i = 0; i < mFiguresCount; i++)
         {

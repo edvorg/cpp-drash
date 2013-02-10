@@ -324,6 +324,39 @@ bool CTest6::InitProcessors()
         this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::Jump);
     }));
 
+    GetEventSystem().SetProcessor("LB", CAppEventProcessor(
+    [this] ()
+    {
+        CSceneObjectGeometry g;
+        g.mFigures.resize(1);
+        g.mFigures[0].mVertices.push_back(CVec2f(-0.1, -0.1));
+        g.mFigures[0].mVertices.push_back(CVec2f(0.1, -0.1));
+        g.mFigures[0].mVertices.push_back(CVec2f(0.1, 0.1));
+        g.mFigures[0].mVertices.push_back(CVec2f(-0.1, 0.1));
+        g.mFigures[0].mDepth = 0.2;
+
+        CPlane pl(PlaneXY);
+        CVec3f pos;
+        GetCamera()->CastRay(GetCursorPos(), pl, pos);
+        pos.Vec2() -= mPlayer1->GetSceneObject()->GetPos().Vec2();
+        pos *= 2;
+
+        CSceneObjectParams p;
+        p.mPos = mPlayer1->GetSceneObject()->GetPos();
+
+        if (pos.mX > 0.0f)
+        {
+            p.mPos.mX += 1;
+        }
+        else
+        {
+            p.mPos.mX -= 1;
+        }
+
+        CSceneObject * o = GetScene().CreateObject(g, p);
+        o->SetLinearVelocity(pos.Vec2());
+    }));
+
     return true;
 }
 
