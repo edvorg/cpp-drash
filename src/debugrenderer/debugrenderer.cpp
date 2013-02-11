@@ -123,6 +123,68 @@ void CDebugRenderer::Render() const
 
                 mGrengSystems->GetMeshManager().DestroyMesh(m);
             }
+
+            for (unsigned int k = 0; k < jc; k++)
+            {
+                auto compute_centroid = [] (const CVec2f * _vertices, unsigned int _count) -> CVec2f
+                {
+                    CVec2f res;
+
+                    if (_count != 0)
+                    {
+                        res = _vertices[0];
+
+                        for (unsigned int l = 1; l < _count; l++)
+                        {
+                            res += _vertices[l];
+                        }
+
+                        res /= _count;
+                    }
+
+                    return res;
+                };
+
+                if (o->GetDestructionGraph().size() == jc * jc)
+                {
+                    if (o->GetDestructionGraph()[j * jc + k] != 0)
+                    {
+                        CVec3f c1(o->GetWorldPoint(compute_centroid(f->GetVertices(),
+                                                                    f->EnumVertices())),
+                                  o->GetPosZ() + f->GetZ());
+                        CVec3f c2(o->GetWorldPoint(compute_centroid(o->GetFigures()[k]->GetVertices(),
+                                                                    o->GetFigures()[k]->EnumVertices())),
+                                  o->GetPosZ() + o->GetFigures()[k]->GetZ());
+
+
+
+                        mGrengSystems->GetRenderer().DrawLine(mCamera,
+                                                              c1,
+                                                              c2,
+                                                              2,
+                                                              CColor4f(1, 0, 0, 1),
+                                                              false);
+                    }
+                    else if (o->GetDestructionGraph()[k * jc + j] != 0)
+                    {
+                        CVec3f c1(o->GetWorldPoint(compute_centroid(f->GetVertices(),
+                                                                    f->EnumVertices())),
+                                  o->GetPosZ() + f->GetZ());
+                        CVec3f c2(o->GetWorldPoint(compute_centroid(o->GetFigures()[k]->GetVertices(),
+                                                                    o->GetFigures()[k]->EnumVertices())),
+                                  o->GetPosZ() + o->GetFigures()[k]->GetZ());
+
+
+
+                        mGrengSystems->GetRenderer().DrawLine(mCamera,
+                                                              c1,
+                                                              c2,
+                                                              2,
+                                                              CColor4f(1, 0, 0, 1),
+                                                              false);
+                    }
+                }
+            }
         }
     }
 }
