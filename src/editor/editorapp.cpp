@@ -1019,7 +1019,7 @@ void CObjectEditorApp::BeginSplit()
 
     mMoveablePoint.SetCenter(mSplitPlane.GetPoint());
 
-    mMoveablePoint.SetAxisOX(false);
+    mMoveablePoint.SetAxisOX(true);
     mMoveablePoint.SetAxisOY(true);
     mMoveablePoint.SetAxisOZ(false);
 

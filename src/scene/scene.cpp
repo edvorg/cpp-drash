@@ -128,7 +128,7 @@ void CScene::Step( double _dt )
                     CSceneObjectGeometry ng;
                     mObjectsFactory.GetObjects()[i]->DumpGeometry(&ng);
 
-                    ng.ComputeDestructionGraph(0.01);
+                    ng.ComputeDestructionGraph(0.5);
 
                     mObjectsFactory.GetObjects()[i]->mDestructionGraph = ng.mDestructionGraph;
 
@@ -158,7 +158,6 @@ void CScene::Step( double _dt )
                         }
                     };
 
-                    unsigned int c = 0;
                     for (unsigned int a = 0; a < ng.mFigures.size(); a++)
                     {
                         if (used[a] == 0)
@@ -166,30 +165,20 @@ void CScene::Step( double _dt )
                             comp.clear();
                             dfs(a);
 
-                            printf("comp %i: ", c);
-                            for (unsigned int b = 0; b < comp.size(); b++)
-                            {
-                                printf("%i ", comp[b]);
-                            }
-                            puts("");
-                            puts("------------------------");
-
-                            c++;
-
                             CSceneObjectGeometry g1;
                             g1.mFigures.resize(comp.size());
 
                             for (unsigned int b = 0; b < comp.size(); b++)
                             {
-                                g1.mFigures[b].mVertices.resize(mObjectsFactory.GetObjects()[i]->mFigures[comp[b]]->EnumVertices());
-                                g1.mFigures[b].mZ = mObjectsFactory.GetObjects()[i]->mFigures[comp[b]]->GetZ();
-                                g1.mFigures[b].mDepth = mObjectsFactory.GetObjects()[i]->mFigures[comp[b]]->GetDepth();
+                                g1.mFigures[b].mVertices.resize(ng.mFigures[comp[b]].mVertices.size());
+                                g1.mFigures[b].mZ = ng.mFigures[comp[b]].mZ;
+                                g1.mFigures[b].mDepth = ng.mFigures[comp[b]].mDepth;
                                 memcpy(&*g1.mFigures[b].mVertices.begin(),
-                                       mObjectsFactory.GetObjects()[i]->mFigures[comp[b]]->GetVertices(),
-                                        sizeof(CVec2f) * mObjectsFactory.GetObjects()[i]->mFigures[comp[b]]->EnumVertices());
+                                       &*ng.mFigures[comp[b]].mVertices.begin(),
+                                       sizeof(CVec2f) * ng.mFigures[comp[b]].mVertices.size());
                             }
 
-                            g1.ComputeDestructionGraph(0.01);
+                            g1.ComputeDestructionGraph(0.5);
 
                             CSceneObjectParams p1;
                             p1.mAngle = mObjectsFactory.GetObjects()[i]->mAngle;
@@ -197,7 +186,10 @@ void CScene::Step( double _dt )
                             p1.mFixedRotation = false;
                             p1.mPos = mObjectsFactory.GetObjects()[i]->mPos;
 
-                            CreateObject(g1, p1);
+                            auto o = CreateObject(g1, p1);
+
+                            o->SetLinearVelocity(mObjectsFactory.GetObjects()[i]->GetLinearVelocity());
+                            o->SetAngularVelocity(mObjectsFactory.GetObjects()[i]->GetAngularVelocity());
 
                             DestroyObject(mObjectsFactory.GetObjects()[i]);
                         }
