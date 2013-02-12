@@ -138,7 +138,7 @@ CSceneObjectGeometry *CTemplateSystem::FindTemplate(const std::string &_name)
 
 }
 
-const CTemplateSystem::SceneObjectTemplatesT &CTemplateSystem::GetSceneObjectTemplates() const
+CTemplateSystem::SceneObjectTemplatesT &CTemplateSystem::GetSceneObjectTemplates()
 {
     return this->mSceneObjectTemplates;
 }

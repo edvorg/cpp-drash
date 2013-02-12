@@ -51,7 +51,7 @@ public:
     void ChangeGeometry(CSceneObjectGeometry *_t, const std::string &_name);
     CSceneObject *CreateSceneObjectFromTemplate(const std::string &_name, const CSceneObjectParams &_params);
 
-    const SceneObjectTemplatesT &GetSceneObjectTemplates() const;
+    SceneObjectTemplatesT &GetSceneObjectTemplates();
 
     CSceneObjectGeometry * FindTemplate(const std::string & _name);
 

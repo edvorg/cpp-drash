@@ -35,6 +35,47 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
+void CSceneObjectGeometry::ComputeDestructionGraph(const float _accuracy)
+{
+    mDestructionGraph.clear();
+    mDestructionGraph.resize(mFigures.size() * mFigures.size());
+    memset(&*mDestructionGraph.begin(), 0, sizeof(int) * mDestructionGraph.size());
+
+    // TODO: optimize this (o(n^2) now)
+
+    for (unsigned i = 0; i < mFigures.size(); i++)
+    {
+        for (unsigned j = 0; j < mFigures.size(); j++)
+        {
+            int cont = 0;
+
+            for (unsigned int k = 0; k < mFigures[i].mVertices.size() && cont < 2; k++)
+            {
+                for (unsigned int l = 0; l < mFigures[j].mVertices.size() && cont < 2; l++)
+                {
+                    CVec2f dist = mFigures[i].mVertices[k];
+                    dist -= mFigures[j].mVertices[l];
+
+                    unsigned int res = 0;
+
+                    if (dist.Length() < _accuracy)
+                    {
+                        cont++;
+                    }
+
+                    if (cont >= 2)
+                    {
+                        res = 1;
+                    }
+
+                    mDestructionGraph[i * mFigures.size() + j] = res;
+                    mDestructionGraph[j * mFigures.size() + i] = res;
+                }
+            }
+        }
+    }
+}
+
 bool CSceneObject::Init()
 {
     return true;
@@ -112,6 +153,8 @@ void CSceneObject::Release()
 
 void CSceneObject::OnContactBegin(const CFigure *_f1, const CFigure *_f2)
 {
+    mCurrentContacts.insert(std::pair<const CFigure*, const CFigure*>(_f2, _f1));
+
     CVec3f speed(_f2->GetSceneObject()->GetLinearVelocity(), 0);
     speed.Vec2() -= _f1->GetSceneObject()->GetLinearVelocity();
 
@@ -127,8 +170,6 @@ void CSceneObject::OnContactBegin(const CFigure *_f1, const CFigure *_f2)
             }
         }
     }
-
-    mCurrentContacts.insert(std::pair<const CFigure*, const CFigure*>(_f2, _f1));
 }
 
 void CSceneObject::OnContactPreSolve(const CFigure *, const CFigure *)

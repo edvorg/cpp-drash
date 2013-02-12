@@ -42,6 +42,8 @@ public:
     std::vector<CFigureParams> mFigures;
     std::vector<unsigned int> mDestructionGraph;
 
+    void ComputeDestructionGraph(const float _accuracy);
+
 protected:
 private:
 };
@@ -93,6 +95,8 @@ public:
 
     void DumpGeometry(CSceneObjectGeometry *_geometry) const;
 
+    inline const std::vector<unsigned int> & GetDestructionGraph() const;
+
 protected:
 private:
     bool Init();
@@ -129,6 +133,8 @@ private:
     float mLifeTime = 0.0f;
 
     std::map<const CFigure*, const CFigure*> mCurrentContacts;
+
+    std::vector<unsigned int> mDestructionGraph;
 };
 
 inline CFigure * const *CSceneObject::GetFigures() const
@@ -159,6 +165,11 @@ inline const CVec3f &CSceneObject::GetPos() const
 inline CAnimator<float> &CSceneObject::GetAngle()
 {
     return mAngleAnimator;
+}
+
+inline const std::vector<unsigned int> &CSceneObject::GetDestructionGraph() const
+{
+    return mDestructionGraph;
 }
 
 } // namespace drash

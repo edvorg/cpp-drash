@@ -102,6 +102,8 @@ void CScene::Step( double _dt )
             {
                 if (mObjectsFactory.GetObjects()[i]->mFigures[j]->mDead == true)
                 {
+                    // detaching figure
+
                     CSceneObjectGeometry g;
                     g.mFigures.resize(1);
                     g.mFigures[0].mVertices.resize(mObjectsFactory.GetObjects()[i]->mFigures[j]->EnumVertices());
@@ -120,6 +122,86 @@ void CScene::Step( double _dt )
                     CreateObject(g, p);
 
                     mObjectsFactory.GetObjects()[i]->DestroyFigure(mObjectsFactory.GetObjects()[i]->mFigures[j]);
+
+                    // recompute destruction graph (TODO: optimize this)
+
+                    CSceneObjectGeometry ng;
+                    mObjectsFactory.GetObjects()[i]->DumpGeometry(&ng);
+
+                    ng.ComputeDestructionGraph(0.01);
+
+                    mObjectsFactory.GetObjects()[i]->mDestructionGraph = ng.mDestructionGraph;
+
+                    // looking for connectivity
+
+                    std::vector<int> used;
+                    used.resize(ng.mFigures.size());
+                    memset(&*used.begin(), 0, sizeof(int) * ng.mFigures.size());
+                    std::vector<int> comp;
+
+                    std::function<void (unsigned int _v)> dfs;
+
+                    dfs = [&] (unsigned int _v)
+                    {
+                        used[_v] = 1;
+                        comp.push_back(_v);
+
+                        for (unsigned int a = 0; a < ng.mFigures.size(); a++)
+                        {
+                            if (ng.mDestructionGraph[_v * ng.mFigures.size() + a] != 0)
+                            {
+                                if (used[a] == 0)
+                                {
+                                    dfs(a);
+                                }
+                            }
+                        }
+                    };
+
+                    unsigned int c = 0;
+                    for (unsigned int a = 0; a < ng.mFigures.size(); a++)
+                    {
+                        if (used[a] == 0)
+                        {
+                            comp.clear();
+                            dfs(a);
+
+                            printf("comp %i: ", c);
+                            for (unsigned int b = 0; b < comp.size(); b++)
+                            {
+                                printf("%i ", comp[b]);
+                            }
+                            puts("");
+                            puts("------------------------");
+
+                            c++;
+
+                            CSceneObjectGeometry g1;
+                            g1.mFigures.resize(comp.size());
+
+                            for (unsigned int b = 0; b < comp.size(); b++)
+                            {
+                                g1.mFigures[b].mVertices.resize(mObjectsFactory.GetObjects()[i]->mFigures[comp[b]]->EnumVertices());
+                                g1.mFigures[b].mZ = mObjectsFactory.GetObjects()[i]->mFigures[comp[b]]->GetZ();
+                                g1.mFigures[b].mDepth = mObjectsFactory.GetObjects()[i]->mFigures[comp[b]]->GetDepth();
+                                memcpy(&*g1.mFigures[b].mVertices.begin(),
+                                       mObjectsFactory.GetObjects()[i]->mFigures[comp[b]]->GetVertices(),
+                                        sizeof(CVec2f) * mObjectsFactory.GetObjects()[i]->mFigures[comp[b]]->EnumVertices());
+                            }
+
+                            g1.ComputeDestructionGraph(0.01);
+
+                            CSceneObjectParams p1;
+                            p1.mAngle = mObjectsFactory.GetObjects()[i]->mAngle;
+                            p1.mDynamic = true;
+                            p1.mFixedRotation = false;
+                            p1.mPos = mObjectsFactory.GetObjects()[i]->mPos;
+
+                            CreateObject(g1, p1);
+
+                            DestroyObject(mObjectsFactory.GetObjects()[i]);
+                        }
+                    }
 
                     break;
                 }
@@ -175,6 +257,7 @@ CSceneObject* CScene::CreateObject(const CSceneObjectGeometry &_geometry, const 
     res->mBody = b;
     res->mPos = _params.mPos;
     res->mAngle = _params.mAngle;
+    res->mDestructionGraph = _geometry.mDestructionGraph;
 
     for ( auto i = _geometry.mFigures.begin(), i_e = _geometry.mFigures.end(); i != i_e; i++ )
     {

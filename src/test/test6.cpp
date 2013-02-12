@@ -177,6 +177,32 @@ bool CTest6::InitCamera()
 
 bool CTest6::InitLevel()
 {
+    std::map<std::string,CSceneObjectGeometry*> & templates = GetTemplateSystem().GetSceneObjectTemplates();
+
+    for (auto i = templates.begin(); i != templates.end(); i++)
+    {
+        if (i->first == "Object7")
+        {
+            int a = 0;
+            int b = a;
+        }
+
+        i->second->ComputeDestructionGraph(0.01);
+
+        if (i->first == "Object7")
+        {
+            unsigned int fc = i->second->mFigures.size();
+            for (unsigned int j = 0; j < fc; j++)
+            {
+                for (unsigned int k = 0; k < fc; k++)
+                {
+                    printf("%i ", i->second->mDestructionGraph[j * fc + k]);
+                }
+                puts("");
+            }
+        }
+    }
+
     CLevel *l = GetLevelManager().CreateLevel();
 
     if (l == nullptr)
