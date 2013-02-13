@@ -42,8 +42,7 @@ SOURCES += \
     ../src/explosion/explosionsystem.cpp \
     ../src/scene/sceneobject.cpp \
     ../src/scene/scene.cpp \
-    ../src/players/player.cpp \
-    ../src/scene/physobserver.cpp \
+	../src/players/player.cpp \
     ../src/scene/figure.cpp \
     ../src/misc/ray.cpp \
     ../src/misc/plane.cpp \
@@ -97,8 +96,7 @@ HEADERS += \
     ../src/explosion/explosionsystem.h \
     ../src/scene/sceneobject.h \
     ../src/scene/scene.h \
-    ../src/players/player.h \
-    ../src/scene/physobserver.h \
+	../src/players/player.h \
     ../src/scene/figure.h \
     ../src/explosion/explosion.h \
     ../src/misc/vec4.h \
