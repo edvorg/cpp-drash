@@ -151,41 +151,6 @@ void CSceneObject::Release()
 {
 }
 
-void CSceneObject::OnContactBegin(const CFigure *_f1, const CFigure *_f2)
-{
-    mCurrentContacts.insert(std::pair<const CFigure*, const CFigure*>(_f2, _f1));
-
-    CVec3f speed(_f2->GetSceneObject()->GetLinearVelocity(), 0);
-    speed.Vec2() -= _f1->GetSceneObject()->GetLinearVelocity();
-
-    if (IsDynamic() && speed.Length() > 10 && mFiguresCount > 1 && mLifeTime > 0.1)
-    {
-        for (unsigned int i = 0; i < mFiguresCount; i++)
-        {
-            if (mFigures[i] == _f1)
-            {
-                mFigures[i]->mDead = true;
-
-                return;
-            }
-        }
-    }
-}
-
-void CSceneObject::OnContactPreSolve(const CFigure *, const CFigure *)
-{
-}
-
-void CSceneObject::OnContactEnd(const CFigure *, const CFigure *_f2)
-{
-    auto f = mCurrentContacts.find(_f2);
-
-    if (f != mCurrentContacts.end())
-    {
-        mCurrentContacts.erase(f);
-    }
-}
-
 CFigure *CSceneObject::CreateFigure(const CFigureParams &_params)
 {
     if (mFiguresCount >= mFiguresCountLimit)

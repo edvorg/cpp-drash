@@ -400,14 +400,40 @@ void CScene::BeginContact(b2Contact * _contact)
         return;
     }
 
-    f1->GetSceneObject()->OnContactBegin(f1, f2);
-    f2->GetSceneObject()->OnContactBegin(f2, f1);
+    // ---------------------------------------------------------------------------------------------
+    f1->GetSceneObject()->mCurrentContacts.insert(std::pair<const CFigure*, const CFigure*>(f2, f1));
+    f2->GetSceneObject()->mCurrentContacts.insert(std::pair<const CFigure*, const CFigure*>(f1, f2));
+    // ^
+    // | this code block required for correct object movement along Z axis
+    // | look for CSceneObject::Step() implementation
+    // ---------------------------------------------------------------------------------------------
+
+    CVec3f speed(f2->GetSceneObject()->GetLinearVelocity(), 0);
+    speed.Vec2() -= f1->GetSceneObject()->GetLinearVelocity();
+
+    if (speed.Length() > 10)
+    {
+        if (f1->GetSceneObject()->IsDynamic() &&
+            f1->GetSceneObject()->mFiguresCount > 1 &&
+            f1->GetSceneObject()->mLifeTime > 0.1)
+        {
+            f1->mDead = true;
+        }
+
+        if (f2->GetSceneObject()->IsDynamic() &&
+            f2->GetSceneObject()->mFiguresCount > 1 &&
+            f2->GetSceneObject()->mLifeTime > 0.1)
+        {
+            f2->mDead = true;
+        }
+    }
 }
 
 void CScene::PreSolve(b2Contact * _contact, const b2Manifold * _old_manifold)
 {
     b2ContactListener::PreSolve(_contact, _old_manifold);
 
+    /*
     CFigure *f1 = reinterpret_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
     CFigure *f2 = reinterpret_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
 
@@ -424,9 +450,7 @@ void CScene::PreSolve(b2Contact * _contact, const b2Manifold * _old_manifold)
                   "it's seems that pair of figures is part of same object" );
         return;
     }
-
-    f1->GetSceneObject()->OnContactPreSolve(f1, f2);
-    f2->GetSceneObject()->OnContactPreSolve(f2, f1);
+    */
 }
 
 void CScene::PostSolve(b2Contact * _contact, const b2ContactImpulse * _impulse)
@@ -455,8 +479,24 @@ void CScene::EndContact(b2Contact * _contact)
         return;
     }
 
-    f1->GetSceneObject()->OnContactEnd(f1, f2);
-    f2->GetSceneObject()->OnContactEnd(f2, f1);
+    // ---------------------------------------------------------------------------------------------
+    auto f = f1->GetSceneObject()->mCurrentContacts.find(f2);
+
+    if (f != f1->GetSceneObject()->mCurrentContacts.end())
+    {
+        f1->GetSceneObject()->mCurrentContacts.erase(f);
+    }
+
+    f = f2->GetSceneObject()->mCurrentContacts.find(f1);
+
+    if (f != f2->GetSceneObject()->mCurrentContacts.end())
+    {
+        f2->GetSceneObject()->mCurrentContacts.erase(f);
+    }
+    // ^
+    // | this code block required for correct object movement along Z axis
+    // | look for CSceneObject::Step() implementation
+    // ---------------------------------------------------------------------------------------------
 }
 
 void CScene::SayGoodbye(b2Joint * _joint)

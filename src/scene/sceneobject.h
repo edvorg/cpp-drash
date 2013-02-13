@@ -103,10 +103,6 @@ private:
     void Step(double _dt);
     void Release(void);
 
-    void OnContactBegin(const CFigure *_f1, const CFigure *_f2);
-    void OnContactPreSolve(const CFigure *, const CFigure *);
-    void OnContactEnd(const CFigure *, const CFigure *_f2);
-
     b2Body* mBody = nullptr;
 
     //////////////////////////////////////////////////////
