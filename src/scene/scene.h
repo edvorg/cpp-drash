@@ -26,6 +26,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CSCENE_H
 #define CSCENE_H
 
+#include <Box2D/Box2D.h>
+
 class b2World;
 
 namespace drash
@@ -43,7 +45,9 @@ public:
     CVec2f mGravity;
 };
 
-class CScene final
+class CScene final : public b2ContactListener,
+                     public b2ContactFilter,
+                     public b2DestructionListener
 {
 public:    
     // **************************************************
@@ -60,7 +64,7 @@ public:
     CScene(void);
     ~CScene(void);
 
-    bool Init( const CSceneParams& _params );
+    bool Init(const CSceneParams & _params);
     void Release(void);
 
     /// must be called once in update cycle
@@ -92,13 +96,17 @@ protected:
 private:
     void DestroyObjectImpl(CSceneObject *_obj);
 
-    bool mLocked = false;
+    virtual bool ShouldCollide(b2Fixture * fixtureA, b2Fixture * fixtureB) override;
+    virtual void BeginContact(b2Contact * _figure) override;
+    virtual void PreSolve(b2Contact * _contact, const b2Manifold * _old_manifold) override;
+    virtual void PostSolve(b2Contact * _contact, const b2ContactImpulse * _impulse) override;
+    virtual void EndContact(b2Contact * _figure) override;
+    virtual void SayGoodbye(b2Joint * _joint) override;
+    virtual void SayGoodbye(b2Fixture * _fixture) override;
 
-    b2World *mWorld = nullptr;
-    CPhysObserver *mObserver = nullptr;
-
+    b2World mWorld;
     CObjectFactory<CSceneObject> mObjectsFactory;
-
+    bool mLocked = false;
     bool mPaused = false;
 };
 

@@ -32,12 +32,12 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "joint.h"
 
 #include <Box2D/Box2D.h>
-#include "physobserver.h"
 
 namespace drash
 {
 
 CScene::CScene():
+    mWorld(b2Vec2(0, 0)),
     mObjectsFactory(mObjectsCountLimit, "CSceneObject")
 {
 }
@@ -46,39 +46,29 @@ CScene::~CScene()
 {
 }
 
-bool CScene::Init( const CSceneParams &_params )
+bool CScene::Init(const CSceneParams & _params)
 {
 	Release();
 
-    mObserver = new CPhysObserver();
-    mWorld = new b2World(b2Vec2(0, 0));
-
-    mWorld->SetContactFilter(mObserver);
-    mWorld->SetContactListener(mObserver);
-    mWorld->SetAllowSleeping(true);
-    mWorld->SetContinuousPhysics(false);
-    mWorld->SetGravity(CVec2ToB2Vec2(_params.mGravity));
+    mWorld.SetContactFilter(this);
+    mWorld.SetContactListener(this);
+    mWorld.SetAllowSleeping(true);
+    mWorld.SetContinuousPhysics(false);
+    mWorld.SetGravity(CVec2ToB2Vec2(_params.mGravity));
 
     return true;
 }
 
 void CScene::Release(void)
 {
-	if (mWorld != nullptr)
-	{
-        while (mWorld->GetJointCount())
-        {
-            delete reinterpret_cast<CJoint*>(mWorld->GetJointList()->GetUserData());
-            mWorld->GetJointList()->SetUserData(nullptr);
-            mWorld->DestroyJoint(mWorld->GetJointList());
-        }
+    while (auto j = mWorld.GetJointList())
+    {
+        delete reinterpret_cast<CJoint*>(j->GetUserData());
+        j->SetUserData(nullptr);
+        mWorld.DestroyJoint(j);
+    }
 
-        DestroyObjects();
-
-        delete mWorld;
-	}
-
-    delete mObserver;
+    DestroyObjects();
 }
 
 void CScene::Step( double _dt )
@@ -119,7 +109,10 @@ void CScene::Step( double _dt )
                     p.mFixedRotation = false;
                     p.mPos = mObjectsFactory.GetObjects()[i]->mPos;
 
-                    CreateObject(g, p);
+                    auto o = CreateObject(g, p);
+
+                    o->SetLinearVelocity(mObjectsFactory.GetObjects()[i]->GetLinearVelocity());
+                    o->SetAngularVelocity(mObjectsFactory.GetObjects()[i]->GetAngularVelocity());
 
                     mObjectsFactory.GetObjects()[i]->DestroyFigure(mObjectsFactory.GetObjects()[i]->mFigures[j]);
 
@@ -128,7 +121,7 @@ void CScene::Step( double _dt )
                     CSceneObjectGeometry ng;
                     mObjectsFactory.GetObjects()[i]->DumpGeometry(&ng);
 
-                    ng.ComputeDestructionGraph(0.01);
+                    ng.ComputeDestructionGraph(0.5);
 
                     mObjectsFactory.GetObjects()[i]->mDestructionGraph = ng.mDestructionGraph;
 
@@ -158,7 +151,6 @@ void CScene::Step( double _dt )
                         }
                     };
 
-                    unsigned int c = 0;
                     for (unsigned int a = 0; a < ng.mFigures.size(); a++)
                     {
                         if (used[a] == 0)
@@ -166,30 +158,20 @@ void CScene::Step( double _dt )
                             comp.clear();
                             dfs(a);
 
-                            printf("comp %i: ", c);
-                            for (unsigned int b = 0; b < comp.size(); b++)
-                            {
-                                printf("%i ", comp[b]);
-                            }
-                            puts("");
-                            puts("------------------------");
-
-                            c++;
-
                             CSceneObjectGeometry g1;
                             g1.mFigures.resize(comp.size());
 
                             for (unsigned int b = 0; b < comp.size(); b++)
                             {
-                                g1.mFigures[b].mVertices.resize(mObjectsFactory.GetObjects()[i]->mFigures[comp[b]]->EnumVertices());
-                                g1.mFigures[b].mZ = mObjectsFactory.GetObjects()[i]->mFigures[comp[b]]->GetZ();
-                                g1.mFigures[b].mDepth = mObjectsFactory.GetObjects()[i]->mFigures[comp[b]]->GetDepth();
+                                g1.mFigures[b].mVertices.resize(ng.mFigures[comp[b]].mVertices.size());
+                                g1.mFigures[b].mZ = ng.mFigures[comp[b]].mZ;
+                                g1.mFigures[b].mDepth = ng.mFigures[comp[b]].mDepth;
                                 memcpy(&*g1.mFigures[b].mVertices.begin(),
-                                       mObjectsFactory.GetObjects()[i]->mFigures[comp[b]]->GetVertices(),
-                                        sizeof(CVec2f) * mObjectsFactory.GetObjects()[i]->mFigures[comp[b]]->EnumVertices());
+                                       &*ng.mFigures[comp[b]].mVertices.begin(),
+                                       sizeof(CVec2f) * ng.mFigures[comp[b]].mVertices.size());
                             }
 
-                            g1.ComputeDestructionGraph(0.01);
+                            g1.ComputeDestructionGraph(0.5);
 
                             CSceneObjectParams p1;
                             p1.mAngle = mObjectsFactory.GetObjects()[i]->mAngle;
@@ -197,11 +179,14 @@ void CScene::Step( double _dt )
                             p1.mFixedRotation = false;
                             p1.mPos = mObjectsFactory.GetObjects()[i]->mPos;
 
-                            CreateObject(g1, p1);
+                            auto o = CreateObject(g1, p1);
 
-                            DestroyObject(mObjectsFactory.GetObjects()[i]);
+                            o->SetLinearVelocity(mObjectsFactory.GetObjects()[i]->GetLinearVelocity());
+                            o->SetAngularVelocity(mObjectsFactory.GetObjects()[i]->GetAngularVelocity());
                         }
                     }
+
+                    DestroyObjectImpl(mObjectsFactory.GetObjects()[i]);
 
                     break;
                 }
@@ -214,12 +199,12 @@ void CScene::Step( double _dt )
 
     mLocked = false;
 
-    mWorld->Step( _dt, mVelocityIterations, mPositionIterations );
+    mWorld.Step(_dt, mVelocityIterations, mPositionIterations);
 }
 
 CSceneObject* CScene::CreateObject(const CSceneObjectGeometry &_geometry, const CSceneObjectParams& _params)
 {
-    if (mWorld->IsLocked())
+    if (mWorld.IsLocked())
     {
         LOG_ERR("CScene::CreateObject(): world is locked now");
         return nullptr;
@@ -246,7 +231,7 @@ CSceneObject* CScene::CreateObject(const CSceneObjectGeometry &_geometry, const 
     bdef.gravityScale = 1;
     bdef.type = _params.mDynamic ? b2_dynamicBody : b2_kinematicBody;
 
-    b2Body *b = mWorld->CreateBody(&bdef);
+    b2Body * b = mWorld.CreateBody(&bdef);
 
     if (b == nullptr)
     {
@@ -275,7 +260,7 @@ bool CScene::DestroyObject(CSceneObject *_obj)
         return false;
     }
 
-    if (mLocked == false && mWorld->IsLocked() == false)
+    if (mLocked == false && mWorld.IsLocked() == false)
     {
         DestroyObjectImpl(_obj);
     }
@@ -301,7 +286,7 @@ CJoint *CScene::CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2, const CVec
     jdef.Initialize(_obj1->mBody, _obj2->mBody, CVec2ToB2Vec2(_anchor.Vec2()));
 
     CJoint *res = new CJoint;
-    res->mJoint = mWorld->CreateJoint(&jdef);;
+    res->mJoint = mWorld.CreateJoint(&jdef);;
     res->mJoint->SetUserData(res);
     return res;
 }
@@ -313,7 +298,7 @@ CJoint *CScene::CreateJointDistance(CSceneObject *_obj1, CSceneObject *_obj2, co
     jdef.length = _length;
 
     CJoint *res = new CJoint;
-    res->mJoint = mWorld->CreateJoint(&jdef);;
+    res->mJoint = mWorld.CreateJoint(&jdef);;
     res->mJoint->SetUserData(res);
     return res;
 }
@@ -330,19 +315,19 @@ CJoint *CScene::CreateJointRope(CSceneObject *_obj1, CSceneObject *_obj2, const 
     jdef.collideConnected = false;
 
     CJoint *res = new CJoint;
-    res->mJoint = mWorld->CreateJoint(&jdef);;
+    res->mJoint = mWorld.CreateJoint(&jdef);;
     res->mJoint->SetUserData(res);
     return res;
 }
 
 void CScene::DestroyJoint(CJoint *_joint)
 {
-    for (auto j=mWorld->GetJointList(); j!=nullptr; j=j->GetNext())
+    for (auto j=mWorld.GetJointList(); j!=nullptr; j=j->GetNext())
     {
         if (j->GetUserData() == _joint)
         {
             delete reinterpret_cast<CJoint*>(j->GetUserData());
-            mWorld->DestroyJoint(j);
+            mWorld.DestroyJoint(j);
             return;
         }
     }
@@ -350,7 +335,7 @@ void CScene::DestroyJoint(CJoint *_joint)
 
 void CScene::SetGravity(const CVec2f &_g)
 {
-    mWorld->SetGravity(CVec2ToB2Vec2(_g));
+    mWorld.SetGravity(CVec2ToB2Vec2(_g));
 }
 
 void CScene::DestroyObjectImpl(CSceneObject *_obj)
@@ -365,11 +350,121 @@ void CScene::DestroyObjectImpl(CSceneObject *_obj)
     }
     _obj->mBody->SetUserData(nullptr);
 
-    mWorld->DestroyBody(_obj->mBody);
+    mWorld.DestroyBody(_obj->mBody);
 
     _obj->mBody = nullptr;
 
     mObjectsFactory.DestroyObject(_obj);
+}
+
+bool CScene::ShouldCollide(b2Fixture * fixtureA, b2Fixture * fixtureB)
+{
+    if (fixtureA->GetUserData() == nullptr ||
+        fixtureB->GetUserData() == nullptr ||
+        fixtureA->GetBody()->GetUserData() == nullptr ||
+        fixtureB->GetBody()->GetUserData() == nullptr)
+    {
+        return false;
+    }
+
+    CSceneObject *o1 = reinterpret_cast<CSceneObject*>(fixtureA->GetBody()->GetUserData());
+    CSceneObject *o2 = reinterpret_cast<CSceneObject*>(fixtureB->GetBody()->GetUserData());
+
+    CFigure *f1 = reinterpret_cast<CFigure*>( fixtureA->GetUserData() );
+    CFigure *f2 = reinterpret_cast<CFigure*>( fixtureB->GetUserData() );
+
+    float z1 = f1->GetZ() + o1->GetPosZ();
+    float z2 = f2->GetZ() + o2->GetPosZ();
+
+    return drash::math::Abs(z1 - z2) < (f1->GetDepth() * 0.5 + f2->GetDepth() * 0.5);
+}
+
+void CScene::BeginContact(b2Contact * _contact)
+{
+    b2ContactListener::BeginContact(_contact);
+
+    CFigure *f1 = reinterpret_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
+    CFigure *f2 = reinterpret_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
+
+    if ( f1 == nullptr || f2 == nullptr )
+    {
+        LOG_WARN( "CContactListener::BeginContact(): "
+                  "can not get pointer for one of figures. Skipping" );
+        return;
+    }
+
+    if ( f1 == f2 || f1->GetSceneObject() == f2->GetSceneObject() )
+    {
+        LOG_WARN( "CContactListener::BeginContact(): "
+                  "it's seems that pair of figures is part of same object" );
+        return;
+    }
+
+    f1->GetSceneObject()->OnContactBegin(f1, f2);
+    f2->GetSceneObject()->OnContactBegin(f2, f1);
+}
+
+void CScene::PreSolve(b2Contact * _contact, const b2Manifold * _old_manifold)
+{
+    b2ContactListener::PreSolve(_contact, _old_manifold);
+
+    CFigure *f1 = reinterpret_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
+    CFigure *f2 = reinterpret_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
+
+    if ( f1 == nullptr || f2 == nullptr )
+    {
+        LOG_WARN( "CContactListener::BeginContact(): "
+                  "can not get pointer for one of figures. Skipping" );
+        return;
+    }
+
+    if ( f1 == f2 || f1->GetSceneObject() == f2->GetSceneObject() )
+    {
+        LOG_WARN( "CContactListener::BeginContact(): "
+                  "it's seems that pair of figures is part of same object" );
+        return;
+    }
+
+    f1->GetSceneObject()->OnContactPreSolve(f1, f2);
+    f2->GetSceneObject()->OnContactPreSolve(f2, f1);
+}
+
+void CScene::PostSolve(b2Contact * _contact, const b2ContactImpulse * _impulse)
+{
+    b2ContactListener::PostSolve(_contact, _impulse);
+}
+
+void CScene::EndContact(b2Contact * _contact)
+{
+    b2ContactListener::EndContact(_contact);
+
+    CFigure *f1 = reinterpret_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
+    CFigure *f2 = reinterpret_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
+
+    if ( f1 == nullptr || f2 == nullptr )
+    {
+        LOG_WARN( "CContactListener::BeginContact(): "
+                  "can not get pointer for one of figures. Skipping" );
+        return;
+    }
+
+    if ( f1 == f2 || f1->GetSceneObject() == f2->GetSceneObject() )
+    {
+        LOG_WARN( "CContactListener::BeginContact(): "
+                  "it's seems that pair of figures is part of same object" );
+        return;
+    }
+
+    f1->GetSceneObject()->OnContactEnd(f1, f2);
+    f2->GetSceneObject()->OnContactEnd(f2, f1);
+}
+
+void CScene::SayGoodbye(b2Joint * _joint)
+{
+}
+
+void CScene::SayGoodbye(b2Fixture * _fixture)
+{
 }
 
 } // namespace drash

@@ -181,26 +181,7 @@ bool CTest6::InitLevel()
 
     for (auto i = templates.begin(); i != templates.end(); i++)
     {
-        if (i->first == "Object7")
-        {
-            int a = 0;
-            int b = a;
-        }
-
-        i->second->ComputeDestructionGraph(0.01);
-
-        if (i->first == "Object7")
-        {
-            unsigned int fc = i->second->mFigures.size();
-            for (unsigned int j = 0; j < fc; j++)
-            {
-                for (unsigned int k = 0; k < fc; k++)
-                {
-                    printf("%i ", i->second->mDestructionGraph[j * fc + k]);
-                }
-                puts("");
-            }
-        }
+        i->second->ComputeDestructionGraph(0.5);
     }
 
     CLevel *l = GetLevelManager().CreateLevel();
@@ -229,7 +210,7 @@ bool CTest6::InitPlayer()
     CPlayerParams p1;
     p1.mVelocityLimit = 10;
     p1.mSceneObjectParams.mFixedRotation = true;
-    p1.mSceneObjectParams.mPos.Set(0, 10, 0);
+    p1.mSceneObjectParams.mPos.Set(0, 20, 0);
 
     mPlayer1 = GetPlayersSystem().CreatePlayer(g1, p1);
 
