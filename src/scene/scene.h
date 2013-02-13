@@ -45,7 +45,9 @@ public:
     CVec2f mGravity;
 };
 
-class CScene final : public b2ContactListener, public b2ContactFilter
+class CScene final : public b2ContactListener,
+                     public b2ContactFilter,
+                     public b2DestructionListener
 {
 public:    
     // **************************************************
@@ -99,6 +101,8 @@ private:
     virtual void PreSolve(b2Contact * _contact, const b2Manifold * _old_manifold) override;
     virtual void PostSolve(b2Contact * _contact, const b2ContactImpulse * _impulse) override;
     virtual void EndContact(b2Contact * _figure) override;
+    virtual void SayGoodbye(b2Joint * _joint) override;
+    virtual void SayGoodbye(b2Fixture * _fixture) override;
 
     b2World mWorld;
     CObjectFactory<CSceneObject> mObjectsFactory;

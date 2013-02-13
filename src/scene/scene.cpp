@@ -459,4 +459,12 @@ void CScene::EndContact(b2Contact * _contact)
     f2->GetSceneObject()->OnContactEnd(f2, f1);
 }
 
+void CScene::SayGoodbye(b2Joint * _joint)
+{
+}
+
+void CScene::SayGoodbye(b2Fixture * _fixture)
+{
+}
+
 } // namespace drash
