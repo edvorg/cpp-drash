@@ -119,7 +119,10 @@ void CScene::Step( double _dt )
                     p.mFixedRotation = false;
                     p.mPos = mObjectsFactory.GetObjects()[i]->mPos;
 
-                    CreateObject(g, p);
+                    auto o = CreateObject(g, p);
+
+                    o->SetLinearVelocity(mObjectsFactory.GetObjects()[i]->GetLinearVelocity());
+                    o->SetAngularVelocity(mObjectsFactory.GetObjects()[i]->GetAngularVelocity());
 
                     mObjectsFactory.GetObjects()[i]->DestroyFigure(mObjectsFactory.GetObjects()[i]->mFigures[j]);
 
@@ -190,10 +193,10 @@ void CScene::Step( double _dt )
 
                             o->SetLinearVelocity(mObjectsFactory.GetObjects()[i]->GetLinearVelocity());
                             o->SetAngularVelocity(mObjectsFactory.GetObjects()[i]->GetAngularVelocity());
-
-                            DestroyObject(mObjectsFactory.GetObjects()[i]);
                         }
                     }
+
+                    DestroyObjectImpl(mObjectsFactory.GetObjects()[i]);
 
                     break;
                 }
