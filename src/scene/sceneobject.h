@@ -60,7 +60,6 @@ public:
 class CSceneObject final : public CObjectFactory<CSceneObject>::CFactoryProduct
 {
 public:
-    friend class CPhysObserver;
     friend class CScene;
     friend class CExplosion;
 
@@ -99,10 +98,6 @@ public:
 
 protected:
 private:
-    bool Init();
-    void Step(double _dt);
-    void Release(void);
-
     b2Body* mBody = nullptr;
 
     //////////////////////////////////////////////////////
