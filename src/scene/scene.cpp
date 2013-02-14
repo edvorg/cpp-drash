@@ -192,7 +192,71 @@ void CScene::Step( double _dt )
                 }
             }
 
-            mObjectsFactory.GetObjects()[i]->Step(_dt);
+            auto o = mObjectsFactory.GetObjects()[i];
+
+            o->mLifeTime += _dt;
+
+            bool phys_pos_changed = false;
+
+            if (o->mPosXYAnimator.Step(_dt))
+            {
+                if (o->mPosXYAnimator.IsTargetSet() == true)
+                {
+                    CVec2f lv = o->mPosXYAnimator.GetTarget();
+                    lv -= o->mPos;
+                    lv /= o->mPosXYAnimator.GetTimeRemains();
+                    o->mBody->SetLinearVelocity(CVec2ToB2Vec2(lv));
+                }
+                else
+                {
+                    phys_pos_changed = true;
+                }
+            }
+            else
+            {
+                o->mPos.Vec2() = B2Vec2ToCVec2(o->mBody->GetWorldPoint(b2Vec2(0, 0)));
+            }
+
+            if (o->mPosZAnimator.Step(_dt))
+            {
+                for (auto i = o->mCurrentContacts.begin(); i != o->mCurrentContacts.end(); i++)
+                {
+                    const CFigure *f1 = i->first;
+                    const CFigure *f2 = i->second;
+
+                    float z1 = f1->GetZ() + f1->GetSceneObject()->GetPosZ();
+                    float z2 = f2->GetZ() + f2->GetSceneObject()->GetPosZ();
+
+                    if (math::Abs(z1 - z2) > ((f1->GetDepth() + f2->GetDepth()) * 0.5f))
+                    {
+                        o->mBody->SetActive(false);
+                        o->mBody->SetActive(true);
+                    }
+                }
+            }
+
+            if (o->mAngleAnimator.Step(_dt))
+            {
+                if (o->mAngleAnimator.IsTargetSet())
+                {
+                    float av = (o->mAngleAnimator.GetTarget() - o->mAngle) / o->mAngleAnimator.GetTimeRemains();
+                    o->mBody->SetAngularVelocity(av);
+                }
+                else
+                {
+                    phys_pos_changed = true;
+                }
+            }
+            else
+            {
+                o->mAngle = o->mBody->GetAngle();
+            }
+
+            if (phys_pos_changed)
+            {
+                o->mBody->SetTransform(CVec2ToB2Vec2(o->mPos), o->mAngle);
+            }
+
             i++;
         }
     }
@@ -400,14 +464,40 @@ void CScene::BeginContact(b2Contact * _contact)
         return;
     }
 
-    f1->GetSceneObject()->OnContactBegin(f1, f2);
-    f2->GetSceneObject()->OnContactBegin(f2, f1);
+    // ---------------------------------------------------------------------------------------------
+    f1->GetSceneObject()->mCurrentContacts.insert(std::pair<const CFigure*, const CFigure*>(f2, f1));
+    f2->GetSceneObject()->mCurrentContacts.insert(std::pair<const CFigure*, const CFigure*>(f1, f2));
+    // ^
+    // | this code block required for correct object movement along Z axis
+    // | look for CSceneObject::() implementation
+    // ---------------------------------------------------------------------------------------------
+
+    CVec3f speed(f2->GetSceneObject()->GetLinearVelocity(), 0);
+    speed.Vec2() -= f1->GetSceneObject()->GetLinearVelocity();
+
+    if (speed.Length() > 10)
+    {
+        if (f1->GetSceneObject()->IsDynamic() &&
+            f1->GetSceneObject()->mFiguresCount > 1 &&
+            f1->GetSceneObject()->mLifeTime > 0.1)
+        {
+            f1->mDead = true;
+        }
+
+        if (f2->GetSceneObject()->IsDynamic() &&
+            f2->GetSceneObject()->mFiguresCount > 1 &&
+            f2->GetSceneObject()->mLifeTime > 0.1)
+        {
+            f2->mDead = true;
+        }
+    }
 }
 
 void CScene::PreSolve(b2Contact * _contact, const b2Manifold * _old_manifold)
 {
     b2ContactListener::PreSolve(_contact, _old_manifold);
 
+    /*
     CFigure *f1 = reinterpret_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
     CFigure *f2 = reinterpret_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
 
@@ -424,9 +514,7 @@ void CScene::PreSolve(b2Contact * _contact, const b2Manifold * _old_manifold)
                   "it's seems that pair of figures is part of same object" );
         return;
     }
-
-    f1->GetSceneObject()->OnContactPreSolve(f1, f2);
-    f2->GetSceneObject()->OnContactPreSolve(f2, f1);
+    */
 }
 
 void CScene::PostSolve(b2Contact * _contact, const b2ContactImpulse * _impulse)
@@ -455,8 +543,24 @@ void CScene::EndContact(b2Contact * _contact)
         return;
     }
 
-    f1->GetSceneObject()->OnContactEnd(f1, f2);
-    f2->GetSceneObject()->OnContactEnd(f2, f1);
+    // ---------------------------------------------------------------------------------------------
+    auto f = f1->GetSceneObject()->mCurrentContacts.find(f2);
+
+    if (f != f1->GetSceneObject()->mCurrentContacts.end())
+    {
+        f1->GetSceneObject()->mCurrentContacts.erase(f);
+    }
+
+    f = f2->GetSceneObject()->mCurrentContacts.find(f1);
+
+    if (f != f2->GetSceneObject()->mCurrentContacts.end())
+    {
+        f2->GetSceneObject()->mCurrentContacts.erase(f);
+    }
+    // ^
+    // | this code block required for correct object movement along Z axis
+    // | look for CScene::Step() implementation
+    // ---------------------------------------------------------------------------------------------
 }
 
 void CScene::SayGoodbye(b2Joint * _joint)
