@@ -469,6 +469,15 @@ void CScene::BeginContact(b2Contact * _contact)
         return;
     }
 
+    for (auto & i : f1->GetSceneObject()->mContactBeginHandlers)
+    {
+        i(f1, f2);
+    }
+    for (auto & i : f2->GetSceneObject()->mContactBeginHandlers)
+    {
+        i(f2, f1);
+    }
+
     // ---------------------------------------------------------------------------------------------
     f1->GetSceneObject()->mCurrentContacts.insert(std::pair<const CFigure*, const CFigure*>(f2, f1));
     f2->GetSceneObject()->mCurrentContacts.insert(std::pair<const CFigure*, const CFigure*>(f1, f2));
@@ -547,6 +556,16 @@ void CScene::EndContact(b2Contact * _contact)
                   "it's seems that pair of figures is part of same object" );
         return;
     }
+
+    for (auto & i : f1->GetSceneObject()->mContactEndHandlers)
+    {
+        i(f1, f2);
+    }
+    for (auto & i : f2->GetSceneObject()->mContactEndHandlers)
+    {
+        i(f2, f1);
+    }
+
 
     // ---------------------------------------------------------------------------------------------
     auto f = f1->GetSceneObject()->mCurrentContacts.find(f2);

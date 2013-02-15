@@ -212,7 +212,44 @@ bool CTest6::InitLevel()
 
     l->Load("demo_level.dlvl");
 
-    return GetLevelManager().StartLevel(l);
+    if (GetLevelManager().StartLevel(l) == false)
+    {
+        return false;
+    }
+
+    auto i = GetTemplateSystem().GetSceneObjectTemplates().find("Object3");
+
+    if (i != GetTemplateSystem().GetSceneObjectTemplates().end())
+    {
+        CSceneObjectParams p;
+        p.mPos.Set(3, -2, 0);
+        p.mDynamic = false;
+
+        auto o = GetScene().CreateObject(*i->second, p);
+
+        if (o == nullptr)
+        {
+            return false;
+        }
+
+        o->AddContactBeginHandler([this] (CFigure * _f1, CFigure * _f2)
+        {
+            if (_f2->GetSceneObject() == mPlayer1->GetSceneObject())
+            {
+                _f1->GetSceneObject()->GetPosXY().SetTarget(CVec2f(8, 8), 2.0, AnimatorBehavior::Single);
+            }
+        });
+
+        o->AddContactEndHandler([this] (CFigure * _f1, CFigure * _f2)
+        {
+            if (_f2->GetSceneObject() == mPlayer1->GetSceneObject())
+            {
+                _f1->GetSceneObject()->GetPosXY().SetTarget(CVec2f(3, -2), 2.0, AnimatorBehavior::Single);
+            }
+        });
+    }
+
+    return true;
 }
 
 bool CTest6::InitPlayer()
