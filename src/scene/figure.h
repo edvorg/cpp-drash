@@ -25,6 +25,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef FIGURE_H
 #define FIGURE_H
 
+#include <functional>
+#include <vector>
+
 class b2Fixture;
 
 namespace drash
@@ -69,6 +72,8 @@ public:
 
     bool TestPoint(const CVec2f &_xy) const;
 
+    inline void AddDestroyHandler(const std::function<void (CFigure *)> & _handler);
+
 protected:
 private:
     CFigure() = default;
@@ -79,6 +84,8 @@ private:
     float mMass = 1;
     int mInternalId = -1;
     bool mDead = false;
+
+    std::vector<std::function<void (CFigure *)>> mDestroyHandlers;
 };
 
 inline float CFigure::GetZ() const
@@ -99,6 +106,11 @@ inline float CFigure::GetDepth() const
 inline void CFigure::SetDepth(float _depth)
 {
     mDepth = _depth;
+}
+
+inline void CFigure::AddDestroyHandler(const std::function<void (CFigure *)> & _handler)
+{
+    mDestroyHandlers.push_back(_handler);
 }
 
 }// namespace drash

@@ -29,6 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/camera.h"
 #include "../scene/scene.h"
 #include "../levelmanager/level.h"
+#include "../misc/math.h"
 
 namespace drash
 {
@@ -43,7 +44,8 @@ bool CTest6::Init()
         InitLevel() == false ||
         InitPlayer() == false ||
         InitLight() == false ||
-        InitProcessors() == false)
+        InitProcessors() == false ||
+        InitTarget() == false)
     {
         return false;
     }
@@ -57,6 +59,7 @@ void CTest6::Step(double _dt)
 {
     CTest1::Step(_dt);
 
+    mTargetCreateTimer += _dt;
     mAngle += _dt;
 
     while (mAngle >= M_PI * 2.0)
@@ -114,6 +117,22 @@ void CTest6::Step(double _dt)
         CVec3f t = GetCamera()->GetPos().GetTarget();
         t.mX = mPlayer1->GetSceneObject()->GetPos().mX;
         GetCamera()->GetPos().SetTarget(t, 1.0, AnimatorBehavior::Single);
+    }
+
+    if (mTargetCreateTimer > 5.0 && mTargetDestroyed)
+    {
+        CSceneObjectParams p;
+        p.mPos.Set(math::Rand<float>(-5, 5, 0.5), 10, 0);
+
+        auto o = GetScene().CreateObject(*mTargetGeometry, p);
+
+        mTargetDestroyed = false;
+        mTargetCreateTimer = 0.0;
+
+        o->AddDestroyHandler([this] (CSceneObject *)
+        {
+            mTargetDestroyed = true;
+        });
     }
 }
 
@@ -363,6 +382,25 @@ bool CTest6::InitProcessors()
         CSceneObject * o = GetScene().CreateObject(g, p);
         o->SetLinearVelocity(pos.Vec2());
     }));
+
+    return true;
+}
+
+bool CTest6::InitTarget()
+{
+    auto i = GetTemplateSystem().GetSceneObjectTemplates().find("Object1");
+
+    if (i == GetTemplateSystem().GetSceneObjectTemplates().end())
+    {
+        return false;
+    }
+
+    mTargetGeometry = i->second;
+
+    if (mTargetGeometry == nullptr)
+    {
+        return false;
+    }
 
     return true;
 }
