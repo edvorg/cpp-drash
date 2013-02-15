@@ -50,6 +50,7 @@ private:
     bool InitPlayer();
     bool InitLight();
     bool InitProcessors();
+    bool InitTarget();
 
     CPlayer *mPlayer1 = nullptr;
     greng::CMesh *mPlayer1Mesh = nullptr;
@@ -63,6 +64,10 @@ private:
     float mAngle = 0;
 
     bool mFollowPlayer = true;
+
+    float mTargetCreateTimer = 0;
+    bool mTargetDestroyed = true;
+    CSceneObjectGeometry * mTargetGeometry = nullptr;
 
     greng::CPointLight mLight1;
 };

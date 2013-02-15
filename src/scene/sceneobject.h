@@ -26,6 +26,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CSCENEOBJECT_H
 #define CSCENEOBJECT_H
 
+#include <functional>
+
 class b2Body;
 
 namespace drash
@@ -96,6 +98,9 @@ public:
 
     inline const std::vector<unsigned int> & GetDestructionGraph() const;
 
+    inline void AddDestroyHandler(const std::function<void (CSceneObject *)> & _handler);
+    inline void AddFigureDestroyHandler(const std::function<void (CFigure *)> & _handler);
+
 protected:
 private:
     b2Body* mBody = nullptr;
@@ -126,6 +131,9 @@ private:
     std::map<const CFigure*, const CFigure*> mCurrentContacts;
 
     std::vector<unsigned int> mDestructionGraph;
+
+    std::vector<std::function<void (CSceneObject *)>> mDestroyHandlers;
+    std::vector<std::function<void (CFigure *)>> mFigureDestroyHandlers;
 };
 
 inline CFigure * const *CSceneObject::GetFigures() const
@@ -161,6 +169,16 @@ inline CAnimator<float> &CSceneObject::GetAngle()
 inline const std::vector<unsigned int> &CSceneObject::GetDestructionGraph() const
 {
     return mDestructionGraph;
+}
+
+inline void CSceneObject::AddDestroyHandler(const std::function<void (CSceneObject *)> & _handler)
+{
+    mDestroyHandlers.push_back(_handler);
+}
+
+inline void CSceneObject::AddFigureDestroyHandler(const std::function<void (CFigure *)> & _handler)
+{
+    mFigureDestroyHandlers.push_back(_handler);
 }
 
 } // namespace drash

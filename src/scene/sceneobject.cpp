@@ -138,6 +138,15 @@ void CSceneObject::DestroyFigure(CFigure *_figure)
         return;
     }
 
+    for (auto & i : mFigureDestroyHandlers)
+    {
+        i(_figure);
+    }
+    for (auto & i : _figure->mDestroyHandlers)
+    {
+        i(_figure);
+    }
+
     if (_figure->mFixture != nullptr)
     {
         mBody->DestroyFixture(_figure->mFixture);
