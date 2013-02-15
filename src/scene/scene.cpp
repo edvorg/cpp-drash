@@ -209,6 +209,7 @@ void CScene::Step( double _dt )
                 }
                 else
                 {
+                    o->mBody->SetLinearVelocity(b2Vec2(0, 0));
                     phys_pos_changed = true;
                 }
             }
@@ -244,6 +245,7 @@ void CScene::Step( double _dt )
                 }
                 else
                 {
+                    o->mBody->SetAngularVelocity(0);
                     phys_pos_changed = true;
                 }
             }
