@@ -100,6 +100,8 @@ public:
 
     inline void AddDestroyHandler(const std::function<void (CSceneObject *)> & _handler);
     inline void AddFigureDestroyHandler(const std::function<void (CFigure *)> & _handler);
+    inline void AddContactBeginHandler(const std::function<void (CFigure *, CFigure *)> & _handler);
+    inline void AddContactEndHandler(const std::function<void (CFigure *, CFigure *)> & _handler);
 
 protected:
 private:
@@ -134,6 +136,8 @@ private:
 
     std::vector<std::function<void (CSceneObject *)>> mDestroyHandlers;
     std::vector<std::function<void (CFigure *)>> mFigureDestroyHandlers;
+    std::vector<std::function<void (CFigure *, CFigure *)>> mContactBeginHandlers;
+    std::vector<std::function<void (CFigure *, CFigure *)>> mContactEndHandlers;
 };
 
 inline CFigure * const *CSceneObject::GetFigures() const
@@ -179,6 +183,16 @@ inline void CSceneObject::AddDestroyHandler(const std::function<void (CSceneObje
 inline void CSceneObject::AddFigureDestroyHandler(const std::function<void (CFigure *)> & _handler)
 {
     mFigureDestroyHandlers.push_back(_handler);
+}
+
+inline void CSceneObject::AddContactBeginHandler(const std::function<void (CFigure *, CFigure *)> & _handler)
+{
+    mContactBeginHandlers.push_back(_handler);
+}
+
+inline void CSceneObject::AddContactEndHandler(const std::function<void (CFigure *, CFigure *)> & _handler)
+{
+    mContactEndHandlers.push_back(_handler);
 }
 
 } // namespace drash
