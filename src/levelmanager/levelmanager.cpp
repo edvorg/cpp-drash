@@ -23,11 +23,11 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include "levelmanager.h"
-#include "level.h"
+#include "leveldesc.h"
 #include "../scene/scene.h"
 #include "../scene/sceneobject.h"
 #include "../diag/logger.h"
-#include "../templates/templatesystem.h"
+#include "../scene/geometrymanager.h"
 #include <map>
 
 
@@ -65,9 +65,9 @@ void CLevelManager::Release()
     }
 }
 
-CLevel *CLevelManager::CreateLevel()
+CLevelDesc *CLevelManager::CreateLevel()
 {
-    CLevel *res = mLevelFactory.CreateObject();
+    CLevelDesc *res = mLevelFactory.CreateObject();
 
     if (res == nullptr)
     {
@@ -77,7 +77,7 @@ CLevel *CLevelManager::CreateLevel()
     return res;
 }
 
-bool CLevelManager::DestroyLevel(CLevel *_level)
+bool CLevelManager::DestroyLevel(CLevelDesc *_level)
 {
     if (mLevelFactory.IsObject(_level) == false)
     {
@@ -90,38 +90,7 @@ bool CLevelManager::DestroyLevel(CLevel *_level)
     return true;
 }
 
-bool CLevelManager::StartLevel(CLevel *_level, std::map<CSceneObject*,CSceneObjectParams*> &_map)
-{
-    if (mLevelFactory.IsObject(_level) == false)
-    {
-        LOG_ERR("CLevelManager::StartLevel(): invalid level taken");
-        return false;
-    }
-
-    mScene->DestroyObjects();
-    _map.clear();
-    for (auto i = _level->mObjects.begin(); i != _level->mObjects.end(); i++)
-    {
-        CSceneObjectGeometry *g = mTemplateSystem->FindTemplate(i->first);
-
-        if (g != nullptr)
-        {
-            for (auto j = i->second.begin(); j != i->second.end(); j++)
-            {
-                auto obj = mScene->CreateObject(*g, j->second);
-                _map.insert(std::pair<CSceneObject*,CSceneObjectParams*>(obj,&(j->second)));
-            }
-        }
-        else
-        {
-            LOG_ERR("CLevelManager::StartLevel(): template '"<<i->first.c_str()<<"' doesn't exists");
-        }
-    }
-
-    return true;
-}
-
-bool CLevelManager::StartLevel(CLevel *_level)
+bool CLevelManager::StartLevel(CLevelDesc *_level)
 {
     if (mLevelFactory.IsObject(_level) == false)
     {
@@ -131,21 +100,19 @@ bool CLevelManager::StartLevel(CLevel *_level)
 
     mScene->DestroyObjects();
 
-    for (auto i = _level->mObjects.begin(); i != _level->mObjects.end(); i++)
+    for (unsigned int i = 0; i < _level->EnumObjects(); i++)
     {
-        CSceneObjectGeometry *g = mTemplateSystem->FindTemplate(i->first);
+        CLevelObjectDesc * desc = _level->GetObjects()[i];
+
+        CSceneObjectGeometry *g = mTemplateSystem->GetGeometry(desc->mGeometryName);
 
         if (g != nullptr)
         {
-            for (auto j = i->second.begin(); j != i->second.end(); j++)
-            {
-                auto obj = mScene->CreateObject(*g, j->second);
-                //_map.insert(std::pair<CSceneObject*,CSceneObjectParams*>(obj,&(j->second)));
-            }
+            auto obj = mScene->CreateObject(*g, desc->mParams);
         }
         else
         {
-            LOG_ERR("CLevelManager::StartLevel(): template '"<<i->first.c_str()<<"' doesn't exists");
+            LOG_ERR("CLevelManager::StartLevel(): geometry '"<<desc->mGeometryName<<"' doesn't exists");
         }
     }
 

@@ -29,7 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../explosion/explosionsystem.h"
 #include "../players/playerssystem.h"
 #include "../scene/scene.h"
-#include "../templates/templatesystem.h"
+#include "../scene/geometrymanager.h"
 #include "../debugrenderer/debugrenderer.h"
 #include "appeventsystem.h"
 #include "../ui/uisystem.h"
@@ -57,7 +57,7 @@ public:
     inline CAppEventSystem &GetEventSystem();
 	inline CExplosionSystem &GetExplosionSystem();
     inline CPlayersSystem &GetPlayersSystem();
-    inline CTemplateSystem &GetTemplateSystem();
+    inline CGeometryManager &GetGeometryManager();
     inline CDebugRenderer &GetDebugRenderer();
     inline ui::CUISystem &GetUISystem();
     inline CLevelManager &GetLevelManager();
@@ -83,7 +83,7 @@ private:
     CScene mScene;
     CExplosionSystem mExplosionSystem;
     CPlayersSystem mPlayersSystem;
-    CTemplateSystem mTemplateSystem;
+    CGeometryManager mGeometryManager;
     CDebugRenderer mDebugRenderer;
     ui::CUISystem mUISystem;
     CLevelManager mLevelManager;
@@ -124,9 +124,9 @@ inline CPlayersSystem &CApp::GetPlayersSystem()
     return mPlayersSystem;
 }
 
-inline CTemplateSystem &CApp::GetTemplateSystem()
+inline CGeometryManager &CApp::GetGeometryManager()
 {
-    return mTemplateSystem;
+    return mGeometryManager;
 }
 
 inline CDebugRenderer &CApp::GetDebugRenderer()

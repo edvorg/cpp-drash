@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../app/app.h"
 #include "../greng/pointlight.h"
+#include "../misc/rotationablepoint.h"
 
 namespace drash
 {

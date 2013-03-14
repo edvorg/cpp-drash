@@ -28,6 +28,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../app/app.h"
 #include "../greng/pointlight.h"
+#include "../misc/ray.h"
+#include "../misc/plane.h"
 
 namespace drash
 {
@@ -57,7 +59,7 @@ private:
     void ExtrudeFigure(float _delta_depth);
     void CamViewProcessors();
     void CompleteFigure();
-    void CreateTemplate();
+    void CreateGeometry();
     void DetachCurrentObject();
     void SelectFigure();
 

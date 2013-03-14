@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define DRASH_ANIMATOR_H
 
 #include <utility>
+#include "math.h"
 
 namespace drash
 {

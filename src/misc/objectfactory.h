@@ -56,6 +56,7 @@ public:
     T* CreateObject();
     bool DestroyObjectSafe(T *_obj);
     void DestroyObject(T *_obj);
+    void DestroyObjects();
     inline bool IsObject(T *_obj) const;
     inline T * const * GetObjects() const;
     inline unsigned int EnumObjects() const;
@@ -155,6 +156,18 @@ void CObjectFactory<T>::DestroyObject(T *_obj)
     }
 
     delete _obj;
+}
+
+template<class T>
+void CObjectFactory<T>::DestroyObjects()
+{
+    for (unsigned int i = 0; i < mObjectsCount; i++)
+    {
+        delete mObjects[i];
+        mObjects[i] = nullptr;
+    }
+
+    mObjectsCount = 0;
 }
 
 template<class T>

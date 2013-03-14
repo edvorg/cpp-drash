@@ -25,6 +25,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_PLANE_H
 #define DRASH_PLANE_H
 
+#include "vec3.h"
+
 namespace drash
 {
 

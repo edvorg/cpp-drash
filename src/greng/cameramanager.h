@@ -25,6 +25,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRENG_CAMERAMANAGER_H
 #define GRENG_CAMERAMANAGER_H
 
+#include "../misc/vec3.h"
+#include "../misc/objectfactory.h"
+
 namespace greng
 {
 

@@ -25,6 +25,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_COLOR4_H
 #define DRASH_COLOR4_H
 
+#include "color3.h"
+
 namespace drash
 {
 

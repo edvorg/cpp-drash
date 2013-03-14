@@ -25,6 +25,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_APPEVENT_H
 #define DRASH_APPEVENT_H
 
+#include <string>
+
 namespace drash
 {
 

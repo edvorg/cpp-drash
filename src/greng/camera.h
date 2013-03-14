@@ -26,6 +26,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef COBJECTCAMERA_H
 #define COBJECTCAMERA_H
 
+#include "../misc/animator.h"
+#include "../misc/matrix4.h"
+#include "../misc/objectfactory.h"
+
 namespace drash
 {
 

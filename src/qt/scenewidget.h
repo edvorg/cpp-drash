@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define SCENEWIDGET_H
 
 #include <QGLWidget>
+#include "../misc/vec2.h"
 
 namespace drash
 {
@@ -69,7 +70,6 @@ protected:
 
 private:
     drash::CVec2f WidgetSpaceToScreenSpace(const drash::CVec2f& _from) const;
-
 };
 
 inline void SceneWidget::SetApp(drash::CApp *_app)

@@ -29,10 +29,6 @@ CONFIG(release, debug|release) {
     QMAKE_CXXFLAGS += -O2
 }
 
-CONFIG += precompile_header
-
-PRECOMPILED_HEADER = ../src/precompiled.h
-
 SOURCES += ../src/qt/main.cpp\
         ../src/qt/gamewindow.cpp \
     ../src/qt/scenewidget.cpp \
@@ -41,7 +37,7 @@ SOURCES += ../src/qt/main.cpp\
     ../src/explosion/explosionsystem.cpp \
     ../src/players/playerssystem.cpp \
     ../src/editor/editorwindow.cpp \
-    ../src/templates/templatesystem.cpp \
+    ../src/scene/geometrymanager.cpp \
     ../src/scene/figure.cpp \
     ../src/app/app.cpp \
     ../src/app/appevent.cpp \
@@ -81,7 +77,6 @@ SOURCES += ../src/qt/main.cpp\
     ../src/greng/cameramanager.cpp \
     ../src/debugrenderer/debugrenderer.cpp \
     ../src/misc/moveablepoint.cpp \
-    ../src/levelmanager/level.cpp \
     ../src/levelmanager/levelmanager.cpp \
     ../src/test/test8.cpp \
     ../src/editor/sceneeditorapp.cpp \
@@ -89,7 +84,8 @@ SOURCES += ../src/qt/main.cpp\
     ../src/test/test9.cpp \
     ../src/greng/grengsystemsset.cpp \
     ../src/test/test10.cpp \
-    ../src/greng/spotlight.cpp
+    ../src/greng/spotlight.cpp \
+    ../src/levelmanager/leveldesc.cpp
 
 HEADERS  += ../src/qt/gamewindow.h \
     ../src/qt/scenewidget.h \
@@ -102,7 +98,7 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/explosion/explosionsystem.h \
     ../src/players/playerssystem.h \
     ../src/editor/editorwindow.h \
-    ../src/templates/templatesystem.h \
+    ../src/scene/geometrymanager.h \
     ../src/scene/figure.h \
     ../src/app/app.h \
     ../src/app/appevent.h \
@@ -155,7 +151,6 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/greng/pointlight.h \
     ../src/debugrenderer/debugrenderer.h \
     ../src/misc/moveablepoint.h \
-    ../src/levelmanager/level.h \
     ../src/levelmanager/levelmanager.h \
     ../src/test/test8.h \
     ../src/editor/sceneeditorapp.h \
@@ -164,7 +159,8 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/precompiled.h \
     ../src/greng/grengsystemsset.h \
     ../src/test/test10.h \
-    ../src/greng/spotlight.h
+    ../src/greng/spotlight.h \
+    ../src/levelmanager/leveldesc.h
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui

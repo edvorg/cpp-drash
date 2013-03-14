@@ -30,6 +30,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/vertex.h"
 #include "../greng/camera.h"
 #include "../greng/grengsystemsset.h"
+#include "../misc/plane.h"
+#include "../misc/ray.h"
+#include "../levelmanager/leveldesc.h"
+#include "../scene/geometrymanager.h"
 
 namespace greng
 {
@@ -395,6 +399,95 @@ CSceneObject *CDebugRenderer::FindObject(const greng::CCamera *_camera, const CV
     }
 
     return res;
+}
+
+CLevelObjectDesc *CDebugRenderer::FindObject(const greng::CCamera * _camera,
+                                             const CVec2f & _pos,
+                                             std::function<CLevelObjectDesc * (unsigned int)> _object_getter,
+                                             unsigned int _objects_count)
+{
+    CVec4f v(0, 0, -1, 1);
+    CVec4f res;
+    MatrixMultiply(_camera->GetAntiRotationMatrix(), v, res);
+
+    res.Normalize();
+
+    LOG_INFO("view "<<res.mX<<' '<<res.mY<<' '<<res.mZ);
+
+    CVec3f center(0);
+    float size = 0;
+
+    auto compute_dummy = [this, & center, & size] (CLevelObjectDesc * _desc)
+    {
+        CVec3f min(0, 0, 0);
+        CVec3f max(0, 0, 0);
+
+        center = 0;
+        size = 0;
+
+        CSceneObjectGeometry * _geometry = mGeometryManager->GetGeometry(_desc->mGeometryName);
+
+        if (_geometry == nullptr)
+        {
+            return;
+        }
+
+        for (auto i = _geometry->mFigures.begin(); i != _geometry->mFigures.end(); i++)
+        {
+            for (auto j = i->mVertices.begin(); j != i->mVertices.end(); j++)
+            {
+                max = CVec3f(*j, 0);
+                min = CVec3f(*j, 0);
+            }
+        }
+
+        for (auto i = _geometry->mFigures.begin(); i != _geometry->mFigures.end(); i++)
+        {
+            for (auto j = i->mVertices.begin(); j != i->mVertices.end(); j++)
+            {
+                max.mX = math::Max(max.mX, j->mX);
+                max.mY = math::Max(max.mY, j->mY);
+                max.mZ = math::Max(max.mZ, math::Abs(i->mDepth));
+
+                min.mX = math::Min(min.mX, j->mX);
+                min.mY = math::Min(min.mY, j->mY);
+                min.mZ = math::Min(min.mZ, - math::Abs(i->mDepth));
+            }
+        }
+
+        center = max;
+        center += min;
+        center *= 0.5f;
+
+        center += _desc->mParams.mPos;
+
+        max -= min;
+
+        size = max.Length() * 0.5f * 0.8f;
+    };
+
+    for (unsigned int i = 0; i < _objects_count; i++)
+    {
+        CLevelObjectDesc * desc = _object_getter(i);
+
+        compute_dummy(desc);
+
+        CPlane plane(center, res);
+
+        CVec3f p;
+        _camera->CastRay(_pos, plane, p);
+
+        p -= center;
+
+        if (p.Length() < size)
+        {
+            LOG_ERR("true");
+            return desc;
+        }
+    }
+
+    LOG_ERR("false");
+    return nullptr;
 }
 
 bool CDebugRenderer::InitTextures()

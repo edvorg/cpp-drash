@@ -27,6 +27,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "appeventprocessor.h"
 #include "appeventcombination.h"
+#include <list>
+#include <map>
 
 namespace drash
 {

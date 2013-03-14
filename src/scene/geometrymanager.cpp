@@ -22,7 +22,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "templatesystem.h"
+#include "geometrymanager.h"
 
 #include "../scene/scene.h"
 #include "../scene/figure.h"
@@ -33,25 +33,25 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
-bool CTemplateSystem::Init()
+bool CGeometryManager::Init()
 {
     return true;
 }
 
-void CTemplateSystem::Step(double)
+void CGeometryManager::Step(double)
 {
 }
 
-void CTemplateSystem::Release()
+void CGeometryManager::Release()
 {
-    for (auto i=mSceneObjectTemplates.begin(), i_e=mSceneObjectTemplates.end(); i!=i_e; i++)
+    for (auto i = mSceneObjectTemplates.begin(), i_e = mSceneObjectTemplates.end(); i != i_e; i++)
     {
         delete i->second;
     }
     mSceneObjectTemplates.clear();
 }
 
-CSceneObjectGeometry *CTemplateSystem::CreateSceneObjectTemplate(const std::string &_name)
+CSceneObjectGeometry * CGeometryManager::CreateGeometry(const std::string & _name)
 {
     if (_name == "" )
     {
@@ -59,7 +59,8 @@ CSceneObjectGeometry *CTemplateSystem::CreateSceneObjectTemplate(const std::stri
     }
     else
     {
-        if (mSceneObjectTemplates.find(_name) != mSceneObjectTemplates.end()) {
+        if (mSceneObjectTemplates.find(_name) != mSceneObjectTemplates.end())
+        {
             LOG_ERR("Template " << _name.c_str() << " exists in TemplateSystem");
             return nullptr;
         }
@@ -68,15 +69,12 @@ CSceneObjectGeometry *CTemplateSystem::CreateSceneObjectTemplate(const std::stri
         elem.first = _name;
         mSceneObjectTemplates.insert(elem);
         return elem.second;
-        //mSceneObjectTemplates.push_back(new CSceneObjectTemplate());
-        //mSceneObjectTemplates.back()->mName = _name;
-        //return mSceneObjectTemplates.back();
     }
 }
 
-void CTemplateSystem::DestoySceneObjectTemplate(CSceneObjectGeometry *_t)
+void CGeometryManager::DestroyGeometry(CSceneObjectGeometry * _t)
 {
-    for (auto i=mSceneObjectTemplates.begin(), i_e=mSceneObjectTemplates.end(); i!=i_e; i++)
+    for (auto i = mSceneObjectTemplates.begin(), i_e = mSceneObjectTemplates.end(); i != i_e; i++)
     {
         if (i->second == _t)
         {
@@ -85,10 +83,9 @@ void CTemplateSystem::DestoySceneObjectTemplate(CSceneObjectGeometry *_t)
             return;
         }
     }
-    //    auto obj = mSceneObjectTemplates.find()
 }
 
-void CTemplateSystem::RemoveSceneObjectTemplate(const std::string &_name)
+void CGeometryManager::DestroyGeometry(const std::string & _name)
 {
     auto iter = mSceneObjectTemplates.find(_name);
     if (iter != mSceneObjectTemplates.end())
@@ -98,67 +95,38 @@ void CTemplateSystem::RemoveSceneObjectTemplate(const std::string &_name)
     }
 }
 
-void CTemplateSystem::ChangeGeometry(CSceneObjectGeometry *_t, const std::string &_name)
+CSceneObject * CGeometryManager::CreateSceneObject(const std::string & _name, const CSceneObjectParams & _params)
 {
     auto iter = mSceneObjectTemplates.find(_name);
-    if (iter != mSceneObjectTemplates.end()) {
-        delete iter->second;
-        iter->second = _t;
-    } else {
-        LOG_ERR("Template " << _name.c_str() << " not found in TemplateSystem");
-    }
-}
-
-CSceneObject *CTemplateSystem::CreateSceneObjectFromTemplate(const std::string &_name, const CSceneObjectParams &_params)
-{
-//    for (auto i=mSceneObjectTemplates.begin(), i_e=mSceneObjectTemplates.end(); i!=i_e; i++)
-//    {
-//        if ((*i)->mName == _name)
-//        {
-//            return GetScene()->CreateObject<CSceneObject>((*i)->mGeometry, _params);
-//        }
-//    }
-    auto iter = mSceneObjectTemplates.find(_name);
-    if (iter == mSceneObjectTemplates.end()) {
+    if (iter == mSceneObjectTemplates.end())
+    {
         LOG_ERR("Object" << _name.c_str() << "not found in CTemplateSystem");
         return nullptr;
     }
     return GetScene()->CreateObject(*(iter->second), _params);
 }
 
-CSceneObjectGeometry *CTemplateSystem::FindTemplate(const std::string &_name)
+CSceneObjectGeometry * CGeometryManager::GetGeometry(const std::string & _name)
 {
     auto iter = mSceneObjectTemplates.find(_name);
-    if (iter == mSceneObjectTemplates.end()) {
+    if (iter == mSceneObjectTemplates.end())
+    {
         LOG_ERR("Object " << _name.c_str() << " not found in CTemplateSystem");
         return nullptr;
-    } else {
+    }
+    else
+    {
         return iter->second;
     }
 
 }
 
-CTemplateSystem::SceneObjectTemplatesT &CTemplateSystem::GetSceneObjectTemplates()
+CGeometryManager::SceneObjectTemplatesT & CGeometryManager::GetGeometries()
 {
     return this->mSceneObjectTemplates;
 }
 
-
-void CTemplateSystem::RenameTemplate(const std::string &_oldName, const std::string &_newName)
-{
-    auto iter = mSceneObjectTemplates.find(_oldName);
-
-    if (iter == mSceneObjectTemplates.end()) {
-        return;
-    }
-
-    MapSceneObjectItem buff = *iter;
-    mSceneObjectTemplates.erase(iter);
-    buff.first = _newName;
-    mSceneObjectTemplates.insert(buff);
-}
-
-bool CTemplateSystem::Load()
+bool CGeometryManager::Load()
 {
     Release();
 
@@ -187,7 +155,7 @@ bool CTemplateSystem::Load()
         in>>name;
         in>>figures_count;
 
-        CSceneObjectGeometry *g = CreateSceneObjectTemplate(name.c_str());
+        CSceneObjectGeometry * g = CreateGeometry(name.c_str());
 
         g->mFigures.resize(figures_count);
 
@@ -220,7 +188,7 @@ bool CTemplateSystem::Load()
     return true;
 }
 
-bool CTemplateSystem::Store()
+bool CGeometryManager::Store()
 {
     using std::endl;
 
@@ -233,19 +201,19 @@ bool CTemplateSystem::Store()
 
     out<<mSceneObjectTemplates.size()<<endl;
 
-    for (auto &i : mSceneObjectTemplates)
+    for (auto & i : mSceneObjectTemplates)
     {
         out<<i.first<<std::endl;
 
         out<<i.second->mFigures.size()<<endl;
 
-        for (auto &j : i.second->mFigures)
+        for (auto & j : i.second->mFigures)
         {
             out<<j.mZ<<endl;
             out<<j.mDepth<<endl;
             out<<j.mVertices.size()<<endl;
 
-            for (auto &k : j.mVertices)
+            for (auto & k : j.mVertices)
             {
                 out<<k.mX<<' '<<k.mY<<endl;
             }

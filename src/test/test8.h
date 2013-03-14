@@ -51,8 +51,8 @@ private:
 
     ui::CUIButton mButton1;
     ui::CUIButton mButton2;
-    CLevel *mLevel1 = nullptr;
-    CLevel *mLevel2 = nullptr;
+    CLevelDesc *mLevel1 = nullptr;
+    CLevelDesc *mLevel2 = nullptr;
     greng::CPointLight mLight1;
 };
 

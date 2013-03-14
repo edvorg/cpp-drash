@@ -21,10 +21,6 @@ CONFIG(release, debug|release) {
     QMAKE_CXXFLAGS += -O2
 }
 
-CONFIG += precompile_header
-
-PRECOMPILED_HEADER = ../src/precompiled.h
-
 SOURCES += \
     ../src/ui/uiwidget.cpp \
     ../src/ui/uisystem.cpp \
@@ -37,7 +33,7 @@ SOURCES += \
     ../src/test/test2.cpp \
     ../src/test/test1.cpp \
     ../src/test/test.cpp \
-    ../src/templates/templatesystem.cpp \
+    ../src/scene/geometrymanager.cpp \
     ../src/players/playerssystem.cpp \
     ../src/explosion/explosionsystem.cpp \
     ../src/scene/sceneobject.cpp \
@@ -70,7 +66,7 @@ SOURCES += \
     ../src/greng/cameramanager.cpp \
     ../src/debugrenderer/debugrenderer.cpp \
     ../src/misc/moveablepoint.cpp \
-    ../src/levelmanager/level.cpp \
+    ../src/levelmanager/leveldesc.cpp \
     ../src/levelmanager/levelmanager.cpp \
     ../src/test/test8.cpp \
     ../src/misc/rotationablepoint.cpp \
@@ -91,7 +87,7 @@ HEADERS += \
     ../src/test/test2.h \
     ../src/test/test1.h \
     ../src/test/test.h \
-    ../src/templates/templatesystem.h \
+    ../src/scene/geometrymanager.h \
     ../src/players/playerssystem.h \
     ../src/explosion/explosionsystem.h \
     ../src/scene/sceneobject.h \
@@ -139,7 +135,7 @@ HEADERS += \
     ../src/greng/cameramanager.h \
     ../src/debugrenderer/debugrenderer.h \
     ../src/misc/moveablepoint.h \
-    ../src/levelmanager/level.h \
+    ../src/levelmanager/leveldesc.h \
     ../src/levelmanager/levelmanager.h \
     ../src/test/test8.h \
     ../src/misc/rotationablepoint.h \

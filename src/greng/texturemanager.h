@@ -25,6 +25,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRENG_TEXTUREMANAGER_H
 #define GRENG_TEXTUREMANAGER_H
 
+#include "../misc/objectfactory.h"
+
 namespace greng
 {
 

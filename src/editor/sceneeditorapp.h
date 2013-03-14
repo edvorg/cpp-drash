@@ -29,6 +29,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../diag/timer.h"
 #include "../greng/pointlight.h"
+#include "../misc/moveablepoint.h"
+#include "../misc/rotationablepoint.h"
 
 namespace drash {
 
@@ -59,7 +61,7 @@ public:
 
     inline bool IsSetFileName()const;
     inline bool IsSetLevel() const;
-    inline CLevel * GetCurrentLevel() const;
+    inline CLevelDesc * GetCurrentLevel() const;
     inline std::string GetLevelFileName() const;
 
     inline void SetTreeRefreshHandler(const std::function<void ()> & _han);
@@ -69,7 +71,7 @@ public:
 
     void ResetLevel();
 
-    void LookObject(const std::string &_templatename,const std::string &_objectname);
+    void LookObject(const std::string &_geometryname,const std::string &_objectname);
 
     void SetDynamicParam(bool _val);
     void SetFixedRotationParam(bool _val);
@@ -83,6 +85,7 @@ public:
     inline bool IsObjectSelected() const;
 
     drash::CSceneObjectParams GetSelectedParams()const;
+
 private:
     void SetProcessors();
     void SetCameraProcessors();
@@ -95,18 +98,17 @@ private:
 
     std::string mFileNameLevel = "";
 
-    CLevel * mCurrentLevel = nullptr;
+    CLevelDesc * mCurrentLevel = nullptr;
     greng::CPointLight mLight1;
     greng::CCamera *mCamera = nullptr;
 
     std::function<void ()> mTreeRefreshHandler = [] () {};
     std::function<std::string ()> mGetSelectedTemplateHandler = [] () { return std::string(""); };
     bool mPlayLevel = false;
+    bool mPaused = false;
     bool mChangedParams = false;
 
-    CSceneObject * mSelectedObject = nullptr;
-
-    //CSceneObjectParams * mSelectedObject = nullptr;
+    CLevelObjectDesc * mSelectedObject = nullptr;
 
     CMoveablePoint mMoveablePoint;
     CRotationablePoint mRotationablePoint;
@@ -121,16 +123,12 @@ private:
 
     static const int MOVING_SPEED = 15;
 
-    std::map<CSceneObject*, CSceneObjectParams*> mObjectParams;
-
-    void StoreParams();
-
     void RenderDragTemplate();
     bool mDragNow = false;
     std::string mDragTemplateName = "";
 
 private:
-    CSceneObject * SelectObject();
+    CLevelObjectDesc * SelectObject();
     void MoveOfAxis();
 };
 
@@ -142,7 +140,7 @@ inline bool CSceneEditorApp::SaveLevel() {
     return SaveLevelAs(mFileNameLevel);
 }
 
-inline CLevel * CSceneEditorApp::GetCurrentLevel() const {
+inline CLevelDesc * CSceneEditorApp::GetCurrentLevel() const {
     return mCurrentLevel;
 }
 
@@ -164,6 +162,7 @@ inline void CSceneEditorApp::SetGetSelectedHandler(const std::function<std::stri
 
 inline void CSceneEditorApp::PauseLevel() {
     mPlayLevel = false;
+    mPaused = true;
 }
 
 inline bool CSceneEditorApp::IsObjectSelected() const{

@@ -24,6 +24,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../greng/renderer.h"
 #include "../greng/camera.h"
+#include "../misc/rotationablepoint.h"
+#include "plane.h"
 
 namespace drash
 {

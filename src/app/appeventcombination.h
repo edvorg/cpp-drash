@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define DRASH_APPEVENTCOMBINATION_H
 
 #include "appevent.h"
+#include <vector>
 
 namespace drash
 {

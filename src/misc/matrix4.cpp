@@ -22,6 +22,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
+#include "matrix4.h"
 #include <cstring>
 #include <cmath>
 

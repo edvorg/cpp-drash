@@ -51,14 +51,14 @@ bool CApp::Init()
 
     mExplosionSystem.SetScene(&mScene);
     mPlayersSystem.SetScene(&mScene);
-    mTemplateSystem.SetScene(&mScene);
+    mGeometryManager.SetScene(&mScene);
     mUISystem.SetRenderer(&GetGrengSystems().GetRenderer());
     mLevelManager.SetScene(&mScene);
-    mLevelManager.SetTemplateSystem(&mTemplateSystem);
+    mLevelManager.SetGeometryManager(&mGeometryManager);
 
     if (mExplosionSystem.Init() == false ||
         mPlayersSystem.Init() == false ||
-        mTemplateSystem.Init() == false ||
+        mGeometryManager.Init() == false ||
         mEventSystem.Init() == false ||
         mUISystem.Init() == false ||
         mLevelManager.Init() == false)
@@ -68,6 +68,7 @@ bool CApp::Init()
 
     mDebugRenderer.SetGrengSystems(&mGrengSystems);
     mDebugRenderer.SetScene(&mScene);
+    mDebugRenderer.SetGeometryManager(&mGeometryManager);
 
     if (mDebugRenderer.Init() == false)
     {
@@ -94,7 +95,7 @@ void CApp::Step(double _dt)
     mScene.Step(_dt);
     mExplosionSystem.Step(_dt);
     mPlayersSystem.Step(_dt);
-    mTemplateSystem.Step(_dt);
+    mGeometryManager.Step(_dt);
     mUISystem.Step(_dt);
 }
 
@@ -105,7 +106,7 @@ void CApp::Release()
     mEventSystem.Release();
     mExplosionSystem.Release();
     mPlayersSystem.Release();
-    mTemplateSystem.Release();
+    mGeometryManager.Release();
     mUISystem.Release();
     mScene.Release();
     mGrengSystems.Release();

@@ -37,11 +37,11 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../scene/scene.h"
 #include "../scene/figure.h"
 #include "../scene/sceneobject.h"
-#include "../templates/templatesystem.h"
+#include "../scene/geometrymanager.h"
 #include "../greng/camera.h"
 #include "editorapp.h"
 #include "sceneeditorapp.h"
-#include "../levelmanager/level.h"
+#include "../levelmanager/leveldesc.h"
 
 using namespace drash;
 
@@ -187,11 +187,11 @@ void EditorWindow::CreateNewObject()
     int i = 0;
     do {
         str_name = "Object";
-        str_name += QString::number(mObjectApp->GetTemplateSystem().GetSceneObjectTemplates().size()+1+i);
+        str_name += QString::number(mObjectApp->GetGeometryManager().GetGeometries().size()+1+i);
         i++;
     } while (mObjectApp->AddNewObjectToTemplate(str_name.toStdString()) == false);
 
-    str_name += QString::number(mObjectApp->GetTemplateSystem().GetSceneObjectTemplates().size()+1);
+    str_name += QString::number(mObjectApp->GetGeometryManager().GetGeometries().size()+1);
     QTreeWidgetItem *newItem = new QTreeWidgetItem(ui->mTreeObjects,QStringList(str_name));
     ui->mTreeObjects->addTopLevelItem(newItem);
     newItem->setSelected(true);
@@ -454,9 +454,9 @@ bool EditorWindow::UpdateTreeTemplates(QTreeWidget *_tree, drash::CApp *_app)
 {
     _tree->clear();
     QList<QTreeWidgetItem*> list;
-    CTemplateSystem tSys= _app->GetTemplateSystem();
-    for (auto item = tSys.GetSceneObjectTemplates().begin();
-        item != tSys.GetSceneObjectTemplates().end() ; item++) {
+    CGeometryManager tSys= _app->GetGeometryManager();
+    for (auto item = tSys.GetGeometries().begin();
+        item != tSys.GetGeometries().end() ; item++) {
 
         QTreeWidgetItem *objectItem = new QTreeWidgetItem(_tree,
                                                       QStringList(QString::fromStdString(item->first)));
@@ -491,15 +491,16 @@ void EditorWindow::UpdateTreeSceneObjects()
 {
     ui->mTreeSceneObjects->clear();
     QTreeWidget * tree = ui->mTreeSceneObjects;
-    for (const auto & headitem : mSceneApp->GetCurrentLevel()->GetObjects()) {
-        QTreeWidgetItem *templateItem = new QTreeWidgetItem(tree,
-                                        QStringList(QString::fromStdString(headitem.first)));
 
-        tree->addTopLevelItem(templateItem);
-        for (const auto &item : headitem.second) {
-            QString objectname = QString::fromStdString(item.first);
-            new QTreeWidgetItem(templateItem,QStringList(objectname));
-        }
+    for (unsigned int i = 0; i < mSceneApp->GetCurrentLevel()->EnumObjects(); i++) {
+        CLevelObjectDesc * cur_obj_desc = mSceneApp->GetCurrentLevel()->GetObjects()[i];
+
+        QTreeWidgetItem *geometryItem = new QTreeWidgetItem(tree,
+                                        QStringList(QString::fromStdString(cur_obj_desc->mLevelObjectName)));
+
+        tree->addTopLevelItem(geometryItem);
+        QString objectname = QString::fromStdString(cur_obj_desc->mGeometryName);
+        new QTreeWidgetItem(geometryItem,QStringList(objectname));
     }
 }
 
@@ -529,10 +530,10 @@ void EditorWindow::Remove_Object()
     }
     if (item->parent() == nullptr) {
         //qDebug() << "Object created";
-        mObjectApp->GetTemplateSystem().RemoveSceneObjectTemplate(item->text(0).toStdString());
+        mObjectApp->GetGeometryManager().DestroyGeometry(item->text(0).toStdString());
         UpdateTreeTemplates(ui->mTreeObjects,mObjectApp);
         //mObjectApp->ShowObject(item->text(0).toStdString());
-        //mCurrentObject = mObjectApp->GetTemplateSystem().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
+        //mCurrentObject = mObjectApp->GetGeometryManager().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
     }
 }
 
@@ -561,8 +562,8 @@ void EditorWindow::on_mManageWidget_currentChanged(int index)
         mWidgetForObjects->hide();
         mWidgetForScene->show();
         mCurrentSceneWidget = mWidgetForScene;
-        mObjectApp->GetTemplateSystem().Store();
-        mSceneApp->GetTemplateSystem().Load();
+        mObjectApp->GetGeometryManager().Store();
+        mSceneApp->GetGeometryManager().Load();
         UpdateTreeTemplates(ui->mTreeTemplates,mSceneApp);
         mObjectToolBar->hide();
 

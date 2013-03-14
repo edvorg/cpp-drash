@@ -25,13 +25,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_LEVELMANAGER_H
 #define DRASH_LEVELMANAGER_H
 
+#include "../misc/objectfactory.h"
+
 namespace drash
 {
 
 class CScene;
-class CLevel;
+class CLevelDesc;
 class CSceneObjectParams;
-class CTemplateSystem;
+class CGeometryManager;
 class CSceneObject;
 
 class CLevelManager
@@ -46,18 +48,17 @@ public:
     void Release();
 
     inline void SetScene(CScene *_scene);
-    inline void SetTemplateSystem(CTemplateSystem *_template_system);
+    inline void SetGeometryManager(CGeometryManager *_geometry_manager);
 
-    CLevel *CreateLevel();
-    bool DestroyLevel(CLevel *_level);
+    CLevelDesc *CreateLevel();
+    bool DestroyLevel(CLevelDesc *_level);
+    bool StartLevel(CLevelDesc *_level);
 
-    bool StartLevel(CLevel *_level, std::map<CSceneObject *, CSceneObjectParams *> &_map);
-    bool StartLevel(CLevel *_level);
 private:
     CScene *mScene = nullptr;
-    CTemplateSystem *mTemplateSystem = nullptr;
+    CGeometryManager *mTemplateSystem = nullptr;
 
-    CObjectFactory<CLevel> mLevelFactory;
+    CObjectFactory<CLevelDesc> mLevelFactory;
 };
 
 inline void CLevelManager::SetScene(CScene *_scene)
@@ -65,9 +66,9 @@ inline void CLevelManager::SetScene(CScene *_scene)
     mScene = _scene;
 }
 
-inline void CLevelManager::SetTemplateSystem(CTemplateSystem *_template_system)
+inline void CLevelManager::SetGeometryManager(CGeometryManager *_geometry_manager)
 {
-    mTemplateSystem = _template_system;
+    mTemplateSystem = _geometry_manager;
 }
 
 } // namespace drash

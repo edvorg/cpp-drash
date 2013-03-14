@@ -28,7 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../players/player.h"
 #include "../greng/camera.h"
 #include "../scene/scene.h"
-#include "../levelmanager/level.h"
+#include "../levelmanager/leveldesc.h"
 #include "../misc/math.h"
 
 namespace drash
@@ -196,14 +196,14 @@ bool CTest6::InitCamera()
 
 bool CTest6::InitLevel()
 {
-    std::map<std::string,CSceneObjectGeometry*> & templates = GetTemplateSystem().GetSceneObjectTemplates();
+    std::map<std::string,CSceneObjectGeometry*> & geometries = GetGeometryManager().GetGeometries();
 
-    for (auto i = templates.begin(); i != templates.end(); i++)
+    for (auto i = geometries.begin(); i != geometries.end(); i++)
     {
         i->second->ComputeDestructionGraph(0.5);
     }
 
-    CLevel *l = GetLevelManager().CreateLevel();
+    CLevelDesc *l = GetLevelManager().CreateLevel();
 
     if (l == nullptr)
     {
@@ -217,9 +217,9 @@ bool CTest6::InitLevel()
         return false;
     }
 
-    auto i = GetTemplateSystem().GetSceneObjectTemplates().find("Object3");
+    auto i = GetGeometryManager().GetGeometries().find("Object3");
 
-    if (i != GetTemplateSystem().GetSceneObjectTemplates().end())
+    if (i != GetGeometryManager().GetGeometries().end())
     {
         CSceneObjectParams p;
         p.mPos.Set(3, -2, 0);
@@ -425,9 +425,9 @@ bool CTest6::InitProcessors()
 
 bool CTest6::InitTarget()
 {
-    auto i = GetTemplateSystem().GetSceneObjectTemplates().find("Object1");
+    auto i = GetGeometryManager().GetGeometries().find("Object1");
 
-    if (i == GetTemplateSystem().GetSceneObjectTemplates().end())
+    if (i == GetGeometryManager().GetGeometries().end())
     {
         return false;
     }
