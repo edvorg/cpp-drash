@@ -33,7 +33,7 @@ SOURCES += \
     ../src/test/test2.cpp \
     ../src/test/test1.cpp \
     ../src/test/test.cpp \
-    ../src/templates/templatesystem.cpp \
+    ../src/scene/geometrymanager.cpp \
     ../src/players/playerssystem.cpp \
     ../src/explosion/explosionsystem.cpp \
     ../src/scene/sceneobject.cpp \
@@ -87,7 +87,7 @@ HEADERS += \
     ../src/test/test2.h \
     ../src/test/test1.h \
     ../src/test/test.h \
-    ../src/templates/templatesystem.h \
+    ../src/scene/geometrymanager.h \
     ../src/players/playerssystem.h \
     ../src/explosion/explosionsystem.h \
     ../src/scene/sceneobject.h \

@@ -27,7 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../scene/scene.h"
 #include "../scene/sceneobject.h"
 #include "../diag/logger.h"
-#include "../templates/templatesystem.h"
+#include "../scene/geometrymanager.h"
 #include <map>
 
 
@@ -104,7 +104,7 @@ bool CLevelManager::StartLevel(CLevelDesc *_level)
     {
         CLevelObjectDesc * desc = _level->GetObjects()[i];
 
-        CSceneObjectGeometry *g = mTemplateSystem->FindTemplate(desc->mGeometryName);
+        CSceneObjectGeometry *g = mTemplateSystem->GetGeometry(desc->mGeometryName);
 
         if (g != nullptr)
         {
@@ -112,7 +112,7 @@ bool CLevelManager::StartLevel(CLevelDesc *_level)
         }
         else
         {
-            LOG_ERR("CLevelManager::StartLevel(): template '"<<desc->mGeometryName<<"' doesn't exists");
+            LOG_ERR("CLevelManager::StartLevel(): geometry '"<<desc->mGeometryName<<"' doesn't exists");
         }
     }
 

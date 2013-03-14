@@ -110,7 +110,7 @@ bool CTest2::Init()
 
 void CTest2::SetProcessors()
 {    
-    auto t = GetTemplateSystem().CreateSceneObjectTemplate("lambda_test");
+    auto t = GetGeometryManager().CreateGeometry("lambda_test");
     t->mFigures.resize(1);
     t->mFigures[0].mVertices.push_back(CVec2f(-10, -10));
     t->mFigures[0].mVertices.push_back(CVec2f(10, -10));
@@ -130,7 +130,7 @@ void CTest2::SetProcessors()
 
         mCamera->CastRay(GetCursorPos(), plane, p.mPos);
 
-        GetTemplateSystem().CreateSceneObjectFromTemplate("lambda_test", p);
+        GetGeometryManager().CreateSceneObject("lambda_test", p);
     }));
 
 

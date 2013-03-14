@@ -48,7 +48,7 @@ bool CObjectEditorApp::Init()
     SetProcessors();
     SetCameraProcessors();
     SetDragDrop();
-    GetTemplateSystem().Load();
+    GetGeometryManager().Load();
 
     CCameraParams cp;
     cp.mPos.Set(10,10,10.0f);
@@ -244,7 +244,7 @@ void CObjectEditorApp::Render()
 
 void CObjectEditorApp::Release()
 {
-    GetTemplateSystem().Store();
+    GetGeometryManager().Store();
     mRotationPoint.Release();
     CApp::Release();
 }
@@ -500,8 +500,8 @@ void CObjectEditorApp::SetDragDrop()
             return;
         }
 //        qDebug() << "Proccess enter";
-        mDragTemplate = GetTemplateSystem().
-                FindTemplate(mGetSelectedTemplateHandler());
+        mDragTemplate = GetGeometryManager().
+                GetGeometry(mGetSelectedTemplateHandler());
         if (mDragTemplate != nullptr) {
             mDragNow = true;
         } else {
@@ -534,7 +534,7 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
         }
     }
 
-    auto obj = GetTemplateSystem().FindTemplate(_objectName);
+    auto obj = GetGeometryManager().GetGeometry(_objectName);
     if (obj == nullptr) {
         return false;
     }
@@ -563,7 +563,7 @@ bool CObjectEditorApp::BuildFigure(const std::string &_objectName)
 
 bool CObjectEditorApp::AddNewObjectToTemplate(const std::string &_name)
 {
-    if (GetTemplateSystem().CreateSceneObjectTemplate(_name) == nullptr ) {
+    if (GetGeometryManager().CreateGeometry(_name) == nullptr ) {
         return false;
     }
     ShowObject(_name);
@@ -575,7 +575,7 @@ void CObjectEditorApp::ShowObject(const std::string &_name)
     RemoveCurrentObject();
     SetCurrentTemplateName(_name);
     CSceneObjectParams params;
-    auto obj = GetTemplateSystem().CreateSceneObjectFromTemplate(_name,params);
+    auto obj = GetGeometryManager().CreateSceneObject(_name,params);
     mCurrentObject = obj;
 }
 
@@ -883,7 +883,10 @@ void CObjectEditorApp::SaveCurrentObject()
 
     CSceneObjectGeometry * geometry = new CSceneObjectGeometry();
     mCurrentObject->DumpGeometry(geometry);
-    GetTemplateSystem().ChangeGeometry( geometry, mCurrentTemplateName );
+
+    CSceneObjectGeometry * g = GetGeometryManager().GetGeometry(mCurrentTemplateName);
+    g->mDestructionGraph = geometry->mDestructionGraph;
+    g->mFigures = geometry->mFigures;
 
     ShowObject(mCurrentTemplateName);
 }
@@ -1177,7 +1180,10 @@ void CObjectEditorApp::EndSplit()
 
             CSceneObjectGeometry * geometry = new CSceneObjectGeometry();
             mCurrentObject->DumpGeometry(geometry);
-            GetTemplateSystem().ChangeGeometry( geometry, mCurrentTemplateName );
+
+            CSceneObjectGeometry * g = GetGeometryManager().GetGeometry(mCurrentTemplateName);
+            g->mDestructionGraph = geometry->mDestructionGraph;
+            g->mFigures = geometry->mFigures;
         }
     }
     mTreeRefreshHandler();
@@ -1295,7 +1301,7 @@ void CObjectEditorApp::ApplyDrop()
     CVec2f cpos = GetCursorPos();
     mCamera->CastRay(cpos, plane, position);
 
-    CSceneObjectGeometry * currg = GetTemplateSystem().FindTemplate(mCurrentTemplateName);
+    CSceneObjectGeometry * currg = GetGeometryManager().GetGeometry(mCurrentTemplateName);
 
     for (CFigureParams figure: mDragTemplate->mFigures) {
         for (auto & v: figure.mVertices) {

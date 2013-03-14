@@ -45,7 +45,7 @@ bool CTest1::Init()
         return false;
     }
 
-    if (GetTemplateSystem().Load() == false)
+    if (GetGeometryManager().Load() == false)
     {
         return false;
     }
@@ -238,7 +238,7 @@ void CTest1::Render()
 
 void CTest1::Release()
 {
-    GetTemplateSystem().Store();
+    GetGeometryManager().Store();
 
     CApp::Release();
 }
@@ -390,7 +390,7 @@ void CTest1::SetProcessors()
     GetEventSystem().SetProcessor("C-c", CAppEventProcessor(
     [this] ()
     {
-        CreateTemplate();
+        CreateGeometry();
     }));
 
     GetEventSystem().SetProcessor("C-d", CAppEventProcessor(
@@ -430,7 +430,7 @@ void CTest1::SetProcessors()
     {
         if (mCurrentTemplate == nullptr)
         {
-            mCurrentTemplate = GetTemplateSystem().GetSceneObjectTemplates().begin()->second;
+            mCurrentTemplate = GetGeometryManager().GetGeometries().begin()->second;
 
             if (mCurrentObject != nullptr)
             {
@@ -444,7 +444,7 @@ void CTest1::SetProcessors()
         }
         else
         {
-            auto &t = GetTemplateSystem().GetSceneObjectTemplates();
+            auto &t = GetGeometryManager().GetGeometries();
             for (auto i = t.begin(); i != t.end(); i++)
             {
                 if (mCurrentTemplate == i->second)
@@ -750,7 +750,7 @@ void CTest1::CamViewProcessors()
     {
         if (mCurrentTemplate == nullptr)
         {
-            mCurrentTemplate = (--GetTemplateSystem().GetSceneObjectTemplates().end())->second;
+            mCurrentTemplate = (--GetGeometryManager().GetGeometries().end())->second;
 
             if (mCurrentObject != nullptr)
             {
@@ -764,7 +764,7 @@ void CTest1::CamViewProcessors()
         }
         else
         {
-            auto &t = GetTemplateSystem().GetSceneObjectTemplates();
+            auto &t = GetGeometryManager().GetGeometries();
             for (auto i = t.begin(); i != t.end(); i++)
             {
                 if (mCurrentTemplate == i->second)
@@ -832,7 +832,7 @@ void CTest1::CompleteFigure()
     }
 }
 
-void CTest1::CreateTemplate()
+void CTest1::CreateGeometry()
 {
     static const unsigned max_try_count = 10;
     unsigned int counter = 0;
@@ -840,8 +840,8 @@ void CTest1::CreateTemplate()
     do
     {
         std::ostringstream is;
-        is<<"new_template_"<<(mTemplateCounter++);
-        this->mCurrentTemplate = GetTemplateSystem().CreateSceneObjectTemplate(is.str().c_str());
+        is<<"new_geometry_"<<(mTemplateCounter++);
+        this->mCurrentTemplate = GetGeometryManager().CreateGeometry(is.str().c_str());
     }
     while (this->mCurrentTemplate == nullptr && counter < max_try_count);
 

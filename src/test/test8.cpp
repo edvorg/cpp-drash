@@ -44,7 +44,7 @@ bool CTest8::Init()
     {
         return false;
     }
-    GetTemplateSystem().Load();
+    GetGeometryManager().Load();
     return true;
 }
 
@@ -55,7 +55,7 @@ void CTest8::Render()
 
 void CTest8::Release()
 {
-    GetTemplateSystem().Store();
+    GetGeometryManager().Store();
     mLevel1->Store("level1");
     mLevel2->Store("level2");
     CApp::Release();
@@ -106,8 +106,8 @@ bool CTest8::InitLevels()
         return false;
     }
 
-    CSceneObjectGeometry *g1 = GetTemplateSystem().CreateSceneObjectTemplate("object1_template");
-    CSceneObjectGeometry *g2 = GetTemplateSystem().CreateSceneObjectTemplate("object2_template");
+    CSceneObjectGeometry *g1 = GetGeometryManager().CreateGeometry("object1_geometry");
+    CSceneObjectGeometry *g2 = GetGeometryManager().CreateGeometry("object2_geometry");
 
     if (g1 == nullptr ||
         g2 == nullptr)
@@ -128,8 +128,8 @@ bool CTest8::InitLevels()
     g2->mFigures[0].mVertices.push_back(CVec2f(1, 1));
     g2->mFigures[0].mVertices.push_back(CVec2f(-1, 1));
 
-    CLevelObjectDesc *p1 = mLevel1->AddObject("object1_template", "obj1");
-    CLevelObjectDesc *p2 = mLevel1->AddObject("object2_template", "obj2");
+    CLevelObjectDesc *p1 = mLevel1->AddObject("object1_geometry", "obj1");
+    CLevelObjectDesc *p2 = mLevel1->AddObject("object2_geometry", "obj2");
 
     if (p1 == nullptr ||
         p2 == nullptr)
@@ -139,8 +139,8 @@ bool CTest8::InitLevels()
 
     p2->mParams.mPos.Set(3, 0, 0);
 
-    CLevelObjectDesc *p3 = mLevel2->AddObject("object1_template", "obj1");
-    CLevelObjectDesc *p4 = mLevel2->AddObject("object2_template", "obj2");
+    CLevelObjectDesc *p3 = mLevel2->AddObject("object1_geometry", "obj1");
+    CLevelObjectDesc *p4 = mLevel2->AddObject("object2_geometry", "obj2");
 
     if (p3 == nullptr ||
         p4 == nullptr)

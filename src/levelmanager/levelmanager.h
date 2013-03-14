@@ -33,7 +33,7 @@ namespace drash
 class CScene;
 class CLevelDesc;
 class CSceneObjectParams;
-class CTemplateSystem;
+class CGeometryManager;
 class CSceneObject;
 
 class CLevelManager
@@ -48,7 +48,7 @@ public:
     void Release();
 
     inline void SetScene(CScene *_scene);
-    inline void SetTemplateSystem(CTemplateSystem *_template_system);
+    inline void SetGeometryManager(CGeometryManager *_geometry_manager);
 
     CLevelDesc *CreateLevel();
     bool DestroyLevel(CLevelDesc *_level);
@@ -56,7 +56,7 @@ public:
 
 private:
     CScene *mScene = nullptr;
-    CTemplateSystem *mTemplateSystem = nullptr;
+    CGeometryManager *mTemplateSystem = nullptr;
 
     CObjectFactory<CLevelDesc> mLevelFactory;
 };
@@ -66,9 +66,9 @@ inline void CLevelManager::SetScene(CScene *_scene)
     mScene = _scene;
 }
 
-inline void CLevelManager::SetTemplateSystem(CTemplateSystem *_template_system)
+inline void CLevelManager::SetGeometryManager(CGeometryManager *_geometry_manager)
 {
-    mTemplateSystem = _template_system;
+    mTemplateSystem = _geometry_manager;
 }
 
 } // namespace drash

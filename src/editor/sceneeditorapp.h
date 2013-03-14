@@ -71,7 +71,7 @@ public:
 
     void ResetLevel();
 
-    void LookObject(const std::string &_templatename,const std::string &_objectname);
+    void LookObject(const std::string &_geometryname,const std::string &_objectname);
 
     void SetDynamicParam(bool _val);
     void SetFixedRotationParam(bool _val);

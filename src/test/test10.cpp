@@ -97,11 +97,11 @@ bool CTest10::InitCamera()
 
 bool CTest10::InitObjects()
 {
-    CSceneObjectGeometry *g1 = GetTemplateSystem().CreateSceneObjectTemplate("wall_back");
-    CSceneObjectGeometry *g2 = GetTemplateSystem().CreateSceneObjectTemplate("wall_top");
-    CSceneObjectGeometry *g3 = GetTemplateSystem().CreateSceneObjectTemplate("wall_bottom");
-    CSceneObjectGeometry *g4 = GetTemplateSystem().CreateSceneObjectTemplate("wall");
-    CSceneObjectGeometry *g5 = GetTemplateSystem().CreateSceneObjectTemplate("lamp");
+    CSceneObjectGeometry *g1 = GetGeometryManager().CreateGeometry("wall_back");
+    CSceneObjectGeometry *g2 = GetGeometryManager().CreateGeometry("wall_top");
+    CSceneObjectGeometry *g3 = GetGeometryManager().CreateGeometry("wall_bottom");
+    CSceneObjectGeometry *g4 = GetGeometryManager().CreateGeometry("wall");
+    CSceneObjectGeometry *g5 = GetGeometryManager().CreateGeometry("lamp");
 
     if (g1 == nullptr ||
         g2 == nullptr ||
@@ -151,32 +151,32 @@ bool CTest10::InitObjects()
     CSceneObjectParams p1;
     p1.mPos.Set(0, 0, -5);
     p1.mDynamic = false;
-    GetTemplateSystem().CreateSceneObjectFromTemplate("wall_back", p1);
+    GetGeometryManager().CreateSceneObject("wall_back", p1);
 
     CSceneObjectParams p2;
     p2.mPos.Set(0, 5, 0);
     p2.mDynamic = true;
-    CSceneObject *o2 = GetTemplateSystem().CreateSceneObjectFromTemplate("wall_top", p2);
+    CSceneObject *o2 = GetGeometryManager().CreateSceneObject("wall_top", p2);
 
     CSceneObjectParams p3;
     p3.mPos.Set(0, -4, 0);
     p3.mDynamic = false;
-    GetTemplateSystem().CreateSceneObjectFromTemplate("wall_bottom", p3);
+    GetGeometryManager().CreateSceneObject("wall_bottom", p3);
 
     CSceneObjectParams p4;
     p4.mPos.Set(-9, 0, 0);
     p4.mDynamic = true;
-    GetTemplateSystem().CreateSceneObjectFromTemplate("wall", p4);
+    GetGeometryManager().CreateSceneObject("wall", p4);
 
     CSceneObjectParams p5;
     p5.mPos.Set(9, 0, 0);
     p5.mDynamic = true;
-    GetTemplateSystem().CreateSceneObjectFromTemplate("wall", p5);
+    GetGeometryManager().CreateSceneObject("wall", p5);
 
     CSceneObjectParams p6;
     p6.mPos.Set(-3, 3, 0);
     p6.mDynamic = true;
-    CSceneObject *o6 = GetTemplateSystem().CreateSceneObjectFromTemplate("lamp", p6);
+    CSceneObject *o6 = GetGeometryManager().CreateSceneObject("lamp", p6);
 
     CVec3f anchor1(0, 0, 0);
     anchor1.mY += 0.5;

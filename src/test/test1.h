@@ -59,7 +59,7 @@ private:
     void ExtrudeFigure(float _delta_depth);
     void CamViewProcessors();
     void CompleteFigure();
-    void CreateTemplate();
+    void CreateGeometry();
     void DetachCurrentObject();
     void SelectFigure();
 

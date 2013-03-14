@@ -50,13 +50,13 @@ class CSceneObjectGeometry;
 class CSceneObjectParams;
 class CSceneObject;
 class CLevelObjectDesc;
-class CTemplateSystem;
+class CGeometryManager;
 
 class CDebugRenderer final
 {
 public:
     inline void SetScene(CScene *_scene);
-    inline void SetTemplateSystem(CTemplateSystem *_template_system);
+    inline void SetGeometryManager(CGeometryManager *_geometry_manager);
     inline void SetGrengSystems(greng::CGrengSystemsSet *_greng_systems);
 
     inline void SetCamera(greng::CCamera *_camera);
@@ -94,7 +94,7 @@ private:
                              float _depth) const;
 
     CScene* mScene = nullptr;
-    CTemplateSystem * mTemplateSystem = nullptr;
+    CGeometryManager * mGeometryManager = nullptr;
     greng::CGrengSystemsSet *mGrengSystems = nullptr;
 
     greng::CShaderProgram *mShaderProgram1 = nullptr;
@@ -113,9 +113,9 @@ inline void CDebugRenderer::SetScene(CScene *_scene)
     mScene = _scene;
 }
 
-inline void CDebugRenderer::SetTemplateSystem(CTemplateSystem *_template_system)
+inline void CDebugRenderer::SetGeometryManager(CGeometryManager *_geometry_manager)
 {
-    mTemplateSystem = _template_system;
+    mGeometryManager = _geometry_manager;
 }
 
 inline void CDebugRenderer::SetGrengSystems(greng::CGrengSystemsSet *_greng_systems)

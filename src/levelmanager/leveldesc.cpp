@@ -39,7 +39,7 @@ CLevelDesc::~CLevelDesc()
     mObjectsFactory.DestroyObjects();
 }
 
-CLevelObjectDesc * CLevelDesc::AddObject(const std::string & _template,
+CLevelObjectDesc * CLevelDesc::AddObject(const std::string & _geometry,
                                          const std::string & _name)
 {
     auto o = mObjectsFactory.CreateObject();
@@ -49,7 +49,7 @@ CLevelObjectDesc * CLevelDesc::AddObject(const std::string & _template,
         return nullptr;
     }
 
-    o->mGeometryName = _template;
+    o->mGeometryName = _geometry;
     o->mLevelObjectName = _name;
 
     return o;
@@ -151,11 +151,11 @@ bool CLevelDesc::Load(const string & _filename)
     for (int i = 0 ; i < objects_count ; i++)
     {
         string name_object = "";
-        std::string name_template = "";
+        std::string name_geometry = "";
         CSceneObjectParams params;
 
         in >> name_object;
-        in >> name_template;
+        in >> name_geometry;
         in >> params.mAngle;
         in >> params.mDynamic;
         in >> params.mFixedRotation;
@@ -163,11 +163,11 @@ bool CLevelDesc::Load(const string & _filename)
         in >> params.mPos.mY;
         in >> params.mPos.mZ;
 
-        CLevelObjectDesc * desc = AddObject(name_template, name_object);
+        CLevelObjectDesc * desc = AddObject(name_geometry, name_object);
 
         if (desc != nullptr)
         {
-            desc->mGeometryName = name_template;
+            desc->mGeometryName = name_geometry;
             desc->mLevelObjectName = name_object;
             desc->mParams = params;
         }

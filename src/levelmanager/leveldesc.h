@@ -53,7 +53,7 @@ public:
     CLevelDesc();
     ~CLevelDesc();
 
-    CLevelObjectDesc * AddObject(const std::string & _template,
+    CLevelObjectDesc * AddObject(const std::string & _geometry,
                                  const std::string & _name);
     bool DestroyObject(CLevelObjectDesc * _desc);
     CLevelObjectDesc * GetObject(const std::string & _name);

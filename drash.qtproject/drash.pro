@@ -37,7 +37,7 @@ SOURCES += ../src/qt/main.cpp\
     ../src/explosion/explosionsystem.cpp \
     ../src/players/playerssystem.cpp \
     ../src/editor/editorwindow.cpp \
-    ../src/templates/templatesystem.cpp \
+    ../src/scene/geometrymanager.cpp \
     ../src/scene/figure.cpp \
     ../src/app/app.cpp \
     ../src/app/appevent.cpp \
@@ -98,7 +98,7 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/explosion/explosionsystem.h \
     ../src/players/playerssystem.h \
     ../src/editor/editorwindow.h \
-    ../src/templates/templatesystem.h \
+    ../src/scene/geometrymanager.h \
     ../src/scene/figure.h \
     ../src/app/app.h \
     ../src/app/appevent.h \

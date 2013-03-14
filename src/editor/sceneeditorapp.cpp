@@ -60,7 +60,7 @@ bool CSceneEditorApp::Init()
 
 //    mMoveablePoint.SetSize(100);
     return true;
-    //GetTemplateSystem().CreateSceneObjectFromTemplate("Object1",CSceneObjectParams());
+    //GetGeometryManager().CreateSceneObjectFromTemplate("Object1",CSceneObjectParams());
 }
 
 void CSceneEditorApp::Step(double _dt)
@@ -94,7 +94,7 @@ void CSceneEditorApp::Render()
         {
             for (unsigned int i = 0; i < mCurrentLevel->EnumObjects(); i++)
             {
-                auto g = GetTemplateSystem().FindTemplate(mCurrentLevel->GetObjects()[i]->mGeometryName);
+                auto g = GetGeometryManager().GetGeometry(mCurrentLevel->GetObjects()[i]->mGeometryName);
 
                 if (g != nullptr)
                 {
@@ -116,7 +116,7 @@ void CSceneEditorApp::Release()
 
 void CSceneEditorApp::UpdateTemplateSystem()
 {
-    GetTemplateSystem().Load();
+    GetGeometryManager().Load();
 }
 
 bool CSceneEditorApp::LoadLevel(const std::string &_filename)
@@ -197,7 +197,7 @@ void CSceneEditorApp::AddObject(const std::string &_name, const CVec3f &_pos)
         return;
     }
 
-    CSceneObjectGeometry *obj = GetTemplateSystem().FindTemplate(_name);
+    CSceneObjectGeometry *obj = GetGeometryManager().GetGeometry(_name);
     if (obj == nullptr) {
         LOG_ERR(_name.c_str()  << " not found in Template System");
         return;
@@ -440,7 +440,7 @@ void CSceneEditorApp::RenderDragTemplate()
     }
     //qDebug() << mDragTemplateName.c_str();
     if (mDragTemplateName != "") {
-        CSceneObjectGeometry * g = GetTemplateSystem().FindTemplate(mDragTemplateName);
+        CSceneObjectGeometry * g = GetGeometryManager().GetGeometry(mDragTemplateName);
         if (g == nullptr) {
             return;
         }
@@ -495,13 +495,13 @@ void CSceneEditorApp::ResetLevel()
     }
 }
 
-void CSceneEditorApp::LookObject(const std::string &_templatename, const std::string &_objectname)
+void CSceneEditorApp::LookObject(const std::string &_geometryname, const std::string &_objectname)
 {
     if (mCurrentLevel != nullptr) {        
         for (unsigned int i = 0; i < mCurrentLevel->EnumObjects(); i++)
         {
             if (mCurrentLevel->GetObjects()[i]->mLevelObjectName == _objectname &&
-                mCurrentLevel->GetObjects()[i]->mGeometryName == _templatename)
+                mCurrentLevel->GetObjects()[i]->mGeometryName == _geometryname)
             {
                 mCamera->LookAt(mCurrentLevel->GetObjects()[i]->mParams.mPos);
             }

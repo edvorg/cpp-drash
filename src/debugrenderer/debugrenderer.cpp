@@ -33,7 +33,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../misc/plane.h"
 #include "../misc/ray.h"
 #include "../levelmanager/leveldesc.h"
-#include "../templates/templatesystem.h"
+#include "../scene/geometrymanager.h"
 
 namespace greng
 {
@@ -425,7 +425,7 @@ CLevelObjectDesc *CDebugRenderer::FindObject(const greng::CCamera * _camera,
         center = 0;
         size = 0;
 
-        CSceneObjectGeometry * _geometry = mTemplateSystem->FindTemplate(_desc->mGeometryName);
+        CSceneObjectGeometry * _geometry = mGeometryManager->GetGeometry(_desc->mGeometryName);
 
         if (_geometry == nullptr)
         {
