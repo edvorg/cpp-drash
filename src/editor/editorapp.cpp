@@ -29,6 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/camera.h"
 #include "../scene/figure.h"
 #include "../scene/sceneobject.h"
+#include "../misc/ray.h"
 
 using namespace greng;
 

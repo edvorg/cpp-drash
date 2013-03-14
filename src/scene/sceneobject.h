@@ -27,6 +27,11 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define CSCENEOBJECT_H
 
 #include <functional>
+#include <vector>
+#include <map>
+#include "../misc/animator.h"
+#include "../misc/vec3.h"
+#include "../misc/objectfactory.h"
 
 class b2Body;
 

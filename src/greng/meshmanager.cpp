@@ -28,6 +28,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../diag/logger.h"
 #include "loadmeshobj.h"
 #include <cstring>
+#include "../misc/vec4.h"
+#include "../misc/matrix4.h"
+#include "../misc/math.h"
 
 namespace greng
 {
@@ -380,20 +383,20 @@ void CMeshManager::ComputeTangentSpace(CMesh *_mesh)
         CVertex &v2 = _mesh->mVertices[_mesh->mIndices[i * 3 + 1]];
         CVertex &v3 = _mesh->mVertices[_mesh->mIndices[i * 3 + 2]];
 
-        CVec3f q1 = v2.mPos;
-        CVec3f q2 = v3.mPos;
+        drash::CVec3f q1 = v2.mPos;
+        drash::CVec3f q2 = v3.mPos;
 
         q1 -= v1.mPos;
         q2 -= v1.mPos;
 
-        CVec2f st1 = v2.mUV;
-        CVec2f st2 = v3.mUV;
+        drash::CVec2f st1 = v2.mUV;
+        drash::CVec2f st2 = v3.mUV;
 
         st1 -= v1.mUV;
         st2 -= v1.mUV;
 
-        CVec3f tangent;
-        CVec3f binormal;
+        drash::CVec3f tangent;
+        drash::CVec3f binormal;
 
         tangent.mX = st2.mY * q1.mX - st1.mY * q2.mX;
         tangent.mY = st2.mY * q1.mY - st1.mY * q2.mY;

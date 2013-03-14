@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <functional>
 #include <vector>
+#include "../misc/vec2.h"
 
 class b2Fixture;
 

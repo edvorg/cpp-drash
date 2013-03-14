@@ -23,6 +23,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include "camera.h"
+#include "../misc/ray.h"
+#include "../misc/plane.h"
 
 namespace greng
 {

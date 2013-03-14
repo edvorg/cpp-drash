@@ -68,6 +68,7 @@ bool CApp::Init()
 
     mDebugRenderer.SetGrengSystems(&mGrengSystems);
     mDebugRenderer.SetScene(&mScene);
+    mDebugRenderer.SetTemplateSystem(&mTemplateSystem);
 
     if (mDebugRenderer.Init() == false)
     {

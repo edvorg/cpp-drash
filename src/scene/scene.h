@@ -27,6 +27,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define CSCENE_H
 
 #include <Box2D/Box2D.h>
+#include "../misc/vec3.h"
+#include "../misc/objectfactory.h"
 
 class b2World;
 

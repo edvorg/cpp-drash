@@ -28,7 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../players/player.h"
 #include "../greng/camera.h"
 #include "../scene/scene.h"
-#include "../levelmanager/level.h"
+#include "../levelmanager/leveldesc.h"
 #include "../misc/math.h"
 
 namespace drash
@@ -203,7 +203,7 @@ bool CTest6::InitLevel()
         i->second->ComputeDestructionGraph(0.5);
     }
 
-    CLevel *l = GetLevelManager().CreateLevel();
+    CLevelDesc *l = GetLevelManager().CreateLevel();
 
     if (l == nullptr)
     {

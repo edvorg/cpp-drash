@@ -30,6 +30,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../scene/sceneobject.h"
 #include "../players/player.h"
 #include "../scene/figure.h"
+#include "../misc/plane.h"
 
 namespace drash
 {

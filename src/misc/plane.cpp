@@ -22,6 +22,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
+#include "plane.h"
+#include "ray.h"
+
 namespace drash
 {
 

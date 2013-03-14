@@ -25,6 +25,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DRASH_DEBUGRENDERER_H
 #define DRASH_DEBUGRENDERER_H
 
+#include <functional>
+#include "../misc/vec2.h"
+
 namespace greng
 {
 
@@ -33,6 +36,8 @@ class CCamera;
 class CGrengSystemsSet;
 class CPointLight;
 class CSpotLight;
+class CMesh;
+class CShaderProgram;
 
 }
 
@@ -44,11 +49,14 @@ class CFigure;
 class CSceneObjectGeometry;
 class CSceneObjectParams;
 class CSceneObject;
+class CLevelObjectDesc;
+class CTemplateSystem;
 
 class CDebugRenderer final
 {
 public:
     inline void SetScene(CScene *_scene);
+    inline void SetTemplateSystem(CTemplateSystem *_template_system);
     inline void SetGrengSystems(greng::CGrengSystemsSet *_greng_systems);
 
     inline void SetCamera(greng::CCamera *_camera);
@@ -69,6 +77,12 @@ public:
     /// returns nearest one
     CFigure *FindFigure(const greng::CCamera *_camera, const CVec2f &_pos) const;
     CSceneObject * FindObject(const greng::CCamera *_camera, const CVec2f &_pos) const;
+
+    CLevelObjectDesc * FindObject(const greng::CCamera * _camera,
+                                  const CVec2f & _pos,
+                                  std::function<CLevelObjectDesc * (unsigned int)> _object_getter,
+                                  unsigned int _objects_count);
+
 protected:
 private:
     bool InitTextures();
@@ -80,6 +94,7 @@ private:
                              float _depth) const;
 
     CScene* mScene = nullptr;
+    CTemplateSystem * mTemplateSystem = nullptr;
     greng::CGrengSystemsSet *mGrengSystems = nullptr;
 
     greng::CShaderProgram *mShaderProgram1 = nullptr;
@@ -96,6 +111,11 @@ private:
 inline void CDebugRenderer::SetScene(CScene *_scene)
 {
     mScene = _scene;
+}
+
+inline void CDebugRenderer::SetTemplateSystem(CTemplateSystem *_template_system)
+{
+    mTemplateSystem = _template_system;
 }
 
 inline void CDebugRenderer::SetGrengSystems(greng::CGrengSystemsSet *_greng_systems)

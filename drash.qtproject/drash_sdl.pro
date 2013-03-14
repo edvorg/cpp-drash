@@ -21,10 +21,6 @@ CONFIG(release, debug|release) {
     QMAKE_CXXFLAGS += -O2
 }
 
-CONFIG += precompile_header
-
-PRECOMPILED_HEADER = ../src/precompiled.h
-
 SOURCES += \
     ../src/ui/uiwidget.cpp \
     ../src/ui/uisystem.cpp \
@@ -70,7 +66,7 @@ SOURCES += \
     ../src/greng/cameramanager.cpp \
     ../src/debugrenderer/debugrenderer.cpp \
     ../src/misc/moveablepoint.cpp \
-    ../src/levelmanager/level.cpp \
+    ../src/levelmanager/leveldesc.cpp \
     ../src/levelmanager/levelmanager.cpp \
     ../src/test/test8.cpp \
     ../src/misc/rotationablepoint.cpp \
@@ -139,7 +135,7 @@ HEADERS += \
     ../src/greng/cameramanager.h \
     ../src/debugrenderer/debugrenderer.h \
     ../src/misc/moveablepoint.h \
-    ../src/levelmanager/level.h \
+    ../src/levelmanager/leveldesc.h \
     ../src/levelmanager/levelmanager.h \
     ../src/test/test8.h \
     ../src/misc/rotationablepoint.h \

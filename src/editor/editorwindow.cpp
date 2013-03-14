@@ -41,7 +41,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/camera.h"
 #include "editorapp.h"
 #include "sceneeditorapp.h"
-#include "../levelmanager/level.h"
+#include "../levelmanager/leveldesc.h"
 
 using namespace drash;
 
@@ -491,15 +491,16 @@ void EditorWindow::UpdateTreeSceneObjects()
 {
     ui->mTreeSceneObjects->clear();
     QTreeWidget * tree = ui->mTreeSceneObjects;
-    for (const auto & headitem : mSceneApp->GetCurrentLevel()->GetObjects()) {
+
+    for (unsigned int i = 0; i < mSceneApp->GetCurrentLevel()->EnumObjects(); i++) {
+        CLevelObjectDesc * cur_obj_desc = mSceneApp->GetCurrentLevel()->GetObjects()[i];
+
         QTreeWidgetItem *templateItem = new QTreeWidgetItem(tree,
-                                        QStringList(QString::fromStdString(headitem.first)));
+                                        QStringList(QString::fromStdString(cur_obj_desc->mLevelObjectName)));
 
         tree->addTopLevelItem(templateItem);
-        for (const auto &item : headitem.second) {
-            QString objectname = QString::fromStdString(item.first);
-            new QTreeWidgetItem(templateItem,QStringList(objectname));
-        }
+        QString objectname = QString::fromStdString(cur_obj_desc->mGeometryName);
+        new QTreeWidgetItem(templateItem,QStringList(objectname));
     }
 }
 

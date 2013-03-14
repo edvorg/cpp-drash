@@ -24,7 +24,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "test8.h"
 
-#include "../levelmanager/level.h"
+#include "../levelmanager/leveldesc.h"
 #include "../scene/figure.h"
 #include "../greng/camera.h"
 
@@ -128,8 +128,8 @@ bool CTest8::InitLevels()
     g2->mFigures[0].mVertices.push_back(CVec2f(1, 1));
     g2->mFigures[0].mVertices.push_back(CVec2f(-1, 1));
 
-    CSceneObjectParams *p1 = mLevel1->AddObject("object1_template", "obj1");
-    CSceneObjectParams *p2 = mLevel1->AddObject("object2_template", "obj2");
+    CLevelObjectDesc *p1 = mLevel1->AddObject("object1_template", "obj1");
+    CLevelObjectDesc *p2 = mLevel1->AddObject("object2_template", "obj2");
 
     if (p1 == nullptr ||
         p2 == nullptr)
@@ -137,10 +137,10 @@ bool CTest8::InitLevels()
         return false;
     }
 
-    p2->mPos.Set(3, 0, 0);
+    p2->mParams.mPos.Set(3, 0, 0);
 
-    CSceneObjectParams *p3 = mLevel2->AddObject("object1_template", "obj1");
-    CSceneObjectParams *p4 = mLevel2->AddObject("object2_template", "obj2");
+    CLevelObjectDesc *p3 = mLevel2->AddObject("object1_template", "obj1");
+    CLevelObjectDesc *p4 = mLevel2->AddObject("object2_template", "obj2");
 
     if (p3 == nullptr ||
         p4 == nullptr)
@@ -148,7 +148,7 @@ bool CTest8::InitLevels()
         return false;
     }
 
-    p3->mPos.Set(3, 0, 0);
+    p3->mParams.mPos.Set(3, 0, 0);
 
     return true;
 }

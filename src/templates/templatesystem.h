@@ -25,6 +25,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef TEMPLATESYSTEM_H
 #define TEMPLATESYSTEM_H
 
+#include <map>
+#include <string>
+
 namespace drash
 {
 
