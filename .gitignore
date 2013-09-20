@@ -18,4 +18,8 @@
 #build dirs
 drash-build-release
 drash-build-debug
+drash-sdl-build-release
+drash-sdl-build-debug
+drash-build
+drash-sdl-build
 3rd
