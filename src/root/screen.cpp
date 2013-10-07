@@ -2,7 +2,7 @@
 
 namespace drash {
 
-CScreen(CRoot & _parent):
+CScreen::CScreen(CRoot & _parent):
     mRoot(_parent)
 {
 

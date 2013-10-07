@@ -74,7 +74,8 @@ SOURCES += \
     ../src/greng/grengsystemsset.cpp \
     ../src/test/test10.cpp \
     ../src/greng/spotlight.cpp \
-    ../src/root/root.cpp
+    ../src/root/root.cpp \
+    ../src/root/screen.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -146,5 +147,6 @@ HEADERS += \
     ../src/greng/grengsystemsset.h \
     ../src/test/test10.h \
     ../src/greng/spotlight.h \
-    ../src/root/root.h
+    ../src/root/root.h \
+    ../src/root/screen.h
 
