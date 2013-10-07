@@ -50,7 +50,6 @@ SOURCES += \
     ../src/greng/fragmentshadermanager.cpp \
     ../src/greng/shaderprogrammanager.cpp \
     ../src/misc/vec2.cpp \
-    ../src/scene/joint.cpp \
     ../src/greng/cameramanager.cpp \
     ../src/misc/moveablepoint.cpp \
     ../src/misc/rotationablepoint.cpp \
@@ -103,7 +102,6 @@ HEADERS += \
     ../src/greng/shaderprogrammanager.h \
     ../src/greng/pointlight.h \
     ../src/misc/animator.h \
-    ../src/scene/joint.h \
     ../src/greng/cameramanager.h \
     ../src/misc/moveablepoint.h \
     ../src/misc/rotationablepoint.h \

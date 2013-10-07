@@ -39,7 +39,6 @@ class CPhysObserver;
 class CSceneObjectGeometry;
 class CSceneObjectParams;
 class CSceneObject;
-class CJoint;
 
 class CSceneParams
 {
@@ -81,14 +80,6 @@ public:
     inline CSceneObject * const * GetObjects(void) const;
     inline unsigned int EnumObjects(void) const;
     void DestroyObjects(void);
-
-    // **************************************************
-    // * working with joints ****************************
-
-    CJoint *CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2, const CVec3f &_anchor);
-    CJoint *CreateJointDistance(CSceneObject *_obj1, CSceneObject *_obj2, const CVec3f &_anchor1, const CVec3f &_anchor2, float _length);
-    CJoint *CreateJointRope(CSceneObject *_obj1, CSceneObject *_obj2, const CVec3f &_anchor1, const CVec3f &_anchor2, float _length);
-    void DestroyJoint(CJoint *_joint);
 
     void SetGravity(const CVec2f &_g);
 
