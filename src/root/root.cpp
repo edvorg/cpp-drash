@@ -1,28 +1,32 @@
 #include "root.h"
 #include "screen.h"
 
-namespace drash {
+namespace drash
+{
 
 CRoot::CRoot()
 {
-
+    mGrengSystems.Init();
 }
 
 CRoot::~CRoot()
 {
-
+    mScreen = CScreenPtr(nullptr);
+    mGrengSystems.Release();
 }
 
 void CRoot::Step(double _dt)
 {
-    if (mScreen) {
+    if (mScreen)
+    {
         mScreen->Step(_dt);
     }
 }
 
 void CRoot::Render()
 {
-    if (mScreen) {
+    if (mScreen)
+    {
         mScreen->Render();
     }
 }

@@ -27,18 +27,9 @@ SOURCES += \
     ../src/ui/uislider.cpp \
     ../src/ui/uicontrol.cpp \
     ../src/ui/uibutton.cpp \
-    ../src/test/test5.cpp \
-    ../src/test/test4.cpp \
-    ../src/test/test3.cpp \
-    ../src/test/test2.cpp \
-    ../src/test/test1.cpp \
-    ../src/test/test.cpp \
     ../src/scene/geometrymanager.cpp \
-    ../src/players/playerssystem.cpp \
-    ../src/explosion/explosionsystem.cpp \
     ../src/scene/sceneobject.cpp \
     ../src/scene/scene.cpp \
-	../src/players/player.cpp \
     ../src/scene/figure.cpp \
     ../src/misc/ray.cpp \
     ../src/misc/plane.cpp \
@@ -48,34 +39,26 @@ SOURCES += \
     ../src/diag/timer.cpp \
     ../src/diag/logger.cpp \
     ../src/greng/camera.cpp \
-    ../src/app/appeventsystem.cpp \
-    ../src/app/appeventprocessor.cpp \
-    ../src/app/appeventcombination.cpp \
-    ../src/app/appevent.cpp \
-    ../src/app/app.cpp \
+    ../src/appeventsystem/appeventsystem.cpp \
+    ../src/appeventsystem/appeventprocessor.cpp \
+    ../src/appeventsystem/appeventcombination.cpp \
+    ../src/appeventsystem/appevent.cpp \
     ../src/sdl/main.cpp \
     ../src/greng/loadmeshobj.cpp \
     ../src/greng/texturemanager.cpp \
     ../src/greng/vertexshadermanager.cpp \
     ../src/greng/fragmentshadermanager.cpp \
     ../src/greng/shaderprogrammanager.cpp \
-    ../src/test/test6.cpp \
     ../src/misc/vec2.cpp \
     ../src/scene/joint.cpp \
-    ../src/test/test7.cpp \
     ../src/greng/cameramanager.cpp \
-    ../src/debugrenderer/debugrenderer.cpp \
     ../src/misc/moveablepoint.cpp \
-    ../src/levelmanager/leveldesc.cpp \
-    ../src/levelmanager/levelmanager.cpp \
-    ../src/test/test8.cpp \
     ../src/misc/rotationablepoint.cpp \
-    ../src/test/test9.cpp \
     ../src/greng/grengsystemsset.cpp \
-    ../src/test/test10.cpp \
     ../src/greng/spotlight.cpp \
     ../src/root/root.cpp \
-    ../src/root/screen.cpp
+    ../src/root/screen.cpp \
+    ../src/mainscreen/mainscreen.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -83,20 +66,10 @@ HEADERS += \
     ../src/ui/uislider.h \
     ../src/ui/uicontrol.h \
     ../src/ui/uibutton.h \
-    ../src/test/test5.h \
-    ../src/test/test4.h \
-    ../src/test/test3.h \
-    ../src/test/test2.h \
-    ../src/test/test1.h \
-    ../src/test/test.h \
     ../src/scene/geometrymanager.h \
-    ../src/players/playerssystem.h \
-    ../src/explosion/explosionsystem.h \
     ../src/scene/sceneobject.h \
     ../src/scene/scene.h \
-	../src/players/player.h \
     ../src/scene/figure.h \
-    ../src/explosion/explosion.h \
     ../src/misc/vec4.h \
     ../src/misc/vec3.h \
     ../src/misc/vec2.h \
@@ -114,11 +87,10 @@ HEADERS += \
     ../src/diag/logger.h \
     ../src/diag/assert.h \
     ../src/greng/camera.h \
-    ../src/app/appeventsystem.h \
-    ../src/app/appeventprocessor.h \
-    ../src/app/appeventcombination.h \
-    ../src/app/appevent.h \
-    ../src/app/app.h \
+    ../src/appeventsystem/appeventsystem.h \
+    ../src/appeventsystem/appeventprocessor.h \
+    ../src/appeventsystem/appeventcombination.h \
+    ../src/appeventsystem/appevent.h \
     ../src/greng/loadmeshobj.h \
     ../src/greng/texturemanager.h \
     ../src/greng/texture.h \
@@ -130,23 +102,16 @@ HEADERS += \
     ../src/greng/shaderprogram.h \
     ../src/greng/shaderprogrammanager.h \
     ../src/greng/pointlight.h \
-    ../src/test/test6.h \
     ../src/misc/animator.h \
     ../src/scene/joint.h \
-    ../src/test/test7.h \
     ../src/greng/cameramanager.h \
-    ../src/debugrenderer/debugrenderer.h \
     ../src/misc/moveablepoint.h \
-    ../src/levelmanager/leveldesc.h \
-    ../src/levelmanager/levelmanager.h \
-    ../src/test/test8.h \
     ../src/misc/rotationablepoint.h \
-    ../src/test/test9.h \
     precompiled.h \
     ../src/precompiled.h \
     ../src/greng/grengsystemsset.h \
-    ../src/test/test10.h \
     ../src/greng/spotlight.h \
     ../src/root/root.h \
-    ../src/root/screen.h
+    ../src/root/screen.h \
+    ../src/mainscreen/mainscreen.h
 

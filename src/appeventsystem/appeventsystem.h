@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "appeventprocessor.h"
 #include "appeventcombination.h"
+#include "../misc/vec2.h"
 #include <list>
 #include <map>
 
@@ -74,6 +75,9 @@ public:
     void EndEvent(const CAppEvent &_event);
     void CancelEvent(const CAppEvent &_event);
 
+    void SetCursorPos(const CVec2f & _pos);
+    const CVec2f & GetCursorPos() const;
+
 protected:
 private:
     int PressEventImpl(const CAppEvent &_event);
@@ -101,7 +105,20 @@ private:
 
     /// start point for searching of combinations to process
     CAppEventCombinationTree *mCurrentNode = nullptr;
+
+    /// current cursor position
+    CVec2f mCursorPos;
 };
+
+inline void CAppEventSystem::SetCursorPos(const CVec2f & _pos)
+{
+    mCursorPos = _pos;
+}
+
+inline const CVec2f & CAppEventSystem::GetCursorPos() const
+{
+    return mCursorPos;
+}
 
 } // namespace drash
 

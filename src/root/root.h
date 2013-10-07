@@ -9,39 +9,42 @@ namespace drash
 
 class CScreen;
 
-
-// Main manager
-// TODO: Contains interface AudioSystem and GamePrefences
-
+/// root system
+/// TODO: add audio and prefs systems
 class CRoot
 {
 public:
+    using CScreenPtr = std::shared_ptr<CScreen>;
+
     CRoot();
     virtual ~CRoot();
 
     void Step(double _dt);
     void Render();
 
-    using CSreenPtr = std::shared_ptr<CScreen>;
-
     greng::CGrengSystemsSet &GetGrengSystems();
-    void SetScreen(const CSreenPtr &_ptr);
+    void SetScreen(const CScreenPtr &_ptr);
+    CScreenPtr GetScreen();
 
 private:
     greng::CGrengSystemsSet mGrengSystems;
-    CSreenPtr mScreen = nullptr;
+    CScreenPtr mScreen = nullptr;
 };
-
 
 inline greng::CGrengSystemsSet &CRoot::GetGrengSystems()
 {
     return mGrengSystems;
 }
 
-inline void CRoot::SetScreen(const CSreenPtr &_ptr) {
+inline void CRoot::SetScreen(const CScreenPtr &_ptr)
+{
     mScreen = _ptr;
 }
 
+inline CRoot::CScreenPtr CRoot::GetScreen()
+{
+    return mScreen;
+}
 
 } // namespace drash
 #endif // ROOT_H

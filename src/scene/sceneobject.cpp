@@ -27,7 +27,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "figure.h"
 #include "../diag/logger.h"
 #include "../diag/assert.h"
-#include "../explosion/explosion.h"
 #include "scene.h"
 
 #include <Box2D/Box2D.h>
