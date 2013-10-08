@@ -25,8 +25,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash
 {
 
-CMainScreen::CMainScreen(CRoot & _root):
-    CScreen(_root)
+CMainScreen::CMainScreen(CRoot & _parent):
+    CScreen(_parent)
 {
 }
 

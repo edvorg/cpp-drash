@@ -31,7 +31,7 @@ namespace drash
 class CMainScreen : public CScreen
 {
 public:
-    explicit CMainScreen(CRoot & _root);
+    explicit CMainScreen(CRoot & _parent);
     virtual ~CMainScreen();
 
     virtual void Step(double _dt) override;
