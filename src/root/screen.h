@@ -4,7 +4,7 @@
 #include "../appeventsystem/appeventsystem.h"
 #include "../ui/uisystem.h"
 
-/// Abstract base class for Screen
+/// base class for Screen
 
 namespace drash
 {
@@ -19,8 +19,8 @@ public:
     explicit CScreen(CRoot & _parent);
     virtual ~CScreen();
 
-    virtual void Step(double _dt) = 0;
-    virtual void Render() = 0;
+    virtual void Step(double _dt);
+    virtual void Render();
 
     inline ui::CUISystem &GetUISystem();
     inline CAppEventSystem &GetEventSystem();

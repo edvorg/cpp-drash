@@ -16,4 +16,14 @@ CScreen::~CScreen()
     mEventSystem.Release();
 }
 
+void CScreen::Step(double _dt)
+{
+    GetUISystem().Step(_dt);
+}
+
+void CScreen::Render()
+{
+    GetUISystem().Render();
+}
+
 } // namespace drash

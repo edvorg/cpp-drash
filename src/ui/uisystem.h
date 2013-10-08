@@ -77,6 +77,7 @@ public:
 
     void Step(double _dt);
     void DebugDraw() const;
+    void Render();
 
 protected:
 private:
