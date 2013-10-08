@@ -38,10 +38,12 @@ namespace drash
 
 		void CPrefsScreen::Step(double _dt)
 		{
+				CScreen::Step(_dt);
 		}
 
 		void CPrefsScreen::Render()
 		{
+				CScreen::Render();
 		}
 
 }
