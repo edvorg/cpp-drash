@@ -4,6 +4,8 @@
 #include "../appeventsystem/appeventsystem.h"
 #include "../ui/uisystem.h"
 
+/// Abstract base class for Screen
+
 namespace drash
 {
 

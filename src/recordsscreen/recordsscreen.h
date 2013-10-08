@@ -25,6 +25,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../root/screen.h"
 
+/// Screen showing table of records
+
 namespace drash {
 
 class CRecordsScreen : public CScreen

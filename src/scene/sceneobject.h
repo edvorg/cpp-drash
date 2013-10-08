@@ -68,7 +68,6 @@ class CSceneObject final : public CObjectFactory<CSceneObject>::CFactoryProduct
 {
 public:
     friend class CScene;
-    friend class CExplosion;
 
     static const unsigned int mFiguresCountLimit = 128;
 
