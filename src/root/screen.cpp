@@ -19,6 +19,7 @@ CScreen::~CScreen()
 void CScreen::Step(double _dt)
 {
     GetUISystem().Step(_dt);
+    GetEventSystem().Process();
 }
 
 void CScreen::Render()
