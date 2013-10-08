@@ -40,10 +40,8 @@ public:
 
 private:
     CScene mScene;
-    CGeometryManager mGeometryManger;
 
     bool InitScene();
-    bool InitGeometryManager();
 };
 
 } // namespace drash

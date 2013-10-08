@@ -53,11 +53,5 @@ bool CGameScreen::InitScene()
     return mScene.Init(params);
 }
 
-bool CGameScreen::InitGeometryManager()
-{
-    bool init = mGeometryManger.Init();
-    mGeometryManger.SetScene(&mScene);
-    return init;
-}
 
 } // namespace drash

@@ -30,6 +30,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../misc/vec3.h"
 #include "../misc/objectfactory.h"
 
+#include "geometrymanager.h"
+
 class b2World;
 
 namespace drash
@@ -85,6 +87,7 @@ public:
 
     inline void SetPaused(bool _paused);
 
+    inline CGeometryManager & GetGeometryManager();
 protected:
 private:
     void DestroyObjectImpl(CSceneObject *_obj);
@@ -101,6 +104,9 @@ private:
     CObjectFactory<CSceneObject> mObjectsFactory;
     bool mLocked = false;
     bool mPaused = false;
+
+    // Manager for create SceneObjects from template
+    CGeometryManager mGeometryManager;
 };
 
 inline CSceneObject * const * CScene::GetObjects(void) const
@@ -116,6 +122,11 @@ inline unsigned int CScene::EnumObjects(void) const
 inline void CScene::SetPaused(bool _paused)
 {
     mPaused = _paused;
+}
+
+inline CGeometryManager &CScene::GetGeometryManager()
+{
+    return mGeometryManager;
 }
 
 } // namespace drash

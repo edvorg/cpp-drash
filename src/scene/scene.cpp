@@ -51,11 +51,12 @@ bool CScene::Init(const CSceneParams & _params)
 
     mWorld.SetContactFilter(this);
     mWorld.SetContactListener(this);
+
     mWorld.SetAllowSleeping(true);
     mWorld.SetContinuousPhysics(false);
     mWorld.SetGravity(CVec2ToB2Vec2(_params.mGravity));
 
-    return true;
+    return mGeometryManager.Init();
 }
 
 void CScene::Release(void)
