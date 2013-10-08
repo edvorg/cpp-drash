@@ -36,10 +36,12 @@ CMainScreen::~CMainScreen()
 
 void CMainScreen::Step(double _dt)
 {
+    CScreen::Step(_dt);
 }
 
 void CMainScreen::Render()
 {
+    CScreen::Render();
 }
 
 } // namespace drash

@@ -37,12 +37,12 @@ CRecordsScreen::~CRecordsScreen()
 
 void CRecordsScreen::Step(double _dt)
 {
-
+    CScreen::Step(_dt);
 }
 
 void CRecordsScreen::Render()
 {
-
+    CScreen::Render();
 }
 
 } // namespace drash

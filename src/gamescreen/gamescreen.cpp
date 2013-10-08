@@ -37,12 +37,13 @@ CGameScreen::~CGameScreen()
 
 void CGameScreen::Step(double _dt)
 {
+    CScreen::Step(_dt);
     mScene.Step(_dt);
 }
 
 void CGameScreen::Render()
 {
-
+    CScreen::Render();
 }
 
 bool CGameScreen::InitScene()
