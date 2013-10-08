@@ -146,6 +146,11 @@ void CUISystem::DebugDraw() const
     }
 }
 
+void CUISystem::Render()
+{
+
+}
+
 } // namepsace ui
 
 } // namespace drash
