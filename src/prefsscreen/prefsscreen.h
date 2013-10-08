@@ -22,26 +22,28 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#ifndef DRASH_RECORDSSCREEN_H
-#define DRASH_RECORDSSCREEN_H
+#ifndef PREFSSCREEN_H
+#define PREFSSCREEN_H
 
 #include "../root/screen.h"
 
-/// Screen showing table of records
-
-namespace drash {
-
-class CRecordsScreen : public CScreen
+namespace drash
 {
-public:
-    explicit CRecordsScreen(CRoot & _parent);
 
-    virtual ~CRecordsScreen();
+		class CPrefsScreen : public CScreen
+		{
+		public:
+				CPrefsScreen() = delete;
+				explicit CPrefsScreen(CRoot & _root);
+				virtual ~CPrefsScreen();
 
-    virtual void Step(double _dt) override;
-    virtual void Render() override;
-};
+				virtual void Step(double _dt) override;
+				virtual void Render() override;
+
+		protected:
+		private:
+		};
 
 } // namespace drash
 
-#endif // DRASH_RECORDSSCREEN_H
+#endif

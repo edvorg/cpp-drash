@@ -1,3 +1,4 @@
+// DRASH_LICENSE_BEGIN
 /*
 
 drash GPL Source Code
@@ -19,6 +20,7 @@ You should have received a copy of the GNU General Public License
 along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+// DRASH_LICENSE_END
 
 #ifndef DRASH_MAINSCREEN_H
 #define DRASH_MAINSCREEN_H
