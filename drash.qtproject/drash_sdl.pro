@@ -58,7 +58,8 @@ SOURCES += \
     ../src/root/root.cpp \
     ../src/root/screen.cpp \
     ../src/mainscreen/mainscreen.cpp \
-    ../src/recordsscreen/recordsscreen.cpp
+    ../src/recordsscreen/recordsscreen.cpp \
+    ../src/gamescreen/gamescreen.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -113,5 +114,6 @@ HEADERS += \
     ../src/root/root.h \
     ../src/root/screen.h \
     ../src/mainscreen/mainscreen.h \
-    ../src/recordsscreen/recordsscreen.h
+    ../src/recordsscreen/recordsscreen.h \
+    ../src/gamescreen/gamescreen.h
 
