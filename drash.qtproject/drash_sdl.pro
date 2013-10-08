@@ -57,7 +57,8 @@ SOURCES += \
     ../src/greng/spotlight.cpp \
     ../src/root/root.cpp \
     ../src/root/screen.cpp \
-    ../src/mainscreen/mainscreen.cpp
+    ../src/mainscreen/mainscreen.cpp \
+    ../src/recordsscreen/recordsscreen.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -111,5 +112,6 @@ HEADERS += \
     ../src/greng/spotlight.h \
     ../src/root/root.h \
     ../src/root/screen.h \
-    ../src/mainscreen/mainscreen.h
+    ../src/mainscreen/mainscreen.h \
+    ../src/recordsscreen/recordsscreen.h
 
