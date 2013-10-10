@@ -3,7 +3,7 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-QMAKE_CXXFLAGS += -std=c++0x
+QMAKE_CXXFLAGS += -std=c++0x -Wall
 
 INCLUDEPATH += ../3rd/Box2D/include
 
@@ -60,7 +60,10 @@ SOURCES += \
 	../src/mainscreen/mainscreen.cpp \
 	../src/recordsscreen/recordsscreen.cpp \
 	../src/prefsscreen/prefsscreen.cpp \
-	../src/gamescreen/gamescreen.cpp
+	../src/gamescreen/gamescreen.cpp \
+    ../src/appeventsystem/eventsystem.cpp \
+    ../src/appeventsystem/touchevent.cpp \
+    ../src/appeventsystem/touchlistener.cpp
 
 HEADERS += \
 	../src/ui/uiwidget.h \
@@ -117,4 +120,7 @@ HEADERS += \
 	../src/mainscreen/mainscreen.h \
 	../src/prefsscreen/prefsscreen.h \
 	../src/recordsscreen/recordsscreen.h \
-	../src/gamescreen/gamescreen.h
+	../src/gamescreen/gamescreen.h \
+    ../src/appeventsystem/eventsystem.h \
+    ../src/appeventsystem/touchevent.h \
+    ../src/appeventsystem/touchlistener.h
