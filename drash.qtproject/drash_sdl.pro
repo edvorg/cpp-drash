@@ -5,20 +5,28 @@ CONFIG -= qt
 
 QMAKE_CXXFLAGS += -std=c++0x -Wall
 
+
 INCLUDEPATH += ../3rd/Box2D/include
 
 LIBS += -L../3rd/Box2D/lib -lBox2D
 
 unix:!macx: LIBS += -lrt -lGL -lSDL -lGLEW -lSDL_image
 
-CONFIG(debug, debug|release) {
+CONFIG(debug, debug|release|profiler) {
 	DEFINES += DRASH_DEBUG
 	QMAKE_CXXFLAGS += -O0
 }
 
-CONFIG(release, debug|release) {
+CONFIG(release, debug|release|profiler) {
 	DEFINES += DRASH_RELEASE
 	QMAKE_CXXFLAGS += -O2
+}
+
+CONFIG(profiler, debug|release|profiler) {
+    DEFINES += DRASH_DEBUG
+    QMAKE_CXXFLAGS += -O0
+    QMAKE_CXXFLAGS += -pg
+    QMAKE_LFLAGS += -pg
 }
 
 SOURCES += \
