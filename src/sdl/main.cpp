@@ -27,15 +27,12 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <SDL/SDL_image.h>
 #include "../diag/logger.h"
 #include "../diag/timer.h"
-#include "../appeventsystem/appevent.h"
 #include "../misc/vec2.h"
 #include "../mainscreen/mainscreen.h"
 #include "../root/root.h"
 
 using namespace drash;
 
-EventKey ConvertKey(SDLKey _key);
-EventKey ConvertButton(int _button);
 void WindowSpaceToScreenSpace(CVec2f &_from);
 
 static double gWindowWidth = 1366;
