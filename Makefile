@@ -18,9 +18,11 @@ drash-clean:
 	rm -rf drash-build/*
 
 drash-sdl-run: drash-sdl-build/drash_sdl
+	make drash-sdl
 	cd res ; ../drash-sdl-build/drash_sdl
 
-drash-sdl-run: drash-build/drash
+drash-run: drash-build/drash
+	make drash
 	cd res ; ../drash-build/drash
 
 check-syntax:
