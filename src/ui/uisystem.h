@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define DRASH_UISYSTEM_H
 
 #include "../misc/vec2.h"
+#include "../appeventsystem/eventsystem.h"
 
 namespace greng
 {
@@ -42,7 +43,7 @@ namespace ui
 
 class CUIControl;
 
-class CUISystem final
+class CUISystem final : public CTouchListener
 {
 public:
     constexpr static const unsigned int mControlsCountLimit = 10;
@@ -52,8 +53,8 @@ public:
     CUISystem(CUISystem &&) = delete;
     CUISystem &operator =(const CUISystem &) = delete;
     CUISystem &operator =(CUISystem &&) = delete;
+    virtual ~CUISystem();
 
-    bool Init();
     void Release();
 
     CUIControl *CreateControl();
@@ -61,6 +62,7 @@ public:
 
     void SetAspectRatio(float _ratio);
     void SetWidth(unsigned int _width);
+    void SetHeight(unsigned int _height);
 
     bool ScreenSpaceToUISpace(const CVec2f &_from, int &_x, int &_y);
     bool UISpaceToScreenSpace(int _x, int _y, CVec2f &_v);
@@ -78,6 +80,11 @@ public:
     void Step(double _dt);
     void DebugDraw() const;
     void Render();
+
+    // implemets Listener's interface
+    virtual void TouchPress(const CTouchEvent & _evt) override;
+    virtual void TouchPressing(const CTouchEvent & _evt) override;
+    virtual void TouchRelease(const CTouchEvent & _evt) override;
 
 protected:
 private:
