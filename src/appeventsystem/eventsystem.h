@@ -25,6 +25,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <list>
 #include "../misc/vec2.h"
+#include "touchlistener.h"
+
+#include <memory>
 
 namespace drash {
 
@@ -37,7 +40,6 @@ enum TouchState : unsigned int
     TOUCH_REPOSE
 };
 
-class CTouchListener;
 
 class CEventSystem
 {
@@ -61,8 +63,8 @@ private:
     CVec2f mTouchPos;
     std::list<CTouchListener*> mTouchListeners;
 
-
     void SendTouchEvents();
+//    using CTouchListnerPtr = std::shared_ptr<CTouchListener>;
 };
 
 } // namespace drash

@@ -35,14 +35,14 @@ public:
     CTouchEvent() = delete;
     explicit CTouchEvent(const CVec2f & _point);
 
-    inline const CVec2f & GetPoint();
+    inline const CVec2f & GetPoint() const;
 
 private:
     CVec2f mPoint;
 
 };
 
-const CVec2f &CTouchEvent::GetPoint()
+const CVec2f &CTouchEvent::GetPoint() const
 {
     return mPoint;
 }

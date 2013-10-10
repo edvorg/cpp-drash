@@ -21,7 +21,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "eventsystem.h"
-#include "touchlistener.h"
 #include "../diag/logger.h"
 
 namespace drash {
@@ -60,6 +59,9 @@ void CEventSystem::SendTouchEvents()
 {
     CTouchEvent evt(mTouchPos);
     for (CTouchListener * listener : mTouchListeners) {
+        if (listener == nullptr) {
+            continue;
+        }
         switch (mTouchState) {
         case TOUCH_PRESS:
             listener->TouchPress(evt);

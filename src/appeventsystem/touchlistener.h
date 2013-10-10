@@ -32,7 +32,7 @@ namespace drash
 class CTouchListener
 {
 public:
-    CTouchListener() = delete;
+    CTouchListener() = default;
 
 public:
     virtual void TouchPress(const CTouchEvent & _evt) = 0;
