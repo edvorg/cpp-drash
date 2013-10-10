@@ -3,12 +3,12 @@ INCLUDES=-I3rd/Box2D/include
 
 drash-sdl: drash.qtproject/drash_sdl.pro
 	mkdir -p drash-sdl-build
-	cd drash-sdl-build ; qmake ../drash.qtproject/drash_sdl.pro
+	cd drash-sdl-build ; qmake CONFIG+=debug ../drash.qtproject/drash_sdl.pro
 	cd drash-sdl-build ; make
 
 drash: drash.qtproject/drash.pro
 	mkdir -p drash-build
-	cd drash-build ; qmake ../drash.qtproject/drash.pro
+	cd drash-build ; qmake CONFIG+=debug ../drash.qtproject/drash.pro
 	cd drash-build ; make
 
 drash-sdl-clean:
@@ -17,11 +17,11 @@ drash-sdl-clean:
 drash-clean:
 	rm -rf drash-build/*
 
-drash-sdl-run: drash-sdl-build/drash_sdl
+drash-sdl-run:
 	make drash-sdl
 	cd res ; ../drash-sdl-build/drash_sdl
 
-drash-run: drash-build/drash
+drash-run:
 	make drash
 	cd res ; ../drash-build/drash
 
