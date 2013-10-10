@@ -1,4 +1,3 @@
-// DRASH_LICENSE_BEGIN
 /*
 
   drash GPL Source Code
@@ -20,4 +19,3 @@
   along with drash Source Code. If not, see <http://www.gnu.org/licenses/>.
 
 */
-// DRASH_LICENSE_END
