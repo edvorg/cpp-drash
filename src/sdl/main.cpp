@@ -27,15 +27,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <SDL/SDL_image.h>
 #include "../diag/logger.h"
 #include "../diag/timer.h"
-#include "../appeventsystem/appevent.h"
 #include "../misc/vec2.h"
 #include "../mainscreen/mainscreen.h"
 #include "../root/root.h"
 
+#include "../appeventsystem/eventsystem.h"
+#include "../appeventsystem/touchevent.h"
+
 using namespace drash;
 
-EventKey ConvertKey(SDLKey _key);
-EventKey ConvertButton(int _button);
 void WindowSpaceToScreenSpace(CVec2f &_from);
 
 static double gWindowWidth = 1366;
@@ -120,11 +120,12 @@ int main(int, char **)
         {
             CVec2f pos(_x, _y);
             WindowSpaceToScreenSpace(pos);
-            root.GetScreen()->GetEventSystem().SetCursorPos(pos);
-            int x;
-            int y;
-            root.GetScreen()->GetUISystem().ScreenSpaceToUISpace(pos, x, y);
-            root.GetScreen()->GetUISystem().SetCursorPos(x, y);
+            //root.GetScreen()->GetEventSystem().SetCursorPos(pos);
+//            int x;
+//            int y;
+//            root.GetScreen()->GetUISystem().ScreenSpaceToUISpace(pos, x, y);
+//            root.GetScreen()->GetUISystem().SetCursorPos(x, y);
+            root.GetScreen()->GetEventSystem().UpdateTouchPos(pos);
         };
 
         CTimer timer;
@@ -139,25 +140,23 @@ int main(int, char **)
                     exit = true;
                     break;
                 }
-                else if (e.type == SDL_KEYDOWN)
-                {
-                    root.GetScreen()->GetEventSystem().BeginEvent(ConvertKey(e.key.keysym.sym));
-                }
-                else if (e.type == SDL_KEYUP)
-                {
-                    root.GetScreen()->GetEventSystem().EndEvent(ConvertKey(e.key.keysym.sym));
-                }
+//                else if (e.type == SDL_KEYDOWN)
+//                {
+//                    //root.GetScreen()->GetEventSystem().BeginEvent(ConvertKey(e.key.keysym.sym));
+//                }
+//                else if (e.type == SDL_KEYUP)
+//                {
+//                    //root.GetScreen()->GetEventSystem().EndEvent(ConvertKey(e.key.keysym.sym));
+//                }
                 else if (e.type == SDL_MOUSEBUTTONDOWN)
                 {
                     update_cursor(e.button.x, e.button.y);
-                    root.GetScreen()->GetUISystem().BeginEvent();
-                    root.GetScreen()->GetEventSystem().BeginEvent(ConvertButton(e.button.button));
+                    root.GetScreen()->GetEventSystem().Touch();
                 }
                 else if (e.type == SDL_MOUSEBUTTONUP)
                 {
                     update_cursor(e.button.x, e.button.y);
-                    root.GetScreen()->GetUISystem().EndEvent();
-                    root.GetScreen()->GetEventSystem().EndEvent(ConvertButton(e.button.button));
+                    root.GetScreen()->GetEventSystem().TouchRelease();
                 }
                 else if (e.type == SDL_MOUSEMOTION)
                 {
@@ -200,70 +199,6 @@ int main(int, char **)
     SDL_Quit();
 
     return 0;
-}
-
-drash::EventKey ConvertKey(SDLKey _key)
-{
-    switch (_key)
-    {
-    case SDLK_q:
-        return EventKeyQ;
-    case SDLK_w:
-        return EventKeyW;
-    case SDLK_e:
-        return EventKeyE;
-    case SDLK_r:
-        return EventKeyR;
-    case SDLK_a:
-        return EventKeyA;
-    case SDLK_s:
-        return EventKeyS;
-    case SDLK_d:
-        return EventKeyD;
-    case SDLK_f:
-        return EventKeyF;
-    case SDLK_z:
-        return EventKeyZ;
-    case SDLK_x:
-        return EventKeyX;
-    case SDLK_c:
-        return EventKeyC;
-    case SDLK_v:
-        return EventKeyV;
-    case SDLK_SPACE:
-        return EventKeySpace;
-    case SDLK_ESCAPE:
-        return EventKeyEscape;
-    case SDLK_LCTRL:
-        return EventKeyControl;
-    case SDLK_LSHIFT:
-        return EventKeyShift;
-    case SDLK_LALT:
-        return EventKeyAlt;
-    case SDLK_LMETA:
-        return EventKeyMeta;
-    default:
-        return EventKeyUnknown;
-    }
-}
-
-drash::EventKey ConvertButton(int _button)
-{
-    switch (_button)
-    {
-    case SDL_BUTTON_LEFT:
-        return EventKeyLeftButton;
-    case SDL_BUTTON_RIGHT:
-        return EventKeyRightButton;
-    case SDL_BUTTON_MIDDLE:
-        return EventKeyMiddleButton;
-    case SDL_BUTTON_WHEELUP:
-        return EventKeyWheelUp;
-    case SDL_BUTTON_WHEELDOWN:
-        return EventKeyWheelDown;
-    default:
-        return EventKeyUnknown;
-    }
 }
 
 void WindowSpaceToScreenSpace(CVec2f &_from)
