@@ -30,20 +30,19 @@ namespace drash
 CScreen::CScreen(CRoot & _parent):
     mRoot(_parent)
 {
-    mUISystem.Init();
-    mEventSystem.Init();
+//    mUISystem.Init();
+    mEventSystem.AddTouchListener(&mUISystem);
 }
 
 CScreen::~CScreen()
 {
     mUISystem.Release();
-    mEventSystem.Release();
 }
 
 void CScreen::Step(double _dt)
 {
+    GetEventSystem().Update();
     GetUISystem().Step(_dt);
-    GetEventSystem().Process();
 }
 
 void CScreen::Render()

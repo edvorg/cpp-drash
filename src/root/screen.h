@@ -25,8 +25,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCREEN_H
 #define SCREEN_H
 
-#include "../appeventsystem/appeventsystem.h"
 #include "../ui/uisystem.h"
+
+#include "../appeventsystem/eventsystem.h"
 
 /// base class for Screen
 
@@ -47,13 +48,13 @@ public:
     virtual void Render();
 
     inline ui::CUISystem &GetUISystem();
-    inline CAppEventSystem &GetEventSystem();
+    inline CEventSystem &GetEventSystem();
     inline CRoot & GetRoot();
 
 protected:
 private:
     ui::CUISystem mUISystem;
-    CAppEventSystem mEventSystem;
+    CEventSystem mEventSystem;
     CRoot & mRoot;
 };
 
@@ -62,7 +63,7 @@ inline ui::CUISystem &CScreen::GetUISystem()
     return mUISystem;
 }
 
-inline CAppEventSystem &CScreen::GetEventSystem()
+inline CEventSystem &CScreen::GetEventSystem()
 {
     return mEventSystem;
 }
