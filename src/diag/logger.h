@@ -67,11 +67,14 @@ inline CLogger& CLogger::operator<<(const std::string &_str)
 #define LOG_ERR_PREFIX "[E]: "
 #define LOG_WARN_PREFIX "[W]: "
 #define LOG_INFO_PREFIX "[I]: "
+#define LOG_DEBUG_PREFIX "[DEBUG]: "
 
 #ifdef DRASH_DEBUG
 #define LOG_ERR(mes) CLogger(std::cerr)<<LOG_ERR_PREFIX<<mes
 #define LOG_WARN(mes) CLogger(std::cerr)<<LOG_WARN_PREFIX<<mes
 #define LOG_INFO(mes) CLogger(std::cout)<<LOG_INFO_PREFIX<<mes
+#define LOG_DEBUG(mes) CLogger(std::cout)<<LOG_DEBUG_PREFIX<<mes
+
 #else
 #define LOG_ERR(mes) CLogger(std::cerr)<<LOG_ERR_PREFIX<<mes
 #define LOG_WARN(mes)
