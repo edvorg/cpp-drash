@@ -43,235 +43,231 @@ static double gWindowHeight = 700;
 
 int main(int, char **)
 {
-    bool fail = false;
-    CRoot root;
-    CRoot::CScreenPtr screen(new CMainScreen(root));
+	bool fail = false;
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        LOG_ERR("SDL_Init() failed");
-        return 0;
-    }
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	{
+		LOG_ERR("SDL_Init() failed");
+		return 0;
+	}
 
-    SDL_GL_SetAttribute(SDL_GL_RED_SIZE,            8);
-    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE,          8);
-    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,           8);
-    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE,          8);
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,          8);
-    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE,         24);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 24);
 
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE,      8);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE,    8);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE,     8);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE,    8);
+	SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 8);
 
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,  0);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  0);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
 
-    SDL_WM_SetCaption("Drash", nullptr);
+	SDL_WM_SetCaption("Drash", nullptr);
 
-    if (SDL_SetVideoMode(gWindowWidth, gWindowHeight, 32, SDL_HWSURFACE |
-                                                          SDL_OPENGL |
-                                                          SDL_GL_DOUBLEBUFFER) == nullptr)
-    {
-        LOG_ERR("SDL_SetVideoMode() failed");
-        fail = true;
-    }
+	if (SDL_SetVideoMode(gWindowWidth, gWindowHeight, 32, SDL_HWSURFACE |
+														  SDL_OPENGL |
+														  SDL_GL_DOUBLEBUFFER) == nullptr)
+	{
+		LOG_ERR("SDL_SetVideoMode() failed");
+		fail = true;
+	}
 
-    glViewport(0, 0, gWindowWidth, gWindowHeight);
+	glViewport(0, 0, gWindowWidth, gWindowHeight);
 
-    if (glewInit() != GLEW_OK)
-    {
+	if (glewInit() != GLEW_OK)
+	{
 		LOG_ERR("glewInit() failed");
-        fail = true;
-    }
+		fail = true;
+	}
 
-    int img_flags = IMG_INIT_PNG;
+	int img_flags = IMG_INIT_PNG;
 
-    if (IMG_Init(img_flags) != img_flags)
-    {
-        LOG_ERR("IMG_Init() failed");
-        fail = true;
-    }
+	if (IMG_Init(img_flags) != img_flags)
+	{
+		LOG_ERR("IMG_Init() failed");
+		fail = true;
+	}
 
-    LOG_INFO("OpenGL version: "<<(const char*)glGetString(GL_VERSION));
-    LOG_INFO("Vendor: "<<(const char*)glGetString(GL_VENDOR));
-    LOG_INFO("GLSL version: "<<(const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
+	LOG_INFO("OpenGL version: "<<(const char*)glGetString(GL_VERSION));
+	LOG_INFO("Vendor: "<<(const char*)glGetString(GL_VENDOR));
+	LOG_INFO("GLSL version: "<<(const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
 
-    if (fail == false)
-    {        
-        root.SetScreen(screen);
+	CRoot root;
+	CRoot::CScreenPtr screen(new CMainScreen(root));
 
-        glViewport(0, 0, gWindowWidth, gWindowHeight);
-        root.GetGrengSystems().GetCameraManager().SetAspectRatio(gWindowWidth / gWindowHeight);
-        root.GetScreen()->GetUISystem().SetAspectRatio(gWindowWidth / gWindowHeight);
-        root.GetScreen()->GetUISystem().SetWidth(gWindowWidth);
+	if (fail == false)
+	{
+		root.SetScreen(screen);
 
-        bool exit = false;
-        SDL_Event e;
+		glViewport(0, 0, gWindowWidth, gWindowHeight);
+		root.GetGrengSystems().GetCameraManager().SetAspectRatio(gWindowWidth / gWindowHeight);
+		root.GetScreen()->GetUISystem().SetAspectRatio(gWindowWidth / gWindowHeight);
+		root.GetScreen()->GetUISystem().SetWidth(gWindowWidth);
 
-    //    app->SetQuitHandler([&exit] ()
-    //    {
-    //        exit = true;
-    //    });
+		bool exit = false;
+		SDL_Event e;
 
-        auto update_cursor = [&root] (int _x, int _y)
-        {
-            CVec2f pos(_x, _y);
-            WindowSpaceToScreenSpace(pos);
-            root.GetScreen()->GetEventSystem().SetCursorPos(pos);
-            int x;
-            int y;
-            root.GetScreen()->GetUISystem().ScreenSpaceToUISpace(pos, x, y);
-            root.GetScreen()->GetUISystem().SetCursorPos(x, y);
-        };
+		auto update_cursor = [&root] (int _x, int _y)
+		{
+			CVec2f pos(_x, _y);
+			WindowSpaceToScreenSpace(pos);
+			root.GetScreen()->GetEventSystem().SetCursorPos(pos);
+			int x;
+			int y;
+			root.GetScreen()->GetUISystem().ScreenSpaceToUISpace(pos, x, y);
+			root.GetScreen()->GetUISystem().SetCursorPos(x, y);
+		};
 
-        CTimer timer;
-        timer.Reset(true);
+		CTimer timer;
+		timer.Reset(true);
 
-        for (;;)
-        {
-            while (SDL_PollEvent(&e))
-            {
-                if (e.type == SDL_QUIT)
-                {
-                    exit = true;
-                    break;
-                }
-                else if (e.type == SDL_KEYDOWN)
-                {
-                    root.GetScreen()->GetEventSystem().BeginEvent(ConvertKey(e.key.keysym.sym));
-                }
-                else if (e.type == SDL_KEYUP)
-                {
-                    root.GetScreen()->GetEventSystem().EndEvent(ConvertKey(e.key.keysym.sym));
-                }
-                else if (e.type == SDL_MOUSEBUTTONDOWN)
-                {
-                    update_cursor(e.button.x, e.button.y);
-                    root.GetScreen()->GetUISystem().BeginEvent();
-                    root.GetScreen()->GetEventSystem().BeginEvent(ConvertButton(e.button.button));
-                }
-                else if (e.type == SDL_MOUSEBUTTONUP)
-                {
-                    update_cursor(e.button.x, e.button.y);
-                    root.GetScreen()->GetUISystem().EndEvent();
-                    root.GetScreen()->GetEventSystem().EndEvent(ConvertButton(e.button.button));
-                }
-                else if (e.type == SDL_MOUSEMOTION)
-                {
-                    update_cursor(e.motion.x, e.motion.y);
-                }
-                else if (e.type == SDL_VIDEORESIZE)
-                {
-                    gWindowWidth = e.resize.w;
-                    gWindowHeight = e.resize.h;
-                    if (SDL_SetVideoMode(gWindowWidth, gWindowHeight, 32, SDL_HWSURFACE |
-                                         SDL_OPENGL |
-                                         SDL_GL_DOUBLEBUFFER) == nullptr)
-                    {
-                        LOG_ERR("SDL_SetVideoMode() failed");
-                        exit = true;
-                    }
+		for (;;)
+		{
+			while (SDL_PollEvent(&e))
+			{
+				if (e.type == SDL_QUIT)
+				{
+					exit = true;
+					break;
+				}
+				else if (e.type == SDL_KEYDOWN)
+				{
+					root.GetScreen()->GetEventSystem().BeginEvent(ConvertKey(e.key.keysym.sym));
+				}
+				else if (e.type == SDL_KEYUP)
+				{
+					root.GetScreen()->GetEventSystem().EndEvent(ConvertKey(e.key.keysym.sym));
+				}
+				else if (e.type == SDL_MOUSEBUTTONDOWN)
+				{
+					update_cursor(e.button.x, e.button.y);
+					root.GetScreen()->GetUISystem().BeginEvent();
+					root.GetScreen()->GetEventSystem().BeginEvent(ConvertButton(e.button.button));
+				}
+				else if (e.type == SDL_MOUSEBUTTONUP)
+				{
+					update_cursor(e.button.x, e.button.y);
+					root.GetScreen()->GetUISystem().EndEvent();
+					root.GetScreen()->GetEventSystem().EndEvent(ConvertButton(e.button.button));
+				}
+				else if (e.type == SDL_MOUSEMOTION)
+				{
+					update_cursor(e.motion.x, e.motion.y);
+				}
+				else if (e.type == SDL_VIDEORESIZE)
+				{
+					gWindowWidth = e.resize.w;
+					gWindowHeight = e.resize.h;
+					if (SDL_SetVideoMode(gWindowWidth, gWindowHeight, 32, SDL_HWSURFACE |
+										 SDL_OPENGL |
+										 SDL_GL_DOUBLEBUFFER) == nullptr)
+					{
+						LOG_ERR("SDL_SetVideoMode() failed");
+						exit = true;
+					}
 
-                    glViewport(0, 0, gWindowWidth, gWindowHeight);
-                    root.GetGrengSystems().GetCameraManager().SetAspectRatio(gWindowWidth / gWindowHeight);
-                    root.GetScreen()->GetUISystem().SetAspectRatio(gWindowWidth / gWindowHeight);
-                    root.GetScreen()->GetUISystem().SetWidth(gWindowWidth);
-                }
-            }
+					glViewport(0, 0, gWindowWidth, gWindowHeight);
+					root.GetGrengSystems().GetCameraManager().SetAspectRatio(gWindowWidth / gWindowHeight);
+					root.GetScreen()->GetUISystem().SetAspectRatio(gWindowWidth / gWindowHeight);
+					root.GetScreen()->GetUISystem().SetWidth(gWindowWidth);
+				}
+			}
 
-            timer.Tick();
-            root.Step(timer.GetDeltaTime());
-            glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-            glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-            root.Render();
-            SDL_GL_SwapBuffers();
+			timer.Tick();
+			root.Step(timer.GetDeltaTime());
+			glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+			glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+			root.Render();
+			SDL_GL_SwapBuffers();
 
-            if (exit == true)
-            {
-                break;
-            }
-        }
-    }
+			if (exit == true)
+			{
+				break;
+			}
+		}
+	}
 
-    IMG_Quit();
-    SDL_Quit();
+	IMG_Quit();
+	SDL_Quit();
 
-    return 0;
+	return 0;
 }
 
 drash::EventKey ConvertKey(SDLKey _key)
 {
-    switch (_key)
-    {
-    case SDLK_q:
-        return EventKeyQ;
-    case SDLK_w:
-        return EventKeyW;
-    case SDLK_e:
-        return EventKeyE;
-    case SDLK_r:
-        return EventKeyR;
-    case SDLK_a:
-        return EventKeyA;
-    case SDLK_s:
-        return EventKeyS;
-    case SDLK_d:
-        return EventKeyD;
-    case SDLK_f:
-        return EventKeyF;
-    case SDLK_z:
-        return EventKeyZ;
-    case SDLK_x:
-        return EventKeyX;
-    case SDLK_c:
-        return EventKeyC;
-    case SDLK_v:
-        return EventKeyV;
-    case SDLK_SPACE:
-        return EventKeySpace;
-    case SDLK_ESCAPE:
-        return EventKeyEscape;
-    case SDLK_LCTRL:
-        return EventKeyControl;
-    case SDLK_LSHIFT:
-        return EventKeyShift;
-    case SDLK_LALT:
-        return EventKeyAlt;
-    case SDLK_LMETA:
-        return EventKeyMeta;
-    default:
-        return EventKeyUnknown;
-    }
+	switch (_key)
+	{
+	case SDLK_q:
+		return EventKeyQ;
+	case SDLK_w:
+		return EventKeyW;
+	case SDLK_e:
+		return EventKeyE;
+	case SDLK_r:
+		return EventKeyR;
+	case SDLK_a:
+		return EventKeyA;
+	case SDLK_s:
+		return EventKeyS;
+	case SDLK_d:
+		return EventKeyD;
+	case SDLK_f:
+		return EventKeyF;
+	case SDLK_z:
+		return EventKeyZ;
+	case SDLK_x:
+		return EventKeyX;
+	case SDLK_c:
+		return EventKeyC;
+	case SDLK_v:
+		return EventKeyV;
+	case SDLK_SPACE:
+		return EventKeySpace;
+	case SDLK_ESCAPE:
+		return EventKeyEscape;
+	case SDLK_LCTRL:
+		return EventKeyControl;
+	case SDLK_LSHIFT:
+		return EventKeyShift;
+	case SDLK_LALT:
+		return EventKeyAlt;
+	case SDLK_LMETA:
+		return EventKeyMeta;
+	default:
+		return EventKeyUnknown;
+	}
 }
 
 drash::EventKey ConvertButton(int _button)
 {
-    switch (_button)
-    {
-    case SDL_BUTTON_LEFT:
-        return EventKeyLeftButton;
-    case SDL_BUTTON_RIGHT:
-        return EventKeyRightButton;
-    case SDL_BUTTON_MIDDLE:
-        return EventKeyMiddleButton;
-    case SDL_BUTTON_WHEELUP:
-        return EventKeyWheelUp;
-    case SDL_BUTTON_WHEELDOWN:
-        return EventKeyWheelDown;
-    default:
-        return EventKeyUnknown;
-    }
+	switch (_button)
+	{
+	case SDL_BUTTON_LEFT:
+		return EventKeyLeftButton;
+	case SDL_BUTTON_RIGHT:
+		return EventKeyRightButton;
+	case SDL_BUTTON_MIDDLE:
+		return EventKeyMiddleButton;
+	case SDL_BUTTON_WHEELUP:
+		return EventKeyWheelUp;
+	case SDL_BUTTON_WHEELDOWN:
+		return EventKeyWheelDown;
+	default:
+		return EventKeyUnknown;
+	}
 }
 
 void WindowSpaceToScreenSpace(CVec2f &_from)
 {
-    _from.mX /= gWindowWidth;
-    _from.mY /= gWindowHeight;
+	_from.mX /= gWindowWidth;
+	_from.mY /= gWindowHeight;
 
-    _from.mX -= 0.5;
-    _from.mY -= 0.5;
-    _from.mY *= -1;
+	_from.mX -= 0.5;
+	_from.mY -= 0.5;
+	_from.mY *= -1;
 }
