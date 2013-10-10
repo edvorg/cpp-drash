@@ -3,7 +3,7 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-QMAKE_CXXFLAGS += -std=c++0x
+QMAKE_CXXFLAGS += -std=c++0x -Wall
 
 INCLUDEPATH += ../3rd/Box2D/include
 
@@ -39,10 +39,6 @@ SOURCES += \
 	../src/diag/timer.cpp \
 	../src/diag/logger.cpp \
 	../src/greng/camera.cpp \
-	../src/appeventsystem/appeventsystem.cpp \
-	../src/appeventsystem/appeventprocessor.cpp \
-	../src/appeventsystem/appeventcombination.cpp \
-	../src/appeventsystem/appevent.cpp \
 	../src/sdl/main.cpp \
 	../src/greng/loadmeshobj.cpp \
 	../src/greng/texturemanager.cpp \
@@ -60,7 +56,10 @@ SOURCES += \
 	../src/mainscreen/mainscreen.cpp \
 	../src/recordsscreen/recordsscreen.cpp \
 	../src/prefsscreen/prefsscreen.cpp \
-	../src/gamescreen/gamescreen.cpp
+	../src/gamescreen/gamescreen.cpp \
+    ../src/appeventsystem/eventsystem.cpp \
+    ../src/appeventsystem/touchevent.cpp \
+    ../src/appeventsystem/touchlistener.cpp
 
 HEADERS += \
 	../src/ui/uiwidget.h \
@@ -89,10 +88,6 @@ HEADERS += \
 	../src/diag/logger.h \
 	../src/diag/assert.h \
 	../src/greng/camera.h \
-	../src/appeventsystem/appeventsystem.h \
-	../src/appeventsystem/appeventprocessor.h \
-	../src/appeventsystem/appeventcombination.h \
-	../src/appeventsystem/appevent.h \
 	../src/greng/loadmeshobj.h \
 	../src/greng/texturemanager.h \
 	../src/greng/texture.h \
@@ -117,4 +112,7 @@ HEADERS += \
 	../src/mainscreen/mainscreen.h \
 	../src/prefsscreen/prefsscreen.h \
 	../src/recordsscreen/recordsscreen.h \
-	../src/gamescreen/gamescreen.h
+	../src/gamescreen/gamescreen.h \
+    ../src/appeventsystem/eventsystem.h \
+    ../src/appeventsystem/touchevent.h \
+    ../src/appeventsystem/touchlistener.h

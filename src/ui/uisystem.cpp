@@ -32,9 +32,9 @@ namespace drash
 namespace ui
 {
 
-bool CUISystem::Init()
+CUISystem::~CUISystem()
 {
-    return true;
+    Release();
 }
 
 void CUISystem::Release()
@@ -53,7 +53,6 @@ CUIControl *CUISystem::CreateControl()
     {
         return nullptr;
     }
-
     return mControls[mControlsCount++] = new CUIControl;
 }
 
@@ -82,6 +81,12 @@ void CUISystem::SetWidth(unsigned int _width)
 {
     mWidth = _width;
     mHeight = mWidth / mAspectRatio;
+}
+
+void CUISystem::SetHeight(unsigned int _height)
+{
+    mHeight = _height;
+    mWidth = mHeight / mAspectRatio;
 }
 
 bool CUISystem::ScreenSpaceToUISpace(const CVec2f &_from, int &_x, int &_y)
@@ -149,6 +154,25 @@ void CUISystem::DebugDraw() const
 void CUISystem::Render()
 {
 
+}
+
+// interface Listeners
+void CUISystem::TouchPress(const CTouchEvent &_evt)
+{
+    int x, y;
+    ScreenSpaceToUISpace(_evt.GetPoint(), x, y);
+    SetCursorPos(x, y);
+    BeginEvent();
+}
+
+void CUISystem::TouchPressing(const CTouchEvent &_evt)
+{
+
+}
+
+void CUISystem::TouchRelease(const CTouchEvent &_evt)
+{
+    EndEvent();
 }
 
 } // namepsace ui
