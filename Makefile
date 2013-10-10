@@ -17,6 +17,12 @@ drash-sdl-clean:
 drash-clean:
 	rm -rf drash-build/*
 
+drash-sdl-run: drash-sdl-build/drash_sdl
+	cd res ; ../drash-sdl-build/drash_sdl
+
+drash-sdl-run: drash-build/drash
+	cd res ; ../drash-build/drash
+
 check-syntax:
 	clang++ ${CPP_FLAGS} ${INCLUDES} -fsyntax-only -fno-color-diagnostics ${CHK_SOURCES}
 
