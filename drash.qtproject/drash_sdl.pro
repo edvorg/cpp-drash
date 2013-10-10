@@ -39,10 +39,6 @@ SOURCES += \
 	../src/diag/timer.cpp \
 	../src/diag/logger.cpp \
 	../src/greng/camera.cpp \
-	../src/appeventsystem/appeventsystem.cpp \
-	../src/appeventsystem/appeventprocessor.cpp \
-	../src/appeventsystem/appeventcombination.cpp \
-	../src/appeventsystem/appevent.cpp \
 	../src/sdl/main.cpp \
 	../src/greng/loadmeshobj.cpp \
 	../src/greng/texturemanager.cpp \
@@ -92,10 +88,6 @@ HEADERS += \
 	../src/diag/logger.h \
 	../src/diag/assert.h \
 	../src/greng/camera.h \
-	../src/appeventsystem/appeventsystem.h \
-	../src/appeventsystem/appeventprocessor.h \
-	../src/appeventsystem/appeventcombination.h \
-	../src/appeventsystem/appevent.h \
 	../src/greng/loadmeshobj.h \
 	../src/greng/texturemanager.h \
 	../src/greng/texture.h \
