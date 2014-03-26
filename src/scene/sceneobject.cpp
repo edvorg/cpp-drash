@@ -183,7 +183,7 @@ bool CSceneObject::IsDynamic() const
 
 void CSceneObject::ApplyLinearImpulse( const CVec2f &_dir, const CVec2f &_pos )
 {
-    mBody->ApplyLinearImpulse(CVec2ToB2Vec2(_dir), CVec2ToB2Vec2(_pos));
+    mBody->ApplyLinearImpulse(CVec2ToB2Vec2(_dir), CVec2ToB2Vec2(_pos), true);
 }
 
 void CSceneObject::SetLinearVelocity(const CVec2f &_vel)

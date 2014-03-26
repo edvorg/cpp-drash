@@ -245,16 +245,16 @@ void CTest5::SetupMeshes()
 void CTest5::SetupTextures()
 {
     mTex1 = GetGrengSystems().GetTextureManager().CreateTextureDummy();
-    mTex2 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/tux.png");
-    mTex3 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/RB_MegatronBodyT2_MATINST.png");
-    mTex3normal = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/mt_body_normal.png");
-    mTex4 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/RB_MegatronHead_MATINST.png");
-    mTex4normal = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/mt_head_normal.png");
-    mTex5 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/RB_MegatronArmFeet_MATINST.png");
-    mTex5normal = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/mt_arm_normal.png");
-    mTex6 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/wall5.png");
-    mTex7 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/RB_Bumblebee_TEXTSET_Color_NormX.png");
-    mTex7normal = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/bb_normal.png");
+    mTex2 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/floor/diffuse.png");
+    mTex3 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/floor/diffuse.png");
+    mTex3normal = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/floor/diffuse.png");
+    mTex4 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/floor/diffuse.png");
+    mTex4normal = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/floor/diffuse.png");
+    mTex5 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/floor/diffuse.png");
+    mTex5normal = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/floor/diffuse.png");
+    mTex6 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/floor/diffuse.png");
+    mTex7 = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/floor/diffuse.png");
+    mTex7normal = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/floor/diffuse.png");
 }
 
 void CTest5::SetupShaders()

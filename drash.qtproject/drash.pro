@@ -13,11 +13,9 @@ TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++0x
 
-INCLUDEPATH += ../3rd/Box2D/include
+INCLUDEPATH += ../3rd
 
-LIBS += -L../3rd/Box2D/lib -lBox2D
-
-unix:!macx: LIBS += -lrt -lGLEW -lSDL -lSDL_image
+unix:!macx: LIBS += -lrt -lGL -lSDL -lGLEW -lSDL_image -lopenal -lvorbis -lvorbisfile
 
 CONFIG(debug, debug|release) {
     DEFINES += DRASH_DEBUG
@@ -85,7 +83,54 @@ SOURCES += ../src/qt/main.cpp\
     ../src/greng/grengsystemsset.cpp \
     ../src/test/test10.cpp \
     ../src/greng/spotlight.cpp \
-    ../src/levelmanager/leveldesc.cpp
+    ../src/levelmanager/leveldesc.cpp \
+    ../src/trash/alsound.cpp \
+    ../3rd/Box2D/Collision/Shapes/b2ChainShape.cpp \
+    ../3rd/Box2D/Collision/Shapes/b2CircleShape.cpp \
+    ../3rd/Box2D/Collision/Shapes/b2EdgeShape.cpp \
+    ../3rd/Box2D/Collision/Shapes/b2PolygonShape.cpp \
+    ../3rd/Box2D/Collision/b2BroadPhase.cpp \
+    ../3rd/Box2D/Collision/b2CollideCircle.cpp \
+    ../3rd/Box2D/Collision/b2CollideEdge.cpp \
+    ../3rd/Box2D/Collision/b2CollidePolygon.cpp \
+    ../3rd/Box2D/Collision/b2Collision.cpp \
+    ../3rd/Box2D/Collision/b2Distance.cpp \
+    ../3rd/Box2D/Collision/b2DynamicTree.cpp \
+    ../3rd/Box2D/Collision/b2TimeOfImpact.cpp \
+    ../3rd/Box2D/Common/b2BlockAllocator.cpp \
+    ../3rd/Box2D/Common/b2Draw.cpp \
+    ../3rd/Box2D/Common/b2Math.cpp \
+    ../3rd/Box2D/Common/b2Settings.cpp \
+    ../3rd/Box2D/Common/b2StackAllocator.cpp \
+    ../3rd/Box2D/Common/b2Timer.cpp \
+    ../3rd/Box2D/Dynamics/Contacts/b2ChainAndCircleContact.cpp \
+    ../3rd/Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.cpp \
+    ../3rd/Box2D/Dynamics/Contacts/b2CircleContact.cpp \
+    ../3rd/Box2D/Dynamics/Contacts/b2Contact.cpp \
+    ../3rd/Box2D/Dynamics/Contacts/b2ContactSolver.cpp \
+    ../3rd/Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.cpp \
+    ../3rd/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp \
+    ../3rd/Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.cpp \
+    ../3rd/Box2D/Dynamics/Contacts/b2PolygonContact.cpp \
+    ../3rd/Box2D/Dynamics/Joints/b2DistanceJoint.cpp \
+    ../3rd/Box2D/Dynamics/Joints/b2FrictionJoint.cpp \
+    ../3rd/Box2D/Dynamics/Joints/b2GearJoint.cpp \
+    ../3rd/Box2D/Dynamics/Joints/b2Joint.cpp \
+    ../3rd/Box2D/Dynamics/Joints/b2MotorJoint.cpp \
+    ../3rd/Box2D/Dynamics/Joints/b2MouseJoint.cpp \
+    ../3rd/Box2D/Dynamics/Joints/b2PrismaticJoint.cpp \
+    ../3rd/Box2D/Dynamics/Joints/b2PulleyJoint.cpp \
+    ../3rd/Box2D/Dynamics/Joints/b2RevoluteJoint.cpp \
+    ../3rd/Box2D/Dynamics/Joints/b2RopeJoint.cpp \
+    ../3rd/Box2D/Dynamics/Joints/b2WeldJoint.cpp \
+    ../3rd/Box2D/Dynamics/Joints/b2WheelJoint.cpp \
+    ../3rd/Box2D/Dynamics/b2Body.cpp \
+    ../3rd/Box2D/Dynamics/b2ContactManager.cpp \
+    ../3rd/Box2D/Dynamics/b2Fixture.cpp \
+    ../3rd/Box2D/Dynamics/b2Island.cpp \
+    ../3rd/Box2D/Dynamics/b2World.cpp \
+    ../3rd/Box2D/Dynamics/b2WorldCallbacks.cpp \
+    ../3rd/Box2D/Rope/b2Rope.cpp
 
 HEADERS  += ../src/qt/gamewindow.h \
     ../src/qt/scenewidget.h \
@@ -160,7 +205,55 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/greng/grengsystemsset.h \
     ../src/test/test10.h \
     ../src/greng/spotlight.h \
-    ../src/levelmanager/leveldesc.h
+    ../src/levelmanager/leveldesc.h \
+    ../src/trash/alsound.h \
+    ../3rd/Box2D/Collision/Shapes/b2ChainShape.h \
+    ../3rd/Box2D/Collision/Shapes/b2CircleShape.h \
+    ../3rd/Box2D/Collision/Shapes/b2EdgeShape.h \
+    ../3rd/Box2D/Collision/Shapes/b2PolygonShape.h \
+    ../3rd/Box2D/Collision/Shapes/b2Shape.h \
+    ../3rd/Box2D/Collision/b2BroadPhase.h \
+    ../3rd/Box2D/Collision/b2Collision.h \
+    ../3rd/Box2D/Collision/b2Distance.h \
+    ../3rd/Box2D/Collision/b2DynamicTree.h \
+    ../3rd/Box2D/Collision/b2TimeOfImpact.h \
+    ../3rd/Box2D/Common/b2BlockAllocator.h \
+    ../3rd/Box2D/Common/b2Draw.h \
+    ../3rd/Box2D/Common/b2GrowableStack.h \
+    ../3rd/Box2D/Common/b2Math.h \
+    ../3rd/Box2D/Common/b2Settings.h \
+    ../3rd/Box2D/Common/b2StackAllocator.h \
+    ../3rd/Box2D/Common/b2Timer.h \
+    ../3rd/Box2D/Dynamics/Contacts/b2ChainAndCircleContact.h \
+    ../3rd/Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.h \
+    ../3rd/Box2D/Dynamics/Contacts/b2CircleContact.h \
+    ../3rd/Box2D/Dynamics/Contacts/b2Contact.h \
+    ../3rd/Box2D/Dynamics/Contacts/b2ContactSolver.h \
+    ../3rd/Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.h \
+    ../3rd/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.h \
+    ../3rd/Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.h \
+    ../3rd/Box2D/Dynamics/Contacts/b2PolygonContact.h \
+    ../3rd/Box2D/Dynamics/Joints/b2DistanceJoint.h \
+    ../3rd/Box2D/Dynamics/Joints/b2FrictionJoint.h \
+    ../3rd/Box2D/Dynamics/Joints/b2GearJoint.h \
+    ../3rd/Box2D/Dynamics/Joints/b2Joint.h \
+    ../3rd/Box2D/Dynamics/Joints/b2MotorJoint.h \
+    ../3rd/Box2D/Dynamics/Joints/b2MouseJoint.h \
+    ../3rd/Box2D/Dynamics/Joints/b2PrismaticJoint.h \
+    ../3rd/Box2D/Dynamics/Joints/b2PulleyJoint.h \
+    ../3rd/Box2D/Dynamics/Joints/b2RevoluteJoint.h \
+    ../3rd/Box2D/Dynamics/Joints/b2RopeJoint.h \
+    ../3rd/Box2D/Dynamics/Joints/b2WeldJoint.h \
+    ../3rd/Box2D/Dynamics/Joints/b2WheelJoint.h \
+    ../3rd/Box2D/Dynamics/b2Body.h \
+    ../3rd/Box2D/Dynamics/b2ContactManager.h \
+    ../3rd/Box2D/Dynamics/b2Fixture.h \
+    ../3rd/Box2D/Dynamics/b2Island.h \
+    ../3rd/Box2D/Dynamics/b2TimeStep.h \
+    ../3rd/Box2D/Dynamics/b2World.h \
+    ../3rd/Box2D/Dynamics/b2WorldCallbacks.h \
+    ../3rd/Box2D/Rope/b2Rope.h \
+    ../3rd/Box2D/Box2D.h
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui

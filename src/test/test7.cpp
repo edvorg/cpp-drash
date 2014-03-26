@@ -79,7 +79,7 @@ void CTest7::Step(double _dt)
 
 bool CTest7::InitTextures()
 {
-    mDebugTexture = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/wall5.png");
+    mDebugTexture = GetGrengSystems().GetTextureManager().CreateTextureFromFile("assets/floor/diffuse.png");
 
     if (mDebugTexture == nullptr)
     {

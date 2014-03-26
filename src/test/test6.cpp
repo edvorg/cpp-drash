@@ -275,7 +275,7 @@ bool CTest6::InitPlayer()
         return false;
     }
 
-    mPlayer1Mesh = GetGrengSystems().GetMeshManager().CreateMeshFromObjFile("assets/player.obj");
+    mPlayer1Mesh = GetGrengSystems().GetMeshManager().CreateMeshCube();
 
     if (mPlayer1Mesh == nullptr)
     {
