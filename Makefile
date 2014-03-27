@@ -1,5 +1,5 @@
 CPP_FLAGS=-std=c++11
-INCLUDES=-I3rd/Box2D/include
+INCLUDES=-I3rd
 
 drash-sdl: drash.qtproject/drash_sdl.pro
 	mkdir -p drash-sdl-build
