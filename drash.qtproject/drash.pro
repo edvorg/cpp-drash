@@ -130,7 +130,9 @@ SOURCES += ../src/qt/main.cpp\
     ../3rd/Box2D/Dynamics/b2Island.cpp \
     ../3rd/Box2D/Dynamics/b2World.cpp \
     ../3rd/Box2D/Dynamics/b2WorldCallbacks.cpp \
-    ../3rd/Box2D/Rope/b2Rope.cpp
+    ../3rd/Box2D/Rope/b2Rope.cpp \
+    ../src/misc/dimensions.cpp \
+    ../src/misc/screenshaker.cpp
 
 HEADERS  += ../src/qt/gamewindow.h \
     ../src/qt/scenewidget.h \
@@ -253,7 +255,11 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../3rd/Box2D/Dynamics/b2World.h \
     ../3rd/Box2D/Dynamics/b2WorldCallbacks.h \
     ../3rd/Box2D/Rope/b2Rope.h \
-    ../3rd/Box2D/Box2D.h
+    ../3rd/Box2D/Box2D.h \
+    ../src/misc/dimensions.hpp \
+    ../src/misc/particle.hpp \
+    ../src/misc/particlesystem.hpp \
+    ../src/misc/screenshaker.hpp
 
 FORMS    += ../src/qt/gamewindow.ui \
     ../src/editor/editorwindow.ui

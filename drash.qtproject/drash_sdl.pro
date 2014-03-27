@@ -118,7 +118,9 @@ SOURCES += \
     ../3rd/Box2D/Dynamics/b2World.cpp \
     ../3rd/Box2D/Dynamics/b2WorldCallbacks.cpp \
     ../3rd/Box2D/Rope/b2Rope.cpp \
-    ../src/trash/alsound.cpp
+    ../src/trash/alsound.cpp \
+    ../src/misc/dimensions.cpp \
+    ../src/misc/screenshaker.cpp
 
 HEADERS += \
     ../src/ui/uiwidget.h \
@@ -242,5 +244,9 @@ HEADERS += \
     ../src/editor/sceneeditorapp.h \
     ../src/qt/gamewindow.h \
     ../src/qt/scenewidget.h \
-    ../src/trash/alsound.h
+    ../src/trash/alsound.h \
+    ../src/misc/dimensions.hpp \
+    ../src/misc/particle.hpp \
+    ../src/misc/particlesystem.hpp \
+    ../src/misc/screenshaker.hpp
 
