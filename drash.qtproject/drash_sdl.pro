@@ -187,8 +187,6 @@ HEADERS += \
     ../src/test/test8.h \
     ../src/misc/rotationablepoint.h \
     ../src/test/test9.h \
-    precompiled.h \
-    ../src/precompiled.h \
     ../src/greng/grengsystemsset.h \
     ../src/test/test10.h \
     ../src/greng/spotlight.h \

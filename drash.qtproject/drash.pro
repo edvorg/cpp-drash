@@ -203,7 +203,6 @@ HEADERS  += ../src/qt/gamewindow.h \
     ../src/editor/sceneeditorapp.h \
     ../src/misc/rotationablepoint.h \
     ../src/test/test9.h \
-    ../src/precompiled.h \
     ../src/greng/grengsystemsset.h \
     ../src/test/test10.h \
     ../src/greng/spotlight.h \
