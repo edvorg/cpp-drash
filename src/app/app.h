@@ -45,29 +45,31 @@ namespace drash {
         virtual void Step(double _dt);
         virtual void Render();
 
-        inline void Quit();
-        inline void SetQuitHandler(std::function<void()> _handler);
+        inline void Quit() { mQuit = true; }
+        inline void SetQuitHandler(std::function<void()> _handler) {
+            mQuitHandler = _handler;
+        }
 
-        inline CScene& GetScene();
-        inline CAppEventSystem& GetEventSystem();
-        inline CPlayersSystem& GetPlayersSystem();
-        inline CGeometryManager& GetGeometryManager();
-        inline CDebugRenderer& GetDebugRenderer();
-        inline ui::CUISystem& GetUISystem();
-        inline CLevelManager& GetLevelManager();
-        inline greng::CGrengSystemsSet& GetGrengSystems();
+        auto& GetScene() { return mScene; }
+        auto& GetEventSystem() { return mEventSystem; }
+        auto& GetPlayersSystem() { return mPlayersSystem; }
+        auto& GetGeometryManager() { return mGeometryManager; }
+        auto& GetDebugRenderer() { return mDebugRenderer; }
+        auto& GetUISystem() { return mUISystem; }
+        auto& GetLevelManager() { return mLevelManager; }
+        auto& GetGrengSystems() { return mGrengSystems; }
 
         /// used to make CApp childs about mouse moving event
         /// use this from your CApp back end (Qt, SDL, etc.)
         /// we assume that _pos is coordinates in screen space (-0.5, -0.5)
         /// (0.5, 0.5)
-        inline void SetCursorPos(const CVec2f& _pos);
+        void SetCursorPos(const CVec2f& _pos) { mCursorPos = _pos; }
 
         /// used by CApp childs for detection, where mouse cursor is
         /// returns coordinates in screen space (-0.5, -0.5) (0.5, 0.5)
-        inline const CVec2f& GetCursorPos() const;
+        auto& GetCursorPos() const { return mCursorPos; }
 
-        inline double GetCurrentTimeDelta() const;
+        auto& GetCurrentTimeDelta() const { return mCurrentTimeDelta; }
 
       protected:
       private:
@@ -86,40 +88,6 @@ namespace drash {
         bool mQuit = false;
         double mCurrentTimeDelta = 0;
     };
-
-    inline void CApp::Quit() { mQuit = true; }
-
-    inline void CApp::SetQuitHandler(std::function<void()> _handler) {
-        mQuitHandler = _handler;
-    }
-
-    inline CScene& CApp::GetScene() { return mScene; }
-
-    inline CAppEventSystem& CApp::GetEventSystem() { return mEventSystem; }
-
-    inline CPlayersSystem& CApp::GetPlayersSystem() { return mPlayersSystem; }
-
-    inline CGeometryManager& CApp::GetGeometryManager() {
-        return mGeometryManager;
-    }
-
-    inline CDebugRenderer& CApp::GetDebugRenderer() { return mDebugRenderer; }
-
-    inline ui::CUISystem& CApp::GetUISystem() { return mUISystem; }
-
-    inline CLevelManager& CApp::GetLevelManager() { return mLevelManager; }
-
-    inline greng::CGrengSystemsSet& CApp::GetGrengSystems() {
-        return mGrengSystems;
-    }
-
-    inline void CApp::SetCursorPos(const CVec2f& _pos) { mCursorPos = _pos; }
-
-    inline const CVec2f& CApp::GetCursorPos() const { return mCursorPos; }
-
-    inline double CApp::GetCurrentTimeDelta() const {
-        return mCurrentTimeDelta;
-    }
 
 } // namespace drash
 
