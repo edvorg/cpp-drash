@@ -58,7 +58,7 @@ namespace drash {
 
             if (currentFigure != nullptr && currentObject != nullptr) {
                 center.Set(currentFigure->GetVertices()[0],
-                            currentObject->GetPosZ() + currentFigure->GetZ());
+                           currentObject->GetPosZ() + currentFigure->GetZ());
 
                 for (unsigned int i = 1; i < currentFigure->EnumVertices();
                      i++) {
@@ -134,8 +134,7 @@ namespace drash {
             if (vertices.size()) {
                 for (int i = 0; i < (int)vertices.size() - 1; i++) {
                     GetGrengSystems().GetRenderer().DrawLine(
-                        vertices[i], vertices[i + 1], 1,
-                        CColor4f(0, 1, 0, 1));
+                        vertices[i], vertices[i + 1], 1, CColor4f(0, 1, 0, 1));
                 }
                 GetGrengSystems().GetRenderer().DrawLine(
                     vertices[vertices.size() - 1], GetCursorPos(), 1,
@@ -173,11 +172,11 @@ namespace drash {
                             CVec3f p2 = _split_intersection;
 
                             p1.z = currentObject->GetPosZ() +
-                                    currentFigure->GetZ() -
-                                    currentFigure->GetDepth() * 0.5f;
+                                   currentFigure->GetZ() -
+                                   currentFigure->GetDepth() * 0.5f;
                             p2.z = currentObject->GetPosZ() +
-                                    currentFigure->GetZ() +
-                                    currentFigure->GetDepth() * 0.5f;
+                                   currentFigure->GetZ() +
+                                   currentFigure->GetDepth() * 0.5f;
 
                             GetGrengSystems().GetRenderer().DrawLine(
                                 GetCamera(), p1, p2, 2, CColor4f(1, 1, 1),
@@ -230,13 +229,13 @@ namespace drash {
                                 CPlane xy(PlaneXY);
                                 xy.SetPoint(center);
                                 camera->CastRay(GetCursorPos(), xy,
-                                                 figureMoveFirstClick);
+                                                figureMoveFirstClick);
                                 axisMoving = axisOver;
                             } else {
                                 CPlane xz(PlaneXZ);
                                 xz.SetPoint(center);
                                 camera->CastRay(GetCursorPos(), xz,
-                                                 figureMoveFirstClick);
+                                                figureMoveFirstClick);
                                 axisMoving = axisOver;
                             }
                         }
@@ -253,7 +252,7 @@ namespace drash {
                             for (unsigned int i = 0;
                                  i < currentFigure->EnumVertices(); i++) {
                                 v[i].x = currentFigure->GetVertices()[i].x +
-                                          new_pos.x - figureMoveFirstClick.x;
+                                         new_pos.x - figureMoveFirstClick.x;
                                 v[i].y = currentFigure->GetVertices()[i].y;
                             }
                             currentFigure->SetVertices(
@@ -275,7 +274,7 @@ namespace drash {
                                  i < currentFigure->EnumVertices(); i++) {
                                 v[i].x = currentFigure->GetVertices()[i].x;
                                 v[i].y = currentFigure->GetVertices()[i].y +
-                                          new_pos.y - figureMoveFirstClick.y;
+                                         new_pos.y - figureMoveFirstClick.y;
                             }
                             currentFigure->SetVertices(
                                 v, currentFigure->EnumVertices());
@@ -291,8 +290,8 @@ namespace drash {
                             camera->CastRay(GetCursorPos(), xz, new_pos);
 
                             currentFigure->SetZ(currentFigure->GetZ() +
-                                                 new_pos.z -
-                                                 figureMoveFirstClick.z);
+                                                new_pos.z -
+                                                figureMoveFirstClick.z);
 
                             figureMoveFirstClick = new_pos;
 
@@ -358,9 +357,9 @@ namespace drash {
                 CAppEventProcessor([this]() {
                     if (currentTemplate == nullptr) {
                         currentTemplate = GetGeometryManager()
-                                               .GetGeometries()
-                                               .begin()
-                                               ->second;
+                                              .GetGeometries()
+                                              .begin()
+                                              ->second;
 
                         if (currentObject != nullptr) {
                             GetScene().DestroyObject(currentObject);
@@ -407,28 +406,24 @@ namespace drash {
                 splitMode = true;
 
                 splitFigureMin.Set(currentFigure->GetVertices()[0].x,
-                                    currentFigure->GetVertices()[0].y,
-                                    currentObject->GetPosZ() +
-                                        currentFigure->GetZ());
+                                   currentFigure->GetVertices()[0].y,
+                                   currentObject->GetPosZ() +
+                                       currentFigure->GetZ());
                 splitFigureMax.Set(currentFigure->GetVertices()[0].x,
-                                    currentFigure->GetVertices()[0].y,
-                                    currentObject->GetPosZ() +
-                                        currentFigure->GetZ());
+                                   currentFigure->GetVertices()[0].y,
+                                   currentObject->GetPosZ() +
+                                       currentFigure->GetZ());
 
                 for (unsigned int i = 0; i < currentFigure->EnumVertices();
                      i++) {
-                    splitFigureMin.x =
-                        math::Min<float>(splitFigureMin.x,
-                                         currentFigure->GetVertices()[i].x);
-                    splitFigureMax.x =
-                        math::Max<float>(splitFigureMax.x,
-                                         currentFigure->GetVertices()[i].x);
-                    splitFigureMin.y =
-                        math::Min<float>(splitFigureMin.y,
-                                         currentFigure->GetVertices()[i].y);
-                    splitFigureMax.y =
-                        math::Max<float>(splitFigureMax.y,
-                                         currentFigure->GetVertices()[i].y);
+                    splitFigureMin.x = math::Min<float>(
+                        splitFigureMin.x, currentFigure->GetVertices()[i].x);
+                    splitFigureMax.x = math::Max<float>(
+                        splitFigureMax.x, currentFigure->GetVertices()[i].x);
+                    splitFigureMin.y = math::Min<float>(
+                        splitFigureMin.y, currentFigure->GetVertices()[i].y);
+                    splitFigureMax.y = math::Max<float>(
+                        splitFigureMax.y, currentFigure->GetVertices()[i].y);
                     splitFigureMin.z = math::Min<float>(
                         splitFigureMin.z,
                         currentObject->GetPosZ() + currentFigure->GetZ());
@@ -487,14 +482,10 @@ namespace drash {
                 currentFigure != nullptr) {
                 CRay r;
 
-                splitPlanePoint1.Set(splitFigureMin.x, 0,
-                                      splitFigureMax.z);
-                splitPlanePoint2.Set(splitFigureMin.x, 0,
-                                      splitFigureMin.z);
-                splitPlanePoint3.Set(splitFigureMax.x, 0,
-                                      splitFigureMin.z);
-                splitPlanePoint4.Set(splitFigureMax.x, 0,
-                                      splitFigureMax.z);
+                splitPlanePoint1.Set(splitFigureMin.x, 0, splitFigureMax.z);
+                splitPlanePoint2.Set(splitFigureMin.x, 0, splitFigureMin.z);
+                splitPlanePoint3.Set(splitFigureMax.x, 0, splitFigureMin.z);
+                splitPlanePoint4.Set(splitFigureMax.x, 0, splitFigureMax.z);
 
                 r.SetDirection(CVec3f(0, -1, 0));
 
@@ -521,15 +512,14 @@ namespace drash {
                 if (currentFigure->EnumVertices() != 0) {
                     for (unsigned int i = 1; i < currentFigure->EnumVertices();
                          i++) {
-                        DetectNewSplitPoint(
-                            currentFigure->GetVertices()[i - 1],
-                            currentFigure->GetVertices()[i], i - 1, r);
+                        DetectNewSplitPoint(currentFigure->GetVertices()[i - 1],
+                                            currentFigure->GetVertices()[i],
+                                            i - 1, r);
                     }
-                    DetectNewSplitPoint(
-                        currentFigure->GetVertices()
-                            [currentFigure->EnumVertices() - 1],
-                        currentFigure->GetVertices()[0],
-                        currentFigure->EnumVertices() - 1, r);
+                    DetectNewSplitPoint(currentFigure->GetVertices()
+                                            [currentFigure->EnumVertices() - 1],
+                                        currentFigure->GetVertices()[0],
+                                        currentFigure->EnumVertices() - 1, r);
                 }
             }
         }
@@ -542,10 +532,9 @@ namespace drash {
                 if (currentFigure != nullptr && currentTemplate != nullptr) {
                     if (splitDepth == false) {
                         if (splitIntersectionsCount == 2) {
-                            unsigned int fsize =
-                                splitIntersection1Index + 2 +
-                                currentFigure->EnumVertices() -
-                                splitIntersection2Index;
+                            unsigned int fsize = splitIntersection1Index + 2 +
+                                                 currentFigure->EnumVertices() -
+                                                 splitIntersection2Index;
 
                             CFigureParams fp;
                             fp.vertices.resize(fsize);
@@ -722,10 +711,8 @@ namespace drash {
 
                 currentTemplate->figures.back().vertices = vertices;
 
-                for (auto i =
-                         currentTemplate->figures.back().vertices.begin();
-                     i != currentTemplate->figures.back().vertices.end();
-                     i++) {
+                for (auto i = currentTemplate->figures.back().vertices.begin();
+                     i != currentTemplate->figures.back().vertices.end(); i++) {
                     CPlane plane;
                     plane.SetNormal(CVec3f(0, 0, 1));
                     plane.SetPoint(CVec3f(0, 0, 0));

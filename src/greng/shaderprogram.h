@@ -29,7 +29,7 @@ namespace greng {
 
     class CShaderProgram
         : public drash::CObjectFactory<CShaderProgram>::CFactoryProduct {
-      public:
+    public:
         CShaderProgram() = default;
 
         unsigned int programId = 0;

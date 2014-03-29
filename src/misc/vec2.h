@@ -33,7 +33,7 @@ struct b2Vec2;
 namespace drash {
 
     template <typename T, const int DEF_VAL> class CVec2 {
-      public:
+    public:
         CVec2() = default;
         CVec2(const CVec2& _xy);
         CVec2(const T& _xy);
@@ -60,8 +60,8 @@ namespace drash {
         T x = static_cast<T>(DEF_VAL);
         T y = static_cast<T>(DEF_VAL);
 
-      protected:
-      private:
+    protected:
+    private:
     };
 
     /// ///////////////////// ///

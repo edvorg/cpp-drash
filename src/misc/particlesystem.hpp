@@ -36,7 +36,7 @@ namespace drash {
 
     template <class PARTICLE> class ParticleSystem {
 
-      public:
+    public:
         using Period = std::function<float()>;
         using Life = std::function<float()>;
         using PostSpawn = std::function<void(PARTICLE&)>;
@@ -96,12 +96,12 @@ namespace drash {
         inline float GetFieldWidth() const { return params.fieldWidth; }
         inline float GetFieldHeight() const { return params.fieldHeight; }
 
-      protected:
+    protected:
         void Spawn();
         // destroy by index ind pool
         void Destroy(unsigned int index);
 
-      private:
+    private:
         std::vector<PARTICLE> pool;
         int poolSize = 100;
         double spawnTimer = 0.0;

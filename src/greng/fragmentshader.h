@@ -29,7 +29,7 @@ namespace greng {
 
     class CFragmentShader
         : public drash::CObjectFactory<CFragmentShader>::CFactoryProduct {
-      public:
+    public:
         CFragmentShader() = default;
 
         unsigned int vertexShaderId = 0;

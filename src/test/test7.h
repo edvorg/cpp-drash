@@ -33,10 +33,10 @@ namespace drash {
     namespace test {
 
         class CTest7 : public CTest3 {
-          public:
+        public:
             CTest7();
 
-          private:
+        private:
             virtual void Step(double _dt) override;
             bool InitTextures();
             bool InitShaders();

@@ -43,18 +43,18 @@ namespace drash {
     class CExplosionParams;
 
     class CSceneObjectGeometry final {
-      public:
+    public:
         std::vector<CFigureParams> figures;
         std::vector<unsigned int> destructionGraph;
 
         void ComputeDestructionGraph(const float _accuracy);
 
-      protected:
-      private:
+    protected:
+    private:
     };
 
     class CSceneObjectParams final {
-      public:
+    public:
         bool dynamic = true;
         CVec3f pos;
         float angle = 0;
@@ -63,7 +63,7 @@ namespace drash {
 
     class CSceneObject final
         : public CObjectFactory<CSceneObject>::CFactoryProduct {
-      public:
+    public:
         friend class CScene;
         friend class CExplosion;
 
@@ -110,8 +110,8 @@ namespace drash {
         inline void AddContactEndHandler(
             const std::function<void(CFigure*, CFigure*)>& _handler);
 
-      protected:
-      private:
+    protected:
+    private:
         b2Body* body = nullptr;
 
         //////////////////////////////////////////////////////
@@ -156,9 +156,7 @@ namespace drash {
         return figuresCount;
     }
 
-    inline CAnimator<CVec2f>& CSceneObject::GetPosXY() {
-        return posXYAnimator;
-    }
+    inline CAnimator<CVec2f>& CSceneObject::GetPosXY() { return posXYAnimator; }
 
     inline CAnimator<float>& CSceneObject::GetPosZ() { return posZAnimator; }
 

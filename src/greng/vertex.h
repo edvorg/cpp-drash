@@ -31,7 +31,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace greng {
 
     class CVertex {
-      public:
+    public:
         CVertex() = default;
 
         drash::CVec3f pos = drash::CVec3f(0);
@@ -41,8 +41,8 @@ namespace greng {
         drash::CVec3f tangent = drash::CVec3f(1, 0, 0);
         drash::CVec3f binormal = drash::CVec3f(0, 1, 0);
 
-      protected:
-      private:
+    protected:
+    private:
     };
 
 } // namespace greng

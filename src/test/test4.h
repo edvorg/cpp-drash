@@ -36,14 +36,14 @@ namespace drash {
     namespace test {
 
         class CTest4 : public CApp {
-          public:
+        public:
             CTest4();
 
-          protected:
+        protected:
             virtual void Step(double _dt) override;
             virtual void Render() override;
 
-          private:
+        private:
             ui::CUIButton testButton1;
             ui::CUIButton testButton2;
             ui::CUISlider testSlider1;

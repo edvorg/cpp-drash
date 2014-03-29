@@ -51,8 +51,8 @@ namespace drash {
             return nullptr;
         }
 
-        return &B2Vec2ToCVec2(*static_cast<b2PolygonShape*>(
-                                   fixture->GetShape())->m_vertices);
+        return &B2Vec2ToCVec2(*static_cast<b2PolygonShape*>(fixture->GetShape())
+                                   ->m_vertices);
     }
 
     unsigned int CFigure::EnumVertices() const {

@@ -34,7 +34,7 @@ namespace drash {
     namespace test {
 
         class CTest9 : public CApp {
-          public:
+        public:
             CTest9();
 
             virtual void Step(double _dt) override;

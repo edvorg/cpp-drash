@@ -30,7 +30,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     class CMatrix4f {
-      public:
+    public:
         constexpr static const unsigned int rowsCount = 4;
         constexpr static const unsigned int columnsCount = 4;
         constexpr static const unsigned int elemsCount = 16;
@@ -60,8 +60,8 @@ namespace drash {
 
         float data[elemsCount];
 
-      protected:
-      private:
+    protected:
+    private:
     };
 
     CMatrix4f& MatrixMultiply(const CMatrix4f& _m1, const CMatrix4f& _m2,

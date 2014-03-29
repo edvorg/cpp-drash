@@ -36,7 +36,7 @@ namespace drash {
     class CSceneObject;
 
     class CGeometryManager final {
-      public:
+    public:
         typedef std::map<std::string, CSceneObjectGeometry*>
         SceneObjectTemplatesT;
         typedef std::pair<std::string, CSceneObjectGeometry*>
@@ -62,8 +62,8 @@ namespace drash {
         bool Load();
         bool Store();
 
-      protected:
-      private:
+    protected:
+    private:
         SceneObjectTemplatesT sceneObjectTemplates;
 
         CScene& scene;

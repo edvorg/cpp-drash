@@ -76,14 +76,13 @@ namespace drash {
                         g.figures.resize(1);
                         g.figures[0]
                             .vertices.resize(objectsFactory.GetObjects()[i]
-                                                  ->figures[j]
-                                                  ->EnumVertices());
-                        g.figures[0].z = objectsFactory.GetObjects()[i]
-                                               ->figures[j]
-                                               ->GetZ();
+                                                 ->figures[j]
+                                                 ->EnumVertices());
+                        g.figures[0].z =
+                            objectsFactory.GetObjects()[i]->figures[j]->GetZ();
                         g.figures[0].depth = objectsFactory.GetObjects()[i]
-                                                   ->figures[j]
-                                                   ->GetDepth();
+                                                 ->figures[j]
+                                                 ->GetDepth();
                         memcpy(&*g.figures[0].vertices.begin(),
                                objectsFactory.GetObjects()[i]
                                    ->figures[j]
@@ -157,12 +156,11 @@ namespace drash {
                                     g1.figures[b].z = ng.figures[comp[b]].z;
                                     g1.figures[b].depth =
                                         ng.figures[comp[b]].depth;
-                                    memcpy(&*g1.figures[b].vertices.begin(),
-                                           &*ng.figures[comp[b]]
-                                                 .vertices.begin(),
-                                           sizeof(CVec2f) *
-                                               ng.figures[comp[b]]
-                                                   .vertices.size());
+                                    memcpy(
+                                        &*g1.figures[b].vertices.begin(),
+                                        &*ng.figures[comp[b]].vertices.begin(),
+                                        sizeof(CVec2f) * ng.figures[comp[b]]
+                                                             .vertices.size());
                                 }
 
                                 g1.ComputeDestructionGraph(0.5);
@@ -294,8 +292,7 @@ namespace drash {
         res->angle = _params.angle;
         res->destructionGraph = _geometry.destructionGraph;
 
-        for (auto i = _geometry.figures.begin(),
-                  i_e = _geometry.figures.end();
+        for (auto i = _geometry.figures.begin(), i_e = _geometry.figures.end();
              i != i_e; i++) {
             res->CreateFigure(*i);
         }

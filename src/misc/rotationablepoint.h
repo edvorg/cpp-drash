@@ -34,7 +34,7 @@ namespace greng {
 namespace drash {
 
     class CRotationablePoint {
-      public:
+    public:
         CRotationablePoint(greng::CRenderer& _renderer,
                            greng::CCamera& _camera);
 
@@ -56,7 +56,7 @@ namespace drash {
 
         inline const CVec3f& GetRotation() const;
 
-      private:
+    private:
         CVec3f rotationDelta;
         CVec2f cursorPos = CVec2f(0);
 

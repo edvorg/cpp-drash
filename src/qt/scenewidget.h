@@ -35,7 +35,7 @@ namespace drash {
 class SceneWidget : public QGLWidget {
     Q_OBJECT
 
-  public:
+public:
     SceneWidget(QWidget* parent = 0);
     virtual ~SceneWidget();
 
@@ -49,7 +49,7 @@ class SceneWidget : public QGLWidget {
     inline void SetApp(drash::CApp* _app);
     inline drash::CApp* GetApp();
 
-  protected:
+protected:
     virtual void mousePressEvent(QMouseEvent* _event) override;
     virtual void mouseReleaseEvent(QMouseEvent* _event) override;
     virtual void mouseMoveEvent(QMouseEvent* _event) override;
@@ -66,7 +66,7 @@ class SceneWidget : public QGLWidget {
     float width = 1.0f;
     float height = 1.0f;
 
-  private:
+private:
     drash::CVec2f WidgetSpaceToScreenSpace(const drash::CVec2f& _from) const;
 };
 

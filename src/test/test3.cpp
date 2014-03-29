@@ -144,8 +144,7 @@ namespace drash {
                                                GetDebugRenderer().FindFigure(
                                                    GetCamera(), GetCursorPos());
                                            if (f != nullptr) {
-                                               moveObject =
-                                                   f->GetSceneObject();
+                                               moveObject = f->GetSceneObject();
                                            }
                                        }
                                    },

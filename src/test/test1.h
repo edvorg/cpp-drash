@@ -36,17 +36,17 @@ namespace drash {
     namespace test {
 
         class CTest1 : public CApp {
-          public:
+        public:
             CTest1();
             ~CTest1();
 
-          protected:
+        protected:
             virtual void Step(double _dt) override;
             virtual void Render() override;
 
             auto& GetCamera() const { return *camera; }
 
-          private:
+        private:
             void SetProcessors();
             void BeginSplit();
             void DetectNewSplitPoint(const CVec2f& _p1, const CVec2f& _p2,

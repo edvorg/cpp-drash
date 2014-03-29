@@ -28,7 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace greng {
 
     class CPointLight {
-      public:
+    public:
         CPointLight() = default;
 
         drash::CVec3f position = 0;

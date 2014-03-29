@@ -36,7 +36,7 @@ namespace drash {
     class CSceneObject;
 
     class CFigureParams {
-      public:
+    public:
         CFigureParams();
 
         float friction = 1;
@@ -52,7 +52,7 @@ namespace drash {
     };
 
     class CFigure {
-      public:
+    public:
         friend class CScene;
         friend class CSceneObject;
 
@@ -74,8 +74,8 @@ namespace drash {
         inline void
         AddDestroyHandler(const std::function<void(CFigure*)>& _handler);
 
-      protected:
-      private:
+    protected:
+    private:
         CFigure() = default;
 
         b2Fixture* fixture = nullptr;

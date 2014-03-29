@@ -33,7 +33,7 @@ namespace drash {
     class CLogger;
 
     class CAppEventCombination {
-      public:
+    public:
         constexpr static const unsigned int catchEventsCountLimit = 3;
 
         void AddEvent(const CAppEvent& _e);
@@ -50,8 +50,8 @@ namespace drash {
         friend CLogger& operator<<(CLogger& _logger,
                                    const CAppEventCombination& _c);
 
-      private:
-      protected:
+    private:
+    protected:
         std::vector<CAppEvent> catchEvents;
     };
 

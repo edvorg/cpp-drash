@@ -33,13 +33,13 @@ namespace drash {
     namespace test {
 
         class CTest6 : public CTest1 {
-          public:
+        public:
             CTest6();
 
             virtual void Step(double _dt) override;
             virtual void Render() override;
 
-          private:
+        private:
             bool InitCamera();
             bool InitLevel();
             bool InitPlayer();

@@ -29,7 +29,7 @@ namespace drash {
 
     // screen shake effect used in by e.g. explosions
     class ScreenShaker {
-      public:
+    public:
         // starts screen shake effect
         void Shake();
 
@@ -37,8 +37,8 @@ namespace drash {
         // apply transformation matrix of shake effect
         float GetTranslate() const { return translate; }
 
-      protected:
-      private:
+    protected:
+    private:
         const float shakeTime = 1.0f;
         float shakeTimer = 0.0f;
         bool shake = false;

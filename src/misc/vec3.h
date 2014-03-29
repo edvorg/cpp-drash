@@ -31,7 +31,7 @@ namespace drash {
 
     template <typename T, const int DEF_VAL>
     class CVec3 : public CVec2<T, DEF_VAL> {
-      public:
+    public:
         CVec3() = default;
         CVec3(const CVec3& _xyz);
         CVec3(const CVec2<T, DEF_VAL>& _xy, const T& _z);
@@ -64,8 +64,8 @@ namespace drash {
 
         T z = static_cast<T>(DEF_VAL);
 
-      protected:
-      private:
+    protected:
+    private:
     };
 
     /// ///////////////////// ///
@@ -80,15 +80,13 @@ namespace drash {
     template <typename T, const int DEF_VAL>
     CVec3<T, DEF_VAL> operator+(const CVec3<T, DEF_VAL>& _v1,
                                 const CVec3<T, DEF_VAL>& _v2) {
-        return CVec3<T, DEF_VAL>(_v1.x + _v2.x, _v1.y + _v2.y,
-                                 _v1.z + _v2.z);
+        return CVec3<T, DEF_VAL>(_v1.x + _v2.x, _v1.y + _v2.y, _v1.z + _v2.z);
     }
 
     template <typename T, const int DEF_VAL>
     CVec3<T, DEF_VAL> operator-(const CVec3<T, DEF_VAL>& _v1,
                                 const CVec3<T, DEF_VAL>& _v2) {
-        return CVec3<T, DEF_VAL>(_v1.x - _v2.x, _v1.y - _v2.y,
-                                 _v1.z - _v2.z);
+        return CVec3<T, DEF_VAL>(_v1.x - _v2.x, _v1.y - _v2.y, _v1.z - _v2.z);
     }
 
     template <typename T, const int DEF_VAL>
@@ -161,8 +159,7 @@ namespace drash {
 
     template <typename T, const int DEF_VAL>
     inline T CVec3<T, DEF_VAL>::Length() const {
-        return sqrt(this->x * this->x + this->y * this->y +
-                    this->z * this->z);
+        return sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
     }
 
     template <typename T, const int DEF_VAL>

@@ -31,7 +31,7 @@ namespace drash {
 
     template <typename T, const int DEF_VAL>
     class CVec4 : public CVec3<T, DEF_VAL> {
-      public:
+    public:
         CVec4() = default;
         CVec4(const CVec2<T, DEF_VAL>& _xy, const T& _z, const T& _w);
         CVec4(const CVec3<T, DEF_VAL>& _xyz, const T& _w);
@@ -62,8 +62,8 @@ namespace drash {
 
         T w = static_cast<T>(DEF_VAL);
 
-      protected:
-      private:
+    protected:
+    private:
     };
 
     /// ///////////////////// ///
@@ -77,8 +77,8 @@ namespace drash {
 
     template <typename T, const int DEF_VAL>
     CLogger& operator<<(CLogger& _logger, const CVec4<T, DEF_VAL>& _v) {
-        _logger << '(' << _v.x << "; " << _v.y << "; " << _v.z << "; "
-                << _v.w << ')';
+        _logger << '(' << _v.x << "; " << _v.y << "; " << _v.z << "; " << _v.w
+                << ')';
         return _logger;
     }
 
@@ -134,8 +134,8 @@ namespace drash {
 
     template <typename T, const int DEF_VAL>
     inline T CVec4<T, DEF_VAL>::Length() const {
-        return sqrt(this->x * this->x + this->y * this->y +
-                    this->z * this->z + this->w * this->w);
+        return sqrt(this->x * this->x + this->y * this->y + this->z * this->z +
+                    this->w * this->w);
     }
 
     template <typename T, const int DEF_VAL>

@@ -118,9 +118,9 @@ namespace drash {
                 CMatrix4f model_view;
                 MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
-                greng::CTexture* texts[6] = { tex4, tex4normal,
-                                              tex3, tex3normal,
-                                              tex5, tex5normal };
+                greng::CTexture* texts[6] = {
+                    tex4, tex4normal, tex3, tex3normal, tex5, tex5normal
+                };
 
                 for (unsigned int i = 0; i < 3; i++) {
                     GetGrengSystems().GetRenderer().RenderMesh(
@@ -161,8 +161,7 @@ namespace drash {
             }
 
             GetGrengSystems().GetRenderer().DrawPoint(
-                GetCamera(), light1.position, 10, CColor4f(1, 1, 1, 1),
-                false);
+                GetCamera(), light1.position, 10, CColor4f(1, 1, 1, 1), false);
         }
 
         void CTest5::SetupMeshes() {

@@ -59,7 +59,7 @@ namespace drash {
     };
 
     class CAppEvent {
-      public:
+    public:
         CAppEvent();
         CAppEvent(const CAppEvent& _src);
         CAppEvent(EventKey _key);
@@ -75,7 +75,7 @@ namespace drash {
 
         void Dump() const;
 
-      private:
+    private:
         EventKey key = EventKeyUnknown;
     };
 

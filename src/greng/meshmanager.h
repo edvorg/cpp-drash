@@ -33,7 +33,7 @@ namespace greng {
     class CVertex;
 
     class CMeshManager final {
-      public:
+    public:
         constexpr static unsigned int meshesCountLimit = 1024;
 
         CMeshManager();
@@ -56,8 +56,8 @@ namespace greng {
         void ComputeNormals(CMesh* _mesh);
         void ComputeTangentSpace(CMesh* _mesh);
 
-      protected:
-      private:
+    protected:
+    private:
         drash::CObjectFactory<CMesh> meshFactory;
     };
 

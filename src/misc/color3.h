@@ -37,7 +37,7 @@ namespace drash {
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
     class CColor3 {
-      public:
+    public:
         CColor3() = default;
         CColor3(const CColor3& _rgb);
         CColor3(const T& _rgb);
@@ -49,8 +49,8 @@ namespace drash {
         T g = DEF_VAL_FUNC(1);
         T b = DEF_VAL_FUNC(2);
 
-      protected:
-      private:
+    protected:
+    private:
     };
 
     /// some typedefs

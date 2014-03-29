@@ -82,8 +82,7 @@ namespace drash {
             CApp::Render();
         } else {
             if (currentLevel != nullptr) {
-                for (unsigned int i = 0; i < currentLevel->EnumObjects();
-                     i++) {
+                for (unsigned int i = 0; i < currentLevel->EnumObjects(); i++) {
                     auto g = GetGeometryManager().GetGeometry(
                         currentLevel->GetObjects()[i]->geometryName);
 
@@ -240,17 +239,18 @@ namespace drash {
                       }
                   }));
 
-        GetEventSystem().SetProcessor(
-            "C-LB", CAppEventProcessor([this]() {
+        GetEventSystem().SetProcessor("C-LB", CAppEventProcessor([this]() {
 
-                        if (playLevel) {
-                            return;
-                        }
-                        CLevelObjectDesc* temp = SelectObject();
-                        if (temp != nullptr) {
-                            temp->params.dynamic = !temp->params.dynamic;
-                        }
-                    }));
+                                                  if (playLevel) {
+                                                      return;
+                                                  }
+                                                  CLevelObjectDesc* temp =
+                                                      SelectObject();
+                                                  if (temp != nullptr) {
+                                                      temp->params.dynamic =
+                                                          !temp->params.dynamic;
+                                                  }
+                                              }));
     }
 
     void CSceneEditorApp::SetCameraProcessors() {
@@ -273,7 +273,7 @@ namespace drash {
             "w", CAppEventProcessor([this]() {},
                                     [this]() {
                                         camera->Forward(MOVING_SPEED *
-                                                         timer.GetDeltaTime());
+                                                        timer.GetDeltaTime());
                                     },
                                     [this] {}));
 
@@ -300,31 +300,30 @@ namespace drash {
                                              }));
 
         GetEventSystem().SetProcessor(
-            "DRDP",
-            CAppEventProcessor([this]() {
-                                   if (currentLevel != nullptr) {
-                                       // qDebug() << "Proccess enter";
-                                       dragTemplateName =
-                                           getSelectedTemplateHandler();
-                                       dragNow = true;
-                                   }
-                               },
-                               [this]() {}, [this]() {
+            "DRDP", CAppEventProcessor([this]() {
+                                           if (currentLevel != nullptr) {
+                                               // qDebug() << "Proccess enter";
+                                               dragTemplateName =
+                                                   getSelectedTemplateHandler();
+                                               dragNow = true;
+                                           }
+                                       },
+                                       [this]() {}, [this]() {
 
-                if (dragNow == true) {
-                    CPlane plane;
-                    plane.SetNormal(CVec3f(0, 0, 1));
-                    plane.SetPoint(CVec3f(0, 0, 0));
+                        if (dragNow == true) {
+                            CPlane plane;
+                            plane.SetNormal(CVec3f(0, 0, 1));
+                            plane.SetPoint(CVec3f(0, 0, 0));
 
-                    CVec3f position;
-                    CVec2f cpos = GetCursorPos();
-                    camera->CastRay(cpos, plane, position);
-                    AddObject(dragTemplateName, position);
+                            CVec3f position;
+                            CVec2f cpos = GetCursorPos();
+                            camera->CastRay(cpos, plane, position);
+                            AddObject(dragTemplateName, position);
 
-                    dragNow = false;
-                    dragTemplateName = "";
-                }
-            }));
+                            dragNow = false;
+                            dragTemplateName = "";
+                        }
+                    }));
     }
 
     bool CSceneEditorApp::InitCamera() {
@@ -453,8 +452,7 @@ namespace drash {
                         _objectname &&
                     currentLevel->GetObjects()[i]->geometryName ==
                         _geometryname) {
-                    camera->LookAt(
-                        currentLevel->GetObjects()[i]->params.pos);
+                    camera->LookAt(currentLevel->GetObjects()[i]->params.pos);
                 }
             }
         }

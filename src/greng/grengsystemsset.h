@@ -36,7 +36,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace greng {
 
     class CGrengSystemsSet {
-      public:
+    public:
         CGrengSystemsSet();
 
         void Step(double _dt);
@@ -49,7 +49,7 @@ namespace greng {
         inline greng::CRenderer& GetRenderer();
         inline greng::CCameraManager& GetCameraManager();
 
-      private:
+    private:
         greng::CRenderer renderer;
         greng::CCameraManager cameraManager;
         greng::CMeshManager meshManager;

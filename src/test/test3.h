@@ -36,14 +36,14 @@ namespace drash {
     namespace test {
 
         class CTest3 : public CTest1 {
-          public:
+        public:
             CTest3();
 
-          protected:
+        protected:
             virtual void Step(double _dt) override;
             virtual void Render() override;
 
-          private:
+        private:
             void SetProcessors();
             void InitObjects();
             CSceneObject* moveObject = nullptr;

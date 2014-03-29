@@ -108,15 +108,13 @@ namespace drash {
                 xy_proj.Normalize();
 
                 rotation.z = acos(xy_proj.x);
-                rotation.z =
-                    (xy_proj.y > 0.000001f ? rotation.z : -rotation.z);
+                rotation.z = (xy_proj.y > 0.000001f ? rotation.z : -rotation.z);
                 rotation.z -= rotationDelta.z;
             } else if (axisRotating == 2) {
                 xz_proj.Normalize();
 
                 rotation.y = acos(xz_proj.z);
-                rotation.y =
-                    (xz_proj.x > 0.000001f ? rotation.y : -rotation.y);
+                rotation.y = (xz_proj.x > 0.000001f ? rotation.y : -rotation.y);
                 rotation.y -= rotationDelta.y;
             } else if (axisRotating == 1) {
                 yz_proj.Normalize();
@@ -160,8 +158,8 @@ namespace drash {
         x_transposed.Vec3() *= radius;
         x_transposed.Vec3() += point;
 
-        renderer.DrawLine(camera, point, x_transposed, 1,
-                           CColor4f(1, 0, 0, 1), false);
+        renderer.DrawLine(camera, point, x_transposed, 1, CColor4f(1, 0, 0, 1),
+                          false);
 
         CVec4f z(0, 0, 1, 0);
 
@@ -172,8 +170,8 @@ namespace drash {
         z_transposed.Vec3() *= radius;
         z_transposed.Vec3() += point;
 
-        renderer.DrawLine(camera, point, z_transposed, 1,
-                           CColor4f(0, 0, 1, 1), false);
+        renderer.DrawLine(camera, point, z_transposed, 1, CColor4f(0, 0, 1, 1),
+                          false);
 
         CVec4f y(0, 1, 0, 0);
 
@@ -184,8 +182,8 @@ namespace drash {
         y_transposed.Vec3() *= radius;
         y_transposed.Vec3() += point;
 
-        renderer.DrawLine(camera, point, y_transposed, 1,
-                           CColor4f(0, 1, 0, 1), false);
+        renderer.DrawLine(camera, point, y_transposed, 1, CColor4f(0, 1, 0, 1),
+                          false);
 
         if (axisOX == true) {
             for (unsigned int i = 0; i < segments; i++) {
@@ -202,9 +200,9 @@ namespace drash {
                 p1_transposed.Vec3() += point;
                 p2_transposed.Vec3() += point;
 
-                renderer.DrawLine(
-                    camera, p1_transposed, p2_transposed, 1,
-                    CColor4f(1, 0, 0, axisOvered == 1 ? 0.5 : 1), false);
+                renderer.DrawLine(camera, p1_transposed, p2_transposed, 1,
+                                  CColor4f(1, 0, 0, axisOvered == 1 ? 0.5 : 1),
+                                  false);
 
                 angle += angle_delta;
             }
@@ -226,9 +224,9 @@ namespace drash {
                 p1_transposed.Vec3() += point;
                 p2_transposed.Vec3() += point;
 
-                renderer.DrawLine(
-                    camera, p1_transposed, p2_transposed, 1,
-                    CColor4f(0, 0, 1, axisOvered == 3 ? 0.5 : 1), false);
+                renderer.DrawLine(camera, p1_transposed, p2_transposed, 1,
+                                  CColor4f(0, 0, 1, axisOvered == 3 ? 0.5 : 1),
+                                  false);
 
                 angle += angle_delta;
             }
@@ -250,9 +248,9 @@ namespace drash {
                 p1_transposed.Vec3() += point;
                 p2_transposed.Vec3() += point;
 
-                renderer.DrawLine(
-                    camera, p1_transposed, p2_transposed, 1,
-                    CColor4f(0, 1, 0, axisOvered == 2 ? 0.5 : 1), false);
+                renderer.DrawLine(camera, p1_transposed, p2_transposed, 1,
+                                  CColor4f(0, 1, 0, axisOvered == 2 ? 0.5 : 1),
+                                  false);
 
                 angle += angle_delta;
             }
@@ -324,23 +322,20 @@ namespace drash {
                 xy_proj.Normalize();
 
                 rotationDelta.z = acos(xy_proj.x);
-                rotationDelta.z =
-                    (xy_proj.y > 0.000001f ? rotationDelta.z
-                                            : -rotationDelta.z);
+                rotationDelta.z = (xy_proj.y > 0.000001f ? rotationDelta.z
+                                                         : -rotationDelta.z);
             } else if (axisRotating == 2) {
                 xz_proj.Normalize();
 
                 rotationDelta.y = acos(xz_proj.z);
-                rotationDelta.y =
-                    (xz_proj.x > 0.000001f ? rotationDelta.y
-                                            : -rotationDelta.y);
+                rotationDelta.y = (xz_proj.x > 0.000001f ? rotationDelta.y
+                                                         : -rotationDelta.y);
             } else if (axisRotating == 1) {
                 yz_proj.Normalize();
 
                 rotationDelta.x = acos(yz_proj.z);
-                rotationDelta.x =
-                    (yz_proj.y < -0.000001f ? rotationDelta.x
-                                             : -rotationDelta.x);
+                rotationDelta.x = (yz_proj.y < -0.000001f ? rotationDelta.x
+                                                          : -rotationDelta.x);
             }
 
             rotationDelta -= rotation;

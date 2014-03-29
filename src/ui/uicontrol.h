@@ -33,7 +33,7 @@ namespace drash {
     namespace ui {
 
         class CUIControl final {
-          public:
+        public:
             friend class CUISystem;
 
             CUIControl() = default;
@@ -56,8 +56,8 @@ namespace drash {
             inline const CVec2i& GetPos() const;
             inline const CVec2ui& GetSize() const;
 
-          protected:
-          private:
+        protected:
+        private:
             std::function<void()> destroyHandler = []() {};
             std::function<void()> pressHandler = []() {};
             std::function<void()> releaseHandler = []() {};

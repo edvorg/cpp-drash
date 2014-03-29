@@ -32,7 +32,7 @@ namespace greng {
     class CFragmentShader;
 
     class CFragmentShaderManager {
-      public:
+    public:
         constexpr static unsigned int shadersCountLimit = 32;
 
         CFragmentShaderManager();
@@ -49,8 +49,8 @@ namespace greng {
         CFragmentShader* CreateShaderFromFile(const char* _path);
         bool DestroyShader(CFragmentShader* _shader);
 
-      protected:
-      private:
+    protected:
+    private:
         drash::CObjectFactory<CFragmentShader> shaderFactory;
     };
 

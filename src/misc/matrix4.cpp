@@ -57,7 +57,7 @@ namespace drash {
         data[i30] = tmp;
 
         tmp = data[i12];
-        data[i12] = data[i21];        
+        data[i12] = data[i21];
         data[i21] = tmp;
 
         tmp = data[i13];
@@ -74,84 +74,84 @@ namespace drash {
     CMatrix4f& MatrixMultiply(const CMatrix4f& _m1, const CMatrix4f& _m2,
                               CMatrix4f& _result) {
         _result.data[_result.i00] = _m1.data[_m1.i00] * _m2.data[_m2.i00] +
-            _m1.data[_m1.i01] * _m2.data[_m2.i10] +
-            _m1.data[_m1.i02] * _m2.data[_m2.i20] +
-            _m1.data[_m1.i03] * _m2.data[_m2.i30];
+                                    _m1.data[_m1.i01] * _m2.data[_m2.i10] +
+                                    _m1.data[_m1.i02] * _m2.data[_m2.i20] +
+                                    _m1.data[_m1.i03] * _m2.data[_m2.i30];
 
         _result.data[_result.i01] = _m1.data[_m1.i00] * _m2.data[_m2.i01] +
-            _m1.data[_m1.i01] * _m2.data[_m2.i11] +
-            _m1.data[_m1.i02] * _m2.data[_m2.i21] +
-            _m1.data[_m1.i03] * _m2.data[_m2.i31];
+                                    _m1.data[_m1.i01] * _m2.data[_m2.i11] +
+                                    _m1.data[_m1.i02] * _m2.data[_m2.i21] +
+                                    _m1.data[_m1.i03] * _m2.data[_m2.i31];
 
         _result.data[_result.i02] = _m1.data[_m1.i00] * _m2.data[_m2.i02] +
-            _m1.data[_m1.i01] * _m2.data[_m2.i12] +
-            _m1.data[_m1.i02] * _m2.data[_m2.i22] +
-            _m1.data[_m1.i03] * _m2.data[_m2.i32];
+                                    _m1.data[_m1.i01] * _m2.data[_m2.i12] +
+                                    _m1.data[_m1.i02] * _m2.data[_m2.i22] +
+                                    _m1.data[_m1.i03] * _m2.data[_m2.i32];
 
         _result.data[_result.i03] = _m1.data[_m1.i00] * _m2.data[_m2.i03] +
-            _m1.data[_m1.i01] * _m2.data[_m2.i13] +
-            _m1.data[_m1.i02] * _m2.data[_m2.i23] +
-            _m1.data[_m1.i03] * _m2.data[_m2.i33];
+                                    _m1.data[_m1.i01] * _m2.data[_m2.i13] +
+                                    _m1.data[_m1.i02] * _m2.data[_m2.i23] +
+                                    _m1.data[_m1.i03] * _m2.data[_m2.i33];
 
         _result.data[_result.i10] = _m1.data[_m1.i10] * _m2.data[_m2.i00] +
-            _m1.data[_m1.i11] * _m2.data[_m2.i10] +
-            _m1.data[_m1.i12] * _m2.data[_m2.i20] +
-            _m1.data[_m1.i13] * _m2.data[_m2.i30];
+                                    _m1.data[_m1.i11] * _m2.data[_m2.i10] +
+                                    _m1.data[_m1.i12] * _m2.data[_m2.i20] +
+                                    _m1.data[_m1.i13] * _m2.data[_m2.i30];
 
         _result.data[_result.i11] = _m1.data[_m1.i10] * _m2.data[_m2.i01] +
-            _m1.data[_m1.i11] * _m2.data[_m2.i11] +
-            _m1.data[_m1.i12] * _m2.data[_m2.i21] +
-            _m1.data[_m1.i13] * _m2.data[_m2.i31];
+                                    _m1.data[_m1.i11] * _m2.data[_m2.i11] +
+                                    _m1.data[_m1.i12] * _m2.data[_m2.i21] +
+                                    _m1.data[_m1.i13] * _m2.data[_m2.i31];
 
         _result.data[_result.i12] = _m1.data[_m1.i10] * _m2.data[_m2.i02] +
-            _m1.data[_m1.i11] * _m2.data[_m2.i12] +
-            _m1.data[_m1.i12] * _m2.data[_m2.i22] +
-            _m1.data[_m1.i13] * _m2.data[_m2.i32];
+                                    _m1.data[_m1.i11] * _m2.data[_m2.i12] +
+                                    _m1.data[_m1.i12] * _m2.data[_m2.i22] +
+                                    _m1.data[_m1.i13] * _m2.data[_m2.i32];
 
         _result.data[_result.i13] = _m1.data[_m1.i10] * _m2.data[_m2.i03] +
-            _m1.data[_m1.i11] * _m2.data[_m2.i13] +
-            _m1.data[_m1.i12] * _m2.data[_m2.i23] +
-            _m1.data[_m1.i13] * _m2.data[_m2.i33];
+                                    _m1.data[_m1.i11] * _m2.data[_m2.i13] +
+                                    _m1.data[_m1.i12] * _m2.data[_m2.i23] +
+                                    _m1.data[_m1.i13] * _m2.data[_m2.i33];
 
         _result.data[_result.i20] = _m1.data[_m1.i20] * _m2.data[_m2.i00] +
-            _m1.data[_m1.i21] * _m2.data[_m2.i10] +
-            _m1.data[_m1.i22] * _m2.data[_m2.i20] +
-            _m1.data[_m1.i23] * _m2.data[_m2.i30];
+                                    _m1.data[_m1.i21] * _m2.data[_m2.i10] +
+                                    _m1.data[_m1.i22] * _m2.data[_m2.i20] +
+                                    _m1.data[_m1.i23] * _m2.data[_m2.i30];
 
         _result.data[_result.i21] = _m1.data[_m1.i20] * _m2.data[_m2.i01] +
-            _m1.data[_m1.i21] * _m2.data[_m2.i11] +
-            _m1.data[_m1.i22] * _m2.data[_m2.i21] +
-            _m1.data[_m1.i23] * _m2.data[_m2.i31];
+                                    _m1.data[_m1.i21] * _m2.data[_m2.i11] +
+                                    _m1.data[_m1.i22] * _m2.data[_m2.i21] +
+                                    _m1.data[_m1.i23] * _m2.data[_m2.i31];
 
         _result.data[_result.i22] = _m1.data[_m1.i20] * _m2.data[_m2.i02] +
-            _m1.data[_m1.i21] * _m2.data[_m2.i12] +
-            _m1.data[_m1.i22] * _m2.data[_m2.i22] +
-            _m1.data[_m1.i23] * _m2.data[_m2.i32];
+                                    _m1.data[_m1.i21] * _m2.data[_m2.i12] +
+                                    _m1.data[_m1.i22] * _m2.data[_m2.i22] +
+                                    _m1.data[_m1.i23] * _m2.data[_m2.i32];
 
         _result.data[_result.i23] = _m1.data[_m1.i20] * _m2.data[_m2.i03] +
-            _m1.data[_m1.i21] * _m2.data[_m2.i13] +
-            _m1.data[_m1.i22] * _m2.data[_m2.i23] +
-            _m1.data[_m1.i23] * _m2.data[_m2.i33];
+                                    _m1.data[_m1.i21] * _m2.data[_m2.i13] +
+                                    _m1.data[_m1.i22] * _m2.data[_m2.i23] +
+                                    _m1.data[_m1.i23] * _m2.data[_m2.i33];
 
         _result.data[_result.i30] = _m1.data[_m1.i30] * _m2.data[_m2.i00] +
-            _m1.data[_m1.i31] * _m2.data[_m2.i10] +
-            _m1.data[_m1.i32] * _m2.data[_m2.i20] +
-            _m1.data[_m1.i33] * _m2.data[_m2.i30];
+                                    _m1.data[_m1.i31] * _m2.data[_m2.i10] +
+                                    _m1.data[_m1.i32] * _m2.data[_m2.i20] +
+                                    _m1.data[_m1.i33] * _m2.data[_m2.i30];
 
         _result.data[_result.i31] = _m1.data[_m1.i30] * _m2.data[_m2.i01] +
-            _m1.data[_m1.i31] * _m2.data[_m2.i11] +
-            _m1.data[_m1.i32] * _m2.data[_m2.i21] +
-            _m1.data[_m1.i33] * _m2.data[_m2.i31];
+                                    _m1.data[_m1.i31] * _m2.data[_m2.i11] +
+                                    _m1.data[_m1.i32] * _m2.data[_m2.i21] +
+                                    _m1.data[_m1.i33] * _m2.data[_m2.i31];
 
         _result.data[_result.i32] = _m1.data[_m1.i30] * _m2.data[_m2.i02] +
-            _m1.data[_m1.i31] * _m2.data[_m2.i12] +
-            _m1.data[_m1.i32] * _m2.data[_m2.i22] +
-            _m1.data[_m1.i33] * _m2.data[_m2.i32];
+                                    _m1.data[_m1.i31] * _m2.data[_m2.i12] +
+                                    _m1.data[_m1.i32] * _m2.data[_m2.i22] +
+                                    _m1.data[_m1.i33] * _m2.data[_m2.i32];
 
         _result.data[_result.i33] = _m1.data[_m1.i30] * _m2.data[_m2.i03] +
-            _m1.data[_m1.i31] * _m2.data[_m2.i13] +
-            _m1.data[_m1.i32] * _m2.data[_m2.i23] +
-            _m1.data[_m1.i33] * _m2.data[_m2.i33];
+                                    _m1.data[_m1.i31] * _m2.data[_m2.i13] +
+                                    _m1.data[_m1.i32] * _m2.data[_m2.i23] +
+                                    _m1.data[_m1.i33] * _m2.data[_m2.i33];
 
         return _result;
     }
@@ -159,16 +159,16 @@ namespace drash {
     CVec4f& MatrixMultiply(const CMatrix4f& _m, const CVec4f& _v,
                            CVec4f& _result) {
         _result.x = _v.x * _m.data[_m.i00] + _v.y * _m.data[_m.i01] +
-            _v.z * _m.data[_m.i02] + _v.w * _m.data[_m.i03];
+                    _v.z * _m.data[_m.i02] + _v.w * _m.data[_m.i03];
 
         _result.y = _v.x * _m.data[_m.i10] + _v.y * _m.data[_m.i11] +
-            _v.z * _m.data[_m.i12] + _v.w * _m.data[_m.i13];
+                    _v.z * _m.data[_m.i12] + _v.w * _m.data[_m.i13];
 
         _result.z = _v.x * _m.data[_m.i20] + _v.y * _m.data[_m.i21] +
-            _v.z * _m.data[_m.i22] + _v.w * _m.data[_m.i23];
+                    _v.z * _m.data[_m.i22] + _v.w * _m.data[_m.i23];
 
         _result.w = _v.x * _m.data[_m.i30] + _v.y * _m.data[_m.i31] +
-            _v.z * _m.data[_m.i32] + _v.w * _m.data[_m.i33];
+                    _v.z * _m.data[_m.i32] + _v.w * _m.data[_m.i33];
 
         return _result;
     }

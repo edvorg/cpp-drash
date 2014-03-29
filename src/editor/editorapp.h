@@ -36,7 +36,7 @@ namespace drash {
 
     class CObjectEditorApp : public CApp {
 
-      public:
+    public:
         enum State {
             BuildState,
             MoveState,
@@ -48,7 +48,7 @@ namespace drash {
             Simple
         };
 
-      private:
+    private:
         struct SplitContext {
             CVec3f splitIntersection1;
             unsigned splitIntersection1Index = 0;
@@ -59,7 +59,7 @@ namespace drash {
             CFigure* figure = nullptr;
         };
 
-      public:
+    public:
         CObjectEditorApp();
 
         virtual void Step(double _dt) override;
@@ -91,7 +91,7 @@ namespace drash {
 
         inline greng::CCamera* GetCamera();
 
-      private:
+    private:
         float GetCurDepth();
 
         void SetProcessors();
@@ -113,7 +113,7 @@ namespace drash {
         void MoveOfAxis();
         bool IsConvex() const;
 
-      private:
+    private:
         // Drag and Drop
         std::function<std::string()> getSelectedTemplateHandler = []() {
             return std::string("");

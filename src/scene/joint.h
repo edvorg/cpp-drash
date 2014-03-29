@@ -30,11 +30,11 @@ class b2Joint;
 namespace drash {
 
     class CJoint {
-      public:
+    public:
         friend class CScene;
 
-      protected:
-      private:
+    protected:
+    private:
         b2Joint* joint = nullptr;
     };
 

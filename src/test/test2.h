@@ -34,10 +34,10 @@ namespace drash {
     namespace test {
 
         class CTest2 : public CApp {
-          public:
+        public:
             CTest2();
 
-          private:
+        private:
             void SetProcessors();
             CSceneObject* selectedObject = nullptr;
 

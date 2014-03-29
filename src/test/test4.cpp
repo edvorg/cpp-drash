@@ -57,9 +57,7 @@ namespace drash {
             testSlider1.SetValue(5);
             testSlider1.SetSliderWidth(100);
 
-            testSlider1.SetValueHandler([](float _value) {
-                LOG_INFO(_value);
-            });
+            testSlider1.SetValueHandler([](float _value) { LOG_INFO(_value); });
 
             LOG_INFO("value is " << valueAnimator1);
             value = 33;

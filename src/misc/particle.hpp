@@ -29,7 +29,7 @@ namespace drash {
 
     class Particle {
 
-      public:
+    public:
         inline void SetPosX(float newX) { x = newX; }
         inline void SetPosY(float newY) { y = newY; }
         inline void SetPos(float newX, float newY) {
@@ -95,8 +95,8 @@ namespace drash {
         inline bool GetDead() const { return dead; }
         inline float GetLifeTimer() const { return lifeTimer; }
 
-      protected:
-      private:
+    protected:
+    private:
         float x = 0.0f;
         float y = 0.0f;
         float angle = 0;

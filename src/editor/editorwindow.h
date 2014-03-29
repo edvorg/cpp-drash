@@ -51,16 +51,16 @@ class QModelIndex;
 class EditorWindow : public QMainWindow {
     Q_OBJECT
 
-  public:
+public:
     explicit EditorWindow(QWidget* parent = 0);
     ~EditorWindow();
 
-  private
+private
 slots:
 
     void on_mTreeObjects_itemSelectionChanged();
 
-  private:
+private:
     Ui::EditorWindow* ui;
     bool InitScene();
     drash::CObjectEditorApp* objectApp = nullptr;
@@ -77,7 +77,7 @@ slots:
     bool dragActivated = false;
 
     // Actions
-  private:
+private:
     // for editor object
     QAction* quit;
     QAction* removeAction;
@@ -103,7 +103,7 @@ slots:
 
     // for other
     // Slots for Actions
-  private
+private
 slots:
     // for edtitor object
     void CreateNewObject();
@@ -137,14 +137,14 @@ slots:
 
     void on_mAngleBox_valueChanged(double arg1);
 
-  private:
+private:
     // GuiObjects
     QLabel* labelOfStatusBar;
 
     QToolBar* objectToolBar;
     QToolBar* sceneToolbar;
 
-  private:
+private:
     void CreateActions();
 
     bool UpdateTreeTemplates(QTreeWidget* _tree, drash::CApp* _app);
@@ -157,10 +157,10 @@ slots:
     void SetObjectParams(const drash::CSceneObjectParams& _params);
     drash::CSceneObjectParams GetObjectParams() const;
 
-  private:
+private:
     QHBoxLayout* layoutForScene;
 
-  public:
+public:
 };
 
 #endif // EDITORWINDOW_H

@@ -119,8 +119,8 @@ namespace greng {
                 std::ostringstream os;
                 os << "gTex" << i + 1;
 
-                int t1loc = glGetUniformLocation(_program->programId,
-                                                 os.str().c_str());
+                int t1loc =
+                    glGetUniformLocation(_program->programId, os.str().c_str());
                 if (t1loc != -1) {
                     glUniform1i(t1loc, i);
                 } else {
@@ -154,8 +154,7 @@ namespace greng {
         }
 
         if (_view != nullptr) {
-            int vloc =
-                glGetUniformLocation(_program->programId, "gViewMatrix");
+            int vloc = glGetUniformLocation(_program->programId, "gViewMatrix");
             if (vloc != -1) {
                 glUniformMatrix4fv(vloc, 1, GL_TRUE, _view->data);
             } else {
@@ -176,8 +175,7 @@ namespace greng {
         }
 
         if (_proj_matrix != nullptr) {
-            int ploc =
-                glGetUniformLocation(_program->programId, "gProjMatrix");
+            int ploc = glGetUniformLocation(_program->programId, "gProjMatrix");
             if (ploc != -1) {
                 glUniformMatrix4fv(ploc, 1, GL_TRUE, _proj_matrix->data);
             } else {

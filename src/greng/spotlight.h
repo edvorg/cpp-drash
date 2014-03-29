@@ -31,7 +31,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace greng {
 
     class CSpotLight {
-      public:
+    public:
         CSpotLight() = default;
 
         drash::CVec3f position = drash::CVec3f(0, 0, 0);

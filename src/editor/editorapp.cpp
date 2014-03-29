@@ -92,8 +92,7 @@ namespace drash {
         grid_size_half /= 2;
 
         for (unsigned int i = 1; i < (unsigned int)segments_counts.x; i++) {
-            for (unsigned int j = 1; j < (unsigned int)segments_counts.y;
-                 j++) {
+            for (unsigned int j = 1; j < (unsigned int)segments_counts.y; j++) {
                 CVec3f p1(i * gridSegmentSize, 0, j * gridSegmentSize);
                 CVec3f p2(i * gridSegmentSize, 0, (j - 1) * gridSegmentSize);
                 CVec3f p3((i - 1) * gridSegmentSize, 0,
@@ -140,8 +139,8 @@ namespace drash {
             GetGrengSystems().GetRenderer().DrawLine(
                 vertexs[vertexs.size() - 1], GetCursorPos(), 1,
                 CColor4f(0, 1, 0, 1));
-            GetGrengSystems().GetRenderer().DrawLine(
-                vertexs[0], GetCursorPos(), 1, CColor4f(0, 1, 0, 1));
+            GetGrengSystems().GetRenderer().DrawLine(vertexs[0], GetCursorPos(),
+                                                     1, CColor4f(0, 1, 0, 1));
         }
         if (state == StretchState && currentObject != nullptr) {
             for (unsigned int i = 0; i < currentObject->EnumFigures(); i++) {
@@ -171,7 +170,7 @@ namespace drash {
                     color.Col3().Set(255, 155, 0);
 
                     position.z = currentObject->GetPosZ() + figure->GetZ() -
-                                  figure->GetDepth() * 0.5f;
+                                 figure->GetDepth() * 0.5f;
 
                     plane.SetPoint(position);
 
@@ -207,9 +206,7 @@ namespace drash {
         DrawDragTemplate();
     }
 
-    void CObjectEditorApp::~CObjectEditorApp() {
-        GetGeometryManager().Store();
-    }
+    void CObjectEditorApp::~CObjectEditorApp() { GetGeometryManager().Store(); }
 
     void CObjectEditorApp::StartBuild() {
         state = BuildState;
@@ -220,110 +217,106 @@ namespace drash {
 
         GetEventSystem().SetProcessor(
             "LB",
-            CAppEventProcessor([this]() {
-                                   if (currentObject == nullptr) {
-                                       return;
-                                   }
-                                   switch (state) {
-                                   case BuildState: {
-                                       if (currentObject != nullptr)
-                                           vertexs.push_back(GetCursorPos());
-                                       if (IsConvex() == false) {
-                                           vertexs.pop_back();
-                                       }
-                                       break;
-                                   }
-                                   case MoveState: {
-                                       selectedFigure =
-                                           SelectFigure(GetCursorPos());
+            CAppEventProcessor(
+                [this]() {
+                    if (currentObject == nullptr) {
+                        return;
+                    }
+                    switch (state) {
+                    case BuildState: {
+                        if (currentObject != nullptr)
+                            vertexs.push_back(GetCursorPos());
+                        if (IsConvex() == false) {
+                            vertexs.pop_back();
+                        }
+                        break;
+                    }
+                    case MoveState: {
+                        selectedFigure = SelectFigure(GetCursorPos());
 
-                                       CPlane plane;
-                                       plane.SetPoint(CVec3f(0, 0, 0));
-                                       plane.SetNormal(CVec3f(0, 0, 1));
+                        CPlane plane;
+                        plane.SetPoint(CVec3f(0, 0, 0));
+                        plane.SetNormal(CVec3f(0, 0, 1));
 
-                                       camera->CastRay(GetCursorPos(), plane,
-                                                        oldPositionCursor);
-                                       break;
-                                   }
-                                   case StretchState: {
-                                       SelectVertex();
-                                       break;
-                                   }
-                                   case MoveOfAxisState: {
-                                       if (selectedFigure != nullptr) {
-                                           moveablePoint.ClickBegin();
-                                       }
-                                       break;
-                                   }
-                                   case DeleteFigure: {
-                                       CFigure* fig =
-                                           SelectFigure(GetCursorPos());
-                                       if (fig != nullptr) {
-                                           currentObject->DestroyFigure(fig);
-                                           SaveCurrentObject();
-                                       }
-                                       break;
-                                   }
-                                   case SplitFigureState: {
-                                       rotationPoint.SetCursorPos(
-                                           GetCursorPos());
-                                       rotationPoint.RotateBegin();
-                                       moveablePoint.ClickBegin();
-                                       break;
-                                   }
-                                   case SplitObjectState: {
-                                       rotationPoint.SetCursorPos(
-                                           GetCursorPos());
-                                       rotationPoint.RotateBegin();
-                                       moveablePoint.ClickBegin();
-                                       break;
-                                   }
-                                   case Simple:
-                                       selectedFigure = nullptr;
-                                       break;
-                                   }
-                               },
-                               [this]() {
-                                   if (selectedFigure != nullptr &&
-                                       state == MoveState) {
-                                       MoveFigure();
-                                   }
+                        camera->CastRay(GetCursorPos(), plane,
+                                        oldPositionCursor);
+                        break;
+                    }
+                    case StretchState: {
+                        SelectVertex();
+                        break;
+                    }
+                    case MoveOfAxisState: {
+                        if (selectedFigure != nullptr) {
+                            moveablePoint.ClickBegin();
+                        }
+                        break;
+                    }
+                    case DeleteFigure: {
+                        CFigure* fig = SelectFigure(GetCursorPos());
+                        if (fig != nullptr) {
+                            currentObject->DestroyFigure(fig);
+                            SaveCurrentObject();
+                        }
+                        break;
+                    }
+                    case SplitFigureState: {
+                        rotationPoint.SetCursorPos(GetCursorPos());
+                        rotationPoint.RotateBegin();
+                        moveablePoint.ClickBegin();
+                        break;
+                    }
+                    case SplitObjectState: {
+                        rotationPoint.SetCursorPos(GetCursorPos());
+                        rotationPoint.RotateBegin();
+                        moveablePoint.ClickBegin();
+                        break;
+                    }
+                    case Simple:
+                        selectedFigure = nullptr;
+                        break;
+                    }
+                },
+                [this]() {
+                    if (selectedFigure != nullptr && state == MoveState) {
+                        MoveFigure();
+                    }
 
-                                   if (selectedFigure != nullptr &&
-                                       state == MoveOfAxisState) {
-                                       moveablePoint.ClickPressing();
-                                       MoveOfAxis();
-                                   }
+                    if (selectedFigure != nullptr && state == MoveOfAxisState) {
+                        moveablePoint.ClickPressing();
+                        MoveOfAxis();
+                    }
 
-                                   if (state == StretchState) {
-                                       StretchFigure();
-                                   }
+                    if (state == StretchState) {
+                        StretchFigure();
+                    }
 
-                                   if (state == SplitFigureState ||
-                                       state == SplitObjectState) {
-                                       moveablePoint.ClickPressing();
-                                   }
-                               },
-                               [this]() {
-                if (state == MoveState) {
-                    selectedFigure = nullptr;
-                    SaveCurrentObject();
-                }
-                if (state == MoveOfAxisState && selectedFigure != nullptr) {
-                    moveablePoint.ClickEnd();
-                    SaveCurrentObject();
-                }
-                if (state == StretchState) {
-                    selectedFigure = nullptr;
-                    SaveCurrentObject();
-                    vertexIndex = -1;
-                }
+                    if (state == SplitFigureState ||
+                        state == SplitObjectState) {
+                        moveablePoint.ClickPressing();
+                    }
+                },
+                [this]() {
+                    if (state == MoveState) {
+                        selectedFigure = nullptr;
+                        SaveCurrentObject();
+                    }
+                    if (state == MoveOfAxisState && selectedFigure != nullptr) {
+                        moveablePoint.ClickEnd();
+                        SaveCurrentObject();
+                    }
+                    if (state == StretchState) {
+                        selectedFigure = nullptr;
+                        SaveCurrentObject();
+                        vertexIndex = -1;
+                    }
 
-                if (state == SplitFigureState || state == SplitObjectState) {
-                    rotationPoint.RotateEnd();
-                    moveablePoint.ClickEnd();
-                }
-            }));
+                    if (state == SplitFigureState ||
+                        state == SplitObjectState) {
+                        rotationPoint.RotateEnd();
+                        moveablePoint.ClickEnd();
+                    }
+                }));
 
         GetEventSystem().SetProcessor(
             "RB", CAppEventProcessor([this]() {
@@ -420,7 +413,7 @@ namespace drash {
             "w", CAppEventProcessor([this]() {},
                                     [this]() {
                                         camera->Forward(MOVING_SPEED *
-                                                         timer.GetDeltaTime());
+                                                        timer.GetDeltaTime());
                                     },
                                     [this] {}));
 
@@ -600,7 +593,7 @@ namespace drash {
         }
 
         selectedFigure->SetVertices(new_vertices,
-                                     selectedFigure->EnumVertices());
+                                    selectedFigure->EnumVertices());
         delete[] new_vertices;
     }
 
@@ -698,7 +691,7 @@ namespace drash {
                     break;
                 } else {
                     position.z = currentObject->GetPosZ() + figure->GetZ() -
-                                  figure->GetDepth() * 0.5f;
+                                 figure->GetDepth() * 0.5f;
 
                     plane.SetPoint(position);
 
@@ -765,11 +758,11 @@ namespace drash {
         }
 
         selectedFigure->SetVertices(new_vertices,
-                                     selectedFigure->EnumVertices());
+                                    selectedFigure->EnumVertices());
         delete[] new_vertices;
 
         selectedFigure->SetZ(selectedFigure->GetZ() + newCenter.z -
-                              oldCenterFigure.z);
+                             oldCenterFigure.z);
         oldCenterFigure = newCenter;
     }
 
@@ -777,10 +770,9 @@ namespace drash {
         if (vertexs.size() <= 3)
             return true;
 
-        int res = math::Sign((vertexs[1].x - vertexs[0].x) *
-                                 (vertexs[2].y - vertexs[0].y) -
-                             (vertexs[2].x - vertexs[0].x) *
-                                 (vertexs[1].y - vertexs[0].y));
+        int res = math::Sign(
+            (vertexs[1].x - vertexs[0].x) * (vertexs[2].y - vertexs[0].y) -
+            (vertexs[2].x - vertexs[0].x) * (vertexs[1].y - vertexs[0].y));
 
         const int N = vertexs.size();
 
@@ -852,13 +844,11 @@ namespace drash {
             if (currentObject != nullptr && selectedFigure != nullptr) {
 
                 splitMin.Set(selectedFigure->GetVertices()[0].x,
-                              selectedFigure->GetVertices()[0].y,
-                              currentObject->GetPosZ() +
-                                  selectedFigure->GetZ());
+                             selectedFigure->GetVertices()[0].y,
+                             currentObject->GetPosZ() + selectedFigure->GetZ());
                 splitMax.Set(selectedFigure->GetVertices()[0].x,
-                              selectedFigure->GetVertices()[0].y,
-                              currentObject->GetPosZ() +
-                                  selectedFigure->GetZ());
+                             selectedFigure->GetVertices()[0].y,
+                             currentObject->GetPosZ() + selectedFigure->GetZ());
 
                 for (unsigned int i = 1; i < selectedFigure->EnumVertices();
                      i++) {
@@ -870,12 +860,12 @@ namespace drash {
                         splitMin.y, selectedFigure->GetVertices()[i].y);
                     splitMax.y = math::Max<float>(
                         splitMax.y, selectedFigure->GetVertices()[i].y);
-                    splitMin.z = math::Min<float>(
-                        splitMin.z,
-                        currentObject->GetPosZ() + selectedFigure->GetZ());
-                    splitMax.z = math::Max<float>(
-                        splitMax.z,
-                        currentObject->GetPosZ() + selectedFigure->GetZ());
+                    splitMin.z = math::Min<float>(splitMin.z,
+                                                  currentObject->GetPosZ() +
+                                                      selectedFigure->GetZ());
+                    splitMax.z = math::Max<float>(splitMax.z,
+                                                  currentObject->GetPosZ() +
+                                                      selectedFigure->GetZ());
                 }
 
                 splitMin.z -= selectedFigure->GetDepth() * 0.5;
@@ -884,10 +874,9 @@ namespace drash {
                 splitMax += 1;
 
                 splitPlane.SetNormal(CVec3f(0, 1, 0));
-                splitPlane.SetPoint(
-                    CVec3f(0.5f * (splitMin.x + splitMax.x),
-                           0.5f * (splitMin.y + splitMax.y),
-                           0.5f * (splitMin.z + splitMax.z)));
+                splitPlane.SetPoint(CVec3f(0.5f * (splitMin.x + splitMax.x),
+                                           0.5f * (splitMin.y + splitMax.y),
+                                           0.5f * (splitMin.z + splitMax.z)));
 
                 ComputeSplitPlanePoints();
                 splitFigureContext.figure = selectedFigure;
@@ -910,8 +899,7 @@ namespace drash {
                         currentObject->GetPosZ() +
                             currentObject->GetFigures()[0]->GetZ());
 
-                    float maxDepth =
-                        currentObject->GetFigures()[0]->GetDepth();
+                    float maxDepth = currentObject->GetFigures()[0]->GetDepth();
 
                     for (unsigned int i = 0; i < currentObject->EnumFigures();
                          i++) {
@@ -1027,8 +1015,7 @@ namespace drash {
             CVec3f dir = splitPlanePoint1;
             dir -= splitPlanePoint4;
 
-            float centerz =
-                currentObject->GetPosZ() + _context.figure->GetZ();
+            float centerz = currentObject->GetPosZ() + _context.figure->GetZ();
 
             CRay r;
             r.SetPoint(CVec3f(splitPlanePoint4.Vec2(), centerz));
@@ -1131,11 +1118,11 @@ namespace drash {
         }
 
         GetGrengSystems().GetRenderer().DrawTriangle(
-            GetCamera(), splitPlanePoint1, splitPlanePoint2,
-            splitPlanePoint4, CColor4f(1, 0, 0.5, 0.5), true);
+            GetCamera(), splitPlanePoint1, splitPlanePoint2, splitPlanePoint4,
+            CColor4f(1, 0, 0.5, 0.5), true);
         GetGrengSystems().GetRenderer().DrawTriangle(
-            GetCamera(), splitPlanePoint4, splitPlanePoint2,
-            splitPlanePoint3, CColor4f(1, 0, 0.5, 0.5), true);
+            GetCamera(), splitPlanePoint4, splitPlanePoint2, splitPlanePoint3,
+            CColor4f(1, 0, 0.5, 0.5), true);
 
         for (SplitContext& context : objectContexts) {
             if (context.splitIntersectionsCount == 2) {
@@ -1143,12 +1130,10 @@ namespace drash {
                     CVec3f p1 = _split_intersection;
                     CVec3f p2 = _split_intersection;
 
-                    p1.z = currentObject->GetPosZ() +
-                            context.figure->GetZ() -
-                            context.figure->GetDepth() * 0.5f;
-                    p2.z = currentObject->GetPosZ() +
-                            context.figure->GetZ() +
-                            context.figure->GetDepth() * 0.5f;
+                    p1.z = currentObject->GetPosZ() + context.figure->GetZ() -
+                           context.figure->GetDepth() * 0.5f;
+                    p2.z = currentObject->GetPosZ() + context.figure->GetZ() +
+                           context.figure->GetDepth() * 0.5f;
 
                     GetGrengSystems().GetRenderer().DrawLine(
                         GetCamera(), p1, p2, 2, CColor4f(1, 1, 1), false);

@@ -32,7 +32,7 @@ namespace greng {
     class CVertexShader;
 
     class CVertexShaderManager {
-      public:
+    public:
         constexpr static unsigned int shadersCountLimit = 32;
 
         CVertexShaderManager();
@@ -48,8 +48,8 @@ namespace greng {
         CVertexShader* CreateShaderFromFile(const char* _path);
         bool DestroyShader(CVertexShader* _shader);
 
-      protected:
-      private:
+    protected:
+    private:
         drash::CObjectFactory<CVertexShader> shaderFactory;
     };
 

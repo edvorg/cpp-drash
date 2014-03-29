@@ -32,7 +32,7 @@ namespace drash {
     namespace ui {
 
         class CUISlider : public CUIWidget {
-          public:
+        public:
             CUISlider() = default;
             CUISlider(const CUISlider&) = delete;
             CUISlider(CUISlider&&) = delete;
@@ -55,8 +55,8 @@ namespace drash {
             void SetMax(float _max);
             float GetMax() const;
 
-          protected:
-          private:
+        protected:
+        private:
             bool pressed = false;
             bool catched = false;
             float min = 0;

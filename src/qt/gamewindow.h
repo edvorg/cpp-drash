@@ -41,7 +41,7 @@ namespace Ui {
 }
 
 class GameWindowParams {
-  public:
+public:
     void SetCommandLine(unsigned int _argc, char* _argv[]);
 
     std::vector<std::string> argv;
@@ -50,18 +50,18 @@ class GameWindowParams {
 class GameWindow : public QMainWindow {
     Q_OBJECT
 
-  public:
+public:
     explicit GameWindow(QWidget* parent = 0);
     ~GameWindow();
 
-  public
+public
 slots:
     void UpdateScene();
 
-  public:
+public:
     bool Init(const GameWindowParams& _params);
 
-  private:
+private:
     Ui::GameWindow* ui = nullptr;
     drash::CApp* app = nullptr;
     SceneWidget* sceneWidget = nullptr;

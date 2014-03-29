@@ -114,14 +114,14 @@ namespace drash {
                                    f->GetZ() + 0.5f * f->GetDepth());
 
                         for (unsigned int k = 1; k < kc; k++) {
-                            min.x = math::Min<float>(min.x,
-                                                      f->GetVertices()[k].x);
-                            min.y = math::Min<float>(min.y,
-                                                      f->GetVertices()[k].y);
-                            max.x = math::Max<float>(max.x,
-                                                      f->GetVertices()[k].x);
-                            max.y = math::Max<float>(max.y,
-                                                      f->GetVertices()[k].y);
+                            min.x =
+                                math::Min<float>(min.x, f->GetVertices()[k].x);
+                            min.y =
+                                math::Min<float>(min.y, f->GetVertices()[k].y);
+                            max.x =
+                                math::Max<float>(max.x, f->GetVertices()[k].x);
+                            max.y =
+                                math::Max<float>(max.y, f->GetVertices()[k].y);
                         }
 
                         max.Vec2() -= min.Vec2();
@@ -132,8 +132,7 @@ namespace drash {
 
                         for (unsigned int k = 0; k < kc; k++) {
                             mv[k].pos = CVec3f(f->GetVertices()[k], max.z);
-                            mv[kc + k].pos =
-                                CVec3f(f->GetVertices()[k], min.z);
+                            mv[kc + k].pos = CVec3f(f->GetVertices()[k], min.z);
 
                             mv[k].uV = mv[k].pos;
                             mv[kc + k].uV = mv[kc + k].pos;
@@ -177,7 +176,7 @@ namespace drash {
                                 .uV.Set(0, math::Abs(max.z - min.z) / 10.0f);
                             mv[2 * kc + (k - 1) * 4 + 2]
                                 .uV.Set(tmp.Length() / 10.0f,
-                                         math::Abs(max.z - min.z) / 10.0f);
+                                        math::Abs(max.z - min.z) / 10.0f);
                             mv[2 * kc + (k - 1) * 4 + 3]
                                 .uV.Set(tmp.Length() / 10.0f, 0);
 
@@ -205,7 +204,7 @@ namespace drash {
                             .uV.Set(0, math::Abs(max.z - min.z) / 10.0f);
                         mv[2 * kc + (kc - 1) * 4 + 2]
                             .uV.Set(tmp.Length() / 10.0f,
-                                     math::Abs(max.z - min.z) / 10.0f);
+                                    math::Abs(max.z - min.z) / 10.0f);
                         mv[2 * kc + (kc - 1) * 4 + 3]
                             .uV.Set(tmp.Length() / 10.0f, 0);
 

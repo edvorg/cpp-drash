@@ -68,9 +68,9 @@ namespace drash {
                                .x -
                            player1OldPos.x,
                        player1OldPos.z - GetPlayersSystem()
-                                               .GetPlayers()[0]
-                                               ->GetSceneObject()
-                                               ->GetPosZ());
+                                             .GetPlayers()[0]
+                                             ->GetSceneObject()
+                                             ->GetPosZ());
 
             if (dir.LengthSquared() < 0.00001) {
                 dir.Set(1, 0);

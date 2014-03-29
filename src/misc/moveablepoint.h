@@ -31,7 +31,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     class CMoveablePoint {
-      public:
+    public:
         CMoveablePoint();
         CMoveablePoint(CVec3f _point, greng::CCamera* _camera);
 
@@ -53,7 +53,7 @@ namespace drash {
         inline void SetAxisOY(bool _val);
         inline void SetAxisOZ(bool _val);
 
-      private:
+    private:
         bool axisOX = true;
         bool axisOY = true;
         bool axisOZ = true;

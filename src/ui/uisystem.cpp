@@ -79,10 +79,8 @@ namespace drash {
         }
 
         bool CUISystem::UISpaceToScreenSpace(int _x, int _y, CVec2f& _v) {
-            _v.x =
-                (static_cast<float>(_x) / static_cast<float>(width)) - 0.5f;
-            _v.y =
-                (static_cast<float>(_y) / static_cast<float>(height)) - 0.5f;
+            _v.x = (static_cast<float>(_x) / static_cast<float>(width)) - 0.5f;
+            _v.y = (static_cast<float>(_y) / static_cast<float>(height)) - 0.5f;
             return true;
         }
 

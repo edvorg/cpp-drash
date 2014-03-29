@@ -36,14 +36,14 @@ namespace drash {
 
     class CLevelObjectDesc
         : public CObjectFactory<CLevelObjectDesc>::CFactoryProduct {
-      public:
+    public:
         std::string geometryName = "";
         std::string levelObjectName = "";
         CSceneObjectParams params;
     };
 
     class CLevelDesc : public CObjectFactory<CLevelDesc>::CFactoryProduct {
-      public:
+    public:
         friend class CLevelManager;
 
         static const unsigned int objectsCountLimit = 128;
@@ -64,7 +64,7 @@ namespace drash {
         bool Store(const string& _filename) const;
         bool Load(const string& _filename);
 
-      private:
+    private:
         CObjectFactory<CLevelObjectDesc> objectsFactory;
     };
 

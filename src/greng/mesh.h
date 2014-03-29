@@ -32,7 +32,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace greng {
 
     class CMesh : public drash::CObjectFactory<CMesh>::CFactoryProduct {
-      public:
+    public:
         friend class CMeshManager;
         friend class CRenderer;
 
@@ -45,8 +45,8 @@ namespace greng {
         unsigned int vertexBufferId = 0;
         unsigned int indexBufferId = 0;
 
-      protected:
-      private:
+    protected:
+    private:
     };
 
 } // namespace greng

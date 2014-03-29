@@ -36,7 +36,7 @@ namespace drash {
     class CSceneObject;
 
     class CLevelManager {
-      public:
+    public:
         static const unsigned int levelsCountLimit = 10;
 
         CLevelManager(CScene& _scene, CGeometryManager& _geometry_manager);
@@ -46,7 +46,7 @@ namespace drash {
         bool DestroyLevel(CLevelDesc* _level);
         bool StartLevel(CLevelDesc* _level);
 
-      private:
+    private:
         CScene& scene;
         CGeometryManager& templateSystem;
         CObjectFactory<CLevelDesc> levelFactory;

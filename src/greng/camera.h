@@ -45,7 +45,7 @@ namespace greng {
     using drash::CMatrix4f;
 
     class CCamera : public drash::CObjectFactory<CCamera>::CFactoryProduct {
-      public:
+    public:
         friend class CCameraManager;
 
         void Step(double _dt);
@@ -78,8 +78,8 @@ namespace greng {
         void CastRay(const CVec2f& _pos, const drash::CPlane& _plane,
                      CVec3f& _result) const;
 
-      protected:
-      private:
+    protected:
+    private:
         void ComputeMatrices();
 
         bool ortho = false;

@@ -34,7 +34,7 @@ namespace greng {
     class CCamera;
 
     class CCameraParams {
-      public:
+    public:
         bool ortho = false;
         float orthoWidth = 1.0f;
         float fov = M_PI / 4.0f;
@@ -44,7 +44,7 @@ namespace greng {
     };
 
     class CCameraManager {
-      public:
+    public:
         static const unsigned int camerasCountLimit = 3;
 
         CCameraManager();
@@ -63,8 +63,8 @@ namespace greng {
         /// aspect ratio is window width in pixels divided on widow height
         inline float GetAspectRatio() const;
 
-      protected:
-      private:
+    protected:
+    private:
         drash::CObjectFactory<CCamera> cameraFactory;
 
         float aspectRatio = 1;

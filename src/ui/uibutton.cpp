@@ -57,8 +57,7 @@ namespace drash {
                 CVec2f p3;
                 CVec2f p4;
 
-                GetUISystem()->UISpaceToScreenSpace(GetPos().x, GetPos().y,
-                                                    p1);
+                GetUISystem()->UISpaceToScreenSpace(GetPos().x, GetPos().y, p1);
                 GetUISystem()->UISpaceToScreenSpace(
                     GetPos().x, GetPos().y + GetSize().y, p2);
                 GetUISystem()->UISpaceToScreenSpace(

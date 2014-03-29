@@ -31,7 +31,7 @@ using namespace std;
 namespace drash {
 
     class GnLogStarter {
-      public:
+    public:
         GnLogStarter() {
             ofstream out;
             out.open("drash.log", ios_base::ate);

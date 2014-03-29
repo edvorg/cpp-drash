@@ -34,7 +34,7 @@ namespace greng {
     class CShaderProgram;
 
     class CShaderProgramManager {
-      public:
+    public:
         constexpr static unsigned int programsCountLimit = 32;
 
         CShaderProgramManager();
@@ -48,8 +48,8 @@ namespace greng {
         CShaderProgram* CreateProgram(CVertexShader* _vs, CFragmentShader* _fs);
         bool DestroyProgram(CShaderProgram* _program);
 
-      protected:
-      private:
+    protected:
+    private:
         drash::CObjectFactory<CShaderProgram> programFactory;
     };
 

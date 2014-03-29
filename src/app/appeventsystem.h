@@ -41,13 +41,13 @@ namespace drash {
     class CAppEvent;
 
     class CAppEventCombinationTree {
-      public:
+    public:
         friend class CAppEventSystem;
 
         CAppEventCombinationTree();
 
-      protected:
-      private:
+    protected:
+    private:
         CAppEventProcessor processor;
         CAppEventCombination combination;
         std::list<CAppEventCombinationTree> childs;
@@ -55,7 +55,7 @@ namespace drash {
     };
 
     class CAppEventSystem {
-      public:
+    public:
         CAppEventSystem();
 
         static bool ValidateModeName(const std::string& _name);
@@ -70,8 +70,8 @@ namespace drash {
         void EndEvent(const CAppEvent& _event);
         void CancelEvent(const CAppEvent& _event);
 
-      protected:
-      private:
+    protected:
+    private:
         int PressEventImpl(const CAppEvent& _event);
 
         /// contains all current events

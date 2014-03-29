@@ -82,8 +82,7 @@ namespace drash {
 
     void CPlane::ComputeD() {
         // Ax + Bx + Cx + D = 0
-        d = -normal.x * point.x - normal.y * point.y -
-             normal.z * point.z;
+        d = -normal.x * point.x - normal.y * point.y - normal.z * point.z;
     }
 
 } // namespace drash

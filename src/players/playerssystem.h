@@ -43,7 +43,7 @@ namespace drash {
     };
 
     class CPlayersSystem final {
-      public:
+    public:
         static const unsigned int playersCountLimit = 2;
 
         CPlayersSystem(CScene& _scene);
@@ -60,7 +60,7 @@ namespace drash {
 
         bool SendMessage(CPlayer* _player, const PlayerMessage& _message);
 
-      private:
+    private:
         CScene& scene;
         CObjectFactory<CPlayer> playersFactory;
     };

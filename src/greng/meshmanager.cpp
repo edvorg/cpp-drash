@@ -274,8 +274,7 @@ namespace greng {
         }
 
         res->vertices.resize(_vertices_count);
-        memcpy(&res->vertices[0], _vertices,
-               sizeof(CVertex) * _vertices_count);
+        memcpy(&res->vertices[0], _vertices, sizeof(CVertex) * _vertices_count);
         res->indices.resize(_indices_count);
         memcpy(&res->indices[0], _indices,
                sizeof(unsigned int) * _indices_count);
@@ -321,10 +320,8 @@ namespace greng {
 
         for (unsigned int i = 0; i < triangles_count; i++) {
             drash::CVec3f v1 = _mesh->vertices[_mesh->indices[i * 3]].pos;
-            drash::CVec3f v2 =
-                _mesh->vertices[_mesh->indices[i * 3 + 1]].pos;
-            drash::CVec3f v3 =
-                _mesh->vertices[_mesh->indices[i * 3 + 2]].pos;
+            drash::CVec3f v2 = _mesh->vertices[_mesh->indices[i * 3 + 1]].pos;
+            drash::CVec3f v3 = _mesh->vertices[_mesh->indices[i * 3 + 2]].pos;
 
             v2 -= v1;
             v3 -= v1;

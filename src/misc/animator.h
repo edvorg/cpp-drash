@@ -37,7 +37,7 @@ namespace drash {
     };
 
     template <class T> class CAnimator {
-      public:
+    public:
         CAnimator() = delete;
         CAnimator(const CAnimator& _src) = delete;
         CAnimator& operator=(const CAnimator& _src) = delete;
@@ -63,7 +63,7 @@ namespace drash {
 
         bool Step(double _dt);
 
-      private:
+    private:
         T& value;
         T fromValue;
         T targetValue;

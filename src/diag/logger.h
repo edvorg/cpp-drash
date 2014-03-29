@@ -33,7 +33,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     class CLogger {
-      public:
+    public:
         explicit CLogger(std::ostream& _stream);
         ~CLogger(void);
         CLogger& operator<<(char _c);
@@ -49,7 +49,7 @@ namespace drash {
 
         static const std::string Tail();
 
-      private:
+    private:
         std::ofstream out;
         std::ostream& stream;
         bool opened = false;

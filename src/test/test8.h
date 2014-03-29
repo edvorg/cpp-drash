@@ -34,11 +34,11 @@ namespace drash {
     namespace test {
 
         class CTest8 : public CApp {
-          public:
+        public:
             CTest8();
             ~CTest8();
 
-          private:
+        private:
             virtual void Render() override;
 
             bool InitUI();

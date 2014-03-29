@@ -30,7 +30,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     class CRay {
-      public:
+    public:
         CRay();
 
         void SetPoint(const CVec3f& _point);
@@ -38,7 +38,7 @@ namespace drash {
         void SetDirection(const CVec3f& _direction);
         inline const CVec3f& GetDirection() const;
 
-      private:
+    private:
         CVec3f point;
         CVec3f direction;
     };

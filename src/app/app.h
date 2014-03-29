@@ -38,7 +38,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     class CApp {
-      public:
+    public:
         CApp();
         virtual ~CApp() = default;
 
@@ -71,8 +71,8 @@ namespace drash {
 
         auto& GetCurrentTimeDelta() const { return currentTimeDelta; }
 
-      protected:
-      private:
+    protected:
+    private:
         CVec2f cursorPos = CVec2f(0);
 
         greng::CGrengSystemsSet grengSystems;

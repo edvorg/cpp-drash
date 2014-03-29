@@ -163,10 +163,10 @@ namespace drash {
     void CDebugRenderer::RenderObject(const CSceneObjectGeometry& _geometry,
                                       const CSceneObjectParams& _params) {
         for (unsigned int i = 0; i < _geometry.figures.size(); i++) {
-            greng::CMesh* m = CreateMesh(&_geometry.figures[i].vertices[0],
-                                         _geometry.figures[i].vertices.size(),
-                                         _geometry.figures[i].z,
-                                         _geometry.figures[i].depth);
+            greng::CMesh* m =
+                CreateMesh(&_geometry.figures[i].vertices[0],
+                           _geometry.figures[i].vertices.size(),
+                           _geometry.figures[i].z, _geometry.figures[i].depth);
 
             if (m != nullptr) {
                 grengSystems.GetMeshManager().ComputeNormals(m);
@@ -189,10 +189,9 @@ namespace drash {
 
                 grengSystems.GetRenderer().RenderMesh(
                     m, 0, textures, 2,
-                    light == nullptr ? shaderProgram1 : shaderProgram2,
-                    &model, nullptr, &model_view,
-                    &camera->GetProjectionMatrix(), light, spotLight1,
-                    &camera->GetPos().Get());
+                    light == nullptr ? shaderProgram1 : shaderProgram2, &model,
+                    nullptr, &model_view, &camera->GetProjectionMatrix(), light,
+                    spotLight1, &camera->GetPos().Get());
 
                 grengSystems.GetMeshManager().DestroyMesh(m);
             }
@@ -426,9 +425,8 @@ namespace drash {
         texture1Diffuse =
             grengSystems.GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
-        texture1Normal =
-            grengSystems.GetTextureManager().CreateTextureFromFile(
-                "assets/floor/normal.png");
+        texture1Normal = grengSystems.GetTextureManager().CreateTextureFromFile(
+            "assets/floor/normal.png");
 
         if (texture1Diffuse == nullptr || texture1Normal == nullptr) {
             return false;
@@ -535,7 +533,7 @@ namespace drash {
                     .uV.Set(0, math::Abs(max.z - min.z) * texCoordsScale);
                 mv[2 * _vertices_count + (k - 1) * 4 + 2]
                     .uV.Set(tmp.Length() * texCoordsScale,
-                             math::Abs(max.z - min.z) * texCoordsScale);
+                            math::Abs(max.z - min.z) * texCoordsScale);
                 mv[2 * _vertices_count + (k - 1) * 4 + 3]
                     .uV.Set(tmp.Length() * texCoordsScale, 0);
 
@@ -564,7 +562,7 @@ namespace drash {
                 .uV.Set(0, math::Abs(max.z - min.z) * texCoordsScale);
             mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 2]
                 .uV.Set(tmp.Length() * texCoordsScale,
-                         math::Abs(max.z - min.z) * texCoordsScale);
+                        math::Abs(max.z - min.z) * texCoordsScale);
             mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 3]
                 .uV.Set(tmp.Length() * texCoordsScale, 0);
 

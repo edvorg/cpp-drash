@@ -34,7 +34,7 @@ namespace Sound {
     Just create an instance and use Load* methods.
     */
     class AlSound {
-      public:
+    public:
         explicit AlSound();
         /// when using this constructor, instances will use shred buffer,
         /// which will be destroyed with last sharing instance
@@ -75,8 +75,8 @@ namespace Sound {
         float GetFullTime();
         float GetTime();
 
-      protected:
-      private:
+    protected:
+    private:
         /// init sound subsystem
         static bool InitSubsystem();
         /// release sound subsystem

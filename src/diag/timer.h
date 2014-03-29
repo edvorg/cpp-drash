@@ -31,7 +31,7 @@ namespace drash {
     class CLogger;
 
     class CTimer {
-      public:
+    public:
         CTimer();
 
         /// if _start is true - automaticly starts timer
@@ -50,7 +50,7 @@ namespace drash {
 
         friend CLogger& operator<<(CLogger& _logger, const CTimer& _timer);
 
-      private:
+    private:
         void Update();
 
         unsigned long startTime = 0;

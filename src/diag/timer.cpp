@@ -34,8 +34,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    CTimer::CTimer()
-        : startTime(0), prevTime(0), currTime(0), paused(true) {}
+    CTimer::CTimer() : startTime(0), prevTime(0), currTime(0), paused(true) {}
 
     void CTimer::Reset(bool _start) {
         this->Update();

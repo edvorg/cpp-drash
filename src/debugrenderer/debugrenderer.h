@@ -50,7 +50,7 @@ namespace drash {
     class CGeometryManager;
 
     class CDebugRenderer final {
-      public:
+    public:
         inline void SetCamera(greng::CCamera* _camera);
         inline greng::CCamera* GetCamera() const;
         inline void SetLight(greng::CPointLight* _light);
@@ -80,8 +80,8 @@ namespace drash {
             std::function<CLevelObjectDesc*(unsigned int)> _object_getter,
             unsigned int _objects_count);
 
-      protected:
-      private:
+    protected:
+    private:
         bool InitTextures();
         bool InitShaders();
 

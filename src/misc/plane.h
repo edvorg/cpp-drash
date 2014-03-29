@@ -32,7 +32,7 @@ namespace drash {
     class CRay;
 
     class CPlane {
-      public:
+    public:
         CPlane();
         CPlane(const CPlane& _plane);
         CPlane(const CVec3f& _point, const CVec3f& _normal);
@@ -46,7 +46,7 @@ namespace drash {
 
         void CastRay(const CRay& _ray, CVec3f& _result) const;
 
-      private:
+    private:
         void ComputeD();
 
         CVec3f point;

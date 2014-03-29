@@ -30,13 +30,13 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     template <class T> class CObjectFactory final {
-      public:
+    public:
         class CFactoryProduct {
-          public:
+        public:
             friend class CObjectFactory;
 
-          protected:
-          private:
+        protected:
+        private:
             long int internalId;
         };
 
@@ -57,8 +57,8 @@ namespace drash {
         inline T* const* GetObjects() const;
         inline unsigned int EnumObjects() const;
 
-      protected:
-      private:
+    protected:
+    private:
         T** objects = nullptr;
         unsigned int objectsCount = 0;
         unsigned int objectsCountLimit = 0;

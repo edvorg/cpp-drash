@@ -48,7 +48,7 @@ namespace greng {
     using drash::CColor4f;
 
     class CRenderer {
-      public:
+    public:
         CRenderer() = default;
         CRenderer(const CRenderer&) = delete;
         CRenderer(CRenderer&&) = delete;

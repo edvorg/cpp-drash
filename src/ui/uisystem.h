@@ -39,7 +39,7 @@ namespace drash {
         class CUIControl;
 
         class CUISystem final {
-          public:
+        public:
             constexpr static const unsigned int controlsCountLimit = 10;
 
             CUISystem(greng::CRenderer& _renderer);
@@ -70,8 +70,8 @@ namespace drash {
 
             auto& GetRenderer() { return renderer; }
 
-          protected:
-          private:
+        protected:
+        private:
             CUIControl* controls[controlsCountLimit];
             unsigned int controlsCount = 0;
 

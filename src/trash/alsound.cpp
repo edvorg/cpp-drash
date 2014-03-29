@@ -38,7 +38,7 @@ namespace Sound {
     using namespace std;
 
     class Block {
-      public:
+    public:
         void* data;
         size_t size;
         size_t red;
@@ -145,8 +145,7 @@ namespace Sound {
     }
 
     bool AlSound::IsValid() const {
-        return g_SysInitialized && alIsBuffer(bufferId) &&
-               alIsSource(sourceId);
+        return g_SysInitialized && alIsBuffer(bufferId) && alIsSource(sourceId);
     }
 
     void AlSound::SetListenerPos(float _x, float _y, float _z) {
@@ -284,7 +283,7 @@ namespace Sound {
 
         if (total_ret > 0) {
             alBufferData(bufferId, (info->channels == 1) ? AL_FORMAT_MONO16
-                                                          : AL_FORMAT_STEREO16,
+                                                         : AL_FORMAT_STEREO16,
                          (void*)PCM, total_ret, info->rate);
         }
 

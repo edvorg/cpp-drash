@@ -41,14 +41,14 @@ namespace drash {
     class CJoint;
 
     class CSceneParams {
-      public:
+    public:
         CVec2f gravity = { 0, -9.8 };
     };
 
     class CScene final : public b2ContactListener,
                          public b2ContactFilter,
                          public b2DestructionListener {
-      public:
+    public:
         // **************************************************
         // * static scene configuration *********************
 
@@ -94,8 +94,8 @@ namespace drash {
 
         inline void SetPaused(bool _paused);
 
-      protected:
-      private:
+    protected:
+    private:
         void DestroyObjectImpl(CSceneObject* _obj);
 
         virtual bool ShouldCollide(b2Fixture* fixtureA,

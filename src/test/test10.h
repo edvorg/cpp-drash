@@ -34,10 +34,10 @@ namespace drash {
     namespace test {
 
         class CTest10 : public CApp {
-          public:
+        public:
             CTest10();
 
-          private:
+        private:
             virtual void Step(double _dt) override;
             virtual void Render() override;
             bool InitCamera();

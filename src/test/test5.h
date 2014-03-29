@@ -34,15 +34,15 @@ namespace drash {
     namespace test {
 
         class CTest5 : public CTest3 {
-          public:
+        public:
             CTest5();
 
-          protected:
+        protected:
             virtual void Step(double _dt) override;
             virtual void Render() override;
 
-          protected:
-          private:
+        protected:
+        private:
             void SetupMeshes();
             void SetupTextures();
             void SetupShaders();

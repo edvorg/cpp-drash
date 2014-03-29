@@ -453,13 +453,12 @@ void EditorWindow::UpdateTreeSceneObjects() {
         CLevelObjectDesc* cur_obj_desc =
             sceneApp->GetCurrentLevel()->GetObjects()[i];
 
-        QTreeWidgetItem* geometryItem =
-            new QTreeWidgetItem(tree, QStringList(QString::fromStdString(
-                                          cur_obj_desc->levelObjectName)));
+        QTreeWidgetItem* geometryItem = new QTreeWidgetItem(
+            tree,
+            QStringList(QString::fromStdString(cur_obj_desc->levelObjectName)));
 
         tree->addTopLevelItem(geometryItem);
-        QString objectname =
-            QString::fromStdString(cur_obj_desc->geometryName);
+        QString objectname = QString::fromStdString(cur_obj_desc->geometryName);
         new QTreeWidgetItem(geometryItem, QStringList(objectname));
     }
 }
@@ -539,7 +538,7 @@ void EditorWindow::on_mTreeSceneObjects_clicked(const QModelIndex&) {
     QTreeWidgetItem* item = ui->treeSceneObjects->selectedItems().at(0);
     if (item->parent() != nullptr) {
         sceneApp->LookObject(item->parent()->text(0).toStdString(),
-                              item->text(0).toStdString());
+                             item->text(0).toStdString());
     }
 }
 

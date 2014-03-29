@@ -32,7 +32,7 @@ namespace drash {
     namespace ui {
 
         class CUIButton : public CUIWidget {
-          public:
+        public:
             CUIButton() = default;
             CUIButton(const CUIButton&) = delete;
             CUIButton(CUIButton&&) = delete;
@@ -43,8 +43,8 @@ namespace drash {
 
             void SetClickHandler(const std::function<void()>& _handler);
 
-          protected:
-          private:
+        protected:
+        private:
             std::function<void()> clickHandler = []() {};
             bool pressed = false;
             float time = 0;

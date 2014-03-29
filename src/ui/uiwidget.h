@@ -36,7 +36,7 @@ namespace drash {
         class CUISystem;
 
         class CUIWidget {
-          public:
+        public:
             CUIWidget() = default;
             CUIWidget(const CUIWidget&) = delete;
             CUIWidget(CUIWidget&&) = delete;
@@ -60,8 +60,8 @@ namespace drash {
             const CVec2i GetPos() const;
             const CVec2ui GetSize() const;
 
-          protected:
-          private:
+        protected:
+        private:
             CUIControl* uIControl = nullptr;
             CUISystem* uISystem = nullptr;
         };

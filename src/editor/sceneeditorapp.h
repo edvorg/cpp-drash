@@ -35,7 +35,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     class CSceneEditorApp : public CApp {
-      public:
+    public:
         CSceneEditorApp();
 
         virtual void Step(double _dt) override;
@@ -85,7 +85,7 @@ namespace drash {
 
         drash::CSceneObjectParams GetSelectedParams() const;
 
-      private:
+    private:
         void SetProcessors();
         void SetCameraProcessors();
         void SetDragDropProcessors();
@@ -127,7 +127,7 @@ namespace drash {
         bool dragNow = false;
         std::string dragTemplateName = "";
 
-      private:
+    private:
         CLevelObjectDesc* SelectObject();
         void MoveOfAxis();
     };

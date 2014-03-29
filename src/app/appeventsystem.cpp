@@ -108,8 +108,7 @@ namespace drash {
         for (auto i = combinations.begin(); i != combinations.end(); i++) {
             bool found = false;
 
-            for (auto j = node->childs.begin(); j != node->childs.end();
-                 j++) {
+            for (auto j = node->childs.begin(); j != node->childs.end(); j++) {
                 if (j->combination == *i) {
                     found = true;
                     node = &*j;
@@ -186,8 +185,7 @@ namespace drash {
 
         for (auto i = currentCombinations.begin();
              i != currentCombinations.end(); i++) {
-            if (currentState.ContainsCombination((*i)->combination) ==
-                false) {
+            if (currentState.ContainsCombination((*i)->combination) == false) {
                 // if this tree node's combination is last one to be removed,
                 // look for his childs
 
@@ -216,8 +214,7 @@ namespace drash {
 
         for (auto i = currentCombinations.begin();
              i != currentCombinations.end(); i++) {
-            if (currentState.ContainsCombination((*i)->combination) ==
-                false) {
+            if (currentState.ContainsCombination((*i)->combination) == false) {
                 // if this tree node's combination is last one to be removed,
                 // look for his childs
 
