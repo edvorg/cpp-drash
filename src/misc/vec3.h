@@ -62,7 +62,7 @@ namespace drash {
         CVec3& operator*=(const CVec3& _v);
         CVec3& operator/=(const CVec3& _v);
 
-        T mZ = static_cast<T>(DEF_VAL);
+        T z = static_cast<T>(DEF_VAL);
 
       protected:
       private:
@@ -80,20 +80,20 @@ namespace drash {
     template <typename T, const int DEF_VAL>
     CVec3<T, DEF_VAL> operator+(const CVec3<T, DEF_VAL>& _v1,
                                 const CVec3<T, DEF_VAL>& _v2) {
-        return CVec3<T, DEF_VAL>(_v1.mX + _v2.mX, _v1.mY + _v2.mY,
-                                 _v1.mZ + _v2.mZ);
+        return CVec3<T, DEF_VAL>(_v1.x + _v2.x, _v1.y + _v2.y,
+                                 _v1.z + _v2.z);
     }
 
     template <typename T, const int DEF_VAL>
     CVec3<T, DEF_VAL> operator-(const CVec3<T, DEF_VAL>& _v1,
                                 const CVec3<T, DEF_VAL>& _v2) {
-        return CVec3<T, DEF_VAL>(_v1.mX - _v2.mX, _v1.mY - _v2.mY,
-                                 _v1.mZ - _v2.mZ);
+        return CVec3<T, DEF_VAL>(_v1.x - _v2.x, _v1.y - _v2.y,
+                                 _v1.z - _v2.z);
     }
 
     template <typename T, const int DEF_VAL>
     CLogger& operator<<(CLogger& _logger, const CVec3<T, DEF_VAL>& _v) {
-        _logger << '(' << _v.mX << "; " << _v.mY << "; " << _v.mZ << ')';
+        _logger << '(' << _v.x << "; " << _v.y << "; " << _v.z << ')';
         return _logger;
     }
 
@@ -101,9 +101,9 @@ namespace drash {
     CVec3<T, DEF_VAL>& Vec3Cross(const CVec3<T, DEF_VAL>& _v1,
                                  const CVec3<T, DEF_VAL>& _v2,
                                  CVec3<T, DEF_VAL>& _result) {
-        _result.mX = _v1.mY * _v2.mZ - _v1.mZ * _v2.mY;
-        _result.mY = _v1.mZ * _v2.mX - _v1.mX * _v2.mZ;
-        _result.mZ = _v1.mX * _v2.mY - _v1.mY * _v2.mX;
+        _result.x = _v1.y * _v2.z - _v1.z * _v2.y;
+        _result.y = _v1.z * _v2.x - _v1.x * _v2.z;
+        _result.z = _v1.x * _v2.y - _v1.y * _v2.x;
         return _result;
     }
 
@@ -112,35 +112,35 @@ namespace drash {
 
     template <typename T, const int DEF_VAL>
     CVec3<T, DEF_VAL>::CVec3(const CVec3& _xyz)
-        : CVec2<T, DEF_VAL>(_xyz.Vec2()), mZ(_xyz.mZ) {}
+        : CVec2<T, DEF_VAL>(_xyz.Vec2()), z(_xyz.z) {}
 
     template <typename T, const int DEF_VAL>
     CVec3<T, DEF_VAL>::CVec3(const CVec2<T, DEF_VAL>& _xy, const T& _z)
-        : CVec2<T, DEF_VAL>(_xy), mZ(_z) {}
+        : CVec2<T, DEF_VAL>(_xy), z(_z) {}
 
     template <typename T, const int DEF_VAL>
     CVec3<T, DEF_VAL>::CVec3(const T& _xyz)
-        : CVec2<T, DEF_VAL>(_xyz), mZ(_xyz) {}
+        : CVec2<T, DEF_VAL>(_xyz), z(_xyz) {}
 
     template <typename T, const int DEF_VAL>
     CVec3<T, DEF_VAL>::CVec3(const T& _x, const T& _y, const T& _z)
-        : CVec2<T, DEF_VAL>(_x, _y), mZ(_z) {}
+        : CVec2<T, DEF_VAL>(_x, _y), z(_z) {}
 
     template <typename T, const int DEF_VAL>
     CVec3<T, DEF_VAL>& CVec3<T, DEF_VAL>::Set(const CVec2<T, DEF_VAL>& _xy,
                                               const T& _z) {
-        this->mX = _xy.mX;
-        this->mY = _xy.mY;
-        this->mZ = _z;
+        this->x = _xy.x;
+        this->y = _xy.y;
+        this->z = _z;
         return *this;
     }
 
     template <typename T, const int DEF_VAL>
     CVec3<T, DEF_VAL>& CVec3<T, DEF_VAL>::Set(const T& _x, const T& _y,
                                               const T& _z) {
-        this->mX = _x;
-        this->mY = _y;
-        this->mZ = _z;
+        this->x = _x;
+        this->y = _y;
+        this->z = _z;
         return *this;
     }
 
@@ -156,61 +156,61 @@ namespace drash {
 
     template <typename T, const int DEF_VAL>
     inline T CVec3<T, DEF_VAL>::LengthSquared() const {
-        return this->mX * this->mX + this->mY * this->mY + this->mZ * this->mZ;
+        return this->x * this->x + this->y * this->y + this->z * this->z;
     }
 
     template <typename T, const int DEF_VAL>
     inline T CVec3<T, DEF_VAL>::Length() const {
-        return sqrt(this->mX * this->mX + this->mY * this->mY +
-                    this->mZ * this->mZ);
+        return sqrt(this->x * this->x + this->y * this->y +
+                    this->z * this->z);
     }
 
     template <typename T, const int DEF_VAL>
     CVec3<T, DEF_VAL>& CVec3<T, DEF_VAL>::Normalize() {
         T len = this->Length();
-        this->mX /= len;
-        this->mY /= len;
-        this->mZ /= len;
+        this->x /= len;
+        this->y /= len;
+        this->z /= len;
         return *this;
     }
 
     template <typename T, const int DEF_VAL>
     CVec3<T, DEF_VAL>& CVec3<T, DEF_VAL>::operator=(const CVec3& _v) {
-        this->mX = _v.mX;
-        this->mY = _v.mY;
-        this->mZ = _v.mZ;
+        this->x = _v.x;
+        this->y = _v.y;
+        this->z = _v.z;
         return *this;
     }
 
     template <typename T, const int DEF_VAL>
     CVec3<T, DEF_VAL>& CVec3<T, DEF_VAL>::operator+=(const CVec3& _v) {
-        this->mX += _v.mX;
-        this->mY += _v.mY;
-        this->mZ += _v.mZ;
+        this->x += _v.x;
+        this->y += _v.y;
+        this->z += _v.z;
         return *this;
     }
 
     template <typename T, const int DEF_VAL>
     CVec3<T, DEF_VAL>& CVec3<T, DEF_VAL>::operator-=(const CVec3& _v) {
-        this->mX -= _v.mX;
-        this->mY -= _v.mY;
-        this->mZ -= _v.mZ;
+        this->x -= _v.x;
+        this->y -= _v.y;
+        this->z -= _v.z;
         return *this;
     }
 
     template <typename T, const int DEF_VAL>
     CVec3<T, DEF_VAL>& CVec3<T, DEF_VAL>::operator*=(const CVec3& _v) {
-        this->mX *= _v.mX;
-        this->mY *= _v.mY;
-        this->mZ *= _v.mZ;
+        this->x *= _v.x;
+        this->y *= _v.y;
+        this->z *= _v.z;
         return *this;
     }
 
     template <typename T, const int DEF_VAL>
     CVec3<T, DEF_VAL>& CVec3<T, DEF_VAL>::operator/=(const CVec3& _v) {
-        this->mX /= _v.mX;
-        this->mY /= _v.mY;
-        this->mZ /= _v.mZ;
+        this->x /= _v.x;
+        this->y /= _v.y;
+        this->z /= _v.z;
         return *this;
     }
 

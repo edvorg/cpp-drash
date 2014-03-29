@@ -33,7 +33,7 @@ namespace greng {
 
     class CTextureManager final {
       public:
-        constexpr static unsigned int mTexturesCountLimit = 1024;
+        constexpr static unsigned int texturesCountLimit = 1024;
 
         CTextureManager();
         CTextureManager(const CTextureManager&) = delete;
@@ -50,7 +50,7 @@ namespace greng {
 
       protected:
       private:
-        drash::CObjectFactory<CTexture> mTextureFactory;
+        drash::CObjectFactory<CTexture> textureFactory;
     };
 
 } // namespace greng

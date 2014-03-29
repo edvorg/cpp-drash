@@ -30,46 +30,46 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     void CAppEventCombination::AddEvent(const CAppEvent& _e) {
-        if (mCatchEvents.size() < mCatchEventsCountLimit) {
-            auto i = std::find(mCatchEvents.begin(), mCatchEvents.end(), _e);
+        if (catchEvents.size() < catchEventsCountLimit) {
+            auto i = std::find(catchEvents.begin(), catchEvents.end(), _e);
 
-            if (i != mCatchEvents.end()) {
+            if (i != catchEvents.end()) {
                 return;
             }
 
-            mCatchEvents.push_back(_e);
-            std::sort(mCatchEvents.begin(), mCatchEvents.end());
+            catchEvents.push_back(_e);
+            std::sort(catchEvents.begin(), catchEvents.end());
         }
     }
 
     void CAppEventCombination::RemoveEvent(const CAppEvent& _e) {
-        auto i = std::find(mCatchEvents.begin(), mCatchEvents.end(), _e);
+        auto i = std::find(catchEvents.begin(), catchEvents.end(), _e);
 
-        if (i != mCatchEvents.end()) {
-            mCatchEvents.erase(i);
+        if (i != catchEvents.end()) {
+            catchEvents.erase(i);
         }
     }
 
-    void CAppEventCombination::Clear() { mCatchEvents.clear(); }
+    void CAppEventCombination::Clear() { catchEvents.clear(); }
 
     bool CAppEventCombination::ContainsEvent(const CAppEvent& _e) const {
-        return std::find(mCatchEvents.begin(), mCatchEvents.end(), _e) !=
-               mCatchEvents.end();
+        return std::find(catchEvents.begin(), catchEvents.end(), _e) !=
+               catchEvents.end();
     }
 
     bool CAppEventCombination::ContainsCombination(
         const CAppEventCombination& _c) const {
         bool res = false;
 
-        for (unsigned int i = 0; i < mCatchEvents.size(); i++) {
-            if (mCatchEvents[i] == *_c.mCatchEvents.begin()) {
-                if (i + _c.mCatchEvents.size() <= mCatchEvents.size()) {
+        for (unsigned int i = 0; i < catchEvents.size(); i++) {
+            if (catchEvents[i] == *_c.catchEvents.begin()) {
+                if (i + _c.catchEvents.size() <= catchEvents.size()) {
                     res = true;
                     i++;
 
-                    for (unsigned int j = 1; j < _c.mCatchEvents.size();
+                    for (unsigned int j = 1; j < _c.catchEvents.size();
                          j++, i++) {
-                        if (mCatchEvents[i] != _c.mCatchEvents[j]) {
+                        if (catchEvents[i] != _c.catchEvents[j]) {
                             res = false;
                             break;
                         }
@@ -85,19 +85,19 @@ namespace drash {
 
     bool CAppEventCombination::
     operator==(const CAppEventCombination& _src) const {
-        if (mCatchEvents.size() != _src.mCatchEvents.size()) {
+        if (catchEvents.size() != _src.catchEvents.size()) {
             return false;
         }
 
-        unsigned int last_elem = mCatchEvents.size() - 1;
+        unsigned int last_elem = catchEvents.size() - 1;
 
-        if (mCatchEvents[0] != _src.mCatchEvents[0] ||
-            mCatchEvents[last_elem] != _src.mCatchEvents[last_elem]) {
+        if (catchEvents[0] != _src.catchEvents[0] ||
+            catchEvents[last_elem] != _src.catchEvents[last_elem]) {
             return false;
         }
 
         for (unsigned int i = 1; i < last_elem; i++) {
-            if (mCatchEvents[i] != _src.mCatchEvents[i]) {
+            if (catchEvents[i] != _src.catchEvents[i]) {
                 return false;
             }
         }
@@ -111,13 +111,13 @@ namespace drash {
     }
 
     CLogger& operator<<(CLogger& _logger, const CAppEventCombination& _c) {
-        auto i = _c.mCatchEvents.begin();
+        auto i = _c.catchEvents.begin();
 
-        if (i != _c.mCatchEvents.end()) {
+        if (i != _c.catchEvents.end()) {
             _logger << i->ToString().c_str();
             i++;
 
-            while (i != _c.mCatchEvents.end()) {
+            while (i != _c.catchEvents.end()) {
                 _logger << '-' << i->ToString().c_str();
                 i++;
             }

@@ -45,7 +45,7 @@ namespace greng {
         const drash::CMatrix4f* _view, const drash::CMatrix4f* _model_view,
         const drash::CMatrix4f* _proj_matrix, const CPointLight* _light,
         const CSpotLight* _spot_light, const CVec3f* _view_pos) {
-        if (_submesh >= _mesh->mMaterialOffsets.size() - 1) {
+        if (_submesh >= _mesh->materialOffsets.size() - 1) {
             return;
         }
 
@@ -62,7 +62,7 @@ namespace greng {
         glEnableClientState(GL_NORMAL_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
 
-        glBindBuffer(GL_ARRAY_BUFFER, _mesh->mVertexBufferId);
+        glBindBuffer(GL_ARRAY_BUFFER, _mesh->vertexBufferId);
         glVertexPointer(3, GL_FLOAT, sizeof(CVertex), nullptr);
         glTexCoordPointer(2, GL_FLOAT, sizeof(CVertex),
                           reinterpret_cast<GLvoid*>(sizeof(drash::CVec3f)));
@@ -74,11 +74,11 @@ namespace greng {
                                                  sizeof(drash::CVec2f) +
                                                  sizeof(drash::CVec3f)));
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->mIndexBufferId);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->indexBufferId);
 
-        glUseProgram(_program->mProgramId);
+        glUseProgram(_program->programId);
 
-        int tangent_loc = glGetAttribLocation(_program->mProgramId, "gTangent");
+        int tangent_loc = glGetAttribLocation(_program->programId, "gTangent");
 
         if (tangent_loc != -1) {
             glEnableVertexAttribArray(tangent_loc);
@@ -90,7 +90,7 @@ namespace greng {
         }
 
         int binormal_loc =
-            glGetAttribLocation(_program->mProgramId, "gBinormal");
+            glGetAttribLocation(_program->programId, "gBinormal");
 
         if (binormal_loc != -1) {
             glEnableVertexAttribArray(binormal_loc);
@@ -114,12 +114,12 @@ namespace greng {
         } else {
             for (unsigned int i = 0; i < _textures_count; i++) {
                 glActiveTexture(GL_TEXTURE0 + i);
-                glBindTexture(GL_TEXTURE_2D, _textures[i]->mTextureBufferId);
+                glBindTexture(GL_TEXTURE_2D, _textures[i]->textureBufferId);
 
                 std::ostringstream os;
                 os << "gTex" << i + 1;
 
-                int t1loc = glGetUniformLocation(_program->mProgramId,
+                int t1loc = glGetUniformLocation(_program->programId,
                                                  os.str().c_str());
                 if (t1loc != -1) {
                     glUniform1i(t1loc, i);
@@ -132,9 +132,9 @@ namespace greng {
 
         if (_model != nullptr) {
             int mloc =
-                glGetUniformLocation(_program->mProgramId, "gModelMatrix");
+                glGetUniformLocation(_program->programId, "gModelMatrix");
             if (mloc != -1) {
-                glUniformMatrix4fv(mloc, 1, GL_TRUE, _model->mData);
+                glUniformMatrix4fv(mloc, 1, GL_TRUE, _model->data);
             } else {
                 LOG_ERR("CRenderer::RenderMesh(): Unable to find gModelMatrix "
                         "attribute");
@@ -143,7 +143,7 @@ namespace greng {
 
         if (_view_pos != nullptr) {
             int vploc =
-                glGetUniformLocation(_program->mProgramId, "gViewPosition");
+                glGetUniformLocation(_program->programId, "gViewPosition");
             if (vploc != -1) {
                 glUniform3fv(vploc, 1,
                              reinterpret_cast<const GLfloat*>(_view_pos));
@@ -155,9 +155,9 @@ namespace greng {
 
         if (_view != nullptr) {
             int vloc =
-                glGetUniformLocation(_program->mProgramId, "gViewMatrix");
+                glGetUniformLocation(_program->programId, "gViewMatrix");
             if (vloc != -1) {
-                glUniformMatrix4fv(vloc, 1, GL_TRUE, _view->mData);
+                glUniformMatrix4fv(vloc, 1, GL_TRUE, _view->data);
             } else {
                 LOG_ERR("CRenderer::RenderMesh(): Unable to find gViewMatrix "
                         "attribute");
@@ -166,9 +166,9 @@ namespace greng {
 
         if (_model_view != nullptr) {
             int mvloc =
-                glGetUniformLocation(_program->mProgramId, "gModelViewMatrix");
+                glGetUniformLocation(_program->programId, "gModelViewMatrix");
             if (mvloc != -1) {
-                glUniformMatrix4fv(mvloc, 1, GL_TRUE, _model_view->mData);
+                glUniformMatrix4fv(mvloc, 1, GL_TRUE, _model_view->data);
             } else {
                 LOG_ERR("CRenderer::RenderMesh(): Unable to find "
                         "gModelViewMatrix attribute");
@@ -177,9 +177,9 @@ namespace greng {
 
         if (_proj_matrix != nullptr) {
             int ploc =
-                glGetUniformLocation(_program->mProgramId, "gProjMatrix");
+                glGetUniformLocation(_program->programId, "gProjMatrix");
             if (ploc != -1) {
-                glUniformMatrix4fv(ploc, 1, GL_TRUE, _proj_matrix->mData);
+                glUniformMatrix4fv(ploc, 1, GL_TRUE, _proj_matrix->data);
             } else {
                 LOG_ERR("CRenderer::RenderMesh(): Unable to find gProjMatrix "
                         "attribute");
@@ -188,10 +188,10 @@ namespace greng {
 
         if (_light != nullptr) {
             int l1ploc =
-                glGetUniformLocation(_program->mProgramId, "gLight1Position");
+                glGetUniformLocation(_program->programId, "gLight1Position");
             if (l1ploc != -1) {
                 glUniform3fv(l1ploc, 1, reinterpret_cast<const GLfloat*>(
-                                            &_light->mPosition));
+                                            &_light->position));
             } else {
                 LOG_ERR("CRenderer::RenderMesh(): Unable to find "
                         "gLight1Position attribute");
@@ -200,31 +200,31 @@ namespace greng {
 
         if (_spot_light != nullptr) {
             int sl1ploc =
-                glGetUniformLocation(_program->mProgramId, "gLight1Position");
+                glGetUniformLocation(_program->programId, "gLight1Position");
             if (sl1ploc != -1) {
                 glUniform3fv(sl1ploc, 1, reinterpret_cast<const GLfloat*>(
-                                             &_spot_light->mPosition));
+                                             &_spot_light->position));
             } else {
                 LOG_ERR("CRenderer::RenderMesh(): Unable to find "
                         "gLight1Position attribute");
             }
 
             int sl1dloc =
-                glGetUniformLocation(_program->mProgramId, "gLight1Direction");
+                glGetUniformLocation(_program->programId, "gLight1Direction");
             if (sl1dloc != -1) {
                 glUniform3fv(sl1dloc, 1, reinterpret_cast<const GLfloat*>(
-                                             &_spot_light->mDirection));
+                                             &_spot_light->direction));
             } else {
                 LOG_ERR("CRenderer::RenderMesh(): Unable to find "
                         "gLight1Direction attribute");
             }
         }
 
-        glDrawElements(GL_TRIANGLES, _mesh->mMaterialOffsets[_submesh + 1] -
-                                         _mesh->mMaterialOffsets[_submesh],
+        glDrawElements(GL_TRIANGLES, _mesh->materialOffsets[_submesh + 1] -
+                                         _mesh->materialOffsets[_submesh],
                        GL_UNSIGNED_INT, reinterpret_cast<const GLvoid*>(
                                             sizeof(unsigned int) *
-                                            _mesh->mMaterialOffsets[_submesh]));
+                                            _mesh->materialOffsets[_submesh]));
 
         glDisableVertexAttribArray(tangent_loc);
         glDisableVertexAttribArray(binormal_loc);
@@ -266,12 +266,12 @@ namespace greng {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glBegin(GL_TRIANGLES);
-        glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
-        glVertex2f(_p1.mX, _p1.mY);
-        glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
-        glVertex2f(_p2.mX, _p2.mY);
-        glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
-        glVertex2f(_p3.mX, _p3.mY);
+        glColor4f(_col.r, _col.g, _col.b, _col.a);
+        glVertex2f(_p1.x, _p1.y);
+        glColor4f(_col.r, _col.g, _col.b, _col.a);
+        glVertex2f(_p2.x, _p2.y);
+        glColor4f(_col.r, _col.g, _col.b, _col.a);
+        glVertex2f(_p3.x, _p3.y);
         glEnd();
     }
 
@@ -288,17 +288,17 @@ namespace greng {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(_camera.GetViewMatrixTransposed().mData);
+        glLoadMatrixf(_camera.GetViewMatrixTransposed().data);
         glMatrixMode(GL_PROJECTION);
-        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().mData);
+        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
 
         glBegin(GL_TRIANGLES);
-        glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
-        glVertex3f(_p1.mX, _p1.mY, _p1.mZ);
-        glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
-        glVertex3f(_p2.mX, _p2.mY, _p2.mZ);
-        glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
-        glVertex3f(_p3.mX, _p3.mY, _p3.mZ);
+        glColor4f(_col.r, _col.g, _col.b, _col.a);
+        glVertex3f(_p1.x, _p1.y, _p1.z);
+        glColor4f(_col.r, _col.g, _col.b, _col.a);
+        glVertex3f(_p2.x, _p2.y, _p2.z);
+        glColor4f(_col.r, _col.g, _col.b, _col.a);
+        glVertex3f(_p3.x, _p3.y, _p3.z);
         glEnd();
     }
 
@@ -321,10 +321,10 @@ namespace greng {
         glLineWidth(_width);
 
         glBegin(GL_LINES);
-        glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
-        glVertex2f(_p1.mX, _p1.mY);
-        glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
-        glVertex2f(_p2.mX, _p2.mY);
+        glColor4f(_col.r, _col.g, _col.b, _col.a);
+        glVertex2f(_p1.x, _p1.y);
+        glColor4f(_col.r, _col.g, _col.b, _col.a);
+        glVertex2f(_p2.x, _p2.y);
         glEnd();
     }
 
@@ -340,17 +340,17 @@ namespace greng {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(_camera.GetViewMatrixTransposed().mData);
+        glLoadMatrixf(_camera.GetViewMatrixTransposed().data);
         glMatrixMode(GL_PROJECTION);
-        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().mData);
+        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
 
         glLineWidth(_width);
 
         glBegin(GL_LINES);
-        glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
-        glVertex3f(_p1.mX, _p1.mY, _p1.mZ);
-        glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
-        glVertex3f(_p2.mX, _p2.mY, _p2.mZ);
+        glColor4f(_col.r, _col.g, _col.b, _col.a);
+        glVertex3f(_p1.x, _p1.y, _p1.z);
+        glColor4f(_col.r, _col.g, _col.b, _col.a);
+        glVertex3f(_p2.x, _p2.y, _p2.z);
         glEnd();
     }
 
@@ -394,8 +394,8 @@ namespace greng {
         glPointSize(_size);
 
         glBegin(GL_POINTS);
-        glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
-        glVertex2f(_p.mX, _p.mY);
+        glColor4f(_col.r, _col.g, _col.b, _col.a);
+        glVertex2f(_p.x, _p.y);
         glEnd();
     }
 
@@ -411,15 +411,15 @@ namespace greng {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(_camera.GetViewMatrixTransposed().mData);
+        glLoadMatrixf(_camera.GetViewMatrixTransposed().data);
         glMatrixMode(GL_PROJECTION);
-        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().mData);
+        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
 
         glPointSize(_size);
 
         glBegin(GL_POINTS);
-        glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
-        glVertex3f(_p.mX, _p.mY, _p.mZ);
+        glColor4f(_col.r, _col.g, _col.b, _col.a);
+        glVertex3f(_p.x, _p.y, _p.z);
         glEnd();
     }
 
@@ -529,8 +529,8 @@ namespace greng {
             glMatrixMode(GL_MODELVIEW);
             glPushMatrix();
             glLoadIdentity();
-            glTranslatef(_pos.mX, _pos.mY, 0);
-            glScalef(_size.mX, _size.mY, 1);
+            glTranslatef(_pos.x, _pos.y, 0);
+            glScalef(_size.x, _size.y, 1);
 
             glEnableClientState(GL_VERTEX_ARRAY);
             glVertexPointer(2, GL_FLOAT, 0, vertices);
@@ -559,13 +559,13 @@ namespace greng {
 
             while (digits.size()) {
                 DrawDigit(pos, _size, digits.top());
-                pos.mX += _size.mX * 2.5f;
+                pos.x += _size.x * 2.5f;
                 digits.pop();
             }
         } else {
             do {
                 DrawDigit(pos, _size, number % 10);
-                pos.mX -= _size.mX * 2.5f;
+                pos.x -= _size.x * 2.5f;
                 number /= 10;
             } while (number);
         }

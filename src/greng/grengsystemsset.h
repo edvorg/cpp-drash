@@ -50,44 +50,44 @@ namespace greng {
         inline greng::CCameraManager& GetCameraManager();
 
       private:
-        greng::CRenderer mRenderer;
-        greng::CCameraManager mCameraManager;
-        greng::CMeshManager mMeshManager;
-        greng::CTextureManager mTextureManager;
-        greng::CVertexShaderManager mVertexShaderManager;
-        greng::CFragmentShaderManager mFragmentShaderManager;
-        greng::CShaderProgramManager mShaderProgramManager;
+        greng::CRenderer renderer;
+        greng::CCameraManager cameraManager;
+        greng::CMeshManager meshManager;
+        greng::CTextureManager textureManager;
+        greng::CVertexShaderManager vertexShaderManager;
+        greng::CFragmentShaderManager fragmentShaderManager;
+        greng::CShaderProgramManager shaderProgramManager;
     };
 
     inline greng::CMeshManager& CGrengSystemsSet::GetMeshManager() {
-        return mMeshManager;
+        return meshManager;
     }
 
     inline greng::CTextureManager& CGrengSystemsSet::GetTextureManager() {
-        return mTextureManager;
+        return textureManager;
     }
 
     inline greng::CVertexShaderManager&
     CGrengSystemsSet::GetVertexShaderManager() {
-        return mVertexShaderManager;
+        return vertexShaderManager;
     }
 
     inline greng::CFragmentShaderManager&
     CGrengSystemsSet::GetFragmentShaderManager() {
-        return mFragmentShaderManager;
+        return fragmentShaderManager;
     }
 
     inline greng::CShaderProgramManager&
     CGrengSystemsSet::GetShaderProgramManager() {
-        return mShaderProgramManager;
+        return shaderProgramManager;
     }
 
     inline greng::CRenderer& CGrengSystemsSet::GetRenderer() {
-        return mRenderer;
+        return renderer;
     }
 
     inline greng::CCameraManager& CGrengSystemsSet::GetCameraManager() {
-        return mCameraManager;
+        return cameraManager;
     }
 
 } // namespace greng

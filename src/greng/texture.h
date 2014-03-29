@@ -31,7 +31,7 @@ namespace greng {
       public:
         CTexture() = default;
 
-        unsigned int mTextureBufferId = 0;
+        unsigned int textureBufferId = 0;
 
       protected:
       private:

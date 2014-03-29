@@ -38,67 +38,67 @@ namespace drash {
 
         CTest2::CTest2() {
             greng::CCameraParams cp;
-            cp.mPos.Set(0, 0, 300);
-            mCamera = GetGrengSystems().GetCameraManager().CreateCamera(cp);
+            cp.pos.Set(0, 0, 300);
+            camera = GetGrengSystems().GetCameraManager().CreateCamera(cp);
 
-            GetDebugRenderer().SetCamera(mCamera);
+            GetDebugRenderer().SetCamera(camera);
 
             SetProcessors();
 
             CSceneObjectGeometry g;
-            g.mFigures.resize(1);
-            g.mFigures[0].mVertices.push_back(CVec2f(-300.0f, 5.0f));
-            g.mFigures[0].mVertices.push_back(CVec2f(-300.0f, -5.0f));
-            g.mFigures[0].mVertices.push_back(CVec2f(300.0f, -5.0f));
-            g.mFigures[0].mVertices.push_back(CVec2f(300.0f, 5.0f));
-            g.mFigures[0].mDepth = 5;
+            g.figures.resize(1);
+            g.figures[0].vertices.push_back(CVec2f(-300.0f, 5.0f));
+            g.figures[0].vertices.push_back(CVec2f(-300.0f, -5.0f));
+            g.figures[0].vertices.push_back(CVec2f(300.0f, -5.0f));
+            g.figures[0].vertices.push_back(CVec2f(300.0f, 5.0f));
+            g.figures[0].depth = 5;
 
             CSceneObjectParams p;
-            p.mPos.mY = -25;
-            p.mDynamic = false;
+            p.pos.y = -25;
+            p.dynamic = false;
             GetScene().CreateObject(g, p);
 
             CSceneObjectGeometry player_geometry;
-            player_geometry.mFigures.resize(1);
-            player_geometry.mFigures[0].mVertices.push_back(CVec2f(-2, -5));
-            player_geometry.mFigures[0].mVertices.push_back(CVec2f(2, -5));
-            player_geometry.mFigures[0].mVertices.push_back(CVec2f(2, 5));
-            player_geometry.mFigures[0].mVertices.push_back(CVec2f(-2, 5));
-            player_geometry.mFigures[0].mDepth = 1;
+            player_geometry.figures.resize(1);
+            player_geometry.figures[0].vertices.push_back(CVec2f(-2, -5));
+            player_geometry.figures[0].vertices.push_back(CVec2f(2, -5));
+            player_geometry.figures[0].vertices.push_back(CVec2f(2, 5));
+            player_geometry.figures[0].vertices.push_back(CVec2f(-2, 5));
+            player_geometry.figures[0].depth = 1;
 
             CPlayerParams player;
-            player.mSceneObjectParams.mPos.Set(0, -20, 0);
+            player.sceneObjectParams.pos.Set(0, -20, 0);
 
             GetPlayersSystem().CreatePlayer(player_geometry, player);
 
             CSceneObjectGeometry tg;
-            tg.mFigures.resize(1);
-            tg.mFigures[0].mVertices.push_back(CVec2f(-10, -5));
-            tg.mFigures[0].mVertices.push_back(CVec2f(10, -5));
-            tg.mFigures[0].mVertices.push_back(CVec2f(10, 5));
-            tg.mFigures[0].mVertices.push_back(CVec2f(-10, 5));
-            tg.mFigures[0].mFriction = 0.5;
-            tg.mFigures[0].mMass = 1;
-            tg.mFigures[0].mDepth = 1;
+            tg.figures.resize(1);
+            tg.figures[0].vertices.push_back(CVec2f(-10, -5));
+            tg.figures[0].vertices.push_back(CVec2f(10, -5));
+            tg.figures[0].vertices.push_back(CVec2f(10, 5));
+            tg.figures[0].vertices.push_back(CVec2f(-10, 5));
+            tg.figures[0].friction = 0.5;
+            tg.figures[0].mass = 1;
+            tg.figures[0].depth = 1;
             CSceneObjectParams targetForFire;
-            targetForFire.mPos.Set(-20, 0, 0);
+            targetForFire.pos.Set(-20, 0, 0);
             for (int i = 0; i < 10; i++) {
                 GetScene().CreateObject(tg, targetForFire);
-                targetForFire.mPos.Set(-20, 20 + i * 20, 0);
+                targetForFire.pos.Set(-20, 20 + i * 20, 0);
             }
 
-            mLight1.mPosition.Set(0, 30, 0);
+            light1.position.Set(0, 30, 0);
 
-            GetDebugRenderer().SetLight(&mLight1);
+            GetDebugRenderer().SetLight(&light1);
         }
 
         void CTest2::SetProcessors() {
             auto t = GetGeometryManager().CreateGeometry("lambda_test");
-            t->mFigures.resize(1);
-            t->mFigures[0].mVertices.push_back(CVec2f(-10, -10));
-            t->mFigures[0].mVertices.push_back(CVec2f(10, -10));
-            t->mFigures[0].mVertices.push_back(CVec2f(0, 10));
-            t->mFigures[0].mDepth = 3;
+            t->figures.resize(1);
+            t->figures[0].vertices.push_back(CVec2f(-10, -10));
+            t->figures[0].vertices.push_back(CVec2f(10, -10));
+            t->figures[0].vertices.push_back(CVec2f(0, 10));
+            t->figures[0].depth = 3;
 
             GetEventSystem().SetProcessor(
                 "C-S-f",
@@ -109,7 +109,7 @@ namespace drash {
 
                     CSceneObjectParams p;
 
-                    mCamera->CastRay(GetCursorPos(), plane, p.mPos);
+                    camera->CastRay(GetCursorPos(), plane, p.pos);
 
                     GetGeometryManager().CreateSceneObject("lambda_test", p);
                 }));
@@ -118,27 +118,27 @@ namespace drash {
                 "LB", CAppEventProcessor([this]() // left mouse button pressed
             {
                 // choose object here
-                mSelectedObject = nullptr;
+                selectedObject = nullptr;
                 CFigure* f =
-                    GetDebugRenderer().FindFigure(*mCamera, GetCursorPos());
+                    GetDebugRenderer().FindFigure(*camera, GetCursorPos());
                 if (f != nullptr) {
-                    mSelectedObject = f->GetSceneObject();
+                    selectedObject = f->GetSceneObject();
                 }
             },
                                          [this]() // left mouse button is being
                                                   // pressed
             {
                           // move object if choosen
-                          if (mSelectedObject != nullptr) {
+                          if (selectedObject != nullptr) {
                               CPlane plane;
-                              plane.SetPoint(mSelectedObject->GetPos());
+                              plane.SetPoint(selectedObject->GetPos());
                               plane.SetNormal(CVec3f(0, 0, 1));
 
                               CVec3f pos;
 
-                              mCamera->CastRay(GetCursorPos(), plane, pos);
+                              camera->CastRay(GetCursorPos(), plane, pos);
 
-                              mSelectedObject->SetPos(pos);
+                              selectedObject->SetPos(pos);
                           }
                       }));
 
@@ -147,9 +147,9 @@ namespace drash {
                                                       // LB released
             {
                 // delete object if choosen
-                if (mSelectedObject != nullptr) {
-                    GetScene().DestroyObject(mSelectedObject);
-                    mSelectedObject = nullptr;
+                if (selectedObject != nullptr) {
+                    GetScene().DestroyObject(selectedObject);
+                    selectedObject = nullptr;
                 }
             }));
 

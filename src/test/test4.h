@@ -44,16 +44,16 @@ namespace drash {
             virtual void Render() override;
 
           private:
-            ui::CUIButton mTestButton1;
-            ui::CUIButton mTestButton2;
-            ui::CUISlider mTestSlider1;
+            ui::CUIButton testButton1;
+            ui::CUIButton testButton2;
+            ui::CUISlider testSlider1;
 
-            float mValue = 77;
-            CAnimator<float> mValueAnimator1 = mValue;
-            CAnimator<float> mValueAnimator2 = mValue;
+            float value = 77;
+            CAnimator<float> valueAnimator1 = value;
+            CAnimator<float> valueAnimator2 = value;
 
-            CVec3f mTestPoint;
-            CMoveablePoint mPoint;
+            CVec3f testPoint;
+            CMoveablePoint point;
         };
 
     } // namespace test

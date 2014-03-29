@@ -31,98 +31,98 @@ namespace drash {
     namespace ui {
 
         CUISystem::CUISystem(greng::CRenderer& _renderer)
-            : mRenderer(_renderer) {}
+            : renderer(_renderer) {}
 
         CUISystem::~CUISystem() {
-            for (unsigned int i = 0; i < mControlsCount; i++) {
-                delete mControls[i];
-                mControls[i] = nullptr;
+            for (unsigned int i = 0; i < controlsCount; i++) {
+                delete controls[i];
+                controls[i] = nullptr;
             }
-            mControlsCount = 0;
+            controlsCount = 0;
         }
 
         CUIControl* CUISystem::CreateControl() {
-            if (mControlsCount == mControlsCountLimit) {
+            if (controlsCount == controlsCountLimit) {
                 return nullptr;
             }
 
-            return mControls[mControlsCount++] = new CUIControl;
+            return controls[controlsCount++] = new CUIControl;
         }
 
         void CUISystem::DestroyControl(CUIControl* _control) {
-            for (unsigned int i = 0; i < mControlsCount; i++) {
-                if (mControls[i] == _control) {
-                    _control->mDestroyHandler();
+            for (unsigned int i = 0; i < controlsCount; i++) {
+                if (controls[i] == _control) {
+                    _control->destroyHandler();
                     delete _control;
-                    mControls[i] = nullptr;
-                    mControlsCount--;
+                    controls[i] = nullptr;
+                    controlsCount--;
                     return;
                 }
             }
         }
 
         void CUISystem::SetAspectRatio(float _ratio) {
-            mAspectRatio = _ratio;
-            SetWidth(mWidth);
+            aspectRatio = _ratio;
+            SetWidth(width);
         }
 
         void CUISystem::SetWidth(unsigned int _width) {
-            mWidth = _width;
-            mHeight = mWidth / mAspectRatio;
+            width = _width;
+            height = width / aspectRatio;
         }
 
         bool CUISystem::ScreenSpaceToUISpace(const CVec2f& _from, int& _x,
                                              int& _y) {
-            _x = (_from.mX + 0.5f) * static_cast<float>(mWidth);
-            _y = (_from.mY + 0.5f) * static_cast<float>(mHeight);
+            _x = (_from.x + 0.5f) * static_cast<float>(width);
+            _y = (_from.y + 0.5f) * static_cast<float>(height);
             return true;
         }
 
         bool CUISystem::UISpaceToScreenSpace(int _x, int _y, CVec2f& _v) {
-            _v.mX =
-                (static_cast<float>(_x) / static_cast<float>(mWidth)) - 0.5f;
-            _v.mY =
-                (static_cast<float>(_y) / static_cast<float>(mHeight)) - 0.5f;
+            _v.x =
+                (static_cast<float>(_x) / static_cast<float>(width)) - 0.5f;
+            _v.y =
+                (static_cast<float>(_y) / static_cast<float>(height)) - 0.5f;
             return true;
         }
 
         void CUISystem::SetCursorPos(int _x, int _y) {
-            mCursorX = _x;
-            mCursorY = _y;
+            cursorX = _x;
+            cursorY = _y;
         }
 
         void CUISystem::BeginEvent() {
-            for (unsigned int i = 0; i < mControlsCount; i++) {
-                int local_x = GetCursorPosX() - mControls[i]->GetPos().mX;
-                int local_y = GetCursorPosY() - mControls[i]->GetPos().mY;
+            for (unsigned int i = 0; i < controlsCount; i++) {
+                int local_x = GetCursorPosX() - controls[i]->GetPos().x;
+                int local_y = GetCursorPosY() - controls[i]->GetPos().y;
 
                 if (0 <= local_x &&
-                    local_x <= static_cast<int>(mControls[i]->GetSize().mX) &&
+                    local_x <= static_cast<int>(controls[i]->GetSize().x) &&
                     0 <= local_y &&
-                    local_y <= static_cast<int>(mControls[i]->GetSize().mY)) {
-                    mPressedControl = mControls[i];
-                    mPressedControl->mPressHandler();
+                    local_y <= static_cast<int>(controls[i]->GetSize().y)) {
+                    pressedControl = controls[i];
+                    pressedControl->pressHandler();
                     break;
                 }
             }
         }
 
         void CUISystem::EndEvent() {
-            if (mPressedControl != nullptr) {
-                mPressedControl->mReleaseHandler();
-                mPressedControl = nullptr;
+            if (pressedControl != nullptr) {
+                pressedControl->releaseHandler();
+                pressedControl = nullptr;
             }
         }
 
         void CUISystem::Step(double _dt) {
-            for (unsigned int i = 0; i < mControlsCount; i++) {
-                mControls[i]->mStepHandler(_dt);
+            for (unsigned int i = 0; i < controlsCount; i++) {
+                controls[i]->stepHandler(_dt);
             }
         }
 
         void CUISystem::DebugDraw() const {
-            for (unsigned int i = 0; i < mControlsCount; i++) {
-                mControls[i]->mDrawHandler();
+            for (unsigned int i = 0; i < controlsCount; i++) {
+                controls[i]->drawHandler();
             }
         }
 

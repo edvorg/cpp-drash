@@ -44,7 +44,7 @@ namespace drash {
 
     class CPlayersSystem final {
       public:
-        static const unsigned int mPlayersCountLimit = 2;
+        static const unsigned int playersCountLimit = 2;
 
         CPlayersSystem(CScene& _scene);
         ~CPlayersSystem();
@@ -61,16 +61,16 @@ namespace drash {
         bool SendMessage(CPlayer* _player, const PlayerMessage& _message);
 
       private:
-        CScene& mScene;
-        CObjectFactory<CPlayer> mPlayersFactory;
+        CScene& scene;
+        CObjectFactory<CPlayer> playersFactory;
     };
 
     inline CPlayer* const* CPlayersSystem::GetPlayers() {
-        return mPlayersFactory.GetObjects();
+        return playersFactory.GetObjects();
     }
 
     inline unsigned int CPlayersSystem::EnumPlayers() const {
-        return mPlayersFactory.EnumObjects();
+        return playersFactory.EnumObjects();
     }
 
 } // namespace drash

@@ -40,7 +40,7 @@ namespace drash {
 
         class CUISystem final {
           public:
-            constexpr static const unsigned int mControlsCountLimit = 10;
+            constexpr static const unsigned int controlsCountLimit = 10;
 
             CUISystem(greng::CRenderer& _renderer);
             CUISystem(const CUISystem&) = delete;
@@ -68,27 +68,27 @@ namespace drash {
             void Step(double _dt);
             void DebugDraw() const;
 
-            auto& GetRenderer() { return mRenderer; }
+            auto& GetRenderer() { return renderer; }
 
           protected:
           private:
-            CUIControl* mControls[mControlsCountLimit];
-            unsigned int mControlsCount = 0;
+            CUIControl* controls[controlsCountLimit];
+            unsigned int controlsCount = 0;
 
-            float mAspectRatio = 1;
-            unsigned int mWidth = 1024;
-            unsigned int mHeight = 768;
+            float aspectRatio = 1;
+            unsigned int width = 1024;
+            unsigned int height = 768;
 
-            int mCursorX = 0;
-            int mCursorY = 0;
+            int cursorX = 0;
+            int cursorY = 0;
 
-            CUIControl* mPressedControl = nullptr;
+            CUIControl* pressedControl = nullptr;
 
-            greng::CRenderer& mRenderer;
+            greng::CRenderer& renderer;
         };
 
-        inline int CUISystem::GetCursorPosX() const { return mCursorX; }
-        inline int CUISystem::GetCursorPosY() const { return mCursorY; }
+        inline int CUISystem::GetCursorPosX() const { return cursorX; }
+        inline int CUISystem::GetCursorPosY() const { return cursorY; }
 
     } // namepsace ui
 

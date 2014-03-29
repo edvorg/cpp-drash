@@ -44,28 +44,28 @@ namespace drash {
     CDebugRenderer::CDebugRenderer(greng::CGrengSystemsSet& _greng_systems,
                                    CScene& _scene,
                                    CGeometryManager& _geometry_manager)
-        : mGrengSystems(_greng_systems), mScene(_scene),
-          mGeometryManager(_geometry_manager) {
+        : grengSystems(_greng_systems), scene(_scene),
+          geometryManager(_geometry_manager) {
         InitTextures();
         InitShaders();
     }
 
     void CDebugRenderer::Render() const {
-        if (mCamera == nullptr) {
-            LOG_ERR("CDebugRenderer::Render(): mCamera is not set");
+        if (camera == nullptr) {
+            LOG_ERR("CDebugRenderer::Render(): camera is not set");
             return;
         }
 
-        if (mLight == nullptr && mSpotLight1 == nullptr) {
-            LOG_ERR("CDebugRenderer::Render(): neither mLight nor mSpotLight1 "
+        if (light == nullptr && spotLight1 == nullptr) {
+            LOG_ERR("CDebugRenderer::Render(): neither light nor spotLight1 "
                     "is set");
             return;
         }
 
-        unsigned int ic = mScene.EnumObjects();
+        unsigned int ic = scene.EnumObjects();
 
         for (unsigned int i = 0; i < ic; i++) {
-            CSceneObject* o = mScene.GetObjects()[i];
+            CSceneObject* o = scene.GetObjects()[i];
             unsigned int jc = o->EnumFigures();
 
             for (unsigned int j = 0; j < jc; j++) {
@@ -79,8 +79,8 @@ namespace drash {
                                f->GetDepth());
 
                 if (m != nullptr) {
-                    mGrengSystems.GetMeshManager().ComputeNormals(m);
-                    mGrengSystems.GetMeshManager().ComputeTangentSpace(m);
+                    grengSystems.GetMeshManager().ComputeNormals(m);
+                    grengSystems.GetMeshManager().ComputeTangentSpace(m);
 
                     CMatrix4f rot;
                     MatrixRotationZ(rot, o->GetAngle());
@@ -95,17 +95,17 @@ namespace drash {
                     MatrixMultiply(GetCamera()->GetViewMatrix(), model,
                                    model_view);
 
-                    greng::CTexture* textures[2] = { mTexture1Diffuse,
-                                                     mTexture1Normal };
+                    greng::CTexture* textures[2] = { texture1Diffuse,
+                                                     texture1Normal };
 
-                    mGrengSystems.GetRenderer().RenderMesh(
+                    grengSystems.GetRenderer().RenderMesh(
                         m, 0, textures, 2,
-                        mLight == nullptr ? mShaderProgram1 : mShaderProgram2,
+                        light == nullptr ? shaderProgram1 : shaderProgram2,
                         &model, nullptr, &model_view,
-                        &mCamera->GetProjectionMatrix(), mLight, mSpotLight1,
-                        &mCamera->GetPos().Get());
+                        &camera->GetProjectionMatrix(), light, spotLight1,
+                        &camera->GetPos().Get());
 
-                    mGrengSystems.GetMeshManager().DestroyMesh(m);
+                    grengSystems.GetMeshManager().DestroyMesh(m);
                 }
 
                 for (unsigned int k = 0; k < jc; k++) {
@@ -137,8 +137,8 @@ namespace drash {
                                       o->GetPosZ() +
                                           o->GetFigures()[k]->GetZ());
 
-                            mGrengSystems.GetRenderer().DrawLine(
-                                *mCamera, c1, c2, 2, CColor4f(1, 0, 0, 1),
+                            grengSystems.GetRenderer().DrawLine(
+                                *camera, c1, c2, 2, CColor4f(1, 0, 0, 1),
                                 false);
                         } else if (o->GetDestructionGraph()[k * jc + j] != 0) {
                             CVec3f c1(o->GetWorldPoint(compute_centroid(
@@ -150,8 +150,8 @@ namespace drash {
                                       o->GetPosZ() +
                                           o->GetFigures()[k]->GetZ());
 
-                            mGrengSystems.GetRenderer().DrawLine(
-                                *mCamera, c1, c2, 2, CColor4f(1, 0, 0, 1),
+                            grengSystems.GetRenderer().DrawLine(
+                                *camera, c1, c2, 2, CColor4f(1, 0, 0, 1),
                                 false);
                         }
                     }
@@ -162,21 +162,21 @@ namespace drash {
 
     void CDebugRenderer::RenderObject(const CSceneObjectGeometry& _geometry,
                                       const CSceneObjectParams& _params) {
-        for (unsigned int i = 0; i < _geometry.mFigures.size(); i++) {
-            greng::CMesh* m = CreateMesh(&_geometry.mFigures[i].mVertices[0],
-                                         _geometry.mFigures[i].mVertices.size(),
-                                         _geometry.mFigures[i].mZ,
-                                         _geometry.mFigures[i].mDepth);
+        for (unsigned int i = 0; i < _geometry.figures.size(); i++) {
+            greng::CMesh* m = CreateMesh(&_geometry.figures[i].vertices[0],
+                                         _geometry.figures[i].vertices.size(),
+                                         _geometry.figures[i].z,
+                                         _geometry.figures[i].depth);
 
             if (m != nullptr) {
-                mGrengSystems.GetMeshManager().ComputeNormals(m);
-                mGrengSystems.GetMeshManager().ComputeTangentSpace(m);
+                grengSystems.GetMeshManager().ComputeNormals(m);
+                grengSystems.GetMeshManager().ComputeTangentSpace(m);
 
                 CMatrix4f rot;
-                MatrixRotationZ(rot, _params.mAngle);
+                MatrixRotationZ(rot, _params.angle);
 
                 CMatrix4f trans;
-                MatrixTranslation(trans, _params.mPos);
+                MatrixTranslation(trans, _params.pos);
 
                 CMatrix4f model;
                 MatrixMultiply(trans, rot, model);
@@ -184,17 +184,17 @@ namespace drash {
                 CMatrix4f model_view;
                 MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
 
-                greng::CTexture* textures[2] = { mTexture1Diffuse,
-                                                 mTexture1Normal };
+                greng::CTexture* textures[2] = { texture1Diffuse,
+                                                 texture1Normal };
 
-                mGrengSystems.GetRenderer().RenderMesh(
+                grengSystems.GetRenderer().RenderMesh(
                     m, 0, textures, 2,
-                    mLight == nullptr ? mShaderProgram1 : mShaderProgram2,
+                    light == nullptr ? shaderProgram1 : shaderProgram2,
                     &model, nullptr, &model_view,
-                    &mCamera->GetProjectionMatrix(), mLight, mSpotLight1,
-                    &mCamera->GetPos().Get());
+                    &camera->GetProjectionMatrix(), light, spotLight1,
+                    &camera->GetPos().Get());
 
-                mGrengSystems.GetMeshManager().DestroyMesh(m);
+                grengSystems.GetMeshManager().DestroyMesh(m);
             }
         }
     }
@@ -207,8 +207,8 @@ namespace drash {
         bool brk = false;
         float z_nearest = 0;
 
-        for (i = 0; i < mScene.EnumObjects(); i++) {
-            CSceneObject* cur_obj = mScene.GetObjects()[i];
+        for (i = 0; i < scene.EnumObjects(); i++) {
+            CSceneObject* cur_obj = scene.GetObjects()[i];
 
             for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++) {
                 CFigure* cur_fgr = cur_obj->GetFigures()[j];
@@ -238,8 +238,8 @@ namespace drash {
             }
         }
 
-        for (; i < mScene.EnumObjects(); i++) {
-            CSceneObject* cur_obj = mScene.GetObjects()[i];
+        for (; i < scene.EnumObjects(); i++) {
+            CSceneObject* cur_obj = scene.GetObjects()[i];
 
             for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++) {
                 CFigure* cur_fgr = cur_obj->GetFigures()[j];
@@ -276,8 +276,8 @@ namespace drash {
         bool brk = false;
         float z_nearest = 0;
 
-        for (i = 0; i < mScene.EnumObjects(); i++) {
-            CSceneObject* cur_obj = mScene.GetObjects()[i];
+        for (i = 0; i < scene.EnumObjects(); i++) {
+            CSceneObject* cur_obj = scene.GetObjects()[i];
 
             for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++) {
                 CFigure* cur_fgr = cur_obj->GetFigures()[j];
@@ -307,8 +307,8 @@ namespace drash {
             }
         }
 
-        for (; i < mScene.EnumObjects(); i++) {
-            CSceneObject* cur_obj = mScene.GetObjects()[i];
+        for (; i < scene.EnumObjects(); i++) {
+            CSceneObject* cur_obj = scene.GetObjects()[i];
 
             for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++) {
                 CFigure* cur_fgr = cur_obj->GetFigures()[j];
@@ -347,7 +347,7 @@ namespace drash {
 
         res.Normalize();
 
-        LOG_INFO("view " << res.mX << ' ' << res.mY << ' ' << res.mZ);
+        LOG_INFO("view " << res.x << ' ' << res.y << ' ' << res.z);
 
         CVec3f center(0);
         float size = 0;
@@ -360,32 +360,32 @@ namespace drash {
             size = 0;
 
             CSceneObjectGeometry* _geometry =
-                mGeometryManager.GetGeometry(_desc->mGeometryName);
+                geometryManager.GetGeometry(_desc->geometryName);
 
             if (_geometry == nullptr) {
                 return;
             }
 
-            for (auto i = _geometry->mFigures.begin();
-                 i != _geometry->mFigures.end(); i++) {
-                for (auto j = i->mVertices.begin(); j != i->mVertices.end();
+            for (auto i = _geometry->figures.begin();
+                 i != _geometry->figures.end(); i++) {
+                for (auto j = i->vertices.begin(); j != i->vertices.end();
                      j++) {
                     max = CVec3f(*j, 0);
                     min = CVec3f(*j, 0);
                 }
             }
 
-            for (auto i = _geometry->mFigures.begin();
-                 i != _geometry->mFigures.end(); i++) {
-                for (auto j = i->mVertices.begin(); j != i->mVertices.end();
+            for (auto i = _geometry->figures.begin();
+                 i != _geometry->figures.end(); i++) {
+                for (auto j = i->vertices.begin(); j != i->vertices.end();
                      j++) {
-                    max.mX = math::Max(max.mX, j->mX);
-                    max.mY = math::Max(max.mY, j->mY);
-                    max.mZ = math::Max(max.mZ, math::Abs(i->mDepth));
+                    max.x = math::Max(max.x, j->x);
+                    max.y = math::Max(max.y, j->y);
+                    max.z = math::Max(max.z, math::Abs(i->depth));
 
-                    min.mX = math::Min(min.mX, j->mX);
-                    min.mY = math::Min(min.mY, j->mY);
-                    min.mZ = math::Min(min.mZ, -math::Abs(i->mDepth));
+                    min.x = math::Min(min.x, j->x);
+                    min.y = math::Min(min.y, j->y);
+                    min.z = math::Min(min.z, -math::Abs(i->depth));
                 }
             }
 
@@ -393,7 +393,7 @@ namespace drash {
             center += min;
             center *= 0.5f;
 
-            center += _desc->mParams.mPos;
+            center += _desc->params.pos;
 
             max -= min;
 
@@ -423,14 +423,14 @@ namespace drash {
     }
 
     bool CDebugRenderer::InitTextures() {
-        mTexture1Diffuse =
-            mGrengSystems.GetTextureManager().CreateTextureFromFile(
+        texture1Diffuse =
+            grengSystems.GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
-        mTexture1Normal =
-            mGrengSystems.GetTextureManager().CreateTextureFromFile(
+        texture1Normal =
+            grengSystems.GetTextureManager().CreateTextureFromFile(
                 "assets/floor/normal.png");
 
-        if (mTexture1Diffuse == nullptr || mTexture1Normal == nullptr) {
+        if (texture1Diffuse == nullptr || texture1Normal == nullptr) {
             return false;
         }
 
@@ -439,21 +439,21 @@ namespace drash {
 
     bool CDebugRenderer::InitShaders() {
         greng::CVertexShader* vs =
-            mGrengSystems.GetVertexShaderManager().CreateShaderFromFile(
+            grengSystems.GetVertexShaderManager().CreateShaderFromFile(
                 "shaders/shader5.120.vs");
         greng::CFragmentShader* fs =
-            mGrengSystems.GetFragmentShaderManager().CreateShaderFromFile(
+            grengSystems.GetFragmentShaderManager().CreateShaderFromFile(
                 "shaders/shader5.120.fs");
-        mShaderProgram1 =
-            mGrengSystems.GetShaderProgramManager().CreateProgram(vs, fs);
-        vs = mGrengSystems.GetVertexShaderManager().CreateShaderFromFile(
+        shaderProgram1 =
+            grengSystems.GetShaderProgramManager().CreateProgram(vs, fs);
+        vs = grengSystems.GetVertexShaderManager().CreateShaderFromFile(
             "shaders/shader4.120.vs");
-        fs = mGrengSystems.GetFragmentShaderManager().CreateShaderFromFile(
+        fs = grengSystems.GetFragmentShaderManager().CreateShaderFromFile(
             "shaders/shader4.120.fs");
-        mShaderProgram2 =
-            mGrengSystems.GetShaderProgramManager().CreateProgram(vs, fs);
+        shaderProgram2 =
+            grengSystems.GetShaderProgramManager().CreateProgram(vs, fs);
 
-        if (mShaderProgram1 == nullptr && mShaderProgram2 == nullptr) {
+        if (shaderProgram1 == nullptr && shaderProgram2 == nullptr) {
             return false;
         }
 
@@ -477,10 +477,10 @@ namespace drash {
             CVec3f max(_vertices[0], _z + 0.5f * _depth);
 
             for (unsigned int k = 1; k < _vertices_count; k++) {
-                min.mX = math::Min<float>(min.mX, _vertices[k].mX);
-                min.mY = math::Min<float>(min.mY, _vertices[k].mY);
-                max.mX = math::Max<float>(max.mX, _vertices[k].mX);
-                max.mY = math::Max<float>(max.mY, _vertices[k].mY);
+                min.x = math::Min<float>(min.x, _vertices[k].x);
+                min.y = math::Min<float>(min.y, _vertices[k].y);
+                max.x = math::Max<float>(max.x, _vertices[k].x);
+                max.y = math::Max<float>(max.y, _vertices[k].y);
             }
 
             max.Vec2() -= min.Vec2();
@@ -490,17 +490,17 @@ namespace drash {
             // front and back faces
 
             for (unsigned int k = 0; k < _vertices_count; k++) {
-                mv[k].mPos = CVec3f(_vertices[k], max.mZ);
-                mv[_vertices_count + k].mPos = CVec3f(_vertices[k], min.mZ);
+                mv[k].pos = CVec3f(_vertices[k], max.z);
+                mv[_vertices_count + k].pos = CVec3f(_vertices[k], min.z);
 
-                mv[k].mUV = mv[k].mPos;
-                mv[_vertices_count + k].mUV = mv[_vertices_count + k].mPos;
+                mv[k].uV = mv[k].pos;
+                mv[_vertices_count + k].uV = mv[_vertices_count + k].pos;
 
-                mv[k].mUV -= min.Vec2();
-                mv[_vertices_count + k].mUV -= min.Vec2();
+                mv[k].uV -= min.Vec2();
+                mv[_vertices_count + k].uV -= min.Vec2();
 
-                mv[k].mUV *= mTexCoordsScale;
-                mv[_vertices_count + k].mUV *= mTexCoordsScale;
+                mv[k].uV *= texCoordsScale;
+                mv[_vertices_count + k].uV *= texCoordsScale;
             }
 
             for (unsigned int k = 2; k < _vertices_count; k++) {
@@ -518,26 +518,26 @@ namespace drash {
             // sides
 
             for (unsigned int k = 1; k < _vertices_count; k++) {
-                mv[2 * _vertices_count + (k - 1) * 4 + 0].mPos =
-                    CVec3f(_vertices[k - 1], max.mZ);
-                mv[2 * _vertices_count + (k - 1) * 4 + 1].mPos =
-                    CVec3f(_vertices[k - 1], min.mZ);
-                mv[2 * _vertices_count + (k - 1) * 4 + 2].mPos =
-                    CVec3f(_vertices[k], min.mZ);
-                mv[2 * _vertices_count + (k - 1) * 4 + 3].mPos =
-                    CVec3f(_vertices[k], max.mZ);
+                mv[2 * _vertices_count + (k - 1) * 4 + 0].pos =
+                    CVec3f(_vertices[k - 1], max.z);
+                mv[2 * _vertices_count + (k - 1) * 4 + 1].pos =
+                    CVec3f(_vertices[k - 1], min.z);
+                mv[2 * _vertices_count + (k - 1) * 4 + 2].pos =
+                    CVec3f(_vertices[k], min.z);
+                mv[2 * _vertices_count + (k - 1) * 4 + 3].pos =
+                    CVec3f(_vertices[k], max.z);
 
                 CVec2f tmp = _vertices[k - 1];
                 tmp -= _vertices[k];
 
-                mv[2 * _vertices_count + (k - 1) * 4 + 0].mUV.Set(0, 0);
+                mv[2 * _vertices_count + (k - 1) * 4 + 0].uV.Set(0, 0);
                 mv[2 * _vertices_count + (k - 1) * 4 + 1]
-                    .mUV.Set(0, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
+                    .uV.Set(0, math::Abs(max.z - min.z) * texCoordsScale);
                 mv[2 * _vertices_count + (k - 1) * 4 + 2]
-                    .mUV.Set(tmp.Length() * mTexCoordsScale,
-                             math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
+                    .uV.Set(tmp.Length() * texCoordsScale,
+                             math::Abs(max.z - min.z) * texCoordsScale);
                 mv[2 * _vertices_count + (k - 1) * 4 + 3]
-                    .mUV.Set(tmp.Length() * mTexCoordsScale, 0);
+                    .uV.Set(tmp.Length() * texCoordsScale, 0);
 
                 mi.push_back(2 * _vertices_count + (k - 1) * 4 + 0);
                 mi.push_back(2 * _vertices_count + (k - 1) * 4 + 1);
@@ -546,27 +546,27 @@ namespace drash {
                 mi.push_back(2 * _vertices_count + (k - 1) * 4 + 3);
                 mi.push_back(2 * _vertices_count + (k - 1) * 4 + 0);
             }
-            mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 0].mPos =
-                CVec3f(_vertices[_vertices_count - 1], max.mZ);
-            mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 1].mPos =
-                CVec3f(_vertices[_vertices_count - 1], min.mZ);
-            mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 2].mPos =
-                CVec3f(_vertices[0], min.mZ);
-            mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 3].mPos =
-                CVec3f(_vertices[0], max.mZ);
+            mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 0].pos =
+                CVec3f(_vertices[_vertices_count - 1], max.z);
+            mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 1].pos =
+                CVec3f(_vertices[_vertices_count - 1], min.z);
+            mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 2].pos =
+                CVec3f(_vertices[0], min.z);
+            mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 3].pos =
+                CVec3f(_vertices[0], max.z);
 
             CVec2f tmp = _vertices[_vertices_count - 1];
             tmp -= _vertices[0];
 
             mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 0]
-                .mUV.Set(0, 0);
+                .uV.Set(0, 0);
             mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 1]
-                .mUV.Set(0, math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
+                .uV.Set(0, math::Abs(max.z - min.z) * texCoordsScale);
             mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 2]
-                .mUV.Set(tmp.Length() * mTexCoordsScale,
-                         math::Abs(max.mZ - min.mZ) * mTexCoordsScale);
+                .uV.Set(tmp.Length() * texCoordsScale,
+                         math::Abs(max.z - min.z) * texCoordsScale);
             mv[2 * _vertices_count + (_vertices_count - 1) * 4 + 3]
-                .mUV.Set(tmp.Length() * mTexCoordsScale, 0);
+                .uV.Set(tmp.Length() * texCoordsScale, 0);
 
             mi.push_back(2 * _vertices_count + (_vertices_count - 1) * 4 + 0);
             mi.push_back(2 * _vertices_count + (_vertices_count - 1) * 4 + 1);
@@ -575,7 +575,7 @@ namespace drash {
             mi.push_back(2 * _vertices_count + (_vertices_count - 1) * 4 + 3);
             mi.push_back(2 * _vertices_count + (_vertices_count - 1) * 4 + 0);
 
-            m = mGrengSystems.GetMeshManager().CreateMeshFromVertices(
+            m = grengSystems.GetMeshManager().CreateMeshFromVertices(
                 &mv[0], mv.size(), &mi[0], mi.size());
         }
 

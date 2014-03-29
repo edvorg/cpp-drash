@@ -22,7 +22,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QTabWidget" name="mManageWidget">
+     <widget class="QTabWidget" name="manageWidget">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -44,7 +44,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QTreeWidget" name="mTreeObjects">
+         <widget class="QTreeWidget" name="treeObjects">
           <property name="columnCount">
            <number>2</number>
           </property>
@@ -81,7 +81,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QTreeWidget" name="mTreeTemplates">
+         <widget class="QTreeWidget" name="treeTemplates">
           <property name="dragEnabled">
            <bool>true</bool>
           </property>
@@ -126,7 +126,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QTreeWidget" name="mTreeSceneObjects">
+         <widget class="QTreeWidget" name="treeSceneObjects">
           <column>
            <property name="text">
             <string notr="true">1</string>
@@ -139,7 +139,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QWidget" name="mSpike" native="true">
+     <widget class="QWidget" name="spike" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -156,7 +156,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QWidget" name="mParamsPanel" native="true">
+     <widget class="QWidget" name="paramsPanel" native="true">
       <property name="minimumSize">
        <size>
         <width>150</width>
@@ -191,7 +191,7 @@
         <string>Object Params</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="mCheckBoxDynamic">
+      <widget class="QCheckBox" name="checkBoxDynamic">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -204,7 +204,7 @@
         <string>Dynamic</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="mCheckBoxFixedRotation">
+      <widget class="QCheckBox" name="checkBoxFixedRotation">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -217,7 +217,7 @@
         <string>Fixed Rotation</string>
        </property>
       </widget>
-      <widget class="QDoubleSpinBox" name="mAngleBox">
+      <widget class="QDoubleSpinBox" name="angleBox">
        <property name="geometry">
         <rect>
          <x>80</x>

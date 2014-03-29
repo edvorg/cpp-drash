@@ -35,7 +35,7 @@ namespace greng {
 
     class CShaderProgramManager {
       public:
-        constexpr static unsigned int mProgramsCountLimit = 32;
+        constexpr static unsigned int programsCountLimit = 32;
 
         CShaderProgramManager();
         CShaderProgramManager(const CShaderProgramManager&) = delete;
@@ -50,7 +50,7 @@ namespace greng {
 
       protected:
       private:
-        drash::CObjectFactory<CShaderProgram> mProgramFactory;
+        drash::CObjectFactory<CShaderProgram> programFactory;
     };
 
 } // namespace greng

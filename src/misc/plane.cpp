@@ -34,56 +34,56 @@ namespace drash {
     CPlane::CPlane() {}
 
     CPlane::CPlane(const CPlane& _plane)
-        : mPoint(_plane.mPoint), mNormal(_plane.mNormal), mD(_plane.mD) {}
+        : point(_plane.point), normal(_plane.normal), d(_plane.d) {}
 
     CPlane::CPlane(const CVec3f& _point, const CVec3f& _normal) {
-        mPoint = _point;
-        mNormal = _normal;
-        mNormal.Normalize();
+        point = _point;
+        normal = _normal;
+        normal.Normalize();
         ComputeD();
     }
 
     void CPlane::SetPoint(const CVec3f& _point) {
-        mPoint = _point;
+        point = _point;
         ComputeD();
     }
 
     void CPlane::SetNormal(const CVec3f& _normal) {
-        mNormal = _normal;
-        mNormal.Normalize();
+        normal = _normal;
+        normal.Normalize();
         ComputeD();
     }
 
     void CPlane::Set(const CVec3f& _p1, const CVec3f& _p2, const CVec3f& _p3) {
-        mPoint = _p1;
+        point = _p1;
         CVec3f a(_p2);
         CVec3f b(_p3);
         a -= _p1;
         b -= _p1;
-        Vec3Cross(a, b, mNormal);
-        mNormal.Normalize();
+        Vec3Cross(a, b, normal);
+        normal.Normalize();
         ComputeD();
     }
 
     void CPlane::CastRay(const CRay& _ray, CVec3f& _result) const {
-        float tmp1 = _ray.GetDirection().mX * mNormal.mX +
-                     _ray.GetDirection().mY * mNormal.mY +
-                     _ray.GetDirection().mZ * mNormal.mZ;
+        float tmp1 = _ray.GetDirection().x * normal.x +
+                     _ray.GetDirection().y * normal.y +
+                     _ray.GetDirection().z * normal.z;
 
         float tmp =
-            (mNormal.mX * _ray.GetPoint().mX + mNormal.mY * _ray.GetPoint().mY +
-             mNormal.mZ * _ray.GetPoint().mZ + mD) /
+            (normal.x * _ray.GetPoint().x + normal.y * _ray.GetPoint().y +
+             normal.z * _ray.GetPoint().z + d) /
             tmp1;
 
-        _result.mX = _ray.GetPoint().mX - _ray.GetDirection().mX * tmp;
-        _result.mY = _ray.GetPoint().mY - _ray.GetDirection().mY * tmp;
-        _result.mZ = _ray.GetPoint().mZ - _ray.GetDirection().mZ * tmp;
+        _result.x = _ray.GetPoint().x - _ray.GetDirection().x * tmp;
+        _result.y = _ray.GetPoint().y - _ray.GetDirection().y * tmp;
+        _result.z = _ray.GetPoint().z - _ray.GetDirection().z * tmp;
     }
 
     void CPlane::ComputeD() {
         // Ax + Bx + Cx + D = 0
-        mD = -mNormal.mX * mPoint.mX - mNormal.mY * mPoint.mY -
-             mNormal.mZ * mPoint.mZ;
+        d = -normal.x * point.x - normal.y * point.y -
+             normal.z * point.z;
     }
 
 } // namespace drash

@@ -29,51 +29,51 @@ using namespace std;
 namespace drash {
 
     CLevelDesc::CLevelDesc()
-        : mObjectsFactory(mObjectsCountLimit, "CLevelObjectDesc") {}
+        : objectsFactory(objectsCountLimit, "CLevelObjectDesc") {}
 
-    CLevelDesc::~CLevelDesc() { mObjectsFactory.DestroyObjects(); }
+    CLevelDesc::~CLevelDesc() { objectsFactory.DestroyObjects(); }
 
     CLevelObjectDesc* CLevelDesc::AddObject(const std::string& _geometry,
                                             const std::string& _name) {
-        auto o = mObjectsFactory.CreateObject();
+        auto o = objectsFactory.CreateObject();
 
         if (o == nullptr) {
             return nullptr;
         }
 
-        o->mGeometryName = _geometry;
-        o->mLevelObjectName = _name;
+        o->geometryName = _geometry;
+        o->levelObjectName = _name;
 
         return o;
     }
 
     bool CLevelDesc::DestroyObject(CLevelObjectDesc* _desc) {
-        if (!mObjectsFactory.IsObject(_desc)) {
+        if (!objectsFactory.IsObject(_desc)) {
             LOG_ERR("CLevelDesc::DestroyObject(): invalid object taken");
             return false;
         }
 
-        mObjectsFactory.DestroyObject(_desc);
+        objectsFactory.DestroyObject(_desc);
         return true;
     }
 
     CLevelObjectDesc* CLevelDesc::GetObject(const std::string& _name) {
-        for (unsigned int i = 0; i < mObjectsFactory.EnumObjects(); i++) {
-            if (mObjectsFactory.GetObjects()[i]->mLevelObjectName == _name) {
-                return mObjectsFactory.GetObjects()[i];
+        for (unsigned int i = 0; i < objectsFactory.EnumObjects(); i++) {
+            if (objectsFactory.GetObjects()[i]->levelObjectName == _name) {
+                return objectsFactory.GetObjects()[i];
             }
         }
 
         return nullptr;
     }
 
-    void CLevelDesc::DestroyObjects() { mObjectsFactory.DestroyObjects(); }
+    void CLevelDesc::DestroyObjects() { objectsFactory.DestroyObjects(); }
 
     std::string CLevelDesc::GetUniqueObjectName() const {
         std::string res("object_0");
 
-        for (unsigned int i = 0; i < mObjectsFactory.EnumObjects(); i++) {
-            if (mObjectsFactory.GetObjects()[i]->mLevelObjectName == res) {
+        for (unsigned int i = 0; i < objectsFactory.EnumObjects(); i++) {
+            if (objectsFactory.GetObjects()[i]->levelObjectName == res) {
                 res += "0";
             }
         }
@@ -89,22 +89,22 @@ namespace drash {
             return false;
         }
 
-        out << mObjectsFactory.EnumObjects() << endl;
-        for (unsigned int i = 0; i < mObjectsFactory.EnumObjects(); i++) {
-            CLevelObjectDesc* desc = mObjectsFactory.GetObjects()[i];
+        out << objectsFactory.EnumObjects() << endl;
+        for (unsigned int i = 0; i < objectsFactory.EnumObjects(); i++) {
+            CLevelObjectDesc* desc = objectsFactory.GetObjects()[i];
 
             // Save name Template
-            out << desc->mLevelObjectName << endl;
-            out << desc->mGeometryName << endl;
+            out << desc->levelObjectName << endl;
+            out << desc->geometryName << endl;
 
-            const CSceneObjectParams& cur = desc->mParams;
+            const CSceneObjectParams& cur = desc->params;
 
-            out << cur.mAngle << endl;
-            out << cur.mDynamic << endl;
-            out << cur.mFixedRotation << endl;
-            out << cur.mPos.mX << endl;
-            out << cur.mPos.mY << endl;
-            out << cur.mPos.mZ << endl;
+            out << cur.angle << endl;
+            out << cur.dynamic << endl;
+            out << cur.fixedRotation << endl;
+            out << cur.pos.x << endl;
+            out << cur.pos.y << endl;
+            out << cur.pos.z << endl;
         }
 
         out.close();
@@ -131,19 +131,19 @@ namespace drash {
 
             in >> name_object;
             in >> name_geometry;
-            in >> params.mAngle;
-            in >> params.mDynamic;
-            in >> params.mFixedRotation;
-            in >> params.mPos.mX;
-            in >> params.mPos.mY;
-            in >> params.mPos.mZ;
+            in >> params.angle;
+            in >> params.dynamic;
+            in >> params.fixedRotation;
+            in >> params.pos.x;
+            in >> params.pos.y;
+            in >> params.pos.z;
 
             CLevelObjectDesc* desc = AddObject(name_geometry, name_object);
 
             if (desc != nullptr) {
-                desc->mGeometryName = name_geometry;
-                desc->mLevelObjectName = name_object;
-                desc->mParams = params;
+                desc->geometryName = name_geometry;
+                desc->levelObjectName = name_object;
+                desc->params = params;
             }
         }
 

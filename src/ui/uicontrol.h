@@ -58,48 +58,48 @@ namespace drash {
 
           protected:
           private:
-            std::function<void()> mDestroyHandler = []() {};
-            std::function<void()> mPressHandler = []() {};
-            std::function<void()> mReleaseHandler = []() {};
-            std::function<void(double)> mStepHandler = [](double) {};
-            std::function<void()> mDrawHandler = []() {};
+            std::function<void()> destroyHandler = []() {};
+            std::function<void()> pressHandler = []() {};
+            std::function<void()> releaseHandler = []() {};
+            std::function<void(double)> stepHandler = [](double) {};
+            std::function<void()> drawHandler = []() {};
 
-            CVec2i mPos;
-            CVec2ui mSize;
+            CVec2i pos;
+            CVec2ui size;
         };
 
         inline void
         CUIControl::SetDestroyHandler(const std::function<void()>& _handler) {
-            mDestroyHandler = _handler;
+            destroyHandler = _handler;
         }
 
         inline void
         CUIControl::SetPressHandler(const std::function<void()>& _handler) {
-            mPressHandler = _handler;
+            pressHandler = _handler;
         }
 
         inline void
         CUIControl::SetReleaseHandler(const std::function<void()>& _handler) {
-            mReleaseHandler = _handler;
+            releaseHandler = _handler;
         }
 
         inline void CUIControl::SetStepHandler(
             const std::function<void(double _dt)>& _handler) {
-            mStepHandler = _handler;
+            stepHandler = _handler;
         }
 
         inline void
         CUIControl::SetDrawHandler(const std::function<void()>& _handler) {
-            mDrawHandler = _handler;
+            drawHandler = _handler;
         }
 
-        inline void CUIControl::SetPos(const CVec2i& _pos) { mPos = _pos; }
+        inline void CUIControl::SetPos(const CVec2i& _pos) { pos = _pos; }
 
-        inline void CUIControl::SetSize(const CVec2ui& _size) { mSize = _size; }
+        inline void CUIControl::SetSize(const CVec2ui& _size) { size = _size; }
 
-        inline const CVec2i& CUIControl::GetPos() const { return mPos; }
+        inline const CVec2i& CUIControl::GetPos() const { return pos; }
 
-        inline const CVec2ui& CUIControl::GetSize() const { return mSize; }
+        inline const CVec2ui& CUIControl::GetSize() const { return size; }
 
     } // namepsace ui
 

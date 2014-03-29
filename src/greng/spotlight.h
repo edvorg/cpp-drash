@@ -34,9 +34,9 @@ namespace greng {
       public:
         CSpotLight() = default;
 
-        drash::CVec3f mPosition = drash::CVec3f(0, 0, 0);
-        drash::CVec3f mDirection = drash::CVec3f(0, 0, -1);
-        drash::CColor3f mColor = drash::CColor3f(1, 1, 1);
+        drash::CVec3f position = drash::CVec3f(0, 0, 0);
+        drash::CVec3f direction = drash::CVec3f(0, 0, -1);
+        drash::CColor3f color = drash::CColor3f(1, 1, 1);
     };
 
 } // namespace greng

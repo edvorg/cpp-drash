@@ -45,16 +45,16 @@ namespace drash {
 
       protected:
       private:
-        FuncT mBegin = []() {};
-        FuncT mProcessing = []() {};
-        FuncT mEnd = []() {};
+        FuncT begin = []() {};
+        FuncT processing = []() {};
+        FuncT end = []() {};
     };
 
-    inline void CAppEventProcessor::Begin() { mBegin(); }
+    inline void CAppEventProcessor::Begin() { begin(); }
 
-    inline void CAppEventProcessor::Processing() { mProcessing(); }
+    inline void CAppEventProcessor::Processing() { processing(); }
 
-    inline void CAppEventProcessor::End() { mEnd(); }
+    inline void CAppEventProcessor::End() { end(); }
 
 } // namespace drash
 

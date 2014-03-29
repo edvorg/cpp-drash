@@ -34,25 +34,25 @@ namespace greng {
     using drash::CLogger;
 
     CTextureManager::CTextureManager()
-        : mTextureFactory(mTexturesCountLimit, "CTexture") {}
+        : textureFactory(texturesCountLimit, "CTexture") {}
 
     CTextureManager::~CTextureManager() {
-        while (mTextureFactory.EnumObjects() != 0) {
-            DestroyTexture(mTextureFactory.GetObjects()[0]);
+        while (textureFactory.EnumObjects() != 0) {
+            DestroyTexture(textureFactory.GetObjects()[0]);
         }
     }
 
     CTexture* CTextureManager::CreateTexture() {
-        CTexture* res = mTextureFactory.CreateObject();
+        CTexture* res = textureFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
         }
 
-        glGenTextures(1, &res->mTextureBufferId);
+        glGenTextures(1, &res->textureBufferId);
 
-        if (res->mTextureBufferId == 0) {
-            mTextureFactory.DestroyObject(res);
+        if (res->textureBufferId == 0) {
+            textureFactory.DestroyObject(res);
             res = nullptr;
         }
 
@@ -80,7 +80,7 @@ namespace greng {
             (s->format->Rmask ? 1 : 0) + (s->format->Gmask ? 1 : 0) +
             (s->format->Bmask ? 1 : 0) + (s->format->Amask ? 1 : 0);
 
-        glBindTexture(GL_TEXTURE_2D, res->mTextureBufferId);
+        glBindTexture(GL_TEXTURE_2D, res->textureBufferId);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexImage2D(GL_TEXTURE_2D, 0, comps_count, s->w, s->h, 0,
@@ -106,7 +106,7 @@ namespace greng {
         data[2].Set(0, 0, 1, 1);
         data[3].Set(1, 1, 1, 0.5f);
 
-        glBindTexture(GL_TEXTURE_2D, res->mTextureBufferId);
+        glBindTexture(GL_TEXTURE_2D, res->textureBufferId);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_FLOAT,
@@ -129,7 +129,7 @@ namespace greng {
         data[2].Set(1, 1, 1, 1);
         data[3].Set(1, 1, 1, 1);
 
-        glBindTexture(GL_TEXTURE_2D, res->mTextureBufferId);
+        glBindTexture(GL_TEXTURE_2D, res->textureBufferId);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_FLOAT,
@@ -140,14 +140,14 @@ namespace greng {
     }
 
     bool CTextureManager::DestroyTexture(CTexture* _texture) {
-        if (mTextureFactory.IsObject(_texture) == false) {
+        if (textureFactory.IsObject(_texture) == false) {
             return false;
         }
 
-        glDeleteTextures(1, &_texture->mTextureBufferId);
-        _texture->mTextureBufferId = 0;
+        glDeleteTextures(1, &_texture->textureBufferId);
+        _texture->textureBufferId = 0;
 
-        mTextureFactory.DestroyObject(_texture);
+        textureFactory.DestroyObject(_texture);
 
         return true;
     }

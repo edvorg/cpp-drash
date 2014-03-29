@@ -34,23 +34,23 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     void CSceneObjectGeometry::ComputeDestructionGraph(const float _accuracy) {
-        mDestructionGraph.clear();
-        mDestructionGraph.resize(mFigures.size() * mFigures.size());
-        memset(&*mDestructionGraph.begin(), 0,
-               sizeof(int) * mDestructionGraph.size());
+        destructionGraph.clear();
+        destructionGraph.resize(figures.size() * figures.size());
+        memset(&*destructionGraph.begin(), 0,
+               sizeof(int) * destructionGraph.size());
 
         // TODO: optimize this (o(n^2) now)
 
-        for (unsigned i = 0; i < mFigures.size(); i++) {
-            for (unsigned j = 0; j < mFigures.size(); j++) {
+        for (unsigned i = 0; i < figures.size(); i++) {
+            for (unsigned j = 0; j < figures.size(); j++) {
                 int cont = 0;
 
                 for (unsigned int k = 0;
-                     k < mFigures[i].mVertices.size() && cont < 2; k++) {
+                     k < figures[i].vertices.size() && cont < 2; k++) {
                     for (unsigned int l = 0;
-                         l < mFigures[j].mVertices.size() && cont < 2; l++) {
-                        CVec2f dist = mFigures[i].mVertices[k];
-                        dist -= mFigures[j].mVertices[l];
+                         l < figures[j].vertices.size() && cont < 2; l++) {
+                        CVec2f dist = figures[i].vertices[k];
+                        dist -= figures[j].vertices[l];
 
                         unsigned int res = 0;
 
@@ -62,8 +62,8 @@ namespace drash {
                             res = 1;
                         }
 
-                        mDestructionGraph[i * mFigures.size() + j] = res;
-                        mDestructionGraph[j * mFigures.size() + i] = res;
+                        destructionGraph[i * figures.size() + j] = res;
+                        destructionGraph[j * figures.size() + i] = res;
                     }
                 }
             }
@@ -71,134 +71,134 @@ namespace drash {
     }
 
     CFigure* CSceneObject::CreateFigure(const CFigureParams& _params) {
-        if (mFiguresCount >= mFiguresCountLimit) {
+        if (figuresCount >= figuresCountLimit) {
             LOG_ERR("CSceneObject::CreateFigure(): figures count exceedes it's "
                     "limit ("
-                    << mFiguresCountLimit << ")");
+                    << figuresCountLimit << ")");
             return nullptr;
         }
 
         b2PolygonShape s;
 
-        if (_params.mVertices.size() == 0) {
+        if (_params.vertices.size() == 0) {
             s.SetAsBox(1.0f, 1.0f);
         } else {
-            s.Set(&CVec2ToB2Vec2(*_params.mVertices.begin()),
-                  _params.mVertices.size());
+            s.Set(&CVec2ToB2Vec2(*_params.vertices.begin()),
+                  _params.vertices.size());
         }
 
         b2MassData md;
         s.ComputeMass(&md, 1.0);
 
         b2FixtureDef fdef;
-        fdef.density = _params.mMass / md.mass;
-        fdef.friction = _params.mFriction;
+        fdef.density = _params.mass / md.mass;
+        fdef.friction = _params.friction;
         fdef.isSensor = false;
-        fdef.restitution = _params.mRestitution;
+        fdef.restitution = _params.restitution;
         fdef.shape = &s;
         fdef.userData = nullptr;
 
-        b2Fixture* f = mBody->CreateFixture(&fdef);
+        b2Fixture* f = body->CreateFixture(&fdef);
 
         CFigure* figure = new CFigure;
 
-        figure->mFixture = f;
-        figure->mMass = _params.mMass;
-        figure->mDepth = _params.mDepth;
-        figure->mInternalId = mFiguresCount;
-        figure->mZ = _params.mZ;
+        figure->fixture = f;
+        figure->mass = _params.mass;
+        figure->depth = _params.depth;
+        figure->internalId = figuresCount;
+        figure->z = _params.z;
 
         f->SetUserData(figure);
 
-        mFigures[mFiguresCount++] = figure;
+        figures[figuresCount++] = figure;
 
         return figure;
     }
 
     void CSceneObject::SetPos(const CVec3f _pos) {
-        mPosXYAnimator.Set(_pos);
-        mPosZAnimator.Set(_pos.mZ);
+        posXYAnimator.Set(_pos);
+        posZAnimator.Set(_pos.z);
     }
 
     void CSceneObject::DestroyFigure(CFigure* _figure) {
-        if (_figure->mInternalId >= static_cast<int>(mFiguresCountLimit) ||
-            mFigures[_figure->mInternalId] != _figure) {
+        if (_figure->internalId >= static_cast<int>(figuresCountLimit) ||
+            figures[_figure->internalId] != _figure) {
             LOG_ERR("CSceneObject::DestroyFigure(): something wrong with "
                     "figures creation logic");
             return;
         }
 
-        for (auto& i : mFigureDestroyHandlers) {
+        for (auto& i : figureDestroyHandlers) {
             i(_figure);
         }
-        for (auto& i : _figure->mDestroyHandlers) {
+        for (auto& i : _figure->destroyHandlers) {
             i(_figure);
         }
 
-        if (_figure->mFixture != nullptr) {
-            mBody->DestroyFixture(_figure->mFixture);
-            _figure->mFixture = nullptr;
+        if (_figure->fixture != nullptr) {
+            body->DestroyFixture(_figure->fixture);
+            _figure->fixture = nullptr;
         } else {
             LOG_WARN("CSceneObject::DestroyFigure(): empty figure destoyed");
         }
 
-        if (static_cast<unsigned int>(_figure->mInternalId) < --mFiguresCount) {
-            mFigures[_figure->mInternalId] = mFigures[mFiguresCount];
-            mFigures[_figure->mInternalId]->mInternalId = _figure->mInternalId;
-            mFigures[mFiguresCount] = nullptr;
+        if (static_cast<unsigned int>(_figure->internalId) < --figuresCount) {
+            figures[_figure->internalId] = figures[figuresCount];
+            figures[_figure->internalId]->internalId = _figure->internalId;
+            figures[figuresCount] = nullptr;
         } else {
-            mFigures[_figure->mInternalId] = nullptr;
+            figures[_figure->internalId] = nullptr;
         }
 
         delete _figure;
     }
 
     void CSceneObject::SetDynamic(bool _dynamic) {
-        mBody->SetType(_dynamic ? b2_dynamicBody : b2_kinematicBody);
+        body->SetType(_dynamic ? b2_dynamicBody : b2_kinematicBody);
     }
 
     bool CSceneObject::IsDynamic() const {
-        return mBody->GetType() == b2_dynamicBody ? true : false;
+        return body->GetType() == b2_dynamicBody ? true : false;
     }
 
     void CSceneObject::ApplyLinearImpulse(const CVec2f& _dir,
                                           const CVec2f& _pos) {
-        mBody->ApplyLinearImpulse(CVec2ToB2Vec2(_dir), CVec2ToB2Vec2(_pos),
+        body->ApplyLinearImpulse(CVec2ToB2Vec2(_dir), CVec2ToB2Vec2(_pos),
                                   true);
     }
 
     void CSceneObject::SetLinearVelocity(const CVec2f& _vel) {
-        mBody->SetLinearVelocity(CVec2ToB2Vec2(_vel));
+        body->SetLinearVelocity(CVec2ToB2Vec2(_vel));
     }
 
     CVec2f CSceneObject::GetLinearVelocity() const {
-        return B2Vec2ToCVec2(mBody->GetLinearVelocity());
+        return B2Vec2ToCVec2(body->GetLinearVelocity());
     }
 
     void CSceneObject::SetAngularVelocity(float _vel) {
-        mBody->SetAngularVelocity(_vel);
+        body->SetAngularVelocity(_vel);
     }
 
     float CSceneObject::GetAngularVelocity() const {
-        return mBody->GetAngularVelocity();
+        return body->GetAngularVelocity();
     }
 
     void CSceneObject::SetFixedRotation(bool _fixed) {
-        mBody->SetFixedRotation(_fixed);
+        body->SetFixedRotation(_fixed);
     }
 
-    void CSceneObject::SetActive(bool _active) { mBody->SetActive(_active); }
+    void CSceneObject::SetActive(bool _active) { body->SetActive(_active); }
 
     CVec2f CSceneObject::GetWorldPoint(const CVec2f& _local_point) const {
-        return B2Vec2ToCVec2(mBody->GetWorldPoint(CVec2ToB2Vec2(_local_point)));
+        return B2Vec2ToCVec2(body->GetWorldPoint(CVec2ToB2Vec2(_local_point)));
     }
 
     CVec2f CSceneObject::GetMassCenter() const {
-        return B2Vec2ToCVec2(mBody->GetWorldCenter());
+        return B2Vec2ToCVec2(body->GetWorldCenter());
     }
 
     CLogger& operator<<(CLogger& _logger, const CSceneObject& _object) {
-        _logger << "pos: " << _object.mPos << " angle: " << _object.mAngle
+        _logger << "pos: " << _object.pos << " angle: " << _object.angle
                 << '\n';
         for (unsigned int i = 0; i < _object.EnumFigures(); i++) {
             _logger << *_object.GetFigures()[i] << '\b';
@@ -207,18 +207,18 @@ namespace drash {
     }
 
     void CSceneObject::DumpGeometry(CSceneObjectGeometry* _geometry) const {
-        _geometry->mFigures.resize(EnumFigures());
+        _geometry->figures.resize(EnumFigures());
 
         for (unsigned int i = 0; i < EnumFigures(); i++) {
-            _geometry->mFigures[i].mDepth = GetFigures()[i]->GetDepth();
-            _geometry->mFigures[i].mZ = GetFigures()[i]->GetZ();
-            _geometry->mFigures[i].mFriction = GetFigures()[i]->GetFriction();
+            _geometry->figures[i].depth = GetFigures()[i]->GetDepth();
+            _geometry->figures[i].z = GetFigures()[i]->GetZ();
+            _geometry->figures[i].friction = GetFigures()[i]->GetFriction();
 
-            _geometry->mFigures[i]
-                .mVertices.resize(GetFigures()[i]->EnumVertices());
+            _geometry->figures[i]
+                .vertices.resize(GetFigures()[i]->EnumVertices());
 
             for (unsigned int j = 0; j < GetFigures()[i]->EnumVertices(); j++) {
-                _geometry->mFigures[i].mVertices[j] =
+                _geometry->figures[i].vertices[j] =
                     GetFigures()[i]->GetVertices()[j];
             }
         }

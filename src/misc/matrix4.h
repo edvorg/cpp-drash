@@ -31,25 +31,25 @@ namespace drash {
 
     class CMatrix4f {
       public:
-        constexpr static const unsigned int mRowsCount = 4;
-        constexpr static const unsigned int mColumnsCount = 4;
-        constexpr static const unsigned int mElemsCount = 16;
-        constexpr static const unsigned int m00 = 0;
-        constexpr static const unsigned int m01 = 1;
-        constexpr static const unsigned int m02 = 2;
-        constexpr static const unsigned int m03 = 3;
-        constexpr static const unsigned int m10 = 4;
-        constexpr static const unsigned int m11 = 5;
-        constexpr static const unsigned int m12 = 6;
-        constexpr static const unsigned int m13 = 7;
-        constexpr static const unsigned int m20 = 8;
-        constexpr static const unsigned int m21 = 9;
-        constexpr static const unsigned int m22 = 10;
-        constexpr static const unsigned int m23 = 11;
-        constexpr static const unsigned int m30 = 12;
-        constexpr static const unsigned int m31 = 13;
-        constexpr static const unsigned int m32 = 14;
-        constexpr static const unsigned int m33 = 15;
+        constexpr static const unsigned int rowsCount = 4;
+        constexpr static const unsigned int columnsCount = 4;
+        constexpr static const unsigned int elemsCount = 16;
+        constexpr static const unsigned int i00 = 0;
+        constexpr static const unsigned int i01 = 1;
+        constexpr static const unsigned int i02 = 2;
+        constexpr static const unsigned int i03 = 3;
+        constexpr static const unsigned int i10 = 4;
+        constexpr static const unsigned int i11 = 5;
+        constexpr static const unsigned int i12 = 6;
+        constexpr static const unsigned int i13 = 7;
+        constexpr static const unsigned int i20 = 8;
+        constexpr static const unsigned int i21 = 9;
+        constexpr static const unsigned int i22 = 10;
+        constexpr static const unsigned int i23 = 11;
+        constexpr static const unsigned int i30 = 12;
+        constexpr static const unsigned int i31 = 13;
+        constexpr static const unsigned int i32 = 14;
+        constexpr static const unsigned int i33 = 15;
 
         CMatrix4f() = default;
         CMatrix4f(const CMatrix4f& _m);
@@ -58,7 +58,7 @@ namespace drash {
         CMatrix4f& Identity();
         CMatrix4f& Transpose();
 
-        float mData[mElemsCount];
+        float data[elemsCount];
 
       protected:
       private:

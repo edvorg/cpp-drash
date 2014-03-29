@@ -46,22 +46,22 @@ namespace drash {
             return false;
         }
 
-        auto i = mTrees.find(_name);
+        auto i = trees.find(_name);
 
-        if (i == mTrees.end()) {
-            mTrees.insert(std::pair<std::string, CAppEventCombinationTree>(
+        if (i == trees.end()) {
+            trees.insert(std::pair<std::string, CAppEventCombinationTree>(
                 _name, CAppEventCombinationTree()));
-            i = mTrees.find(_name);
-        } else if (i->first == mCurrentMode) {
+            i = trees.find(_name);
+        } else if (i->first == currentMode) {
             return true;
         }
 
-        mCurrentMode = _name;
-        mCurrentNode = mCurrentModeRoot = &i->second;
+        currentMode = _name;
+        currentNode = currentModeRoot = &i->second;
 
-        for (auto i = mCurrentCombinations.begin();
-             i != mCurrentCombinations.end(); i++) {
-            (*i)->mState |= STATE_END;
+        for (auto i = currentCombinations.begin();
+             i != currentCombinations.end(); i++) {
+            (*i)->state |= STATE_END;
         }
 
         LOG_INFO("mode changed: " << _name.c_str());
@@ -104,13 +104,13 @@ namespace drash {
             combinations.push_back(comb);
         });
 
-        CAppEventCombinationTree* node = mCurrentModeRoot;
+        CAppEventCombinationTree* node = currentModeRoot;
         for (auto i = combinations.begin(); i != combinations.end(); i++) {
             bool found = false;
 
-            for (auto j = node->mChilds.begin(); j != node->mChilds.end();
+            for (auto j = node->childs.begin(); j != node->childs.end();
                  j++) {
-                if (j->mCombination == *i) {
+                if (j->combination == *i) {
                     found = true;
                     node = &*j;
                     break;
@@ -118,41 +118,41 @@ namespace drash {
             }
 
             if (found == false) {
-                node->mChilds.push_back(CAppEventCombinationTree());
-                node->mChilds.back().mCombination = *i;
-                node = &node->mChilds.back();
+                node->childs.push_back(CAppEventCombinationTree());
+                node->childs.back().combination = *i;
+                node = &node->childs.back();
             }
         };
 
-        node->mProcessor = _processor;
+        node->processor = _processor;
     }
 
     void CAppEventSystem::Process() {
-        for (auto i = mCurrentCombinations.begin();
-             i != mCurrentCombinations.end();) {
+        for (auto i = currentCombinations.begin();
+             i != currentCombinations.end();) {
             CAppEventCombinationTree* c = *i;
 
-            if (c->mState & STATE_BEGIN) {
-                c->mState ^= STATE_BEGIN;
-                c->mState |= STATE_PROCESSING;
-                c->mProcessor.Begin();
+            if (c->state & STATE_BEGIN) {
+                c->state ^= STATE_BEGIN;
+                c->state |= STATE_PROCESSING;
+                c->processor.Begin();
             }
 
-            if (c->mState & STATE_CANCEL) {
-                c->mState = STATE_NORMAL;
-                i = mCurrentCombinations.erase(i);
+            if (c->state & STATE_CANCEL) {
+                c->state = STATE_NORMAL;
+                i = currentCombinations.erase(i);
                 continue;
             }
 
-            if (c->mState & STATE_END) {
-                c->mProcessor.End();
-                c->mState = STATE_NORMAL;
-                i = mCurrentCombinations.erase(i);
+            if (c->state & STATE_END) {
+                c->processor.End();
+                c->state = STATE_NORMAL;
+                i = currentCombinations.erase(i);
                 continue;
             }
 
-            if (c->mState & STATE_PROCESSING) {
-                c->mProcessor.Processing();
+            if (c->state & STATE_PROCESSING) {
+                c->processor.Processing();
             }
 
             i++;
@@ -160,7 +160,7 @@ namespace drash {
     }
 
     void CAppEventSystem::BeginEvent(const CAppEvent& _event) {
-        mCurrentState.AddEvent(_event);
+        currentState.AddEvent(_event);
 
         // now we find key combination in current combination tree root
         // if we pressed key, which is completely wrong, we set res flag to true
@@ -168,73 +168,73 @@ namespace drash {
         int res = PressEventImpl(_event);
 
         // if pressed key is completely wrong and current tree node is not
-        // &mTree (root)
-        // try to process this key second time, using &mTree as current tree
+        // &tree (root)
+        // try to process this key second time, using &tree as current tree
         // node
 
-        if (res == 0 && mCurrentNode != mCurrentModeRoot) {
-            mCurrentNode = mCurrentModeRoot;
+        if (res == 0 && currentNode != currentModeRoot) {
+            currentNode = currentModeRoot;
 
             PressEventImpl(_event);
         }
     }
 
     void CAppEventSystem::EndEvent(const CAppEvent& _event) {
-        mCurrentState.RemoveEvent(_event);
+        currentState.RemoveEvent(_event);
 
         // find key combinations, thas is not intersect current events state
 
-        for (auto i = mCurrentCombinations.begin();
-             i != mCurrentCombinations.end(); i++) {
-            if (mCurrentState.ContainsCombination((*i)->mCombination) ==
+        for (auto i = currentCombinations.begin();
+             i != currentCombinations.end(); i++) {
+            if (currentState.ContainsCombination((*i)->combination) ==
                 false) {
                 // if this tree node's combination is last one to be removed,
                 // look for his childs
 
-                if (mCurrentCombinations.size() == 1) {
-                    if ((*i)->mChilds.size() != 0) {
+                if (currentCombinations.size() == 1) {
+                    if ((*i)->childs.size() != 0) {
                         // if it has any - try to process next combinations from
                         // this tree node
 
-                        mCurrentNode = *i;
+                        currentNode = *i;
                     } else {
                         // fall back to combinations tree root
 
-                        mCurrentNode = mCurrentModeRoot;
+                        currentNode = currentModeRoot;
                     }
                 }
 
-                (*i)->mState |= STATE_END;
+                (*i)->state |= STATE_END;
             }
         }
     }
 
     void CAppEventSystem::CancelEvent(const CAppEvent& _event) {
-        mCurrentState.RemoveEvent(_event);
+        currentState.RemoveEvent(_event);
 
         // find key combinations, thas is not intersect current events state
 
-        for (auto i = mCurrentCombinations.begin();
-             i != mCurrentCombinations.end(); i++) {
-            if (mCurrentState.ContainsCombination((*i)->mCombination) ==
+        for (auto i = currentCombinations.begin();
+             i != currentCombinations.end(); i++) {
+            if (currentState.ContainsCombination((*i)->combination) ==
                 false) {
                 // if this tree node's combination is last one to be removed,
                 // look for his childs
 
-                if (mCurrentCombinations.size() == 1) {
-                    if ((*i)->mChilds.size() != 0) {
+                if (currentCombinations.size() == 1) {
+                    if ((*i)->childs.size() != 0) {
                         // if it has any - try to process next combinations from
                         // this tree node
 
-                        mCurrentNode = *i;
+                        currentNode = *i;
                     } else {
                         // fall back to combinations tree root
 
-                        mCurrentNode = mCurrentModeRoot;
+                        currentNode = currentModeRoot;
                     }
                 }
 
-                (*i)->mState |= STATE_CANCEL;
+                (*i)->state |= STATE_CANCEL;
             }
         }
     }
@@ -242,18 +242,18 @@ namespace drash {
     int CAppEventSystem::PressEventImpl(const CAppEvent& _event) {
         int res = 0;
 
-        for (auto i = mCurrentNode->mChilds.begin();
-             i != mCurrentNode->mChilds.end();
-             i++) { // mOperationLock is used for fast determine, that node
-                    // already in mCurrentCombinations list
-            if (i->mState == STATE_NORMAL &&
-                mCurrentState.ContainsCombination(i->mCombination)) {
+        for (auto i = currentNode->childs.begin();
+             i != currentNode->childs.end();
+             i++) { // operationLock is used for fast determine, that node
+                    // already in currentCombinations list
+            if (i->state == STATE_NORMAL &&
+                currentState.ContainsCombination(i->combination)) {
                 res = 1;
 
-                i->mState = STATE_BEGIN;
-                this->mCurrentCombinations.push_back(&*i);
+                i->state = STATE_BEGIN;
+                this->currentCombinations.push_back(&*i);
             } else if (res == 0 &&
-                       i->mCombination.ContainsEvent(_event) == true) {
+                       i->combination.ContainsEvent(_event) == true) {
                 res = 1;
             }
         }

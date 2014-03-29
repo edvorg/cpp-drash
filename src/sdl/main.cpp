@@ -259,10 +259,10 @@ drash::EventKey ConvertButton(int _button) {
 }
 
 void WindowSpaceToScreenSpace(CVec2f& _from) {
-    _from.mX /= gWindowWidth;
-    _from.mY /= gWindowHeight;
+    _from.x /= gWindowWidth;
+    _from.y /= gWindowHeight;
 
-    _from.mX -= 0.5;
-    _from.mY -= 0.5;
-    _from.mY *= -1;
+    _from.x -= 0.5;
+    _from.y -= 0.5;
+    _from.y *= -1;
 }

@@ -36,7 +36,7 @@ namespace drash {
     constexpr const void* p1 = &v1;
     constexpr const void* p2 = &v1.x;
     constexpr const void* p3 = &v2;
-    constexpr const void* p4 = &v2.mX;
+    constexpr const void* p4 = &v2.x;
 
 #if (b2Vec2size == CVec2fsize && p1 == p2 && p3 == p4)
 

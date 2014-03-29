@@ -33,25 +33,25 @@ namespace greng {
     using drash::CLogger;
 
     CFragmentShaderManager::CFragmentShaderManager()
-        : mShaderFactory(mShadersCountLimit, "CFragmentShader") {}
+        : shaderFactory(shadersCountLimit, "CFragmentShader") {}
 
     CFragmentShaderManager::~CFragmentShaderManager() {
-        while (mShaderFactory.EnumObjects() != 0) {
-            DestroyShader(mShaderFactory.GetObjects()[0]);
+        while (shaderFactory.EnumObjects() != 0) {
+            DestroyShader(shaderFactory.GetObjects()[0]);
         }
     }
 
     CFragmentShader* CFragmentShaderManager::CreateShader() {
-        CFragmentShader* res = mShaderFactory.CreateObject();
+        CFragmentShader* res = shaderFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
         }
 
-        res->mVertexShaderId = glCreateShader(GL_FRAGMENT_SHADER);
+        res->vertexShaderId = glCreateShader(GL_FRAGMENT_SHADER);
 
-        if (res->mVertexShaderId == 0) {
-            mShaderFactory.DestroyObject(res);
+        if (res->vertexShaderId == 0) {
+            shaderFactory.DestroyObject(res);
             return nullptr;
         }
 
@@ -82,20 +82,20 @@ namespace greng {
 
         int len = strlen(_source);
 
-        glShaderSource(res->mVertexShaderId, 1, &_source, &len);
+        glShaderSource(res->vertexShaderId, 1, &_source, &len);
 
-        glCompileShader(res->mVertexShaderId);
+        glCompileShader(res->vertexShaderId);
 
         int status = GL_FALSE;
 
-        glGetShaderiv(res->mVertexShaderId, GL_COMPILE_STATUS, &status);
+        glGetShaderiv(res->vertexShaderId, GL_COMPILE_STATUS, &status);
 
         if (status == GL_FALSE) {
             const int buffer_size = 2048;
             char buffer[buffer_size];
             int length = 0;
 
-            glGetShaderInfoLog(res->mVertexShaderId, buffer_size - 1, &length,
+            glGetShaderInfoLog(res->vertexShaderId, buffer_size - 1, &length,
                                buffer);
 
             LOG_ERR("CFragmentShaderManager::CreateShaderFromSource(): "
@@ -132,16 +132,16 @@ namespace greng {
     }
 
     bool CFragmentShaderManager::DestroyShader(CFragmentShader* _shader) {
-        if (mShaderFactory.IsObject(_shader) == false) {
+        if (shaderFactory.IsObject(_shader) == false) {
             LOG_ERR("CFragmentShaderManager::DestroyShader(): invalid shader "
                     "taken");
             return false;
         }
 
-        glDeleteShader(_shader->mVertexShaderId);
-        _shader->mVertexShaderId = 0;
+        glDeleteShader(_shader->vertexShaderId);
+        _shader->vertexShaderId = 0;
 
-        mShaderFactory.DestroyObject(_shader);
+        shaderFactory.DestroyObject(_shader);
 
         return true;
     }

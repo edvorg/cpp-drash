@@ -44,7 +44,7 @@ class GameWindowParams {
   public:
     void SetCommandLine(unsigned int _argc, char* _argv[]);
 
-    std::vector<std::string> mArgv;
+    std::vector<std::string> argv;
 };
 
 class GameWindow : public QMainWindow {
@@ -63,11 +63,11 @@ slots:
 
   private:
     Ui::GameWindow* ui = nullptr;
-    drash::CApp* mApp = nullptr;
-    SceneWidget* mSceneWidget = nullptr;
-    QTimer mUpdateTimer;
-    drash::CTimer mGameTimer;
-    QLabel* mStatusLabel = nullptr;
+    drash::CApp* app = nullptr;
+    SceneWidget* sceneWidget = nullptr;
+    QTimer updateTimer;
+    drash::CTimer gameTimer;
+    QLabel* statusLabel = nullptr;
 };
 
 #endif // GAMEWINDOW_H

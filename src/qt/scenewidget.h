@@ -39,7 +39,7 @@ class SceneWidget : public QGLWidget {
     SceneWidget(QWidget* parent = 0);
     virtual ~SceneWidget();
 
-    /// converts coordinates from window space (0,0)..(mWidth, mHeight)
+    /// converts coordinates from window space (0,0)..(width, height)
     /// to screen space (-0.5, -0.5)..(0.5, 0.5)
 
     virtual void initializeGL() override;
@@ -62,16 +62,16 @@ class SceneWidget : public QGLWidget {
     virtual void dragEnterEvent(QDragEnterEvent* _event) override;
     virtual void dragLeaveEvent(QDragLeaveEvent* _event) override;
 
-    drash::CApp* mApp = nullptr;
-    float mWidth = 1.0f;
-    float mHeight = 1.0f;
+    drash::CApp* app = nullptr;
+    float width = 1.0f;
+    float height = 1.0f;
 
   private:
     drash::CVec2f WidgetSpaceToScreenSpace(const drash::CVec2f& _from) const;
 };
 
-inline void SceneWidget::SetApp(drash::CApp* _app) { mApp = _app; }
+inline void SceneWidget::SetApp(drash::CApp* _app) { app = _app; }
 
-inline drash::CApp* SceneWidget::GetApp() { return mApp; }
+inline drash::CApp* SceneWidget::GetApp() { return app; }
 
 #endif // SCENEWIDGET_H

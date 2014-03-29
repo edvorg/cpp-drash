@@ -82,8 +82,8 @@ namespace Sound {
         /// release sound subsystem
         static void ReleaseSubsystem();
 
-        unsigned int mSourceId;
-        unsigned int mBufferId;
+        unsigned int sourceId;
+        unsigned int bufferId;
     };
 }
 

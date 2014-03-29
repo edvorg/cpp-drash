@@ -57,49 +57,49 @@ namespace drash {
         inline const CVec3f& GetRotation() const;
 
       private:
-        CVec3f mRotationDelta;
-        CVec2f mCursorPos = CVec2f(0);
+        CVec3f rotationDelta;
+        CVec2f cursorPos = CVec2f(0);
 
-        greng::CRenderer& mRenderer;
-        greng::CCamera& mCamera;
+        greng::CRenderer& renderer;
+        greng::CCamera& camera;
 
-        CVec3f mPoint = CVec3f(0);
-        CVec3f mRotation = CVec3f(0);
+        CVec3f point = CVec3f(0);
+        CVec3f rotation = CVec3f(0);
 
-        unsigned int mAxisOvered = 0;
-        unsigned int mAxisRotating = 0;
+        unsigned int axisOvered = 0;
+        unsigned int axisRotating = 0;
 
-        bool mAxisOX = true;
-        bool mAxisOY = true;
-        bool mAxisOZ = true;
+        bool axisOX = true;
+        bool axisOY = true;
+        bool axisOZ = true;
     };
 
     inline void CRotationablePoint::SetPoint(const CVec3f& _point) {
-        mPoint = _point;
+        point = _point;
     }
 
     inline void CRotationablePoint::SetRotation(const CVec3f& _rotation) {
-        mRotation = _rotation;
+        rotation = _rotation;
     }
 
     inline void CRotationablePoint::SetCursorPos(const CVec2f& _pos) {
-        mCursorPos = _pos;
+        cursorPos = _pos;
     }
 
     inline void CRotationablePoint::SetAxisOX(const bool _val) {
-        mAxisOX = _val;
+        axisOX = _val;
     }
 
     inline void CRotationablePoint::SetAxisOY(const bool _val) {
-        mAxisOY = _val;
+        axisOY = _val;
     }
 
     inline void CRotationablePoint::SetAxisOZ(const bool _val) {
-        mAxisOZ = _val;
+        axisOZ = _val;
     }
 
     inline const CVec3f& CRotationablePoint::GetRotation() const {
-        return mRotation;
+        return rotation;
     }
 
 } // namespace drash

@@ -34,12 +34,12 @@ namespace greng {
       public:
         CVertex() = default;
 
-        drash::CVec3f mPos = drash::CVec3f(0);
-        drash::CVec2f mUV = drash::CVec2f(0);
-        drash::CVec3f mNormal = drash::CVec3f(0);
-        drash::CColor4f mColor = drash::CColor4f(1);
-        drash::CVec3f mTangent = drash::CVec3f(1, 0, 0);
-        drash::CVec3f mBinormal = drash::CVec3f(0, 1, 0);
+        drash::CVec3f pos = drash::CVec3f(0);
+        drash::CVec2f uV = drash::CVec2f(0);
+        drash::CVec3f normal = drash::CVec3f(0);
+        drash::CColor4f color = drash::CColor4f(1);
+        drash::CVec3f tangent = drash::CVec3f(1, 0, 0);
+        drash::CVec3f binormal = drash::CVec3f(0, 1, 0);
 
       protected:
       private:

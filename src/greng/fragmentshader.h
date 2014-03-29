@@ -32,7 +32,7 @@ namespace greng {
       public:
         CFragmentShader() = default;
 
-        unsigned int mVertexShaderId = 0;
+        unsigned int vertexShaderId = 0;
     };
 
 } // namespace greng

@@ -62,8 +62,8 @@ namespace drash {
 
           protected:
           private:
-            CUIControl* mUIControl = nullptr;
-            CUISystem* mUISystem = nullptr;
+            CUIControl* uIControl = nullptr;
+            CUISystem* uISystem = nullptr;
         };
 
     } // namepsace ui

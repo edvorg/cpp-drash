@@ -43,29 +43,29 @@ namespace drash {
                                  AnimatorBehavior::Single);
             c.GetRotation().Set(CVec3f(-M_PI / 12.0f, 0.0f, 0.0f));
 
-            mSlider1.Connect(&GetUISystem());
-            mSlider1.SetPos(CVec2i(10, 10));
-            mSlider1.SetSize(CVec2ui(100, 20));
-            mSlider1.SetMin(-50);
-            mSlider1.SetMax(50);
-            mSlider1.SetValue(0);
-            mSlider1.SetValueHandler([this](float _value) {
-                GetScene().SetGravity(CVec2f(_value, mSlider2.GetValue()));
+            slider1.Connect(&GetUISystem());
+            slider1.SetPos(CVec2i(10, 10));
+            slider1.SetSize(CVec2ui(100, 20));
+            slider1.SetMin(-50);
+            slider1.SetMax(50);
+            slider1.SetValue(0);
+            slider1.SetValueHandler([this](float _value) {
+                GetScene().SetGravity(CVec2f(_value, slider2.GetValue()));
             });
 
-            mSlider2.Connect(&GetUISystem());
-            mSlider2.SetPos(CVec2i(10, 40));
-            mSlider2.SetSize(CVec2ui(100, 20));
-            mSlider2.SetMin(-50);
-            mSlider2.SetMax(50);
-            mSlider2.SetValue(-9.8);
-            mSlider2.SetValueHandler([this](float _value) {
-                GetScene().SetGravity(CVec2f(mSlider1.GetValue(), _value));
+            slider2.Connect(&GetUISystem());
+            slider2.SetPos(CVec2i(10, 40));
+            slider2.SetSize(CVec2ui(100, 20));
+            slider2.SetMin(-50);
+            slider2.SetMax(50);
+            slider2.SetValue(-9.8);
+            slider2.SetValueHandler([this](float _value) {
+                GetScene().SetGravity(CVec2f(slider1.GetValue(), _value));
             });
 
-            mLight1.mPosition.Set(0, 40, 0);
+            light1.position.Set(0, 40, 0);
 
-            GetDebugRenderer().SetLight(&mLight1);
+            GetDebugRenderer().SetLight(&light1);
         }
 
         void CTest3::Step(double _dt) { CTest1::Step(_dt); }
@@ -139,20 +139,20 @@ namespace drash {
             GetEventSystem().SetProcessor(
                 "MB",
                 CAppEventProcessor([this]() {
-                                       if (mMoveObject == nullptr) {
+                                       if (moveObject == nullptr) {
                                            CFigure* f =
                                                GetDebugRenderer().FindFigure(
                                                    GetCamera(), GetCursorPos());
                                            if (f != nullptr) {
-                                               mMoveObject =
+                                               moveObject =
                                                    f->GetSceneObject();
                                            }
                                        }
                                    },
                                    [this]() {
-                                       if (mMoveObject != nullptr) {
+                                       if (moveObject != nullptr) {
                                            CPlane p(PlaneXY);
-                                           p.SetPoint(mMoveObject->GetPos());
+                                           p.SetPoint(moveObject->GetPos());
 
                                            CVec3f pos;
 
@@ -160,19 +160,19 @@ namespace drash {
                                                                p, pos);
 
                                            pos.Vec2() -=
-                                               mMoveObject->GetMassCenter();
+                                               moveObject->GetMassCenter();
                                            pos *= 10;
-                                           mMoveObject->SetLinearVelocity(pos);
+                                           moveObject->SetLinearVelocity(pos);
                                        }
                                    },
                                    [this]() {
-                    if (mMoveObject != nullptr) {
+                    if (moveObject != nullptr) {
                         /// if our body is not dynamic. it wil never stop, until
                         /// we make it's velocity module to 0
-                        if (mMoveObject->IsDynamic() == false) {
-                            mMoveObject->SetLinearVelocity(CVec2f(0));
+                        if (moveObject->IsDynamic() == false) {
+                            moveObject->SetLinearVelocity(CVec2f(0));
                         }
-                        mMoveObject = nullptr;
+                        moveObject = nullptr;
                     }
                 }));
 
@@ -186,7 +186,7 @@ namespace drash {
                                 pos = GetCamera().GetPos().Get();
                             }
 
-                            pos.mZ += 10.0f;
+                            pos.z += 10.0f;
 
                             GetCamera().GetPos().SetTarget(
                                 pos, 0.3, AnimatorBehavior::Single);
@@ -202,7 +202,7 @@ namespace drash {
                                 pos = GetCamera().GetPos().Get();
                             }
 
-                            pos.mZ -= 10.0f;
+                            pos.z -= 10.0f;
 
                             GetCamera().GetPos().SetTarget(
                                 pos, 0.3, AnimatorBehavior::Single);
@@ -230,53 +230,53 @@ namespace drash {
 
         void CTest3::InitObjects() {
             CSceneObjectGeometry sbg;
-            sbg.mFigures.resize(1);
-            sbg.mFigures[0].mDepth = 200;
-            sbg.mFigures[0].mRestitution = 0.0;
-            sbg.mFigures[0].mVertices.push_back(CVec2f(-300, -5));
-            sbg.mFigures[0].mVertices.push_back(CVec2f(300, -5));
-            sbg.mFigures[0].mVertices.push_back(CVec2f(300, 5));
-            sbg.mFigures[0].mVertices.push_back(CVec2f(-300, 5));
+            sbg.figures.resize(1);
+            sbg.figures[0].depth = 200;
+            sbg.figures[0].restitution = 0.0;
+            sbg.figures[0].vertices.push_back(CVec2f(-300, -5));
+            sbg.figures[0].vertices.push_back(CVec2f(300, -5));
+            sbg.figures[0].vertices.push_back(CVec2f(300, 5));
+            sbg.figures[0].vertices.push_back(CVec2f(-300, 5));
             CSceneObjectParams sbp;
-            sbp.mDynamic = false;
-            sbp.mAngle = 0;
-            sbp.mPos.Set(0, -30, 0);
+            sbp.dynamic = false;
+            sbp.angle = 0;
+            sbp.pos.Set(0, -30, 0);
             GetScene().CreateObject(sbg, sbp);
 
-            sbp.mPos.Set(0, 570, 0);
+            sbp.pos.Set(0, 570, 0);
             GetScene().CreateObject(sbg, sbp);
 
-            sbg.mFigures[0].mVertices.clear();
-            sbg.mFigures.resize(1);
-            sbg.mFigures[0].mVertices.push_back(CVec2f(-5, -300));
-            sbg.mFigures[0].mVertices.push_back(CVec2f(5, -300));
-            sbg.mFigures[0].mVertices.push_back(CVec2f(5, 300));
-            sbg.mFigures[0].mVertices.push_back(CVec2f(-5, 300));
-            sbp.mPos.Set(-300, 270, 0);
+            sbg.figures[0].vertices.clear();
+            sbg.figures.resize(1);
+            sbg.figures[0].vertices.push_back(CVec2f(-5, -300));
+            sbg.figures[0].vertices.push_back(CVec2f(5, -300));
+            sbg.figures[0].vertices.push_back(CVec2f(5, 300));
+            sbg.figures[0].vertices.push_back(CVec2f(-5, 300));
+            sbp.pos.Set(-300, 270, 0);
             GetScene().CreateObject(sbg, sbp);
 
-            sbg.mFigures[0].mVertices.clear();
-            sbg.mFigures.resize(1);
-            sbg.mFigures[0].mVertices.push_back(CVec2f(-5, -300));
-            sbg.mFigures[0].mVertices.push_back(CVec2f(5, -300));
-            sbg.mFigures[0].mVertices.push_back(CVec2f(5, 300));
-            sbg.mFigures[0].mVertices.push_back(CVec2f(-5, 300));
-            sbp.mPos.Set(300, 270, 0);
+            sbg.figures[0].vertices.clear();
+            sbg.figures.resize(1);
+            sbg.figures[0].vertices.push_back(CVec2f(-5, -300));
+            sbg.figures[0].vertices.push_back(CVec2f(5, -300));
+            sbg.figures[0].vertices.push_back(CVec2f(5, 300));
+            sbg.figures[0].vertices.push_back(CVec2f(-5, 300));
+            sbp.pos.Set(300, 270, 0);
             GetScene().CreateObject(sbg, sbp);
 
             CSceneObjectGeometry pg;
-            pg.mFigures.resize(1);
-            pg.mFigures[0].mMass = 3;
+            pg.figures.resize(1);
+            pg.figures[0].mass = 3;
             CSceneObjectParams pp;
-            pp.mPos.Set(-200, 100, 0);
+            pp.pos.Set(-200, 100, 0);
             GetScene().CreateObject(pg, pp)->SetLinearVelocity(CVec2f(200, 0));
 
             CSceneObjectGeometry ppg;
-            ppg.mFigures.resize(1);
-            ppg.mFigures[0].mDepth = 2;
+            ppg.figures.resize(1);
+            ppg.figures[0].depth = 2;
             CPlayerParams ppp;
-            ppp.mSceneObjectParams.mPos.Set(0, 10, 0);
-            ppp.mVelocityLimit = 10;
+            ppp.sceneObjectParams.pos.Set(0, 10, 0);
+            ppp.velocityLimit = 10;
             GetPlayersSystem().CreatePlayer(ppg, ppp);
         }
 

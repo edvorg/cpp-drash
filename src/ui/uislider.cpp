@@ -37,20 +37,20 @@ namespace drash {
         void CUISlider::Connect(CUISystem* _system) {
             CUIWidget::Connect(_system);
 
-            SetPressHandler([this]() { mPressed = true; });
+            SetPressHandler([this]() { pressed = true; });
 
-            SetReleaseHandler([this]() { mPressed = false; });
+            SetReleaseHandler([this]() { pressed = false; });
 
             SetStepHandler([this](double) {
-                if (mPressed == true) {
-                    int hw = mSliderWidth / 2;
-                    int local_x = GetUISystem()->GetCursorPosX() - GetPos().mX;
+                if (pressed == true) {
+                    int hw = sliderWidth / 2;
+                    int local_x = GetUISystem()->GetCursorPosX() - GetPos().x;
                     local_x = drash::math::Clamp<int>(local_x, hw,
-                                                      (int)GetSize().mX - hw) -
+                                                      (int)GetSize().x - hw) -
                               hw;
                     SetPercent((float)local_x /
-                               ((float)GetSize().mX - (float)mSliderWidth));
-                    mValueHandler(mValue);
+                               ((float)GetSize().x - (float)sliderWidth));
+                    valueHandler(value);
                 }
             });
 
@@ -61,35 +61,35 @@ namespace drash {
                 CVec2f p2;
                 CVec2f p3;
                 CVec2f p4;
-                GetUISystem()->UISpaceToScreenSpace(GetPos().mX, GetPos().mY,
+                GetUISystem()->UISpaceToScreenSpace(GetPos().x, GetPos().y,
                                                     p1);
                 GetUISystem()->UISpaceToScreenSpace(
-                    GetPos().mX, GetPos().mY + GetSize().mY, p2);
+                    GetPos().x, GetPos().y + GetSize().y, p2);
                 GetUISystem()->UISpaceToScreenSpace(
-                    GetPos().mX + GetSize().mX, GetPos().mY + GetSize().mY, p3);
-                GetUISystem()->UISpaceToScreenSpace(GetPos().mX + GetSize().mX,
-                                                    GetPos().mY, p4);
+                    GetPos().x + GetSize().x, GetPos().y + GetSize().y, p3);
+                GetUISystem()->UISpaceToScreenSpace(GetPos().x + GetSize().x,
+                                                    GetPos().y, p4);
                 GetUISystem()->GetRenderer().DrawLine(p1, p2, 1, c);
                 GetUISystem()->GetRenderer().DrawLine(p3, p2, 1, c);
                 GetUISystem()->GetRenderer().DrawLine(p3, p4, 1, c);
                 GetUISystem()->GetRenderer().DrawLine(p1, p4, 1, c);
 
-                const unsigned int l = GetSize().mX - mSliderWidth;
+                const unsigned int l = GetSize().x - sliderWidth;
 
                 CVec2f p5;
                 CVec2f p6;
                 CVec2f p7;
                 CVec2f p8;
                 GetUISystem()->UISpaceToScreenSpace(
-                    GetPos().mX + l * GetPercent(), GetPos().mY, p5);
+                    GetPos().x + l * GetPercent(), GetPos().y, p5);
                 GetUISystem()->UISpaceToScreenSpace(
-                    GetPos().mX + l * GetPercent() + mSliderWidth, GetPos().mY,
+                    GetPos().x + l * GetPercent() + sliderWidth, GetPos().y,
                     p6);
                 GetUISystem()->UISpaceToScreenSpace(
-                    GetPos().mX + l * GetPercent() + mSliderWidth,
-                    GetPos().mY + GetSize().mY, p7);
+                    GetPos().x + l * GetPercent() + sliderWidth,
+                    GetPos().y + GetSize().y, p7);
                 GetUISystem()->UISpaceToScreenSpace(
-                    GetPos().mX + l * GetPercent(), GetPos().mY + GetSize().mY,
+                    GetPos().x + l * GetPercent(), GetPos().y + GetSize().y,
                     p8);
                 GetUISystem()->GetRenderer().DrawLine(p5, p6, 1, c);
                 GetUISystem()->GetRenderer().DrawLine(p7, p6, 1, c);
@@ -100,42 +100,42 @@ namespace drash {
 
         void CUISlider::SetValueHandler(
             const std::function<void(float _value)>& _handler) {
-            mValueHandler = _handler;
+            valueHandler = _handler;
         }
 
         void CUISlider::SetValue(float _value) {
-            mValue = Clamp<float>(_value, mMin, mMax);
+            value = Clamp<float>(_value, min, max);
         }
 
-        float CUISlider::GetValue() const { return mValue; }
+        float CUISlider::GetValue() const { return value; }
 
         void CUISlider::SetPercent(float _percent) {
-            mValue = mMin + Clamp<float>(_percent, 0, 1) * (mMax - mMin);
+            value = min + Clamp<float>(_percent, 0, 1) * (max - min);
         }
 
         float CUISlider::GetPercent() const {
-            return (mValue - mMin) / (mMax - mMin);
+            return (value - min) / (max - min);
         }
 
         void CUISlider::SetSliderWidth(unsigned int _width) {
-            mSliderWidth = Min(_width, GetSize().mX / 2);
+            sliderWidth = Min(_width, GetSize().x / 2);
         }
 
-        unsigned int CUISlider::GetSliderWidth() const { return mSliderWidth; }
+        unsigned int CUISlider::GetSliderWidth() const { return sliderWidth; }
 
         void CUISlider::SetMin(float _min) {
-            mMin = Min(_min, mMax);
-            SetValue(mValue);
+            min = Min(_min, max);
+            SetValue(value);
         }
 
-        float CUISlider::GetMin() const { return mMin; }
+        float CUISlider::GetMin() const { return min; }
 
         void CUISlider::SetMax(float _max) {
-            mMax = Max(_max, mMin);
-            SetValue(mValue);
+            max = Max(_max, min);
+            SetValue(value);
         }
 
-        float CUISlider::GetMax() const { return mMax; }
+        float CUISlider::GetMax() const { return max; }
 
     } // namepsace ui
 

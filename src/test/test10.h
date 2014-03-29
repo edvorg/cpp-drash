@@ -45,11 +45,11 @@ namespace drash {
             bool InitLights();
             bool InitProcessors();
 
-            greng::CCamera* mCamera = nullptr;
-            greng::CPointLight mLightPoint1;
-            greng::CSpotLight mSpotLight;
-            CSceneObject* mLamp1Object = nullptr;
-            CSceneObject* mWallTopObject = nullptr;
+            greng::CCamera* camera = nullptr;
+            greng::CPointLight lightPoint1;
+            greng::CSpotLight spotLight;
+            CSceneObject* lamp1Object = nullptr;
+            CSceneObject* wallTopObject = nullptr;
         };
 
     } // namespace test

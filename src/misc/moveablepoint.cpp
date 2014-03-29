@@ -27,162 +27,162 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    CMoveablePoint::CMoveablePoint() { mCenter.Set(0, 0, 0); }
+    CMoveablePoint::CMoveablePoint() { center.Set(0, 0, 0); }
 
     CMoveablePoint::CMoveablePoint(CVec3f _point, greng::CCamera* _camera)
-        : mCurrentCamera(_camera), mCenter(_point) {}
+        : currentCamera(_camera), center(_point) {}
 
-    void CMoveablePoint::SetCenter(const CVec3f& _center) { mCenter = _center; }
+    void CMoveablePoint::SetCenter(const CVec3f& _center) { center = _center; }
 
     void CMoveablePoint::SetCamera(greng::CCamera* _camera) {
-        mCurrentCamera = _camera;
+        currentCamera = _camera;
     }
 
     void CMoveablePoint::Step(double) {
-        if (mCurrentCamera == nullptr) {
+        if (currentCamera == nullptr) {
             return;
         }
 
         CVec4f normal(0, 0, -1, 0);
         CVec4f normal_transformed;
-        MatrixMultiply(mCurrentCamera->GetAntiRotationMatrix(), normal,
+        MatrixMultiply(currentCamera->GetAntiRotationMatrix(), normal,
                        normal_transformed);
 
         CPlane p;
-        p.SetPoint(mCenter);
+        p.SetPoint(center);
         p.SetNormal(normal_transformed);
 
         CVec2f p1(0, 0);
-        CVec2f p2(mLineSizeScreen, 0);
+        CVec2f p2(lineSizeScreen, 0);
 
         CVec3f wp1;
         CVec3f wp2;
 
-        mCurrentCamera->CastRay(p1, p, wp1);
-        mCurrentCamera->CastRay(p2, p, wp2);
+        currentCamera->CastRay(p1, p, wp1);
+        currentCamera->CastRay(p2, p, wp2);
 
         wp1 -= wp2;
 
-        mLineSizeWorld = wp1.Length();
+        lineSizeWorld = wp1.Length();
 
-        mX = mCenter;
-        mY = mCenter;
-        mZ = mCenter;
+        x = center;
+        y = center;
+        z = center;
 
-        mX.mX += mLineSizeWorld;
-        mY.mY += mLineSizeWorld;
-        mZ.mZ += mLineSizeWorld;
+        x.x += lineSizeWorld;
+        y.y += lineSizeWorld;
+        z.z += lineSizeWorld;
     }
 
     void CMoveablePoint::Render(greng::CRenderer& _render) {
-        if (mCurrentCamera == nullptr) {
+        if (currentCamera == nullptr) {
             return;
         }
-        _render.DrawLine(*GetCamera(), mCenter, mX, 1,
-                         CColor4f(1 * mAxisDrawK.mX + 10, 0, 0, 1), false);
-        _render.DrawLine(*GetCamera(), mCenter, mY, 1,
-                         CColor4f(0, 1 * mAxisDrawK.mY + 10, 0, 1), false);
-        _render.DrawLine(*GetCamera(), mCenter, mZ, 1,
-                         CColor4f(0, 0, 1 * mAxisDrawK.mZ + 10, 1), false);
+        _render.DrawLine(*GetCamera(), center, x, 1,
+                         CColor4f(1 * axisDrawK.x + 10, 0, 0, 1), false);
+        _render.DrawLine(*GetCamera(), center, y, 1,
+                         CColor4f(0, 1 * axisDrawK.y + 10, 0, 1), false);
+        _render.DrawLine(*GetCamera(), center, z, 1,
+                         CColor4f(0, 0, 1 * axisDrawK.z + 10, 1), false);
     }
 
-    greng::CCamera* CMoveablePoint::GetCamera() { return mCurrentCamera; }
+    greng::CCamera* CMoveablePoint::GetCamera() { return currentCamera; }
 
     void CMoveablePoint::ClickBegin() {
-        if (mAxisOver == 0) {
+        if (axisOver == 0) {
             return;
         }
-        if (mAxisOver == 2) {
+        if (axisOver == 2) {
             CPlane xy(PlaneXY);
-            xy.SetPoint(mCenter);
-            GetCamera()->CastRay(mCursorPos, xy, mFirstClick);
-            mAxisMoving = mAxisOver;
-            mMoving = true;
+            xy.SetPoint(center);
+            GetCamera()->CastRay(cursorPos, xy, firstClick);
+            axisMoving = axisOver;
+            moving = true;
         } else {
             CPlane xz(PlaneXZ);
-            xz.SetPoint(mCenter);
-            GetCamera()->CastRay(mCursorPos, xz, mFirstClick);
-            mAxisMoving = mAxisOver;
-            mMoving = true;
+            xz.SetPoint(center);
+            GetCamera()->CastRay(cursorPos, xz, firstClick);
+            axisMoving = axisOver;
+            moving = true;
         }
     }
 
     void CMoveablePoint::ClickPressing() {
-        if (mAxisMoving == 1) {
+        if (axisMoving == 1) {
             CPlane xz(PlaneXZ);
-            xz.SetPoint(mCenter);
+            xz.SetPoint(center);
             CVec3f new_pos;
-            GetCamera()->CastRay(mCursorPos, xz, new_pos);
+            GetCamera()->CastRay(cursorPos, xz, new_pos);
 
-            mCenter.mX += new_pos.mX - mFirstClick.mX;
-            mFirstClick = new_pos;
-        } else if (mAxisMoving == 2) {
+            center.x += new_pos.x - firstClick.x;
+            firstClick = new_pos;
+        } else if (axisMoving == 2) {
             CPlane xy(PlaneXY);
-            xy.SetPoint(mCenter);
+            xy.SetPoint(center);
             CVec3f new_pos;
-            GetCamera()->CastRay(mCursorPos, xy, new_pos);
+            GetCamera()->CastRay(cursorPos, xy, new_pos);
 
-            mCenter.mY += new_pos.mY - mFirstClick.mY;
-            mFirstClick = new_pos;
-        } else if (mAxisMoving == 3) {
+            center.y += new_pos.y - firstClick.y;
+            firstClick = new_pos;
+        } else if (axisMoving == 3) {
             CPlane xz(PlaneXZ);
-            xz.SetPoint(mCenter);
+            xz.SetPoint(center);
             CVec3f new_pos;
-            GetCamera()->CastRay(mCursorPos, xz, new_pos);
+            GetCamera()->CastRay(cursorPos, xz, new_pos);
 
-            mCenter.mZ += new_pos.mZ - mFirstClick.mZ;
+            center.z += new_pos.z - firstClick.z;
 
-            mFirstClick = new_pos;
+            firstClick = new_pos;
         }
     }
 
     void CMoveablePoint::ClickEnd() {
-        mAxisMoving = 0;
-        mMoving = false;
+        axisMoving = 0;
+        moving = false;
     }
 
     void CMoveablePoint::SetCursorPos(const CVec2f& _pos) {
-        mCursorPos = _pos;
+        cursorPos = _pos;
         Calculate();
     }
 
     void CMoveablePoint::Calculate() {
         CPlane xz(PlaneXZ);
-        xz.SetPoint(mCenter);
+        xz.SetPoint(center);
         CPlane xy(PlaneXY);
-        xy.SetPoint(mCenter);
+        xy.SetPoint(center);
 
         CVec3f r1;
-        GetCamera()->CastRay(mCursorPos, xz, r1);
+        GetCamera()->CastRay(cursorPos, xz, r1);
         CVec3f r2;
-        GetCamera()->CastRay(mCursorPos, xy, r2);
+        GetCamera()->CastRay(cursorPos, xy, r2);
 
         CVec2f dstz = r1;
-        dstz -= mCenter.Vec2();
-        CVec2f dstx(r1.mZ, r1.mY);
-        dstx -= CVec2f(mCenter.mZ, mCenter.mY);
-        CVec2f dsty(r2.mZ, r2.mX);
-        dsty -= CVec2f(mCenter.mZ, mCenter.mX);
+        dstz -= center.Vec2();
+        CVec2f dstx(r1.z, r1.y);
+        dstx -= CVec2f(center.z, center.y);
+        CVec2f dsty(r2.z, r2.x);
+        dsty -= CVec2f(center.z, center.x);
 
-        if (mMoving == true) {
+        if (moving == true) {
             return;
         }
 
-        mAxisOver = 0;
-        mAxisDrawK.Set(1, 1, 1);
+        axisOver = 0;
+        axisDrawK.Set(1, 1, 1);
 
-        if (mAxisOZ == true && dstz.Length() < mLineSizeWorld * 0.1 &&
-            mCenter.mZ < r1.mZ && r1.mZ < mCenter.mZ + mLineSizeWorld) {
-            mAxisDrawK.mZ *= 0.5;
-            mAxisOver = 3;
-        } else if (mAxisOX == true && dstx.Length() < mLineSizeWorld * 0.1 &&
-                   mCenter.mX < r1.mX && r1.mX < mCenter.mX + mLineSizeWorld) {
-            mAxisDrawK.mX *= 0.5;
-            mAxisOver = 1;
-        } else if (mAxisOY == true && dsty.Length() < mLineSizeWorld * 0.1 &&
-                   mCenter.mY < r2.mY && r2.mY < mCenter.mY + mLineSizeWorld) {
-            mAxisDrawK.mY *= 0.5;
-            mAxisOver = 2;
+        if (axisOZ == true && dstz.Length() < lineSizeWorld * 0.1 &&
+            center.z < r1.z && r1.z < center.z + lineSizeWorld) {
+            axisDrawK.z *= 0.5;
+            axisOver = 3;
+        } else if (axisOX == true && dstx.Length() < lineSizeWorld * 0.1 &&
+                   center.x < r1.x && r1.x < center.x + lineSizeWorld) {
+            axisDrawK.x *= 0.5;
+            axisOver = 1;
+        } else if (axisOY == true && dsty.Length() < lineSizeWorld * 0.1 &&
+                   center.y < r2.y && r2.y < center.y + lineSizeWorld) {
+            axisDrawK.y *= 0.5;
+            axisOver = 2;
         }
     }
 

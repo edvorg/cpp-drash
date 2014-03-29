@@ -32,7 +32,7 @@ namespace greng {
       public:
         CShaderProgram() = default;
 
-        unsigned int mProgramId = 0;
+        unsigned int programId = 0;
     };
 
 } // namespace greng

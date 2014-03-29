@@ -40,15 +40,15 @@ namespace drash {
             GetGeometryManager().Load();
 
             greng::CCameraParams cp;
-            cp.mPos.Set(0, 0, 100);
-            mCamera = GetGrengSystems().GetCameraManager().CreateCamera(cp);
+            cp.pos.Set(0, 0, 100);
+            camera = GetGrengSystems().GetCameraManager().CreateCamera(cp);
 
-            mLight1.mPosition.Set(0, 0, 20);
+            light1.position.Set(0, 0, 20);
 
-            GetDebugRenderer().SetCamera(mCamera);
-            GetDebugRenderer().SetLight(&mLight1);
+            GetDebugRenderer().SetCamera(camera);
+            GetDebugRenderer().SetLight(&light1);
 
-            GetDebugRenderer().SetLight(&mLight1);
+            GetDebugRenderer().SetLight(&light1);
 
             SetProcessors();
         }
@@ -56,60 +56,60 @@ namespace drash {
         void CTest1::Step(double _dt) {
             CApp::Step(_dt);
 
-            if (mCurrentFigure != nullptr && mCurrentObject != nullptr) {
-                mCenter.Set(mCurrentFigure->GetVertices()[0],
-                            mCurrentObject->GetPosZ() + mCurrentFigure->GetZ());
+            if (currentFigure != nullptr && currentObject != nullptr) {
+                center.Set(currentFigure->GetVertices()[0],
+                            currentObject->GetPosZ() + currentFigure->GetZ());
 
-                for (unsigned int i = 1; i < mCurrentFigure->EnumVertices();
+                for (unsigned int i = 1; i < currentFigure->EnumVertices();
                      i++) {
-                    mCenter.Vec2() += mCurrentFigure->GetVertices()[i];
+                    center.Vec2() += currentFigure->GetVertices()[i];
                 }
 
-                mCenter.Vec2() /= CVec2f(mCurrentFigure->EnumVertices());
+                center.Vec2() /= CVec2f(currentFigure->EnumVertices());
 
-                mX = mCenter;
-                mY = mCenter;
-                mZ = mCenter;
-                mX.mX += 10;
-                mY.mY += 10;
-                mZ.mZ += 10;
+                x = center;
+                y = center;
+                z = center;
+                x.x += 10;
+                y.y += 10;
+                z.z += 10;
 
                 CPlane xz(PlaneXZ);
-                xz.SetPoint(mCenter);
+                xz.SetPoint(center);
                 CPlane xy(PlaneXY);
-                xy.SetPoint(mCenter);
+                xy.SetPoint(center);
 
                 CVec3f r1;
-                mCamera->CastRay(GetCursorPos(), xz, r1);
+                camera->CastRay(GetCursorPos(), xz, r1);
                 CVec3f r2;
-                mCamera->CastRay(GetCursorPos(), xy, r2);
+                camera->CastRay(GetCursorPos(), xy, r2);
 
                 CVec2f dstz = r1;
-                dstz -= mCenter.Vec2();
-                CVec2f dstx(r1.mZ, r1.mY);
-                dstx -= CVec2f(mCenter.mZ, mCenter.mY);
-                CVec2f dsty(r2.mZ, r2.mX);
-                dsty -= CVec2f(mCenter.mZ, mCenter.mX);
+                dstz -= center.Vec2();
+                CVec2f dstx(r1.z, r1.y);
+                dstx -= CVec2f(center.z, center.y);
+                CVec2f dsty(r2.z, r2.x);
+                dsty -= CVec2f(center.z, center.x);
 
-                mAxisOver = 0;
-                mAxisDrawK.Set(1, 1, 1);
+                axisOver = 0;
+                axisDrawK.Set(1, 1, 1);
 
                 if (dstz.Length() < 3) {
-                    mAxisDrawK.mZ *= 0.5;
-                    mAxisOver = 3;
+                    axisDrawK.z *= 0.5;
+                    axisOver = 3;
                 } else if (dstx.Length() < 3) {
-                    mAxisDrawK.mX *= 0.5;
-                    mAxisOver = 1;
+                    axisDrawK.x *= 0.5;
+                    axisOver = 1;
                 } else if (dsty.Length() < 3) {
-                    mAxisDrawK.mY *= 0.5;
-                    mAxisOver = 2;
+                    axisDrawK.y *= 0.5;
+                    axisOver = 2;
                 }
             }
         }
 
         float Area(const CVec2f& _p1, const CVec2f& _p2, const CVec2f& _p3) {
-            return (_p2.mX - _p1.mX) * (_p3.mY - _p1.mY) -
-                   (_p2.mY - _p1.mY) * (_p3.mX - _p1.mX);
+            return (_p2.x - _p1.x) * (_p3.y - _p1.y) -
+                   (_p2.y - _p1.y) * (_p3.x - _p1.x);
         }
 
         float Intersect_1(float _x, float _y, float _a, float _b) {
@@ -122,8 +122,8 @@ namespace drash {
 
         bool Intersect(const CVec2f& _p1, const CVec2f& _p2, const CVec2f& _p3,
                        const CVec2f& _p4) {
-            return Intersect_1(_p1.mX, _p2.mX, _p3.mX, _p4.mX) &&
-                   Intersect_1(_p1.mY, _p2.mY, _p3.mY, _p4.mY) &&
+            return Intersect_1(_p1.x, _p2.x, _p3.x, _p4.x) &&
+                   Intersect_1(_p1.y, _p2.y, _p3.y, _p4.y) &&
                    Area(_p1, _p2, _p3) * Area(_p1, _p2, _p4) <= 0 &&
                    Area(_p3, _p4, _p1) * Area(_p3, _p4, _p2) <= 0;
         }
@@ -131,69 +131,69 @@ namespace drash {
         void CTest1::Render() {
             CApp::Render();
 
-            if (mVertices.size()) {
-                for (int i = 0; i < (int)mVertices.size() - 1; i++) {
+            if (vertices.size()) {
+                for (int i = 0; i < (int)vertices.size() - 1; i++) {
                     GetGrengSystems().GetRenderer().DrawLine(
-                        mVertices[i], mVertices[i + 1], 1,
+                        vertices[i], vertices[i + 1], 1,
                         CColor4f(0, 1, 0, 1));
                 }
                 GetGrengSystems().GetRenderer().DrawLine(
-                    mVertices[mVertices.size() - 1], GetCursorPos(), 1,
+                    vertices[vertices.size() - 1], GetCursorPos(), 1,
                     CColor4f(0, 1, 0, 1), false);
                 GetGrengSystems().GetRenderer().DrawLine(
-                    mVertices[0], GetCursorPos(), 1, CColor4f(0, 1, 0, 1),
+                    vertices[0], GetCursorPos(), 1, CColor4f(0, 1, 0, 1),
                     false);
             }
 
-            if (mCurrentFigure != nullptr && mCurrentObject != nullptr) {
+            if (currentFigure != nullptr && currentObject != nullptr) {
                 GetGrengSystems().GetRenderer().DrawLine(
-                    GetCamera(), mCenter, mX, 1,
-                    CColor4f(1 * mAxisDrawK.mX, 0, 0, 1), false);
+                    GetCamera(), center, x, 1,
+                    CColor4f(1 * axisDrawK.x, 0, 0, 1), false);
                 GetGrengSystems().GetRenderer().DrawLine(
-                    GetCamera(), mCenter, mY, 1,
-                    CColor4f(0, 1 * mAxisDrawK.mY, 0, 1), false);
+                    GetCamera(), center, y, 1,
+                    CColor4f(0, 1 * axisDrawK.y, 0, 1), false);
                 GetGrengSystems().GetRenderer().DrawLine(
-                    GetCamera(), mCenter, mZ, 1,
-                    CColor4f(0, 0, 1 * mAxisDrawK.mZ, 1), false);
+                    GetCamera(), center, z, 1,
+                    CColor4f(0, 0, 1 * axisDrawK.z, 1), false);
             }
 
-            if (mSplitMode == true && mCurrentTemplate != nullptr &&
-                mCurrentObject != nullptr && mCurrentFigure != nullptr) {
-                if (mSplitDepth == false) {
+            if (splitMode == true && currentTemplate != nullptr &&
+                currentObject != nullptr && currentFigure != nullptr) {
+                if (splitDepth == false) {
                     GetGrengSystems().GetRenderer().DrawTriangle(
-                        GetCamera(), mSplitPlanePoint1, mSplitPlanePoint2,
-                        mSplitPlanePoint4, CColor4f(1, 0, 0.5, 0.5), true);
+                        GetCamera(), splitPlanePoint1, splitPlanePoint2,
+                        splitPlanePoint4, CColor4f(1, 0, 0.5, 0.5), true);
                     GetGrengSystems().GetRenderer().DrawTriangle(
-                        GetCamera(), mSplitPlanePoint4, mSplitPlanePoint2,
-                        mSplitPlanePoint3, CColor4f(1, 0, 0.5, 0.5), true);
+                        GetCamera(), splitPlanePoint4, splitPlanePoint2,
+                        splitPlanePoint3, CColor4f(1, 0, 0.5, 0.5), true);
 
-                    if (mSplitIntersectionsCount == 2) {
+                    if (splitIntersectionsCount == 2) {
                         auto draw_split = [&](CVec3f _split_intersection) {
                             CVec3f p1 = _split_intersection;
                             CVec3f p2 = _split_intersection;
 
-                            p1.mZ = mCurrentObject->GetPosZ() +
-                                    mCurrentFigure->GetZ() -
-                                    mCurrentFigure->GetDepth() * 0.5f;
-                            p2.mZ = mCurrentObject->GetPosZ() +
-                                    mCurrentFigure->GetZ() +
-                                    mCurrentFigure->GetDepth() * 0.5f;
+                            p1.z = currentObject->GetPosZ() +
+                                    currentFigure->GetZ() -
+                                    currentFigure->GetDepth() * 0.5f;
+                            p2.z = currentObject->GetPosZ() +
+                                    currentFigure->GetZ() +
+                                    currentFigure->GetDepth() * 0.5f;
 
                             GetGrengSystems().GetRenderer().DrawLine(
                                 GetCamera(), p1, p2, 2, CColor4f(1, 1, 1),
                                 false);
                         };
 
-                        draw_split(mSplitIntersection1);
-                        draw_split(mSplitIntersection2);
+                        draw_split(splitIntersection1);
+                        draw_split(splitIntersection2);
                     }
                 } else {
-                    CVec3f p1(mSplitFigureMin.Vec2(), mSplitFigureCenterZ);
-                    CVec3f p2(mSplitFigureMin.mX, mSplitFigureMax.mY,
-                              mSplitFigureCenterZ);
-                    CVec3f p3(mSplitFigureMax.Vec2(), mSplitFigureCenterZ);
-                    CVec3f p4(mSplitFigureMax.mX, mSplitFigureMin.mY,
-                              mSplitFigureCenterZ);
+                    CVec3f p1(splitFigureMin.Vec2(), splitFigureCenterZ);
+                    CVec3f p2(splitFigureMin.x, splitFigureMax.y,
+                              splitFigureCenterZ);
+                    CVec3f p3(splitFigureMax.Vec2(), splitFigureCenterZ);
+                    CVec3f p4(splitFigureMax.x, splitFigureMin.y,
+                              splitFigureCenterZ);
 
                     GetGrengSystems().GetRenderer().DrawTriangle(
                         GetCamera(), p1, p2, p4, CColor4f(1, 0, 0.5, 0.5),
@@ -223,83 +223,83 @@ namespace drash {
                 "LB",
                 CAppEventProcessor(
                     [this]() {
-                        if (mAxisOver == 0) {
+                        if (axisOver == 0) {
                             SelectFigure();
                         } else {
-                            if (mAxisOver == 2) {
+                            if (axisOver == 2) {
                                 CPlane xy(PlaneXY);
-                                xy.SetPoint(mCenter);
-                                mCamera->CastRay(GetCursorPos(), xy,
-                                                 mFigureMoveFirstClick);
-                                mAxisMoving = mAxisOver;
+                                xy.SetPoint(center);
+                                camera->CastRay(GetCursorPos(), xy,
+                                                 figureMoveFirstClick);
+                                axisMoving = axisOver;
                             } else {
                                 CPlane xz(PlaneXZ);
-                                xz.SetPoint(mCenter);
-                                mCamera->CastRay(GetCursorPos(), xz,
-                                                 mFigureMoveFirstClick);
-                                mAxisMoving = mAxisOver;
+                                xz.SetPoint(center);
+                                camera->CastRay(GetCursorPos(), xz,
+                                                 figureMoveFirstClick);
+                                axisMoving = axisOver;
                             }
                         }
                     },
                     [this]() {
-                        if (mAxisMoving == 1) {
+                        if (axisMoving == 1) {
                             CPlane xz(PlaneXZ);
-                            xz.SetPoint(mCenter);
+                            xz.SetPoint(center);
                             CVec3f new_pos;
-                            mCamera->CastRay(GetCursorPos(), xz, new_pos);
+                            camera->CastRay(GetCursorPos(), xz, new_pos);
 
                             CVec2f* v =
-                                new CVec2f[mCurrentFigure->EnumVertices()];
+                                new CVec2f[currentFigure->EnumVertices()];
                             for (unsigned int i = 0;
-                                 i < mCurrentFigure->EnumVertices(); i++) {
-                                v[i].mX = mCurrentFigure->GetVertices()[i].mX +
-                                          new_pos.mX - mFigureMoveFirstClick.mX;
-                                v[i].mY = mCurrentFigure->GetVertices()[i].mY;
+                                 i < currentFigure->EnumVertices(); i++) {
+                                v[i].x = currentFigure->GetVertices()[i].x +
+                                          new_pos.x - figureMoveFirstClick.x;
+                                v[i].y = currentFigure->GetVertices()[i].y;
                             }
-                            mCurrentFigure->SetVertices(
-                                v, mCurrentFigure->EnumVertices());
+                            currentFigure->SetVertices(
+                                v, currentFigure->EnumVertices());
                             delete[] v;
 
-                            mFigureMoveFirstClick = new_pos;
+                            figureMoveFirstClick = new_pos;
 
-                            mCurrentObject->DumpGeometry(mCurrentTemplate);
-                        } else if (mAxisMoving == 2) {
+                            currentObject->DumpGeometry(currentTemplate);
+                        } else if (axisMoving == 2) {
                             CPlane xy(PlaneXY);
-                            xy.SetPoint(mCenter);
+                            xy.SetPoint(center);
                             CVec3f new_pos;
-                            mCamera->CastRay(GetCursorPos(), xy, new_pos);
+                            camera->CastRay(GetCursorPos(), xy, new_pos);
 
                             CVec2f* v =
-                                new CVec2f[mCurrentFigure->EnumVertices()];
+                                new CVec2f[currentFigure->EnumVertices()];
                             for (unsigned int i = 0;
-                                 i < mCurrentFigure->EnumVertices(); i++) {
-                                v[i].mX = mCurrentFigure->GetVertices()[i].mX;
-                                v[i].mY = mCurrentFigure->GetVertices()[i].mY +
-                                          new_pos.mY - mFigureMoveFirstClick.mY;
+                                 i < currentFigure->EnumVertices(); i++) {
+                                v[i].x = currentFigure->GetVertices()[i].x;
+                                v[i].y = currentFigure->GetVertices()[i].y +
+                                          new_pos.y - figureMoveFirstClick.y;
                             }
-                            mCurrentFigure->SetVertices(
-                                v, mCurrentFigure->EnumVertices());
+                            currentFigure->SetVertices(
+                                v, currentFigure->EnumVertices());
                             delete[] v;
 
-                            mFigureMoveFirstClick = new_pos;
+                            figureMoveFirstClick = new_pos;
 
-                            mCurrentObject->DumpGeometry(mCurrentTemplate);
-                        } else if (mAxisMoving == 3) {
+                            currentObject->DumpGeometry(currentTemplate);
+                        } else if (axisMoving == 3) {
                             CPlane xz(PlaneXZ);
-                            xz.SetPoint(mCenter);
+                            xz.SetPoint(center);
                             CVec3f new_pos;
-                            mCamera->CastRay(GetCursorPos(), xz, new_pos);
+                            camera->CastRay(GetCursorPos(), xz, new_pos);
 
-                            mCurrentFigure->SetZ(mCurrentFigure->GetZ() +
-                                                 new_pos.mZ -
-                                                 mFigureMoveFirstClick.mZ);
+                            currentFigure->SetZ(currentFigure->GetZ() +
+                                                 new_pos.z -
+                                                 figureMoveFirstClick.z);
 
-                            mFigureMoveFirstClick = new_pos;
+                            figureMoveFirstClick = new_pos;
 
-                            mCurrentObject->DumpGeometry(mCurrentTemplate);
+                            currentObject->DumpGeometry(currentTemplate);
                         }
                     },
-                    [this]() { mAxisMoving = 0; }));
+                    [this]() { axisMoving = 0; }));
 
             CamViewProcessors();
 
@@ -311,17 +311,17 @@ namespace drash {
                 "C-s", CAppEventProcessor([this]() { EndSplit(); }));
 
             GetEventSystem().SetProcessor("C-v", CAppEventProcessor([this]() {
-                                                     mSplitDepth = !mSplitDepth;
+                                                     splitDepth = !splitDepth;
                                                  }));
 
             GetEventSystem().SetProcessor(
                 "C-r", CAppEventProcessor([this]() {
                            CMatrix4f m;
                            MatrixRotationZ(m, M_PI / 12);
-                           CVec4f old_normal(mSplitPlane.GetNormal(), 1);
+                           CVec4f old_normal(splitPlane.GetNormal(), 1);
                            CVec4f new_normal;
                            MatrixMultiply(m, old_normal, new_normal);
-                           mSplitPlane.SetNormal(new_normal);
+                           splitPlane.SetNormal(new_normal);
                            ComputeIntersections();
                        }));
 
@@ -338,7 +338,7 @@ namespace drash {
                 "C-d", CAppEventProcessor([this]() { DetachCurrentObject(); }));
 
             GetEventSystem().SetProcessor("C-LB", CAppEventProcessor([this]() {
-                                                      mVertices.push_back(
+                                                      vertices.push_back(
                                                           GetCursorPos());
                                                   }));
 
@@ -356,42 +356,42 @@ namespace drash {
             GetEventSystem().SetProcessor(
                 "e",
                 CAppEventProcessor([this]() {
-                    if (mCurrentTemplate == nullptr) {
-                        mCurrentTemplate = GetGeometryManager()
+                    if (currentTemplate == nullptr) {
+                        currentTemplate = GetGeometryManager()
                                                .GetGeometries()
                                                .begin()
                                                ->second;
 
-                        if (mCurrentObject != nullptr) {
-                            GetScene().DestroyObject(mCurrentObject);
+                        if (currentObject != nullptr) {
+                            GetScene().DestroyObject(currentObject);
                         }
 
                         CSceneObjectParams p;
-                        p.mDynamic = false;
-                        mCurrentObject =
-                            GetScene().CreateObject(*mCurrentTemplate, p);
-                        mCurrentObject->SetActive(false);
+                        p.dynamic = false;
+                        currentObject =
+                            GetScene().CreateObject(*currentTemplate, p);
+                        currentObject->SetActive(false);
                     } else {
                         auto& t = GetGeometryManager().GetGeometries();
                         for (auto i = t.begin(); i != t.end(); i++) {
-                            if (mCurrentTemplate == i->second) {
+                            if (currentTemplate == i->second) {
                                 i++;
 
                                 if (i == t.end()) {
                                     break;
                                 }
 
-                                mCurrentTemplate = i->second;
+                                currentTemplate = i->second;
 
-                                if (mCurrentObject != nullptr) {
-                                    GetScene().DestroyObject(mCurrentObject);
+                                if (currentObject != nullptr) {
+                                    GetScene().DestroyObject(currentObject);
                                 }
 
                                 CSceneObjectParams p;
-                                p.mDynamic = false;
-                                mCurrentObject = GetScene().CreateObject(
-                                    *mCurrentTemplate, p);
-                                mCurrentObject->SetActive(false);
+                                p.dynamic = false;
+                                currentObject = GetScene().CreateObject(
+                                    *currentTemplate, p);
+                                currentObject->SetActive(false);
 
                                 break;
                             }
@@ -401,56 +401,56 @@ namespace drash {
         }
 
         void CTest1::BeginSplit() {
-            if (mCurrentTemplate != nullptr && mCurrentObject != nullptr &&
-                mCurrentFigure != nullptr) {
+            if (currentTemplate != nullptr && currentObject != nullptr &&
+                currentFigure != nullptr) {
                 GetEventSystem().SetMode(std::string("split_mode"));
-                mSplitMode = true;
+                splitMode = true;
 
-                mSplitFigureMin.Set(mCurrentFigure->GetVertices()[0].mX,
-                                    mCurrentFigure->GetVertices()[0].mY,
-                                    mCurrentObject->GetPosZ() +
-                                        mCurrentFigure->GetZ());
-                mSplitFigureMax.Set(mCurrentFigure->GetVertices()[0].mX,
-                                    mCurrentFigure->GetVertices()[0].mY,
-                                    mCurrentObject->GetPosZ() +
-                                        mCurrentFigure->GetZ());
+                splitFigureMin.Set(currentFigure->GetVertices()[0].x,
+                                    currentFigure->GetVertices()[0].y,
+                                    currentObject->GetPosZ() +
+                                        currentFigure->GetZ());
+                splitFigureMax.Set(currentFigure->GetVertices()[0].x,
+                                    currentFigure->GetVertices()[0].y,
+                                    currentObject->GetPosZ() +
+                                        currentFigure->GetZ());
 
-                for (unsigned int i = 0; i < mCurrentFigure->EnumVertices();
+                for (unsigned int i = 0; i < currentFigure->EnumVertices();
                      i++) {
-                    mSplitFigureMin.mX =
-                        math::Min<float>(mSplitFigureMin.mX,
-                                         mCurrentFigure->GetVertices()[i].mX);
-                    mSplitFigureMax.mX =
-                        math::Max<float>(mSplitFigureMax.mX,
-                                         mCurrentFigure->GetVertices()[i].mX);
-                    mSplitFigureMin.mY =
-                        math::Min<float>(mSplitFigureMin.mY,
-                                         mCurrentFigure->GetVertices()[i].mY);
-                    mSplitFigureMax.mY =
-                        math::Max<float>(mSplitFigureMax.mY,
-                                         mCurrentFigure->GetVertices()[i].mY);
-                    mSplitFigureMin.mZ = math::Min<float>(
-                        mSplitFigureMin.mZ,
-                        mCurrentObject->GetPosZ() + mCurrentFigure->GetZ());
-                    mSplitFigureMax.mZ = math::Max<float>(
-                        mSplitFigureMax.mZ,
-                        mCurrentObject->GetPosZ() + mCurrentFigure->GetZ());
+                    splitFigureMin.x =
+                        math::Min<float>(splitFigureMin.x,
+                                         currentFigure->GetVertices()[i].x);
+                    splitFigureMax.x =
+                        math::Max<float>(splitFigureMax.x,
+                                         currentFigure->GetVertices()[i].x);
+                    splitFigureMin.y =
+                        math::Min<float>(splitFigureMin.y,
+                                         currentFigure->GetVertices()[i].y);
+                    splitFigureMax.y =
+                        math::Max<float>(splitFigureMax.y,
+                                         currentFigure->GetVertices()[i].y);
+                    splitFigureMin.z = math::Min<float>(
+                        splitFigureMin.z,
+                        currentObject->GetPosZ() + currentFigure->GetZ());
+                    splitFigureMax.z = math::Max<float>(
+                        splitFigureMax.z,
+                        currentObject->GetPosZ() + currentFigure->GetZ());
                 }
 
-                mSplitFigureMin -= 10;
-                mSplitFigureMax += 10;
+                splitFigureMin -= 10;
+                splitFigureMax += 10;
 
-                mSplitFigureMin.mZ -= mCurrentFigure->GetDepth() * 0.5;
-                mSplitFigureMax.mZ += mCurrentFigure->GetDepth() * 0.5;
+                splitFigureMin.z -= currentFigure->GetDepth() * 0.5;
+                splitFigureMax.z += currentFigure->GetDepth() * 0.5;
 
-                mSplitPlane.SetNormal(CVec3f(0, 1, 0));
-                mSplitPlane.SetPoint(
-                    CVec3f(0.5f * (mSplitFigureMin.mX + mSplitFigureMax.mX),
-                           0.5f * (mSplitFigureMin.mY + mSplitFigureMax.mY),
-                           0.5f * (mSplitFigureMin.mZ + mSplitFigureMax.mZ)));
+                splitPlane.SetNormal(CVec3f(0, 1, 0));
+                splitPlane.SetPoint(
+                    CVec3f(0.5f * (splitFigureMin.x + splitFigureMax.x),
+                           0.5f * (splitFigureMin.y + splitFigureMax.y),
+                           0.5f * (splitFigureMin.z + splitFigureMax.z)));
 
-                mSplitFigureCenterZ =
-                    0.5f * (mSplitFigureMin.mZ + mSplitFigureMax.mZ);
+                splitFigureCenterZ =
+                    0.5f * (splitFigureMin.z + splitFigureMax.z);
 
                 ComputeIntersections();
             }
@@ -458,7 +458,7 @@ namespace drash {
 
         void CTest1::DetectNewSplitPoint(const CVec2f& _p1, const CVec2f& _p2,
                                          unsigned int _index, const CRay& _r) {
-            float centerz = mCurrentObject->GetPosZ() + mCurrentFigure->GetZ();
+            float centerz = currentObject->GetPosZ() + currentFigure->GetZ();
 
             CPlane p;
             p.Set(CVec3f(_p1, centerz), CVec3f(_p2, centerz),
@@ -469,153 +469,153 @@ namespace drash {
             p.CastRay(_r, p1);
             p2 = p1;
 
-            if (mSplitIntersectionsCount == 0) {
-                mSplitIntersection1 = p1;
-                mSplitIntersection1Index = _index;
-            } else if (mSplitIntersectionsCount == 1) {
-                mSplitIntersection2 = p1;
-                mSplitIntersection2Index = _index;
+            if (splitIntersectionsCount == 0) {
+                splitIntersection1 = p1;
+                splitIntersection1Index = _index;
+            } else if (splitIntersectionsCount == 1) {
+                splitIntersection2 = p1;
+                splitIntersection2Index = _index;
             }
 
-            if (Intersect(_p1, _p2, mSplitPlanePoint4, mSplitPlanePoint1)) {
-                mSplitIntersectionsCount++;
+            if (Intersect(_p1, _p2, splitPlanePoint4, splitPlanePoint1)) {
+                splitIntersectionsCount++;
             }
         }
 
         void CTest1::ComputeIntersections() {
-            if (mCurrentTemplate != nullptr && mCurrentObject != nullptr &&
-                mCurrentFigure != nullptr) {
+            if (currentTemplate != nullptr && currentObject != nullptr &&
+                currentFigure != nullptr) {
                 CRay r;
 
-                mSplitPlanePoint1.Set(mSplitFigureMin.mX, 0,
-                                      mSplitFigureMax.mZ);
-                mSplitPlanePoint2.Set(mSplitFigureMin.mX, 0,
-                                      mSplitFigureMin.mZ);
-                mSplitPlanePoint3.Set(mSplitFigureMax.mX, 0,
-                                      mSplitFigureMin.mZ);
-                mSplitPlanePoint4.Set(mSplitFigureMax.mX, 0,
-                                      mSplitFigureMax.mZ);
+                splitPlanePoint1.Set(splitFigureMin.x, 0,
+                                      splitFigureMax.z);
+                splitPlanePoint2.Set(splitFigureMin.x, 0,
+                                      splitFigureMin.z);
+                splitPlanePoint3.Set(splitFigureMax.x, 0,
+                                      splitFigureMin.z);
+                splitPlanePoint4.Set(splitFigureMax.x, 0,
+                                      splitFigureMax.z);
 
                 r.SetDirection(CVec3f(0, -1, 0));
 
-                r.SetPoint(mSplitPlanePoint1);
-                mSplitPlane.CastRay(r, mSplitPlanePoint1);
-                r.SetPoint(mSplitPlanePoint2);
-                mSplitPlane.CastRay(r, mSplitPlanePoint2);
-                r.SetPoint(mSplitPlanePoint3);
-                mSplitPlane.CastRay(r, mSplitPlanePoint3);
-                r.SetPoint(mSplitPlanePoint4);
-                mSplitPlane.CastRay(r, mSplitPlanePoint4);
+                r.SetPoint(splitPlanePoint1);
+                splitPlane.CastRay(r, splitPlanePoint1);
+                r.SetPoint(splitPlanePoint2);
+                splitPlane.CastRay(r, splitPlanePoint2);
+                r.SetPoint(splitPlanePoint3);
+                splitPlane.CastRay(r, splitPlanePoint3);
+                r.SetPoint(splitPlanePoint4);
+                splitPlane.CastRay(r, splitPlanePoint4);
 
-                CVec3f dir = mSplitPlanePoint1;
-                dir -= mSplitPlanePoint4;
+                CVec3f dir = splitPlanePoint1;
+                dir -= splitPlanePoint4;
 
                 float centerz =
-                    mCurrentObject->GetPosZ() + mCurrentFigure->GetZ();
+                    currentObject->GetPosZ() + currentFigure->GetZ();
 
-                r.SetPoint(CVec3f(mSplitPlanePoint4.Vec2(), centerz));
+                r.SetPoint(CVec3f(splitPlanePoint4.Vec2(), centerz));
                 r.SetDirection(dir);
 
-                mSplitIntersectionsCount = 0;
+                splitIntersectionsCount = 0;
 
-                if (mCurrentFigure->EnumVertices() != 0) {
-                    for (unsigned int i = 1; i < mCurrentFigure->EnumVertices();
+                if (currentFigure->EnumVertices() != 0) {
+                    for (unsigned int i = 1; i < currentFigure->EnumVertices();
                          i++) {
                         DetectNewSplitPoint(
-                            mCurrentFigure->GetVertices()[i - 1],
-                            mCurrentFigure->GetVertices()[i], i - 1, r);
+                            currentFigure->GetVertices()[i - 1],
+                            currentFigure->GetVertices()[i], i - 1, r);
                     }
                     DetectNewSplitPoint(
-                        mCurrentFigure->GetVertices()
-                            [mCurrentFigure->EnumVertices() - 1],
-                        mCurrentFigure->GetVertices()[0],
-                        mCurrentFigure->EnumVertices() - 1, r);
+                        currentFigure->GetVertices()
+                            [currentFigure->EnumVertices() - 1],
+                        currentFigure->GetVertices()[0],
+                        currentFigure->EnumVertices() - 1, r);
                 }
             }
         }
 
         void CTest1::EndSplit() {
             GetEventSystem().SetMode(std::string("figure_movement"));
-            mSplitMode = false;
+            splitMode = false;
 
-            if (mCurrentObject != nullptr) {
-                if (mCurrentFigure != nullptr && mCurrentTemplate != nullptr) {
-                    if (mSplitDepth == false) {
-                        if (mSplitIntersectionsCount == 2) {
+            if (currentObject != nullptr) {
+                if (currentFigure != nullptr && currentTemplate != nullptr) {
+                    if (splitDepth == false) {
+                        if (splitIntersectionsCount == 2) {
                             unsigned int fsize =
-                                mSplitIntersection1Index + 2 +
-                                mCurrentFigure->EnumVertices() -
-                                mSplitIntersection2Index;
+                                splitIntersection1Index + 2 +
+                                currentFigure->EnumVertices() -
+                                splitIntersection2Index;
 
                             CFigureParams fp;
-                            fp.mVertices.resize(fsize);
-                            fp.mDepth = mCurrentFigure->GetDepth();
-                            fp.mZ = mCurrentFigure->GetZ();
+                            fp.vertices.resize(fsize);
+                            fp.depth = currentFigure->GetDepth();
+                            fp.z = currentFigure->GetZ();
 
                             unsigned int i = 0;
 
-                            for (; i <= mSplitIntersection1Index; i++) {
-                                fp.mVertices[i] =
-                                    mCurrentFigure->GetVertices()[i];
+                            for (; i <= splitIntersection1Index; i++) {
+                                fp.vertices[i] =
+                                    currentFigure->GetVertices()[i];
                             }
-                            fp.mVertices[i++] = mSplitIntersection1;
-                            fp.mVertices[i++] = mSplitIntersection2;
-                            for (i = mSplitIntersection2Index + 1;
-                                 i < mCurrentFigure->EnumVertices(); i++) {
-                                fp.mVertices[i] =
-                                    mCurrentFigure->GetVertices()[i];
+                            fp.vertices[i++] = splitIntersection1;
+                            fp.vertices[i++] = splitIntersection2;
+                            for (i = splitIntersection2Index + 1;
+                                 i < currentFigure->EnumVertices(); i++) {
+                                fp.vertices[i] =
+                                    currentFigure->GetVertices()[i];
                             }
 
-                            mCurrentObject->CreateFigure(fp);
+                            currentObject->CreateFigure(fp);
 
-                            fsize = mSplitIntersection2Index -
-                                    mSplitIntersection1Index + 2;
+                            fsize = splitIntersection2Index -
+                                    splitIntersection1Index + 2;
 
-                            fp.mVertices.clear();
-                            fp.mVertices.resize(fsize);
+                            fp.vertices.clear();
+                            fp.vertices.resize(fsize);
 
                             i = 0;
-                            fp.mVertices[i++] = mSplitIntersection1;
-                            for (unsigned int j = mSplitIntersection1Index + 1;
-                                 j <= mSplitIntersection2Index; j++) {
-                                fp.mVertices[i++] =
-                                    mCurrentFigure->GetVertices()[j];
+                            fp.vertices[i++] = splitIntersection1;
+                            for (unsigned int j = splitIntersection1Index + 1;
+                                 j <= splitIntersection2Index; j++) {
+                                fp.vertices[i++] =
+                                    currentFigure->GetVertices()[j];
                             }
-                            fp.mVertices[i] = mSplitIntersection2;
+                            fp.vertices[i] = splitIntersection2;
 
-                            mCurrentObject->CreateFigure(fp);
+                            currentObject->CreateFigure(fp);
 
-                            mCurrentObject->DestroyFigure(mCurrentFigure);
-                            mCurrentFigure = nullptr;
-                            mCurrentObject->DumpGeometry(mCurrentTemplate);
+                            currentObject->DestroyFigure(currentFigure);
+                            currentFigure = nullptr;
+                            currentObject->DumpGeometry(currentTemplate);
 
                             GetEventSystem().SetMode(
                                 std::string("editor_mode"));
                         }
                     } else {
                         CFigureParams fp;
-                        fp.mVertices.resize(mCurrentFigure->EnumVertices());
-                        memcpy(&fp.mVertices[0], mCurrentFigure->GetVertices(),
-                               sizeof(CVec2f) * mCurrentFigure->EnumVertices());
+                        fp.vertices.resize(currentFigure->EnumVertices());
+                        memcpy(&fp.vertices[0], currentFigure->GetVertices(),
+                               sizeof(CVec2f) * currentFigure->EnumVertices());
 
-                        float min = mCurrentObject->GetPosZ() +
-                                    mCurrentFigure->GetZ() +
-                                    0.5f * mCurrentFigure->GetDepth();
-                        float max = mCurrentObject->GetPosZ() +
-                                    mCurrentFigure->GetZ() -
-                                    0.5f * mCurrentFigure->GetDepth();
+                        float min = currentObject->GetPosZ() +
+                                    currentFigure->GetZ() +
+                                    0.5f * currentFigure->GetDepth();
+                        float max = currentObject->GetPosZ() +
+                                    currentFigure->GetZ() -
+                                    0.5f * currentFigure->GetDepth();
 
-                        fp.mZ = 0.5f * (mSplitFigureCenterZ + min);
-                        fp.mDepth = math::Abs(mSplitFigureCenterZ - min);
-                        mCurrentObject->CreateFigure(fp);
+                        fp.z = 0.5f * (splitFigureCenterZ + min);
+                        fp.depth = math::Abs(splitFigureCenterZ - min);
+                        currentObject->CreateFigure(fp);
 
-                        fp.mZ = 0.5f * (mSplitFigureCenterZ + max);
-                        fp.mDepth = math::Abs(max - mSplitFigureCenterZ);
-                        mCurrentObject->CreateFigure(fp);
+                        fp.z = 0.5f * (splitFigureCenterZ + max);
+                        fp.depth = math::Abs(max - splitFigureCenterZ);
+                        currentObject->CreateFigure(fp);
 
-                        mCurrentObject->DestroyFigure(mCurrentFigure);
-                        mCurrentFigure = nullptr;
-                        mCurrentObject->DumpGeometry(mCurrentTemplate);
+                        currentObject->DestroyFigure(currentFigure);
+                        currentFigure = nullptr;
+                        currentObject->DumpGeometry(currentTemplate);
 
                         GetEventSystem().SetMode(std::string("editor_mode"));
                     }
@@ -624,89 +624,89 @@ namespace drash {
         }
 
         void CTest1::ExtrudeFigure(float _delta_depth) {
-            if (mCurrentFigure != nullptr) {
-                mCurrentFigure->SetDepth(math::Max<float>(
-                    0, mCurrentFigure->GetDepth() + _delta_depth));
+            if (currentFigure != nullptr) {
+                currentFigure->SetDepth(math::Max<float>(
+                    0, currentFigure->GetDepth() + _delta_depth));
 
-                mCurrentObject->DumpGeometry(mCurrentTemplate);
+                currentObject->DumpGeometry(currentTemplate);
             }
         }
 
         void CTest1::CamViewProcessors() {
             GetEventSystem().SetProcessor(
                 "MB", CAppEventProcessor([this]() {
-                                             mCamRotFirstClick = GetCursorPos();
+                                             camRotFirstClick = GetCursorPos();
                                          },
                                          [this]() {
                           CVec2f new_pos = GetCursorPos();
 
-                          CVec2f rot = mCamera->GetRotation().Get();
-                          rot.mY -= new_pos.mX - mCamRotFirstClick.mX;
-                          rot.mX += new_pos.mY - mCamRotFirstClick.mY;
+                          CVec2f rot = camera->GetRotation().Get();
+                          rot.y -= new_pos.x - camRotFirstClick.x;
+                          rot.x += new_pos.y - camRotFirstClick.y;
 
-                          mCamera->GetRotation().Set(rot);
+                          camera->GetRotation().Set(rot);
 
-                          mCamRotFirstClick = new_pos;
+                          camRotFirstClick = new_pos;
                       }));
 
             GetEventSystem().SetProcessor(
                 "w", CAppEventProcessor([this]() {}, [this]() {
-                         mCamera->Forward(50 * GetCurrentTimeDelta());
+                         camera->Forward(50 * GetCurrentTimeDelta());
                      }));
 
             GetEventSystem().SetProcessor(
                 "a", CAppEventProcessor([this]() {}, [this]() {
-                         mCamera->Strafe(50 * GetCurrentTimeDelta());
+                         camera->Strafe(50 * GetCurrentTimeDelta());
                      }));
 
             GetEventSystem().SetProcessor(
                 "s", CAppEventProcessor([this]() {}, [this]() {
-                         mCamera->Forward(-50 * GetCurrentTimeDelta());
+                         camera->Forward(-50 * GetCurrentTimeDelta());
                      }));
 
             GetEventSystem().SetProcessor(
                 "d", CAppEventProcessor([this]() {}, [this]() {
-                         mCamera->Strafe(-50 * GetCurrentTimeDelta());
+                         camera->Strafe(-50 * GetCurrentTimeDelta());
                      }));
 
             GetEventSystem().SetProcessor(
                 "q",
                 CAppEventProcessor([this]() {
-                    if (mCurrentTemplate == nullptr) {
-                        mCurrentTemplate =
+                    if (currentTemplate == nullptr) {
+                        currentTemplate =
                             (--GetGeometryManager().GetGeometries().end())
                                 ->second;
 
-                        if (mCurrentObject != nullptr) {
-                            GetScene().DestroyObject(mCurrentObject);
+                        if (currentObject != nullptr) {
+                            GetScene().DestroyObject(currentObject);
                         }
 
                         CSceneObjectParams p;
-                        p.mDynamic = false;
-                        mCurrentObject =
-                            GetScene().CreateObject(*mCurrentTemplate, p);
-                        mCurrentObject->SetActive(false);
+                        p.dynamic = false;
+                        currentObject =
+                            GetScene().CreateObject(*currentTemplate, p);
+                        currentObject->SetActive(false);
                     } else {
                         auto& t = GetGeometryManager().GetGeometries();
                         for (auto i = t.begin(); i != t.end(); i++) {
-                            if (mCurrentTemplate == i->second) {
+                            if (currentTemplate == i->second) {
                                 if (i == t.begin()) {
                                     break;
                                 }
 
                                 i--;
 
-                                mCurrentTemplate = i->second;
+                                currentTemplate = i->second;
 
-                                if (mCurrentObject != nullptr) {
-                                    GetScene().DestroyObject(mCurrentObject);
+                                if (currentObject != nullptr) {
+                                    GetScene().DestroyObject(currentObject);
                                 }
 
                                 CSceneObjectParams p;
-                                p.mDynamic = false;
-                                mCurrentObject = GetScene().CreateObject(
-                                    *mCurrentTemplate, p);
-                                mCurrentObject->SetActive(false);
+                                p.dynamic = false;
+                                currentObject = GetScene().CreateObject(
+                                    *currentTemplate, p);
+                                currentObject->SetActive(false);
 
                                 break;
                             }
@@ -716,15 +716,15 @@ namespace drash {
         }
 
         void CTest1::CompleteFigure() {
-            if (mCurrentTemplate != nullptr && mVertices.size() >= 3) {
-                mCurrentTemplate->mFigures.resize(
-                    mCurrentTemplate->mFigures.size() + 1);
+            if (currentTemplate != nullptr && vertices.size() >= 3) {
+                currentTemplate->figures.resize(
+                    currentTemplate->figures.size() + 1);
 
-                mCurrentTemplate->mFigures.back().mVertices = mVertices;
+                currentTemplate->figures.back().vertices = vertices;
 
                 for (auto i =
-                         mCurrentTemplate->mFigures.back().mVertices.begin();
-                     i != mCurrentTemplate->mFigures.back().mVertices.end();
+                         currentTemplate->figures.back().vertices.begin();
+                     i != currentTemplate->figures.back().vertices.end();
                      i++) {
                     CPlane plane;
                     plane.SetNormal(CVec3f(0, 0, 1));
@@ -732,22 +732,22 @@ namespace drash {
 
                     CVec3f pos;
 
-                    mCamera->CastRay(*i, plane, pos);
+                    camera->CastRay(*i, plane, pos);
 
                     *i = pos;
                 }
 
-                if (mCurrentObject != nullptr) {
-                    GetScene().DestroyObject(mCurrentObject);
-                    this->mCurrentObject = nullptr;
+                if (currentObject != nullptr) {
+                    GetScene().DestroyObject(currentObject);
+                    this->currentObject = nullptr;
                 }
 
                 CSceneObjectParams p;
-                p.mDynamic = false;
-                mCurrentObject = GetScene().CreateObject(*mCurrentTemplate, p);
-                mCurrentObject->SetActive(false);
+                p.dynamic = false;
+                currentObject = GetScene().CreateObject(*currentTemplate, p);
+                currentObject->SetActive(false);
 
-                mVertices.clear();
+                vertices.clear();
             }
         }
 
@@ -757,38 +757,38 @@ namespace drash {
 
             do {
                 std::ostringstream is;
-                is << "new_geometry_" << (mTemplateCounter++);
-                this->mCurrentTemplate =
+                is << "new_geometry_" << (templateCounter++);
+                this->currentTemplate =
                     GetGeometryManager().CreateGeometry(is.str().c_str());
-            } while (this->mCurrentTemplate == nullptr &&
+            } while (this->currentTemplate == nullptr &&
                      counter < max_try_count);
 
-            if (mCurrentObject != nullptr) {
-                GetScene().DestroyObject(mCurrentObject);
-                this->mCurrentObject = nullptr;
+            if (currentObject != nullptr) {
+                GetScene().DestroyObject(currentObject);
+                this->currentObject = nullptr;
             }
         }
 
         void CTest1::DetachCurrentObject() {
-            if (mCurrentObject != nullptr) {
-                mCurrentObject->SetDynamic(true);
-                mCurrentObject->SetActive(true);
+            if (currentObject != nullptr) {
+                currentObject->SetDynamic(true);
+                currentObject->SetActive(true);
 
-                if (mCurrentTemplate != nullptr) {
+                if (currentTemplate != nullptr) {
                     CSceneObjectParams p;
-                    p.mDynamic = false;
-                    mCurrentObject =
-                        GetScene().CreateObject(*mCurrentTemplate, p);
-                    mCurrentObject->SetActive(false);
+                    p.dynamic = false;
+                    currentObject =
+                        GetScene().CreateObject(*currentTemplate, p);
+                    currentObject->SetActive(false);
                 }
             }
         }
 
         void CTest1::SelectFigure() {
-            mCurrentFigure =
-                GetDebugRenderer().FindFigure(*mCamera, GetCursorPos());
+            currentFigure =
+                GetDebugRenderer().FindFigure(*camera, GetCursorPos());
 
-            if (mCurrentFigure != nullptr) {
+            if (currentFigure != nullptr) {
                 GetEventSystem().SetMode("figure_movement");
             } else {
                 GetEventSystem().SetMode("editor_mode");

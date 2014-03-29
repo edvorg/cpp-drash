@@ -32,8 +32,8 @@ namespace drash {
 
         CTest9::CTest9()
             : CApp(),
-              mCamera{ GetGrengSystems().GetCameraManager().CreateCamera({}) },
-              mPoint1{ GetGrengSystems().GetRenderer(), *mCamera } {
+              camera{ GetGrengSystems().GetCameraManager().CreateCamera({}) },
+              point1{ GetGrengSystems().GetRenderer(), *camera } {
             InitCamera();
             InitLights();
             InitRotationablePoint();
@@ -42,44 +42,44 @@ namespace drash {
         void CTest9::Step(double _dt) {
             CApp::Step(_dt);
 
-            mPoint1.SetCursorPos(GetCursorPos());
-            mPoint1.Step(_dt);
+            point1.SetCursorPos(GetCursorPos());
+            point1.Step(_dt);
         }
 
         void CTest9::Render() {
             CApp::Render();
 
-            mPoint1.Render();
+            point1.Render();
         }
 
         bool CTest9::InitCamera() {
-            mCamera->GetPos().Set({ 10, 10, 10 });
-            mCamera->GetFov().Set(M_PI / 6.0);
-            mCamera->LookAt(CVec3f(0));
+            camera->GetPos().Set({ 10, 10, 10 });
+            camera->GetFov().Set(M_PI / 6.0);
+            camera->LookAt(CVec3f(0));
 
-            if (mCamera == nullptr) {
+            if (camera == nullptr) {
                 return false;
             }
 
-            GetDebugRenderer().SetCamera(mCamera);
+            GetDebugRenderer().SetCamera(camera);
 
             return true;
         }
 
         bool CTest9::InitLights() {
-            mLight1.mPosition.Set(0, 10, 0);
-            GetDebugRenderer().SetLight(&mLight1);
+            light1.position.Set(0, 10, 0);
+            GetDebugRenderer().SetLight(&light1);
 
             return true;
         }
 
         bool CTest9::InitRotationablePoint() {
-            mPoint1.SetPoint(CVec3f(0));
+            point1.SetPoint(CVec3f(0));
 
             GetEventSystem().SetProcessor(
                 "LB",
-                CAppEventProcessor([this]() { mPoint1.RotateBegin(); }, []() {},
-                                   [this]() { mPoint1.RotateEnd(); }));
+                CAppEventProcessor([this]() { point1.RotateBegin(); }, []() {},
+                                   [this]() { point1.RotateEnd(); }));
 
             return true;
         }

@@ -64,9 +64,9 @@ namespace drash {
 
       protected:
       private:
-        SceneObjectTemplatesT mSceneObjectTemplates;
+        SceneObjectTemplatesT sceneObjectTemplates;
 
-        CScene& mScene;
+        CScene& scene;
     };
 
 } // namespace drash

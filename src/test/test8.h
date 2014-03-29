@@ -46,11 +46,11 @@ namespace drash {
             bool InitCamera();
             bool InitLights();
 
-            ui::CUIButton mButton1;
-            ui::CUIButton mButton2;
-            CLevelDesc* mLevel1 = nullptr;
-            CLevelDesc* mLevel2 = nullptr;
-            greng::CPointLight mLight1;
+            ui::CUIButton button1;
+            ui::CUIButton button2;
+            CLevelDesc* level1 = nullptr;
+            CLevelDesc* level2 = nullptr;
+            greng::CPointLight light1;
         };
 
     } // namespace test

@@ -63,43 +63,43 @@ slots:
   private:
     Ui::EditorWindow* ui;
     bool InitScene();
-    drash::CObjectEditorApp* mObjectApp = nullptr;
-    drash::CSceneEditorApp* mSceneApp = nullptr;
-    drash::CApp* mCurrentApp = nullptr;
+    drash::CObjectEditorApp* objectApp = nullptr;
+    drash::CSceneEditorApp* sceneApp = nullptr;
+    drash::CApp* currentApp = nullptr;
 
     virtual void timerEvent(QTimerEvent*) override;
 
-    SceneWidget* mWidgetForScene = nullptr;
-    SceneWidget* mWidgetForObjects = nullptr;
-    SceneWidget* mCurrentSceneWidget = nullptr;
-    // drash::CSceneObject * mCurrentObject = nullptr;
+    SceneWidget* widgetForScene = nullptr;
+    SceneWidget* widgetForObjects = nullptr;
+    SceneWidget* currentSceneWidget = nullptr;
+    // drash::CSceneObject * currentObject = nullptr;
 
-    bool mDragActivated = false;
+    bool dragActivated = false;
 
     // Actions
   private:
     // for editor object
-    QAction* mQuit;
-    QAction* mRemoveAction;
-    QAction* mMoveActiveAction;
-    QAction* mStretchActiveAction;
-    QAction* mMoveOfAxisActiveAction;
-    QAction* mNewFigureAction;
-    QAction* mNewObjectAction;
-    QAction* mDeleteModeActiveAction;
-    QAction* mSplitFigureActiveAction;
-    QAction* mSplitObjectActiveAction;
-    QActionGroup mModeActions;
-    QAction* mCombineFiguresMode;
+    QAction* quit;
+    QAction* removeAction;
+    QAction* moveActiveAction;
+    QAction* stretchActiveAction;
+    QAction* moveOfAxisActiveAction;
+    QAction* newFigureAction;
+    QAction* newObjectAction;
+    QAction* deleteModeActiveAction;
+    QAction* splitFigureActiveAction;
+    QAction* splitObjectActiveAction;
+    QActionGroup modeActions;
+    QAction* combineFiguresMode;
 
     // for editor scene
-    QAction* mOpenLevelAction;
-    QAction* mSaveLevelAction;
-    QAction* mSaveLevelAsAction;
-    QAction* mPlayLevelAction;
-    QAction* mPauseLevelAction;
-    QAction* mStopLevelAction;
-    QAction* mNewLevelAction;
+    QAction* openLevelAction;
+    QAction* saveLevelAction;
+    QAction* saveLevelAsAction;
+    QAction* playLevelAction;
+    QAction* pauseLevelAction;
+    QAction* stopLevelAction;
+    QAction* newLevelAction;
 
     // for other
     // Slots for Actions
@@ -139,10 +139,10 @@ slots:
 
   private:
     // GuiObjects
-    QLabel* mLabelOfStatusBar;
+    QLabel* labelOfStatusBar;
 
-    QToolBar* mObjectToolBar;
-    QToolBar* mSceneToolbar;
+    QToolBar* objectToolBar;
+    QToolBar* sceneToolbar;
 
   private:
     void CreateActions();
@@ -151,14 +151,14 @@ slots:
 
     void UpdateTreeSceneObjects();
 
-    drash::CTimer mTimer;
+    drash::CTimer timer;
 
     void AddFigure();
     void SetObjectParams(const drash::CSceneObjectParams& _params);
     drash::CSceneObjectParams GetObjectParams() const;
 
   private:
-    QHBoxLayout* mLayoutForScene;
+    QHBoxLayout* layoutForScene;
 
   public:
 };

@@ -45,9 +45,9 @@ namespace drash {
 
           protected:
           private:
-            std::function<void()> mClickHandler = []() {};
-            bool mPressed = false;
-            float mTime = 0;
+            std::function<void()> clickHandler = []() {};
+            bool pressed = false;
+            float time = 0;
         };
 
     } // namepsace ui

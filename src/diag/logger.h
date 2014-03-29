@@ -51,10 +51,10 @@ namespace drash {
 
       private:
         std::ofstream out;
-        std::ostream& mStream;
-        bool mOpened = false;
+        std::ostream& stream;
+        bool opened = false;
 
-        static std::ostringstream mTailStream;
+        static std::ostringstream tailStream;
     };
 
     inline CLogger& CLogger::operator<<(const std::string& _str) {

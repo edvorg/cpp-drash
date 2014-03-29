@@ -37,7 +37,7 @@ namespace drash {
 
     class CLevelManager {
       public:
-        static const unsigned int mLevelsCountLimit = 10;
+        static const unsigned int levelsCountLimit = 10;
 
         CLevelManager(CScene& _scene, CGeometryManager& _geometry_manager);
         ~CLevelManager();
@@ -47,9 +47,9 @@ namespace drash {
         bool StartLevel(CLevelDesc* _level);
 
       private:
-        CScene& mScene;
-        CGeometryManager& mTemplateSystem;
-        CObjectFactory<CLevelDesc> mLevelFactory;
+        CScene& scene;
+        CGeometryManager& templateSystem;
+        CObjectFactory<CLevelDesc> levelFactory;
     };
 
 } // namespace drash

@@ -42,7 +42,7 @@ namespace drash {
 
     class CSceneParams {
       public:
-        CVec2f mGravity = { 0, -9.8 };
+        CVec2f gravity = { 0, -9.8 };
     };
 
     class CScene final : public b2ContactListener,
@@ -52,10 +52,10 @@ namespace drash {
         // **************************************************
         // * static scene configuration *********************
 
-        static const int mVelocityIterations = 5;
-        static const int mPositionIterations = 2;
-        static const unsigned int mObjectsCountLimit = 10000;
-        static const unsigned int mSubsystemsCountLimit = 5;
+        static const int velocityIterations = 5;
+        static const int positionIterations = 2;
+        static const unsigned int objectsCountLimit = 10000;
+        static const unsigned int subsystemsCountLimit = 5;
 
         // **************************************************
         // * main routines **********************************
@@ -109,21 +109,21 @@ namespace drash {
         virtual void SayGoodbye(b2Joint* _joint) override;
         virtual void SayGoodbye(b2Fixture* _fixture) override;
 
-        b2World mWorld;
-        CObjectFactory<CSceneObject> mObjectsFactory;
-        bool mLocked = false;
-        bool mPaused = false;
+        b2World world;
+        CObjectFactory<CSceneObject> objectsFactory;
+        bool locked = false;
+        bool paused = false;
     };
 
     inline CSceneObject* const* CScene::GetObjects(void) const {
-        return mObjectsFactory.GetObjects();
+        return objectsFactory.GetObjects();
     }
 
     inline unsigned int CScene::EnumObjects(void) const {
-        return mObjectsFactory.EnumObjects();
+        return objectsFactory.EnumObjects();
     }
 
-    inline void CScene::SetPaused(bool _paused) { mPaused = _paused; }
+    inline void CScene::SetPaused(bool _paused) { paused = _paused; }
 
 } // namespace drash
 

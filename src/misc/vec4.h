@@ -60,7 +60,7 @@ namespace drash {
         CVec4& operator*=(const CVec4& _v);
         CVec4& operator/=(const CVec4& _v);
 
-        T mW = static_cast<T>(DEF_VAL);
+        T w = static_cast<T>(DEF_VAL);
 
       protected:
       private:
@@ -77,8 +77,8 @@ namespace drash {
 
     template <typename T, const int DEF_VAL>
     CLogger& operator<<(CLogger& _logger, const CVec4<T, DEF_VAL>& _v) {
-        _logger << '(' << _v.mX << "; " << _v.mY << "; " << _v.mZ << "; "
-                << _v.mW << ')';
+        _logger << '(' << _v.x << "; " << _v.y << "; " << _v.z << "; "
+                << _v.w << ')';
         return _logger;
     }
 
@@ -88,31 +88,31 @@ namespace drash {
     template <typename T, const int DEF_VAL>
     CVec4<T, DEF_VAL>::CVec4(const CVec2<T, DEF_VAL>& _xy, const T& _z,
                              const T& _w)
-        : mW(_w) {
-        this->mX = _xy.mX;
-        this->mY = _xy.mY;
-        this->mZ = _z;
+        : w(_w) {
+        this->x = _xy.x;
+        this->y = _xy.y;
+        this->z = _z;
     }
 
     template <typename T, const int DEF_VAL>
     CVec4<T, DEF_VAL>::CVec4(const CVec3<T, DEF_VAL>& _xyz, const T& _w)
-        : CVec3<T, DEF_VAL>(_xyz), mW(_w) {}
+        : CVec3<T, DEF_VAL>(_xyz), w(_w) {}
 
     template <typename T, const int DEF_VAL>
     CVec4<T, DEF_VAL>::CVec4(const T& _x, const T& _y, const T& _z, const T& _w)
-        : mW(_w) {
-        this->mX = _x;
-        this->mY = _y;
-        this->mZ = _z;
+        : w(_w) {
+        this->x = _x;
+        this->y = _y;
+        this->z = _z;
     }
 
     template <typename T, const int DEF_VAL>
     CVec4<T, DEF_VAL>& CVec4<T, DEF_VAL>::Set(const T& _x, const T& _y,
                                               const T& _z, const T& _w) {
-        this->mX = _x;
-        this->mY = _y;
-        this->mZ = _z;
-        this->mW = _w;
+        this->x = _x;
+        this->y = _y;
+        this->z = _z;
+        this->w = _w;
         return *this;
     }
 
@@ -128,68 +128,68 @@ namespace drash {
 
     template <typename T, const int DEF_VAL>
     inline T CVec4<T, DEF_VAL>::LengthSquared() const {
-        return this->mX * this->mX + this->mY * this->mY + this->mZ * this->mZ +
-               this->mW * this->mW;
+        return this->x * this->x + this->y * this->y + this->z * this->z +
+               this->w * this->w;
     }
 
     template <typename T, const int DEF_VAL>
     inline T CVec4<T, DEF_VAL>::Length() const {
-        return sqrt(this->mX * this->mX + this->mY * this->mY +
-                    this->mZ * this->mZ + this->mW * this->mW);
+        return sqrt(this->x * this->x + this->y * this->y +
+                    this->z * this->z + this->w * this->w);
     }
 
     template <typename T, const int DEF_VAL>
     CVec4<T, DEF_VAL>& CVec4<T, DEF_VAL>::Normalize() {
         T len = CVec4::Length();
-        this->mX /= len;
-        this->mY /= len;
-        this->mZ /= len;
-        this->mW /= len;
+        this->x /= len;
+        this->y /= len;
+        this->z /= len;
+        this->w /= len;
         return *this;
     }
 
     template <typename T, const int DEF_VAL>
     CVec4<T, DEF_VAL>& CVec4<T, DEF_VAL>::operator=(const CVec4& _v) {
-        this->mX = _v.mX;
-        this->mY = _v.mY;
-        this->mZ = _v.mZ;
-        this->mW = _v.mW;
+        this->x = _v.x;
+        this->y = _v.y;
+        this->z = _v.z;
+        this->w = _v.w;
         return *this;
     }
 
     template <typename T, const int DEF_VAL>
     CVec4<T, DEF_VAL>& CVec4<T, DEF_VAL>::operator+=(const CVec4& _v) {
-        this->mX += _v.mX;
-        this->mY += _v.mY;
-        this->mZ += _v.mZ;
-        this->mW += _v.mW;
+        this->x += _v.x;
+        this->y += _v.y;
+        this->z += _v.z;
+        this->w += _v.w;
         return *this;
     }
 
     template <typename T, const int DEF_VAL>
     CVec4<T, DEF_VAL>& CVec4<T, DEF_VAL>::operator-=(const CVec4& _v) {
-        this->mX -= _v.mX;
-        this->mY -= _v.mY;
-        this->mZ -= _v.mZ;
-        this->mW -= _v.mW;
+        this->x -= _v.x;
+        this->y -= _v.y;
+        this->z -= _v.z;
+        this->w -= _v.w;
         return *this;
     }
 
     template <typename T, const int DEF_VAL>
     CVec4<T, DEF_VAL>& CVec4<T, DEF_VAL>::operator*=(const CVec4& _v) {
-        this->mX *= _v.mX;
-        this->mY *= _v.mY;
-        this->mZ *= _v.mZ;
-        this->mW *= _v.mW;
+        this->x *= _v.x;
+        this->y *= _v.y;
+        this->z *= _v.z;
+        this->w *= _v.w;
         return *this;
     }
 
     template <typename T, const int DEF_VAL>
     CVec4<T, DEF_VAL>& CVec4<T, DEF_VAL>::operator/=(const CVec4& _v) {
-        this->mX /= _v.mX;
-        this->mY /= _v.mY;
-        this->mZ /= _v.mZ;
-        this->mW /= _v.mW;
+        this->x /= _v.x;
+        this->y /= _v.y;
+        this->z /= _v.z;
+        this->w /= _v.w;
         return *this;
     }
 

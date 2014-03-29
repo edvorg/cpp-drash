@@ -34,7 +34,7 @@ namespace greng {
 
     class CMeshManager final {
       public:
-        constexpr static unsigned int mMeshesCountLimit = 1024;
+        constexpr static unsigned int meshesCountLimit = 1024;
 
         CMeshManager();
         CMeshManager(const CMeshManager&) = delete;
@@ -58,7 +58,7 @@ namespace greng {
 
       protected:
       private:
-        drash::CObjectFactory<CMesh> mMeshFactory;
+        drash::CObjectFactory<CMesh> meshFactory;
     };
 
 } // namespace greng

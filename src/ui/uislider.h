@@ -57,13 +57,13 @@ namespace drash {
 
           protected:
           private:
-            bool mPressed = false;
-            bool mCatched = false;
-            float mMin = 0;
-            float mMax = 100;
-            float mValue = 0;
-            unsigned int mSliderWidth = 20;
-            std::function<void(float _value)> mValueHandler = [](float) {};
+            bool pressed = false;
+            bool catched = false;
+            float min = 0;
+            float max = 100;
+            float value = 0;
+            unsigned int sliderWidth = 20;
+            std::function<void(float _value)> valueHandler = [](float) {};
         };
 
     } // namepsace ui

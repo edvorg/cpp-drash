@@ -45,24 +45,24 @@ namespace drash {
         GetGeometryManager().Load();
 
         CCameraParams cp;
-        cp.mPos.Set(10, 10, 10.0f);
-        cp.mRotation.Set(-M_PI / 4, M_PI / 4, 0);
-        mCamera = GetGrengSystems().GetCameraManager().CreateCamera(cp);
-        GetDebugRenderer().SetCamera(mCamera);
-        mPointLight.mPosition = GetCamera()->GetPos();
+        cp.pos.Set(10, 10, 10.0f);
+        cp.rotation.Set(-M_PI / 4, M_PI / 4, 0);
+        camera = GetGrengSystems().GetCameraManager().CreateCamera(cp);
+        GetDebugRenderer().SetCamera(camera);
+        pointLight.position = GetCamera()->GetPos();
 
-        GetDebugRenderer().SetLight(&mPointLight);
+        GetDebugRenderer().SetLight(&pointLight);
         GetDebugRenderer().SetTexCoordsScale(0.5);
 
-        mTreeRefreshHandler();
+        treeRefreshHandler();
 
-        mMoveablePoint.SetCamera(mCamera);
-        mRotationPoint.SetCamera(mCamera);
-        mRotationPoint.SetRenderer(&GetGrengSystems().GetRenderer());
-        mRotationPoint.Init();
-        mRotationPoint.SetAxisOX(false);
-        mRotationPoint.SetAxisOY(false);
-        mTimer.Reset(true);
+        moveablePoint.SetCamera(camera);
+        rotationPoint.SetCamera(camera);
+        rotationPoint.SetRenderer(&GetGrengSystems().GetRenderer());
+        rotationPoint.Init();
+        rotationPoint.SetAxisOX(false);
+        rotationPoint.SetAxisOY(false);
+        timer.Reset(true);
 
         LOG_INFO("EditorObject App initzializeted");
     }
@@ -70,85 +70,85 @@ namespace drash {
     void CObjectEditorApp::Step(double _dt) {
         CApp::Step(0);
 
-        mTimer.Tick();
+        timer.Tick();
 
-        mPointLight.mPosition = GetCamera()->GetPos();
+        pointLight.position = GetCamera()->GetPos();
 
-        if (mState == MoveOfAxisState && mSelectedFigure != nullptr) {
-            mMoveablePoint.SetCursorPos(GetCursorPos());
-            mMoveablePoint.Step(_dt);
+        if (state == MoveOfAxisState && selectedFigure != nullptr) {
+            moveablePoint.SetCursorPos(GetCursorPos());
+            moveablePoint.Step(_dt);
         }
 
-        if (mState == SplitFigureState || mState == SplitObjectState) {
+        if (state == SplitFigureState || state == SplitObjectState) {
             SplitRotateStep(_dt);
         }
     }
 
     void CObjectEditorApp::Render() {
-        CVec2i segments_counts(mGridSize.mX, mGridSize.mY);
-        segments_counts /= mGridSegmentSize;
+        CVec2i segments_counts(gridSize.x, gridSize.y);
+        segments_counts /= gridSegmentSize;
 
-        CVec2f grid_size_half(mGridSize.mX, mGridSize.mY);
+        CVec2f grid_size_half(gridSize.x, gridSize.y);
         grid_size_half /= 2;
 
-        for (unsigned int i = 1; i < (unsigned int)segments_counts.mX; i++) {
-            for (unsigned int j = 1; j < (unsigned int)segments_counts.mY;
+        for (unsigned int i = 1; i < (unsigned int)segments_counts.x; i++) {
+            for (unsigned int j = 1; j < (unsigned int)segments_counts.y;
                  j++) {
-                CVec3f p1(i * mGridSegmentSize, 0, j * mGridSegmentSize);
-                CVec3f p2(i * mGridSegmentSize, 0, (j - 1) * mGridSegmentSize);
-                CVec3f p3((i - 1) * mGridSegmentSize, 0,
-                          (j - 1) * mGridSegmentSize);
-                CVec3f p4((i - 1) * mGridSegmentSize, 0, j * mGridSegmentSize);
+                CVec3f p1(i * gridSegmentSize, 0, j * gridSegmentSize);
+                CVec3f p2(i * gridSegmentSize, 0, (j - 1) * gridSegmentSize);
+                CVec3f p3((i - 1) * gridSegmentSize, 0,
+                          (j - 1) * gridSegmentSize);
+                CVec3f p4((i - 1) * gridSegmentSize, 0, j * gridSegmentSize);
 
-                p1.mX -= grid_size_half.mX;
-                p1.mZ -= grid_size_half.mY;
-                p2.mX -= grid_size_half.mX;
-                p2.mZ -= grid_size_half.mY;
-                p3.mX -= grid_size_half.mX;
-                p3.mZ -= grid_size_half.mY;
-                p4.mX -= grid_size_half.mX;
-                p4.mZ -= grid_size_half.mY;
+                p1.x -= grid_size_half.x;
+                p1.z -= grid_size_half.y;
+                p2.x -= grid_size_half.x;
+                p2.z -= grid_size_half.y;
+                p3.x -= grid_size_half.x;
+                p3.z -= grid_size_half.y;
+                p4.x -= grid_size_half.x;
+                p4.z -= grid_size_half.y;
 
-                GetGrengSystems().GetRenderer().DrawLine(mCamera, p1, p2, 1,
-                                                         mGridColor, true);
-                GetGrengSystems().GetRenderer().DrawLine(mCamera, p2, p3, 1,
-                                                         mGridColor, true);
-                GetGrengSystems().GetRenderer().DrawLine(mCamera, p3, p4, 1,
-                                                         mGridColor, true);
-                GetGrengSystems().GetRenderer().DrawLine(mCamera, p4, p1, 1,
-                                                         mGridColor, true);
+                GetGrengSystems().GetRenderer().DrawLine(camera, p1, p2, 1,
+                                                         gridColor, true);
+                GetGrengSystems().GetRenderer().DrawLine(camera, p2, p3, 1,
+                                                         gridColor, true);
+                GetGrengSystems().GetRenderer().DrawLine(camera, p3, p4, 1,
+                                                         gridColor, true);
+                GetGrengSystems().GetRenderer().DrawLine(camera, p4, p1, 1,
+                                                         gridColor, true);
             }
         }
 
         GetGrengSystems().GetRenderer().DrawLine(
-            mCamera, CVec3f(-segments_counts.mX * mGridSegmentSize / 2, 0, 0),
-            CVec3f(-1 + segments_counts.mX * mGridSegmentSize / 2, 0, 0), 2,
+            camera, CVec3f(-segments_counts.x * gridSegmentSize / 2, 0, 0),
+            CVec3f(-1 + segments_counts.x * gridSegmentSize / 2, 0, 0), 2,
             CColor4f(0, 0, 0, 1), false);
 
         GetGrengSystems().GetRenderer().DrawLine(
-            mCamera, CVec3f(0, 0, -segments_counts.mY * mGridSegmentSize / 2),
-            CVec3f(0, 0, -1 + segments_counts.mY * mGridSegmentSize / 2), 2,
+            camera, CVec3f(0, 0, -segments_counts.y * gridSegmentSize / 2),
+            CVec3f(0, 0, -1 + segments_counts.y * gridSegmentSize / 2), 2,
             CColor4f(0, 0, 0, 1), false);
 
         CApp::Render();
 
-        if (mVertexs.size() != 0 && mState == BuildState) {
-            for (unsigned int i = 1; i < mVertexs.size(); i++) {
+        if (vertexs.size() != 0 && state == BuildState) {
+            for (unsigned int i = 1; i < vertexs.size(); i++) {
                 GetGrengSystems().GetRenderer().DrawLine(
-                    mVertexs[i - 1], mVertexs[i], 1, CColor4f(0, 1, 0, 1));
+                    vertexs[i - 1], vertexs[i], 1, CColor4f(0, 1, 0, 1));
             }
             GetGrengSystems().GetRenderer().DrawLine(
-                mVertexs[mVertexs.size() - 1], GetCursorPos(), 1,
+                vertexs[vertexs.size() - 1], GetCursorPos(), 1,
                 CColor4f(0, 1, 0, 1));
             GetGrengSystems().GetRenderer().DrawLine(
-                mVertexs[0], GetCursorPos(), 1, CColor4f(0, 1, 0, 1));
+                vertexs[0], GetCursorPos(), 1, CColor4f(0, 1, 0, 1));
         }
-        if (mState == StretchState && mCurrentObject != nullptr) {
-            for (unsigned int i = 0; i < mCurrentObject->EnumFigures(); i++) {
-                CFigure* figure = mCurrentObject->GetFigures()[i];
+        if (state == StretchState && currentObject != nullptr) {
+            for (unsigned int i = 0; i < currentObject->EnumFigures(); i++) {
+                CFigure* figure = currentObject->GetFigures()[i];
                 for (unsigned int j = 0; j < figure->EnumVertices(); j++) {
                     CVec3f position(figure->GetVertices()[j],
-                                    mCurrentObject->GetPosZ() + figure->GetZ() +
+                                    currentObject->GetPosZ() + figure->GetZ() +
                                         figure->GetDepth() * 0.5f);
 
                     CColor4f color(1, 0.5, 0, 1);
@@ -159,49 +159,49 @@ namespace drash {
 
                     CVec3f cursor_pos;
 
-                    mCamera->CastRay(GetCursorPos(), plane, cursor_pos);
-                    if (drash::math::Abs(position.mX - cursor_pos.mX) <= 1 &&
-                        drash::math::Abs(position.mY - cursor_pos.mY) <= 1) {
+                    camera->CastRay(GetCursorPos(), plane, cursor_pos);
+                    if (drash::math::Abs(position.x - cursor_pos.x) <= 1 &&
+                        drash::math::Abs(position.y - cursor_pos.y) <= 1) {
                         color.Col3().Set(255, 0, 0);
                     }
 
-                    GetGrengSystems().GetRenderer().DrawPoint(mCamera, position,
+                    GetGrengSystems().GetRenderer().DrawPoint(camera, position,
                                                               10.0f, color);
 
                     color.Col3().Set(255, 155, 0);
 
-                    position.mZ = mCurrentObject->GetPosZ() + figure->GetZ() -
+                    position.z = currentObject->GetPosZ() + figure->GetZ() -
                                   figure->GetDepth() * 0.5f;
 
                     plane.SetPoint(position);
 
-                    mCamera->CastRay(GetCursorPos(), plane, cursor_pos);
+                    camera->CastRay(GetCursorPos(), plane, cursor_pos);
 
-                    if (drash::math::Abs(position.mX - cursor_pos.mX) <= 1 &&
-                        drash::math::Abs(position.mY - cursor_pos.mY) <= 1) {
+                    if (drash::math::Abs(position.x - cursor_pos.x) <= 1 &&
+                        drash::math::Abs(position.y - cursor_pos.y) <= 1) {
                         color.Col3().Set(255, 0, 0);
                     }
 
-                    GetGrengSystems().GetRenderer().DrawPoint(mCamera, position,
+                    GetGrengSystems().GetRenderer().DrawPoint(camera, position,
                                                               10.0f, color);
                 }
             }
         }
 
-        if (mState == MoveOfAxisState && mSelectedFigure != nullptr) {
-            mMoveablePoint.Render(GetGrengSystems().GetRenderer());
+        if (state == MoveOfAxisState && selectedFigure != nullptr) {
+            moveablePoint.Render(GetGrengSystems().GetRenderer());
         }
 
         RenderSplitPlane();
 
-        if (mState == SplitObjectState) {
-            mRotationPoint.Render();
-            mMoveablePoint.Render(GetGrengSystems().GetRenderer());
+        if (state == SplitObjectState) {
+            rotationPoint.Render();
+            moveablePoint.Render(GetGrengSystems().GetRenderer());
         }
 
-        if (mState == SplitFigureState && mSelectedFigure != nullptr) {
-            mRotationPoint.Render();
-            mMoveablePoint.Render(GetGrengSystems().GetRenderer());
+        if (state == SplitFigureState && selectedFigure != nullptr) {
+            rotationPoint.Render();
+            moveablePoint.Render(GetGrengSystems().GetRenderer());
         }
 
         DrawDragTemplate();
@@ -212,7 +212,7 @@ namespace drash {
     }
 
     void CObjectEditorApp::StartBuild() {
-        mState = BuildState;
+        state = BuildState;
         ChangeMode();
     }
 
@@ -221,28 +221,28 @@ namespace drash {
         GetEventSystem().SetProcessor(
             "LB",
             CAppEventProcessor([this]() {
-                                   if (mCurrentObject == nullptr) {
+                                   if (currentObject == nullptr) {
                                        return;
                                    }
-                                   switch (mState) {
+                                   switch (state) {
                                    case BuildState: {
-                                       if (mCurrentObject != nullptr)
-                                           mVertexs.push_back(GetCursorPos());
+                                       if (currentObject != nullptr)
+                                           vertexs.push_back(GetCursorPos());
                                        if (IsConvex() == false) {
-                                           mVertexs.pop_back();
+                                           vertexs.pop_back();
                                        }
                                        break;
                                    }
                                    case MoveState: {
-                                       mSelectedFigure =
+                                       selectedFigure =
                                            SelectFigure(GetCursorPos());
 
                                        CPlane plane;
                                        plane.SetPoint(CVec3f(0, 0, 0));
                                        plane.SetNormal(CVec3f(0, 0, 1));
 
-                                       mCamera->CastRay(GetCursorPos(), plane,
-                                                        mOldPositionCursor);
+                                       camera->CastRay(GetCursorPos(), plane,
+                                                        oldPositionCursor);
                                        break;
                                    }
                                    case StretchState: {
@@ -250,8 +250,8 @@ namespace drash {
                                        break;
                                    }
                                    case MoveOfAxisState: {
-                                       if (mSelectedFigure != nullptr) {
-                                           mMoveablePoint.ClickBegin();
+                                       if (selectedFigure != nullptr) {
+                                           moveablePoint.ClickBegin();
                                        }
                                        break;
                                    }
@@ -259,86 +259,86 @@ namespace drash {
                                        CFigure* fig =
                                            SelectFigure(GetCursorPos());
                                        if (fig != nullptr) {
-                                           mCurrentObject->DestroyFigure(fig);
+                                           currentObject->DestroyFigure(fig);
                                            SaveCurrentObject();
                                        }
                                        break;
                                    }
                                    case SplitFigureState: {
-                                       mRotationPoint.SetCursorPos(
+                                       rotationPoint.SetCursorPos(
                                            GetCursorPos());
-                                       mRotationPoint.RotateBegin();
-                                       mMoveablePoint.ClickBegin();
+                                       rotationPoint.RotateBegin();
+                                       moveablePoint.ClickBegin();
                                        break;
                                    }
                                    case SplitObjectState: {
-                                       mRotationPoint.SetCursorPos(
+                                       rotationPoint.SetCursorPos(
                                            GetCursorPos());
-                                       mRotationPoint.RotateBegin();
-                                       mMoveablePoint.ClickBegin();
+                                       rotationPoint.RotateBegin();
+                                       moveablePoint.ClickBegin();
                                        break;
                                    }
                                    case Simple:
-                                       mSelectedFigure = nullptr;
+                                       selectedFigure = nullptr;
                                        break;
                                    }
                                },
                                [this]() {
-                                   if (mSelectedFigure != nullptr &&
-                                       mState == MoveState) {
+                                   if (selectedFigure != nullptr &&
+                                       state == MoveState) {
                                        MoveFigure();
                                    }
 
-                                   if (mSelectedFigure != nullptr &&
-                                       mState == MoveOfAxisState) {
-                                       mMoveablePoint.ClickPressing();
+                                   if (selectedFigure != nullptr &&
+                                       state == MoveOfAxisState) {
+                                       moveablePoint.ClickPressing();
                                        MoveOfAxis();
                                    }
 
-                                   if (mState == StretchState) {
+                                   if (state == StretchState) {
                                        StretchFigure();
                                    }
 
-                                   if (mState == SplitFigureState ||
-                                       mState == SplitObjectState) {
-                                       mMoveablePoint.ClickPressing();
+                                   if (state == SplitFigureState ||
+                                       state == SplitObjectState) {
+                                       moveablePoint.ClickPressing();
                                    }
                                },
                                [this]() {
-                if (mState == MoveState) {
-                    mSelectedFigure = nullptr;
+                if (state == MoveState) {
+                    selectedFigure = nullptr;
                     SaveCurrentObject();
                 }
-                if (mState == MoveOfAxisState && mSelectedFigure != nullptr) {
-                    mMoveablePoint.ClickEnd();
+                if (state == MoveOfAxisState && selectedFigure != nullptr) {
+                    moveablePoint.ClickEnd();
                     SaveCurrentObject();
                 }
-                if (mState == StretchState) {
-                    mSelectedFigure = nullptr;
+                if (state == StretchState) {
+                    selectedFigure = nullptr;
                     SaveCurrentObject();
-                    mVertexIndex = -1;
+                    vertexIndex = -1;
                 }
 
-                if (mState == SplitFigureState || mState == SplitObjectState) {
-                    mRotationPoint.RotateEnd();
-                    mMoveablePoint.ClickEnd();
+                if (state == SplitFigureState || state == SplitObjectState) {
+                    rotationPoint.RotateEnd();
+                    moveablePoint.ClickEnd();
                 }
             }));
 
         GetEventSystem().SetProcessor(
             "RB", CAppEventProcessor([this]() {
-                      switch (mState) {
+                      switch (state) {
                       case BuildState:
-                          BuildFigure(mCurrentTemplateName);
+                          BuildFigure(currentTemplateName);
                           break;
                       case MoveOfAxisState: {
-                          mSelectedFigure = SelectFigure(GetCursorPos());
+                          selectedFigure = SelectFigure(GetCursorPos());
                           SettingCenterFigure();
                           break;
                       }
                       case SplitFigureState: {
-                          mSelectedFigure = SelectFigure(GetCursorPos());
-                          if (mSelectedFigure != nullptr) {
+                          selectedFigure = SelectFigure(GetCursorPos());
+                          if (selectedFigure != nullptr) {
                               BeginSplit();
                           }
                           break;
@@ -346,7 +346,7 @@ namespace drash {
                       case SplitObjectState:
                           break;
                       //            case SplitFigureState: {
-                      //                if (mSelectedFigure != nullptr) {
+                      //                if (selectedFigure != nullptr) {
                       //                    EndSplit();
                       //                }
                       //                break;
@@ -368,10 +368,10 @@ namespace drash {
 
         GetEventSystem().SetProcessor(
             "WHUP", CAppEventProcessor([this]() {
-                        if (mCurrentObject != nullptr) {
+                        if (currentObject != nullptr) {
                             for (unsigned int i = 0;
-                                 i < mCurrentObject->EnumFigures(); i++) {
-                                CFigure* fig = mCurrentObject->GetFigures()[i];
+                                 i < currentObject->EnumFigures(); i++) {
+                                CFigure* fig = currentObject->GetFigures()[i];
                                 fig->SetDepth(fig->GetDepth() + 0.5);
                             }
                             SaveCurrentObject();
@@ -379,10 +379,10 @@ namespace drash {
                     }));
         GetEventSystem().SetProcessor(
             "WHDN", CAppEventProcessor([this]() {
-                        if (mCurrentObject != nullptr) {
+                        if (currentObject != nullptr) {
                             for (unsigned int i = 0;
-                                 i < mCurrentObject->EnumFigures(); i++) {
-                                CFigure* fig = mCurrentObject->GetFigures()[i];
+                                 i < currentObject->EnumFigures(); i++) {
+                                CFigure* fig = currentObject->GetFigures()[i];
                                 if (fig->GetDepth() - 0.5 > 0.01) {
                                     fig->SetDepth(fig->GetDepth() - 0.5);
                                 }
@@ -392,8 +392,8 @@ namespace drash {
                     }));
         GetEventSystem().SetProcessor("SPC",
                                       CAppEventProcessor([this]() {
-                                          if (mState == SplitFigureState ||
-                                              mState == SplitObjectState) {
+                                          if (state == SplitFigureState ||
+                                              state == SplitObjectState) {
                                               EndSplit();
                                           }
                                       }));
@@ -403,80 +403,80 @@ namespace drash {
 
         GetEventSystem().SetProcessor(
             "MB",
-            CAppEventProcessor([this]() { mCamRotFirstClick = GetCursorPos(); },
+            CAppEventProcessor([this]() { camRotFirstClick = GetCursorPos(); },
                                [this]() {
                 CVec2f new_pos = GetCursorPos();
 
-                CVec2f rot = mCamera->GetRotation().Get();
-                rot.mY -= new_pos.mX - mCamRotFirstClick.mX;
-                rot.mX += new_pos.mY - mCamRotFirstClick.mY;
+                CVec2f rot = camera->GetRotation().Get();
+                rot.y -= new_pos.x - camRotFirstClick.x;
+                rot.x += new_pos.y - camRotFirstClick.y;
 
-                mCamera->GetRotation().Set(rot);
+                camera->GetRotation().Set(rot);
 
-                mCamRotFirstClick = new_pos;
+                camRotFirstClick = new_pos;
             }));
 
         GetEventSystem().SetProcessor(
             "w", CAppEventProcessor([this]() {},
                                     [this]() {
-                                        mCamera->Forward(MOVING_SPEED *
-                                                         mTimer.GetDeltaTime());
+                                        camera->Forward(MOVING_SPEED *
+                                                         timer.GetDeltaTime());
                                     },
                                     [this] {}));
 
         GetEventSystem().SetProcessor(
             "a", CAppEventProcessor([this]() {}, [this]() {
-                     mCamera->Strafe(MOVING_SPEED * mTimer.GetDeltaTime());
+                     camera->Strafe(MOVING_SPEED * timer.GetDeltaTime());
                  }));
 
         GetEventSystem().SetProcessor(
             "s", CAppEventProcessor([this]() {}, [this]() {
-                     mCamera->Forward(-MOVING_SPEED * mTimer.GetDeltaTime());
+                     camera->Forward(-MOVING_SPEED * timer.GetDeltaTime());
                  }));
 
         GetEventSystem().SetProcessor(
             "d", CAppEventProcessor([this]() {}, [this]() {
-                     mCamera->Strafe(-MOVING_SPEED * mTimer.GetDeltaTime());
+                     camera->Strafe(-MOVING_SPEED * timer.GetDeltaTime());
                  }));
     }
 
     void CObjectEditorApp::SetDragDrop() {
         GetEventSystem().SetProcessor("DRL", CAppEventProcessor([this]() {
-                                                 mDragNow = false;
-                                                 mDragTemplate = nullptr;
+                                                 dragNow = false;
+                                                 dragTemplate = nullptr;
                                              }));
 
         GetEventSystem().SetProcessor(
             "DRDP",
             CAppEventProcessor([this]() {
-                                   if (mCurrentObject == nullptr) {
+                                   if (currentObject == nullptr) {
                                        return;
                                    }
                                    //        qDebug() << "Proccess enter";
-                                   mDragTemplate =
+                                   dragTemplate =
                                        GetGeometryManager().GetGeometry(
-                                           mGetSelectedTemplateHandler());
-                                   if (mDragTemplate != nullptr) {
-                                       mDragNow = true;
+                                           getSelectedTemplateHandler());
+                                   if (dragTemplate != nullptr) {
+                                       dragNow = true;
                                    } else {
-                                       mDragNow = false;
+                                       dragNow = false;
                                    }
                                },
                                [this]() {}, [this]() {
 
-                if (mDragNow == true) {
+                if (dragNow == true) {
                     ApplyDrop();
-                    mDragNow = false;
+                    dragNow = false;
                 }
             }));
     }
 
     bool CObjectEditorApp::BuildFigure(const std::string& _objectName) {
-        if (mVertexs.size() < 3 || mCurrentObject == nullptr) {
+        if (vertexs.size() < 3 || currentObject == nullptr) {
             return false;
         }
         if (ValidateFigure() == false) {
-            std::reverse(mVertexs.begin(), mVertexs.end());
+            std::reverse(vertexs.begin(), vertexs.end());
             if (ValidateFigure() == false) {
                 LOG_ERR("This figure can't build, canceled");
                 return false;
@@ -489,21 +489,21 @@ namespace drash {
         }
 
         CFigureParams param;
-        std::for_each(mVertexs.begin(), mVertexs.end(), [this](CVec2f& v) {
+        std::for_each(vertexs.begin(), vertexs.end(), [this](CVec2f& v) {
             CPlane plane;
             plane.SetNormal(CVec3f(0, 0, 1));
             plane.SetPoint(CVec3f(0, 0, 0));
 
             CVec3f vv;
-            mCamera->CastRay(v, plane, vv);
+            camera->CastRay(v, plane, vv);
             v = vv;
         });
-        param.mVertices = mVertexs;
-        obj->mFigures.push_back(param);
+        param.vertices = vertexs;
+        obj->figures.push_back(param);
 
         ShowObject(_objectName);
 
-        mTreeRefreshHandler();
+        treeRefreshHandler();
 
         ActiveMoveMode();
         return true;
@@ -522,11 +522,11 @@ namespace drash {
         SetCurrentTemplateName(_name);
         CSceneObjectParams params;
         auto obj = GetGeometryManager().CreateSceneObject(_name, params);
-        mCurrentObject = obj;
+        currentObject = obj;
     }
 
     bool CObjectEditorApp::ValidateFigure() {
-        if (mVertexs.size() < 3) {
+        if (vertexs.size() < 3) {
             return false;
         }
 
@@ -536,7 +536,7 @@ namespace drash {
 
         CVec2f pRef(0.0f, 0.0f);
 
-        std::vector<drash::CVec2f>& vs = mVertexs;
+        std::vector<drash::CVec2f>& vs = vertexs;
 
         for (unsigned int i = 0; i < vs.size(); ++i) {
             CVec2f p1 = pRef;
@@ -545,7 +545,7 @@ namespace drash {
 
             CVec2f e1 = p2 - p1;
             CVec2f e2 = p3 - p1;
-            float D = e1.mX * e2.mY - e1.mY * e2.mX;
+            float D = e1.x * e2.y - e1.y * e2.x;
             float triangleArea = 0.5f * D;
             area += triangleArea;
         }
@@ -559,22 +559,22 @@ namespace drash {
     }
 
     void CObjectEditorApp::RemoveCurrentObject() {
-        if (mCurrentObject != nullptr) {
-            GetScene().DestroyObject(mCurrentObject);
-            mCurrentObject = nullptr;
+        if (currentObject != nullptr) {
+            GetScene().DestroyObject(currentObject);
+            currentObject = nullptr;
         }
     }
 
     CFigure* CObjectEditorApp::SelectFigure(const CVec2f& _pos) {
-        if (mCurrentObject != nullptr) {
-            return GetDebugRenderer().FindFigure(mCamera, _pos);
+        if (currentObject != nullptr) {
+            return GetDebugRenderer().FindFigure(camera, _pos);
         }
 
         return nullptr;
     }
 
     void CObjectEditorApp::MoveFigure() {
-        if (mSelectedFigure == nullptr) {
+        if (selectedFigure == nullptr) {
             return;
         }
 
@@ -584,64 +584,64 @@ namespace drash {
         plane.SetNormal(CVec3f(0, 0, 1));
         plane.SetPoint(CVec3f(0, 0, 0));
 
-        mCamera->CastRay(GetCursorPos(), plane, pos);
+        camera->CastRay(GetCursorPos(), plane, pos);
 
-        float disX = pos.mX - mOldPositionCursor.mX;
-        float disY = pos.mY - mOldPositionCursor.mY;
+        float disX = pos.x - oldPositionCursor.x;
+        float disY = pos.y - oldPositionCursor.y;
 
-        mOldPositionCursor = pos;
+        oldPositionCursor = pos;
 
-        const CVec2f* v = mSelectedFigure->GetVertices();
-        CVec2f* new_vertices = new CVec2f[mSelectedFigure->EnumVertices()];
-        for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++) {
+        const CVec2f* v = selectedFigure->GetVertices();
+        CVec2f* new_vertices = new CVec2f[selectedFigure->EnumVertices()];
+        for (unsigned int i = 0; i < selectedFigure->EnumVertices(); i++) {
             new_vertices[i] = v[i];
-            new_vertices[i].mX += disX;
-            new_vertices[i].mY += disY;
+            new_vertices[i].x += disX;
+            new_vertices[i].y += disY;
         }
 
-        mSelectedFigure->SetVertices(new_vertices,
-                                     mSelectedFigure->EnumVertices());
+        selectedFigure->SetVertices(new_vertices,
+                                     selectedFigure->EnumVertices());
         delete[] new_vertices;
     }
 
     void CObjectEditorApp::StretchFigure() {
-        if (mVertexIndex == -1) {
+        if (vertexIndex == -1) {
             return;
         }
-        CVec2f* ver = new CVec2f[mSelectedFigure->EnumVertices()];
-        for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++) {
-            if (i == (unsigned int)mVertexIndex) {
+        CVec2f* ver = new CVec2f[selectedFigure->EnumVertices()];
+        for (unsigned int i = 0; i < selectedFigure->EnumVertices(); i++) {
+            if (i == (unsigned int)vertexIndex) {
                 CVec2f posCur = GetCursorPos();
-                // qDebug() << posCur.mX << " " << posCur.mY;
+                // qDebug() << posCur.x << " " << posCur.y;
 
-                float tmp = mSelectedFigure->GetDepth() * 0.5;
+                float tmp = selectedFigure->GetDepth() * 0.5;
 
                 CPlane plane;
                 plane.SetNormal(CVec3f(0, 0, 1));
-                plane.SetPoint(CVec3f(0, 0, mFrontSide ? tmp : -tmp));
+                plane.SetPoint(CVec3f(0, 0, frontSide ? tmp : -tmp));
 
                 CVec3f pos;
 
-                mCamera->CastRay(posCur, plane, pos);
+                camera->CastRay(posCur, plane, pos);
 
-                ver[i].Set(pos.mX, pos.mY);
+                ver[i].Set(pos.x, pos.y);
             } else {
-                ver[i] = mSelectedFigure->GetVertices()[i];
+                ver[i] = selectedFigure->GetVertices()[i];
             }
         }
-        mSelectedFigure->SetVertices(ver, mSelectedFigure->EnumVertices());
+        selectedFigure->SetVertices(ver, selectedFigure->EnumVertices());
         delete[] ver;
     }
 
     void CObjectEditorApp::ChangeMode() {
-        mVertexs.clear();
-        mSelectedFigure = nullptr;
+        vertexs.clear();
+        selectedFigure = nullptr;
         SaveCurrentObject();
-        mObjectContexts.clear();
+        objectContexts.clear();
 
         std::string logstr = "";
 
-        switch (mState) {
+        switch (state) {
         case MoveState:
             logstr = "Moving";
             break;
@@ -673,12 +673,12 @@ namespace drash {
     }
 
     void CObjectEditorApp::SelectVertex() {
-        for (unsigned int i = 0; i < mCurrentObject->EnumFigures(); i++) {
-            CFigure* figure = mCurrentObject->GetFigures()[i];
+        for (unsigned int i = 0; i < currentObject->EnumFigures(); i++) {
+            CFigure* figure = currentObject->GetFigures()[i];
 
             for (unsigned int j = 0; j < figure->EnumVertices(); j++) {
                 CVec3f position(figure->GetVertices()[j],
-                                mCurrentObject->GetPosZ() + figure->GetZ() +
+                                currentObject->GetPosZ() + figure->GetZ() +
                                     figure->GetDepth() * 0.5f);
 
                 CPlane plane;
@@ -687,29 +687,29 @@ namespace drash {
 
                 CVec3f cursor_pos;
 
-                mCamera->CastRay(GetCursorPos(), plane, cursor_pos);
+                camera->CastRay(GetCursorPos(), plane, cursor_pos);
 
-                if (drash::math::Abs(position.mX - cursor_pos.mX) <= 1.0f &&
-                    drash::math::Abs(position.mY - cursor_pos.mY) <= 1.0f) {
-                    mCurrentFigureVertex = position;
-                    mVertexIndex = j;
-                    mSelectedFigure = figure;
-                    mFrontSide = true;
+                if (drash::math::Abs(position.x - cursor_pos.x) <= 1.0f &&
+                    drash::math::Abs(position.y - cursor_pos.y) <= 1.0f) {
+                    currentFigureVertex = position;
+                    vertexIndex = j;
+                    selectedFigure = figure;
+                    frontSide = true;
                     break;
                 } else {
-                    position.mZ = mCurrentObject->GetPosZ() + figure->GetZ() -
+                    position.z = currentObject->GetPosZ() + figure->GetZ() -
                                   figure->GetDepth() * 0.5f;
 
                     plane.SetPoint(position);
 
-                    mCamera->CastRay(GetCursorPos(), plane, cursor_pos);
+                    camera->CastRay(GetCursorPos(), plane, cursor_pos);
 
-                    if (drash::math::Abs(position.mX - cursor_pos.mX) <= 1.0f &&
-                        drash::math::Abs(position.mY - cursor_pos.mY) <= 1.0f) {
-                        mCurrentFigureVertex = position;
-                        mVertexIndex = j;
-                        mSelectedFigure = figure;
-                        mFrontSide = false;
+                    if (drash::math::Abs(position.x - cursor_pos.x) <= 1.0f &&
+                        drash::math::Abs(position.y - cursor_pos.y) <= 1.0f) {
+                        currentFigureVertex = position;
+                        vertexIndex = j;
+                        selectedFigure = figure;
+                        frontSide = false;
                         break;
                     }
                 }
@@ -718,30 +718,30 @@ namespace drash {
     }
 
     void CObjectEditorApp::SettingCenterFigure() {
-        if (mSelectedFigure == nullptr) {
+        if (selectedFigure == nullptr) {
             return;
         }
 
         CVec3f center;
 
-        center.Set(mSelectedFigure->GetVertices()[0],
-                   mCurrentObject->GetPosZ() + mSelectedFigure->GetZ());
+        center.Set(selectedFigure->GetVertices()[0],
+                   currentObject->GetPosZ() + selectedFigure->GetZ());
 
-        for (unsigned int i = 1; i < mSelectedFigure->EnumVertices(); i++) {
-            center.Vec2() += mSelectedFigure->GetVertices()[i];
+        for (unsigned int i = 1; i < selectedFigure->EnumVertices(); i++) {
+            center.Vec2() += selectedFigure->GetVertices()[i];
         }
 
-        center.Vec2() /= CVec2f(mSelectedFigure->EnumVertices());
+        center.Vec2() /= CVec2f(selectedFigure->EnumVertices());
 
-        mMoveablePoint.SetCenter(center);
-        mMoveablePoint.SetAxisOX(true);
-        mMoveablePoint.SetAxisOY(true);
-        mMoveablePoint.SetAxisOZ(true);
-        mOldCenterFigure = center;
+        moveablePoint.SetCenter(center);
+        moveablePoint.SetAxisOX(true);
+        moveablePoint.SetAxisOY(true);
+        moveablePoint.SetAxisOZ(true);
+        oldCenterFigure = center;
     }
 
     void CObjectEditorApp::MoveOfAxis() {
-        if (mSelectedFigure == nullptr) {
+        if (selectedFigure == nullptr) {
             return;
         }
         CVec3f pos;
@@ -750,45 +750,45 @@ namespace drash {
         plane.SetNormal(CVec3f(0, 0, 1));
         plane.SetPoint(CVec3f(0, 0, 0));
 
-        mCamera->CastRay(GetCursorPos(), plane, pos);
-        CVec3f newCenter = mMoveablePoint.GetCenter();
-        float disX = newCenter.mX - mOldCenterFigure.mX;
-        float disY = newCenter.mY - mOldCenterFigure.mY;
-        mOldPositionCursor = pos;
+        camera->CastRay(GetCursorPos(), plane, pos);
+        CVec3f newCenter = moveablePoint.GetCenter();
+        float disX = newCenter.x - oldCenterFigure.x;
+        float disY = newCenter.y - oldCenterFigure.y;
+        oldPositionCursor = pos;
 
-        const CVec2f* v = mSelectedFigure->GetVertices();
-        CVec2f* new_vertices = new CVec2f[mSelectedFigure->EnumVertices()];
-        for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++) {
+        const CVec2f* v = selectedFigure->GetVertices();
+        CVec2f* new_vertices = new CVec2f[selectedFigure->EnumVertices()];
+        for (unsigned int i = 0; i < selectedFigure->EnumVertices(); i++) {
             new_vertices[i] = v[i];
-            new_vertices[i].mX += disX;
-            new_vertices[i].mY += disY;
+            new_vertices[i].x += disX;
+            new_vertices[i].y += disY;
         }
 
-        mSelectedFigure->SetVertices(new_vertices,
-                                     mSelectedFigure->EnumVertices());
+        selectedFigure->SetVertices(new_vertices,
+                                     selectedFigure->EnumVertices());
         delete[] new_vertices;
 
-        mSelectedFigure->SetZ(mSelectedFigure->GetZ() + newCenter.mZ -
-                              mOldCenterFigure.mZ);
-        mOldCenterFigure = newCenter;
+        selectedFigure->SetZ(selectedFigure->GetZ() + newCenter.z -
+                              oldCenterFigure.z);
+        oldCenterFigure = newCenter;
     }
 
     bool CObjectEditorApp::IsConvex() const {
-        if (mVertexs.size() <= 3)
+        if (vertexs.size() <= 3)
             return true;
 
-        int res = math::Sign((mVertexs[1].mX - mVertexs[0].mX) *
-                                 (mVertexs[2].mY - mVertexs[0].mY) -
-                             (mVertexs[2].mX - mVertexs[0].mX) *
-                                 (mVertexs[1].mY - mVertexs[0].mY));
+        int res = math::Sign((vertexs[1].x - vertexs[0].x) *
+                                 (vertexs[2].y - vertexs[0].y) -
+                             (vertexs[2].x - vertexs[0].x) *
+                                 (vertexs[1].y - vertexs[0].y));
 
-        const int N = mVertexs.size();
+        const int N = vertexs.size();
 
         for (int i = 1; i < N; i++) {
-            float buf = (mVertexs[(i + 1) % N].mX - mVertexs[i].mX) *
-                            (mVertexs[(i + 2) % N].mY - mVertexs[i].mY) -
-                        (mVertexs[(i + 2) % N].mX - mVertexs[i].mX) *
-                            (mVertexs[(i + 1) % N].mY - mVertexs[i].mY);
+            float buf = (vertexs[(i + 1) % N].x - vertexs[i].x) *
+                            (vertexs[(i + 2) % N].y - vertexs[i].y) -
+                        (vertexs[(i + 2) % N].x - vertexs[i].x) *
+                            (vertexs[(i + 1) % N].y - vertexs[i].y);
             if (res != math::Sign(buf)) {
                 return false;
             }
@@ -798,37 +798,37 @@ namespace drash {
     }
 
     void CObjectEditorApp::ActiveStretchMode() {
-        mState = StretchState;
+        state = StretchState;
         ChangeMode();
     }
 
     void CObjectEditorApp::SaveCurrentObject() {
-        if (mCurrentObject == nullptr) {
+        if (currentObject == nullptr) {
             return;
         }
 
         CSceneObjectGeometry* geometry = new CSceneObjectGeometry();
-        mCurrentObject->DumpGeometry(geometry);
+        currentObject->DumpGeometry(geometry);
 
         CSceneObjectGeometry* g =
-            GetGeometryManager().GetGeometry(mCurrentTemplateName);
-        g->mDestructionGraph = geometry->mDestructionGraph;
-        g->mFigures = geometry->mFigures;
+            GetGeometryManager().GetGeometry(currentTemplateName);
+        g->destructionGraph = geometry->destructionGraph;
+        g->figures = geometry->figures;
 
-        ShowObject(mCurrentTemplateName);
+        ShowObject(currentTemplateName);
     }
 
     float CObjectEditorApp::GetCurDepth() {
-        float depth = drash::math::Abs(mCurrentObject->GetPosZ() -
-                                       mCamera->GetPos().Get().mZ);
+        float depth = drash::math::Abs(currentObject->GetPosZ() -
+                                       camera->GetPos().Get().z);
         return depth;
     }
 
     // For Split mode
 
     float Area(const CVec2f& _p1, const CVec2f& _p2, const CVec2f& _p3) {
-        return (_p2.mX - _p1.mX) * (_p3.mY - _p1.mY) -
-               (_p2.mY - _p1.mY) * (_p3.mX - _p1.mX);
+        return (_p2.x - _p1.x) * (_p3.y - _p1.y) -
+               (_p2.y - _p1.y) * (_p3.x - _p1.x);
     }
 
     float Intersect_1(float _x, float _y, float _a, float _b) {
@@ -841,131 +841,131 @@ namespace drash {
 
     bool Intersect(const CVec2f& _p1, const CVec2f& _p2, const CVec2f& _p3,
                    const CVec2f& _p4) {
-        return Intersect_1(_p1.mX, _p2.mX, _p3.mX, _p4.mX) &&
-               Intersect_1(_p1.mY, _p2.mY, _p3.mY, _p4.mY) &&
+        return Intersect_1(_p1.x, _p2.x, _p3.x, _p4.x) &&
+               Intersect_1(_p1.y, _p2.y, _p3.y, _p4.y) &&
                Area(_p1, _p2, _p3) * Area(_p1, _p2, _p4) <= 0 &&
                Area(_p3, _p4, _p1) * Area(_p3, _p4, _p2) <= 0;
     }
 
     void CObjectEditorApp::BeginSplit() {
-        if (mState == SplitFigureState) {
-            if (mCurrentObject != nullptr && mSelectedFigure != nullptr) {
+        if (state == SplitFigureState) {
+            if (currentObject != nullptr && selectedFigure != nullptr) {
 
-                mSplitMin.Set(mSelectedFigure->GetVertices()[0].mX,
-                              mSelectedFigure->GetVertices()[0].mY,
-                              mCurrentObject->GetPosZ() +
-                                  mSelectedFigure->GetZ());
-                mSplitMax.Set(mSelectedFigure->GetVertices()[0].mX,
-                              mSelectedFigure->GetVertices()[0].mY,
-                              mCurrentObject->GetPosZ() +
-                                  mSelectedFigure->GetZ());
+                splitMin.Set(selectedFigure->GetVertices()[0].x,
+                              selectedFigure->GetVertices()[0].y,
+                              currentObject->GetPosZ() +
+                                  selectedFigure->GetZ());
+                splitMax.Set(selectedFigure->GetVertices()[0].x,
+                              selectedFigure->GetVertices()[0].y,
+                              currentObject->GetPosZ() +
+                                  selectedFigure->GetZ());
 
-                for (unsigned int i = 1; i < mSelectedFigure->EnumVertices();
+                for (unsigned int i = 1; i < selectedFigure->EnumVertices();
                      i++) {
-                    mSplitMin.mX = math::Min<float>(
-                        mSplitMin.mX, mSelectedFigure->GetVertices()[i].mX);
-                    mSplitMax.mX = math::Max<float>(
-                        mSplitMax.mX, mSelectedFigure->GetVertices()[i].mX);
-                    mSplitMin.mY = math::Min<float>(
-                        mSplitMin.mY, mSelectedFigure->GetVertices()[i].mY);
-                    mSplitMax.mY = math::Max<float>(
-                        mSplitMax.mY, mSelectedFigure->GetVertices()[i].mY);
-                    mSplitMin.mZ = math::Min<float>(
-                        mSplitMin.mZ,
-                        mCurrentObject->GetPosZ() + mSelectedFigure->GetZ());
-                    mSplitMax.mZ = math::Max<float>(
-                        mSplitMax.mZ,
-                        mCurrentObject->GetPosZ() + mSelectedFigure->GetZ());
+                    splitMin.x = math::Min<float>(
+                        splitMin.x, selectedFigure->GetVertices()[i].x);
+                    splitMax.x = math::Max<float>(
+                        splitMax.x, selectedFigure->GetVertices()[i].x);
+                    splitMin.y = math::Min<float>(
+                        splitMin.y, selectedFigure->GetVertices()[i].y);
+                    splitMax.y = math::Max<float>(
+                        splitMax.y, selectedFigure->GetVertices()[i].y);
+                    splitMin.z = math::Min<float>(
+                        splitMin.z,
+                        currentObject->GetPosZ() + selectedFigure->GetZ());
+                    splitMax.z = math::Max<float>(
+                        splitMax.z,
+                        currentObject->GetPosZ() + selectedFigure->GetZ());
                 }
 
-                mSplitMin.mZ -= mSelectedFigure->GetDepth() * 0.5;
-                mSplitMax.mZ += mSelectedFigure->GetDepth() * 0.5;
-                mSplitMin -= 1;
-                mSplitMax += 1;
+                splitMin.z -= selectedFigure->GetDepth() * 0.5;
+                splitMax.z += selectedFigure->GetDepth() * 0.5;
+                splitMin -= 1;
+                splitMax += 1;
 
-                mSplitPlane.SetNormal(CVec3f(0, 1, 0));
-                mSplitPlane.SetPoint(
-                    CVec3f(0.5f * (mSplitMin.mX + mSplitMax.mX),
-                           0.5f * (mSplitMin.mY + mSplitMax.mY),
-                           0.5f * (mSplitMin.mZ + mSplitMax.mZ)));
+                splitPlane.SetNormal(CVec3f(0, 1, 0));
+                splitPlane.SetPoint(
+                    CVec3f(0.5f * (splitMin.x + splitMax.x),
+                           0.5f * (splitMin.y + splitMax.y),
+                           0.5f * (splitMin.z + splitMax.z)));
 
                 ComputeSplitPlanePoints();
-                mSplitFigureContext.mFigure = mSelectedFigure;
-                mObjectContexts.push_back(mSplitFigureContext);
-                ComputeIntersections(mSplitFigureContext);
+                splitFigureContext.figure = selectedFigure;
+                objectContexts.push_back(splitFigureContext);
+                ComputeIntersections(splitFigureContext);
             }
         } else {
             //--
-            if (mCurrentObject != nullptr) {
-                if (mCurrentObject->EnumFigures() != 0) {
+            if (currentObject != nullptr) {
+                if (currentObject->EnumFigures() != 0) {
 
-                    mSplitMin.Set(
-                        mCurrentObject->GetFigures()[0]->GetVertices()[0].mX,
-                        mCurrentObject->GetFigures()[0]->GetVertices()[0].mY,
-                        mCurrentObject->GetPosZ() +
-                            mCurrentObject->GetFigures()[0]->GetZ());
-                    mSplitMax.Set(
-                        mCurrentObject->GetFigures()[0]->GetVertices()[0].mX,
-                        mCurrentObject->GetFigures()[0]->GetVertices()[0].mY,
-                        mCurrentObject->GetPosZ() +
-                            mCurrentObject->GetFigures()[0]->GetZ());
+                    splitMin.Set(
+                        currentObject->GetFigures()[0]->GetVertices()[0].x,
+                        currentObject->GetFigures()[0]->GetVertices()[0].y,
+                        currentObject->GetPosZ() +
+                            currentObject->GetFigures()[0]->GetZ());
+                    splitMax.Set(
+                        currentObject->GetFigures()[0]->GetVertices()[0].x,
+                        currentObject->GetFigures()[0]->GetVertices()[0].y,
+                        currentObject->GetPosZ() +
+                            currentObject->GetFigures()[0]->GetZ());
 
                     float maxDepth =
-                        mCurrentObject->GetFigures()[0]->GetDepth();
+                        currentObject->GetFigures()[0]->GetDepth();
 
-                    for (unsigned int i = 0; i < mCurrentObject->EnumFigures();
+                    for (unsigned int i = 0; i < currentObject->EnumFigures();
                          i++) {
-                        CFigure* figure = mCurrentObject->GetFigures()[i];
+                        CFigure* figure = currentObject->GetFigures()[i];
                         for (unsigned int i = 1; i < figure->EnumVertices();
                              i++) {
-                            mSplitMin.mX = math::Min<float>(
-                                mSplitMin.mX, figure->GetVertices()[i].mX);
-                            mSplitMax.mX = math::Max<float>(
-                                mSplitMax.mX, figure->GetVertices()[i].mX);
-                            mSplitMin.mY = math::Min<float>(
-                                mSplitMin.mY, figure->GetVertices()[i].mY);
-                            mSplitMax.mY = math::Max<float>(
-                                mSplitMax.mY, figure->GetVertices()[i].mY);
-                            mSplitMin.mZ = math::Min<float>(
-                                mSplitMin.mZ,
-                                mCurrentObject->GetPosZ() + figure->GetZ());
-                            mSplitMax.mZ = math::Max<float>(
-                                mSplitMax.mZ,
-                                mCurrentObject->GetPosZ() + figure->GetZ());
+                            splitMin.x = math::Min<float>(
+                                splitMin.x, figure->GetVertices()[i].x);
+                            splitMax.x = math::Max<float>(
+                                splitMax.x, figure->GetVertices()[i].x);
+                            splitMin.y = math::Min<float>(
+                                splitMin.y, figure->GetVertices()[i].y);
+                            splitMax.y = math::Max<float>(
+                                splitMax.y, figure->GetVertices()[i].y);
+                            splitMin.z = math::Min<float>(
+                                splitMin.z,
+                                currentObject->GetPosZ() + figure->GetZ());
+                            splitMax.z = math::Max<float>(
+                                splitMax.z,
+                                currentObject->GetPosZ() + figure->GetZ());
                         }
                         maxDepth =
                             math::Max<float>(maxDepth, figure->GetDepth());
                         SplitContext context;
-                        context.mFigure = figure;
-                        mObjectContexts.push_back(context);
+                        context.figure = figure;
+                        objectContexts.push_back(context);
                     }
-                    mSplitMin.mZ -= maxDepth * 0.5;
-                    mSplitMax.mZ += maxDepth * 0.5;
-                    mSplitMin -= 1;
-                    mSplitMax += 1;
+                    splitMin.z -= maxDepth * 0.5;
+                    splitMax.z += maxDepth * 0.5;
+                    splitMin -= 1;
+                    splitMax += 1;
 
-                    mSplitPlane.SetNormal(CVec3f(0, 1, 0));
-                    mSplitPlane.SetPoint(
-                        CVec3f(0.5f * (mSplitMin.mX + mSplitMax.mX),
-                               0.5f * (mSplitMin.mY + mSplitMax.mY),
-                               0.5f * (mSplitMin.mZ + mSplitMax.mZ)));
+                    splitPlane.SetNormal(CVec3f(0, 1, 0));
+                    splitPlane.SetPoint(
+                        CVec3f(0.5f * (splitMin.x + splitMax.x),
+                               0.5f * (splitMin.y + splitMax.y),
+                               0.5f * (splitMin.z + splitMax.z)));
 
                     ComputeSplitPlanePoints();
-                    for (SplitContext& context : mObjectContexts) {
+                    for (SplitContext& context : objectContexts) {
                         ComputeIntersections(context);
                     }
                 }
             }
             //--
         }
-        mRotationPoint.SetPoint(mSplitPlane.GetPoint());
-        mRotationPoint.SetRotation(CVec3f(0.0f, 0.0f, 0.0f));
+        rotationPoint.SetPoint(splitPlane.GetPoint());
+        rotationPoint.SetRotation(CVec3f(0.0f, 0.0f, 0.0f));
 
-        mMoveablePoint.SetCenter(mSplitPlane.GetPoint());
+        moveablePoint.SetCenter(splitPlane.GetPoint());
 
-        mMoveablePoint.SetAxisOX(true);
-        mMoveablePoint.SetAxisOY(true);
-        mMoveablePoint.SetAxisOZ(false);
+        moveablePoint.SetAxisOX(true);
+        moveablePoint.SetAxisOY(true);
+        moveablePoint.SetAxisOZ(false);
     }
 
     void CObjectEditorApp::DetectNewSplitPoint(const CVec2f& _p1,
@@ -973,11 +973,11 @@ namespace drash {
                                                unsigned int _index,
                                                const CRay& _r,
                                                SplitContext& _context) const {
-        if (mCurrentObject == nullptr) {
+        if (currentObject == nullptr) {
             return;
         }
 
-        float centerz = mCurrentObject->GetPosZ() + _context.mFigure->GetZ();
+        float centerz = currentObject->GetPosZ() + _context.figure->GetZ();
 
         CPlane p;
         p.Set(CVec3f(_p1, centerz), CVec3f(_p2, centerz),
@@ -988,65 +988,65 @@ namespace drash {
         p.CastRay(_r, p1);
         p2 = p1;
 
-        if (_context.mSplitIntersectionsCount == 0) {
-            _context.mSplitIntersection1 = p1;
-            _context.mSplitIntersection1Index = _index;
-        } else if (_context.mSplitIntersectionsCount == 1) {
-            _context.mSplitIntersection2 = p1;
-            _context.mSplitIntersection2Index = _index;
+        if (_context.splitIntersectionsCount == 0) {
+            _context.splitIntersection1 = p1;
+            _context.splitIntersection1Index = _index;
+        } else if (_context.splitIntersectionsCount == 1) {
+            _context.splitIntersection2 = p1;
+            _context.splitIntersection2Index = _index;
         }
 
-        if (Intersect(_p1, _p2, mSplitPlanePoint4, mSplitPlanePoint1)) {
-            _context.mSplitIntersectionsCount++;
+        if (Intersect(_p1, _p2, splitPlanePoint4, splitPlanePoint1)) {
+            _context.splitIntersectionsCount++;
         }
     }
 
     void CObjectEditorApp::ComputeSplitPlanePoints() {
         CRay r;
 
-        mSplitPlanePoint1.Set(mSplitMin.mX, 0, mSplitMax.mZ);
-        mSplitPlanePoint2.Set(mSplitMin.mX, 0, mSplitMin.mZ);
-        mSplitPlanePoint3.Set(mSplitMax.mX, 0, mSplitMin.mZ);
-        mSplitPlanePoint4.Set(mSplitMax.mX, 0, mSplitMax.mZ);
+        splitPlanePoint1.Set(splitMin.x, 0, splitMax.z);
+        splitPlanePoint2.Set(splitMin.x, 0, splitMin.z);
+        splitPlanePoint3.Set(splitMax.x, 0, splitMin.z);
+        splitPlanePoint4.Set(splitMax.x, 0, splitMax.z);
 
         r.SetDirection(CVec3f(0, -1, 0));
 
-        r.SetPoint(mSplitPlanePoint1);
-        mSplitPlane.CastRay(r, mSplitPlanePoint1);
-        r.SetPoint(mSplitPlanePoint2);
-        mSplitPlane.CastRay(r, mSplitPlanePoint2);
-        r.SetPoint(mSplitPlanePoint3);
-        mSplitPlane.CastRay(r, mSplitPlanePoint3);
-        r.SetPoint(mSplitPlanePoint4);
-        mSplitPlane.CastRay(r, mSplitPlanePoint4);
+        r.SetPoint(splitPlanePoint1);
+        splitPlane.CastRay(r, splitPlanePoint1);
+        r.SetPoint(splitPlanePoint2);
+        splitPlane.CastRay(r, splitPlanePoint2);
+        r.SetPoint(splitPlanePoint3);
+        splitPlane.CastRay(r, splitPlanePoint3);
+        r.SetPoint(splitPlanePoint4);
+        splitPlane.CastRay(r, splitPlanePoint4);
     }
 
     void CObjectEditorApp::ComputeIntersections(SplitContext& _context) const {
 
-        if (_context.mFigure != nullptr) {
-            CVec3f dir = mSplitPlanePoint1;
-            dir -= mSplitPlanePoint4;
+        if (_context.figure != nullptr) {
+            CVec3f dir = splitPlanePoint1;
+            dir -= splitPlanePoint4;
 
             float centerz =
-                mCurrentObject->GetPosZ() + _context.mFigure->GetZ();
+                currentObject->GetPosZ() + _context.figure->GetZ();
 
             CRay r;
-            r.SetPoint(CVec3f(mSplitPlanePoint4.Vec2(), centerz));
+            r.SetPoint(CVec3f(splitPlanePoint4.Vec2(), centerz));
             r.SetDirection(dir);
 
-            _context.mSplitIntersectionsCount = 0;
+            _context.splitIntersectionsCount = 0;
 
-            if (_context.mFigure->EnumVertices() != 0) {
-                for (unsigned int i = 1; i < _context.mFigure->EnumVertices();
+            if (_context.figure->EnumVertices() != 0) {
+                for (unsigned int i = 1; i < _context.figure->EnumVertices();
                      i++) {
-                    DetectNewSplitPoint(_context.mFigure->GetVertices()[i - 1],
-                                        _context.mFigure->GetVertices()[i],
+                    DetectNewSplitPoint(_context.figure->GetVertices()[i - 1],
+                                        _context.figure->GetVertices()[i],
                                         i - 1, r, _context);
                 }
-                DetectNewSplitPoint(_context.mFigure->GetVertices()
-                                        [_context.mFigure->EnumVertices() - 1],
-                                    _context.mFigure->GetVertices()[0],
-                                    _context.mFigure->EnumVertices() - 1, r,
+                DetectNewSplitPoint(_context.figure->GetVertices()
+                                        [_context.figure->EnumVertices() - 1],
+                                    _context.figure->GetVertices()[0],
+                                    _context.figure->EnumVertices() - 1, r,
                                     _context);
             }
         }
@@ -1054,139 +1054,139 @@ namespace drash {
 
     void CObjectEditorApp::EndSplit() {
 
-        if (mState == SplitFigureState) {
-            mObjectContexts.clear();
-            mObjectContexts.push_back(mSplitFigureContext);
+        if (state == SplitFigureState) {
+            objectContexts.clear();
+            objectContexts.push_back(splitFigureContext);
         }
 
-        for (SplitContext& context : mObjectContexts) {
+        for (SplitContext& context : objectContexts) {
 
-            if (context.mFigure == nullptr) {
+            if (context.figure == nullptr) {
                 continue;
             }
 
-            if (context.mSplitIntersectionsCount == 2) {
-                unsigned int fsize = context.mSplitIntersection1Index + 2 +
-                                     context.mFigure->EnumVertices() -
-                                     context.mSplitIntersection2Index;
+            if (context.splitIntersectionsCount == 2) {
+                unsigned int fsize = context.splitIntersection1Index + 2 +
+                                     context.figure->EnumVertices() -
+                                     context.splitIntersection2Index;
 
                 CFigureParams fp;
-                fp.mVertices.resize(fsize);
-                fp.mDepth = context.mFigure->GetDepth();
-                fp.mZ = context.mFigure->GetZ();
+                fp.vertices.resize(fsize);
+                fp.depth = context.figure->GetDepth();
+                fp.z = context.figure->GetZ();
 
                 unsigned int i = 0;
 
-                for (; i <= context.mSplitIntersection1Index; i++) {
-                    fp.mVertices[i] = context.mFigure->GetVertices()[i];
+                for (; i <= context.splitIntersection1Index; i++) {
+                    fp.vertices[i] = context.figure->GetVertices()[i];
                 }
 
-                fp.mVertices[i++] = context.mSplitIntersection1;
-                fp.mVertices[i++] = context.mSplitIntersection2;
-                for (i = context.mSplitIntersection2Index + 1;
-                     i < context.mFigure->EnumVertices(); i++) {
-                    fp.mVertices[i] = context.mFigure->GetVertices()[i];
+                fp.vertices[i++] = context.splitIntersection1;
+                fp.vertices[i++] = context.splitIntersection2;
+                for (i = context.splitIntersection2Index + 1;
+                     i < context.figure->EnumVertices(); i++) {
+                    fp.vertices[i] = context.figure->GetVertices()[i];
                 }
 
-                mCurrentObject->CreateFigure(fp);
+                currentObject->CreateFigure(fp);
 
-                fsize = context.mSplitIntersection2Index -
-                        context.mSplitIntersection1Index + 2;
+                fsize = context.splitIntersection2Index -
+                        context.splitIntersection1Index + 2;
 
-                fp.mVertices.clear();
-                fp.mVertices.resize(fsize);
+                fp.vertices.clear();
+                fp.vertices.resize(fsize);
 
                 i = 0;
-                fp.mVertices[i++] = context.mSplitIntersection1;
-                for (unsigned int j = context.mSplitIntersection1Index + 1;
-                     j <= context.mSplitIntersection2Index; j++) {
-                    fp.mVertices[i++] = context.mFigure->GetVertices()[j];
+                fp.vertices[i++] = context.splitIntersection1;
+                for (unsigned int j = context.splitIntersection1Index + 1;
+                     j <= context.splitIntersection2Index; j++) {
+                    fp.vertices[i++] = context.figure->GetVertices()[j];
                 }
-                fp.mVertices[i] = context.mSplitIntersection2;
+                fp.vertices[i] = context.splitIntersection2;
 
-                mCurrentObject->CreateFigure(fp);
+                currentObject->CreateFigure(fp);
 
-                mCurrentObject->DestroyFigure(context.mFigure);
+                currentObject->DestroyFigure(context.figure);
 
                 CSceneObjectGeometry* geometry = new CSceneObjectGeometry();
-                mCurrentObject->DumpGeometry(geometry);
+                currentObject->DumpGeometry(geometry);
 
                 CSceneObjectGeometry* g =
-                    GetGeometryManager().GetGeometry(mCurrentTemplateName);
-                g->mDestructionGraph = geometry->mDestructionGraph;
-                g->mFigures = geometry->mFigures;
+                    GetGeometryManager().GetGeometry(currentTemplateName);
+                g->destructionGraph = geometry->destructionGraph;
+                g->figures = geometry->figures;
             }
         }
-        mTreeRefreshHandler();
+        treeRefreshHandler();
     }
 
     void CObjectEditorApp::RenderSplitPlane() {
-        if ((mState != SplitFigureState && mState != SplitObjectState) ||
-            mCurrentObject == nullptr) {
+        if ((state != SplitFigureState && state != SplitObjectState) ||
+            currentObject == nullptr) {
             return;
         }
 
-        if (mState == SplitFigureState && mSelectedFigure == nullptr) {
+        if (state == SplitFigureState && selectedFigure == nullptr) {
             return;
         }
 
         GetGrengSystems().GetRenderer().DrawTriangle(
-            GetCamera(), mSplitPlanePoint1, mSplitPlanePoint2,
-            mSplitPlanePoint4, CColor4f(1, 0, 0.5, 0.5), true);
+            GetCamera(), splitPlanePoint1, splitPlanePoint2,
+            splitPlanePoint4, CColor4f(1, 0, 0.5, 0.5), true);
         GetGrengSystems().GetRenderer().DrawTriangle(
-            GetCamera(), mSplitPlanePoint4, mSplitPlanePoint2,
-            mSplitPlanePoint3, CColor4f(1, 0, 0.5, 0.5), true);
+            GetCamera(), splitPlanePoint4, splitPlanePoint2,
+            splitPlanePoint3, CColor4f(1, 0, 0.5, 0.5), true);
 
-        for (SplitContext& context : mObjectContexts) {
-            if (context.mSplitIntersectionsCount == 2) {
+        for (SplitContext& context : objectContexts) {
+            if (context.splitIntersectionsCount == 2) {
                 auto draw_split = [&](CVec3f _split_intersection) {
                     CVec3f p1 = _split_intersection;
                     CVec3f p2 = _split_intersection;
 
-                    p1.mZ = mCurrentObject->GetPosZ() +
-                            context.mFigure->GetZ() -
-                            context.mFigure->GetDepth() * 0.5f;
-                    p2.mZ = mCurrentObject->GetPosZ() +
-                            context.mFigure->GetZ() +
-                            context.mFigure->GetDepth() * 0.5f;
+                    p1.z = currentObject->GetPosZ() +
+                            context.figure->GetZ() -
+                            context.figure->GetDepth() * 0.5f;
+                    p2.z = currentObject->GetPosZ() +
+                            context.figure->GetZ() +
+                            context.figure->GetDepth() * 0.5f;
 
                     GetGrengSystems().GetRenderer().DrawLine(
                         GetCamera(), p1, p2, 2, CColor4f(1, 1, 1), false);
                 };
 
-                draw_split(context.mSplitIntersection1);
-                draw_split(context.mSplitIntersection2);
+                draw_split(context.splitIntersection1);
+                draw_split(context.splitIntersection2);
             }
         }
     }
 
     void CObjectEditorApp::SplitRotateStep(double _dt) {
-        if (mState == SplitFigureState && mSelectedFigure == nullptr) {
+        if (state == SplitFigureState && selectedFigure == nullptr) {
             return;
         }
-        mRotationPoint.SetCursorPos(GetCursorPos());
-        mRotationPoint.Step(_dt);
-        mMoveablePoint.SetCursorPos(GetCursorPos());
-        mMoveablePoint.Step(_dt);
+        rotationPoint.SetCursorPos(GetCursorPos());
+        rotationPoint.Step(_dt);
+        moveablePoint.SetCursorPos(GetCursorPos());
+        moveablePoint.Step(_dt);
 
-        mRotationPoint.SetPoint(mMoveablePoint.GetCenter());
-        float angle = mRotationPoint.GetRotation().mZ;
+        rotationPoint.SetPoint(moveablePoint.GetCenter());
+        float angle = rotationPoint.GetRotation().z;
         double cs = cos(M_PI / 2 + angle);
         double ss = sin(M_PI / 2 + angle);
-        mSplitPlane.SetNormal(CVec3f(cs, ss, 0));
-        mSplitPlane.SetPoint(mMoveablePoint.GetCenter());
+        splitPlane.SetNormal(CVec3f(cs, ss, 0));
+        splitPlane.SetPoint(moveablePoint.GetCenter());
         ComputeSplitPlanePoints();
-        if (mState == SplitFigureState) {
-            ComputeIntersections(mSplitFigureContext);
+        if (state == SplitFigureState) {
+            ComputeIntersections(splitFigureContext);
         } else {
-            for (SplitContext& context : mObjectContexts) {
+            for (SplitContext& context : objectContexts) {
                 ComputeIntersections(context);
             }
         }
     }
 
     void CObjectEditorApp::DrawDragTemplate() {
-        if (mDragNow == false || mDragTemplate == nullptr) {
+        if (dragNow == false || dragTemplate == nullptr) {
             return;
         }
         //    qDebug() << "Draw drag Template";
@@ -1198,20 +1198,20 @@ namespace drash {
         plane.SetNormal(CVec3f(0, 0, 1));
         plane.SetPoint(CVec3f(0, 0, 0));
 
-        mCamera->CastRay(cpos, plane, position);
-        params.mPos = position;
-        GetDebugRenderer().RenderObject(*mDragTemplate, params);
+        camera->CastRay(cpos, plane, position);
+        params.pos = position;
+        GetDebugRenderer().RenderObject(*dragTemplate, params);
     }
 
     void CObjectEditorApp::ApplyDrop() {
-        if (mDragTemplate == nullptr) {
+        if (dragTemplate == nullptr) {
             return;
         }
 
         //    CSceneObjectGeometry a;
         /*
-         *    std::vector<CFigureParams> mFigures;
-        std::vector<std::vector<unsigned int>> mDestructionGraph;
+         *    std::vector<CFigureParams> figures;
+        std::vector<std::vector<unsigned int>> destructionGraph;
          */
 
         CPlane plane;
@@ -1220,22 +1220,22 @@ namespace drash {
 
         CVec3f position;
         CVec2f cpos = GetCursorPos();
-        mCamera->CastRay(cpos, plane, position);
+        camera->CastRay(cpos, plane, position);
 
         CSceneObjectGeometry* currg =
-            GetGeometryManager().GetGeometry(mCurrentTemplateName);
+            GetGeometryManager().GetGeometry(currentTemplateName);
 
-        for (CFigureParams figure : mDragTemplate->mFigures) {
-            for (auto& v : figure.mVertices) {
-                v.Set(v.mX + position.mX, v.mY + position.mY);
-                qDebug() << v.mX << " " << v.mY;
+        for (CFigureParams figure : dragTemplate->figures) {
+            for (auto& v : figure.vertices) {
+                v.Set(v.x + position.x, v.y + position.y);
+                qDebug() << v.x << " " << v.y;
             }
             //        qDebug() << "add figure";
-            currg->mFigures.push_back(figure);
+            currg->figures.push_back(figure);
         }
-        qDebug() << mCurrentTemplateName.c_str();
-        ShowObject(mCurrentTemplateName);
-        mTreeRefreshHandler();
+        qDebug() << currentTemplateName.c_str();
+        ShowObject(currentTemplateName);
+        treeRefreshHandler();
     }
 
 } // namespace drash

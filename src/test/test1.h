@@ -44,7 +44,7 @@ namespace drash {
             virtual void Step(double _dt) override;
             virtual void Render() override;
 
-            auto& GetCamera() const { return *mCamera; }
+            auto& GetCamera() const { return *camera; }
 
           private:
             void SetProcessors();
@@ -60,42 +60,42 @@ namespace drash {
             void DetachCurrentObject();
             void SelectFigure();
 
-            std::vector<CVec2f> mVertices;
-            unsigned int mTemplateCounter = 0;
-            CSceneObjectGeometry* mCurrentTemplate = nullptr;
-            CSceneObject* mCurrentObject = nullptr;
-            CFigure* mCurrentFigure = nullptr;
+            std::vector<CVec2f> vertices;
+            unsigned int templateCounter = 0;
+            CSceneObjectGeometry* currentTemplate = nullptr;
+            CSceneObject* currentObject = nullptr;
+            CFigure* currentFigure = nullptr;
 
-            CVec2f mCamRotFirstClick;
+            CVec2f camRotFirstClick;
 
-            CVec3f mCenter;
-            CVec3f mX;
-            CVec3f mY;
-            CVec3f mZ;
+            CVec3f center;
+            CVec3f x;
+            CVec3f y;
+            CVec3f z;
 
-            CVec3f mAxisDrawK;
-            unsigned int mAxisOver = 0;
-            CVec3f mFigureMoveFirstClick;
-            unsigned int mAxisMoving = 0;
+            CVec3f axisDrawK;
+            unsigned int axisOver = 0;
+            CVec3f figureMoveFirstClick;
+            unsigned int axisMoving = 0;
 
-            CVec3f mSplitFigureMin;
-            CVec3f mSplitFigureMax;
-            bool mSplitMode = false;
-            CPlane mSplitPlane;
-            CVec3f mSplitPlanePoint1;
-            CVec3f mSplitPlanePoint2;
-            CVec3f mSplitPlanePoint3;
-            CVec3f mSplitPlanePoint4;
-            CVec3f mSplitIntersection1;
-            unsigned mSplitIntersection1Index = 0;
-            CVec3f mSplitIntersection2;
-            unsigned mSplitIntersection2Index = 0;
-            unsigned int mSplitIntersectionsCount = 0;
-            bool mSplitDepth = false;
-            float mSplitFigureCenterZ = 0;
+            CVec3f splitFigureMin;
+            CVec3f splitFigureMax;
+            bool splitMode = false;
+            CPlane splitPlane;
+            CVec3f splitPlanePoint1;
+            CVec3f splitPlanePoint2;
+            CVec3f splitPlanePoint3;
+            CVec3f splitPlanePoint4;
+            CVec3f splitIntersection1;
+            unsigned splitIntersection1Index = 0;
+            CVec3f splitIntersection2;
+            unsigned splitIntersection2Index = 0;
+            unsigned int splitIntersectionsCount = 0;
+            bool splitDepth = false;
+            float splitFigureCenterZ = 0;
 
-            greng::CCamera* mCamera = nullptr;
-            greng::CPointLight mLight1;
+            greng::CCamera* camera = nullptr;
+            greng::CPointLight light1;
         };
 
     } // namespace test

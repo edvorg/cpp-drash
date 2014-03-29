@@ -31,54 +31,54 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     CPlayersSystem::CPlayersSystem(CScene& _scene)
-        : mScene(_scene), mPlayersFactory(mPlayersCountLimit, "CPlayer") {}
+        : scene(_scene), playersFactory(playersCountLimit, "CPlayer") {}
 
     void CPlayersSystem::Step(double) {}
 
     CPlayersSystem::~CPlayersSystem() {
-        while (mPlayersFactory.EnumObjects() != 0) {
-            DestroyPlayer(mPlayersFactory.GetObjects()[0]);
+        while (playersFactory.EnumObjects() != 0) {
+            DestroyPlayer(playersFactory.GetObjects()[0]);
         }
     }
 
     CPlayer* CPlayersSystem::CreatePlayer(const CSceneObjectGeometry& _g,
                                           const CPlayerParams& _p) {
-        CPlayer* res = mPlayersFactory.CreateObject();
+        CPlayer* res = playersFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
         }
 
-        res->mSceneObject = mScene.CreateObject(_g, _p.mSceneObjectParams);
+        res->sceneObject = scene.CreateObject(_g, _p.sceneObjectParams);
 
-        if (res->mSceneObject == nullptr) {
-            mPlayersFactory.DestroyObject(res);
+        if (res->sceneObject == nullptr) {
+            playersFactory.DestroyObject(res);
             return nullptr;
         }
 
-        res->mSceneObject->SetFixedRotation(true);
-        res->mVelocityLimit = _p.mVelocityLimit;
+        res->sceneObject->SetFixedRotation(true);
+        res->velocityLimit = _p.velocityLimit;
 
         return res;
     }
 
     bool CPlayersSystem::DestroyPlayer(CPlayer* _player) {
-        if (mPlayersFactory.IsObject(_player) == false) {
+        if (playersFactory.IsObject(_player) == false) {
             return false;
         }
 
-        if (_player->mSceneObject != nullptr) {
-            mScene.DestroyObject(_player->mSceneObject);
+        if (_player->sceneObject != nullptr) {
+            scene.DestroyObject(_player->sceneObject);
         }
 
-        mPlayersFactory.DestroyObject(_player);
+        playersFactory.DestroyObject(_player);
 
         return true;
     }
 
     bool CPlayersSystem::SendMessage(CPlayer* _player,
                                      const PlayerMessage& _message) {
-        if (mPlayersFactory.IsObject(_player) == false) {
+        if (playersFactory.IsObject(_player) == false) {
             LOG_ERR("CPlayersSystem::SendMessage(): Wrong player");
             return false;
         }
@@ -86,7 +86,7 @@ namespace drash {
         switch (_message) {
         case PlayerMessage::Left:
             if (_player->GetSceneObject()->GetLinearVelocity().Length() <
-                _player->mVelocityLimit) {
+                _player->velocityLimit) {
                 _player->GetSceneObject()->ApplyLinearImpulse(
                     CVec2f(-1.0, 0),
                     _player->GetSceneObject()->GetMassCenter());
@@ -95,7 +95,7 @@ namespace drash {
 
         case PlayerMessage::Right:
             if (_player->GetSceneObject()->GetLinearVelocity().Length() <
-                _player->mVelocityLimit) {
+                _player->velocityLimit) {
                 _player->GetSceneObject()->ApplyLinearImpulse(
                     CVec2f(1.0, 0), _player->GetSceneObject()->GetMassCenter());
             }

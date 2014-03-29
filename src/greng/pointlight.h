@@ -31,7 +31,7 @@ namespace greng {
       public:
         CPointLight() = default;
 
-        drash::CVec3f mPosition = 0;
+        drash::CVec3f position = 0;
     };
 
 } // namespace greng

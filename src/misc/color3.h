@@ -45,9 +45,9 @@ namespace drash {
 
         CColor3& Set(const T& _r, const T& _g, const T& _b);
 
-        T mR = DEF_VAL_FUNC(0);
-        T mG = DEF_VAL_FUNC(1);
-        T mB = DEF_VAL_FUNC(2);
+        T r = DEF_VAL_FUNC(0);
+        T g = DEF_VAL_FUNC(1);
+        T b = DEF_VAL_FUNC(2);
 
       protected:
       private:
@@ -62,22 +62,22 @@ namespace drash {
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
     CColor3<T, DEF_VAL_FUNC>::CColor3(const CColor3& _rgb)
-        : mR(_rgb.mR), mG(_rgb.mG), mB(_rgb.mB) {}
+        : r(_rgb.r), g(_rgb.g), b(_rgb.b) {}
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
     CColor3<T, DEF_VAL_FUNC>::CColor3(const T& _rgb)
-        : mR(_rgb), mG(_rgb), mB(_rgb) {}
+        : r(_rgb), g(_rgb), b(_rgb) {}
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
     CColor3<T, DEF_VAL_FUNC>::CColor3(const T& _r, const T& _g, const T& _b)
-        : mR(_r), mG(_g), mB(_b) {}
+        : r(_r), g(_g), b(_b) {}
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
     CColor3<T, DEF_VAL_FUNC>&
     CColor3<T, DEF_VAL_FUNC>::Set(const T& _r, const T& _g, const T& _b) {
-        this->mR = _r;
-        this->mG = _g;
-        this->mB = _b;
+        this->r = _r;
+        this->g = _g;
+        this->b = _b;
         return *this;
     }
 

@@ -35,17 +35,17 @@ namespace greng {
 
     class CCameraParams {
       public:
-        bool mOrtho = false;
-        float mOrthoWidth = 1.0f;
-        float mFov = M_PI / 4.0f;
-        float mDepthOfView = 1000.0f;
-        CVec3f mPos = { 0, 0, 0 };
-        CVec3f mRotation = { 0, 0, 0 };
+        bool ortho = false;
+        float orthoWidth = 1.0f;
+        float fov = M_PI / 4.0f;
+        float depthOfView = 1000.0f;
+        CVec3f pos = { 0, 0, 0 };
+        CVec3f rotation = { 0, 0, 0 };
     };
 
     class CCameraManager {
       public:
-        static const unsigned int mCamerasCountLimit = 3;
+        static const unsigned int camerasCountLimit = 3;
 
         CCameraManager();
         ~CCameraManager();
@@ -65,20 +65,20 @@ namespace greng {
 
       protected:
       private:
-        drash::CObjectFactory<CCamera> mCameraFactory;
+        drash::CObjectFactory<CCamera> cameraFactory;
 
-        float mAspectRatio = 1;
+        float aspectRatio = 1;
     };
 
     inline CCamera* const* CCameraManager::GetCameras() const {
-        return mCameraFactory.GetObjects();
+        return cameraFactory.GetObjects();
     }
 
     inline unsigned int CCameraManager::EnumCameras() const {
-        return mCameraFactory.EnumObjects();
+        return cameraFactory.EnumObjects();
     }
 
-    inline float CCameraManager::GetAspectRatio() const { return mAspectRatio; }
+    inline float CCameraManager::GetAspectRatio() const { return aspectRatio; }
 
 } // namespace greng
 

@@ -36,40 +36,40 @@ namespace greng {
 
     using drash::CLogger;
 
-    CMeshManager::CMeshManager() : mMeshFactory(mMeshesCountLimit, "CMesh") {}
+    CMeshManager::CMeshManager() : meshFactory(meshesCountLimit, "CMesh") {}
 
     CMeshManager::~CMeshManager() {
-        while (mMeshFactory.EnumObjects() != 0) {
-            DestroyMesh(mMeshFactory.GetObjects()[0]);
+        while (meshFactory.EnumObjects() != 0) {
+            DestroyMesh(meshFactory.GetObjects()[0]);
         }
     }
 
     CMesh* CMeshManager::CreateMesh() {
-        CMesh* res = mMeshFactory.CreateObject();
+        CMesh* res = meshFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
         }
 
-        glGenBuffers(1, &res->mVertexBufferId);
-        glGenBuffers(1, &res->mIndexBufferId);
+        glGenBuffers(1, &res->vertexBufferId);
+        glGenBuffers(1, &res->indexBufferId);
 
         bool fail = false;
 
-        if (res->mVertexBufferId == 0) {
-            if (res->mIndexBufferId != 0) {
-                glDeleteBuffers(1, &res->mIndexBufferId);
-                res->mIndexBufferId = 0;
+        if (res->vertexBufferId == 0) {
+            if (res->indexBufferId != 0) {
+                glDeleteBuffers(1, &res->indexBufferId);
+                res->indexBufferId = 0;
             }
             fail = true;
-        } else if (res->mIndexBufferId == 0) {
-            glDeleteBuffers(1, &res->mVertexBufferId);
-            res->mVertexBufferId = 0;
+        } else if (res->indexBufferId == 0) {
+            glDeleteBuffers(1, &res->vertexBufferId);
+            res->vertexBufferId = 0;
             fail = true;
         }
 
         if (fail == true) {
-            mMeshFactory.DestroyObject(res);
+            meshFactory.DestroyObject(res);
             res = nullptr;
         }
 
@@ -91,14 +91,14 @@ namespace greng {
             return nullptr;
         }
 
-        glBindBuffer(GL_ARRAY_BUFFER, res->mVertexBufferId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * res->mVertices.size(),
-                     &res->mVertices[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, res->vertexBufferId);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * res->vertices.size(),
+                     &res->vertices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, res->mIndexBufferId);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, res->indexBufferId);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                     sizeof(unsigned int) * res->mIndices.size(),
-                     &res->mIndices[0], GL_STATIC_DRAW);
+                     sizeof(unsigned int) * res->indices.size(),
+                     &res->indices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
         return res;
@@ -116,42 +116,42 @@ namespace greng {
         CVertex v3;
         CVertex v4;
 
-        v1.mPos.Set(-1, -1, 0);
-        v1.mUV.Set(0, 0);
-        v1.mNormal.Set(0, 0, 1);
-        v2.mPos.Set(-1, 1, 0);
-        v2.mUV.Set(0, 1);
-        v2.mNormal.Set(0, 0, 1);
-        v3.mPos.Set(1, 1, 0);
-        v3.mUV.Set(1, 1);
-        v3.mNormal.Set(0, 0, 1);
-        v4.mPos.Set(1, -1, 0);
-        v4.mUV.Set(1, 0);
-        v4.mNormal.Set(0, 0, 1);
+        v1.pos.Set(-1, -1, 0);
+        v1.uV.Set(0, 0);
+        v1.normal.Set(0, 0, 1);
+        v2.pos.Set(-1, 1, 0);
+        v2.uV.Set(0, 1);
+        v2.normal.Set(0, 0, 1);
+        v3.pos.Set(1, 1, 0);
+        v3.uV.Set(1, 1);
+        v3.normal.Set(0, 0, 1);
+        v4.pos.Set(1, -1, 0);
+        v4.uV.Set(1, 0);
+        v4.normal.Set(0, 0, 1);
 
-        res->mVertices.push_back(v1);
-        res->mVertices.push_back(v2);
-        res->mVertices.push_back(v3);
-        res->mVertices.push_back(v4);
+        res->vertices.push_back(v1);
+        res->vertices.push_back(v2);
+        res->vertices.push_back(v3);
+        res->vertices.push_back(v4);
 
-        res->mIndices.push_back(0);
-        res->mIndices.push_back(1);
-        res->mIndices.push_back(3);
-        res->mIndices.push_back(3);
-        res->mIndices.push_back(1);
-        res->mIndices.push_back(2);
+        res->indices.push_back(0);
+        res->indices.push_back(1);
+        res->indices.push_back(3);
+        res->indices.push_back(3);
+        res->indices.push_back(1);
+        res->indices.push_back(2);
 
-        res->mMaterialOffsets.push_back(0);
-        res->mMaterialOffsets.push_back(res->mIndices.size());
+        res->materialOffsets.push_back(0);
+        res->materialOffsets.push_back(res->indices.size());
 
-        glBindBuffer(GL_ARRAY_BUFFER, res->mVertexBufferId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * res->mVertices.size(),
-                     &res->mVertices[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, res->vertexBufferId);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * res->vertices.size(),
+                     &res->vertices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, res->mIndexBufferId);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, res->indexBufferId);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                     sizeof(unsigned int) * res->mIndices.size(),
-                     &res->mIndices[0], GL_STATIC_DRAW);
+                     sizeof(unsigned int) * res->indices.size(),
+                     &res->indices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
         return res;
@@ -177,19 +177,19 @@ namespace greng {
         CVertex v3;
         CVertex v4;
 
-        v1.mUV.Set(0, 0);
-        v2.mUV.Set(0, 1);
-        v3.mUV.Set(1, 1);
-        v4.mUV.Set(1, 0);
+        v1.uV.Set(0, 0);
+        v2.uV.Set(0, 1);
+        v3.uV.Set(1, 1);
+        v4.uV.Set(1, 0);
 
         for (unsigned int i = 0; i < 6; i++) {
             unsigned int basei = i * 4;
-            res->mIndices.push_back(basei + 0);
-            res->mIndices.push_back(basei + 1);
-            res->mIndices.push_back(basei + 3);
-            res->mIndices.push_back(basei + 3);
-            res->mIndices.push_back(basei + 1);
-            res->mIndices.push_back(basei + 2);
+            res->indices.push_back(basei + 0);
+            res->indices.push_back(basei + 1);
+            res->indices.push_back(basei + 3);
+            res->indices.push_back(basei + 3);
+            res->indices.push_back(basei + 1);
+            res->indices.push_back(basei + 2);
 
             drash::CVec4f p1(-1, -1, 1, 1);
             drash::CVec4f p2(-1, 1, 1, 1);
@@ -204,15 +204,15 @@ namespace greng {
             drash::CVec4f rn1 = n1;
 
             drash::CMatrix4f m;
-            if (drash::math::Abs(angles[i].mX) > 0.0001) {
-                drash::MatrixRotationX(m, angles[i].mX);
+            if (drash::math::Abs(angles[i].x) > 0.0001) {
+                drash::MatrixRotationX(m, angles[i].x);
                 drash::MatrixMultiply(m, p1, rp1);
                 drash::MatrixMultiply(m, p2, rp2);
                 drash::MatrixMultiply(m, p3, rp3);
                 drash::MatrixMultiply(m, p4, rp4);
                 drash::MatrixMultiply(m, n1, rn1);
-            } else if (drash::math::Abs(angles[i].mY) > 0.0001) {
-                drash::MatrixRotationY(m, angles[i].mY);
+            } else if (drash::math::Abs(angles[i].y) > 0.0001) {
+                drash::MatrixRotationY(m, angles[i].y);
                 drash::MatrixMultiply(m, p1, rp1);
                 drash::MatrixMultiply(m, p2, rp2);
                 drash::MatrixMultiply(m, p3, rp3);
@@ -220,32 +220,32 @@ namespace greng {
                 drash::MatrixMultiply(m, n1, rn1);
             }
 
-            v1.mPos = rp1;
-            v1.mNormal = rn1;
-            v2.mPos = rp2;
-            v2.mNormal = rn1;
-            v3.mPos = rp3;
-            v3.mNormal = rn1;
-            v4.mPos = rp4;
-            v4.mNormal = rn1;
+            v1.pos = rp1;
+            v1.normal = rn1;
+            v2.pos = rp2;
+            v2.normal = rn1;
+            v3.pos = rp3;
+            v3.normal = rn1;
+            v4.pos = rp4;
+            v4.normal = rn1;
 
-            res->mVertices.push_back(v1);
-            res->mVertices.push_back(v2);
-            res->mVertices.push_back(v3);
-            res->mVertices.push_back(v4);
+            res->vertices.push_back(v1);
+            res->vertices.push_back(v2);
+            res->vertices.push_back(v3);
+            res->vertices.push_back(v4);
         }
 
-        res->mMaterialOffsets.push_back(0);
-        res->mMaterialOffsets.push_back(res->mIndices.size());
+        res->materialOffsets.push_back(0);
+        res->materialOffsets.push_back(res->indices.size());
 
-        glBindBuffer(GL_ARRAY_BUFFER, res->mVertexBufferId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * res->mVertices.size(),
-                     &res->mVertices[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, res->vertexBufferId);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * res->vertices.size(),
+                     &res->vertices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, res->mIndexBufferId);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, res->indexBufferId);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                     sizeof(unsigned int) * res->mIndices.size(),
-                     &res->mIndices[0], GL_STATIC_DRAW);
+                     sizeof(unsigned int) * res->indices.size(),
+                     &res->indices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
         return res;
@@ -273,40 +273,40 @@ namespace greng {
             return nullptr;
         }
 
-        res->mVertices.resize(_vertices_count);
-        memcpy(&res->mVertices[0], _vertices,
+        res->vertices.resize(_vertices_count);
+        memcpy(&res->vertices[0], _vertices,
                sizeof(CVertex) * _vertices_count);
-        res->mIndices.resize(_indices_count);
-        memcpy(&res->mIndices[0], _indices,
+        res->indices.resize(_indices_count);
+        memcpy(&res->indices[0], _indices,
                sizeof(unsigned int) * _indices_count);
 
-        res->mMaterialOffsets.push_back(0);
-        res->mMaterialOffsets.push_back(_indices_count);
+        res->materialOffsets.push_back(0);
+        res->materialOffsets.push_back(_indices_count);
 
-        glBindBuffer(GL_ARRAY_BUFFER, res->mVertexBufferId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * res->mVertices.size(),
-                     &res->mVertices[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, res->vertexBufferId);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * res->vertices.size(),
+                     &res->vertices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, res->mIndexBufferId);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, res->indexBufferId);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                     sizeof(unsigned int) * res->mIndices.size(),
-                     &res->mIndices[0], GL_STATIC_DRAW);
+                     sizeof(unsigned int) * res->indices.size(),
+                     &res->indices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
         return res;
     }
 
     bool CMeshManager::DestroyMesh(CMesh* _mesh) {
-        if (mMeshFactory.IsObject(_mesh) == false) {
+        if (meshFactory.IsObject(_mesh) == false) {
             return false;
         }
 
-        glDeleteBuffers(1, &_mesh->mVertexBufferId);
-        glDeleteBuffers(1, &_mesh->mIndexBufferId);
-        _mesh->mVertexBufferId = 0;
-        _mesh->mIndexBufferId = 0;
+        glDeleteBuffers(1, &_mesh->vertexBufferId);
+        glDeleteBuffers(1, &_mesh->indexBufferId);
+        _mesh->vertexBufferId = 0;
+        _mesh->indexBufferId = 0;
 
-        mMeshFactory.DestroyObject(_mesh);
+        meshFactory.DestroyObject(_mesh);
 
         return true;
     }
@@ -317,14 +317,14 @@ namespace greng {
             return;
         }
 
-        unsigned int triangles_count = _mesh->mIndices.size() / 3;
+        unsigned int triangles_count = _mesh->indices.size() / 3;
 
         for (unsigned int i = 0; i < triangles_count; i++) {
-            drash::CVec3f v1 = _mesh->mVertices[_mesh->mIndices[i * 3]].mPos;
+            drash::CVec3f v1 = _mesh->vertices[_mesh->indices[i * 3]].pos;
             drash::CVec3f v2 =
-                _mesh->mVertices[_mesh->mIndices[i * 3 + 1]].mPos;
+                _mesh->vertices[_mesh->indices[i * 3 + 1]].pos;
             drash::CVec3f v3 =
-                _mesh->mVertices[_mesh->mIndices[i * 3 + 2]].mPos;
+                _mesh->vertices[_mesh->indices[i * 3 + 2]].pos;
 
             v2 -= v1;
             v3 -= v1;
@@ -333,14 +333,14 @@ namespace greng {
 
             v1.Normalize();
 
-            _mesh->mVertices[_mesh->mIndices[i * 3]].mNormal = v1;
-            _mesh->mVertices[_mesh->mIndices[i * 3 + 1]].mNormal = v1;
-            _mesh->mVertices[_mesh->mIndices[i * 3 + 2]].mNormal = v1;
+            _mesh->vertices[_mesh->indices[i * 3]].normal = v1;
+            _mesh->vertices[_mesh->indices[i * 3 + 1]].normal = v1;
+            _mesh->vertices[_mesh->indices[i * 3 + 2]].normal = v1;
         }
 
-        glBindBuffer(GL_ARRAY_BUFFER, _mesh->mVertexBufferId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * _mesh->mVertices.size(),
-                     &_mesh->mVertices[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, _mesh->vertexBufferId);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * _mesh->vertices.size(),
+                     &_mesh->vertices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
@@ -350,37 +350,37 @@ namespace greng {
             return;
         }
 
-        unsigned int triangles_count = _mesh->mIndices.size() / 3;
+        unsigned int triangles_count = _mesh->indices.size() / 3;
 
         for (unsigned int i = 0; i < triangles_count; i++) {
-            CVertex& v1 = _mesh->mVertices[_mesh->mIndices[i * 3]];
-            CVertex& v2 = _mesh->mVertices[_mesh->mIndices[i * 3 + 1]];
-            CVertex& v3 = _mesh->mVertices[_mesh->mIndices[i * 3 + 2]];
+            CVertex& v1 = _mesh->vertices[_mesh->indices[i * 3]];
+            CVertex& v2 = _mesh->vertices[_mesh->indices[i * 3 + 1]];
+            CVertex& v3 = _mesh->vertices[_mesh->indices[i * 3 + 2]];
 
-            drash::CVec3f q1 = v2.mPos;
-            drash::CVec3f q2 = v3.mPos;
+            drash::CVec3f q1 = v2.pos;
+            drash::CVec3f q2 = v3.pos;
 
-            q1 -= v1.mPos;
-            q2 -= v1.mPos;
+            q1 -= v1.pos;
+            q2 -= v1.pos;
 
-            drash::CVec2f st1 = v2.mUV;
-            drash::CVec2f st2 = v3.mUV;
+            drash::CVec2f st1 = v2.uV;
+            drash::CVec2f st2 = v3.uV;
 
-            st1 -= v1.mUV;
-            st2 -= v1.mUV;
+            st1 -= v1.uV;
+            st2 -= v1.uV;
 
             drash::CVec3f tangent;
             drash::CVec3f binormal;
 
-            tangent.mX = st2.mY * q1.mX - st1.mY * q2.mX;
-            tangent.mY = st2.mY * q1.mY - st1.mY * q2.mY;
-            tangent.mZ = st2.mY * q1.mZ - st1.mY * q2.mZ;
+            tangent.x = st2.y * q1.x - st1.y * q2.x;
+            tangent.y = st2.y * q1.y - st1.y * q2.y;
+            tangent.z = st2.y * q1.z - st1.y * q2.z;
 
-            binormal.mX = -st2.mX * q1.mX + st1.mX * q2.mX;
-            binormal.mY = -st2.mX * q1.mY + st1.mX * q2.mY;
-            binormal.mZ = -st2.mX * q1.mZ + st1.mX * q2.mZ;
+            binormal.x = -st2.x * q1.x + st1.x * q2.x;
+            binormal.y = -st2.x * q1.y + st1.x * q2.y;
+            binormal.z = -st2.x * q1.z + st1.x * q2.z;
 
-            float k = 1.0 / (st1.mX * st2.mY - st2.mX * st1.mY);
+            float k = 1.0 / (st1.x * st2.y - st2.x * st1.y);
 
             tangent *= k;
             binormal *= k;
@@ -388,18 +388,18 @@ namespace greng {
             tangent.Normalize();
             binormal.Normalize();
 
-            v1.mTangent = tangent;
-            v2.mTangent = tangent;
-            v3.mTangent = tangent;
+            v1.tangent = tangent;
+            v2.tangent = tangent;
+            v3.tangent = tangent;
 
-            v1.mBinormal = binormal;
-            v2.mBinormal = binormal;
-            v3.mBinormal = binormal;
+            v1.binormal = binormal;
+            v2.binormal = binormal;
+            v3.binormal = binormal;
         }
 
-        glBindBuffer(GL_ARRAY_BUFFER, _mesh->mVertexBufferId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * _mesh->mVertices.size(),
-                     &_mesh->mVertices[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, _mesh->vertexBufferId);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * _mesh->vertices.size(),
+                     &_mesh->vertices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 

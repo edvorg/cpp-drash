@@ -46,55 +46,55 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 using namespace drash;
 
 EditorWindow::EditorWindow(QWidget* parent)
-    : QMainWindow(parent), ui(new Ui::EditorWindow), mModeActions(parent) {
+    : QMainWindow(parent), ui(new Ui::EditorWindow), modeActions(parent) {
     ui->setupUi(this);
 
-    mSceneToolbar = new QToolBar(this);
-    mObjectToolBar = new QToolBar(this);
-    this->addToolBar(mSceneToolbar);
-    this->addToolBar(mObjectToolBar);
+    sceneToolbar = new QToolBar(this);
+    objectToolBar = new QToolBar(this);
+    this->addToolBar(sceneToolbar);
+    this->addToolBar(objectToolBar);
 
     CreateActions();
-    mModeActions.setExclusive(true);
-    connect(&mModeActions, SIGNAL(selected(QAction*)), this,
+    modeActions.setExclusive(true);
+    connect(&modeActions, SIGNAL(selected(QAction*)), this,
             SLOT(ChangeMode(QAction*)));
 
-    mLabelOfStatusBar = new QLabel("Editor Object");
+    labelOfStatusBar = new QLabel("Editor Object");
 
-    this->statusBar()->addWidget(mLabelOfStatusBar);
+    this->statusBar()->addWidget(labelOfStatusBar);
 
     this->setWindowTitle("DRASH Editor");
 
-    mLayoutForScene = new QHBoxLayout();
-    ui->mSpike->setLayout(mLayoutForScene);
+    layoutForScene = new QHBoxLayout();
+    ui->spike->setLayout(layoutForScene);
 
     if (this->InitScene() == false) {
         close();
     }
 
-    mCurrentSceneWidget = mWidgetForObjects;
+    currentSceneWidget = widgetForObjects;
 
-    this->ui->mTreeObjects->clear();
+    this->ui->treeObjects->clear();
 
-    mObjectApp->SetTreeRefreshHandler([this]() {
-        this->UpdateTreeTemplates(ui->mTreeObjects, mObjectApp);
-        mMoveActiveAction->setChecked(true);
+    objectApp->SetTreeRefreshHandler([this]() {
+        this->UpdateTreeTemplates(ui->treeObjects, objectApp);
+        moveActiveAction->setChecked(true);
     });
 
-    mSceneApp->SetTreeRefreshHandler([this]() {
+    sceneApp->SetTreeRefreshHandler([this]() {
         this->UpdateTreeSceneObjects();
     });
 
-    mSceneToolbar->hide();
-    mTimer.Reset(true);
+    sceneToolbar->hide();
+    timer.Reset(true);
 
-    ui->mTreeTemplates->setDragEnabled(true);
-    //    ui->mTreeTemplates->setDragDropMode();
-    //    emit mMoveActiveAction->trigger();
-    //    ui->mTreeTemplates->setDragDropMode(QAbstractItemView::InternalMove);
-    mWidgetForScene->hide();
-    mSceneApp->SetGetSelectedHandler([this]() {
-        QTreeWidgetItem* item = ui->mTreeTemplates->currentItem();
+    ui->treeTemplates->setDragEnabled(true);
+    //    ui->treeTemplates->setDragDropMode();
+    //    emit moveActiveAction->trigger();
+    //    ui->treeTemplates->setDragDropMode(QAbstractItemView::InternalMove);
+    widgetForScene->hide();
+    sceneApp->SetGetSelectedHandler([this]() {
+        QTreeWidgetItem* item = ui->treeTemplates->currentItem();
         if (item->parent() == NULL) {
             return item->text(0).toStdString();
         } else {
@@ -102,44 +102,44 @@ EditorWindow::EditorWindow(QWidget* parent)
         }
     });
 
-    mObjectApp->SetGetSelectedHandler([this]() {
-        QTreeWidgetItem* item = ui->mTreeObjects->currentItem();
+    objectApp->SetGetSelectedHandler([this]() {
+        QTreeWidgetItem* item = ui->treeObjects->currentItem();
         if (item->parent() == NULL) {
             return item->text(0).toStdString();
         } else {
             return std::string("");
         }
     });
-    ui->mParamsPanel->hide();
+    ui->paramsPanel->hide();
 
     this->startTimer(0);
 }
 
 EditorWindow::~EditorWindow() {
     delete ui;
-    delete mObjectApp;
-    delete mSceneApp;
+    delete objectApp;
+    delete sceneApp;
 }
 
 bool EditorWindow::InitScene() {
     drash::CSceneParams params;
-    params.mGravity.Set(0.0f, -9.8f);
+    params.gravity.Set(0.0f, -9.8f);
 
-    mSceneApp = new CSceneEditorApp();
-    mObjectApp = new CObjectEditorApp();
+    sceneApp = new CSceneEditorApp();
+    objectApp = new CObjectEditorApp();
 
-    mWidgetForObjects = new SceneWidget(this);
-    mWidgetForScene = new SceneWidget(this);
-    mWidgetForScene->SetApp(mSceneApp);
-    mWidgetForObjects->SetApp(mObjectApp);
+    widgetForObjects = new SceneWidget(this);
+    widgetForScene = new SceneWidget(this);
+    widgetForScene->SetApp(sceneApp);
+    widgetForObjects->SetApp(objectApp);
 
-    mLayoutForScene->addWidget(mWidgetForScene);
-    mLayoutForScene->addWidget(mWidgetForObjects);
-    mWidgetForScene->show();
-    ui->mManageWidget->setCurrentIndex(0);
+    layoutForScene->addWidget(widgetForScene);
+    layoutForScene->addWidget(widgetForObjects);
+    widgetForScene->show();
+    ui->manageWidget->setCurrentIndex(0);
 
-    if (mWidgetForObjects->GetApp() == nullptr ||
-        mWidgetForScene->GetApp() == nullptr) {
+    if (widgetForObjects->GetApp() == nullptr ||
+        widgetForScene->GetApp() == nullptr) {
         return false;
     }
 
@@ -147,27 +147,27 @@ bool EditorWindow::InitScene() {
 }
 
 void EditorWindow::timerEvent(QTimerEvent*) {
-    mTimer.Tick();
+    timer.Tick();
 
-    if (mCurrentSceneWidget->GetApp() != nullptr) {
-        mCurrentSceneWidget->GetApp()->Step(mTimer.GetDeltaTime());
+    if (currentSceneWidget->GetApp() != nullptr) {
+        currentSceneWidget->GetApp()->Step(timer.GetDeltaTime());
     } else {
         close();
     }
 
-    if (mCurrentSceneWidget == mWidgetForScene) {
-        if (mSceneApp->IsObjectSelected() == true) {
-            ui->mParamsPanel->setEnabled(true);
-            if (mSceneApp->IsChangedParams() == true) {
-                SetObjectParams(mSceneApp->GetSelectedParams());
-                // ui->mAngleBox->setValue((double)mSceneApp->GetAngleParams());
+    if (currentSceneWidget == widgetForScene) {
+        if (sceneApp->IsObjectSelected() == true) {
+            ui->paramsPanel->setEnabled(true);
+            if (sceneApp->IsChangedParams() == true) {
+                SetObjectParams(sceneApp->GetSelectedParams());
+                // ui->angleBox->setValue((double)sceneApp->GetAngleParams());
             }
         } else {
-            ui->mParamsPanel->setEnabled(false);
+            ui->paramsPanel->setEnabled(false);
         }
     }
 
-    mCurrentSceneWidget->updateGL();
+    currentSceneWidget->updateGL();
 }
 
 void EditorWindow::CreateNewObject() {
@@ -176,74 +176,74 @@ void EditorWindow::CreateNewObject() {
     do {
         str_name = "Object";
         str_name += QString::number(
-            mObjectApp->GetGeometryManager().GetGeometries().size() + 1 + i);
+            objectApp->GetGeometryManager().GetGeometries().size() + 1 + i);
         i++;
-    } while (mObjectApp->AddNewObjectToTemplate(str_name.toStdString()) ==
+    } while (objectApp->AddNewObjectToTemplate(str_name.toStdString()) ==
              false);
 
     str_name += QString::number(
-        mObjectApp->GetGeometryManager().GetGeometries().size() + 1);
+        objectApp->GetGeometryManager().GetGeometries().size() + 1);
     QTreeWidgetItem* newItem =
-        new QTreeWidgetItem(ui->mTreeObjects, QStringList(str_name));
-    ui->mTreeObjects->addTopLevelItem(newItem);
+        new QTreeWidgetItem(ui->treeObjects, QStringList(str_name));
+    ui->treeObjects->addTopLevelItem(newItem);
     newItem->setSelected(true);
-    UpdateTreeTemplates(ui->mTreeObjects, mObjectApp);
+    UpdateTreeTemplates(ui->treeObjects, objectApp);
 }
 
 void EditorWindow::AddNewFigure() {
-    if (mNewFigureAction->isChecked()) {
-        mObjectApp->StartBuild();
+    if (newFigureAction->isChecked()) {
+        objectApp->StartBuild();
     }
 }
 
 void EditorWindow::MoveActive() {
-    if (mMoveActiveAction->isChecked() == true) {
-        mObjectApp->ActiveMoveMode();
+    if (moveActiveAction->isChecked() == true) {
+        objectApp->ActiveMoveMode();
     }
 }
 
 void EditorWindow::MoveOfAxisActive() {
-    if (mMoveOfAxisActiveAction->isChecked()) {
-        mObjectApp->ActiveMoveOfAxisMode();
+    if (moveOfAxisActiveAction->isChecked()) {
+        objectApp->ActiveMoveOfAxisMode();
     }
 }
 
 void EditorWindow::StretchActive() {
-    if (mStretchActiveAction->isChecked()) {
-        mObjectApp->ActiveStretchMode();
+    if (stretchActiveAction->isChecked()) {
+        objectApp->ActiveStretchMode();
     }
 }
 
 void EditorWindow::DeleteModeActive() {
-    if (mDeleteModeActiveAction->isChecked() == true) {
-        mObjectApp->ActiveDeleteMode();
+    if (deleteModeActiveAction->isChecked() == true) {
+        objectApp->ActiveDeleteMode();
     }
 }
 
 void EditorWindow::CombineFigureModeActive() {
-    if (mCombineFiguresMode->isChecked() == true) {
-        ui->mTreeObjects->setDragEnabled(true);
-        mDragActivated = true;
+    if (combineFiguresMode->isChecked() == true) {
+        ui->treeObjects->setDragEnabled(true);
+        dragActivated = true;
     } else {
-        ui->mTreeObjects->setDragEnabled(false);
-        mDragActivated = false;
+        ui->treeObjects->setDragEnabled(false);
+        dragActivated = false;
     }
 }
 
 void EditorWindow::ChangeMode(QAction* _action) {
-    mLabelOfStatusBar->setText(_action->text());
-    //    if (_action == mCombineFiguresMode && _action->isChecked()) {
-    //        mDragActivated = true;
+    labelOfStatusBar->setText(_action->text());
+    //    if (_action == combineFiguresMode && _action->isChecked()) {
+    //        dragActivated = true;
     //    } else {
-    //        mDragActivated = false;
+    //        dragActivated = false;
     //    }
 }
 
 void EditorWindow::OpenLevel() {
     //    qDebug() << "Open file";
     QString name = QFileDialog::getOpenFileName(this, "Open level file");
-    if (mSceneApp->LoadLevel(name.toStdString()) == true) {
-        mLabelOfStatusBar->setText("Level load from " + name);
+    if (sceneApp->LoadLevel(name.toStdString()) == true) {
+        labelOfStatusBar->setText("Level load from " + name);
     } else {
         QMessageBox::critical(this, "Error", "Level not load. See log file");
     }
@@ -251,161 +251,161 @@ void EditorWindow::OpenLevel() {
 
 void EditorWindow::SaveLevel() {
     //    qDebug() << " Save file";
-    if (mSceneApp->IsSetLevel() == false) {
+    if (sceneApp->IsSetLevel() == false) {
         QMessageBox::critical(this, "Error", "Level is not set now!!");
         return;
     }
-    if (mSceneApp->IsSetFileName() == false) {
+    if (sceneApp->IsSetFileName() == false) {
         SaveLevelAs();
     } else {
-        if (mSceneApp->SaveLevel() == false) {
+        if (sceneApp->SaveLevel() == false) {
             QMessageBox::critical(this, "Error",
                                   "Level is not save. See log file");
         } else {
-            mLabelOfStatusBar->setText(
+            labelOfStatusBar->setText(
                 "Level saved in " +
-                QString::fromStdString(mSceneApp->GetLevelFileName()));
+                QString::fromStdString(sceneApp->GetLevelFileName()));
         }
     }
 }
 
 void EditorWindow::SaveLevelAs() {
-    if (mSceneApp->IsSetLevel() == false) {
+    if (sceneApp->IsSetLevel() == false) {
         QMessageBox::critical(this, "Error", "Level is not set now!!");
         return;
     }
     QString name = QFileDialog::getSaveFileName(this, "Choose file for saving");
-    if (mSceneApp->SaveLevelAs(name.toStdString()) == false) {
+    if (sceneApp->SaveLevelAs(name.toStdString()) == false) {
         QMessageBox::critical(this, "Error", "Level is not save. See log file");
     } else {
-        mLabelOfStatusBar->setText("Level saved in " + name);
+        labelOfStatusBar->setText("Level saved in " + name);
     }
 }
 
-void EditorWindow::PlayLevel() { mSceneApp->StartCurrentLevel(); }
+void EditorWindow::PlayLevel() { sceneApp->StartCurrentLevel(); }
 
-void EditorWindow::PauseLevel() { mSceneApp->PauseLevel(); }
+void EditorWindow::PauseLevel() { sceneApp->PauseLevel(); }
 
-void EditorWindow::StopLevel() { mSceneApp->StopLevel(); }
+void EditorWindow::StopLevel() { sceneApp->StopLevel(); }
 
 void EditorWindow::NewLevel() {
-    if (mSceneApp->NewLevel() == true) {
-        mLabelOfStatusBar->setText("Created new level");
+    if (sceneApp->NewLevel() == true) {
+        labelOfStatusBar->setText("Created new level");
     }
 }
 
 void EditorWindow::CreateActions() {
-    mQuit = new QAction("Quit", this);
-    mQuit->setShortcut(tr("Ctrl+Q"));
-    this->addAction(mQuit);
-    connect(mQuit, SIGNAL(triggered()), this, SLOT(close()));
+    quit = new QAction("Quit", this);
+    quit->setShortcut(tr("Ctrl+Q"));
+    this->addAction(quit);
+    connect(quit, SIGNAL(triggered()), this, SLOT(close()));
     QList<QAction*> listActions;
 
-    mNewObjectAction = new QAction("New SceneObject", this);
-    mNewObjectAction->setShortcut(tr("Ctrl+N"));
-    listActions << mNewObjectAction;
-    connect(mNewObjectAction, SIGNAL(triggered()), this,
+    newObjectAction = new QAction("New SceneObject", this);
+    newObjectAction->setShortcut(tr("Ctrl+N"));
+    listActions << newObjectAction;
+    connect(newObjectAction, SIGNAL(triggered()), this,
             SLOT(CreateNewObject()));
 
-    mNewFigureAction = new QAction("Build new Figure", this);
-    mNewFigureAction->setShortcut(tr("Ctrl+F"));
-    mNewFigureAction->setCheckable(true);
-    listActions << mNewFigureAction;
-    connect(mNewFigureAction, SIGNAL(changed()), this, SLOT(AddNewFigure()));
-    mModeActions.addAction(mNewFigureAction);
+    newFigureAction = new QAction("Build new Figure", this);
+    newFigureAction->setShortcut(tr("Ctrl+F"));
+    newFigureAction->setCheckable(true);
+    listActions << newFigureAction;
+    connect(newFigureAction, SIGNAL(changed()), this, SLOT(AddNewFigure()));
+    modeActions.addAction(newFigureAction);
 
-    mMoveActiveAction = new QAction("Move Figure", this);
-    mMoveActiveAction->setCheckable(true);
-    mMoveActiveAction->setShortcut(tr("Ctrl+M"));
-    listActions << mMoveActiveAction;
-    connect(mMoveActiveAction, SIGNAL(changed()), this, SLOT(MoveActive()));
-    mModeActions.addAction(mMoveActiveAction);
+    moveActiveAction = new QAction("Move Figure", this);
+    moveActiveAction->setCheckable(true);
+    moveActiveAction->setShortcut(tr("Ctrl+M"));
+    listActions << moveActiveAction;
+    connect(moveActiveAction, SIGNAL(changed()), this, SLOT(MoveActive()));
+    modeActions.addAction(moveActiveAction);
 
-    mMoveOfAxisActiveAction = new QAction("Move Of Axis Figure", this);
-    mMoveOfAxisActiveAction->setCheckable(true);
-    mMoveOfAxisActiveAction->setShortcut(tr("Ctrl+A"));
-    listActions << mMoveOfAxisActiveAction;
-    connect(mMoveOfAxisActiveAction, SIGNAL(changed()), this,
+    moveOfAxisActiveAction = new QAction("Move Of Axis Figure", this);
+    moveOfAxisActiveAction->setCheckable(true);
+    moveOfAxisActiveAction->setShortcut(tr("Ctrl+A"));
+    listActions << moveOfAxisActiveAction;
+    connect(moveOfAxisActiveAction, SIGNAL(changed()), this,
             SLOT(MoveOfAxisActive()));
-    mModeActions.addAction(mMoveOfAxisActiveAction);
+    modeActions.addAction(moveOfAxisActiveAction);
 
-    mSplitFigureActiveAction = new QAction("Split Figure", this);
-    mSplitFigureActiveAction->setCheckable(true);
-    mSplitFigureActiveAction->setShortcut(tr("Ctrl+E"));
-    listActions << mSplitFigureActiveAction;
-    connect(mSplitFigureActiveAction, SIGNAL(changed()), this,
+    splitFigureActiveAction = new QAction("Split Figure", this);
+    splitFigureActiveAction->setCheckable(true);
+    splitFigureActiveAction->setShortcut(tr("Ctrl+E"));
+    listActions << splitFigureActiveAction;
+    connect(splitFigureActiveAction, SIGNAL(changed()), this,
             SLOT(SplitActive()));
-    mModeActions.addAction(mSplitFigureActiveAction);
+    modeActions.addAction(splitFigureActiveAction);
 
-    mSplitObjectActiveAction = new QAction("Split Object", this);
-    mSplitObjectActiveAction->setCheckable(true);
-    listActions << mSplitObjectActiveAction;
-    connect(mSplitObjectActiveAction, SIGNAL(changed()), this,
+    splitObjectActiveAction = new QAction("Split Object", this);
+    splitObjectActiveAction->setCheckable(true);
+    listActions << splitObjectActiveAction;
+    connect(splitObjectActiveAction, SIGNAL(changed()), this,
             SLOT(SplitActive()));
-    mModeActions.addAction(mSplitObjectActiveAction);
+    modeActions.addAction(splitObjectActiveAction);
 
-    mStretchActiveAction = new QAction("Stretch active", this);
-    mStretchActiveAction->setCheckable(true);
-    mStretchActiveAction->setShortcut(tr("Ctrl+W"));
-    listActions << mStretchActiveAction;
-    connect(mStretchActiveAction, SIGNAL(changed()), this,
+    stretchActiveAction = new QAction("Stretch active", this);
+    stretchActiveAction->setCheckable(true);
+    stretchActiveAction->setShortcut(tr("Ctrl+W"));
+    listActions << stretchActiveAction;
+    connect(stretchActiveAction, SIGNAL(changed()), this,
             SLOT(StretchActive()));
-    mModeActions.addAction(mStretchActiveAction);
+    modeActions.addAction(stretchActiveAction);
 
-    mDeleteModeActiveAction = new QAction("Delete mode", this);
-    mDeleteModeActiveAction->setCheckable(true);
-    mDeleteModeActiveAction->setShortcut(tr("Ctrl+D"));
-    listActions << mDeleteModeActiveAction;
-    connect(mDeleteModeActiveAction, SIGNAL(changed()), this,
+    deleteModeActiveAction = new QAction("Delete mode", this);
+    deleteModeActiveAction->setCheckable(true);
+    deleteModeActiveAction->setShortcut(tr("Ctrl+D"));
+    listActions << deleteModeActiveAction;
+    connect(deleteModeActiveAction, SIGNAL(changed()), this,
             SLOT(DeleteModeActive()));
-    mModeActions.addAction(mDeleteModeActiveAction);
+    modeActions.addAction(deleteModeActiveAction);
 
-    mCombineFiguresMode = new QAction("Combine", this);
-    mCombineFiguresMode->setCheckable(true);
-    listActions << mCombineFiguresMode;
-    connect(mCombineFiguresMode, SIGNAL(changed()), this,
+    combineFiguresMode = new QAction("Combine", this);
+    combineFiguresMode->setCheckable(true);
+    listActions << combineFiguresMode;
+    connect(combineFiguresMode, SIGNAL(changed()), this,
             SLOT(CombineFigureModeActive()));
-    mModeActions.addAction(mCombineFiguresMode);
+    modeActions.addAction(combineFiguresMode);
 
-    mRemoveAction = new QAction("Remove Object", this);
-    mRemoveAction->setShortcut(tr("Ctrl+R"));
-    listActions << mRemoveAction;
-    connect(mRemoveAction, SIGNAL(triggered()), this, SLOT(Remove_Object()));
+    removeAction = new QAction("Remove Object", this);
+    removeAction->setShortcut(tr("Ctrl+R"));
+    listActions << removeAction;
+    connect(removeAction, SIGNAL(triggered()), this, SLOT(Remove_Object()));
 
-    mObjectToolBar->addActions(listActions);
+    objectToolBar->addActions(listActions);
 
     // Actions for editor scene
     listActions.clear();
 
-    mOpenLevelAction = new QAction("Open Level", this);
-    listActions << mOpenLevelAction;
-    connect(mOpenLevelAction, SIGNAL(triggered()), this, SLOT(OpenLevel()));
+    openLevelAction = new QAction("Open Level", this);
+    listActions << openLevelAction;
+    connect(openLevelAction, SIGNAL(triggered()), this, SLOT(OpenLevel()));
 
-    mSaveLevelAction = new QAction("Save Level", this);
-    listActions << mSaveLevelAction;
-    connect(mSaveLevelAction, SIGNAL(triggered()), this, SLOT(SaveLevel()));
+    saveLevelAction = new QAction("Save Level", this);
+    listActions << saveLevelAction;
+    connect(saveLevelAction, SIGNAL(triggered()), this, SLOT(SaveLevel()));
 
-    mSaveLevelAsAction = new QAction("Save As Level", this);
-    listActions << mSaveLevelAsAction;
-    connect(mSaveLevelAsAction, SIGNAL(triggered()), this, SLOT(SaveLevelAs()));
+    saveLevelAsAction = new QAction("Save As Level", this);
+    listActions << saveLevelAsAction;
+    connect(saveLevelAsAction, SIGNAL(triggered()), this, SLOT(SaveLevelAs()));
 
-    mPlayLevelAction = new QAction("Start Level", this);
-    listActions << mPlayLevelAction;
-    connect(mPlayLevelAction, SIGNAL(triggered()), this, SLOT(PlayLevel()));
+    playLevelAction = new QAction("Start Level", this);
+    listActions << playLevelAction;
+    connect(playLevelAction, SIGNAL(triggered()), this, SLOT(PlayLevel()));
 
-    mPauseLevelAction = new QAction("Pause Level", this);
-    listActions << mPauseLevelAction;
-    connect(mPauseLevelAction, SIGNAL(triggered()), this, SLOT(PauseLevel()));
+    pauseLevelAction = new QAction("Pause Level", this);
+    listActions << pauseLevelAction;
+    connect(pauseLevelAction, SIGNAL(triggered()), this, SLOT(PauseLevel()));
 
-    mStopLevelAction = new QAction("Stop Level", this);
-    listActions << mStopLevelAction;
-    connect(mStopLevelAction, SIGNAL(triggered()), this, SLOT(StopLevel()));
+    stopLevelAction = new QAction("Stop Level", this);
+    listActions << stopLevelAction;
+    connect(stopLevelAction, SIGNAL(triggered()), this, SLOT(StopLevel()));
 
-    mNewLevelAction = new QAction("New Level", this);
-    listActions.push_front(mNewLevelAction);
-    connect(mNewLevelAction, SIGNAL(triggered()), this, SLOT(NewLevel()));
+    newLevelAction = new QAction("New Level", this);
+    listActions.push_front(newLevelAction);
+    connect(newLevelAction, SIGNAL(triggered()), this, SLOT(NewLevel()));
 
-    mSceneToolbar->addActions(listActions);
+    sceneToolbar->addActions(listActions);
 }
 
 bool EditorWindow::UpdateTreeTemplates(QTreeWidget* _tree, drash::CApp* _app) {
@@ -420,20 +420,20 @@ bool EditorWindow::UpdateTreeTemplates(QTreeWidget* _tree, drash::CApp* _app) {
         _tree->addTopLevelItem(objectItem);
 
         const CSceneObjectGeometry& geo = *(item->second);
-        const std::vector<CFigureParams>& mF = geo.mFigures;
-        objectItem->setText(1, QString::number(mF.size()));
-        //       for (auto fig = mF.begin() ; fig != mF.end() ; fig++) {
+        const std::vector<CFigureParams>& f = geo.figures;
+        objectItem->setText(1, QString::number(f.size()));
+        //       for (auto fig = f.begin() ; fig != f.end() ; fig++) {
         //           CFigureParams par = *fig;
 
         //           QString vecs("");
         //           vecs.append("[");
-        //           for (unsigned int i = 0 ; i < par.mVertices.size() ; i++) {
+        //           for (unsigned int i = 0 ; i < par.vertices.size() ; i++) {
         //               if (i != 0) vecs.append(",");
         //               vecs.append("(");
-        //               QString x = QString::number(par.mVertices[i].mX);
+        //               QString x = QString::number(par.vertices[i].x);
         //               vecs.append(x);
         //               vecs.append(",");
-        //               QString y = QString::number(par.mVertices[i].mY);
+        //               QString y = QString::number(par.vertices[i].y);
         //               vecs.append(y);
         //               vecs.append(")");
         //           }
@@ -445,126 +445,126 @@ bool EditorWindow::UpdateTreeTemplates(QTreeWidget* _tree, drash::CApp* _app) {
 }
 
 void EditorWindow::UpdateTreeSceneObjects() {
-    ui->mTreeSceneObjects->clear();
-    QTreeWidget* tree = ui->mTreeSceneObjects;
+    ui->treeSceneObjects->clear();
+    QTreeWidget* tree = ui->treeSceneObjects;
 
-    for (unsigned int i = 0; i < mSceneApp->GetCurrentLevel()->EnumObjects();
+    for (unsigned int i = 0; i < sceneApp->GetCurrentLevel()->EnumObjects();
          i++) {
         CLevelObjectDesc* cur_obj_desc =
-            mSceneApp->GetCurrentLevel()->GetObjects()[i];
+            sceneApp->GetCurrentLevel()->GetObjects()[i];
 
         QTreeWidgetItem* geometryItem =
             new QTreeWidgetItem(tree, QStringList(QString::fromStdString(
-                                          cur_obj_desc->mLevelObjectName)));
+                                          cur_obj_desc->levelObjectName)));
 
         tree->addTopLevelItem(geometryItem);
         QString objectname =
-            QString::fromStdString(cur_obj_desc->mGeometryName);
+            QString::fromStdString(cur_obj_desc->geometryName);
         new QTreeWidgetItem(geometryItem, QStringList(objectname));
     }
 }
 
 void EditorWindow::on_mTreeObjects_itemSelectionChanged() {
-    if (mDragActivated == true) {
+    if (dragActivated == true) {
         return;
     }
     QTreeWidgetItem* item = nullptr;
-    if (ui->mTreeObjects->selectedItems().size() != 0) {
-        item = ui->mTreeObjects->selectedItems().at(0);
+    if (ui->treeObjects->selectedItems().size() != 0) {
+        item = ui->treeObjects->selectedItems().at(0);
     } else {
         return;
     }
     if (item->parent() == nullptr) {
-        mObjectApp->ShowObject(item->text(0).toStdString());
+        objectApp->ShowObject(item->text(0).toStdString());
     }
 }
 
 void EditorWindow::Remove_Object() {
     QTreeWidgetItem* item = nullptr;
-    if (ui->mTreeObjects->selectedItems().size() != 0) {
-        item = ui->mTreeObjects->selectedItems().at(0);
+    if (ui->treeObjects->selectedItems().size() != 0) {
+        item = ui->treeObjects->selectedItems().at(0);
     } else {
         return;
     }
     if (item->parent() == nullptr) {
         // qDebug() << "Object created";
-        mObjectApp->GetGeometryManager().DestroyGeometry(
+        objectApp->GetGeometryManager().DestroyGeometry(
             item->text(0).toStdString());
-        UpdateTreeTemplates(ui->mTreeObjects, mObjectApp);
-        // mObjectApp->ShowObject(item->text(0).toStdString());
-        // mCurrentObject =
-        // mObjectApp->GetGeometryManager().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
+        UpdateTreeTemplates(ui->treeObjects, objectApp);
+        // objectApp->ShowObject(item->text(0).toStdString());
+        // currentObject =
+        // objectApp->GetGeometryManager().CreateSceneObjectFromTemplate(item->text(0).toStdString(),params);
     }
 }
 
 void EditorWindow::SplitActive() {
-    if (mSplitFigureActiveAction->isChecked() == true) {
-        mObjectApp->ActiveSplitFigureMode();
-    } else if (mSplitObjectActiveAction->isChecked() == true) {
-        mObjectApp->ActiveSplitObjectMode();
+    if (splitFigureActiveAction->isChecked() == true) {
+        objectApp->ActiveSplitFigureMode();
+    } else if (splitObjectActiveAction->isChecked() == true) {
+        objectApp->ActiveSplitObjectMode();
     }
 }
 
 void EditorWindow::on_mManageWidget_currentChanged(int index) {
     //    qDebug() << " Changed " << index ;
     if (index == 0) {
-        mWidgetForScene->hide();
-        mWidgetForObjects->show();
-        mCurrentSceneWidget = mWidgetForObjects;
-        mSceneToolbar->hide();
-        mObjectToolBar->show();
+        widgetForScene->hide();
+        widgetForObjects->show();
+        currentSceneWidget = widgetForObjects;
+        sceneToolbar->hide();
+        objectToolBar->show();
 
-        ui->mParamsPanel->hide();
+        ui->paramsPanel->hide();
 
     } else if (index == 1) {
-        mWidgetForObjects->hide();
-        mWidgetForScene->show();
-        mCurrentSceneWidget = mWidgetForScene;
-        mObjectApp->GetGeometryManager().Store();
-        mSceneApp->GetGeometryManager().Load();
-        UpdateTreeTemplates(ui->mTreeTemplates, mSceneApp);
-        mObjectToolBar->hide();
+        widgetForObjects->hide();
+        widgetForScene->show();
+        currentSceneWidget = widgetForScene;
+        objectApp->GetGeometryManager().Store();
+        sceneApp->GetGeometryManager().Load();
+        UpdateTreeTemplates(ui->treeTemplates, sceneApp);
+        objectToolBar->hide();
 
-        mSceneToolbar->show();
+        sceneToolbar->show();
 
-        ui->mParamsPanel->show();
-        ui->mParamsPanel->setEnabled(false);
+        ui->paramsPanel->show();
+        ui->paramsPanel->setEnabled(false);
 
-        mSceneApp->ResetLevel();
+        sceneApp->ResetLevel();
     }
 }
 
 void EditorWindow::on_mTreeSceneObjects_clicked(const QModelIndex&) {
 
-    QTreeWidgetItem* item = ui->mTreeSceneObjects->selectedItems().at(0);
+    QTreeWidgetItem* item = ui->treeSceneObjects->selectedItems().at(0);
     if (item->parent() != nullptr) {
-        mSceneApp->LookObject(item->parent()->text(0).toStdString(),
+        sceneApp->LookObject(item->parent()->text(0).toStdString(),
                               item->text(0).toStdString());
     }
 }
 
 CSceneObjectParams EditorWindow::GetObjectParams() const {
     CSceneObjectParams buff;
-    buff.mDynamic = ui->mCheckBoxDynamic->isChecked();
-    buff.mAngle = (float)ui->mAngleBox->value();
-    buff.mFixedRotation = ui->mCheckBoxFixedRotation->isChecked();
+    buff.dynamic = ui->checkBoxDynamic->isChecked();
+    buff.angle = (float)ui->angleBox->value();
+    buff.fixedRotation = ui->checkBoxFixedRotation->isChecked();
     return buff;
 }
 
 void EditorWindow::on_mCheckBoxDynamic_clicked() {
-    mSceneApp->SetDynamicParam(ui->mCheckBoxDynamic->isChecked());
+    sceneApp->SetDynamicParam(ui->checkBoxDynamic->isChecked());
 }
 
 void EditorWindow::on_mCheckBoxFixedRotation_clicked() {
-    mSceneApp->SetFixedRotationParam(ui->mCheckBoxFixedRotation->isChecked());
+    sceneApp->SetFixedRotationParam(ui->checkBoxFixedRotation->isChecked());
 }
 
 void EditorWindow::on_mAngleBox_valueChanged(double arg1) {
-    mSceneApp->SetAngleParams((float)arg1);
+    sceneApp->SetAngleParams((float)arg1);
 }
 
 void EditorWindow::SetObjectParams(const CSceneObjectParams& _params) {
-    ui->mAngleBox->setValue(_params.mAngle);
-    ui->mCheckBoxDynamic->setChecked(_params.mDynamic);
-    ui->mCheckBoxFixedRotation->setChecked(_params.mFixedRotation);
+    ui->angleBox->setValue(_params.angle);
+    ui->checkBoxDynamic->setChecked(_params.dynamic);
+    ui->checkBoxFixedRotation->setChecked(_params.fixedRotation);
 }

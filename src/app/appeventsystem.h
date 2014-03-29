@@ -48,10 +48,10 @@ namespace drash {
 
       protected:
       private:
-        CAppEventProcessor mProcessor;
-        CAppEventCombination mCombination;
-        std::list<CAppEventCombinationTree> mChilds;
-        int mState = STATE_NORMAL;
+        CAppEventProcessor processor;
+        CAppEventCombination combination;
+        std::list<CAppEventCombinationTree> childs;
+        int state = STATE_NORMAL;
     };
 
     class CAppEventSystem {
@@ -75,12 +75,12 @@ namespace drash {
         int PressEventImpl(const CAppEvent& _event);
 
         /// contains all current events
-        /// BeginEvent invokation adds event to mCurrentState
-        /// EndEvent invokation removes event from mCurrentState
-        CAppEventCombination mCurrentState;
+        /// BeginEvent invokation adds event to currentState
+        /// EndEvent invokation removes event from currentState
+        CAppEventCombination currentState;
 
         /// contains combinations being processed
-        std::list<CAppEventCombinationTree*> mCurrentCombinations;
+        std::list<CAppEventCombinationTree*> currentCombinations;
 
         /// name of mode currently in use. mode is just name for one
         /// combinations tree.
@@ -88,16 +88,16 @@ namespace drash {
         /// bind
         /// more than one CAppEventProcessor instances to the same combination
         /// but execute only one instance at time
-        std::string mCurrentMode = "";
+        std::string currentMode = "";
 
         /// combination trees for each mode
-        std::map<std::string, CAppEventCombinationTree> mTrees;
+        std::map<std::string, CAppEventCombinationTree> trees;
 
         /// root of current mode tree
-        CAppEventCombinationTree* mCurrentModeRoot = nullptr;
+        CAppEventCombinationTree* currentModeRoot = nullptr;
 
         /// start point for searching of combinations to process
-        CAppEventCombinationTree* mCurrentNode = nullptr;
+        CAppEventCombinationTree* currentNode = nullptr;
     };
 
 } // namespace drash

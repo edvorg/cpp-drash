@@ -33,7 +33,7 @@ namespace greng {
 
     class CFragmentShaderManager {
       public:
-        constexpr static unsigned int mShadersCountLimit = 32;
+        constexpr static unsigned int shadersCountLimit = 32;
 
         CFragmentShaderManager();
         CFragmentShaderManager(const CFragmentShaderManager&) = delete;
@@ -51,7 +51,7 @@ namespace greng {
 
       protected:
       private:
-        drash::CObjectFactory<CFragmentShader> mShaderFactory;
+        drash::CObjectFactory<CFragmentShader> shaderFactory;
     };
 
 } // namespace greng

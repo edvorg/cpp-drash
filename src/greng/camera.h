@@ -80,80 +80,80 @@ namespace greng {
       private:
         void ComputeMatrices();
 
-        bool mOrtho = false;
-        float mOrthoWidth;
-        float mFov;
-        float mDepthOfView;
-        CVec3f mPos;
-        CVec2f mRotation;
-        CAnimator<float> mOrthoWidthAnimator = mOrthoWidth;
-        CAnimator<float> mFovAnimator = mFov;
-        CAnimator<float> mDepthOfViewAnimator = mDepthOfView;
-        CAnimator<CVec3f> mPosAnimator = mPos;
-        CAnimator<CVec2f> mRotationAnimator = mRotation;
+        bool ortho = false;
+        float orthoWidth;
+        float fov;
+        float depthOfView;
+        CVec3f pos;
+        CVec2f rotation;
+        CAnimator<float> orthoWidthAnimator = orthoWidth;
+        CAnimator<float> fovAnimator = fov;
+        CAnimator<float> depthOfViewAnimator = depthOfView;
+        CAnimator<CVec3f> posAnimator = pos;
+        CAnimator<CVec2f> rotationAnimator = rotation;
 
-        CMatrix4f mRotationMatrix;
-        CMatrix4f mAntiRotationMatrix;
-        CMatrix4f mViewMatrix;
-        CMatrix4f mProjectionMatrix;
+        CMatrix4f rotationMatrix;
+        CMatrix4f antiRotationMatrix;
+        CMatrix4f viewMatrix;
+        CMatrix4f projectionMatrix;
 
-        CMatrix4f mViewMatrixTransposed;
-        CMatrix4f mProjectionMatrixTransposed;
+        CMatrix4f viewMatrixTransposed;
+        CMatrix4f projectionMatrixTransposed;
 
-        float mAspectRatio = 1.0f;
-        CAnimator<float> mAspectRatioAnimator = mAspectRatio;
+        float aspectRatio = 1.0f;
+        CAnimator<float> aspectRatioAnimator = aspectRatio;
     };
 
-    inline void CCamera::SetOrtho(bool _ortho) { mOrtho = _ortho; }
+    inline void CCamera::SetOrtho(bool _ortho) { ortho = _ortho; }
 
-    inline bool CCamera::IsOrtho() const { return mOrtho; }
+    inline bool CCamera::IsOrtho() const { return ortho; }
 
     inline CAnimator<float>& CCamera::GetOrthoWidth() {
-        return mOrthoWidthAnimator;
+        return orthoWidthAnimator;
     }
 
-    inline CAnimator<float>& CCamera::GetFov() { return mFovAnimator; }
+    inline CAnimator<float>& CCamera::GetFov() { return fovAnimator; }
 
     inline CAnimator<float>& CCamera::GetDepthOfView() {
-        return mDepthOfViewAnimator;
+        return depthOfViewAnimator;
     }
 
-    inline CAnimator<CVec3f>& CCamera::GetPos() { return mPosAnimator; }
+    inline CAnimator<CVec3f>& CCamera::GetPos() { return posAnimator; }
 
     inline const CAnimator<CVec3f>& CCamera::GetPos() const {
-        return mPosAnimator;
+        return posAnimator;
     }
 
     inline CAnimator<CVec2f>& CCamera::GetRotation() {
-        return mRotationAnimator;
+        return rotationAnimator;
     }
 
     inline CAnimator<float>& CCamera::GetAspectRatio() {
-        return mAspectRatioAnimator;
+        return aspectRatioAnimator;
     }
 
     inline const CMatrix4f& CCamera::GetRotationMatrix() const {
-        return mRotationMatrix;
+        return rotationMatrix;
     }
 
     inline const CMatrix4f& CCamera::GetAntiRotationMatrix() const {
-        return mAntiRotationMatrix;
+        return antiRotationMatrix;
     }
 
     inline const CMatrix4f& CCamera::GetViewMatrix() const {
-        return mViewMatrix;
+        return viewMatrix;
     }
 
     inline const CMatrix4f& CCamera::GetViewMatrixTransposed() const {
-        return mViewMatrixTransposed;
+        return viewMatrixTransposed;
     }
 
     inline const CMatrix4f& CCamera::GetProjectionMatrix() const {
-        return mProjectionMatrix;
+        return projectionMatrix;
     }
 
     inline const CMatrix4f& CCamera::GetProjectionMatrixTransposed() const {
-        return mProjectionMatrixTransposed;
+        return projectionMatrixTransposed;
     }
 
 } // namespace greng

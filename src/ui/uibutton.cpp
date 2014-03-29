@@ -36,35 +36,35 @@ namespace drash {
             CUIWidget::Connect(_system);
 
             SetStepHandler([this](double _dt) {
-                int local_x = GetUISystem()->GetCursorPosX() - GetPos().mX;
-                int local_y = GetUISystem()->GetCursorPosY() - GetPos().mY;
+                int local_x = GetUISystem()->GetCursorPosX() - GetPos().x;
+                int local_y = GetUISystem()->GetCursorPosY() - GetPos().y;
 
-                if (0 <= local_x && local_x <= static_cast<int>(GetSize().mX) &&
-                    0 <= local_y && local_y <= static_cast<int>(GetSize().mY)) {
-                    mTime += _dt * 2.0f;
+                if (0 <= local_x && local_x <= static_cast<int>(GetSize().x) &&
+                    0 <= local_y && local_y <= static_cast<int>(GetSize().y)) {
+                    time += _dt * 2.0f;
                 } else {
-                    mTime -= _dt * 2.0f;
+                    time -= _dt * 2.0f;
                 }
 
-                mTime = drash::math::Clamp<float>(mTime, 0, 1);
+                time = drash::math::Clamp<float>(time, 0, 1);
             });
 
             SetDrawHandler([this]() {
-                CColor4f c(mPressed ? 0 : mTime, mPressed ? 0.0f : 1.0f - mTime,
-                           mPressed ? 1 : 0, 1);
+                CColor4f c(pressed ? 0 : time, pressed ? 0.0f : 1.0f - time,
+                           pressed ? 1 : 0, 1);
                 CVec2f p1;
                 CVec2f p2;
                 CVec2f p3;
                 CVec2f p4;
 
-                GetUISystem()->UISpaceToScreenSpace(GetPos().mX, GetPos().mY,
+                GetUISystem()->UISpaceToScreenSpace(GetPos().x, GetPos().y,
                                                     p1);
                 GetUISystem()->UISpaceToScreenSpace(
-                    GetPos().mX, GetPos().mY + GetSize().mY, p2);
+                    GetPos().x, GetPos().y + GetSize().y, p2);
                 GetUISystem()->UISpaceToScreenSpace(
-                    GetPos().mX + GetSize().mX, GetPos().mY + GetSize().mY, p3);
-                GetUISystem()->UISpaceToScreenSpace(GetPos().mX + GetSize().mX,
-                                                    GetPos().mY, p4);
+                    GetPos().x + GetSize().x, GetPos().y + GetSize().y, p3);
+                GetUISystem()->UISpaceToScreenSpace(GetPos().x + GetSize().x,
+                                                    GetPos().y, p4);
 
                 GetUISystem()->GetRenderer().DrawTriangle(p4, p2, p1, c);
                 GetUISystem()->GetRenderer().DrawTriangle(p3, p2, p4, c);
@@ -75,27 +75,27 @@ namespace drash {
                 GetUISystem()->GetRenderer().DrawLine(p1, p4, 1, c);
             });
 
-            SetPressHandler([this]() { mPressed = true; });
+            SetPressHandler([this]() { pressed = true; });
 
             SetReleaseHandler([this]() {
-                if (mPressed == true) {
-                    mPressed = false;
+                if (pressed == true) {
+                    pressed = false;
 
-                    int local_x = GetUISystem()->GetCursorPosX() - GetPos().mX;
-                    int local_y = GetUISystem()->GetCursorPosY() - GetPos().mY;
+                    int local_x = GetUISystem()->GetCursorPosX() - GetPos().x;
+                    int local_y = GetUISystem()->GetCursorPosY() - GetPos().y;
 
                     if (0 <= local_x &&
-                        local_x <= static_cast<int>(GetSize().mX) &&
+                        local_x <= static_cast<int>(GetSize().x) &&
                         0 <= local_y &&
-                        local_y <= static_cast<int>(GetSize().mY)) {
-                        mClickHandler();
+                        local_y <= static_cast<int>(GetSize().y)) {
+                        clickHandler();
                     }
                 }
             });
         }
 
         void CUIButton::SetClickHandler(const std::function<void()>& _handler) {
-            mClickHandler = _handler;
+            clickHandler = _handler;
         }
 
     } // namepsace ui

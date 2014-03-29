@@ -30,12 +30,12 @@ namespace drash {
 
     CAppEvent::CAppEvent() {}
 
-    CAppEvent::CAppEvent(const CAppEvent& _src) : mKey(_src.mKey) {}
+    CAppEvent::CAppEvent(const CAppEvent& _src) : key(_src.key) {}
 
-    CAppEvent::CAppEvent(EventKey _key) : mKey(_key) {}
+    CAppEvent::CAppEvent(EventKey _key) : key(_key) {}
 
     std::string CAppEvent::ToString() const {
-        switch (this->mKey) {
+        switch (this->key) {
         case EventKeyQ:
             return std::string("q");
 
@@ -116,62 +116,62 @@ namespace drash {
 
     void CAppEvent::FromString(const std::string& _str) {
         if (_str == "q") {
-            this->mKey = EventKeyQ;
+            this->key = EventKeyQ;
         } else if (_str == "w") {
-            this->mKey = EventKeyW;
+            this->key = EventKeyW;
         } else if (_str == "e") {
-            this->mKey = EventKeyE;
+            this->key = EventKeyE;
         } else if (_str == "r") {
-            this->mKey = EventKeyR;
+            this->key = EventKeyR;
         } else if (_str == "a") {
-            this->mKey = EventKeyA;
+            this->key = EventKeyA;
         } else if (_str == "s") {
-            this->mKey = EventKeyS;
+            this->key = EventKeyS;
         } else if (_str == "d") {
-            this->mKey = EventKeyD;
+            this->key = EventKeyD;
         } else if (_str == "f") {
-            this->mKey = EventKeyF;
+            this->key = EventKeyF;
         } else if (_str == "z") {
-            this->mKey = EventKeyZ;
+            this->key = EventKeyZ;
         } else if (_str == "x") {
-            this->mKey = EventKeyX;
+            this->key = EventKeyX;
         } else if (_str == "c") {
-            this->mKey = EventKeyC;
+            this->key = EventKeyC;
         } else if (_str == "v") {
-            this->mKey = EventKeyV;
+            this->key = EventKeyV;
         } else if (_str == "SPC") {
-            this->mKey = EventKeySpace;
+            this->key = EventKeySpace;
         } else if (_str == "ESC") {
-            this->mKey = EventKeyEscape;
+            this->key = EventKeyEscape;
         } else if (_str == "C") {
-            this->mKey = EventKeyControl;
+            this->key = EventKeyControl;
         } else if (_str == "S") {
-            this->mKey = EventKeyShift;
+            this->key = EventKeyShift;
         } else if (_str == "A") {
-            this->mKey = EventKeyAlt;
+            this->key = EventKeyAlt;
         } else if (_str == "M") {
-            this->mKey = EventKeyMeta;
+            this->key = EventKeyMeta;
         } else if (_str == "LB") {
-            this->mKey = EventKeyLeftButton;
+            this->key = EventKeyLeftButton;
         } else if (_str == "RB") {
-            this->mKey = EventKeyRightButton;
+            this->key = EventKeyRightButton;
         } else if (_str == "MB") {
-            this->mKey = EventKeyMiddleButton;
+            this->key = EventKeyMiddleButton;
         } else if (_str == "WHUP") {
-            this->mKey = EventKeyWheelUp;
+            this->key = EventKeyWheelUp;
         } else if (_str == "WHDN") {
-            this->mKey = EventKeyWheelDown;
+            this->key = EventKeyWheelDown;
         } else if (_str == "DRDP") {
-            this->mKey = EventDragDrop;
+            this->key = EventDragDrop;
         } else if (_str == "DRL") {
-            this->mKey = EventDragLeave;
+            this->key = EventDragLeave;
         } else {
-            this->mKey = EventKeyUnknown;
+            this->key = EventKeyUnknown;
         }
     }
 
     void CAppEvent::Dump() const {
-        LOG_INFO("CAppEvent dump: " << (unsigned int)mKey);
+        LOG_INFO("CAppEvent dump: " << (unsigned int)key);
     }
 
 } // namespace drash

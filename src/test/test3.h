@@ -46,14 +46,14 @@ namespace drash {
           private:
             void SetProcessors();
             void InitObjects();
-            CSceneObject* mMoveObject = nullptr;
+            CSceneObject* moveObject = nullptr;
 
             // gravity in y axis
-            ui::CUISlider mSlider1;
+            ui::CUISlider slider1;
             // gravity in x axis
-            ui::CUISlider mSlider2;
+            ui::CUISlider slider2;
 
-            greng::CPointLight mLight1;
+            greng::CPointLight light1;
         };
 
     } // namespace test

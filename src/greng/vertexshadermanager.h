@@ -33,7 +33,7 @@ namespace greng {
 
     class CVertexShaderManager {
       public:
-        constexpr static unsigned int mShadersCountLimit = 32;
+        constexpr static unsigned int shadersCountLimit = 32;
 
         CVertexShaderManager();
         CVertexShaderManager(const CVertexShaderManager&) = delete;
@@ -50,7 +50,7 @@ namespace greng {
 
       protected:
       private:
-        drash::CObjectFactory<CVertexShader> mShaderFactory;
+        drash::CObjectFactory<CVertexShader> shaderFactory;
     };
 
 } // namespace greng

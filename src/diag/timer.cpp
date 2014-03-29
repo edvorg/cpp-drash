@@ -35,31 +35,31 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     CTimer::CTimer()
-        : mStartTime(0), mPrevTime(0), mCurrTime(0), mPaused(true) {}
+        : startTime(0), prevTime(0), currTime(0), paused(true) {}
 
     void CTimer::Reset(bool _start) {
         this->Update();
-        mStartTime = mPrevTime = mCurrTime;
+        startTime = prevTime = currTime;
 
         SetPaused(!_start);
     }
 
     void CTimer::Tick() {
-        if (mPaused == false) {
-            mPrevTime = mCurrTime;
+        if (paused == false) {
+            prevTime = currTime;
             this->Update();
         } else {
             this->Update();
-            mPrevTime = mCurrTime;
+            prevTime = currTime;
         }
     }
 
     double CTimer::GetFullTime() const {
-        return (mCurrTime - mStartTime) / 1000000000.0;
+        return (currTime - startTime) / 1000000000.0;
     }
 
     double CTimer::GetDeltaTime() const {
-        return (mCurrTime - mPrevTime) / 1000000000.0;
+        return (currTime - prevTime) / 1000000000.0;
     }
 
     CLogger& operator<<(CLogger& _logger, const CTimer& _timer) {
@@ -83,10 +83,10 @@ namespace drash {
         clock_gettime(CLOCK_REALTIME, &ts);
 #endif
 
-        mCurrTime = (ts.tv_sec * 1000000000 + ts.tv_nsec);
+        currTime = (ts.tv_sec * 1000000000 + ts.tv_nsec);
 
         DRASH_ASSERT(
-            mCurrTime >= mPrevTime &&
+            currTime >= prevTime &&
             "CTimer::Update(): something wrong with time query library");
     }
 

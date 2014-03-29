@@ -32,9 +32,9 @@ namespace drash {
         const CAppEventProcessor::FuncT& _begin,
         const CAppEventProcessor::FuncT& _processing,
         const CAppEventProcessor::FuncT& _end)
-        : mBegin(_begin), mProcessing(_processing), mEnd(_end) {}
+        : begin(_begin), processing(_processing), end(_end) {}
 
     CAppEventProcessor::CAppEventProcessor(const CAppEventProcessor& _src)
-        : mBegin(_src.mBegin), mProcessing(_src.mProcessing), mEnd(_src.mEnd) {}
+        : begin(_src.begin), processing(_src.processing), end(_src.end) {}
 
 } // namespace drash

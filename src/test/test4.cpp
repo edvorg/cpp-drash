@@ -33,68 +33,68 @@ namespace drash {
         using namespace greng;
 
         CTest4::CTest4() {
-            mTestButton1.Connect(&GetUISystem());
+            testButton1.Connect(&GetUISystem());
 
-            mTestButton1.SetClickHandler([]() { LOG_INFO("click 1"); });
+            testButton1.SetClickHandler([]() { LOG_INFO("click 1"); });
 
-            mTestButton1.SetPos(CVec2i(100, 100));
-            mTestButton1.SetSize(CVec2ui(200, 30));
+            testButton1.SetPos(CVec2i(100, 100));
+            testButton1.SetSize(CVec2ui(200, 30));
 
-            mTestButton2.Connect(&GetUISystem());
+            testButton2.Connect(&GetUISystem());
 
-            mTestButton2.SetClickHandler([]() { LOG_INFO("click 2"); });
+            testButton2.SetClickHandler([]() { LOG_INFO("click 2"); });
 
-            mTestButton2.SetPos(CVec2i(350, 100));
-            mTestButton2.SetSize(CVec2ui(30, 30));
+            testButton2.SetPos(CVec2i(350, 100));
+            testButton2.SetSize(CVec2ui(30, 30));
 
-            mTestSlider1.Connect(&GetUISystem());
+            testSlider1.Connect(&GetUISystem());
 
-            mTestSlider1.SetPos(CVec2i(430, 100));
-            mTestSlider1.SetSize(CVec2ui(200, 30));
+            testSlider1.SetPos(CVec2i(430, 100));
+            testSlider1.SetSize(CVec2ui(200, 30));
 
-            mTestSlider1.SetMin(-100);
-            mTestSlider1.SetMax(200);
-            mTestSlider1.SetValue(5);
-            mTestSlider1.SetSliderWidth(100);
+            testSlider1.SetMin(-100);
+            testSlider1.SetMax(200);
+            testSlider1.SetValue(5);
+            testSlider1.SetSliderWidth(100);
 
-            mTestSlider1.SetValueHandler([](float _value) {
+            testSlider1.SetValueHandler([](float _value) {
                 LOG_INFO(_value);
             });
 
-            LOG_INFO("value is " << mValueAnimator1);
-            mValue = 33;
-            LOG_INFO("value is " << mValueAnimator1);
+            LOG_INFO("value is " << valueAnimator1);
+            value = 33;
+            LOG_INFO("value is " << valueAnimator1);
 
-            mValueAnimator1 = 50;
-            mValueAnimator2.SetTarget(100, 2.0, AnimatorBehavior::Bounce);
+            valueAnimator1 = 50;
+            valueAnimator2.SetTarget(100, 2.0, AnimatorBehavior::Bounce);
 
-            mTestPoint.Set(0.0f, 0.0f, 0.0f);
+            testPoint.Set(0.0f, 0.0f, 0.0f);
             CCameraParams params;
-            params.mPos.Set(10, 10, 10.0f);
-            params.mRotation.Set(-M_PI / 4, M_PI / 4, 0);
+            params.pos.Set(10, 10, 10.0f);
+            params.rotation.Set(-M_PI / 4, M_PI / 4, 0);
             CCamera* camera =
                 GetGrengSystems().GetCameraManager().CreateCamera(params);
 
-            mPoint.SetCamera(camera);
-            mPoint.SetCenter(mTestPoint);
+            point.SetCamera(camera);
+            point.SetCenter(testPoint);
 
             GetEventSystem().SetProcessor(
-                "LB", CAppEventProcessor([this]() { mPoint.ClickBegin(); },
-                                         [this]() { mPoint.ClickPressing(); },
-                                         [this]() { mPoint.ClickEnd(); }));
+                "LB", CAppEventProcessor([this]() { point.ClickBegin(); },
+                                         [this]() { point.ClickPressing(); },
+                                         [this]() { point.ClickEnd(); }));
 
             GetDebugRenderer().SetCamera(camera);
         }
 
         void CTest4::Step(double _dt) {
             CApp::Step(_dt);
-            mPoint.SetCursorPos(GetCursorPos());
-            mPoint.Step(_dt);
+            point.SetCursorPos(GetCursorPos());
+            point.Step(_dt);
         }
 
         void CTest4::Render() {
             CApp::Render();
-            mPoint.Render(GetGrengSystems().GetRenderer());
+            point.Render(GetGrengSystems().GetRenderer());
         }
 
     } // namespace test

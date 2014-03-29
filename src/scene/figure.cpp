@@ -31,41 +31,41 @@ namespace drash {
     CFigureParams::CFigureParams() {}
 
     CSceneObject* CFigure::GetSceneObject() const {
-        return static_cast<CSceneObject*>(mFixture->GetBody()->GetUserData());
+        return static_cast<CSceneObject*>(fixture->GetBody()->GetUserData());
     }
 
     void CFigure::SetVertices(const CVec2f* _vertices, unsigned int _count) {
-        if (mFixture == nullptr || mFixture->GetShape() == nullptr ||
-            mFixture->GetShape()->GetType() != b2Shape::e_polygon) {
+        if (fixture == nullptr || fixture->GetShape() == nullptr ||
+            fixture->GetShape()->GetType() != b2Shape::e_polygon) {
             return;
         }
 
-        static_cast<b2PolygonShape*>(mFixture->GetShape())
+        static_cast<b2PolygonShape*>(fixture->GetShape())
             ->Set(&CVec2ToB2Vec2(*_vertices), _count);
-        mFixture->GetBody()->ResetMassData();
+        fixture->GetBody()->ResetMassData();
     }
 
     const CVec2f* CFigure::GetVertices() const {
-        if (mFixture == nullptr || mFixture->GetShape() == nullptr ||
-            mFixture->GetShape()->GetType() != b2Shape::e_polygon) {
+        if (fixture == nullptr || fixture->GetShape() == nullptr ||
+            fixture->GetShape()->GetType() != b2Shape::e_polygon) {
             return nullptr;
         }
 
         return &B2Vec2ToCVec2(*static_cast<b2PolygonShape*>(
-                                   mFixture->GetShape())->m_vertices);
+                                   fixture->GetShape())->m_vertices);
     }
 
     unsigned int CFigure::EnumVertices() const {
-        if (mFixture == nullptr || mFixture->GetShape() == nullptr ||
-            mFixture->GetShape()->GetType() != b2Shape::e_polygon) {
+        if (fixture == nullptr || fixture->GetShape() == nullptr ||
+            fixture->GetShape()->GetType() != b2Shape::e_polygon) {
             return 0;
         }
 
-        return static_cast<b2PolygonShape*>(mFixture->GetShape())
+        return static_cast<b2PolygonShape*>(fixture->GetShape())
             ->GetVertexCount();
     }
 
-    float CFigure::GetFriction() const { return mFixture->GetFriction(); }
+    float CFigure::GetFriction() const { return fixture->GetFriction(); }
 
     CLogger& operator<<(CLogger& _logger, const CFigure& _figure) {
         if (_figure.EnumVertices()) {
@@ -73,14 +73,14 @@ namespace drash {
             for (unsigned int i = 0; i < _figure.EnumVertices(); i++) {
                 _logger << _figure.GetVertices()[i] << ' ';
             }
-            _logger << "} depth: " << _figure.mDepth
-                    << " local_z: " << _figure.mZ;
+            _logger << "} depth: " << _figure.depth
+                    << " local_z: " << _figure.z;
         }
         return _logger;
     }
 
     bool CFigure::TestPoint(const CVec2f& _xy) const {
-        return mFixture->TestPoint(CVec2ToB2Vec2(_xy));
+        return fixture->TestPoint(CVec2ToB2Vec2(_xy));
     }
 
 } // namespace drash

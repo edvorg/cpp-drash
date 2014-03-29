@@ -39,11 +39,11 @@ namespace drash {
 
           private:
             void SetProcessors();
-            CSceneObject* mSelectedObject = nullptr;
+            CSceneObject* selectedObject = nullptr;
 
-            greng::CPointLight mLight1;
+            greng::CPointLight light1;
 
-            greng::CCamera* mCamera = nullptr;
+            greng::CCamera* camera = nullptr;
         };
 
     } // namespace test

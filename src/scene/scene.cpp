@@ -36,94 +36,94 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     CScene::CScene(const CSceneParams& _params)
-        : mWorld(b2Vec2(0, 0)),
-          mObjectsFactory(mObjectsCountLimit, "CSceneObject") {
-        mWorld.SetContactFilter(this);
-        mWorld.SetContactListener(this);
-        mWorld.SetAllowSleeping(true);
-        mWorld.SetContinuousPhysics(false);
-        mWorld.SetGravity(CVec2ToB2Vec2(_params.mGravity));
+        : world(b2Vec2(0, 0)),
+          objectsFactory(objectsCountLimit, "CSceneObject") {
+        world.SetContactFilter(this);
+        world.SetContactListener(this);
+        world.SetAllowSleeping(true);
+        world.SetContinuousPhysics(false);
+        world.SetGravity(CVec2ToB2Vec2(_params.gravity));
     }
 
     CScene::~CScene() {
-        while (auto j = mWorld.GetJointList()) {
+        while (auto j = world.GetJointList()) {
             delete static_cast<CJoint*>(j->GetUserData());
             j->SetUserData(nullptr);
-            mWorld.DestroyJoint(j);
+            world.DestroyJoint(j);
         }
 
         DestroyObjects();
     }
 
     void CScene::Step(double _dt) {
-        if (mPaused == true) {
+        if (paused == true) {
             return;
         }
 
-        mLocked = true;
+        locked = true;
 
-        for (unsigned int i = 0; i < mObjectsFactory.EnumObjects();) {
-            if (mObjectsFactory.GetObjects()[i]->mDead) {
-                DestroyObjectImpl(mObjectsFactory.GetObjects()[i]);
+        for (unsigned int i = 0; i < objectsFactory.EnumObjects();) {
+            if (objectsFactory.GetObjects()[i]->dead) {
+                DestroyObjectImpl(objectsFactory.GetObjects()[i]);
             } else {
                 for (unsigned int j = 0;
-                     j < mObjectsFactory.GetObjects()[i]->mFiguresCount; j++) {
-                    if (mObjectsFactory.GetObjects()[i]->mFigures[j]->mDead ==
+                     j < objectsFactory.GetObjects()[i]->figuresCount; j++) {
+                    if (objectsFactory.GetObjects()[i]->figures[j]->dead ==
                         true) {
                         // detaching figure
 
                         CSceneObjectGeometry g;
-                        g.mFigures.resize(1);
-                        g.mFigures[0]
-                            .mVertices.resize(mObjectsFactory.GetObjects()[i]
-                                                  ->mFigures[j]
+                        g.figures.resize(1);
+                        g.figures[0]
+                            .vertices.resize(objectsFactory.GetObjects()[i]
+                                                  ->figures[j]
                                                   ->EnumVertices());
-                        g.mFigures[0].mZ = mObjectsFactory.GetObjects()[i]
-                                               ->mFigures[j]
+                        g.figures[0].z = objectsFactory.GetObjects()[i]
+                                               ->figures[j]
                                                ->GetZ();
-                        g.mFigures[0].mDepth = mObjectsFactory.GetObjects()[i]
-                                                   ->mFigures[j]
+                        g.figures[0].depth = objectsFactory.GetObjects()[i]
+                                                   ->figures[j]
                                                    ->GetDepth();
-                        memcpy(&*g.mFigures[0].mVertices.begin(),
-                               mObjectsFactory.GetObjects()[i]
-                                   ->mFigures[j]
+                        memcpy(&*g.figures[0].vertices.begin(),
+                               objectsFactory.GetObjects()[i]
+                                   ->figures[j]
                                    ->GetVertices(),
-                               sizeof(CVec2f) * mObjectsFactory.GetObjects()[i]
-                                                    ->mFigures[j]
+                               sizeof(CVec2f) * objectsFactory.GetObjects()[i]
+                                                    ->figures[j]
                                                     ->EnumVertices());
 
                         CSceneObjectParams p;
-                        p.mAngle = mObjectsFactory.GetObjects()[i]->mAngle;
-                        p.mDynamic = true;
-                        p.mFixedRotation = false;
-                        p.mPos = mObjectsFactory.GetObjects()[i]->mPos;
+                        p.angle = objectsFactory.GetObjects()[i]->angle;
+                        p.dynamic = true;
+                        p.fixedRotation = false;
+                        p.pos = objectsFactory.GetObjects()[i]->pos;
 
                         auto o = CreateObject(g, p);
 
-                        o->SetLinearVelocity(mObjectsFactory.GetObjects()[i]
+                        o->SetLinearVelocity(objectsFactory.GetObjects()[i]
                                                  ->GetLinearVelocity());
-                        o->SetAngularVelocity(mObjectsFactory.GetObjects()[i]
+                        o->SetAngularVelocity(objectsFactory.GetObjects()[i]
                                                   ->GetAngularVelocity());
 
-                        mObjectsFactory.GetObjects()[i]->DestroyFigure(
-                            mObjectsFactory.GetObjects()[i]->mFigures[j]);
+                        objectsFactory.GetObjects()[i]->DestroyFigure(
+                            objectsFactory.GetObjects()[i]->figures[j]);
 
                         // recompute destruction graph (TODO: optimize this)
 
                         CSceneObjectGeometry ng;
-                        mObjectsFactory.GetObjects()[i]->DumpGeometry(&ng);
+                        objectsFactory.GetObjects()[i]->DumpGeometry(&ng);
 
                         ng.ComputeDestructionGraph(0.5);
 
-                        mObjectsFactory.GetObjects()[i]->mDestructionGraph =
-                            ng.mDestructionGraph;
+                        objectsFactory.GetObjects()[i]->destructionGraph =
+                            ng.destructionGraph;
 
                         // looking for connectivity
 
                         std::vector<int> used;
-                        used.resize(ng.mFigures.size());
+                        used.resize(ng.figures.size());
                         memset(&*used.begin(), 0,
-                               sizeof(int) * ng.mFigures.size());
+                               sizeof(int) * ng.figures.size());
                         std::vector<int> comp;
 
                         std::function<void(unsigned int _v)> dfs;
@@ -132,10 +132,10 @@ namespace drash {
                             used[_v] = 1;
                             comp.push_back(_v);
 
-                            for (unsigned int a = 0; a < ng.mFigures.size();
+                            for (unsigned int a = 0; a < ng.figures.size();
                                  a++) {
-                                if (ng.mDestructionGraph
-                                        [_v * ng.mFigures.size() + a] != 0) {
+                                if (ng.destructionGraph
+                                        [_v * ng.figures.size() + a] != 0) {
                                     if (used[a] == 0) {
                                         dfs(a);
                                     }
@@ -143,78 +143,78 @@ namespace drash {
                             }
                         };
 
-                        for (unsigned int a = 0; a < ng.mFigures.size(); a++) {
+                        for (unsigned int a = 0; a < ng.figures.size(); a++) {
                             if (used[a] == 0) {
                                 comp.clear();
                                 dfs(a);
 
                                 CSceneObjectGeometry g1;
-                                g1.mFigures.resize(comp.size());
+                                g1.figures.resize(comp.size());
 
                                 for (unsigned int b = 0; b < comp.size(); b++) {
-                                    g1.mFigures[b].mVertices.resize(
-                                        ng.mFigures[comp[b]].mVertices.size());
-                                    g1.mFigures[b].mZ = ng.mFigures[comp[b]].mZ;
-                                    g1.mFigures[b].mDepth =
-                                        ng.mFigures[comp[b]].mDepth;
-                                    memcpy(&*g1.mFigures[b].mVertices.begin(),
-                                           &*ng.mFigures[comp[b]]
-                                                 .mVertices.begin(),
+                                    g1.figures[b].vertices.resize(
+                                        ng.figures[comp[b]].vertices.size());
+                                    g1.figures[b].z = ng.figures[comp[b]].z;
+                                    g1.figures[b].depth =
+                                        ng.figures[comp[b]].depth;
+                                    memcpy(&*g1.figures[b].vertices.begin(),
+                                           &*ng.figures[comp[b]]
+                                                 .vertices.begin(),
                                            sizeof(CVec2f) *
-                                               ng.mFigures[comp[b]]
-                                                   .mVertices.size());
+                                               ng.figures[comp[b]]
+                                                   .vertices.size());
                                 }
 
                                 g1.ComputeDestructionGraph(0.5);
 
                                 CSceneObjectParams p1;
-                                p1.mAngle =
-                                    mObjectsFactory.GetObjects()[i]->mAngle;
-                                p1.mDynamic = true;
-                                p1.mFixedRotation = false;
-                                p1.mPos = mObjectsFactory.GetObjects()[i]->mPos;
+                                p1.angle =
+                                    objectsFactory.GetObjects()[i]->angle;
+                                p1.dynamic = true;
+                                p1.fixedRotation = false;
+                                p1.pos = objectsFactory.GetObjects()[i]->pos;
 
                                 auto o = CreateObject(g1, p1);
 
                                 o->SetLinearVelocity(
-                                    mObjectsFactory.GetObjects()[i]
+                                    objectsFactory.GetObjects()[i]
                                         ->GetLinearVelocity());
                                 o->SetAngularVelocity(
-                                    mObjectsFactory.GetObjects()[i]
+                                    objectsFactory.GetObjects()[i]
                                         ->GetAngularVelocity());
                             }
                         }
 
-                        DestroyObjectImpl(mObjectsFactory.GetObjects()[i]);
+                        DestroyObjectImpl(objectsFactory.GetObjects()[i]);
 
                         break;
                     }
                 }
 
-                auto o = mObjectsFactory.GetObjects()[i];
+                auto o = objectsFactory.GetObjects()[i];
 
-                o->mLifeTime += _dt;
+                o->lifeTime += _dt;
 
                 bool phys_pos_changed = false;
 
-                if (o->mPosXYAnimator.Step(_dt)) {
-                    if (o->mPosXYAnimator.IsTargetSet() == true) {
-                        CVec2f lv = o->mPosXYAnimator.GetTarget();
-                        lv -= o->mPos;
-                        lv /= o->mPosXYAnimator.GetTimeRemains();
-                        o->mBody->SetLinearVelocity(CVec2ToB2Vec2(lv));
+                if (o->posXYAnimator.Step(_dt)) {
+                    if (o->posXYAnimator.IsTargetSet() == true) {
+                        CVec2f lv = o->posXYAnimator.GetTarget();
+                        lv -= o->pos;
+                        lv /= o->posXYAnimator.GetTimeRemains();
+                        o->body->SetLinearVelocity(CVec2ToB2Vec2(lv));
                     } else {
-                        o->mBody->SetLinearVelocity(b2Vec2(0, 0));
+                        o->body->SetLinearVelocity(b2Vec2(0, 0));
                         phys_pos_changed = true;
                     }
                 } else {
-                    o->mPos.Vec2() =
-                        B2Vec2ToCVec2(o->mBody->GetWorldPoint(b2Vec2(0, 0)));
+                    o->pos.Vec2() =
+                        B2Vec2ToCVec2(o->body->GetWorldPoint(b2Vec2(0, 0)));
                 }
 
-                if (o->mPosZAnimator.Step(_dt)) {
-                    for (auto i = o->mCurrentContacts.begin();
-                         i != o->mCurrentContacts.end(); i++) {
+                if (o->posZAnimator.Step(_dt)) {
+                    for (auto i = o->currentContacts.begin();
+                         i != o->currentContacts.end(); i++) {
                         const CFigure* f1 = i->first;
                         const CFigure* f2 = i->second;
 
@@ -223,79 +223,79 @@ namespace drash {
 
                         if (math::Abs(z1 - z2) >
                             ((f1->GetDepth() + f2->GetDepth()) * 0.5f)) {
-                            o->mBody->SetActive(false);
-                            o->mBody->SetActive(true);
+                            o->body->SetActive(false);
+                            o->body->SetActive(true);
                         }
                     }
                 }
 
-                if (o->mAngleAnimator.Step(_dt)) {
-                    if (o->mAngleAnimator.IsTargetSet()) {
-                        float av = (o->mAngleAnimator.GetTarget() - o->mAngle) /
-                                   o->mAngleAnimator.GetTimeRemains();
-                        o->mBody->SetAngularVelocity(av);
+                if (o->angleAnimator.Step(_dt)) {
+                    if (o->angleAnimator.IsTargetSet()) {
+                        float av = (o->angleAnimator.GetTarget() - o->angle) /
+                                   o->angleAnimator.GetTimeRemains();
+                        o->body->SetAngularVelocity(av);
                     } else {
-                        o->mBody->SetAngularVelocity(0);
+                        o->body->SetAngularVelocity(0);
                         phys_pos_changed = true;
                     }
                 } else {
-                    o->mAngle = o->mBody->GetAngle();
+                    o->angle = o->body->GetAngle();
                 }
 
                 if (phys_pos_changed) {
-                    o->mBody->SetTransform(CVec2ToB2Vec2(o->mPos), o->mAngle);
+                    o->body->SetTransform(CVec2ToB2Vec2(o->pos), o->angle);
                 }
 
                 i++;
             }
         }
 
-        mLocked = false;
+        locked = false;
 
-        mWorld.Step(_dt, mVelocityIterations, mPositionIterations);
+        world.Step(_dt, velocityIterations, positionIterations);
     }
 
     CSceneObject* CScene::CreateObject(const CSceneObjectGeometry& _geometry,
                                        const CSceneObjectParams& _params) {
-        if (mWorld.IsLocked()) {
+        if (world.IsLocked()) {
             LOG_ERR("CScene::CreateObject(): world is locked now");
             return nullptr;
         }
 
-        CSceneObject* res = mObjectsFactory.CreateObject();
+        CSceneObject* res = objectsFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
         }
 
         b2BodyDef bdef;
-        bdef.position = CVec2ToB2Vec2(_params.mPos);
-        bdef.angle = _params.mAngle;
+        bdef.position = CVec2ToB2Vec2(_params.pos);
+        bdef.angle = _params.angle;
         bdef.active = true;
         bdef.awake = true;
         bdef.allowSleep = true;
         bdef.userData = res;
         bdef.angularDamping = 0;
         bdef.bullet = false;
-        bdef.fixedRotation = _params.mFixedRotation;
+        bdef.fixedRotation = _params.fixedRotation;
         bdef.linearDamping = 0;
         bdef.gravityScale = 1;
-        bdef.type = _params.mDynamic ? b2_dynamicBody : b2_kinematicBody;
+        bdef.type = _params.dynamic ? b2_dynamicBody : b2_kinematicBody;
 
-        b2Body* b = mWorld.CreateBody(&bdef);
+        b2Body* b = world.CreateBody(&bdef);
 
         if (b == nullptr) {
             LOG_ERR("CScene::CreateObject(): something wrong with box2d");
             return nullptr;
         }
 
-        res->mBody = b;
-        res->mPos = _params.mPos;
-        res->mAngle = _params.mAngle;
-        res->mDestructionGraph = _geometry.mDestructionGraph;
+        res->body = b;
+        res->pos = _params.pos;
+        res->angle = _params.angle;
+        res->destructionGraph = _geometry.destructionGraph;
 
-        for (auto i = _geometry.mFigures.begin(),
-                  i_e = _geometry.mFigures.end();
+        for (auto i = _geometry.figures.begin(),
+                  i_e = _geometry.figures.end();
              i != i_e; i++) {
             res->CreateFigure(*i);
         }
@@ -304,36 +304,36 @@ namespace drash {
     }
 
     bool CScene::DestroyObject(CSceneObject* _obj) {
-        if (mObjectsFactory.IsObject(_obj) == false) {
+        if (objectsFactory.IsObject(_obj) == false) {
             LOG_ERR("CScene::DestroyObject(): invalid object taken");
             return false;
         }
 
-        if (mLocked == false && mWorld.IsLocked() == false) {
+        if (locked == false && world.IsLocked() == false) {
             DestroyObjectImpl(_obj);
         } else {
-            _obj->mDead = true;
+            _obj->dead = true;
         }
 
         return true;
     }
 
     void CScene::DestroyObjects(void) {
-        while (mObjectsFactory.EnumObjects() != 0) {
-            DestroyObjectImpl(mObjectsFactory.GetObjects()[0]);
+        while (objectsFactory.EnumObjects() != 0) {
+            DestroyObjectImpl(objectsFactory.GetObjects()[0]);
         }
     }
 
     CJoint* CScene::CreateJoint(CSceneObject* _obj1, CSceneObject* _obj2,
                                 const CVec3f& _anchor) {
         b2WeldJointDef jdef;
-        jdef.Initialize(_obj1->mBody, _obj2->mBody,
+        jdef.Initialize(_obj1->body, _obj2->body,
                         CVec2ToB2Vec2(_anchor.Vec2()));
 
         CJoint* res = new CJoint;
-        res->mJoint = mWorld.CreateJoint(&jdef);
+        res->joint = world.CreateJoint(&jdef);
         ;
-        res->mJoint->SetUserData(res);
+        res->joint->SetUserData(res);
         return res;
     }
 
@@ -342,15 +342,15 @@ namespace drash {
                                         const CVec3f& _anchor1,
                                         const CVec3f& _anchor2, float _length) {
         b2DistanceJointDef jdef;
-        jdef.Initialize(_obj1->mBody, _obj2->mBody,
+        jdef.Initialize(_obj1->body, _obj2->body,
                         CVec2ToB2Vec2(_anchor1.Vec2()),
                         CVec2ToB2Vec2(_anchor2.Vec2()));
         jdef.length = _length;
 
         CJoint* res = new CJoint;
-        res->mJoint = mWorld.CreateJoint(&jdef);
+        res->joint = world.CreateJoint(&jdef);
         ;
-        res->mJoint->SetUserData(res);
+        res->joint->SetUserData(res);
         return res;
     }
 
@@ -361,49 +361,49 @@ namespace drash {
         jdef.maxLength = _length;
         jdef.localAnchorA = CVec2ToB2Vec2(_anchor1.Vec2());
         jdef.localAnchorB = CVec2ToB2Vec2(_anchor2.Vec2());
-        jdef.bodyA = _obj1->mBody;
-        jdef.bodyB = _obj2->mBody;
+        jdef.bodyA = _obj1->body;
+        jdef.bodyB = _obj2->body;
         jdef.type = e_ropeJoint;
         jdef.collideConnected = false;
 
         CJoint* res = new CJoint;
-        res->mJoint = mWorld.CreateJoint(&jdef);
+        res->joint = world.CreateJoint(&jdef);
         ;
-        res->mJoint->SetUserData(res);
+        res->joint->SetUserData(res);
         return res;
     }
 
     void CScene::DestroyJoint(CJoint* _joint) {
-        for (auto j = mWorld.GetJointList(); j != nullptr; j = j->GetNext()) {
+        for (auto j = world.GetJointList(); j != nullptr; j = j->GetNext()) {
             if (j->GetUserData() == _joint) {
                 delete static_cast<CJoint*>(j->GetUserData());
-                mWorld.DestroyJoint(j);
+                world.DestroyJoint(j);
                 return;
             }
         }
     }
 
     void CScene::SetGravity(const CVec2f& _g) {
-        mWorld.SetGravity(CVec2ToB2Vec2(_g));
+        world.SetGravity(CVec2ToB2Vec2(_g));
     }
 
     void CScene::DestroyObjectImpl(CSceneObject* _obj) {
-        for (auto& i : _obj->mDestroyHandlers) {
+        for (auto& i : _obj->destroyHandlers) {
             i(_obj);
         }
 
-        _obj->mBody->SetActive(false);
+        _obj->body->SetActive(false);
 
         while (_obj->EnumFigures() != 0) {
             _obj->DestroyFigure(_obj->GetFigures()[0]);
         }
-        _obj->mBody->SetUserData(nullptr);
+        _obj->body->SetUserData(nullptr);
 
-        mWorld.DestroyBody(_obj->mBody);
+        world.DestroyBody(_obj->body);
 
-        _obj->mBody = nullptr;
+        _obj->body = nullptr;
 
-        mObjectsFactory.DestroyObject(_obj);
+        objectsFactory.DestroyObject(_obj);
     }
 
     bool CScene::ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB) {
@@ -449,17 +449,17 @@ namespace drash {
             return;
         }
 
-        for (auto& i : f1->GetSceneObject()->mContactBeginHandlers) {
+        for (auto& i : f1->GetSceneObject()->contactBeginHandlers) {
             i(f1, f2);
         }
-        for (auto& i : f2->GetSceneObject()->mContactBeginHandlers) {
+        for (auto& i : f2->GetSceneObject()->contactBeginHandlers) {
             i(f2, f1);
         }
 
         // ---------------------------------------------------------------------------------------------
-        f1->GetSceneObject()->mCurrentContacts.insert(
+        f1->GetSceneObject()->currentContacts.insert(
             std::pair<const CFigure*, const CFigure*>(f2, f1));
-        f2->GetSceneObject()->mCurrentContacts.insert(
+        f2->GetSceneObject()->currentContacts.insert(
             std::pair<const CFigure*, const CFigure*>(f1, f2));
         // ^
         // | this code block required for correct object movement along Z axis
@@ -471,15 +471,15 @@ namespace drash {
 
         if (speed.Length() > 10) {
             if (f1->GetSceneObject()->IsDynamic() &&
-                f1->GetSceneObject()->mFiguresCount > 1 &&
-                f1->GetSceneObject()->mLifeTime > 0.1) {
-                f1->mDead = true;
+                f1->GetSceneObject()->figuresCount > 1 &&
+                f1->GetSceneObject()->lifeTime > 0.1) {
+                f1->dead = true;
             }
 
             if (f2->GetSceneObject()->IsDynamic() &&
-                f2->GetSceneObject()->mFiguresCount > 1 &&
-                f2->GetSceneObject()->mLifeTime > 0.1) {
-                f2->mDead = true;
+                f2->GetSceneObject()->figuresCount > 1 &&
+                f2->GetSceneObject()->lifeTime > 0.1) {
+                f2->dead = true;
             }
         }
     }
@@ -536,24 +536,24 @@ namespace drash {
             return;
         }
 
-        for (auto& i : f1->GetSceneObject()->mContactEndHandlers) {
+        for (auto& i : f1->GetSceneObject()->contactEndHandlers) {
             i(f1, f2);
         }
-        for (auto& i : f2->GetSceneObject()->mContactEndHandlers) {
+        for (auto& i : f2->GetSceneObject()->contactEndHandlers) {
             i(f2, f1);
         }
 
         // ---------------------------------------------------------------------------------------------
-        auto f = f1->GetSceneObject()->mCurrentContacts.find(f2);
+        auto f = f1->GetSceneObject()->currentContacts.find(f2);
 
-        if (f != f1->GetSceneObject()->mCurrentContacts.end()) {
-            f1->GetSceneObject()->mCurrentContacts.erase(f);
+        if (f != f1->GetSceneObject()->currentContacts.end()) {
+            f1->GetSceneObject()->currentContacts.erase(f);
         }
 
-        f = f2->GetSceneObject()->mCurrentContacts.find(f1);
+        f = f2->GetSceneObject()->currentContacts.find(f1);
 
-        if (f != f2->GetSceneObject()->mCurrentContacts.end()) {
-            f2->GetSceneObject()->mCurrentContacts.erase(f);
+        if (f != f2->GetSceneObject()->currentContacts.end()) {
+            f2->GetSceneObject()->currentContacts.erase(f);
         }
         // ^
         // | this code block required for correct object movement along Z axis

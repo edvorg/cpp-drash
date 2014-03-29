@@ -50,13 +50,13 @@ namespace drash {
 
       private:
         struct SplitContext {
-            CVec3f mSplitIntersection1;
-            unsigned mSplitIntersection1Index = 0;
-            CVec3f mSplitIntersection2;
-            unsigned mSplitIntersection2Index = 0;
-            unsigned int mSplitIntersectionsCount = 0;
+            CVec3f splitIntersection1;
+            unsigned splitIntersection1Index = 0;
+            CVec3f splitIntersection2;
+            unsigned splitIntersection2Index = 0;
+            unsigned int splitIntersectionsCount = 0;
 
-            CFigure* mFigure = nullptr;
+            CFigure* figure = nullptr;
         };
 
       public:
@@ -115,62 +115,62 @@ namespace drash {
 
       private:
         // Drag and Drop
-        std::function<std::string()> mGetSelectedTemplateHandler = []() {
+        std::function<std::string()> getSelectedTemplateHandler = []() {
             return std::string("");
         };
-        CSceneObjectGeometry* mDragTemplate = nullptr;
-        bool mDragNow = false;
+        CSceneObjectGeometry* dragTemplate = nullptr;
+        bool dragNow = false;
         void DrawDragTemplate();
         void ApplyDrop();
 
         // For current object
-        CSceneObject* mCurrentObject = nullptr;
-        State mState = Simple;
-        std::string mCurrentTemplateName = "";
-        std::function<void()> mTreeRefreshHandler = []() {};
+        CSceneObject* currentObject = nullptr;
+        State state = Simple;
+        std::string currentTemplateName = "";
+        std::function<void()> treeRefreshHandler = []() {};
 
-        std::vector<drash::CVec2f> mVertexs;
+        std::vector<drash::CVec2f> vertexs;
 
-        CFigure* mSelectedFigure = nullptr;
+        CFigure* selectedFigure = nullptr;
 
-        CVec3f mOldPositionCursor = CVec3f(0);
+        CVec3f oldPositionCursor = CVec3f(0);
 
-        CVec2f mCurrentFigureVertex;
+        CVec2f currentFigureVertex;
 
-        CVec2f mCamRotFirstClick;
+        CVec2f camRotFirstClick;
 
-        int mVertexIndex = -1;
+        int vertexIndex = -1;
 
-        bool mFrontSide = true;
+        bool frontSide = true;
 
-        greng::CCamera* mCamera = nullptr;
+        greng::CCamera* camera = nullptr;
 
-        greng::CPointLight mPointLight;
+        greng::CPointLight pointLight;
 
-        CMoveablePoint mMoveablePoint;
+        CMoveablePoint moveablePoint;
 
-        CVec3f mOldCenterFigure;
+        CVec3f oldCenterFigure;
 
-        CTimer mTimer;
+        CTimer timer;
 
         static const float MOVING_SPEED;
 
-        CColor4f mGridColor = CColor4f(0.8, 0.8, 0.8, 1);
-        int mGridSegmentSize = 1;
-        CVec2i mGridSize = CVec2i(20, 20);
+        CColor4f gridColor = CColor4f(0.8, 0.8, 0.8, 1);
+        int gridSegmentSize = 1;
+        CVec2i gridSize = CVec2i(20, 20);
 
         // for Split
 
-        CVec3f mSplitMin;
-        CVec3f mSplitMax;
-        CPlane mSplitPlane;
-        CVec3f mSplitPlanePoint1;
-        CVec3f mSplitPlanePoint2;
-        CVec3f mSplitPlanePoint3;
-        CVec3f mSplitPlanePoint4;
+        CVec3f splitMin;
+        CVec3f splitMax;
+        CPlane splitPlane;
+        CVec3f splitPlanePoint1;
+        CVec3f splitPlanePoint2;
+        CVec3f splitPlanePoint3;
+        CVec3f splitPlanePoint4;
 
-        std::vector<SplitContext> mObjectContexts;
-        SplitContext mSplitFigureContext;
+        std::vector<SplitContext> objectContexts;
+        SplitContext splitFigureContext;
 
         void BeginSplit();
         void DetectNewSplitPoint(const CVec2f& _p1, const CVec2f& _p2,
@@ -182,57 +182,57 @@ namespace drash {
         void RenderSplitPlane();
         void ComputeSplitPlanePoints();
 
-        CRotationablePoint mRotationPoint;
+        CRotationablePoint rotationPoint;
 
         void SplitRotateStep(double _dt);
     };
 
     inline bool CObjectEditorApp::IsStartBuild() const {
-        return mState == BuildState;
+        return state == BuildState;
     }
 
     inline void CObjectEditorApp::ActiveMoveMode() {
-        mState = MoveState;
+        state = MoveState;
         ChangeMode();
         //    LOG_INFO("Moving mode Active");
     }
 
     inline void CObjectEditorApp::ActiveMoveOfAxisMode() {
-        mState = MoveOfAxisState;
+        state = MoveOfAxisState;
         ChangeMode();
     }
 
     inline void
     CObjectEditorApp::SetCurrentTemplateName(const std::string& _name) {
-        mCurrentTemplateName = _name;
+        currentTemplateName = _name;
     }
 
     inline void
     CObjectEditorApp::SetTreeRefreshHandler(const std::function<void()>& _han) {
-        mTreeRefreshHandler = _han;
+        treeRefreshHandler = _han;
     }
 
-    inline greng::CCamera* CObjectEditorApp::GetCamera() { return mCamera; }
+    inline greng::CCamera* CObjectEditorApp::GetCamera() { return camera; }
 
     inline void CObjectEditorApp::ActiveSplitFigureMode() {
-        mState = SplitFigureState;
+        state = SplitFigureState;
         ChangeMode();
     }
 
     inline void CObjectEditorApp::ActiveSplitObjectMode() {
-        mState = SplitObjectState;
+        state = SplitObjectState;
         ChangeMode();
         BeginSplit();
     }
 
     inline void CObjectEditorApp::ActiveDeleteMode() {
-        mState = DeleteFigure;
+        state = DeleteFigure;
         ChangeMode();
     }
 
     inline void CObjectEditorApp::SetGetSelectedHandler(
         const std::function<std::string()>& _han) {
-        mGetSelectedTemplateHandler = _han;
+        getSelectedTemplateHandler = _han;
     }
 
 } // namespace drash

@@ -34,7 +34,7 @@ namespace drash {
 
     class CAppEventCombination {
       public:
-        constexpr static const unsigned int mCatchEventsCountLimit = 3;
+        constexpr static const unsigned int catchEventsCountLimit = 3;
 
         void AddEvent(const CAppEvent& _e);
         void RemoveEvent(const CAppEvent& _e);
@@ -52,11 +52,11 @@ namespace drash {
 
       private:
       protected:
-        std::vector<CAppEvent> mCatchEvents;
+        std::vector<CAppEvent> catchEvents;
     };
 
     inline unsigned int CAppEventCombination::GetEventsCount() const {
-        return mCatchEvents.size();
+        return catchEvents.size();
     }
 
 } // namespace drash

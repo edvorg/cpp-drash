@@ -32,33 +32,33 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 using namespace drash;
 
 void GameWindowParams::SetCommandLine(unsigned int _argc, char* _argv[]) {
-    mArgv.resize(_argc);
+    argv.resize(_argc);
 
     for (unsigned int i = 0; i < _argc; i++) {
-        mArgv[i] = _argv[i];
+        argv[i] = _argv[i];
     }
 }
 
 GameWindow::GameWindow(QWidget* parent)
-    : QMainWindow(parent), ui(new Ui::GameWindow), mSceneWidget(nullptr) {
+    : QMainWindow(parent), ui(new Ui::GameWindow), sceneWidget(nullptr) {
     ui->setupUi(this);
 
-    mStatusLabel = new QLabel(QString(""));
-    ui->statusBar->addWidget(mStatusLabel);
+    statusLabel = new QLabel(QString(""));
+    ui->statusBar->addWidget(statusLabel);
 
-    setCentralWidget(mSceneWidget = new SceneWidget(this));
+    setCentralWidget(sceneWidget = new SceneWidget(this));
 
-    mSceneWidget->setFocus();
+    sceneWidget->setFocus();
 
-    mGameTimer.Reset(true);
+    gameTimer.Reset(true);
 }
 
 GameWindow::~GameWindow() {
-    disconnect(&mUpdateTimer);
+    disconnect(&updateTimer);
 
-    if (mApp != nullptr) {
-        delete mApp;
-        mApp = nullptr;
+    if (app != nullptr) {
+        delete app;
+        app = nullptr;
     }
 
     delete ui;
@@ -66,26 +66,26 @@ GameWindow::~GameWindow() {
 
 bool GameWindow::Init(const GameWindowParams& _params) {
     CSceneParams params;
-    params.mGravity.Set(0.0f, -9.8f);
+    params.gravity.Set(0.0f, -9.8f);
 
     QString title = "drash";
 
-    for (unsigned int i = 0; i < _params.mArgv.size(); i++) {
-        if (_params.mArgv[i] == "--test") {
-            if (i + 1 < _params.mArgv.size()) {
-                mApp = test::StartApp(_params.mArgv[i + 1].c_str());
+    for (unsigned int i = 0; i < _params.argv.size(); i++) {
+        if (_params.argv[i] == "--test") {
+            if (i + 1 < _params.argv.size()) {
+                app = test::StartApp(_params.argv[i + 1].c_str());
 
-                if (mApp == nullptr) {
+                if (app == nullptr) {
                     LOG_ERR("CApp::CApp(): test app "
-                            << _params.mArgv[i + 1].c_str() << " not found");
+                            << _params.argv[i + 1].c_str() << " not found");
                     return false;
                 }
 
                 title += " - ";
-                title += _params.mArgv[i + 1].c_str();
+                title += _params.argv[i + 1].c_str();
 
-                mApp->SetQuitHandler([this]() {
-                    disconnect(&mUpdateTimer);
+                app->SetQuitHandler([this]() {
+                    disconnect(&updateTimer);
                     QApplication::quit();
                 });
 
@@ -97,28 +97,28 @@ bool GameWindow::Init(const GameWindowParams& _params) {
         }
     }
 
-    mSceneWidget->SetApp(mApp);
+    sceneWidget->SetApp(app);
 
     this->setWindowTitle(title);
 
-    mUpdateTimer.start(0);
-    connect(&mUpdateTimer, SIGNAL(timeout()), this, SLOT(UpdateScene()));
+    updateTimer.start(0);
+    connect(&updateTimer, SIGNAL(timeout()), this, SLOT(UpdateScene()));
 
     return true;
 }
 
 void GameWindow::UpdateScene() {
-    if (mSceneWidget->GetApp() == nullptr) {
-        disconnect(&mUpdateTimer);
+    if (sceneWidget->GetApp() == nullptr) {
+        disconnect(&updateTimer);
         QApplication::quit();
     }
 
-    mGameTimer.Tick();
-    if (mApp != nullptr) {
-        mApp->Step(mGameTimer.GetDeltaTime());
+    gameTimer.Tick();
+    if (app != nullptr) {
+        app->Step(gameTimer.GetDeltaTime());
     }
 
-    mStatusLabel->setText(QString(drash::CLogger::Tail().c_str()));
+    statusLabel->setText(QString(drash::CLogger::Tail().c_str()));
 
-    mSceneWidget->updateGL();
+    sceneWidget->updateGL();
 }

@@ -47,24 +47,24 @@ namespace drash {
             bool InitProcessors();
             bool InitTarget();
 
-            CPlayer* mPlayer1 = nullptr;
-            greng::CMesh* mPlayer1Mesh = nullptr;
-            greng::CTexture* mPlayer1Texture = nullptr;
-            greng::CVertexShader* mPlayer1VertexShader = nullptr;
-            greng::CFragmentShader* mPlayer1FragmentShader = nullptr;
-            greng::CShaderProgram* mPlayer1ShaderProgram = nullptr;
-            CVec2f mPlayer1MeshDir = CVec2f(1, 0);
-            CVec3f mPlayer1OldPos;
+            CPlayer* player1 = nullptr;
+            greng::CMesh* player1Mesh = nullptr;
+            greng::CTexture* player1Texture = nullptr;
+            greng::CVertexShader* player1VertexShader = nullptr;
+            greng::CFragmentShader* player1FragmentShader = nullptr;
+            greng::CShaderProgram* player1ShaderProgram = nullptr;
+            CVec2f player1MeshDir = CVec2f(1, 0);
+            CVec3f player1OldPos;
 
-            float mAngle = 0;
+            float angle = 0;
 
-            bool mFollowPlayer = true;
+            bool followPlayer = true;
 
-            float mTargetCreateTimer = 0;
-            bool mTargetDestroyed = true;
-            CSceneObjectGeometry* mTargetGeometry = nullptr;
+            float targetCreateTimer = 0;
+            bool targetDestroyed = true;
+            CSceneObjectGeometry* targetGeometry = nullptr;
 
-            greng::CPointLight mLight1;
+            greng::CPointLight light1;
         };
 
     } // namespace test

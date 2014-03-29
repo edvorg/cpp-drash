@@ -76,21 +76,21 @@ namespace drash {
         void Dump() const;
 
       private:
-        EventKey mKey = EventKeyUnknown;
+        EventKey key = EventKeyUnknown;
     };
 
-    inline EventKey CAppEvent::GetKey() const { return mKey; }
+    inline EventKey CAppEvent::GetKey() const { return key; }
 
     inline bool CAppEvent::operator==(const CAppEvent& _to) const {
-        return mKey == _to.mKey;
+        return key == _to.key;
     }
 
     inline bool CAppEvent::operator!=(const CAppEvent& _to) const {
-        return mKey != _to.mKey;
+        return key != _to.key;
     }
 
     inline bool CAppEvent::operator<(const CAppEvent& _to) const {
-        return (unsigned int)mKey < (unsigned int)_to.mKey;
+        return (unsigned int)key < (unsigned int)_to.key;
     }
 
 } // namespace drash

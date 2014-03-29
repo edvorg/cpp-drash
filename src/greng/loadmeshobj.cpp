@@ -62,23 +62,23 @@ namespace greng {
         LoadTexCoords(uv, f, fsize);
         LoadFaces(_mesh, f, fsize, uv);
 
-        if (_mesh->mMaterialOffsets.size() == 0) {
-            _mesh->mMaterialOffsets.push_back(0);
+        if (_mesh->materialOffsets.size() == 0) {
+            _mesh->materialOffsets.push_back(0);
         }
 
-        _mesh->mMaterialOffsets.push_back(_mesh->mIndices.size());
+        _mesh->materialOffsets.push_back(_mesh->indices.size());
 
         return true;
     }
 
     void LoadVertex(CVertex& v, const char* buf) {
-        sscanf(buf, "%f %f %f", &v.mPos.mX, &v.mPos.mY, &v.mPos.mZ);
-        v.mUV.mX = 0;
-        v.mUV.mY = 0;
-        v.mColor.mR = 1;
-        v.mColor.mG = 1;
-        v.mColor.mB = 1;
-        v.mColor.mA = 1;
+        sscanf(buf, "%f %f %f", &v.pos.x, &v.pos.y, &v.pos.z);
+        v.uV.x = 0;
+        v.uV.y = 0;
+        v.color.r = 1;
+        v.color.g = 1;
+        v.color.b = 1;
+        v.color.a = 1;
     }
 
     void LoadVertices(CMesh* res, std::ifstream& f, unsigned int) {
@@ -92,8 +92,8 @@ namespace greng {
             f.getline(buf, 1024);
             sscanf(buf, "%s", buf1);
             if (strcmp(buf1, "v") == 0) {
-                res->mVertices.resize(res->mVertices.size() + 1);
-                LoadVertex(res->mVertices.back(), buf + 2);
+                res->vertices.resize(res->vertices.size() + 1);
+                LoadVertex(res->vertices.back(), buf + 2);
             }
         }
     }
@@ -171,68 +171,68 @@ namespace greng {
                 LoadFace(fc, buf + 2);
 
                 if (fc.triangle == true) {
-                    res->mVertices.push_back(res->mVertices[fc.v1]);
+                    res->vertices.push_back(res->vertices[fc.v1]);
                     if (fc.tc == true) {
-                        res->mVertices.back().mUV = uv[fc.vt1];
+                        res->vertices.back().uV = uv[fc.vt1];
                     }
-                    res->mVertices.push_back(res->mVertices[fc.v2]);
+                    res->vertices.push_back(res->vertices[fc.v2]);
                     if (fc.tc == true) {
-                        res->mVertices.back().mUV = uv[fc.vt2];
+                        res->vertices.back().uV = uv[fc.vt2];
                     }
-                    res->mVertices.push_back(res->mVertices[fc.v3]);
+                    res->vertices.push_back(res->vertices[fc.v3]);
                     if (fc.tc == true) {
-                        res->mVertices.back().mUV = uv[fc.vt3];
+                        res->vertices.back().uV = uv[fc.vt3];
                     }
 
-                    res->mIndices.push_back(res->mVertices.size() - 3);
-                    res->mIndices.push_back(res->mVertices.size() - 2);
-                    res->mIndices.push_back(res->mVertices.size() - 1);
+                    res->indices.push_back(res->vertices.size() - 3);
+                    res->indices.push_back(res->vertices.size() - 2);
+                    res->indices.push_back(res->vertices.size() - 1);
                 } else {
-                    res->mVertices.push_back(res->mVertices[fc.v1]);
+                    res->vertices.push_back(res->vertices[fc.v1]);
                     if (fc.tc == true) {
-                        res->mVertices.back().mUV = uv[fc.vt1];
+                        res->vertices.back().uV = uv[fc.vt1];
                     }
-                    res->mVertices.push_back(res->mVertices[fc.v2]);
+                    res->vertices.push_back(res->vertices[fc.v2]);
                     if (fc.tc == true) {
-                        res->mVertices.back().mUV = uv[fc.vt2];
+                        res->vertices.back().uV = uv[fc.vt2];
                     }
-                    res->mVertices.push_back(res->mVertices[fc.v4]);
+                    res->vertices.push_back(res->vertices[fc.v4]);
                     if (fc.tc == true) {
-                        res->mVertices.back().mUV = uv[fc.vt4];
+                        res->vertices.back().uV = uv[fc.vt4];
                     }
-                    res->mVertices.push_back(res->mVertices[fc.v4]);
+                    res->vertices.push_back(res->vertices[fc.v4]);
                     if (fc.tc == true) {
-                        res->mVertices.back().mUV = uv[fc.vt4];
+                        res->vertices.back().uV = uv[fc.vt4];
                     }
-                    res->mVertices.push_back(res->mVertices[fc.v2]);
+                    res->vertices.push_back(res->vertices[fc.v2]);
                     if (fc.tc == true) {
-                        res->mVertices.back().mUV = uv[fc.vt2];
+                        res->vertices.back().uV = uv[fc.vt2];
                     }
-                    res->mVertices.push_back(res->mVertices[fc.v3]);
+                    res->vertices.push_back(res->vertices[fc.v3]);
                     if (fc.tc == true) {
-                        res->mVertices.back().mUV = uv[fc.vt3];
+                        res->vertices.back().uV = uv[fc.vt3];
                     }
 
-                    res->mIndices.push_back(res->mVertices.size() - 6);
-                    res->mIndices.push_back(res->mVertices.size() - 5);
-                    res->mIndices.push_back(res->mVertices.size() - 4);
-                    res->mIndices.push_back(res->mVertices.size() - 3);
-                    res->mIndices.push_back(res->mVertices.size() - 2);
-                    res->mIndices.push_back(res->mVertices.size() - 1);
+                    res->indices.push_back(res->vertices.size() - 6);
+                    res->indices.push_back(res->vertices.size() - 5);
+                    res->indices.push_back(res->vertices.size() - 4);
+                    res->indices.push_back(res->vertices.size() - 3);
+                    res->indices.push_back(res->vertices.size() - 2);
+                    res->indices.push_back(res->vertices.size() - 1);
                 }
             } else if (strcmp(buf1, "usemtl") == 0) {
                 char buf2[1024] = { 0 };
                 sscanf(buf + 7, "%s", buf2);
 
-                res->mMaterialOffsets.push_back(res->mIndices.size());
-                res->mMaterialNames.push_back(std::string(buf2));
+                res->materialOffsets.push_back(res->indices.size());
+                res->materialNames.push_back(std::string(buf2));
             }
         }
     }
 
     void LoadTexCoord(CVec2f& tc, const char* buf) {
-        sscanf(buf, "%f %f", &tc.mX, &tc.mY);
-        tc.mY *= -1;
+        sscanf(buf, "%f %f", &tc.x, &tc.y);
+        tc.y *= -1;
     }
 
     void LoadTexCoords(std::vector<CVec2f>& uv, std::ifstream& f,

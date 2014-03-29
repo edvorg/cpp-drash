@@ -28,31 +28,31 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     CApp::CApp()
-        : mGrengSystems(), mScene({}), mPlayersSystem(mScene),
-          mGeometryManager(mScene), mEventSystem(),
-          mUISystem(GetGrengSystems().GetRenderer()),
-          mLevelManager(mScene, mGeometryManager),
-          mDebugRenderer(mGrengSystems, mScene, mGeometryManager) {}
+        : grengSystems(), scene({}), playersSystem(scene),
+          geometryManager(scene), eventSystem(),
+          uISystem(GetGrengSystems().GetRenderer()),
+          levelManager(scene, geometryManager),
+          debugRenderer(grengSystems, scene, geometryManager) {}
 
     void CApp::Step(double _dt) {
-        if (mQuit) {
-            mQuitHandler();
+        if (quit) {
+            quitHandler();
             return;
         }
 
-        mCurrentTimeDelta = _dt;
+        currentTimeDelta = _dt;
 
-        mGrengSystems.Step(_dt);
-        mEventSystem.Process();
-        mScene.Step(_dt);
-        mPlayersSystem.Step(_dt);
-        mGeometryManager.Step(_dt);
-        mUISystem.Step(_dt);
+        grengSystems.Step(_dt);
+        eventSystem.Process();
+        scene.Step(_dt);
+        playersSystem.Step(_dt);
+        geometryManager.Step(_dt);
+        uISystem.Step(_dt);
     }
 
     void CApp::Render() {
-        mDebugRenderer.Render();
-        mUISystem.DebugDraw();
+        debugRenderer.Render();
+        uISystem.DebugDraw();
     }
 
 } // namespace drash

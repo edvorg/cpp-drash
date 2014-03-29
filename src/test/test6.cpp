@@ -49,25 +49,25 @@ namespace drash {
         void CTest6::Step(double _dt) {
             CTest1::Step(_dt);
 
-            mTargetCreateTimer += _dt;
-            mAngle += _dt;
+            targetCreateTimer += _dt;
+            angle += _dt;
 
-            while (mAngle >= M_PI * 2.0) {
-                mAngle -= M_PI * 2.0;
+            while (angle >= M_PI * 2.0) {
+                angle -= M_PI * 2.0;
             }
 
-            mLight1.mPosition.Set(sin(mAngle) * 40, 20, 0);
+            light1.position.Set(sin(angle) * 40, 20, 0);
 
-            GetDebugRenderer().SetLight(&mLight1);
+            GetDebugRenderer().SetLight(&light1);
 
             CVec2f dir(GetPlayersSystem()
                                .GetPlayers()[0]
                                ->GetSceneObject()
                                ->GetPosXY()
                                .Get()
-                               .mX -
-                           mPlayer1OldPos.mX,
-                       mPlayer1OldPos.mZ - GetPlayersSystem()
+                               .x -
+                           player1OldPos.x,
+                       player1OldPos.z - GetPlayersSystem()
                                                .GetPlayers()[0]
                                                ->GetSceneObject()
                                                ->GetPosZ());
@@ -79,48 +79,48 @@ namespace drash {
             }
 
             float angle =
-                acos(dir.mX * mPlayer1MeshDir.mX + dir.mY * mPlayer1MeshDir.mY);
+                acos(dir.x * player1MeshDir.x + dir.y * player1MeshDir.y);
 
             if (angle > 0.000001f) {
                 CVec3f cross;
-                Vec3Cross(CVec3f(mPlayer1MeshDir, 0), CVec3f(dir, 0), cross);
+                Vec3Cross(CVec3f(player1MeshDir, 0), CVec3f(dir, 0), cross);
 
                 CMatrix4f m;
-                if (cross.mZ < 0.0) {
+                if (cross.z < 0.0) {
                     MatrixRotationZ(m, angle * -10.0 * _dt);
                 } else {
                     MatrixRotationZ(m, angle * 10.0 * _dt);
                 }
 
                 CVec4f new_dir;
-                MatrixMultiply(m, CVec4f(mPlayer1MeshDir, 0, 0), new_dir);
-                mPlayer1MeshDir = new_dir;
+                MatrixMultiply(m, CVec4f(player1MeshDir, 0, 0), new_dir);
+                player1MeshDir = new_dir;
 
-                if (mPlayer1MeshDir.LengthSquared() > 0.00001f) {
-                    mPlayer1MeshDir.Normalize();
+                if (player1MeshDir.LengthSquared() > 0.00001f) {
+                    player1MeshDir.Normalize();
                 }
             }
 
-            mPlayer1OldPos = mPlayer1->GetSceneObject()->GetPos();
+            player1OldPos = player1->GetSceneObject()->GetPos();
 
-            if (mFollowPlayer == true) {
+            if (followPlayer == true) {
                 CVec3f t = GetCamera().GetPos().GetTarget();
-                t.mX = mPlayer1->GetSceneObject()->GetPos().mX;
+                t.x = player1->GetSceneObject()->GetPos().x;
                 GetCamera().GetPos().SetTarget(t, 1.0,
                                                AnimatorBehavior::Single);
             }
 
-            if (mTargetCreateTimer > 5.0 && mTargetDestroyed) {
+            if (targetCreateTimer > 5.0 && targetDestroyed) {
                 CSceneObjectParams p;
-                p.mPos.Set(math::Rand<float>(-5, 5, 0.5), 10, 0);
+                p.pos.Set(math::Rand<float>(-5, 5, 0.5), 10, 0);
 
-                auto o = GetScene().CreateObject(*mTargetGeometry, p);
+                auto o = GetScene().CreateObject(*targetGeometry, p);
 
-                mTargetDestroyed = false;
-                mTargetCreateTimer = 0.0;
+                targetDestroyed = false;
+                targetCreateTimer = 0.0;
 
                 o->AddDestroyHandler([this](CSceneObject*) {
-                    mTargetDestroyed = true;
+                    targetDestroyed = true;
                 });
             }
         }
@@ -128,9 +128,9 @@ namespace drash {
         void CTest6::Render() {
             CTest1::Render();
 
-            float new_angle = acos(mPlayer1MeshDir.mX);
+            float new_angle = acos(player1MeshDir.x);
 
-            if (mPlayer1MeshDir.mY < 0.0f) {
+            if (player1MeshDir.y < 0.0f) {
                 new_angle *= -1;
             }
 
@@ -144,7 +144,7 @@ namespace drash {
             MatrixMultiply(r, s, rot);
 
             CMatrix4f transl;
-            MatrixTranslation(transl, mPlayer1->GetSceneObject()->GetPos() -
+            MatrixTranslation(transl, player1->GetSceneObject()->GetPos() -
                                           CVec3f(0, 0.4, 0));
 
             CMatrix4f model;
@@ -155,13 +155,13 @@ namespace drash {
 
             for (unsigned int i = 0; i < 6; i++) {
                 GetGrengSystems().GetRenderer().RenderMesh(
-                    mPlayer1Mesh, i, &mPlayer1Texture, 1, mPlayer1ShaderProgram,
+                    player1Mesh, i, &player1Texture, 1, player1ShaderProgram,
                     &model, nullptr, &model_view,
-                    &GetCamera().GetProjectionMatrix(), &mLight1);
+                    &GetCamera().GetProjectionMatrix(), &light1);
             }
 
             GetGrengSystems().GetRenderer().DrawPoint(
-                GetCamera(), mLight1.mPosition, 10, CColor4f(1, 1, 1, 1), true);
+                GetCamera(), light1.position, 10, CColor4f(1, 1, 1, 1), true);
         }
 
         bool CTest6::InitCamera() {
@@ -195,8 +195,8 @@ namespace drash {
 
             if (i != GetGeometryManager().GetGeometries().end()) {
                 CSceneObjectParams p;
-                p.mPos.Set(3, -2, 0);
-                p.mDynamic = false;
+                p.pos.Set(3, -2, 0);
+                p.dynamic = false;
 
                 auto o = GetScene().CreateObject(*i->second, p);
 
@@ -205,14 +205,14 @@ namespace drash {
                 }
 
                 o->AddContactBeginHandler([this](CFigure* _f1, CFigure* _f2) {
-                    if (_f2->GetSceneObject() == mPlayer1->GetSceneObject()) {
+                    if (_f2->GetSceneObject() == player1->GetSceneObject()) {
                         _f1->GetSceneObject()->GetPosXY().SetTarget(
                             CVec2f(8, 8), 2.0, AnimatorBehavior::Single);
                     }
                 });
 
                 o->AddContactEndHandler([this](CFigure* _f1, CFigure* _f2) {
-                    if (_f2->GetSceneObject() == mPlayer1->GetSceneObject()) {
+                    if (_f2->GetSceneObject() == player1->GetSceneObject()) {
                         _f1->GetSceneObject()->GetPosXY().SetTarget(
                             CVec2f(3, -2), 2.0, AnimatorBehavior::Single);
                     }
@@ -225,61 +225,61 @@ namespace drash {
         bool CTest6::InitPlayer() {
             CSceneObjectGeometry g1;
 
-            g1.mFigures.resize(1);
-            g1.mFigures[0].mDepth = 0.8;
-            g1.mFigures[0].mVertices.push_back(CVec2f(0, 0.4));
-            g1.mFigures[0].mVertices.push_back(CVec2f(-0.4, -0.2));
-            g1.mFigures[0].mVertices.push_back(CVec2f(0, -0.4));
-            g1.mFigures[0].mVertices.push_back(CVec2f(0.4, -0.2));
+            g1.figures.resize(1);
+            g1.figures[0].depth = 0.8;
+            g1.figures[0].vertices.push_back(CVec2f(0, 0.4));
+            g1.figures[0].vertices.push_back(CVec2f(-0.4, -0.2));
+            g1.figures[0].vertices.push_back(CVec2f(0, -0.4));
+            g1.figures[0].vertices.push_back(CVec2f(0.4, -0.2));
 
             CPlayerParams p1;
-            p1.mVelocityLimit = 10;
-            p1.mSceneObjectParams.mFixedRotation = true;
-            p1.mSceneObjectParams.mPos.Set(0, 20, 0);
+            p1.velocityLimit = 10;
+            p1.sceneObjectParams.fixedRotation = true;
+            p1.sceneObjectParams.pos.Set(0, 20, 0);
 
-            mPlayer1 = GetPlayersSystem().CreatePlayer(g1, p1);
+            player1 = GetPlayersSystem().CreatePlayer(g1, p1);
 
-            if (mPlayer1 == nullptr) {
+            if (player1 == nullptr) {
                 return false;
             }
 
-            mPlayer1Mesh = GetGrengSystems().GetMeshManager().CreateMeshCube();
+            player1Mesh = GetGrengSystems().GetMeshManager().CreateMeshCube();
 
-            if (mPlayer1Mesh == nullptr) {
+            if (player1Mesh == nullptr) {
                 return false;
             }
 
-            GetGrengSystems().GetMeshManager().ComputeNormals(mPlayer1Mesh);
+            GetGrengSystems().GetMeshManager().ComputeNormals(player1Mesh);
 
-            mPlayer1Texture =
+            player1Texture =
                 GetGrengSystems().GetTextureManager().CreateTextureDummy();
 
-            if (mPlayer1Texture == nullptr) {
+            if (player1Texture == nullptr) {
                 return false;
             }
 
-            mPlayer1VertexShader =
+            player1VertexShader =
                 GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader2.120.vs");
 
-            if (mPlayer1VertexShader == nullptr) {
+            if (player1VertexShader == nullptr) {
                 return false;
             }
 
-            mPlayer1FragmentShader =
+            player1FragmentShader =
                 GetGrengSystems()
                     .GetFragmentShaderManager()
                     .CreateShaderFromFile("shaders/shader2.120.fs");
 
-            if (mPlayer1FragmentShader == nullptr) {
+            if (player1FragmentShader == nullptr) {
                 return false;
             }
 
-            mPlayer1ShaderProgram =
+            player1ShaderProgram =
                 GetGrengSystems().GetShaderProgramManager().CreateProgram(
-                    mPlayer1VertexShader, mPlayer1FragmentShader);
+                    player1VertexShader, player1FragmentShader);
 
-            if (mPlayer1ShaderProgram == nullptr) {
+            if (player1ShaderProgram == nullptr) {
                 return false;
             }
 
@@ -287,9 +287,9 @@ namespace drash {
         }
 
         bool CTest6::InitLight() {
-            mLight1.mPosition.Set(10, 10, 0);
+            light1.position.Set(10, 10, 0);
 
-            GetDebugRenderer().SetLight(&mLight1);
+            GetDebugRenderer().SetLight(&light1);
 
             return true;
         }
@@ -299,7 +299,7 @@ namespace drash {
 
             GetEventSystem().SetProcessor("C-x",
                                           CAppEventProcessor([]() {}, [this]() {
-                                              mFollowPlayer = true;
+                                              followPlayer = true;
                                               GetEventSystem().SetMode("test6");
                                           }));
 
@@ -307,7 +307,7 @@ namespace drash {
 
             GetEventSystem().SetProcessor(
                 "C-x", CAppEventProcessor([]() {}, [this]() {
-                           mFollowPlayer = false;
+                           followPlayer = false;
                            GetEventSystem().SetMode("editor_mode");
                        }));
 
@@ -352,27 +352,27 @@ namespace drash {
             GetEventSystem().SetProcessor(
                 "LB", CAppEventProcessor([this]() {
                           CSceneObjectGeometry g;
-                          g.mFigures.resize(1);
-                          g.mFigures[0].mVertices.push_back(CVec2f(-0.1, -0.1));
-                          g.mFigures[0].mVertices.push_back(CVec2f(0.1, -0.1));
-                          g.mFigures[0].mVertices.push_back(CVec2f(0.1, 0.1));
-                          g.mFigures[0].mVertices.push_back(CVec2f(-0.1, 0.1));
-                          g.mFigures[0].mDepth = 0.2;
+                          g.figures.resize(1);
+                          g.figures[0].vertices.push_back(CVec2f(-0.1, -0.1));
+                          g.figures[0].vertices.push_back(CVec2f(0.1, -0.1));
+                          g.figures[0].vertices.push_back(CVec2f(0.1, 0.1));
+                          g.figures[0].vertices.push_back(CVec2f(-0.1, 0.1));
+                          g.figures[0].depth = 0.2;
 
                           CPlane pl(PlaneXY);
                           CVec3f pos;
                           GetCamera().CastRay(GetCursorPos(), pl, pos);
                           pos.Vec2() -=
-                              mPlayer1->GetSceneObject()->GetPos().Vec2();
+                              player1->GetSceneObject()->GetPos().Vec2();
                           pos *= 2;
 
                           CSceneObjectParams p;
-                          p.mPos = mPlayer1->GetSceneObject()->GetPos();
+                          p.pos = player1->GetSceneObject()->GetPos();
 
-                          if (pos.mX > 0.0f) {
-                              p.mPos.mX += 1;
+                          if (pos.x > 0.0f) {
+                              p.pos.x += 1;
                           } else {
-                              p.mPos.mX -= 1;
+                              p.pos.x -= 1;
                           }
 
                           CSceneObject* o = GetScene().CreateObject(g, p);
@@ -389,9 +389,9 @@ namespace drash {
                 return false;
             }
 
-            mTargetGeometry = i->second;
+            targetGeometry = i->second;
 
-            if (mTargetGeometry == nullptr) {
+            if (targetGeometry == nullptr) {
                 return false;
             }
 

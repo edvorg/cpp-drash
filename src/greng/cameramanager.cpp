@@ -32,33 +32,33 @@ namespace greng {
     using drash::CLogger;
 
     CCameraManager::CCameraManager()
-        : mCameraFactory(mCamerasCountLimit, "CCamera") {}
+        : cameraFactory(camerasCountLimit, "CCamera") {}
 
     CCameraManager::~CCameraManager() {
-        while (mCameraFactory.EnumObjects() != 0) {
-            DestroyCamera(mCameraFactory.GetObjects()[0]);
+        while (cameraFactory.EnumObjects() != 0) {
+            DestroyCamera(cameraFactory.GetObjects()[0]);
         }
     }
 
     void CCameraManager::Step(double _dt) {
-        for (unsigned int i = 0; i < mCameraFactory.EnumObjects(); i++) {
-            mCameraFactory.GetObjects()[i]->Step(_dt);
+        for (unsigned int i = 0; i < cameraFactory.EnumObjects(); i++) {
+            cameraFactory.GetObjects()[i]->Step(_dt);
         }
     }
 
     CCamera* CCameraManager::CreateCamera(const CCameraParams& _params) {
-        CCamera* res = mCameraFactory.CreateObject();
+        CCamera* res = cameraFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
         }
 
-        res->mAspectRatioAnimator = mAspectRatio;
-        res->mOrthoWidthAnimator = _params.mOrthoWidth;
-        res->mFovAnimator = _params.mFov;
-        res->mDepthOfViewAnimator = _params.mDepthOfView;
-        res->mPosAnimator = _params.mPos;
-        res->mRotationAnimator = _params.mRotation;
+        res->aspectRatioAnimator = aspectRatio;
+        res->orthoWidthAnimator = _params.orthoWidth;
+        res->fovAnimator = _params.fov;
+        res->depthOfViewAnimator = _params.depthOfView;
+        res->posAnimator = _params.pos;
+        res->rotationAnimator = _params.rotation;
 
         res->ComputeMatrices();
 
@@ -66,12 +66,12 @@ namespace greng {
     }
 
     bool CCameraManager::DestroyCamera(CCamera* _camera) {
-        if (mCameraFactory.IsObject(_camera) == false) {
+        if (cameraFactory.IsObject(_camera) == false) {
             LOG_ERR("CCameraManager::DestroyCamera(): Invalid object taken");
             return false;
         }
 
-        mCameraFactory.DestroyObject(_camera);
+        cameraFactory.DestroyObject(_camera);
 
         return true;
     }
@@ -81,10 +81,10 @@ namespace greng {
             _ratio = 1.0f;
         }
 
-        mAspectRatio = _ratio;
+        aspectRatio = _ratio;
 
-        for (unsigned int i = 0; i < mCameraFactory.EnumObjects(); i++) {
-            mCameraFactory.GetObjects()[i]->GetAspectRatio() = _ratio;
+        for (unsigned int i = 0; i < cameraFactory.EnumObjects(); i++) {
+            cameraFactory.GetObjects()[i]->GetAspectRatio() = _ratio;
         }
     }
 

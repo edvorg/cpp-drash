@@ -42,7 +42,7 @@ namespace drash {
         inline void SetPaused(bool _paused);
         inline bool IsPaused() const;
 
-        /// time (seconds) from mStartTime
+        /// time (seconds) from startTime
         double GetFullTime() const;
 
         /// time (seconds) spent between last two Tick() invokations
@@ -53,15 +53,15 @@ namespace drash {
       private:
         void Update();
 
-        unsigned long mStartTime = 0;
-        unsigned long mPrevTime = 0;
-        unsigned long mCurrTime = 0;
-        bool mPaused = true;
+        unsigned long startTime = 0;
+        unsigned long prevTime = 0;
+        unsigned long currTime = 0;
+        bool paused = true;
     };
 
-    inline void CTimer::SetPaused(bool _paused) { mPaused = _paused; }
+    inline void CTimer::SetPaused(bool _paused) { paused = _paused; }
 
-    inline bool CTimer::IsPaused() const { return mPaused; }
+    inline bool CTimer::IsPaused() const { return paused; }
 
 } // namespace drash
 

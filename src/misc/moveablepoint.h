@@ -54,45 +54,45 @@ namespace drash {
         inline void SetAxisOZ(bool _val);
 
       private:
-        bool mAxisOX = true;
-        bool mAxisOY = true;
-        bool mAxisOZ = true;
+        bool axisOX = true;
+        bool axisOY = true;
+        bool axisOZ = true;
 
-        greng::CCamera* mCurrentCamera = nullptr;
+        greng::CCamera* currentCamera = nullptr;
 
         void Calculate();
 
         greng::CCamera* GetCamera();
 
-        CVec3f mCenter;
-        CVec3f mX;
-        CVec3f mY;
-        CVec3f mZ;
+        CVec3f center;
+        CVec3f x;
+        CVec3f y;
+        CVec3f z;
 
-        CVec3f mAxisDrawK;
-        unsigned int mAxisOver = 0;
-        CVec3f mFirstClick;
-        unsigned int mAxisMoving = 0;
+        CVec3f axisDrawK;
+        unsigned int axisOver = 0;
+        CVec3f firstClick;
+        unsigned int axisMoving = 0;
 
-        bool mMoving = false;
+        bool moving = false;
 
-        CVec2f mCursorPos;
+        CVec2f cursorPos;
 
-        float mLineSizeWorld = 1.0f;
-        float mLineSizeScreen = 0.05;
+        float lineSizeWorld = 1.0f;
+        float lineSizeScreen = 0.05;
     };
 
-    inline CVec3f CMoveablePoint::GetCenter() const { return mCenter; }
+    inline CVec3f CMoveablePoint::GetCenter() const { return center; }
 
     inline void CMoveablePoint::SetSize(float _size) {
-        mLineSizeScreen = math::Abs(_size);
+        lineSizeScreen = math::Abs(_size);
     }
 
-    inline void CMoveablePoint::SetAxisOX(bool _val) { mAxisOX = _val; }
+    inline void CMoveablePoint::SetAxisOX(bool _val) { axisOX = _val; }
 
-    inline void CMoveablePoint::SetAxisOY(bool _val) { mAxisOY = _val; }
+    inline void CMoveablePoint::SetAxisOY(bool _val) { axisOY = _val; }
 
-    inline void CMoveablePoint::SetAxisOZ(bool _val) { mAxisOZ = _val; }
+    inline void CMoveablePoint::SetAxisOZ(bool _val) { axisOZ = _val; }
 
 } // namespace drash
 #endif // MOVEABLEPOINT_H

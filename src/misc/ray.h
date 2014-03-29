@@ -39,13 +39,13 @@ namespace drash {
         inline const CVec3f& GetDirection() const;
 
       private:
-        CVec3f mPoint;
-        CVec3f mDirection;
+        CVec3f point;
+        CVec3f direction;
     };
 
-    inline const CVec3f& CRay::GetPoint() const { return mPoint; }
+    inline const CVec3f& CRay::GetPoint() const { return point; }
 
-    inline const CVec3f& CRay::GetDirection() const { return mDirection; }
+    inline const CVec3f& CRay::GetDirection() const { return direction; }
 
 } // namespace drash
 

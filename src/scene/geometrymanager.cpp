@@ -32,17 +32,17 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    CGeometryManager::CGeometryManager(CScene& _scene) : mScene(_scene) {}
+    CGeometryManager::CGeometryManager(CScene& _scene) : scene(_scene) {}
 
     void CGeometryManager::Step(double) {}
 
     CGeometryManager::~CGeometryManager() {
-        for (auto i = mSceneObjectTemplates.begin(),
-                  i_e = mSceneObjectTemplates.end();
+        for (auto i = sceneObjectTemplates.begin(),
+                  i_e = sceneObjectTemplates.end();
              i != i_e; i++) {
             delete i->second;
         }
-        mSceneObjectTemplates.clear();
+        sceneObjectTemplates.clear();
     }
 
     CSceneObjectGeometry*
@@ -50,8 +50,8 @@ namespace drash {
         if (_name == "") {
             return nullptr;
         } else {
-            if (mSceneObjectTemplates.find(_name) !=
-                mSceneObjectTemplates.end()) {
+            if (sceneObjectTemplates.find(_name) !=
+                sceneObjectTemplates.end()) {
                 LOG_ERR("Template " << _name.c_str()
                                     << " exists in TemplateSystem");
                 return nullptr;
@@ -59,47 +59,47 @@ namespace drash {
             MapSceneObjectItem elem;
             elem.second = new CSceneObjectGeometry();
             elem.first = _name;
-            mSceneObjectTemplates.insert(elem);
+            sceneObjectTemplates.insert(elem);
             return elem.second;
         }
     }
 
     void CGeometryManager::DestroyGeometry(CSceneObjectGeometry* _t) {
-        for (auto i = mSceneObjectTemplates.begin(),
-                  i_e = mSceneObjectTemplates.end();
+        for (auto i = sceneObjectTemplates.begin(),
+                  i_e = sceneObjectTemplates.end();
              i != i_e; i++) {
             if (i->second == _t) {
                 delete _t;
-                mSceneObjectTemplates.erase(i);
+                sceneObjectTemplates.erase(i);
                 return;
             }
         }
     }
 
     void CGeometryManager::DestroyGeometry(const std::string& _name) {
-        auto iter = mSceneObjectTemplates.find(_name);
-        if (iter != mSceneObjectTemplates.end()) {
+        auto iter = sceneObjectTemplates.find(_name);
+        if (iter != sceneObjectTemplates.end()) {
             delete iter->second;
-            mSceneObjectTemplates.erase(iter);
+            sceneObjectTemplates.erase(iter);
         }
     }
 
     CSceneObject*
     CGeometryManager::CreateSceneObject(const std::string& _name,
                                         const CSceneObjectParams& _params) {
-        auto iter = mSceneObjectTemplates.find(_name);
-        if (iter == mSceneObjectTemplates.end()) {
+        auto iter = sceneObjectTemplates.find(_name);
+        if (iter == sceneObjectTemplates.end()) {
             LOG_ERR("Object" << _name.c_str()
                              << "not found in CTemplateSystem");
             return nullptr;
         }
-        return mScene.CreateObject(*(iter->second), _params);
+        return scene.CreateObject(*(iter->second), _params);
     }
 
     CSceneObjectGeometry*
     CGeometryManager::GetGeometry(const std::string& _name) {
-        auto iter = mSceneObjectTemplates.find(_name);
-        if (iter == mSceneObjectTemplates.end()) {
+        auto iter = sceneObjectTemplates.find(_name);
+        if (iter == sceneObjectTemplates.end()) {
             LOG_ERR("Object " << _name.c_str()
                               << " not found in CTemplateSystem");
             return nullptr;
@@ -109,16 +109,16 @@ namespace drash {
     }
 
     CGeometryManager::SceneObjectTemplatesT& CGeometryManager::GetGeometries() {
-        return this->mSceneObjectTemplates;
+        return this->sceneObjectTemplates;
     }
 
     bool CGeometryManager::Load() {
-        for (auto i = mSceneObjectTemplates.begin(),
-                  i_e = mSceneObjectTemplates.end();
+        for (auto i = sceneObjectTemplates.begin(),
+                  i_e = sceneObjectTemplates.end();
              i != i_e; i++) {
             delete i->second;
         }
-        mSceneObjectTemplates.clear();
+        sceneObjectTemplates.clear();
 
         std::ifstream in("templates.txt");
 
@@ -145,7 +145,7 @@ namespace drash {
 
             CSceneObjectGeometry* g = CreateGeometry(name.c_str());
 
-            g->mFigures.resize(figures_count);
+            g->figures.resize(figures_count);
 
             for (unsigned int j = 0; j < figures_count; j++) {
                 vertices_count = 0;
@@ -156,17 +156,17 @@ namespace drash {
                 in >> depth;
                 in >> vertices_count;
 
-                g->mFigures[j].mZ = z;
-                g->mFigures[j].mDepth = depth;
-                g->mFigures[j].mVertices.resize(vertices_count);
+                g->figures[j].z = z;
+                g->figures[j].depth = depth;
+                g->figures[j].vertices.resize(vertices_count);
 
                 for (unsigned int k = 0; k < vertices_count; k++) {
                     vertex.Set(0, 0);
 
-                    in >> vertex.mX;
-                    in >> vertex.mY;
+                    in >> vertex.x;
+                    in >> vertex.y;
 
-                    g->mFigures[j].mVertices[k] = vertex;
+                    g->figures[j].vertices[k] = vertex;
                 }
             }
         }
@@ -183,20 +183,20 @@ namespace drash {
             return false;
         }
 
-        out << mSceneObjectTemplates.size() << endl;
+        out << sceneObjectTemplates.size() << endl;
 
-        for (auto& i : mSceneObjectTemplates) {
+        for (auto& i : sceneObjectTemplates) {
             out << i.first << std::endl;
 
-            out << i.second->mFigures.size() << endl;
+            out << i.second->figures.size() << endl;
 
-            for (auto& j : i.second->mFigures) {
-                out << j.mZ << endl;
-                out << j.mDepth << endl;
-                out << j.mVertices.size() << endl;
+            for (auto& j : i.second->figures) {
+                out << j.z << endl;
+                out << j.depth << endl;
+                out << j.vertices.size() << endl;
 
-                for (auto& k : j.mVertices) {
-                    out << k.mX << ' ' << k.mY << endl;
+                for (auto& k : j.vertices) {
+                    out << k.x << ' ' << k.y << endl;
                 }
             }
         }

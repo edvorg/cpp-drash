@@ -34,8 +34,8 @@ namespace drash {
 
     class CPlayerParams final {
       public:
-        CSceneObjectParams mSceneObjectParams;
-        float mVelocityLimit = 1;
+        CSceneObjectParams sceneObjectParams;
+        float velocityLimit = 1;
     };
 
     class CPlayer final : public CObjectFactory<CPlayer>::CFactoryProduct {
@@ -46,11 +46,11 @@ namespace drash {
 
       protected:
       private:
-        CSceneObject* mSceneObject = nullptr;
-        float mVelocityLimit = 1;
+        CSceneObject* sceneObject = nullptr;
+        float velocityLimit = 1;
     };
 
-    inline CSceneObject* CPlayer::GetSceneObject() { return mSceneObject; }
+    inline CSceneObject* CPlayer::GetSceneObject() { return sceneObject; }
 
 } // namespace drash
 

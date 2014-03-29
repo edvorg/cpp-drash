@@ -33,27 +33,27 @@ namespace greng {
     void CCamera::Step(double _dt) {
         bool compute_matrices = false;
 
-        if (mOrthoWidthAnimator.Step(_dt)) {
+        if (orthoWidthAnimator.Step(_dt)) {
             compute_matrices = true;
         }
 
-        if (mFovAnimator.Step(_dt)) {
+        if (fovAnimator.Step(_dt)) {
             compute_matrices = true;
         }
 
-        if (mDepthOfViewAnimator.Step(_dt)) {
+        if (depthOfViewAnimator.Step(_dt)) {
             compute_matrices = true;
         }
 
-        if (mPosAnimator.Step(_dt)) {
+        if (posAnimator.Step(_dt)) {
             compute_matrices = true;
         }
 
-        if (mRotationAnimator.Step(_dt)) {
+        if (rotationAnimator.Step(_dt)) {
             compute_matrices = true;
         }
 
-        if (mAspectRatioAnimator.Step(_dt)) {
+        if (aspectRatioAnimator.Step(_dt)) {
             compute_matrices = true;
         }
 
@@ -64,107 +64,107 @@ namespace greng {
 
     void CCamera::LookAt(const CVec3f& _point) {
         CVec3f dir = _point;
-        dir -= mPos;
+        dir -= pos;
 
-        CVec2f dirx(-dir.mZ, -dir.mX);
-        CVec2f diry(dirx.Length(), dir.mY);
+        CVec2f dirx(-dir.z, -dir.x);
+        CVec2f diry(dirx.Length(), dir.y);
 
         dirx.Normalize();
         diry.Normalize();
 
         CVec3f rot;
 
-        rot.mY = acos(dirx.mX);
-        rot.mX = asin(diry.mY);
+        rot.y = acos(dirx.x);
+        rot.x = asin(diry.y);
 
-        if (dirx.mY < 0) {
-            rot.mY = -rot.mY;
+        if (dirx.y < 0) {
+            rot.y = -rot.y;
         }
 
-        mRotationAnimator = rot;
+        rotationAnimator = rot;
     }
 
     void CCamera::Forward(float _distance) {
         CVec4f z(0, 0, -1, 1);
         CVec4f dir;
-        MatrixMultiply(mAntiRotationMatrix, z, dir);
+        MatrixMultiply(antiRotationMatrix, z, dir);
 
         dir.Normalize();
-        dir.mX *= _distance;
-        dir.mY *= _distance;
-        dir.mZ *= _distance;
-        dir.mW *= _distance;
+        dir.x *= _distance;
+        dir.y *= _distance;
+        dir.z *= _distance;
+        dir.w *= _distance;
 
-        CVec3f new_pos(mPos);
+        CVec3f new_pos(pos);
         new_pos += dir;
-        mPosAnimator = new_pos;
+        posAnimator = new_pos;
     }
 
     void CCamera::Strafe(float _distance) {
         CVec3f up(0, 1, 0);
         CVec4f z(0, 0, -1, 1);
         CVec4f dir;
-        MatrixMultiply(mAntiRotationMatrix, z, dir);
+        MatrixMultiply(antiRotationMatrix, z, dir);
 
         CVec3f strafe_dir;
         Vec3Cross(up, dir, strafe_dir);
 
-        strafe_dir.mX *= _distance;
-        strafe_dir.mY *= _distance;
-        strafe_dir.mZ *= _distance;
+        strafe_dir.x *= _distance;
+        strafe_dir.y *= _distance;
+        strafe_dir.z *= _distance;
 
-        strafe_dir += mPos;
-        mPosAnimator = strafe_dir;
+        strafe_dir += pos;
+        posAnimator = strafe_dir;
     }
 
     void CCamera::CastRay(const CVec2f& _pos, const drash::CPlane& _plane,
                           CVec3f& _result) const {
-        double c = 1.0 / cos(mFov / 2.0); // hypotenuse
+        double c = 1.0 / cos(fov / 2.0); // hypotenuse
 
         double frame_height = 2.0 * sqrt(c * c - 1.0);
-        double frame_width = frame_height * mAspectRatio;
+        double frame_width = frame_height * aspectRatio;
 
-        CVec2f pos = _pos;
+        CVec2f ppos = _pos;
 
-        pos.mX *= frame_width;
-        pos.mY *= frame_height;
+        ppos.x *= frame_width;
+        ppos.y *= frame_height;
 
-        CVec4f dir(pos, -1, 1);
+        CVec4f dir(ppos, -1, 1);
         CVec4f tmp;
-        MatrixMultiply(mAntiRotationMatrix, dir, tmp);
+        MatrixMultiply(antiRotationMatrix, dir, tmp);
 
         drash::CRay r;
-        r.SetPoint(mPos);
+        r.SetPoint(pos);
         r.SetDirection(tmp);
         _plane.CastRay(r, _result);
     }
 
     void CCamera::ComputeMatrices() {
         CMatrix4f rotx;
-        MatrixRotationX(rotx, -mRotation.mX);
+        MatrixRotationX(rotx, -rotation.x);
 
         CMatrix4f roty;
-        MatrixRotationY(roty, -mRotation.mY);
+        MatrixRotationY(roty, -rotation.y);
 
-        MatrixMultiply(rotx, roty, mRotationMatrix);
-        MatrixRotationX(rotx, mRotation.mX);
-        MatrixRotationY(roty, mRotation.mY);
-        MatrixMultiply(roty, rotx, mAntiRotationMatrix);
+        MatrixMultiply(rotx, roty, rotationMatrix);
+        MatrixRotationX(rotx, rotation.x);
+        MatrixRotationY(roty, rotation.y);
+        MatrixMultiply(roty, rotx, antiRotationMatrix);
 
-        CVec3f tv(-mPos.mX, -mPos.mY, -mPos.mZ);
+        CVec3f tv(-pos.x, -pos.y, -pos.z);
         CMatrix4f tm;
         MatrixTranslation(tm, tv);
 
-        MatrixMultiply(mRotationMatrix, tm, mViewMatrix);
+        MatrixMultiply(rotationMatrix, tm, viewMatrix);
 
-        Matrix4Perspective(mProjectionMatrix, mFov, mAspectRatio, 1.0,
-                           mDepthOfView + 1.0f);
+        Matrix4Perspective(projectionMatrix, fov, aspectRatio, 1.0,
+                           depthOfView + 1.0f);
 
-        mViewMatrixTransposed = mViewMatrix;
-        mViewMatrixTransposed.Transpose();
+        viewMatrixTransposed = viewMatrix;
+        viewMatrixTransposed.Transpose();
 
-        mProjectionMatrixTransposed = mProjectionMatrix;
-        mProjectionMatrixTransposed.Transpose();
+        projectionMatrixTransposed = projectionMatrix;
+        projectionMatrixTransposed.Transpose();
     }
 
 } // namespace greng

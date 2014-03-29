@@ -57,7 +57,7 @@ namespace Sound {
     long TellOgg(void* _datasource);
     int CloseOgg(void* _datasource);
 
-    AlSound::AlSound() : mSourceId(0), mBufferId(0) {
+    AlSound::AlSound() : sourceId(0), bufferId(0) {
         g_TotalInstances++;
 
         if (g_TotalInstances == 1) {
@@ -66,10 +66,10 @@ namespace Sound {
             }
         }
 
-        alGenSources(1, &mSourceId);
-        alGenBuffers(1, &mBufferId);
-        g_Buffers.insert(make_pair(mBufferId, 1));
-        cout << "AlSound() " << mBufferId << endl;
+        alGenSources(1, &sourceId);
+        alGenBuffers(1, &bufferId);
+        g_Buffers.insert(make_pair(bufferId, 1));
+        cout << "AlSound() " << bufferId << endl;
 
         this->SetPitch(1.0f);
         this->SetGain(1.0f);
@@ -81,14 +81,14 @@ namespace Sound {
     AlSound::AlSound(const AlSound& _src) {
         g_TotalInstances++;
 
-        alGenSources(1, &mSourceId);
+        alGenSources(1, &sourceId);
 
-        mBufferId = _src.mBufferId;
-        BuffersT::iterator i = g_Buffers.find(mBufferId);
+        bufferId = _src.bufferId;
+        BuffersT::iterator i = g_Buffers.find(bufferId);
         if (i != g_Buffers.end()) {
             i->second++;
         }
-        cout << "AlSound(AlSound&) " << mBufferId << endl;
+        cout << "AlSound(AlSound&) " << bufferId << endl;
 
         this->SetPitch(1.0f);
         this->SetGain(1.0f);
@@ -98,24 +98,24 @@ namespace Sound {
     }
 
     AlSound::~AlSound() {
-        cout << "~AlSound() " << mBufferId << endl;
+        cout << "~AlSound() " << bufferId << endl;
         g_TotalInstances--;
 
         if (!g_SysInitialized) {
             return;
         }
 
-        BuffersT::iterator i = g_Buffers.find(mBufferId);
+        BuffersT::iterator i = g_Buffers.find(bufferId);
         if (i != g_Buffers.end()) {
             i->second--;
 
             if (i->second == 0) {
-                alDeleteBuffers(1, &mBufferId);
+                alDeleteBuffers(1, &bufferId);
                 g_Buffers.erase(i);
             }
         }
 
-        alDeleteSources(1, &mSourceId);
+        alDeleteSources(1, &sourceId);
 
         if (g_TotalInstances == 0) {
             ReleaseSubsystem();
@@ -123,20 +123,20 @@ namespace Sound {
     }
 
     AlSound& AlSound::operator=(const AlSound& _src) {
-        cout << "operator=(AlSound&) " << mBufferId << " to " << _src.mBufferId
+        cout << "operator=(AlSound&) " << bufferId << " to " << _src.bufferId
              << endl;
-        BuffersT::iterator i = g_Buffers.find(mBufferId);
+        BuffersT::iterator i = g_Buffers.find(bufferId);
         if (i != g_Buffers.end()) {
             i->second--;
 
             if (i->second == 0) {
-                alDeleteBuffers(1, &mBufferId);
+                alDeleteBuffers(1, &bufferId);
                 g_Buffers.erase(i);
             }
         }
 
-        mBufferId = _src.mBufferId;
-        i = g_Buffers.find(mBufferId);
+        bufferId = _src.bufferId;
+        i = g_Buffers.find(bufferId);
         if (i != g_Buffers.end()) {
             i->second++;
         }
@@ -145,8 +145,8 @@ namespace Sound {
     }
 
     bool AlSound::IsValid() const {
-        return g_SysInitialized && alIsBuffer(mBufferId) &&
-               alIsSource(mSourceId);
+        return g_SysInitialized && alIsBuffer(bufferId) &&
+               alIsSource(sourceId);
     }
 
     void AlSound::SetListenerPos(float _x, float _y, float _z) {
@@ -283,7 +283,7 @@ namespace Sound {
         }
 
         if (total_ret > 0) {
-            alBufferData(mBufferId, (info->channels == 1) ? AL_FORMAT_MONO16
+            alBufferData(bufferId, (info->channels == 1) ? AL_FORMAT_MONO16
                                                           : AL_FORMAT_STEREO16,
                          (void*)PCM, total_ret, info->rate);
         }
@@ -302,8 +302,8 @@ namespace Sound {
             return;
         }
 
-        alSourcei(mSourceId, AL_BUFFER, mBufferId);
-        alSourcePlay(mSourceId);
+        alSourcei(sourceId, AL_BUFFER, bufferId);
+        alSourcePlay(sourceId);
     }
 
     void AlSound::Pause() {
@@ -311,7 +311,7 @@ namespace Sound {
             return;
         }
 
-        alSourcePause(mSourceId);
+        alSourcePause(sourceId);
     }
 
     void AlSound::Stop() {
@@ -319,7 +319,7 @@ namespace Sound {
             return;
         }
 
-        alSourceStop(mSourceId);
+        alSourceStop(sourceId);
     }
 
     void AlSound::SetLoop(bool _loop) {
@@ -327,7 +327,7 @@ namespace Sound {
             return;
         }
 
-        alSourcei(mSourceId, AL_LOOPING, _loop ? 1 : 0);
+        alSourcei(sourceId, AL_LOOPING, _loop ? 1 : 0);
     }
 
     void AlSound::SetPitch(float _pitch) {
@@ -335,7 +335,7 @@ namespace Sound {
             return;
         }
 
-        alSourcef(mSourceId, AL_PITCH, _pitch);
+        alSourcef(sourceId, AL_PITCH, _pitch);
     }
 
     void AlSound::SetGain(float _gain) {
@@ -343,7 +343,7 @@ namespace Sound {
             return;
         }
 
-        alSourcef(mSourceId, AL_GAIN, _gain);
+        alSourcef(sourceId, AL_GAIN, _gain);
     }
 
     void AlSound::SetPos(float _x, float _y, float _z) {
@@ -351,7 +351,7 @@ namespace Sound {
             return;
         }
 
-        alSource3f(mSourceId, AL_POSITION, _x, _y, _z);
+        alSource3f(sourceId, AL_POSITION, _x, _y, _z);
     }
 
     void AlSound::SetVel(float _x, float _y, float _z) {
@@ -359,7 +359,7 @@ namespace Sound {
             return;
         }
 
-        alSource3f(mSourceId, AL_VELOCITY, _x, _y, _z);
+        alSource3f(sourceId, AL_VELOCITY, _x, _y, _z);
     }
 
     float AlSound::GetFullTime() {

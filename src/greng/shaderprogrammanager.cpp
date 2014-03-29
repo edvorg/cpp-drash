@@ -33,25 +33,25 @@ namespace greng {
     using drash::CLogger;
 
     CShaderProgramManager::CShaderProgramManager()
-        : mProgramFactory(mProgramsCountLimit, "CShaderProgram") {}
+        : programFactory(programsCountLimit, "CShaderProgram") {}
 
     CShaderProgramManager::~CShaderProgramManager() {
-        while (mProgramFactory.EnumObjects() != 0) {
-            DestroyProgram(mProgramFactory.GetObjects()[0]);
+        while (programFactory.EnumObjects() != 0) {
+            DestroyProgram(programFactory.GetObjects()[0]);
         }
     }
 
     CShaderProgram* CShaderProgramManager::CreateProgram() {
-        CShaderProgram* res = mProgramFactory.CreateObject();
+        CShaderProgram* res = programFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
         }
 
-        res->mProgramId = glCreateProgram();
+        res->programId = glCreateProgram();
 
-        if (res->mProgramId == 0) {
-            mProgramFactory.DestroyObject(res);
+        if (res->programId == 0) {
+            programFactory.DestroyObject(res);
             res = nullptr;
         }
 
@@ -70,20 +70,20 @@ namespace greng {
             return nullptr;
         }
 
-        glAttachShader(res->mProgramId, _vs->mVertexShaderId);
-        glAttachShader(res->mProgramId, _fs->mVertexShaderId);
-        glLinkProgram(res->mProgramId);
+        glAttachShader(res->programId, _vs->vertexShaderId);
+        glAttachShader(res->programId, _fs->vertexShaderId);
+        glLinkProgram(res->programId);
 
         int status = GL_FALSE;
 
-        glGetProgramiv(res->mProgramId, GL_LINK_STATUS, &status);
+        glGetProgramiv(res->programId, GL_LINK_STATUS, &status);
 
         if (status == GL_FALSE) {
             const int buffer_size = 2048;
             char buffer[buffer_size];
             int length = 0;
 
-            glGetProgramInfoLog(res->mProgramId, buffer_size - 1, &length,
+            glGetProgramInfoLog(res->programId, buffer_size - 1, &length,
                                 buffer);
 
             LOG_ERR(
@@ -95,19 +95,19 @@ namespace greng {
             return nullptr;
         }
 
-        glUseProgram(res->mProgramId);
-        glValidateProgram(res->mProgramId);
+        glUseProgram(res->programId);
+        glValidateProgram(res->programId);
 
         status = GL_FALSE;
 
-        glGetProgramiv(res->mProgramId, GL_VALIDATE_STATUS, &status);
+        glGetProgramiv(res->programId, GL_VALIDATE_STATUS, &status);
 
         if (status == GL_FALSE) {
             const int buffer_size = 2048;
             char buffer[buffer_size];
             int length = 0;
 
-            glGetProgramInfoLog(res->mProgramId, buffer_size - 1, &length,
+            glGetProgramInfoLog(res->programId, buffer_size - 1, &length,
                                 buffer);
 
             LOG_ERR("CShaderProgramManager::CreateProgram(): glValidateProgram "
@@ -125,15 +125,15 @@ namespace greng {
     }
 
     bool CShaderProgramManager::DestroyProgram(CShaderProgram* _program) {
-        if (mProgramFactory.IsObject(_program) == false) {
+        if (programFactory.IsObject(_program) == false) {
             LOG_ERR("CShaderProgramManager::DestroyProgram(): invalid program "
                     "taken");
             return false;
         }
 
-        glDeleteProgram(_program->mProgramId);
+        glDeleteProgram(_program->programId);
 
-        mProgramFactory.DestroyObject(_program);
+        programFactory.DestroyObject(_program);
 
         return false;
     }

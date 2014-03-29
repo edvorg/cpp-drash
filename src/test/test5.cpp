@@ -38,31 +38,31 @@ namespace drash {
             SetupShaders();
             SetupLights();
 
-            mLight1.mPosition.Set(0, 50, 0);
+            light1.position.Set(0, 50, 0);
 
-            GetDebugRenderer().SetLight(&mLight1);
+            GetDebugRenderer().SetLight(&light1);
         }
 
         void CTest5::Step(double _dt) {
             CTest3::Step(_dt);
 
-            mAngle += 0.5 * _dt;
+            angle += 0.5 * _dt;
 
-            while (mAngle > M_PI * 2.0) {
-                mAngle -= M_PI * 2.0;
+            while (angle > M_PI * 2.0) {
+                angle -= M_PI * 2.0;
             }
 
-            mLight1.mPosition.mX = 200 * sin(mAngle);
-            mLight1.mPosition.mY = 50;
-            mLight1.mPosition.mZ = 200 * cos(mAngle);
+            light1.position.x = 200 * sin(angle);
+            light1.position.y = 50;
+            light1.position.z = 200 * cos(angle);
         }
 
         void CTest5::Render() {
             CTest3::Render();
 
-            if (mMesh1 != nullptr) {
+            if (mesh1 != nullptr) {
                 CMatrix4f r;
-                MatrixRotationZ(r, mAngle);
+                MatrixRotationZ(r, angle);
 
                 CMatrix4f s;
                 MatrixScale(s, CVec3f(10));
@@ -80,13 +80,13 @@ namespace drash {
                 MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
                 GetGrengSystems().GetRenderer().RenderMesh(
-                    mMesh1, 0, &mTex6, 1, mShaderProgram2, &model, nullptr,
-                    &model_view, &GetCamera().GetProjectionMatrix(), &mLight1);
+                    mesh1, 0, &tex6, 1, shaderProgram2, &model, nullptr,
+                    &model_view, &GetCamera().GetProjectionMatrix(), &light1);
             }
 
-            if (mMesh2 != nullptr) {
+            if (mesh2 != nullptr) {
                 CMatrix4f r;
-                MatrixRotationZ(r, -mAngle);
+                MatrixRotationZ(r, -angle);
 
                 CMatrix4f s;
                 MatrixScale(s, CVec3f(10));
@@ -104,39 +104,39 @@ namespace drash {
                 MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
                 GetGrengSystems().GetRenderer().RenderMesh(
-                    mMesh2, 0, &mTex2, 1, mShaderProgram2, &model, nullptr,
-                    &model_view, &GetCamera().GetProjectionMatrix(), &mLight1);
+                    mesh2, 0, &tex2, 1, shaderProgram2, &model, nullptr,
+                    &model_view, &GetCamera().GetProjectionMatrix(), &light1);
             }
 
-            if (mMesh3 != nullptr) {
+            if (mesh3 != nullptr) {
                 CMatrix4f rangle;
                 MatrixRotationY(rangle, 0);
 
                 CMatrix4f model;
-                MatrixMultiply(rangle, mMesh3ConstMatrix, model);
+                MatrixMultiply(rangle, mesh3ConstMatrix, model);
 
                 CMatrix4f model_view;
                 MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
-                greng::CTexture* texts[6] = { mTex4, mTex4normal,
-                                              mTex3, mTex3normal,
-                                              mTex5, mTex5normal };
+                greng::CTexture* texts[6] = { tex4, tex4normal,
+                                              tex3, tex3normal,
+                                              tex5, tex5normal };
 
                 for (unsigned int i = 0; i < 3; i++) {
                     GetGrengSystems().GetRenderer().RenderMesh(
-                        mMesh3, i, &texts[i * 2], 2, mShaderProgram4, &model,
+                        mesh3, i, &texts[i * 2], 2, shaderProgram4, &model,
                         nullptr, &model_view,
-                        &GetCamera().GetProjectionMatrix(), &mLight1, nullptr,
+                        &GetCamera().GetProjectionMatrix(), &light1, nullptr,
                         &GetCamera().GetPos().Get());
                 }
             }
 
-            if (mMesh4 != nullptr) {
+            if (mesh4 != nullptr) {
                 CMatrix4f rangle;
                 MatrixRotationY(rangle, 0);
 
                 CMatrix4f model_1;
-                MatrixMultiply(rangle, mMesh3ConstMatrix, model_1);
+                MatrixMultiply(rangle, mesh3ConstMatrix, model_1);
 
                 CMatrix4f trans;
                 MatrixTranslation(trans, CVec3f(-150, 0, 0));
@@ -147,35 +147,35 @@ namespace drash {
                 CMatrix4f model_view;
                 MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
-                greng::CTexture* texts[6] = { mTex7, mTex7normal,
-                                              mTex7, mTex7normal,
-                                              mTex7, mTex7normal, };
+                greng::CTexture* texts[6] = { tex7, tex7normal,
+                                              tex7, tex7normal,
+                                              tex7, tex7normal, };
 
                 for (unsigned int i = 0; i < 3; i++) {
                     GetGrengSystems().GetRenderer().RenderMesh(
-                        mMesh4, i, &texts[i * 2], 2, mShaderProgram4, &model,
+                        mesh4, i, &texts[i * 2], 2, shaderProgram4, &model,
                         nullptr, &model_view,
-                        &GetCamera().GetProjectionMatrix(), &mLight1, nullptr,
+                        &GetCamera().GetProjectionMatrix(), &light1, nullptr,
                         &GetCamera().GetPos().Get());
                 }
             }
 
             GetGrengSystems().GetRenderer().DrawPoint(
-                GetCamera(), mLight1.mPosition, 10, CColor4f(1, 1, 1, 1),
+                GetCamera(), light1.position, 10, CColor4f(1, 1, 1, 1),
                 false);
         }
 
         void CTest5::SetupMeshes() {
-            mMesh1 = GetGrengSystems().GetMeshManager().CreateMeshCube();
-            mMesh2 = GetGrengSystems().GetMeshManager().CreateMeshQuad();
-            mMesh3 = GetGrengSystems().GetMeshManager().CreateMeshFromObjFile(
+            mesh1 = GetGrengSystems().GetMeshManager().CreateMeshCube();
+            mesh2 = GetGrengSystems().GetMeshManager().CreateMeshQuad();
+            mesh3 = GetGrengSystems().GetMeshManager().CreateMeshFromObjFile(
                 "assets/mt.obj");
-            mMesh4 = GetGrengSystems().GetMeshManager().CreateMeshFromObjFile(
+            mesh4 = GetGrengSystems().GetMeshManager().CreateMeshFromObjFile(
                 "assets/RB-BumbleBee.obj");
 
-            GetGrengSystems().GetMeshManager().ComputeNormals(mMesh3);
-            GetGrengSystems().GetMeshManager().ComputeTangentSpace(mMesh3);
-            GetGrengSystems().GetMeshManager().ComputeNormals(mMesh4);
+            GetGrengSystems().GetMeshManager().ComputeNormals(mesh3);
+            GetGrengSystems().GetMeshManager().ComputeTangentSpace(mesh3);
+            GetGrengSystems().GetMeshManager().ComputeNormals(mesh4);
 
             CMatrix4f s;
             MatrixScale(s, CVec3f(0.1));
@@ -189,83 +189,83 @@ namespace drash {
             CMatrix4f rxy;
             MatrixMultiply(ry, rx, rxy);
 
-            MatrixMultiply(rxy, s, mMesh3ConstMatrix);
+            MatrixMultiply(rxy, s, mesh3ConstMatrix);
         }
 
         void CTest5::SetupTextures() {
-            mTex1 = GetGrengSystems().GetTextureManager().CreateTextureDummy();
-            mTex2 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+            tex1 = GetGrengSystems().GetTextureManager().CreateTextureDummy();
+            tex2 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
-            mTex3 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+            tex3 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
-            mTex3normal =
+            tex3normal =
                 GetGrengSystems().GetTextureManager().CreateTextureFromFile(
                     "assets/floor/normal.png");
-            mTex4 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+            tex4 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
-            mTex4normal =
+            tex4normal =
                 GetGrengSystems().GetTextureManager().CreateTextureFromFile(
                     "assets/floor/normal.png");
-            mTex5 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+            tex5 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
-            mTex5normal =
+            tex5normal =
                 GetGrengSystems().GetTextureManager().CreateTextureFromFile(
                     "assets/floor/normal.png");
-            mTex6 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+            tex6 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
-            mTex7 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+            tex7 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
-            mTex7normal =
+            tex7normal =
                 GetGrengSystems().GetTextureManager().CreateTextureFromFile(
                     "assets/floor/normal.png");
         }
 
         void CTest5::SetupShaders() {
-            mVertexShader1 =
+            vertexShader1 =
                 GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader1.120.vs");
-            mFragmentShader1 =
+            fragmentShader1 =
                 GetGrengSystems()
                     .GetFragmentShaderManager()
                     .CreateShaderFromFile("shaders/shader1.120.fs");
-            mShaderProgram1 =
+            shaderProgram1 =
                 GetGrengSystems().GetShaderProgramManager().CreateProgram(
-                    mVertexShader1, mFragmentShader1);
-            mVertexShader2 =
+                    vertexShader1, fragmentShader1);
+            vertexShader2 =
                 GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader2.120.vs");
-            mFragmentShader2 =
+            fragmentShader2 =
                 GetGrengSystems()
                     .GetFragmentShaderManager()
                     .CreateShaderFromFile("shaders/shader2.120.fs");
-            mShaderProgram2 =
+            shaderProgram2 =
                 GetGrengSystems().GetShaderProgramManager().CreateProgram(
-                    mVertexShader2, mFragmentShader2);
-            mVertexShader3 =
+                    vertexShader2, fragmentShader2);
+            vertexShader3 =
                 GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader3.120.vs");
-            mFragmentShader3 =
+            fragmentShader3 =
                 GetGrengSystems()
                     .GetFragmentShaderManager()
                     .CreateShaderFromFile("shaders/shader3.120.fs");
-            mShaderProgram3 =
+            shaderProgram3 =
                 GetGrengSystems().GetShaderProgramManager().CreateProgram(
-                    mVertexShader3, mFragmentShader3);
-            mVertexShader4 =
+                    vertexShader3, fragmentShader3);
+            vertexShader4 =
                 GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader4.120.vs");
-            mFragmentShader4 =
+            fragmentShader4 =
                 GetGrengSystems()
                     .GetFragmentShaderManager()
                     .CreateShaderFromFile("shaders/shader4.120.fs");
-            mShaderProgram4 =
+            shaderProgram4 =
                 GetGrengSystems().GetShaderProgramManager().CreateProgram(
-                    mVertexShader4, mFragmentShader4);
+                    vertexShader4, fragmentShader4);
         }
 
         void CTest5::SetupProcessors() {}
 
-        void CTest5::SetupLights() { mLight1.mPosition.Set(-50, 100, 0); }
+        void CTest5::SetupLights() { light1.position.Set(-50, 100, 0); }
 
     } // namespace test
 

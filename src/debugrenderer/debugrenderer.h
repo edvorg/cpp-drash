@@ -89,41 +89,41 @@ namespace drash {
                                  unsigned int _vertices_count, float _z,
                                  float _depth) const;
 
-        greng::CGrengSystemsSet& mGrengSystems;
-        CScene& mScene;
-        CGeometryManager& mGeometryManager;
+        greng::CGrengSystemsSet& grengSystems;
+        CScene& scene;
+        CGeometryManager& geometryManager;
 
-        greng::CShaderProgram* mShaderProgram1 = nullptr;
-        greng::CShaderProgram* mShaderProgram2 = nullptr;
-        greng::CCamera* mCamera = nullptr;
-        greng::CPointLight* mLight = nullptr;
-        greng::CSpotLight* mSpotLight1 = nullptr;
-        greng::CTexture* mTexture1Diffuse = nullptr;
-        greng::CTexture* mTexture1Normal = nullptr;
+        greng::CShaderProgram* shaderProgram1 = nullptr;
+        greng::CShaderProgram* shaderProgram2 = nullptr;
+        greng::CCamera* camera = nullptr;
+        greng::CPointLight* light = nullptr;
+        greng::CSpotLight* spotLight1 = nullptr;
+        greng::CTexture* texture1Diffuse = nullptr;
+        greng::CTexture* texture1Normal = nullptr;
 
-        float mTexCoordsScale = 1.0 / 40.0;
+        float texCoordsScale = 1.0 / 40.0;
     };
 
     inline void CDebugRenderer::SetCamera(greng::CCamera* _camera) {
-        mCamera = _camera;
+        camera = _camera;
     }
 
-    inline greng::CCamera* CDebugRenderer::GetCamera() const { return mCamera; }
+    inline greng::CCamera* CDebugRenderer::GetCamera() const { return camera; }
 
     inline void CDebugRenderer::SetLight(greng::CPointLight* _light) {
-        mLight = _light;
+        light = _light;
     }
 
     inline greng::CPointLight* CDebugRenderer::GetLight() const {
-        return mLight;
+        return light;
     }
 
     inline void CDebugRenderer::SetSpotLight(greng::CSpotLight* _light) {
-        mSpotLight1 = _light;
+        spotLight1 = _light;
     }
 
     inline void CDebugRenderer::SetTexCoordsScale(float _scale) {
-        mTexCoordsScale = _scale;
+        texCoordsScale = _scale;
     }
 
 } // namespace drash

@@ -39,16 +39,16 @@ namespace drash {
       public:
         CFigureParams();
 
-        float mFriction = 1;
-        float mRestitution = 0;
-        float mMass = 1;
+        float friction = 1;
+        float restitution = 0;
+        float mass = 1;
 
-        /// if size of mVertices is nullptr, creates a box with (1, 1)
+        /// if size of vertices is nullptr, creates a box with (1, 1)
         /// dimentions
-        std::vector<CVec2f> mVertices;
+        std::vector<CVec2f> vertices;
 
-        float mDepth = 1;
-        float mZ = 0;
+        float depth = 1;
+        float z = 0;
     };
 
     class CFigure {
@@ -78,27 +78,27 @@ namespace drash {
       private:
         CFigure() = default;
 
-        b2Fixture* mFixture = nullptr;
-        float mZ = 0;
-        float mDepth = 1;
-        float mMass = 1;
-        int mInternalId = -1;
-        bool mDead = false;
+        b2Fixture* fixture = nullptr;
+        float z = 0;
+        float depth = 1;
+        float mass = 1;
+        int internalId = -1;
+        bool dead = false;
 
-        std::vector<std::function<void(CFigure*)> > mDestroyHandlers;
+        std::vector<std::function<void(CFigure*)> > destroyHandlers;
     };
 
-    inline float CFigure::GetZ() const { return mZ; }
+    inline float CFigure::GetZ() const { return z; }
 
-    inline void CFigure::SetZ(float _z) { mZ = _z; }
+    inline void CFigure::SetZ(float _z) { z = _z; }
 
-    inline float CFigure::GetDepth() const { return mDepth; }
+    inline float CFigure::GetDepth() const { return depth; }
 
-    inline void CFigure::SetDepth(float _depth) { mDepth = _depth; }
+    inline void CFigure::SetDepth(float _depth) { depth = _depth; }
 
     inline void
     CFigure::AddDestroyHandler(const std::function<void(CFigure*)>& _handler) {
-        mDestroyHandlers.push_back(_handler);
+        destroyHandlers.push_back(_handler);
     }
 
 } // namespace drash

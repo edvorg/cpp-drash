@@ -43,12 +43,12 @@ namespace drash {
             bool InitLights();
             virtual void Render() override;
 
-            greng::CTexture* mDebugTexture = nullptr;
-            greng::CShaderProgram* mProgram = nullptr;
+            greng::CTexture* debugTexture = nullptr;
+            greng::CShaderProgram* program = nullptr;
 
-            float mPointLight1PosAngle = 0;
+            float pointLight1PosAngle = 0;
 
-            greng::CPointLight mLight1;
+            greng::CPointLight light1;
         };
 
     } // namespace test

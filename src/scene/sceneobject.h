@@ -44,8 +44,8 @@ namespace drash {
 
     class CSceneObjectGeometry final {
       public:
-        std::vector<CFigureParams> mFigures;
-        std::vector<unsigned int> mDestructionGraph;
+        std::vector<CFigureParams> figures;
+        std::vector<unsigned int> destructionGraph;
 
         void ComputeDestructionGraph(const float _accuracy);
 
@@ -55,10 +55,10 @@ namespace drash {
 
     class CSceneObjectParams final {
       public:
-        bool mDynamic = true;
-        CVec3f mPos;
-        float mAngle = 0;
-        bool mFixedRotation = false;
+        bool dynamic = true;
+        CVec3f pos;
+        float angle = 0;
+        bool fixedRotation = false;
     };
 
     class CSceneObject final
@@ -67,7 +67,7 @@ namespace drash {
         friend class CScene;
         friend class CExplosion;
 
-        static const unsigned int mFiguresCountLimit = 128;
+        static const unsigned int figuresCountLimit = 128;
 
         CSceneObject(void) = default;
 
@@ -112,83 +112,83 @@ namespace drash {
 
       protected:
       private:
-        b2Body* mBody = nullptr;
+        b2Body* body = nullptr;
 
         //////////////////////////////////////////////////////
         /// values, changed only be owning system (CScene) ///
 
         /// if flag is true, object will be destoyed with next CScene::Step()
         /// invokation
-        bool mDead = false;
+        bool dead = false;
 
         //////////////////////////////////////////////
         /// figures factory //////////////////////////
 
-        CFigure* mFigures[mFiguresCountLimit];
-        unsigned int mFiguresCount = 0;
+        CFigure* figures[figuresCountLimit];
+        unsigned int figuresCount = 0;
 
         /// world space postition in physics world
-        CVec3f mPos = 0;
-        CAnimator<CVec2f> mPosXYAnimator = mPos;
-        CAnimator<float> mPosZAnimator = mPos.mZ;
+        CVec3f pos = 0;
+        CAnimator<CVec2f> posXYAnimator = pos;
+        CAnimator<float> posZAnimator = pos.z;
 
         /// rotation angle in radians
-        float mAngle = 0;
-        CAnimator<float> mAngleAnimator = mAngle;
+        float angle = 0;
+        CAnimator<float> angleAnimator = angle;
 
-        float mLifeTime = 0.0f;
+        float lifeTime = 0.0f;
 
-        std::map<const CFigure*, const CFigure*> mCurrentContacts;
+        std::map<const CFigure*, const CFigure*> currentContacts;
 
-        std::vector<unsigned int> mDestructionGraph;
+        std::vector<unsigned int> destructionGraph;
 
-        std::vector<std::function<void(CSceneObject*)> > mDestroyHandlers;
-        std::vector<std::function<void(CFigure*)> > mFigureDestroyHandlers;
+        std::vector<std::function<void(CSceneObject*)> > destroyHandlers;
+        std::vector<std::function<void(CFigure*)> > figureDestroyHandlers;
         std::vector<std::function<void(CFigure*, CFigure*)> >
-        mContactBeginHandlers;
+        contactBeginHandlers;
         std::vector<std::function<void(CFigure*, CFigure*)> >
-        mContactEndHandlers;
+        contactEndHandlers;
     };
 
-    inline CFigure* const* CSceneObject::GetFigures() const { return mFigures; }
+    inline CFigure* const* CSceneObject::GetFigures() const { return figures; }
 
     inline unsigned int CSceneObject::EnumFigures() const {
-        return mFiguresCount;
+        return figuresCount;
     }
 
     inline CAnimator<CVec2f>& CSceneObject::GetPosXY() {
-        return mPosXYAnimator;
+        return posXYAnimator;
     }
 
-    inline CAnimator<float>& CSceneObject::GetPosZ() { return mPosZAnimator; }
+    inline CAnimator<float>& CSceneObject::GetPosZ() { return posZAnimator; }
 
-    inline const CVec3f& CSceneObject::GetPos() const { return mPos; }
+    inline const CVec3f& CSceneObject::GetPos() const { return pos; }
 
-    inline CAnimator<float>& CSceneObject::GetAngle() { return mAngleAnimator; }
+    inline CAnimator<float>& CSceneObject::GetAngle() { return angleAnimator; }
 
     inline const std::vector<unsigned int>&
     CSceneObject::GetDestructionGraph() const {
-        return mDestructionGraph;
+        return destructionGraph;
     }
 
     inline void CSceneObject::AddDestroyHandler(
         const std::function<void(CSceneObject*)>& _handler) {
-        mDestroyHandlers.push_back(_handler);
+        destroyHandlers.push_back(_handler);
     }
 
     inline void CSceneObject::AddFigureDestroyHandler(
         const std::function<void(CFigure*)>& _handler) {
-        mFigureDestroyHandlers.push_back(_handler);
+        figureDestroyHandlers.push_back(_handler);
     }
 
     inline void CSceneObject::AddContactBeginHandler(
         const std::function<void(CFigure*, CFigure*)>& _handler) {
-        mContactBeginHandlers.push_back(_handler);
+        contactBeginHandlers.push_back(_handler);
     }
 
     inline void CSceneObject::AddContactEndHandler(
         const std::function<void(CFigure*, CFigure*)>& _handler) {
-        mContactEndHandlers.push_back(_handler);
+        contactEndHandlers.push_back(_handler);
     }
 
 } // namespace drash

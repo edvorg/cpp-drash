@@ -37,29 +37,29 @@ namespace drash {
             InitShaders();
             InitLights();
 
-            mLight1.mPosition.Set(0, 30, 0);
+            light1.position.Set(0, 30, 0);
 
-            GetDebugRenderer().SetLight(&mLight1);
+            GetDebugRenderer().SetLight(&light1);
         }
 
         void CTest7::Step(double _dt) {
             CTest3::Step(_dt);
 
-            mPointLight1PosAngle += _dt * 0.5;
+            pointLight1PosAngle += _dt * 0.5;
 
-            while (mPointLight1PosAngle >= M_PI * 2.0) {
-                mPointLight1PosAngle -= M_PI * 2.0;
+            while (pointLight1PosAngle >= M_PI * 2.0) {
+                pointLight1PosAngle -= M_PI * 2.0;
             }
 
-            mLight1.mPosition.mX = 150 * sin(mPointLight1PosAngle);
+            light1.position.x = 150 * sin(pointLight1PosAngle);
         }
 
         bool CTest7::InitTextures() {
-            mDebugTexture =
+            debugTexture =
                 GetGrengSystems().GetTextureManager().CreateTextureFromFile(
                     "assets/floor/diffuse.png");
 
-            if (mDebugTexture == nullptr) {
+            if (debugTexture == nullptr) {
                 return false;
             }
 
@@ -75,10 +75,10 @@ namespace drash {
                     .GetFragmentShaderManager()
                     .CreateShaderFromFile("shaders/shader2.120.fs");
 
-            mProgram =
+            program =
                 GetGrengSystems().GetShaderProgramManager().CreateProgram(v, f);
 
-            if (mProgram == nullptr) {
+            if (program == nullptr) {
                 return false;
             }
 
@@ -86,7 +86,7 @@ namespace drash {
         }
 
         bool CTest7::InitLights() {
-            mLight1.mPosition.Set(0, 50, 0);
+            light1.position.Set(0, 50, 0);
 
             return true;
         }
@@ -114,14 +114,14 @@ namespace drash {
                                    f->GetZ() + 0.5f * f->GetDepth());
 
                         for (unsigned int k = 1; k < kc; k++) {
-                            min.mX = math::Min<float>(min.mX,
-                                                      f->GetVertices()[k].mX);
-                            min.mY = math::Min<float>(min.mY,
-                                                      f->GetVertices()[k].mY);
-                            max.mX = math::Max<float>(max.mX,
-                                                      f->GetVertices()[k].mX);
-                            max.mY = math::Max<float>(max.mY,
-                                                      f->GetVertices()[k].mY);
+                            min.x = math::Min<float>(min.x,
+                                                      f->GetVertices()[k].x);
+                            min.y = math::Min<float>(min.y,
+                                                      f->GetVertices()[k].y);
+                            max.x = math::Max<float>(max.x,
+                                                      f->GetVertices()[k].x);
+                            max.y = math::Max<float>(max.y,
+                                                      f->GetVertices()[k].y);
                         }
 
                         max.Vec2() -= min.Vec2();
@@ -131,18 +131,18 @@ namespace drash {
                         // front and back faces
 
                         for (unsigned int k = 0; k < kc; k++) {
-                            mv[k].mPos = CVec3f(f->GetVertices()[k], max.mZ);
-                            mv[kc + k].mPos =
-                                CVec3f(f->GetVertices()[k], min.mZ);
+                            mv[k].pos = CVec3f(f->GetVertices()[k], max.z);
+                            mv[kc + k].pos =
+                                CVec3f(f->GetVertices()[k], min.z);
 
-                            mv[k].mUV = mv[k].mPos;
-                            mv[kc + k].mUV = mv[kc + k].mPos;
+                            mv[k].uV = mv[k].pos;
+                            mv[kc + k].uV = mv[kc + k].pos;
 
-                            mv[k].mUV -= min.Vec2();
-                            mv[kc + k].mUV -= min.Vec2();
+                            mv[k].uV -= min.Vec2();
+                            mv[kc + k].uV -= min.Vec2();
 
-                            mv[k].mUV /= 10;
-                            mv[kc + k].mUV /= 10;
+                            mv[k].uV /= 10;
+                            mv[kc + k].uV /= 10;
                         }
 
                         for (unsigned int k = 2; k < kc; k++) {
@@ -160,26 +160,26 @@ namespace drash {
                         // sides
 
                         for (unsigned int k = 1; k < kc; k++) {
-                            mv[2 * kc + (k - 1) * 4 + 0].mPos =
-                                CVec3f(f->GetVertices()[k - 1], max.mZ);
-                            mv[2 * kc + (k - 1) * 4 + 1].mPos =
-                                CVec3f(f->GetVertices()[k - 1], min.mZ);
-                            mv[2 * kc + (k - 1) * 4 + 2].mPos =
-                                CVec3f(f->GetVertices()[k], min.mZ);
-                            mv[2 * kc + (k - 1) * 4 + 3].mPos =
-                                CVec3f(f->GetVertices()[k], max.mZ);
+                            mv[2 * kc + (k - 1) * 4 + 0].pos =
+                                CVec3f(f->GetVertices()[k - 1], max.z);
+                            mv[2 * kc + (k - 1) * 4 + 1].pos =
+                                CVec3f(f->GetVertices()[k - 1], min.z);
+                            mv[2 * kc + (k - 1) * 4 + 2].pos =
+                                CVec3f(f->GetVertices()[k], min.z);
+                            mv[2 * kc + (k - 1) * 4 + 3].pos =
+                                CVec3f(f->GetVertices()[k], max.z);
 
                             CVec2f tmp = f->GetVertices()[k - 1];
                             tmp -= f->GetVertices()[k];
 
-                            mv[2 * kc + (k - 1) * 4 + 0].mUV.Set(0, 0);
+                            mv[2 * kc + (k - 1) * 4 + 0].uV.Set(0, 0);
                             mv[2 * kc + (k - 1) * 4 + 1]
-                                .mUV.Set(0, math::Abs(max.mZ - min.mZ) / 10.0f);
+                                .uV.Set(0, math::Abs(max.z - min.z) / 10.0f);
                             mv[2 * kc + (k - 1) * 4 + 2]
-                                .mUV.Set(tmp.Length() / 10.0f,
-                                         math::Abs(max.mZ - min.mZ) / 10.0f);
+                                .uV.Set(tmp.Length() / 10.0f,
+                                         math::Abs(max.z - min.z) / 10.0f);
                             mv[2 * kc + (k - 1) * 4 + 3]
-                                .mUV.Set(tmp.Length() / 10.0f, 0);
+                                .uV.Set(tmp.Length() / 10.0f, 0);
 
                             mi.push_back(2 * kc + (k - 1) * 4 + 0);
                             mi.push_back(2 * kc + (k - 1) * 4 + 1);
@@ -188,26 +188,26 @@ namespace drash {
                             mi.push_back(2 * kc + (k - 1) * 4 + 3);
                             mi.push_back(2 * kc + (k - 1) * 4 + 0);
                         }
-                        mv[2 * kc + (kc - 1) * 4 + 0].mPos =
-                            CVec3f(f->GetVertices()[kc - 1], max.mZ);
-                        mv[2 * kc + (kc - 1) * 4 + 1].mPos =
-                            CVec3f(f->GetVertices()[kc - 1], min.mZ);
-                        mv[2 * kc + (kc - 1) * 4 + 2].mPos =
-                            CVec3f(f->GetVertices()[0], min.mZ);
-                        mv[2 * kc + (kc - 1) * 4 + 3].mPos =
-                            CVec3f(f->GetVertices()[0], max.mZ);
+                        mv[2 * kc + (kc - 1) * 4 + 0].pos =
+                            CVec3f(f->GetVertices()[kc - 1], max.z);
+                        mv[2 * kc + (kc - 1) * 4 + 1].pos =
+                            CVec3f(f->GetVertices()[kc - 1], min.z);
+                        mv[2 * kc + (kc - 1) * 4 + 2].pos =
+                            CVec3f(f->GetVertices()[0], min.z);
+                        mv[2 * kc + (kc - 1) * 4 + 3].pos =
+                            CVec3f(f->GetVertices()[0], max.z);
 
                         CVec2f tmp = f->GetVertices()[kc - 1];
                         tmp -= f->GetVertices()[0];
 
-                        mv[2 * kc + (kc - 1) * 4 + 0].mUV.Set(0, 0);
+                        mv[2 * kc + (kc - 1) * 4 + 0].uV.Set(0, 0);
                         mv[2 * kc + (kc - 1) * 4 + 1]
-                            .mUV.Set(0, math::Abs(max.mZ - min.mZ) / 10.0f);
+                            .uV.Set(0, math::Abs(max.z - min.z) / 10.0f);
                         mv[2 * kc + (kc - 1) * 4 + 2]
-                            .mUV.Set(tmp.Length() / 10.0f,
-                                     math::Abs(max.mZ - min.mZ) / 10.0f);
+                            .uV.Set(tmp.Length() / 10.0f,
+                                     math::Abs(max.z - min.z) / 10.0f);
                         mv[2 * kc + (kc - 1) * 4 + 3]
-                            .mUV.Set(tmp.Length() / 10.0f, 0);
+                            .uV.Set(tmp.Length() / 10.0f, 0);
 
                         mi.push_back(2 * kc + (kc - 1) * 4 + 0);
                         mi.push_back(2 * kc + (kc - 1) * 4 + 1);
@@ -239,9 +239,9 @@ namespace drash {
                                        model_view);
 
                         GetGrengSystems().GetRenderer().RenderMesh(
-                            m, 0, &mDebugTexture, 1, mProgram, &model, nullptr,
+                            m, 0, &debugTexture, 1, program, &model, nullptr,
                             &model_view, &GetCamera().GetProjectionMatrix(),
-                            &mLight1);
+                            &light1);
 
                         GetGrengSystems().GetMeshManager().DestroyMesh(m);
                     }

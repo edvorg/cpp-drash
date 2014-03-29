@@ -31,17 +31,17 @@ namespace drash {
 
     CRotationablePoint::CRotationablePoint(greng::CRenderer& _renderer,
                                            greng::CCamera& _camera)
-        : mRenderer(_renderer), mCamera(_camera) {}
+        : renderer(_renderer), camera(_camera) {}
 
     void CRotationablePoint::Step(double) {
         CMatrix4f rotx;
-        MatrixRotationX(rotx, mRotation.mX);
+        MatrixRotationX(rotx, rotation.x);
 
         CMatrix4f rotz;
-        MatrixRotationZ(rotz, mRotation.mZ);
+        MatrixRotationZ(rotz, rotation.z);
 
         CMatrix4f roty;
-        MatrixRotationY(roty, mRotation.mY);
+        MatrixRotationY(roty, rotation.y);
 
         CMatrix4f rot_yz;
         MatrixMultiply(roty, rotz, rot_yz);
@@ -62,69 +62,69 @@ namespace drash {
         MatrixMultiply(rot, yz_normal, yz_normal_transposed);
 
         CPlane xy;
-        xy.SetPoint(mPoint);
+        xy.SetPoint(point);
         xy.SetNormal(xy_normal_transposed);
 
         CPlane xz;
-        xz.SetPoint(mPoint);
+        xz.SetPoint(point);
         xz.SetNormal(xz_normal_transposed);
 
         CPlane yz;
-        yz.SetPoint(mPoint);
+        yz.SetPoint(point);
         yz.SetNormal(yz_normal_transposed);
 
         CVec3f xy_proj;
-        mCamera.CastRay(mCursorPos, xy, xy_proj);
+        camera.CastRay(cursorPos, xy, xy_proj);
 
         CVec3f xz_proj;
-        mCamera.CastRay(mCursorPos, xz, xz_proj);
+        camera.CastRay(cursorPos, xz, xz_proj);
 
         CVec3f yz_proj;
-        mCamera.CastRay(mCursorPos, yz, yz_proj);
+        camera.CastRay(cursorPos, yz, yz_proj);
 
-        xy_proj -= mPoint;
-        xz_proj -= mPoint;
-        yz_proj -= mPoint;
+        xy_proj -= point;
+        xz_proj -= point;
+        yz_proj -= point;
 
-        if (mAxisRotating == 0) {
+        if (axisRotating == 0) {
             float len_xy = xy_proj.Length();
             float len_xz = xz_proj.Length();
             float len_yz = yz_proj.Length();
 
             if (radius - 0.1 < len_xy && len_xy < radius + 0.1) {
-                mAxisOvered = 3;
+                axisOvered = 3;
                 return;
             } else if (radius - 0.1 < len_xz && len_xz < radius + 0.1) {
-                mAxisOvered = 2;
+                axisOvered = 2;
                 return;
             } else if (radius - 0.1 < len_yz && len_yz < radius + 0.1) {
-                mAxisOvered = 1;
+                axisOvered = 1;
                 return;
             }
 
-            mAxisOvered = 0;
+            axisOvered = 0;
         } else {
-            if (mAxisRotating == 3) {
+            if (axisRotating == 3) {
                 xy_proj.Normalize();
 
-                mRotation.mZ = acos(xy_proj.mX);
-                mRotation.mZ =
-                    (xy_proj.mY > 0.000001f ? mRotation.mZ : -mRotation.mZ);
-                mRotation.mZ -= mRotationDelta.mZ;
-            } else if (mAxisRotating == 2) {
+                rotation.z = acos(xy_proj.x);
+                rotation.z =
+                    (xy_proj.y > 0.000001f ? rotation.z : -rotation.z);
+                rotation.z -= rotationDelta.z;
+            } else if (axisRotating == 2) {
                 xz_proj.Normalize();
 
-                mRotation.mY = acos(xz_proj.mZ);
-                mRotation.mY =
-                    (xz_proj.mX > 0.000001f ? mRotation.mY : -mRotation.mY);
-                mRotation.mY -= mRotationDelta.mY;
-            } else if (mAxisRotating == 1) {
+                rotation.y = acos(xz_proj.z);
+                rotation.y =
+                    (xz_proj.x > 0.000001f ? rotation.y : -rotation.y);
+                rotation.y -= rotationDelta.y;
+            } else if (axisRotating == 1) {
                 yz_proj.Normalize();
 
-                mRotation.mX = acos(yz_proj.mZ);
-                mRotation.mX =
-                    (yz_proj.mY < -0.000001f ? mRotation.mX : -mRotation.mX);
-                mRotation.mX -= mRotationDelta.mX;
+                rotation.x = acos(yz_proj.z);
+                rotation.x =
+                    (yz_proj.y < -0.000001f ? rotation.x : -rotation.x);
+                rotation.x -= rotationDelta.x;
             }
         }
     }
@@ -136,13 +136,13 @@ namespace drash {
         float angle_delta = 2.0 * M_PI / segments;
 
         CMatrix4f rotx;
-        MatrixRotationX(rotx, mRotation.mX);
+        MatrixRotationX(rotx, rotation.x);
 
         CMatrix4f rotz;
-        MatrixRotationZ(rotz, mRotation.mZ);
+        MatrixRotationZ(rotz, rotation.z);
 
         CMatrix4f roty;
-        MatrixRotationY(roty, mRotation.mY);
+        MatrixRotationY(roty, rotation.y);
 
         CMatrix4f rot_yz;
         MatrixMultiply(roty, rotz, rot_yz);
@@ -158,9 +158,9 @@ namespace drash {
 
         x_transposed.Vec3().Normalize();
         x_transposed.Vec3() *= radius;
-        x_transposed.Vec3() += mPoint;
+        x_transposed.Vec3() += point;
 
-        mRenderer.DrawLine(mCamera, mPoint, x_transposed, 1,
+        renderer.DrawLine(camera, point, x_transposed, 1,
                            CColor4f(1, 0, 0, 1), false);
 
         CVec4f z(0, 0, 1, 0);
@@ -170,9 +170,9 @@ namespace drash {
 
         z_transposed.Vec3().Normalize();
         z_transposed.Vec3() *= radius;
-        z_transposed.Vec3() += mPoint;
+        z_transposed.Vec3() += point;
 
-        mRenderer.DrawLine(mCamera, mPoint, z_transposed, 1,
+        renderer.DrawLine(camera, point, z_transposed, 1,
                            CColor4f(0, 0, 1, 1), false);
 
         CVec4f y(0, 1, 0, 0);
@@ -182,12 +182,12 @@ namespace drash {
 
         y_transposed.Vec3().Normalize();
         y_transposed.Vec3() *= radius;
-        y_transposed.Vec3() += mPoint;
+        y_transposed.Vec3() += point;
 
-        mRenderer.DrawLine(mCamera, mPoint, y_transposed, 1,
+        renderer.DrawLine(camera, point, y_transposed, 1,
                            CColor4f(0, 1, 0, 1), false);
 
-        if (mAxisOX == true) {
+        if (axisOX == true) {
             for (unsigned int i = 0; i < segments; i++) {
                 CVec4f p1(0, radius * sin(angle), -radius * cos(angle), 0);
                 CVec4f p2(0, radius * sin(angle + angle_delta),
@@ -199,19 +199,19 @@ namespace drash {
                 MatrixMultiply(rot, p1, p1_transposed);
                 MatrixMultiply(rot, p2, p2_transposed);
 
-                p1_transposed.Vec3() += mPoint;
-                p2_transposed.Vec3() += mPoint;
+                p1_transposed.Vec3() += point;
+                p2_transposed.Vec3() += point;
 
-                mRenderer.DrawLine(
-                    mCamera, p1_transposed, p2_transposed, 1,
-                    CColor4f(1, 0, 0, mAxisOvered == 1 ? 0.5 : 1), false);
+                renderer.DrawLine(
+                    camera, p1_transposed, p2_transposed, 1,
+                    CColor4f(1, 0, 0, axisOvered == 1 ? 0.5 : 1), false);
 
                 angle += angle_delta;
             }
         }
 
         ///
-        if (mAxisOZ == true) {
+        if (axisOZ == true) {
             for (unsigned int i = 0; i < segments; i++) {
                 CVec4f p1(radius * cos(angle), radius * sin(angle), 0, 0);
                 CVec4f p2(radius * cos(angle + angle_delta),
@@ -223,19 +223,19 @@ namespace drash {
                 MatrixMultiply(rot, p1, p1_transposed);
                 MatrixMultiply(rot, p2, p2_transposed);
 
-                p1_transposed.Vec3() += mPoint;
-                p2_transposed.Vec3() += mPoint;
+                p1_transposed.Vec3() += point;
+                p2_transposed.Vec3() += point;
 
-                mRenderer.DrawLine(
-                    mCamera, p1_transposed, p2_transposed, 1,
-                    CColor4f(0, 0, 1, mAxisOvered == 3 ? 0.5 : 1), false);
+                renderer.DrawLine(
+                    camera, p1_transposed, p2_transposed, 1,
+                    CColor4f(0, 0, 1, axisOvered == 3 ? 0.5 : 1), false);
 
                 angle += angle_delta;
             }
         }
 
         ///
-        if (mAxisOY == true) {
+        if (axisOY == true) {
             for (unsigned int i = 0; i < segments; i++) {
                 CVec4f p1(radius * cos(angle), 0, -radius * sin(angle), 0);
                 CVec4f p2(radius * cos(angle + angle_delta), 0,
@@ -247,12 +247,12 @@ namespace drash {
                 MatrixMultiply(rot, p1, p1_transposed);
                 MatrixMultiply(rot, p2, p2_transposed);
 
-                p1_transposed.Vec3() += mPoint;
-                p2_transposed.Vec3() += mPoint;
+                p1_transposed.Vec3() += point;
+                p2_transposed.Vec3() += point;
 
-                mRenderer.DrawLine(
-                    mCamera, p1_transposed, p2_transposed, 1,
-                    CColor4f(0, 1, 0, mAxisOvered == 2 ? 0.5 : 1), false);
+                renderer.DrawLine(
+                    camera, p1_transposed, p2_transposed, 1,
+                    CColor4f(0, 1, 0, axisOvered == 2 ? 0.5 : 1), false);
 
                 angle += angle_delta;
             }
@@ -260,20 +260,20 @@ namespace drash {
     }
 
     void CRotationablePoint::RotateBegin() {
-        if ((mAxisOvered == 1 && mAxisOX == true) ||
-            (mAxisOvered == 2 && mAxisOY == true) ||
-            (mAxisOvered == 3 && mAxisOZ == true)) {
+        if ((axisOvered == 1 && axisOX == true) ||
+            (axisOvered == 2 && axisOY == true) ||
+            (axisOvered == 3 && axisOZ == true)) {
 
-            mAxisRotating = mAxisOvered;
+            axisRotating = axisOvered;
 
             CMatrix4f rotx;
-            MatrixRotationX(rotx, mRotation.mX);
+            MatrixRotationX(rotx, rotation.x);
 
             CMatrix4f rotz;
-            MatrixRotationZ(rotz, mRotation.mZ);
+            MatrixRotationZ(rotz, rotation.z);
 
             CMatrix4f roty;
-            MatrixRotationY(roty, mRotation.mY);
+            MatrixRotationY(roty, rotation.y);
 
             CMatrix4f rot_yz;
             MatrixMultiply(roty, rotz, rot_yz);
@@ -294,59 +294,59 @@ namespace drash {
             MatrixMultiply(rot, yz_normal, yz_normal_transposed);
 
             CPlane xy;
-            xy.SetPoint(mPoint);
+            xy.SetPoint(point);
             xy.SetNormal(xy_normal_transposed);
 
             CPlane xz;
-            xz.SetPoint(mPoint);
+            xz.SetPoint(point);
             xz.SetNormal(xz_normal_transposed);
 
             CPlane yz;
-            yz.SetPoint(mPoint);
+            yz.SetPoint(point);
             yz.SetNormal(yz_normal_transposed);
 
             CVec3f xy_proj;
-            mCamera.CastRay(mCursorPos, xy, xy_proj);
+            camera.CastRay(cursorPos, xy, xy_proj);
 
             CVec3f xz_proj;
-            mCamera.CastRay(mCursorPos, xz, xz_proj);
+            camera.CastRay(cursorPos, xz, xz_proj);
 
             CVec3f yz_proj;
-            mCamera.CastRay(mCursorPos, yz, yz_proj);
+            camera.CastRay(cursorPos, yz, yz_proj);
 
-            xy_proj -= mPoint;
-            xz_proj -= mPoint;
-            yz_proj -= mPoint;
+            xy_proj -= point;
+            xz_proj -= point;
+            yz_proj -= point;
 
-            mRotationDelta = mRotation;
+            rotationDelta = rotation;
 
-            if (mAxisRotating == 3) {
+            if (axisRotating == 3) {
                 xy_proj.Normalize();
 
-                mRotationDelta.mZ = acos(xy_proj.mX);
-                mRotationDelta.mZ =
-                    (xy_proj.mY > 0.000001f ? mRotationDelta.mZ
-                                            : -mRotationDelta.mZ);
-            } else if (mAxisRotating == 2) {
+                rotationDelta.z = acos(xy_proj.x);
+                rotationDelta.z =
+                    (xy_proj.y > 0.000001f ? rotationDelta.z
+                                            : -rotationDelta.z);
+            } else if (axisRotating == 2) {
                 xz_proj.Normalize();
 
-                mRotationDelta.mY = acos(xz_proj.mZ);
-                mRotationDelta.mY =
-                    (xz_proj.mX > 0.000001f ? mRotationDelta.mY
-                                            : -mRotationDelta.mY);
-            } else if (mAxisRotating == 1) {
+                rotationDelta.y = acos(xz_proj.z);
+                rotationDelta.y =
+                    (xz_proj.x > 0.000001f ? rotationDelta.y
+                                            : -rotationDelta.y);
+            } else if (axisRotating == 1) {
                 yz_proj.Normalize();
 
-                mRotationDelta.mX = acos(yz_proj.mZ);
-                mRotationDelta.mX =
-                    (yz_proj.mY < -0.000001f ? mRotationDelta.mX
-                                             : -mRotationDelta.mX);
+                rotationDelta.x = acos(yz_proj.z);
+                rotationDelta.x =
+                    (yz_proj.y < -0.000001f ? rotationDelta.x
+                                             : -rotationDelta.x);
             }
 
-            mRotationDelta -= mRotation;
+            rotationDelta -= rotation;
         }
     }
 
-    void CRotationablePoint::RotateEnd() { mAxisRotating = 0; }
+    void CRotationablePoint::RotateEnd() { axisRotating = 0; }
 
 } // namespace drash

@@ -38,12 +38,12 @@ namespace greng {
 
         CMesh() = default;
 
-        std::vector<CVertex> mVertices;
-        std::vector<unsigned int> mIndices;
-        std::vector<unsigned int> mMaterialOffsets;
-        std::vector<std::string> mMaterialNames;
-        unsigned int mVertexBufferId = 0;
-        unsigned int mIndexBufferId = 0;
+        std::vector<CVertex> vertices;
+        std::vector<unsigned int> indices;
+        std::vector<unsigned int> materialOffsets;
+        std::vector<std::string> materialNames;
+        unsigned int vertexBufferId = 0;
+        unsigned int indexBufferId = 0;
 
       protected:
       private:

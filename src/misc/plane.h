@@ -49,18 +49,18 @@ namespace drash {
       private:
         void ComputeD();
 
-        CVec3f mPoint;
-        CVec3f mNormal;
-        float mD = 0;
+        CVec3f point;
+        CVec3f normal;
+        float d = 0;
     };
 
     extern const CPlane PlaneXY;
     extern const CPlane PlaneYZ;
     extern const CPlane PlaneXZ;
 
-    inline const CVec3f& CPlane::GetPoint() const { return mPoint; }
+    inline const CVec3f& CPlane::GetPoint() const { return point; }
 
-    inline const CVec3f& CPlane::GetNormal() const { return mNormal; }
+    inline const CVec3f& CPlane::GetNormal() const { return normal; }
 
 } // namespace drash
 

@@ -44,10 +44,10 @@ namespace drash {
             bool InitLights();
             bool InitRotationablePoint();
 
-            greng::CPointLight mLight1;
-            greng::CCamera* mCamera = nullptr;
+            greng::CPointLight light1;
+            greng::CCamera* camera = nullptr;
 
-            CRotationablePoint mPoint1;
+            CRotationablePoint point1;
         };
 
     } // namespace test
