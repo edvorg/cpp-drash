@@ -33,16 +33,14 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 class QTreeWidgetItem;
 class QLabel;
 
-namespace drash
-{
+namespace drash {
     class CObjectEditorApp;
     class CApp;
     class CSceneEditorApp;
     class CSceneObjectParams;
 }
 
-namespace Ui
-{
+namespace Ui {
     class EditorWindow;
 }
 
@@ -50,36 +48,36 @@ class QStatusBar;
 class QTreeWidget;
 class QModelIndex;
 
-class EditorWindow : public QMainWindow
-{
+class EditorWindow : public QMainWindow {
     Q_OBJECT
-    
-public:
+
+  public:
     explicit EditorWindow(QWidget *parent = 0);
     ~EditorWindow();
-    
-private slots:
+
+  private
+slots:
 
     void on_mTreeObjects_itemSelectionChanged();
 
-private:
+  private:
     Ui::EditorWindow *ui;
     bool InitScene();
-    drash::CObjectEditorApp  * mObjectApp = nullptr;
-    drash::CSceneEditorApp * mSceneApp = nullptr;
-    drash::CApp * mCurrentApp = nullptr;
+    drash::CObjectEditorApp *mObjectApp = nullptr;
+    drash::CSceneEditorApp *mSceneApp = nullptr;
+    drash::CApp *mCurrentApp = nullptr;
 
     virtual void timerEvent(QTimerEvent *) override;
 
-    SceneWidget * mWidgetForScene = nullptr;
-    SceneWidget * mWidgetForObjects = nullptr;
-    SceneWidget * mCurrentSceneWidget = nullptr;
-    //drash::CSceneObject * mCurrentObject = nullptr;
+    SceneWidget *mWidgetForScene = nullptr;
+    SceneWidget *mWidgetForObjects = nullptr;
+    SceneWidget *mCurrentSceneWidget = nullptr;
+    // drash::CSceneObject * mCurrentObject = nullptr;
 
     bool mDragActivated = false;
 
     // Actions
-private:
+  private:
     // for editor object
     QAction *mQuit;
     QAction *mRemoveAction;
@@ -92,22 +90,21 @@ private:
     QAction *mSplitFigureActiveAction;
     QAction *mSplitObjectActiveAction;
     QActionGroup mModeActions;
-    QAction * mCombineFiguresMode;
-
+    QAction *mCombineFiguresMode;
 
     // for editor scene
-    QAction * mOpenLevelAction;
-    QAction * mSaveLevelAction;
-    QAction * mSaveLevelAsAction;
-    QAction * mPlayLevelAction;
-    QAction * mPauseLevelAction;
-    QAction * mStopLevelAction;
-    QAction * mNewLevelAction;
-
+    QAction *mOpenLevelAction;
+    QAction *mSaveLevelAction;
+    QAction *mSaveLevelAsAction;
+    QAction *mPlayLevelAction;
+    QAction *mPauseLevelAction;
+    QAction *mStopLevelAction;
+    QAction *mNewLevelAction;
 
     // for other
     // Slots for Actions
-private slots:
+  private
+slots:
     // for edtitor object
     void CreateNewObject();
     void AddNewFigure();
@@ -140,14 +137,14 @@ private slots:
 
     void on_mAngleBox_valueChanged(double arg1);
 
-private:
+  private:
     // GuiObjects
     QLabel *mLabelOfStatusBar;
 
-    QToolBar * mObjectToolBar;
-    QToolBar * mSceneToolbar;
+    QToolBar *mObjectToolBar;
+    QToolBar *mSceneToolbar;
 
-private:
+  private:
     void CreateActions();
 
     bool UpdateTreeTemplates(QTreeWidget *_tree, drash::CApp *_app);
@@ -160,12 +157,10 @@ private:
     void SetObjectParams(const drash::CSceneObjectParams &_params);
     drash::CSceneObjectParams GetObjectParams() const;
 
+  private:
+    QHBoxLayout *mLayoutForScene;
 
-private:
-    QHBoxLayout * mLayoutForScene;
-
-public:
-
+  public:
 };
 
 #endif // EDITORWINDOW_H

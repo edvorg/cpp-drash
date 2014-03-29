@@ -34,14 +34,13 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    template<class PARTICLE>
-    class ParticleSystem {
+    template <class PARTICLE> class ParticleSystem {
 
-    public:
-        using Period = std::function<float ()>;
-        using Life = std::function<float ()>;
-        using PostSpawn = std::function<void (PARTICLE &)>;
-        using PreDestroy = std::function<void (PARTICLE &)>;
+      public:
+        using Period = std::function<float()>;
+        using Life = std::function<float()>;
+        using PostSpawn = std::function<void(PARTICLE &)>;
+        using PreDestroy = std::function<void(PARTICLE &)>;
 
         ParticleSystem() = default;
         virtual ~ParticleSystem() = default;
@@ -56,11 +55,13 @@ namespace drash {
         virtual void Resize(int newSize);
 
         // collide with some object
-        template<class ANOTHER>
-        void Collide(ANOTHER & another, std::function<void (PARTICLE &, ANOTHER &)> callback);
+        template <class ANOTHER>
+        void Collide(ANOTHER &another,
+                     std::function<void(PARTICLE &, ANOTHER &)> callback);
         // collide with another particle system
-        template<class ANOTHER>
-        void Collide(ParticleSystem<ANOTHER> & another, std::function<void (PARTICLE &, ANOTHER &)> callback);
+        template <class ANOTHER>
+        void Collide(ParticleSystem<ANOTHER> &another,
+                     std::function<void(PARTICLE &, ANOTHER &)> callback);
 
         void FieldSize(float newWidth, float newHeight);
         void FieldPos(float newX, float newY);
@@ -74,7 +75,8 @@ namespace drash {
         void PopPeriod();
         Period TopPeriod();
 
-        // push function returning life length for created particles (top will be used)
+        // push function returning life length for created particles (top will
+        // be used)
         void PushLife(Life newLife);
         void PopLife();
         Life TopLife();
@@ -95,12 +97,12 @@ namespace drash {
         inline float GetFieldWidth() const { return params.fieldWidth; }
         inline float GetFieldHeight() const { return params.fieldHeight; }
 
-    protected:
+      protected:
         void Spawn();
         // destroy by index ind pool
         void Destroy(unsigned int index);
 
-    private:
+      private:
         std::vector<PARTICLE> pool;
         int poolSize = 100;
         double spawnTimer = 0.0;
@@ -132,16 +134,14 @@ namespace drash {
         std::stack<PreDestroy> preDestroys;
     };
 
-    template<class PARTICLE>
-    void ParticleSystem<PARTICLE>::Init() {
+    template <class PARTICLE> void ParticleSystem<PARTICLE>::Init() {
         pool.resize(poolSize);
         for (unsigned int i = 0; i < poolSize; i++) {
             pool[i].Init();
         }
     }
 
-    template<class PARTICLE>
-    void ParticleSystem<PARTICLE>::Update(double dt) {
+    template <class PARTICLE> void ParticleSystem<PARTICLE>::Update(double dt) {
         // spawn new pool on field
         if (spawning) {
             spawnTimer += dt;
@@ -166,12 +166,12 @@ namespace drash {
             // for extending field use of margins is recommended
             if (pool[i].GetDead() ||
                 (lifes.size() && pool[i].GetLifeTimer() > lifes.top()()) ||
-
                 (pool[i].GetPosY() < y && pool[i].GetVelY() < 0.0f) ||
-                (pool[i].GetPosY() > y + params.fieldHeight && pool[i].GetVelY() > 0.0f) ||
+                (pool[i].GetPosY() > y + params.fieldHeight &&
+                 pool[i].GetVelY() > 0.0f) ||
                 (pool[i].GetPosX() < x && pool[i].GetVelX() < 0.0f) ||
-                (pool[i].GetPosX() > x + params.fieldWidth && pool[i].GetVelX() > 0.0f) ||
-
+                (pool[i].GetPosX() > x + params.fieldWidth &&
+                 pool[i].GetVelX() > 0.0f) ||
                 pool[i].GetPosY() < y - marginBottom ||
                 pool[i].GetPosY() > y + params.fieldHeight + marginTop ||
                 pool[i].GetPosX() < x - marginLeft ||
@@ -183,35 +183,33 @@ namespace drash {
         }
     }
 
-    template<class PARTICLE>
-    void ParticleSystem<PARTICLE>::Draw() {
+    template <class PARTICLE> void ParticleSystem<PARTICLE>::Draw() {
         for (unsigned int i = 0; i < used; ++i) {
             pool[i].Draw();
         }
     }
 
-    template<class PARTICLE>
-    void ParticleSystem<PARTICLE>::Release() {
+    template <class PARTICLE> void ParticleSystem<PARTICLE>::Release() {
         for (unsigned int i = 0; i < poolSize; i++) {
             pool[i].Release();
         }
     }
 
-    template<class PARTICLE>
-    void ParticleSystem<PARTICLE>::Clean() {
+    template <class PARTICLE> void ParticleSystem<PARTICLE>::Clean() {
         used = 0;
     }
 
-    template<class PARTICLE>
+    template <class PARTICLE>
     void ParticleSystem<PARTICLE>::Resize(int newSize) {
         pool.resize(newSize);
         poolSize = newSize;
         used = 0;
     }
 
-    template<class PARTICLE>
+    template <class PARTICLE>
     template <class ANOTHER>
-    void ParticleSystem<PARTICLE>::Collide(ANOTHER & another, std::function<void (PARTICLE &, ANOTHER &)> callback) {
+    void ParticleSystem<PARTICLE>::Collide(
+        ANOTHER &another, std::function<void(PARTICLE &, ANOTHER &)> callback) {
         // TODO optimize this. complexity n now, use aabb or something else
         for (unsigned int i = 0; i < used; ++i) {
             if (another.GetDimensions().Intersect(pool[i].GetDimensions())) {
@@ -220,105 +218,104 @@ namespace drash {
         }
     }
 
-    template<class PARTICLE>
+    template <class PARTICLE>
     template <class ANOTHER>
-    void ParticleSystem<PARTICLE>::Collide(ParticleSystem<ANOTHER> & another, std::function<void (PARTICLE &, ANOTHER &)> callback) {
+    void ParticleSystem<PARTICLE>::Collide(
+        ParticleSystem<ANOTHER> &another,
+        std::function<void(PARTICLE &, ANOTHER &)> callback) {
         // TODO optimize this. complexity n^2 now, use aabb or something else
-        auto reversed = [&] (ANOTHER & a, PARTICLE & p) {
-            callback(p, a);
-        };
+        auto reversed = [&](ANOTHER &a, PARTICLE &p) { callback(p, a); };
         for (unsigned i = 0; i < used; i++) {
             another.template Collide<PARTICLE>(pool[i], reversed);
         }
     }
 
-    template<class PARTICLE>
+    template <class PARTICLE>
     void ParticleSystem<PARTICLE>::FieldSize(float newWidth, float newHeight) {
         params.fieldWidth = newWidth;
         params.fieldHeight = newHeight;
     }
 
-    template<class PARTICLE>
+    template <class PARTICLE>
     void ParticleSystem<PARTICLE>::FieldPos(float newX, float newY) {
         x = newX;
         y = newY;
     }
 
-    template<class PARTICLE>
+    template <class PARTICLE>
     void ParticleSystem<PARTICLE>::PushPeriod(Period newPeriod) {
         periods.push(newPeriod);
     }
 
-    template<class PARTICLE>
-    void ParticleSystem<PARTICLE>::PopPeriod() {
+    template <class PARTICLE> void ParticleSystem<PARTICLE>::PopPeriod() {
         if (periods.size()) {
             periods.pop();
         }
     }
 
-    template<class PARTICLE>
-    typename ParticleSystem<PARTICLE>::Period ParticleSystem<PARTICLE>::TopPeriod() {
+    template <class PARTICLE>
+    typename ParticleSystem<PARTICLE>::Period
+    ParticleSystem<PARTICLE>::TopPeriod() {
         return periods.top();
     }
 
-    template<class PARTICLE>
+    template <class PARTICLE>
     void ParticleSystem<PARTICLE>::PushLife(Life newLife) {
         lifes.push(newLife);
     }
 
-    template<class PARTICLE>
-    void ParticleSystem<PARTICLE>::PopLife() {
+    template <class PARTICLE> void ParticleSystem<PARTICLE>::PopLife() {
         if (lifes.size()) {
             lifes.pop();
         }
     }
 
-    template<class PARTICLE>
-    typename ParticleSystem<PARTICLE>::Life ParticleSystem<PARTICLE>::TopLife() {
+    template <class PARTICLE>
+    typename ParticleSystem<PARTICLE>::Life
+    ParticleSystem<PARTICLE>::TopLife() {
         return lifes.top();
     }
 
-    template<class PARTICLE>
+    template <class PARTICLE>
     void ParticleSystem<PARTICLE>::PushPostSpawn(PostSpawn newPostSpawn) {
         postSpawns.push(newPostSpawn);
     }
 
-    template<class PARTICLE>
-    void ParticleSystem<PARTICLE>::PopPostSpawn() {
+    template <class PARTICLE> void ParticleSystem<PARTICLE>::PopPostSpawn() {
         if (postSpawns.size()) {
             postSpawns.pop();
         }
     }
 
-    template<class PARTICLE>
-    typename ParticleSystem<PARTICLE>::PostSpawn ParticleSystem<PARTICLE>::TopPostSpawn() {
+    template <class PARTICLE>
+    typename ParticleSystem<PARTICLE>::PostSpawn
+    ParticleSystem<PARTICLE>::TopPostSpawn() {
         return postSpawns.top();
     }
 
-    template<class PARTICLE>
+    template <class PARTICLE>
     void ParticleSystem<PARTICLE>::PushPreDestroy(PreDestroy newPreDestroy) {
         preDestroys.push(newPreDestroy);
     }
 
-    template<class PARTICLE>
-    void ParticleSystem<PARTICLE>::PopPreDestroy() {
+    template <class PARTICLE> void ParticleSystem<PARTICLE>::PopPreDestroy() {
         if (preDestroys.size()) {
             preDestroys.pop();
         }
     }
 
-    template<class PARTICLE>
-    typename ParticleSystem<PARTICLE>::PreDestroy ParticleSystem<PARTICLE>::TopPreDestroy() {
+    template <class PARTICLE>
+    typename ParticleSystem<PARTICLE>::PreDestroy
+    ParticleSystem<PARTICLE>::TopPreDestroy() {
         return preDestroys.top();
     }
 
-    template<class PARTICLE>
+    template <class PARTICLE>
     void ParticleSystem<PARTICLE>::SetSpawning(bool enable) {
         spawning = enable;
     }
 
-    template<class PARTICLE>
-    void ParticleSystem<PARTICLE>::Spawn() {
+    template <class PARTICLE> void ParticleSystem<PARTICLE>::Spawn() {
         if (used < poolSize) {
             auto index = used;
             used++;
@@ -329,7 +326,7 @@ namespace drash {
         }
     }
 
-    template<class PARTICLE>
+    template <class PARTICLE>
     void ParticleSystem<PARTICLE>::Destroy(unsigned int index) {
         if (index < used) {
             if (preDestroys.size()) {
@@ -344,4 +341,4 @@ namespace drash {
     }
 }
 
-#endif// PARTICLESYSTEM_HPP
+#endif // PARTICLESYSTEM_HPP

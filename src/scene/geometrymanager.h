@@ -28,57 +28,53 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <map>
 #include <string>
 
-namespace drash
-{
+namespace drash {
 
-class CScene;
-class CSceneObjectGeometry;
-class CSceneObjectParams;
-class CSceneObject;
+    class CScene;
+    class CSceneObjectGeometry;
+    class CSceneObjectParams;
+    class CSceneObject;
 
-class CGeometryManager final
-{
-public:
-    typedef std::map<std::string,CSceneObjectGeometry *> SceneObjectTemplatesT;
-    typedef std::pair<std::string,CSceneObjectGeometry *> MapSceneObjectItem;
+    class CGeometryManager final {
+      public:
+        typedef std::map<std::string, CSceneObjectGeometry *>
+        SceneObjectTemplatesT;
+        typedef std::pair<std::string, CSceneObjectGeometry *>
+        MapSceneObjectItem;
 
-    bool Init();
-    void Step(double);
-    void Release();
+        bool Init();
+        void Step(double);
+        void Release();
 
-    /// template is just named CSceneObjectGeometry
-    /// we can use it to create many instances of one object at any time we want
-    CSceneObjectGeometry * CreateGeometry(const std::string & _name);
-    void DestroyGeometry(CSceneObjectGeometry * _t);
-    void DestroyGeometry(const std::string & _name);
-    CSceneObject * CreateSceneObject(const std::string & _name, const CSceneObjectParams & _params);
+        /// template is just named CSceneObjectGeometry
+        /// we can use it to create many instances of one object at any time we
+        /// want
+        CSceneObjectGeometry *CreateGeometry(const std::string &_name);
+        void DestroyGeometry(CSceneObjectGeometry *_t);
+        void DestroyGeometry(const std::string &_name);
+        CSceneObject *CreateSceneObject(const std::string &_name,
+                                        const CSceneObjectParams &_params);
 
-    CSceneObjectGeometry * GetGeometry(const std::string & _name);
-    SceneObjectTemplatesT & GetGeometries();
+        CSceneObjectGeometry *GetGeometry(const std::string &_name);
+        SceneObjectTemplatesT &GetGeometries();
 
-    bool Load();
-    bool Store();
+        bool Load();
+        bool Store();
 
-    inline void SetScene(CScene * _scene);
-    inline CScene * GetScene();
+        inline void SetScene(CScene *_scene);
+        inline CScene *GetScene();
 
-protected:
-private:
-    SceneObjectTemplatesT mSceneObjectTemplates;
+      protected:
+      private:
+        SceneObjectTemplatesT mSceneObjectTemplates;
 
-    CScene * mScene = nullptr;
-};
+        CScene *mScene = nullptr;
+    };
 
-inline void CGeometryManager::SetScene(CScene * _scene)
-{
-    mScene = _scene;
-}
+    inline void CGeometryManager::SetScene(CScene *_scene) { mScene = _scene; }
 
-inline CScene *CGeometryManager::GetScene()
-{
-    return mScene;
-}
+    inline CScene *CGeometryManager::GetScene() { return mScene; }
 
-}// namespace drash
+} // namespace drash
 
 #endif // TEMPLATESYSTEM_H

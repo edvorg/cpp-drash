@@ -30,50 +30,47 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <sstream>
 
-namespace drash
-{
+namespace drash {
 
-class CLogger
-{
-public:
-    explicit CLogger(std::ostream &_stream);
-    ~CLogger(void);
-    CLogger& operator<<( char _c );
-    CLogger& operator<<( const char* _str );
-    CLogger& operator<<( int _v );
-    CLogger& operator<<( unsigned int _v );
-    CLogger& operator<<( long _v );
-    CLogger& operator<<( unsigned long _v );
-    CLogger& operator<<( float _v );
-    CLogger& operator<<( double _v );
+    class CLogger {
+      public:
+        explicit CLogger(std::ostream &_stream);
+        ~CLogger(void);
+        CLogger &operator<<(char _c);
+        CLogger &operator<<(const char *_str);
+        CLogger &operator<<(int _v);
+        CLogger &operator<<(unsigned int _v);
+        CLogger &operator<<(long _v);
+        CLogger &operator<<(unsigned long _v);
+        CLogger &operator<<(float _v);
+        CLogger &operator<<(double _v);
 
-    inline CLogger& operator<<( const std::string &_str );
+        inline CLogger &operator<<(const std::string &_str);
 
-    static const std::string Tail();
+        static const std::string Tail();
 
-private:
-    std::ofstream out;
-    std::ostream &mStream;
-    bool mOpened = false;
+      private:
+        std::ofstream out;
+        std::ostream &mStream;
+        bool mOpened = false;
 
-    static std::ostringstream mTailStream;
-};
+        static std::ostringstream mTailStream;
+    };
 
-inline CLogger& CLogger::operator<<(const std::string &_str)
-{
-    return (*this) << _str.c_str();
-}
+    inline CLogger &CLogger::operator<<(const std::string &_str) {
+        return (*this) << _str.c_str();
+    }
 
 #define LOG_ERR_PREFIX "[E]: "
 #define LOG_WARN_PREFIX "[W]: "
 #define LOG_INFO_PREFIX "[I]: "
 
 #ifdef DRASH_DEBUG
-#define LOG_ERR(mes) CLogger(std::cerr)<<LOG_ERR_PREFIX<<mes
-#define LOG_WARN(mes) CLogger(std::cerr)<<LOG_WARN_PREFIX<<mes
-#define LOG_INFO(mes) CLogger(std::cout)<<LOG_INFO_PREFIX<<mes
+#define LOG_ERR(mes) CLogger(std::cerr) << LOG_ERR_PREFIX << mes
+#define LOG_WARN(mes) CLogger(std::cerr) << LOG_WARN_PREFIX << mes
+#define LOG_INFO(mes) CLogger(std::cout) << LOG_INFO_PREFIX << mes
 #else
-#define LOG_ERR(mes) CLogger(std::cerr)<<LOG_ERR_PREFIX<<mes
+#define LOG_ERR(mes) CLogger(std::cerr) << LOG_ERR_PREFIX << mes
 #define LOG_WARN(mes)
 #define LOG_INFO(mes)
 #endif

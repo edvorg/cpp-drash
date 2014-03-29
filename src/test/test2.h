@@ -29,31 +29,28 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../app/app.h"
 #include "../greng/pointlight.h"
 
-namespace drash
-{
+namespace drash {
 
-namespace test
-{
+    namespace test {
 
-class CTest2 : public CApp
-{
-public:
-    CTest2() = default;
+        class CTest2 : public CApp {
+          public:
+            CTest2() = default;
 
-protected:
-    virtual bool Init() override;
+          protected:
+            virtual bool Init() override;
 
-private:
-    void SetProcessors();
-    CSceneObject *mSelectedObject = nullptr;
+          private:
+            void SetProcessors();
+            CSceneObject *mSelectedObject = nullptr;
 
-    greng::CPointLight mLight1;
+            greng::CPointLight mLight1;
 
-    greng::CCamera *mCamera = nullptr;
-};
+            greng::CCamera *mCamera = nullptr;
+        };
 
-} // namespace test
+    } // namespace test
 
-}// namespace drash
+} // namespace drash
 
 #endif // CTESTAPP2_H

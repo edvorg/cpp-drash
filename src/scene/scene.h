@@ -32,100 +32,101 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 class b2World;
 
-namespace drash
-{
+namespace drash {
 
-class CPhysObserver;
-class CSceneObjectGeometry;
-class CSceneObjectParams;
-class CSceneObject;
-class CJoint;
+    class CPhysObserver;
+    class CSceneObjectGeometry;
+    class CSceneObjectParams;
+    class CSceneObject;
+    class CJoint;
 
-class CSceneParams
-{
-public:
-    CVec2f mGravity;
-};
+    class CSceneParams {
+      public:
+        CVec2f mGravity;
+    };
 
-class CScene final : public b2ContactListener,
-                     public b2ContactFilter,
-                     public b2DestructionListener
-{
-public:    
-    // **************************************************
-    // * static scene configuration *********************
+    class CScene final : public b2ContactListener,
+                         public b2ContactFilter,
+                         public b2DestructionListener {
+      public:
+        // **************************************************
+        // * static scene configuration *********************
 
-    static const int mVelocityIterations = 5;
-    static const int mPositionIterations = 2;
-    static const unsigned int mObjectsCountLimit = 10000;
-    static const unsigned int mSubsystemsCountLimit = 5;
+        static const int mVelocityIterations = 5;
+        static const int mPositionIterations = 2;
+        static const unsigned int mObjectsCountLimit = 10000;
+        static const unsigned int mSubsystemsCountLimit = 5;
 
-    // **************************************************
-    // * main routines **********************************
+        // **************************************************
+        // * main routines **********************************
 
-    CScene(void);
-    ~CScene(void);
+        CScene(void);
+        ~CScene(void);
 
-    bool Init(const CSceneParams & _params);
-    void Release(void);
+        bool Init(const CSceneParams &_params);
+        void Release(void);
 
-    /// must be called once in update cycle
-    /// dt - seconds
-    void Step( double _dt );
+        /// must be called once in update cycle
+        /// dt - seconds
+        void Step(double _dt);
 
-    // **************************************************
-    // * working with objects ***************************
+        // **************************************************
+        // * working with objects ***************************
 
-    CSceneObject* CreateObject(const CSceneObjectGeometry &_geometry, const CSceneObjectParams& _params );
-    bool DestroyObject(CSceneObject *_obj);
-    inline CSceneObject * const * GetObjects(void) const;
-    inline unsigned int EnumObjects(void) const;
-    void DestroyObjects(void);
+        CSceneObject *CreateObject(const CSceneObjectGeometry &_geometry,
+                                   const CSceneObjectParams &_params);
+        bool DestroyObject(CSceneObject *_obj);
+        inline CSceneObject *const *GetObjects(void) const;
+        inline unsigned int EnumObjects(void) const;
+        void DestroyObjects(void);
 
-    // **************************************************
-    // * working with joints ****************************
+        // **************************************************
+        // * working with joints ****************************
 
-    CJoint *CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2, const CVec3f &_anchor);
-    CJoint *CreateJointDistance(CSceneObject *_obj1, CSceneObject *_obj2, const CVec3f &_anchor1, const CVec3f &_anchor2, float _length);
-    CJoint *CreateJointRope(CSceneObject *_obj1, CSceneObject *_obj2, const CVec3f &_anchor1, const CVec3f &_anchor2, float _length);
-    void DestroyJoint(CJoint *_joint);
+        CJoint *CreateJoint(CSceneObject *_obj1, CSceneObject *_obj2,
+                            const CVec3f &_anchor);
+        CJoint *CreateJointDistance(CSceneObject *_obj1, CSceneObject *_obj2,
+                                    const CVec3f &_anchor1,
+                                    const CVec3f &_anchor2, float _length);
+        CJoint *CreateJointRope(CSceneObject *_obj1, CSceneObject *_obj2,
+                                const CVec3f &_anchor1, const CVec3f &_anchor2,
+                                float _length);
+        void DestroyJoint(CJoint *_joint);
 
-    void SetGravity(const CVec2f &_g);
+        void SetGravity(const CVec2f &_g);
 
-    inline void SetPaused(bool _paused);
+        inline void SetPaused(bool _paused);
 
-protected:
-private:
-    void DestroyObjectImpl(CSceneObject *_obj);
+      protected:
+      private:
+        void DestroyObjectImpl(CSceneObject *_obj);
 
-    virtual bool ShouldCollide(b2Fixture * fixtureA, b2Fixture * fixtureB) override;
-    virtual void BeginContact(b2Contact * _figure) override;
-    virtual void PreSolve(b2Contact * _contact, const b2Manifold * _old_manifold) override;
-    virtual void PostSolve(b2Contact * _contact, const b2ContactImpulse * _impulse) override;
-    virtual void EndContact(b2Contact * _figure) override;
-    virtual void SayGoodbye(b2Joint * _joint) override;
-    virtual void SayGoodbye(b2Fixture * _fixture) override;
+        virtual bool ShouldCollide(b2Fixture *fixtureA,
+                                   b2Fixture *fixtureB) override;
+        virtual void BeginContact(b2Contact *_figure) override;
+        virtual void PreSolve(b2Contact *_contact,
+                              const b2Manifold *_old_manifold) override;
+        virtual void PostSolve(b2Contact *_contact,
+                               const b2ContactImpulse *_impulse) override;
+        virtual void EndContact(b2Contact *_figure) override;
+        virtual void SayGoodbye(b2Joint *_joint) override;
+        virtual void SayGoodbye(b2Fixture *_fixture) override;
 
-    b2World mWorld;
-    CObjectFactory<CSceneObject> mObjectsFactory;
-    bool mLocked = false;
-    bool mPaused = false;
-};
+        b2World mWorld;
+        CObjectFactory<CSceneObject> mObjectsFactory;
+        bool mLocked = false;
+        bool mPaused = false;
+    };
 
-inline CSceneObject * const * CScene::GetObjects(void) const
-{
-    return mObjectsFactory.GetObjects();
-}
+    inline CSceneObject *const *CScene::GetObjects(void) const {
+        return mObjectsFactory.GetObjects();
+    }
 
-inline unsigned int CScene::EnumObjects(void) const
-{
-    return mObjectsFactory.EnumObjects();
-}
+    inline unsigned int CScene::EnumObjects(void) const {
+        return mObjectsFactory.EnumObjects();
+    }
 
-inline void CScene::SetPaused(bool _paused)
-{
-    mPaused = _paused;
-}
+    inline void CScene::SetPaused(bool _paused) { mPaused = _paused; }
 
 } // namespace drash
 

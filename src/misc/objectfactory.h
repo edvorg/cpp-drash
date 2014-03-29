@@ -27,166 +27,140 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../diag/logger.h"
 
-namespace drash
-{
+namespace drash {
 
-template<class T>
-class CObjectFactory final
-{
-public:
-    class CFactoryProduct
-    {
-    public:
-        friend class CObjectFactory;
+    template <class T> class CObjectFactory final {
+      public:
+        class CFactoryProduct {
+          public:
+            friend class CObjectFactory;
 
-    protected:
-    private:
-        long int mInternalId;
+          protected:
+          private:
+            long int mInternalId;
+        };
+
+        CObjectFactory() = delete;
+        CObjectFactory(const CObjectFactory &) = delete;
+        CObjectFactory(CObjectFactory &&) = delete;
+        CObjectFactory &operator=(const CObjectFactory &) = delete;
+        CObjectFactory &operator=(CObjectFactory &&) = delete;
+
+        explicit CObjectFactory(unsigned int _size, const char *_product_name);
+        ~CObjectFactory();
+
+        T *CreateObject();
+        bool DestroyObjectSafe(T *_obj);
+        void DestroyObject(T *_obj);
+        void DestroyObjects();
+        inline bool IsObject(T *_obj) const;
+        inline T *const *GetObjects() const;
+        inline unsigned int EnumObjects() const;
+
+      protected:
+      private:
+        T **mObjects = nullptr;
+        unsigned int mObjectsCount = 0;
+        unsigned int mObjectsCountLimit = 0;
+        std::string mProductName;
     };
 
-    CObjectFactory() = delete;
-    CObjectFactory(const CObjectFactory &) = delete;
-    CObjectFactory(CObjectFactory &&) = delete;
-    CObjectFactory &operator =(const CObjectFactory &) = delete;
-    CObjectFactory &operator =(CObjectFactory &&) = delete;
+    template <class T>
+    CObjectFactory<T>::CObjectFactory(unsigned int _size,
+                                      const char *_product_name)
+        : mObjectsCountLimit(_size), mProductName(_product_name) {
+        if (mObjectsCountLimit == 0) {
+            LOG_ERR("CObjectFactory<"
+                    << mProductName.c_str()
+                    << ">::CObjectFactory(): Empty factory is unusable");
+            return;
+        }
 
-    explicit CObjectFactory(unsigned int _size, const char *_product_name);
-    ~CObjectFactory();
-
-    T* CreateObject();
-    bool DestroyObjectSafe(T *_obj);
-    void DestroyObject(T *_obj);
-    void DestroyObjects();
-    inline bool IsObject(T *_obj) const;
-    inline T * const * GetObjects() const;
-    inline unsigned int EnumObjects() const;
-
-protected:
-private:
-    T **mObjects = nullptr;
-    unsigned int mObjectsCount = 0;
-    unsigned int mObjectsCountLimit = 0;
-    std::string mProductName;
-};
-
-template<class T>
-CObjectFactory<T>::CObjectFactory(unsigned int _size, const char *_product_name):
-    mObjectsCountLimit(_size),
-    mProductName(_product_name)
-{
-    if (mObjectsCountLimit == 0)
-    {
-        LOG_ERR("CObjectFactory<"<<
-                mProductName.c_str()<<
-                ">::CObjectFactory(): Empty factory is unusable");
-        return;
-    }
-
-    mObjects = new T*[mObjectsCountLimit];
-    for (unsigned int i = 0; i < mObjectsCount; i++)
-    {
-        mObjects[i] = nullptr;
-    }
-}
-
-template<class T>
-CObjectFactory<T>::~CObjectFactory()
-{
-    if (mObjectsCount != 0)
-    {
-        LOG_WARN("CObjectFactory<"<<
-                 mProductName.c_str()<<
-                 ">::~CObjectFactory(): Potential memory leak. You mush remove objects manually");
-
-        for (unsigned int i = 0; i < mObjectsCount; i++)
-        {
-            DestroyObject(mObjects[i]);
+        mObjects = new T *[mObjectsCountLimit];
+        for (unsigned int i = 0; i < mObjectsCount; i++) {
             mObjects[i] = nullptr;
         }
     }
 
-    delete [] mObjects;
-    mObjects = nullptr;
-}
+    template <class T> CObjectFactory<T>::~CObjectFactory() {
+        if (mObjectsCount != 0) {
+            LOG_WARN("CObjectFactory<" << mProductName.c_str()
+                                       << ">::~CObjectFactory(): Potential "
+                                          "memory leak. You mush remove "
+                                          "objects manually");
 
-template<class T>
-T *CObjectFactory<T>::CreateObject()
-{
-    if (mObjectsCount >= mObjectsCountLimit)
-    {
-        LOG_ERR("CObjectFactory<"<<
-                mProductName.c_str()<<
-                ">::CreateObject(): Objects count exceedes it's limit ("<<mObjectsCountLimit<<')');
-        return nullptr;
+            for (unsigned int i = 0; i < mObjectsCount; i++) {
+                DestroyObject(mObjects[i]);
+                mObjects[i] = nullptr;
+            }
+        }
+
+        delete[] mObjects;
+        mObjects = nullptr;
     }
 
-    T *res = mObjects[mObjectsCount] = new T();
-    res->mInternalId = mObjectsCount++;
-    return res;
-}
+    template <class T> T *CObjectFactory<T>::CreateObject() {
+        if (mObjectsCount >= mObjectsCountLimit) {
+            LOG_ERR("CObjectFactory<"
+                    << mProductName.c_str()
+                    << ">::CreateObject(): Objects count exceedes it's limit ("
+                    << mObjectsCountLimit << ')');
+            return nullptr;
+        }
 
-template<class T>
-bool CObjectFactory<T>::DestroyObjectSafe(T *_obj)
-{
-    if (IsObject(_obj) == false)
-    {
-        LOG_ERR("CObjectFactory<"<<
-                mProductName.c_str()<<
-                ">::DestroyObject(): Something wrong with objects creation logic. Skipping");
-        return false;
+        T *res = mObjects[mObjectsCount] = new T();
+        res->mInternalId = mObjectsCount++;
+        return res;
     }
 
-    DestroyObject(_obj);
+    template <class T> bool CObjectFactory<T>::DestroyObjectSafe(T *_obj) {
+        if (IsObject(_obj) == false) {
+            LOG_ERR("CObjectFactory<" << mProductName.c_str()
+                                      << ">::DestroyObject(): Something wrong "
+                                         "with objects creation logic. "
+                                         "Skipping");
+            return false;
+        }
 
-    return true;
-}
+        DestroyObject(_obj);
 
-template<class T>
-void CObjectFactory<T>::DestroyObject(T *_obj)
-{
-    if (_obj->mInternalId < --mObjectsCount)
-    {
-        mObjects[_obj->mInternalId] = mObjects[mObjectsCount];
-        mObjects[_obj->mInternalId]->mInternalId = _obj->mInternalId;
-        mObjects[mObjectsCount] = nullptr;
-    }
-    else
-    {
-        mObjects[_obj->mInternalId] = nullptr;
+        return true;
     }
 
-    delete _obj;
-}
+    template <class T> void CObjectFactory<T>::DestroyObject(T *_obj) {
+        if (_obj->mInternalId < --mObjectsCount) {
+            mObjects[_obj->mInternalId] = mObjects[mObjectsCount];
+            mObjects[_obj->mInternalId]->mInternalId = _obj->mInternalId;
+            mObjects[mObjectsCount] = nullptr;
+        } else {
+            mObjects[_obj->mInternalId] = nullptr;
+        }
 
-template<class T>
-void CObjectFactory<T>::DestroyObjects()
-{
-    for (unsigned int i = 0; i < mObjectsCount; i++)
-    {
-        delete mObjects[i];
-        mObjects[i] = nullptr;
+        delete _obj;
     }
 
-    mObjectsCount = 0;
-}
+    template <class T> void CObjectFactory<T>::DestroyObjects() {
+        for (unsigned int i = 0; i < mObjectsCount; i++) {
+            delete mObjects[i];
+            mObjects[i] = nullptr;
+        }
 
-template<class T>
-inline bool CObjectFactory<T>::IsObject(T *_obj) const
-{
-    return _obj != nullptr && _obj->mInternalId < mObjectsCount && _obj == mObjects[_obj->mInternalId];
-}
+        mObjectsCount = 0;
+    }
 
-template<class T>
-inline T * const * CObjectFactory<T>::GetObjects() const
-{
-    return mObjects;
-}
+    template <class T> inline bool CObjectFactory<T>::IsObject(T *_obj) const {
+        return _obj != nullptr && _obj->mInternalId < mObjectsCount &&
+               _obj == mObjects[_obj->mInternalId];
+    }
 
-template<class T>
-inline unsigned int CObjectFactory<T>::EnumObjects() const
-{
-    return mObjectsCount;
-}
+    template <class T> inline T *const *CObjectFactory<T>::GetObjects() const {
+        return mObjects;
+    }
+
+    template <class T>
+    inline unsigned int CObjectFactory<T>::EnumObjects() const {
+        return mObjectsCount;
+    }
 
 } // namespace drash
 

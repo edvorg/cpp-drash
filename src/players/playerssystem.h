@@ -27,72 +27,62 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../misc/objectfactory.h"
 
-namespace drash
-{
+namespace drash {
 
-class CScene;
-class CSceneObjectGeometry;
-class CPlayer;
-class CPlayerParams;
+    class CScene;
+    class CSceneObjectGeometry;
+    class CPlayer;
+    class CPlayerParams;
 
-enum class PlayerMessage : unsigned int
-{
-    Left,
-    Right,
-    Deep,
-    AntiDeep,
-    Jump,
-};
+    enum class PlayerMessage : unsigned int {
+        Left,
+        Right,
+        Deep,
+        AntiDeep,
+        Jump,
+    };
 
-class CPlayersSystem final
-{
-public:
-    static const unsigned int mPlayersCountLimit = 2;
+    class CPlayersSystem final {
+      public:
+        static const unsigned int mPlayersCountLimit = 2;
 
-    CPlayersSystem();
-    ~CPlayersSystem();
+        CPlayersSystem();
+        ~CPlayersSystem();
 
-    bool Init();
-    void Step(double);
-    void Release();
+        bool Init();
+        void Step(double);
+        void Release();
 
-    inline void SetScene(CScene *_scene);
-    inline CScene *GetScene();
+        inline void SetScene(CScene *_scene);
+        inline CScene *GetScene();
 
-    CPlayer *CreatePlayer(const CSceneObjectGeometry &_g, const CPlayerParams &_p);
-    bool DestroyPlayer(CPlayer* _player);
+        CPlayer *CreatePlayer(const CSceneObjectGeometry &_g,
+                              const CPlayerParams &_p);
+        bool DestroyPlayer(CPlayer *_player);
 
-    inline CPlayer * const * GetPlayers();
-    inline unsigned int EnumPlayers() const;
+        inline CPlayer *const *GetPlayers();
+        inline unsigned int EnumPlayers() const;
 
-    bool SendMessage(CPlayer *_player, const PlayerMessage &_message);
+        bool SendMessage(CPlayer *_player, const PlayerMessage &_message);
 
-private:
-    CObjectFactory<CPlayer> mPlayersFactory;
+      private:
+        CObjectFactory<CPlayer> mPlayersFactory;
 
-    CScene* mScene = nullptr;
-};
+        CScene *mScene = nullptr;
+    };
 
-inline void CPlayersSystem::SetScene(CScene *_scene)
-{
-    mScene = _scene;
-}
+    inline void CPlayersSystem::SetScene(CScene *_scene) { mScene = _scene; }
 
-inline CScene *CPlayersSystem::GetScene()
-{
-    return mScene;
-}
+    inline CScene *CPlayersSystem::GetScene() { return mScene; }
 
-inline CPlayer *const*CPlayersSystem::GetPlayers()
-{
-    return mPlayersFactory.GetObjects();
-}
+    inline CPlayer *const *CPlayersSystem::GetPlayers() {
+        return mPlayersFactory.GetObjects();
+    }
 
-inline unsigned int CPlayersSystem::EnumPlayers() const
-{
-    return mPlayersFactory.EnumObjects();
-}
+    inline unsigned int CPlayersSystem::EnumPlayers() const {
+        return mPlayersFactory.EnumObjects();
+    }
 
-}// namespace drash
+} // namespace drash
 
 #endif // PLAYERSSYSTEM_H

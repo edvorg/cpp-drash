@@ -29,34 +29,32 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../ui/uibutton.h"
 #include "../greng/pointlight.h"
 
-namespace drash
-{
+namespace drash {
 
-namespace test
-{
+    namespace test {
 
-class CTest8 : public CApp
-{
-public:
-    CTest8() = default;
-private:
-    virtual bool Init() override;
-    virtual void Render() override;
-    virtual void Release() override;
+        class CTest8 : public CApp {
+          public:
+            CTest8() = default;
 
-    bool InitUI();
-    bool InitLevels();
-    bool InitCamera();
-    bool InitLights();
+          private:
+            virtual bool Init() override;
+            virtual void Render() override;
+            virtual void Release() override;
 
-    ui::CUIButton mButton1;
-    ui::CUIButton mButton2;
-    CLevelDesc *mLevel1 = nullptr;
-    CLevelDesc *mLevel2 = nullptr;
-    greng::CPointLight mLight1;
-};
+            bool InitUI();
+            bool InitLevels();
+            bool InitCamera();
+            bool InitLights();
 
-} // namespace test
+            ui::CUIButton mButton1;
+            ui::CUIButton mButton2;
+            CLevelDesc *mLevel1 = nullptr;
+            CLevelDesc *mLevel2 = nullptr;
+            greng::CPointLight mLight1;
+        };
+
+    } // namespace test
 
 } // namespace drash
 

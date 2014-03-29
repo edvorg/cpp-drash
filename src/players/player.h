@@ -28,36 +28,30 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../scene/sceneobject.h"
 
-namespace drash
-{
+namespace drash {
 
-class CSceneObject;
+    class CSceneObject;
 
-class CPlayerParams final
-{
-public:
-    CSceneObjectParams mSceneObjectParams;
-    float mVelocityLimit = 1;
-};
+    class CPlayerParams final {
+      public:
+        CSceneObjectParams mSceneObjectParams;
+        float mVelocityLimit = 1;
+    };
 
-class CPlayer final : public CObjectFactory<CPlayer>::CFactoryProduct
-{
-public:
-    friend class CPlayersSystem;
+    class CPlayer final : public CObjectFactory<CPlayer>::CFactoryProduct {
+      public:
+        friend class CPlayersSystem;
 
-    inline CSceneObject* GetSceneObject();
+        inline CSceneObject *GetSceneObject();
 
-protected:
-private:
-    CSceneObject *mSceneObject = nullptr;
-    float mVelocityLimit = 1;
-};
+      protected:
+      private:
+        CSceneObject *mSceneObject = nullptr;
+        float mVelocityLimit = 1;
+    };
 
-inline CSceneObject *CPlayer::GetSceneObject()
-{
-    return mSceneObject;
-}
+    inline CSceneObject *CPlayer::GetSceneObject() { return mSceneObject; }
 
-}// namespace drash
+} // namespace drash
 
 #endif // CPLAYER_H

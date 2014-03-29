@@ -28,27 +28,26 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../scene/sceneobject.h"
 
-namespace drash
-{
+namespace drash {
 
-class CExplosionParams final
-{
-public:
-    /// if this value is less than zero, bodies will move in direction of explosion
-    float mStregth = 1;
-    float mLifeTime = 1;
-    /// maximal distance between explosion and object allowed for interation
-    /// if this value is less than zero, we assume that it's infinite (positive)
-    float mRadius = 1;
-};
+    class CExplosionParams final {
+      public:
+        /// if this value is less than zero, bodies will move in direction of
+        /// explosion
+        float mStregth = 1;
+        float mLifeTime = 1;
+        /// maximal distance between explosion and object allowed for interation
+        /// if this value is less than zero, we assume that it's infinite
+        /// (positive)
+        float mRadius = 1;
+    };
 
-class CExplosion final
-{
-public:
-protected:
-private:
-};
+    class CExplosion final {
+      public:
+      protected:
+      private:
+    };
 
-}// namespace drash
+} // namespace drash
 
 #endif // CBOOMPARAMS_H

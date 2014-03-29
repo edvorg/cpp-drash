@@ -29,35 +29,32 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/pointlight.h"
 #include "../greng/spotlight.h"
 
-namespace drash
-{
+namespace drash {
 
-namespace test
-{
+    namespace test {
 
-class CTest10 : public CApp
-{
-public:
-    CTest10() = default;
+        class CTest10 : public CApp {
+          public:
+            CTest10() = default;
 
-protected:
-private:
-    virtual bool Init() override;
-    virtual void Step(double _dt) override;
-    virtual void Render() override;
-    bool InitCamera();
-    bool InitObjects();
-    bool InitLights();
-    bool InitProcessors();
+          protected:
+          private:
+            virtual bool Init() override;
+            virtual void Step(double _dt) override;
+            virtual void Render() override;
+            bool InitCamera();
+            bool InitObjects();
+            bool InitLights();
+            bool InitProcessors();
 
-    greng::CCamera *mCamera = nullptr;
-    greng::CPointLight mLightPoint1;
-    greng::CSpotLight mSpotLight;
-    CSceneObject *mLamp1Object = nullptr;
-    CSceneObject *mWallTopObject = nullptr;
-};
+            greng::CCamera *mCamera = nullptr;
+            greng::CPointLight mLightPoint1;
+            greng::CSpotLight mSpotLight;
+            CSceneObject *mLamp1Object = nullptr;
+            CSceneObject *mWallTopObject = nullptr;
+        };
 
-} // namespace test
+    } // namespace test
 
 } // namespace drash
 

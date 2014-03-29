@@ -25,97 +25,83 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "app.h"
 #include "../greng/camera.h"
 
-namespace drash
-{
+namespace drash {
 
-CApp::CApp()
-{
-}
+    CApp::CApp() {}
 
-bool CApp::Init()
-{
-    mQuit = true;
+    bool CApp::Init() {
+        mQuit = true;
 
-    CSceneParams params;
-    params.mGravity.Set( 0, -9.8 );
+        CSceneParams params;
+        params.mGravity.Set(0, -9.8);
 
-    if (mGrengSystems.Init() == false)
-    {
-        return false;
+        if (mGrengSystems.Init() == false) {
+            return false;
+        }
+
+        if (mScene.Init(params) == false) {
+            return false;
+        }
+
+        mExplosionSystem.SetScene(&mScene);
+        mPlayersSystem.SetScene(&mScene);
+        mGeometryManager.SetScene(&mScene);
+        mUISystem.SetRenderer(&GetGrengSystems().GetRenderer());
+        mLevelManager.SetScene(&mScene);
+        mLevelManager.SetGeometryManager(&mGeometryManager);
+
+        if (mExplosionSystem.Init() == false ||
+            mPlayersSystem.Init() == false ||
+            mGeometryManager.Init() == false || mEventSystem.Init() == false ||
+            mUISystem.Init() == false || mLevelManager.Init() == false) {
+            return false;
+        }
+
+        mDebugRenderer.SetGrengSystems(&mGrengSystems);
+        mDebugRenderer.SetScene(&mScene);
+        mDebugRenderer.SetGeometryManager(&mGeometryManager);
+
+        if (mDebugRenderer.Init() == false) {
+            return false;
+        }
+
+        mQuit = false;
+
+        return true;
     }
 
-    if (mScene.Init(params) == false)
-    {
-        return false;
+    void CApp::Step(double _dt) {
+        if (mQuit) {
+            mQuitHandler();
+            return;
+        }
+
+        mCurrentTimeDelta = _dt;
+
+        mGrengSystems.Step(_dt);
+        mEventSystem.Process();
+        mScene.Step(_dt);
+        mExplosionSystem.Step(_dt);
+        mPlayersSystem.Step(_dt);
+        mGeometryManager.Step(_dt);
+        mUISystem.Step(_dt);
     }
 
-    mExplosionSystem.SetScene(&mScene);
-    mPlayersSystem.SetScene(&mScene);
-    mGeometryManager.SetScene(&mScene);
-    mUISystem.SetRenderer(&GetGrengSystems().GetRenderer());
-    mLevelManager.SetScene(&mScene);
-    mLevelManager.SetGeometryManager(&mGeometryManager);
-
-    if (mExplosionSystem.Init() == false ||
-        mPlayersSystem.Init() == false ||
-        mGeometryManager.Init() == false ||
-        mEventSystem.Init() == false ||
-        mUISystem.Init() == false ||
-        mLevelManager.Init() == false)
-    {
-        return false;
+    void CApp::Release() {
+        mLevelManager.Release();
+        mDebugRenderer.Release();
+        mEventSystem.Release();
+        mExplosionSystem.Release();
+        mPlayersSystem.Release();
+        mGeometryManager.Release();
+        mUISystem.Release();
+        mScene.Release();
+        mGrengSystems.Release();
     }
 
-    mDebugRenderer.SetGrengSystems(&mGrengSystems);
-    mDebugRenderer.SetScene(&mScene);
-    mDebugRenderer.SetGeometryManager(&mGeometryManager);
-
-    if (mDebugRenderer.Init() == false)
-    {
-        return false;
+    void CApp::Render() {
+        mDebugRenderer.Render();
+        mUISystem.DebugDraw();
     }
-
-    mQuit = false;
-
-    return true;
-}
-
-void CApp::Step(double _dt)
-{
-    if (mQuit)
-    {
-        mQuitHandler();
-        return;    
-    }
-
-    mCurrentTimeDelta = _dt;
-
-    mGrengSystems.Step(_dt);
-    mEventSystem.Process();
-    mScene.Step(_dt);
-    mExplosionSystem.Step(_dt);
-    mPlayersSystem.Step(_dt);
-    mGeometryManager.Step(_dt);
-    mUISystem.Step(_dt);
-}
-
-void CApp::Release()
-{
-    mLevelManager.Release();
-    mDebugRenderer.Release();
-    mEventSystem.Release();
-    mExplosionSystem.Release();
-    mPlayersSystem.Release();
-    mGeometryManager.Release();
-    mUISystem.Release();
-    mScene.Release();
-    mGrengSystems.Release();
-}
-
-void CApp::Render()
-{
-    mDebugRenderer.Render();
-    mUISystem.DebugDraw();
-}
 
 } // namespace drash

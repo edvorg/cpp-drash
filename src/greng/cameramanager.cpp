@@ -27,90 +27,73 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../diag/logger.h"
 
-namespace greng
-{
+namespace greng {
 
-using drash::CLogger;
+    using drash::CLogger;
 
-CCameraManager::CCameraManager():
-    mCameraFactory(mCamerasCountLimit, "CCamera")
-{
-}
+    CCameraManager::CCameraManager()
+        : mCameraFactory(mCamerasCountLimit, "CCamera") {}
 
-CCameraManager::~CCameraManager()
-{
-}
+    CCameraManager::~CCameraManager() {}
 
-bool CCameraManager::Init()
-{
-    Release();
+    bool CCameraManager::Init() {
+        Release();
 
-    return true;
-}
-
-void CCameraManager::Release()
-{
-    while (mCameraFactory.EnumObjects() != 0)
-    {
-        DestroyCamera(mCameraFactory.GetObjects()[0]);
-    }
-}
-
-void CCameraManager::Step(double _dt)
-{
-    for (unsigned int i = 0; i < mCameraFactory.EnumObjects(); i++)
-    {
-        mCameraFactory.GetObjects()[i]->Step(_dt);
-    }
-}
-
-CCamera *CCameraManager::CreateCamera(const CCameraParams &_params)
-{
-    CCamera *res = mCameraFactory.CreateObject();
-
-    if (res == nullptr)
-    {
-        return nullptr;
+        return true;
     }
 
-    res->mAspectRatioAnimator = mAspectRatio;
-    res->mOrthoWidthAnimator = _params.mOrthoWidth;
-    res->mFovAnimator = _params.mFov;
-    res->mDepthOfViewAnimator = _params.mDepthOfView;
-    res->mPosAnimator = _params.mPos;
-    res->mRotationAnimator = _params.mRotation;
-
-    res->ComputeMatrices();
-
-    return res;
-}
-
-bool CCameraManager::DestroyCamera(CCamera *_camera)
-{
-    if (mCameraFactory.IsObject(_camera) == false)
-    {
-        LOG_ERR("CCameraManager::DestroyCamera(): Invalid object taken");
-        return false;
+    void CCameraManager::Release() {
+        while (mCameraFactory.EnumObjects() != 0) {
+            DestroyCamera(mCameraFactory.GetObjects()[0]);
+        }
     }
 
-    mCameraFactory.DestroyObject(_camera);
-
-    return true;
-}
-
-void CCameraManager::SetAspectRatio(float _ratio)
-{
-    if (drash::math::Abs(_ratio) < 0.000001)
-    {
-        _ratio = 1.0f;
+    void CCameraManager::Step(double _dt) {
+        for (unsigned int i = 0; i < mCameraFactory.EnumObjects(); i++) {
+            mCameraFactory.GetObjects()[i]->Step(_dt);
+        }
     }
 
-    mAspectRatio = _ratio;
+    CCamera *CCameraManager::CreateCamera(const CCameraParams &_params) {
+        CCamera *res = mCameraFactory.CreateObject();
 
-    for (unsigned int i = 0; i < mCameraFactory.EnumObjects(); i++)
-    {
-        mCameraFactory.GetObjects()[i]->GetAspectRatio() = _ratio;
+        if (res == nullptr) {
+            return nullptr;
+        }
+
+        res->mAspectRatioAnimator = mAspectRatio;
+        res->mOrthoWidthAnimator = _params.mOrthoWidth;
+        res->mFovAnimator = _params.mFov;
+        res->mDepthOfViewAnimator = _params.mDepthOfView;
+        res->mPosAnimator = _params.mPos;
+        res->mRotationAnimator = _params.mRotation;
+
+        res->ComputeMatrices();
+
+        return res;
     }
-}
+
+    bool CCameraManager::DestroyCamera(CCamera *_camera) {
+        if (mCameraFactory.IsObject(_camera) == false) {
+            LOG_ERR("CCameraManager::DestroyCamera(): Invalid object taken");
+            return false;
+        }
+
+        mCameraFactory.DestroyObject(_camera);
+
+        return true;
+    }
+
+    void CCameraManager::SetAspectRatio(float _ratio) {
+        if (drash::math::Abs(_ratio) < 0.000001) {
+            _ratio = 1.0f;
+        }
+
+        mAspectRatio = _ratio;
+
+        for (unsigned int i = 0; i < mCameraFactory.EnumObjects(); i++) {
+            mCameraFactory.GetObjects()[i]->GetAspectRatio() = _ratio;
+        }
+    }
 
 } // namespace greng

@@ -27,45 +27,34 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <functional>
 
-namespace drash
-{
+namespace drash {
 
-class CAppEventProcessor
-{
-public:
-    typedef std::function<void ()> FuncT;
+    class CAppEventProcessor {
+      public:
+        typedef std::function<void()> FuncT;
 
-    CAppEventProcessor();
-    CAppEventProcessor(const FuncT &_begin,
-                       const FuncT &_processing = [] () {},
-                       const FuncT &_end = [] () {});
-    CAppEventProcessor(const CAppEventProcessor &_src);
+        CAppEventProcessor();
+        CAppEventProcessor(const FuncT &_begin,
+                           const FuncT &_processing = []() {},
+                           const FuncT &_end = []() {});
+        CAppEventProcessor(const CAppEventProcessor &_src);
 
-    inline void Begin();
-    inline void Processing();
-    inline void End();
-protected:
-private:
+        inline void Begin();
+        inline void Processing();
+        inline void End();
 
-    FuncT mBegin = [] () {};
-    FuncT mProcessing = [] () {};
-    FuncT mEnd = [] () {};
-};
+      protected:
+      private:
+        FuncT mBegin = []() {};
+        FuncT mProcessing = []() {};
+        FuncT mEnd = []() {};
+    };
 
-inline void CAppEventProcessor::Begin()
-{
-    mBegin();
-}
+    inline void CAppEventProcessor::Begin() { mBegin(); }
 
-inline void CAppEventProcessor::Processing()
-{
-    mProcessing();
-}
+    inline void CAppEventProcessor::Processing() { mProcessing(); }
 
-inline void CAppEventProcessor::End()
-{
-    mEnd();
-}
+    inline void CAppEventProcessor::End() { mEnd(); }
 
 } // namespace drash
 

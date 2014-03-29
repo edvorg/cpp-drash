@@ -25,38 +25,30 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef EXPLOSIONSYSTEM_H
 #define EXPLOSIONSYSTEM_H
 
-namespace drash
-{
+namespace drash {
 
-class CScene;
+    class CScene;
 
-class CExplosionSystem final
-{
-public:    
-    CExplosionSystem() = default;
+    class CExplosionSystem final {
+      public:
+        CExplosionSystem() = default;
 
-    bool Init();
-    void Step(double);
-    void Release();
+        bool Init();
+        void Step(double);
+        void Release();
 
-    inline void SetScene(CScene *_scene);
-    inline CScene *GetScene();
+        inline void SetScene(CScene *_scene);
+        inline CScene *GetScene();
 
-protected:
-private:
-    CScene* mScene = nullptr;
-};
+      protected:
+      private:
+        CScene *mScene = nullptr;
+    };
 
-inline void CExplosionSystem::SetScene(CScene *_scene)
-{
-    mScene = _scene;
-}
+    inline void CExplosionSystem::SetScene(CScene *_scene) { mScene = _scene; }
 
-inline CScene *CExplosionSystem::GetScene()
-{
-    return mScene;
-}
+    inline CScene *CExplosionSystem::GetScene() { return mScene; }
 
-}// namespace drash
+} // namespace drash
 
 #endif // EXPLOSIONSYSTEM_H

@@ -28,86 +28,71 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/camera.h"
 #include "../greng/renderer.h"
 
-namespace drash{
+namespace drash {
 
-class CMoveablePoint
-{
-public:
+    class CMoveablePoint {
+      public:
+        CMoveablePoint();
+        CMoveablePoint(CVec3f _point, greng::CCamera *_camera);
 
-    CMoveablePoint();
-    CMoveablePoint(CVec3f _point, greng::CCamera *_camera);
+        void SetCenter(const CVec3f &_center);
+        void SetCamera(greng::CCamera *_camera);
+        inline CVec3f GetCenter() const;
+        void Step(double);
+        void Render(greng::CRenderer &_render);
 
-    void SetCenter(const CVec3f &_center);
-    void SetCamera(greng::CCamera * _camera);
-    inline CVec3f GetCenter()const;
-    void Step(double);
-    void Render(greng::CRenderer &_render);
+        void SetCursorPos(const CVec2f &_pos);
 
-    void SetCursorPos(const CVec2f &_pos);
+        void ClickBegin();
+        void ClickPressing();
+        void ClickEnd();
 
-    void ClickBegin();
-    void ClickPressing();
-    void ClickEnd();
+        inline void SetSize(float _size);
 
-    inline void SetSize(float _size);
+        inline void SetAxisOX(bool _val);
+        inline void SetAxisOY(bool _val);
+        inline void SetAxisOZ(bool _val);
 
-    inline void SetAxisOX(bool _val);
-    inline void SetAxisOY(bool _val);
-    inline void SetAxisOZ(bool _val);
+      private:
+        bool mAxisOX = true;
+        bool mAxisOY = true;
+        bool mAxisOZ = true;
 
-private:
+        greng::CCamera *mCurrentCamera = nullptr;
 
-    bool mAxisOX = true;
-    bool mAxisOY = true;
-    bool mAxisOZ = true;
+        void Calculate();
 
-    greng::CCamera * mCurrentCamera = nullptr;
+        greng::CCamera *GetCamera();
 
+        CVec3f mCenter;
+        CVec3f mX;
+        CVec3f mY;
+        CVec3f mZ;
 
-    void Calculate();
+        CVec3f mAxisDrawK;
+        unsigned int mAxisOver = 0;
+        CVec3f mFirstClick;
+        unsigned int mAxisMoving = 0;
 
-    greng::CCamera * GetCamera();
+        bool mMoving = false;
 
-    CVec3f mCenter;
-    CVec3f mX;
-    CVec3f mY;
-    CVec3f mZ;
+        CVec2f mCursorPos;
 
-    CVec3f mAxisDrawK;
-    unsigned int mAxisOver = 0;
-    CVec3f mFirstClick;
-    unsigned int mAxisMoving = 0;
+        float mLineSizeWorld = 1.0f;
+        float mLineSizeScreen = 0.05;
+    };
 
+    inline CVec3f CMoveablePoint::GetCenter() const { return mCenter; }
 
-    bool mMoving = false;
+    inline void CMoveablePoint::SetSize(float _size) {
+        mLineSizeScreen = math::Abs(_size);
+    }
 
-    CVec2f mCursorPos;
+    inline void CMoveablePoint::SetAxisOX(bool _val) { mAxisOX = _val; }
 
-    float mLineSizeWorld = 1.0f;
-    float mLineSizeScreen = 0.05;
-};
+    inline void CMoveablePoint::SetAxisOY(bool _val) { mAxisOY = _val; }
 
-
-inline CVec3f CMoveablePoint::GetCenter() const{
-    return mCenter;
-}
-
-inline void CMoveablePoint::SetSize(float _size)
-{
-    mLineSizeScreen = math::Abs(_size);
-}
-
-inline void CMoveablePoint::SetAxisOX(bool _val) {
-    mAxisOX = _val;
-}
-
-inline void CMoveablePoint::SetAxisOY(bool _val) {
-    mAxisOY = _val;
-}
-
-inline void CMoveablePoint::SetAxisOZ(bool _val) {
-    mAxisOZ = _val;
-}
+    inline void CMoveablePoint::SetAxisOZ(bool _val) { mAxisOZ = _val; }
 
 } // namespace drash
 #endif // MOVEABLEPOINT_H

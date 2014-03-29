@@ -27,49 +27,44 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../misc/objectfactory.h"
 
-namespace drash
-{
+namespace drash {
 
-class CScene;
-class CLevelDesc;
-class CSceneObjectParams;
-class CGeometryManager;
-class CSceneObject;
+    class CScene;
+    class CLevelDesc;
+    class CSceneObjectParams;
+    class CGeometryManager;
+    class CSceneObject;
 
-class CLevelManager
-{
-public:
-    static const unsigned int mLevelsCountLimit = 10;
+    class CLevelManager {
+      public:
+        static const unsigned int mLevelsCountLimit = 10;
 
-    CLevelManager();
-    ~CLevelManager();
+        CLevelManager();
+        ~CLevelManager();
 
-    bool Init();
-    void Release();
+        bool Init();
+        void Release();
 
-    inline void SetScene(CScene *_scene);
-    inline void SetGeometryManager(CGeometryManager *_geometry_manager);
+        inline void SetScene(CScene *_scene);
+        inline void SetGeometryManager(CGeometryManager *_geometry_manager);
 
-    CLevelDesc *CreateLevel();
-    bool DestroyLevel(CLevelDesc *_level);
-    bool StartLevel(CLevelDesc *_level);
+        CLevelDesc *CreateLevel();
+        bool DestroyLevel(CLevelDesc *_level);
+        bool StartLevel(CLevelDesc *_level);
 
-private:
-    CScene *mScene = nullptr;
-    CGeometryManager *mTemplateSystem = nullptr;
+      private:
+        CScene *mScene = nullptr;
+        CGeometryManager *mTemplateSystem = nullptr;
 
-    CObjectFactory<CLevelDesc> mLevelFactory;
-};
+        CObjectFactory<CLevelDesc> mLevelFactory;
+    };
 
-inline void CLevelManager::SetScene(CScene *_scene)
-{
-    mScene = _scene;
-}
+    inline void CLevelManager::SetScene(CScene *_scene) { mScene = _scene; }
 
-inline void CLevelManager::SetGeometryManager(CGeometryManager *_geometry_manager)
-{
-    mTemplateSystem = _geometry_manager;
-}
+    inline void
+    CLevelManager::SetGeometryManager(CGeometryManager *_geometry_manager) {
+        mTemplateSystem = _geometry_manager;
+    }
 
 } // namespace drash
 

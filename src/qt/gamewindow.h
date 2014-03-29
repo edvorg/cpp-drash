@@ -32,39 +32,36 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 class SceneWidget;
 class QLabel;
 
-namespace drash
-{
+namespace drash {
     class CApp;
 }
 
-namespace Ui
-{
-class GameWindow;
+namespace Ui {
+    class GameWindow;
 }
 
-class GameWindowParams
-{
-public:
-    void SetCommandLine( unsigned int _argc, char *_argv[] );
+class GameWindowParams {
+  public:
+    void SetCommandLine(unsigned int _argc, char *_argv[]);
 
     std::vector<std::string> mArgv;
 };
 
-class GameWindow : public QMainWindow
-{
+class GameWindow : public QMainWindow {
     Q_OBJECT
-    
-public:
+
+  public:
     explicit GameWindow(QWidget *parent = 0);
     ~GameWindow();
 
-public slots:
+  public
+slots:
     void UpdateScene();
 
-public:
-    bool Init( const GameWindowParams &_params );
-    
-private:
+  public:
+    bool Init(const GameWindowParams &_params);
+
+  private:
     Ui::GameWindow *ui = nullptr;
     drash::CApp *mApp = nullptr;
     SceneWidget *mSceneWidget = nullptr;

@@ -31,36 +31,33 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/camera.h"
 #include "../misc/moveablepoint.h"
 
-namespace drash
-{
+namespace drash {
 
-namespace test
-{
+    namespace test {
 
-class CTest4 : public CApp
-{
-public:
-    CTest4() = default;
+        class CTest4 : public CApp {
+          public:
+            CTest4() = default;
 
-protected:
-    virtual bool Init() override;
-    virtual void Step(double _dt) override;
-    virtual void Render() override;
+          protected:
+            virtual bool Init() override;
+            virtual void Step(double _dt) override;
+            virtual void Render() override;
 
-private:
-    ui::CUIButton mTestButton1;
-    ui::CUIButton mTestButton2;
-    ui::CUISlider mTestSlider1;
+          private:
+            ui::CUIButton mTestButton1;
+            ui::CUIButton mTestButton2;
+            ui::CUISlider mTestSlider1;
 
-    float mValue = 77;
-    CAnimator<float> mValueAnimator1 = mValue;
-    CAnimator<float> mValueAnimator2 = mValue;
+            float mValue = 77;
+            CAnimator<float> mValueAnimator1 = mValue;
+            CAnimator<float> mValueAnimator2 = mValue;
 
-    CVec3f mTestPoint;
-    CMoveablePoint mPoint;
-};
+            CVec3f mTestPoint;
+            CMoveablePoint mPoint;
+        };
 
-} // namespace test
+    } // namespace test
 
 } // namespace drash
 

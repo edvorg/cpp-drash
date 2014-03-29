@@ -27,80 +27,71 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 
-namespace drash
-{
+namespace drash {
 
-enum EventKey : unsigned int
-{
-    EventKeyUnknown = 0,
-    EventKeyControl,
-    EventKeyShift,
-    EventKeyAlt,
-    EventKeyMeta,
-    EventKeyQ,
-    EventKeyW,
-    EventKeyE,
-    EventKeyR,
-    EventKeyA,
-    EventKeyS,
-    EventKeyD,
-    EventKeyF,
-    EventKeyZ,
-    EventKeyX,
-    EventKeyC,
-    EventKeyV,
-    EventKeySpace,
-    EventKeyEscape,
-    EventKeyLeftButton,
-    EventKeyRightButton,
-    EventKeyMiddleButton,
-    EventKeyWheelUp,
-    EventKeyWheelDown,
-    EventDragDrop,
-    EventDragLeave
-};
+    enum EventKey : unsigned int {
+        EventKeyUnknown = 0,
+        EventKeyControl,
+        EventKeyShift,
+        EventKeyAlt,
+        EventKeyMeta,
+        EventKeyQ,
+        EventKeyW,
+        EventKeyE,
+        EventKeyR,
+        EventKeyA,
+        EventKeyS,
+        EventKeyD,
+        EventKeyF,
+        EventKeyZ,
+        EventKeyX,
+        EventKeyC,
+        EventKeyV,
+        EventKeySpace,
+        EventKeyEscape,
+        EventKeyLeftButton,
+        EventKeyRightButton,
+        EventKeyMiddleButton,
+        EventKeyWheelUp,
+        EventKeyWheelDown,
+        EventDragDrop,
+        EventDragLeave
+    };
 
-class CAppEvent
-{
-public:
-    CAppEvent();
-    CAppEvent(const CAppEvent &_src);
-    CAppEvent(EventKey _key);
+    class CAppEvent {
+      public:
+        CAppEvent();
+        CAppEvent(const CAppEvent &_src);
+        CAppEvent(EventKey _key);
 
-    inline EventKey GetKey() const;
+        inline EventKey GetKey() const;
 
-    std::string ToString() const;
-    void FromString(const std::string &_str);
+        std::string ToString() const;
+        void FromString(const std::string &_str);
 
-    inline bool operator ==(const CAppEvent &_to) const;
-    inline bool operator !=(const CAppEvent &_to) const;
-    inline bool operator <(const CAppEvent &_to) const;
+        inline bool operator==(const CAppEvent &_to) const;
+        inline bool operator!=(const CAppEvent &_to) const;
+        inline bool operator<(const CAppEvent &_to) const;
 
-    void Dump() const;
+        void Dump() const;
 
-private:
-    EventKey mKey = EventKeyUnknown;
-};
+      private:
+        EventKey mKey = EventKeyUnknown;
+    };
 
-inline EventKey CAppEvent::GetKey() const
-{
-    return mKey;
-}
+    inline EventKey CAppEvent::GetKey() const { return mKey; }
 
-inline bool CAppEvent::operator ==(const CAppEvent &_to) const
-{
-    return mKey == _to.mKey;
-}
+    inline bool CAppEvent::operator==(const CAppEvent &_to) const {
+        return mKey == _to.mKey;
+    }
 
-inline bool CAppEvent::operator !=(const CAppEvent &_to) const
-{
-    return mKey != _to.mKey;
-}
+    inline bool CAppEvent::operator!=(const CAppEvent &_to) const {
+        return mKey != _to.mKey;
+    }
 
-inline bool CAppEvent::operator <(const CAppEvent &_to) const
-{
-    return (unsigned int)mKey < (unsigned int)_to.mKey;
-}
+    inline bool CAppEvent::operator<(const CAppEvent &_to) const {
+        return (unsigned int)mKey < (unsigned int)_to.mKey;
+    }
 
 } // namespace drash
 

@@ -27,33 +27,30 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "uiwidget.h"
 
-namespace drash
-{
+namespace drash {
 
-namespace ui
-{
+    namespace ui {
 
-class CUIButton : public CUIWidget
-{
-public:
-    CUIButton() = default;
-    CUIButton(const CUIButton &) = delete;
-    CUIButton(CUIButton &&) = delete;
-    CUIButton &operator =(const CUIButton &) = delete;
-    CUIButton &operator =(CUIButton &&) = delete;
+        class CUIButton : public CUIWidget {
+          public:
+            CUIButton() = default;
+            CUIButton(const CUIButton &) = delete;
+            CUIButton(CUIButton &&) = delete;
+            CUIButton &operator=(const CUIButton &) = delete;
+            CUIButton &operator=(CUIButton &&) = delete;
 
-    virtual void Connect(CUISystem *_system) override;
+            virtual void Connect(CUISystem *_system) override;
 
-    void SetClickHandler(const std::function<void ()> &_handler);
+            void SetClickHandler(const std::function<void()> &_handler);
 
-protected:
-private:
-    std::function<void ()> mClickHandler = [] () {};
-    bool mPressed = false;
-    float mTime = 0;
-};
+          protected:
+          private:
+            std::function<void()> mClickHandler = []() {};
+            bool mPressed = false;
+            float mTime = 0;
+        };
 
-} // namepsace ui
+    } // namepsace ui
 
 } // namespace drash
 

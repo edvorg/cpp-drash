@@ -28,31 +28,28 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "test3.h"
 #include "../greng/pointlight.h"
 
-namespace drash
-{
+namespace drash {
 
-namespace test
-{
+    namespace test {
 
-class CTest7 : public CTest3
-{
-private:
-    virtual bool Init() override;
-    virtual void Step(double _dt) override;
-    bool InitTextures();
-    bool InitShaders();
-    bool InitLights();
-    virtual void Render() override;
+        class CTest7 : public CTest3 {
+          private:
+            virtual bool Init() override;
+            virtual void Step(double _dt) override;
+            bool InitTextures();
+            bool InitShaders();
+            bool InitLights();
+            virtual void Render() override;
 
-    greng::CTexture *mDebugTexture = nullptr;
-    greng::CShaderProgram *mProgram = nullptr;
+            greng::CTexture *mDebugTexture = nullptr;
+            greng::CShaderProgram *mProgram = nullptr;
 
-    float mPointLight1PosAngle = 0;
+            float mPointLight1PosAngle = 0;
 
-    greng::CPointLight mLight1;
-};
+            greng::CPointLight mLight1;
+        };
 
-} // namespace test
+    } // namespace test
 
 } // namespace drash
 

@@ -27,18 +27,16 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 class b2Joint;
 
-namespace drash
-{
+namespace drash {
 
-class CJoint
-{
-public:
-    friend class CScene;
+    class CJoint {
+      public:
+        friend class CScene;
 
-protected:
-private:
-    b2Joint *mJoint = nullptr;
-};
+      protected:
+      private:
+        b2Joint *mJoint = nullptr;
+    };
 
 } // namespace drash
 

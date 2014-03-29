@@ -24,41 +24,32 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "grengsystemsset.h"
 
-namespace greng
-{
+namespace greng {
 
-bool CGrengSystemsSet::Init()
-{
-    Release();
+    bool CGrengSystemsSet::Init() {
+        Release();
 
-    if (mRenderer.Init() == false ||
-            mCameraManager.Init() == false ||
-            mMeshManager.Init() == false ||
-            mTextureManager.Init() == false ||
+        if (mRenderer.Init() == false || mCameraManager.Init() == false ||
+            mMeshManager.Init() == false || mTextureManager.Init() == false ||
             mVertexShaderManager.Init() == false ||
             mFragmentShaderManager.Init() == false ||
-            mShaderProgramManager.Init() == false)
-    {
-        return false;
+            mShaderProgramManager.Init() == false) {
+            return false;
+        }
+
+        return true;
     }
 
-    return true;
-}
+    void CGrengSystemsSet::Step(double _dt) { mCameraManager.Step(_dt); }
 
-void CGrengSystemsSet::Step(double _dt)
-{
-    mCameraManager.Step(_dt);
-}
-
-void CGrengSystemsSet::Release()
-{
-    mVertexShaderManager.Release();
-    mFragmentShaderManager.Release();
-    mShaderProgramManager.Release();
-    mTextureManager.Release();
-    mMeshManager.Release();
-    mCameraManager.Release();
-    mRenderer.Release();
-}
+    void CGrengSystemsSet::Release() {
+        mVertexShaderManager.Release();
+        mFragmentShaderManager.Release();
+        mShaderProgramManager.Release();
+        mTextureManager.Release();
+        mMeshManager.Release();
+        mCameraManager.Release();
+        mRenderer.Release();
+    }
 
 } // namespace greng

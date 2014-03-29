@@ -30,308 +30,264 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../scene/figure.h"
 #include "../greng/camera.h"
 
-namespace drash
-{
+namespace drash {
 
-namespace test
-{
+    namespace test {
 
-bool CTest3::Init()
-{
-    if ( CTest1::Init() == false )
-    {
-        return false;
-    }
-
-    SetProcessors();
-
-    InitObjects();
-
-    auto c = GetCamera();
-    c->GetPos().SetTarget(CVec3f(0, 50, 180), 1.0f, AnimatorBehavior::Single);
-    c->GetRotation().Set(CVec3f(-M_PI / 12, 0, 0));
-
-    mSlider1.Connect(&GetUISystem());
-    mSlider1.SetPos(CVec2i(10, 10));
-    mSlider1.SetSize(CVec2ui(100, 20));
-    mSlider1.SetMin(-50);
-    mSlider1.SetMax(50);
-    mSlider1.SetValue(0);
-    mSlider1.SetValueHandler([this] (float _value)
-    {
-        GetScene().SetGravity(CVec2f(_value, mSlider2.GetValue()));
-    });
-
-    mSlider2.Connect(&GetUISystem());
-    mSlider2.SetPos(CVec2i(10, 40));
-    mSlider2.SetSize(CVec2ui(100, 20));
-    mSlider2.SetMin(-50);
-    mSlider2.SetMax(50);
-    mSlider2.SetValue(-9.8);
-    mSlider2.SetValueHandler([this] (float _value)
-    {
-        GetScene().SetGravity(CVec2f(mSlider1.GetValue(), _value));
-    });
-
-    mLight1.mPosition.Set(0, 40, 0);
-
-    GetDebugRenderer().SetLight(&mLight1);
-
-    return true;
-}
-
-void CTest3::Step(double _dt)
-{
-    CTest1::Step(_dt);
-}
-
-float angle = 0;
-
-void CTest3::Render()
-{
-    CTest1::Render();
-
-    CVec4f origin(40, 20, 0, 1);
-    CVec4f pos(0, 0, 0, 1);
-    CMatrix4f m;
-    MatrixRotationX(m, angle);
-    MatrixMultiply(m, origin, pos);
-    GetGrengSystems().GetRenderer().DrawPoint(GetCamera(), pos, 10, CColor4f(1, 0, 0), false);
-
-    angle += 0.01;
-}
-
-void CTest3::SetProcessors()
-{
-    GetEventSystem().SetMode("editor_mode");
-
-    GetEventSystem().SetProcessor("C-x", CAppEventProcessor(
-    [] () {},
-    [this] ()
-    {
-        GetEventSystem().SetMode("test3");
-    }));
-
-    GetEventSystem().SetMode("test3");
-
-    GetEventSystem().SetProcessor("C-x", CAppEventProcessor(
-    [] () {},
-    [this] ()
-    {
-        GetEventSystem().SetMode("editor_mode");
-    }));
-
-    GetEventSystem().SetProcessor("w", CAppEventProcessor(
-    [] () {},
-    [this] ()
-    {
-        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::Deep);
-    }));
-
-    GetEventSystem().SetProcessor("a", CAppEventProcessor(
-    [] () {},
-    [this] ()
-    {
-        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::Left);
-    }));
-
-    GetEventSystem().SetProcessor("s", CAppEventProcessor(
-    [] () {},
-    [this] ()
-    {
-        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::AntiDeep);
-    }));
-
-    GetEventSystem().SetProcessor("d", CAppEventProcessor(
-    [] () {},
-    [this] ()
-    {
-        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::Right);
-    }));
-
-    GetEventSystem().SetProcessor("SPC", CAppEventProcessor(
-    [] () {},
-    [this] ()
-    {
-        this->GetPlayersSystem().SendMessage(GetPlayersSystem().GetPlayers()[0], PlayerMessage::Jump);
-    }));
-
-    GetEventSystem().SetProcessor("MB", CAppEventProcessor(
-    [this] ()
-    {
-        if (mMoveObject == nullptr)
-        {
-            CFigure *f = GetDebugRenderer().FindFigure(GetCamera(), GetCursorPos());
-            if (f != nullptr)
-            {
-                mMoveObject = f->GetSceneObject();
+        bool CTest3::Init() {
+            if (CTest1::Init() == false) {
+                return false;
             }
-        }
-    },
-    [this] ()
-    {
-        if (mMoveObject != nullptr)
-        {
-            CPlane p(PlaneXY);
-            p.SetPoint(mMoveObject->GetPos());
 
-            CVec3f pos;
+            SetProcessors();
 
-            GetCamera()->CastRay(GetCursorPos(), p, pos);
+            InitObjects();
 
-            pos.Vec2() -= mMoveObject->GetMassCenter();
-            pos *= 10;
-            mMoveObject->SetLinearVelocity(pos);
-        }
-    },
-    [this] ()
-    {
-        if (mMoveObject != nullptr)
-        {
-            /// if our body is not dynamic. it wil never stop, until we make it's velocity module to 0
-            if (mMoveObject->IsDynamic() == false)
-            {
-                mMoveObject->SetLinearVelocity(CVec2f(0));
-            }
-            mMoveObject = nullptr;
-        }
-    }));
+            auto c = GetCamera();
+            c->GetPos().SetTarget(CVec3f(0, 50, 180), 1.0f,
+                                  AnimatorBehavior::Single);
+            c->GetRotation().Set(CVec3f(-M_PI / 12, 0, 0));
 
-    GetEventSystem().SetProcessor("WHUP", CAppEventProcessor(
-    [this] ()
-    {
-        CVec3f pos;
+            mSlider1.Connect(&GetUISystem());
+            mSlider1.SetPos(CVec2i(10, 10));
+            mSlider1.SetSize(CVec2ui(100, 20));
+            mSlider1.SetMin(-50);
+            mSlider1.SetMax(50);
+            mSlider1.SetValue(0);
+            mSlider1.SetValueHandler([this](float _value) {
+                GetScene().SetGravity(CVec2f(_value, mSlider2.GetValue()));
+            });
 
-        if (GetCamera()->GetPos().IsTargetSet())
-        {
-            pos = GetCamera()->GetPos().GetTarget();
-        }
-        else
-        {
-            pos = GetCamera()->GetPos().Get();
+            mSlider2.Connect(&GetUISystem());
+            mSlider2.SetPos(CVec2i(10, 40));
+            mSlider2.SetSize(CVec2ui(100, 20));
+            mSlider2.SetMin(-50);
+            mSlider2.SetMax(50);
+            mSlider2.SetValue(-9.8);
+            mSlider2.SetValueHandler([this](float _value) {
+                GetScene().SetGravity(CVec2f(mSlider1.GetValue(), _value));
+            });
+
+            mLight1.mPosition.Set(0, 40, 0);
+
+            GetDebugRenderer().SetLight(&mLight1);
+
+            return true;
         }
 
-        pos.mZ += 10.0f;
+        void CTest3::Step(double _dt) { CTest1::Step(_dt); }
 
-        GetCamera()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
-    }));
+        float angle = 0;
 
-    GetEventSystem().SetProcessor("WHDN", CAppEventProcessor(
-    [this] ()
-    {
-        CVec3f pos;
+        void CTest3::Render() {
+            CTest1::Render();
 
-        if (GetCamera()->GetPos().IsTargetSet())
-        {
-            pos = GetCamera()->GetPos().GetTarget();
+            CVec4f origin(40, 20, 0, 1);
+            CVec4f pos(0, 0, 0, 1);
+            CMatrix4f m;
+            MatrixRotationX(m, angle);
+            MatrixMultiply(m, origin, pos);
+            GetGrengSystems().GetRenderer().DrawPoint(GetCamera(), pos, 10,
+                                                      CColor4f(1, 0, 0), false);
+
+            angle += 0.01;
         }
-        else
-        {
-            pos = GetCamera()->GetPos().Get();
+
+        void CTest3::SetProcessors() {
+            GetEventSystem().SetMode("editor_mode");
+
+            GetEventSystem().SetProcessor("C-x",
+                                          CAppEventProcessor([]() {}, [this]() {
+                                              GetEventSystem().SetMode("test3");
+                                          }));
+
+            GetEventSystem().SetMode("test3");
+
+            GetEventSystem().SetProcessor(
+                "C-x", CAppEventProcessor([]() {}, [this]() {
+                           GetEventSystem().SetMode("editor_mode");
+                       }));
+
+            GetEventSystem().SetProcessor(
+                "w", CAppEventProcessor([]() {}, [this]() {
+                         this->GetPlayersSystem().SendMessage(
+                             GetPlayersSystem().GetPlayers()[0],
+                             PlayerMessage::Deep);
+                     }));
+
+            GetEventSystem().SetProcessor(
+                "a", CAppEventProcessor([]() {}, [this]() {
+                         this->GetPlayersSystem().SendMessage(
+                             GetPlayersSystem().GetPlayers()[0],
+                             PlayerMessage::Left);
+                     }));
+
+            GetEventSystem().SetProcessor(
+                "s", CAppEventProcessor([]() {}, [this]() {
+                         this->GetPlayersSystem().SendMessage(
+                             GetPlayersSystem().GetPlayers()[0],
+                             PlayerMessage::AntiDeep);
+                     }));
+
+            GetEventSystem().SetProcessor(
+                "d", CAppEventProcessor([]() {}, [this]() {
+                         this->GetPlayersSystem().SendMessage(
+                             GetPlayersSystem().GetPlayers()[0],
+                             PlayerMessage::Right);
+                     }));
+
+            GetEventSystem().SetProcessor(
+                "SPC", CAppEventProcessor([]() {}, [this]() {
+                           this->GetPlayersSystem().SendMessage(
+                               GetPlayersSystem().GetPlayers()[0],
+                               PlayerMessage::Jump);
+                       }));
+
+            GetEventSystem().SetProcessor(
+                "MB",
+                CAppEventProcessor([this]() {
+                                       if (mMoveObject == nullptr) {
+                                           CFigure *f =
+                                               GetDebugRenderer().FindFigure(
+                                                   GetCamera(), GetCursorPos());
+                                           if (f != nullptr) {
+                                               mMoveObject =
+                                                   f->GetSceneObject();
+                                           }
+                                       }
+                                   },
+                                   [this]() {
+                                       if (mMoveObject != nullptr) {
+                                           CPlane p(PlaneXY);
+                                           p.SetPoint(mMoveObject->GetPos());
+
+                                           CVec3f pos;
+
+                                           GetCamera()->CastRay(GetCursorPos(),
+                                                                p, pos);
+
+                                           pos.Vec2() -=
+                                               mMoveObject->GetMassCenter();
+                                           pos *= 10;
+                                           mMoveObject->SetLinearVelocity(pos);
+                                       }
+                                   },
+                                   [this]() {
+                    if (mMoveObject != nullptr) {
+                        /// if our body is not dynamic. it wil never stop, until
+                        /// we make it's velocity module to 0
+                        if (mMoveObject->IsDynamic() == false) {
+                            mMoveObject->SetLinearVelocity(CVec2f(0));
+                        }
+                        mMoveObject = nullptr;
+                    }
+                }));
+
+            GetEventSystem().SetProcessor(
+                "WHUP", CAppEventProcessor([this]() {
+                            CVec3f pos;
+
+                            if (GetCamera()->GetPos().IsTargetSet()) {
+                                pos = GetCamera()->GetPos().GetTarget();
+                            } else {
+                                pos = GetCamera()->GetPos().Get();
+                            }
+
+                            pos.mZ += 10.0f;
+
+                            GetCamera()->GetPos().SetTarget(
+                                pos, 0.3, AnimatorBehavior::Single);
+                        }));
+
+            GetEventSystem().SetProcessor(
+                "WHDN", CAppEventProcessor([this]() {
+                            CVec3f pos;
+
+                            if (GetCamera()->GetPos().IsTargetSet()) {
+                                pos = GetCamera()->GetPos().GetTarget();
+                            } else {
+                                pos = GetCamera()->GetPos().Get();
+                            }
+
+                            pos.mZ -= 10.0f;
+
+                            GetCamera()->GetPos().SetTarget(
+                                pos, 0.3, AnimatorBehavior::Single);
+                        }));
+
+            GetEventSystem().SetProcessor(
+                "C-q", CAppEventProcessor([this]() { this->Quit(); }));
+
+            GetEventSystem().SetProcessor(
+                "e", CAppEventProcessor([this]() {},
+                                        [this]() { GetCamera()->Forward(5); }));
+
+            GetEventSystem().SetProcessor(
+                "q", CAppEventProcessor([this]() {}, [this]() {
+                         GetCamera()->Forward(-5);
+                     }));
+
+            GetEventSystem().SetProcessor(
+                "z", CAppEventProcessor([this]() {},
+                                        [this]() { GetCamera()->Strafe(5); }));
+
+            GetEventSystem().SetProcessor(
+                "c", CAppEventProcessor([this]() {},
+                                        [this]() { GetCamera()->Strafe(-5); }));
         }
 
-        pos.mZ -= 10.0f;
+        void CTest3::InitObjects() {
+            CSceneObjectGeometry sbg;
+            sbg.mFigures.resize(1);
+            sbg.mFigures[0].mDepth = 200;
+            sbg.mFigures[0].mRestitution = 0.0;
+            sbg.mFigures[0].mVertices.push_back(CVec2f(-300, -5));
+            sbg.mFigures[0].mVertices.push_back(CVec2f(300, -5));
+            sbg.mFigures[0].mVertices.push_back(CVec2f(300, 5));
+            sbg.mFigures[0].mVertices.push_back(CVec2f(-300, 5));
+            CSceneObjectParams sbp;
+            sbp.mDynamic = false;
+            sbp.mAngle = 0;
+            sbp.mPos.Set(0, -30, 0);
+            GetScene().CreateObject(sbg, sbp);
 
-        GetCamera()->GetPos().SetTarget(pos, 0.3, AnimatorBehavior::Single);
-    }));
+            sbp.mPos.Set(0, 570, 0);
+            GetScene().CreateObject(sbg, sbp);
 
-    GetEventSystem().SetProcessor("C-q", CAppEventProcessor(
-    [this] ()
-    {
-        this->Quit();
-    }));
+            sbg.mFigures[0].mVertices.clear();
+            sbg.mFigures.resize(1);
+            sbg.mFigures[0].mVertices.push_back(CVec2f(-5, -300));
+            sbg.mFigures[0].mVertices.push_back(CVec2f(5, -300));
+            sbg.mFigures[0].mVertices.push_back(CVec2f(5, 300));
+            sbg.mFigures[0].mVertices.push_back(CVec2f(-5, 300));
+            sbp.mPos.Set(-300, 270, 0);
+            GetScene().CreateObject(sbg, sbp);
 
-    GetEventSystem().SetProcessor("e", CAppEventProcessor(
-    [this] ()
-    {
-    },
-    [this] ()
-    {
-        GetCamera()->Forward(5);
-    }));
+            sbg.mFigures[0].mVertices.clear();
+            sbg.mFigures.resize(1);
+            sbg.mFigures[0].mVertices.push_back(CVec2f(-5, -300));
+            sbg.mFigures[0].mVertices.push_back(CVec2f(5, -300));
+            sbg.mFigures[0].mVertices.push_back(CVec2f(5, 300));
+            sbg.mFigures[0].mVertices.push_back(CVec2f(-5, 300));
+            sbp.mPos.Set(300, 270, 0);
+            GetScene().CreateObject(sbg, sbp);
 
-    GetEventSystem().SetProcessor("q", CAppEventProcessor(
-    [this] ()
-    {
-    },
-    [this] ()
-    {
-        GetCamera()->Forward(-5);
-    }));
+            CSceneObjectGeometry pg;
+            pg.mFigures.resize(1);
+            pg.mFigures[0].mMass = 3;
+            CSceneObjectParams pp;
+            pp.mPos.Set(-200, 100, 0);
+            GetScene().CreateObject(pg, pp)->SetLinearVelocity(CVec2f(200, 0));
 
-    GetEventSystem().SetProcessor("z", CAppEventProcessor(
-    [this] ()
-    {
-    },
-    [this] ()
-    {
-        GetCamera()->Strafe(5);
-    }));
+            CSceneObjectGeometry ppg;
+            ppg.mFigures.resize(1);
+            ppg.mFigures[0].mDepth = 2;
+            CPlayerParams ppp;
+            ppp.mSceneObjectParams.mPos.Set(0, 10, 0);
+            ppp.mVelocityLimit = 10;
+            GetPlayersSystem().CreatePlayer(ppg, ppp);
+        }
 
-    GetEventSystem().SetProcessor("c", CAppEventProcessor(
-    [this] ()
-    {
-    },
-    [this] ()
-    {
-        GetCamera()->Strafe(-5);
-    }));
-}
-
-void CTest3::InitObjects()
-{
-    CSceneObjectGeometry sbg;
-    sbg.mFigures.resize(1);
-    sbg.mFigures[0].mDepth = 200;
-    sbg.mFigures[0].mRestitution = 0.0;
-    sbg.mFigures[0].mVertices.push_back( CVec2f( -300, -5 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2f( 300, -5 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2f( 300, 5 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2f( -300, 5 ) );
-    CSceneObjectParams sbp;
-    sbp.mDynamic = false;
-    sbp.mAngle = 0;
-    sbp.mPos.Set(0, -30, 0);
-    GetScene().CreateObject(sbg, sbp);
-
-    sbp.mPos.Set(0, 570, 0);
-    GetScene().CreateObject(sbg, sbp);
-
-    sbg.mFigures[0].mVertices.clear();
-    sbg.mFigures.resize(1);
-    sbg.mFigures[0].mVertices.push_back( CVec2f( -5, -300 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2f( 5, -300 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2f( 5, 300 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2f( -5, 300 ) );
-    sbp.mPos.Set(-300, 270, 0);
-    GetScene().CreateObject(sbg, sbp);
-
-    sbg.mFigures[0].mVertices.clear();
-    sbg.mFigures.resize(1);
-    sbg.mFigures[0].mVertices.push_back( CVec2f( -5, -300 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2f( 5, -300 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2f( 5, 300 ) );
-    sbg.mFigures[0].mVertices.push_back( CVec2f( -5, 300 ) );
-    sbp.mPos.Set(300, 270, 0);
-    GetScene().CreateObject(sbg, sbp);
-
-    CSceneObjectGeometry pg;
-    pg.mFigures.resize(1);
-    pg.mFigures[0].mMass = 3;
-    CSceneObjectParams pp;
-    pp.mPos.Set(-200, 100, 0);
-    GetScene().CreateObject(pg, pp)->SetLinearVelocity( CVec2f( 200, 0 ) );
-
-    CSceneObjectGeometry ppg;
-    ppg.mFigures.resize(1);
-    ppg.mFigures[0].mDepth = 2;
-    CPlayerParams ppp;
-    ppp.mSceneObjectParams.mPos.Set(0, 10, 0);
-    ppp.mVelocityLimit = 10;
-    GetPlayersSystem().CreatePlayer(ppg, ppp);
-}
-
-} // namespace test
+    } // namespace test
 
 } // namespace drash
-

@@ -30,158 +30,132 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../misc/matrix4.h"
 #include "../misc/objectfactory.h"
 
-namespace drash
-{
+namespace drash {
 
-class CPlane;
-class CMatrix4f;
+    class CPlane;
+    class CMatrix4f;
 
 } // namespace drash
 
-namespace greng
-{
+namespace greng {
 
-using drash::CAnimator;
-using drash::CVec2f;
-using drash::CVec3f;
-using drash::CMatrix4f;
+    using drash::CAnimator;
+    using drash::CVec2f;
+    using drash::CVec3f;
+    using drash::CMatrix4f;
 
-class CCamera : public drash::CObjectFactory<CCamera>::CFactoryProduct
-{
-public:
-    friend class CCameraManager;
+    class CCamera : public drash::CObjectFactory<CCamera>::CFactoryProduct {
+      public:
+        friend class CCameraManager;
 
-    void Step(double _dt);
+        void Step(double _dt);
 
-    inline void SetOrtho(bool _ortho);
-    inline bool IsOrtho() const;
+        inline void SetOrtho(bool _ortho);
+        inline bool IsOrtho() const;
 
-    inline CAnimator<float> &GetOrthoWidth();
-    inline CAnimator<float> &GetFov();
-    inline CAnimator<float> &GetDepthOfView();
-    inline CAnimator<CVec3f> &GetPos();
-    inline const CAnimator<CVec3f> &GetPos() const;
-    inline CAnimator<CVec2f> &GetRotation();
-    inline CAnimator<float> &GetAspectRatio();
+        inline CAnimator<float> &GetOrthoWidth();
+        inline CAnimator<float> &GetFov();
+        inline CAnimator<float> &GetDepthOfView();
+        inline CAnimator<CVec3f> &GetPos();
+        inline const CAnimator<CVec3f> &GetPos() const;
+        inline CAnimator<CVec2f> &GetRotation();
+        inline CAnimator<float> &GetAspectRatio();
 
-    void LookAt(const CVec3f &_point);
+        void LookAt(const CVec3f &_point);
 
-    void Forward(float _distance);
-    void Strafe(float _distance);
+        void Forward(float _distance);
+        void Strafe(float _distance);
 
-    inline const CMatrix4f &GetRotationMatrix() const;
-    inline const CMatrix4f &GetAntiRotationMatrix() const;
-    inline const CMatrix4f &GetViewMatrix() const;
-    inline const CMatrix4f &GetViewMatrixTransposed() const;
-    inline const CMatrix4f &GetProjectionMatrix() const;
-    inline const CMatrix4f &GetProjectionMatrixTransposed() const;
+        inline const CMatrix4f &GetRotationMatrix() const;
+        inline const CMatrix4f &GetAntiRotationMatrix() const;
+        inline const CMatrix4f &GetViewMatrix() const;
+        inline const CMatrix4f &GetViewMatrixTransposed() const;
+        inline const CMatrix4f &GetProjectionMatrix() const;
+        inline const CMatrix4f &GetProjectionMatrixTransposed() const;
 
-    void CastRay(const CVec2f &_pos, const drash::CPlane &_plane, CVec3f &_result) const;
+        void CastRay(const CVec2f &_pos, const drash::CPlane &_plane,
+                     CVec3f &_result) const;
 
-protected:
+      protected:
+      private:
+        void ComputeMatrices();
 
-private:
-    void ComputeMatrices();
+        bool mOrtho = false;
+        float mOrthoWidth;
+        float mFov;
+        float mDepthOfView;
+        CVec3f mPos;
+        CVec2f mRotation;
+        CAnimator<float> mOrthoWidthAnimator = mOrthoWidth;
+        CAnimator<float> mFovAnimator = mFov;
+        CAnimator<float> mDepthOfViewAnimator = mDepthOfView;
+        CAnimator<CVec3f> mPosAnimator = mPos;
+        CAnimator<CVec2f> mRotationAnimator = mRotation;
 
-    bool mOrtho = false;
-    float mOrthoWidth;
-    float mFov;
-    float mDepthOfView;
-    CVec3f mPos;
-    CVec2f mRotation;
-    CAnimator<float> mOrthoWidthAnimator = mOrthoWidth;
-    CAnimator<float> mFovAnimator = mFov;
-    CAnimator<float> mDepthOfViewAnimator = mDepthOfView;
-    CAnimator<CVec3f> mPosAnimator = mPos;
-    CAnimator<CVec2f> mRotationAnimator = mRotation;
+        CMatrix4f mRotationMatrix;
+        CMatrix4f mAntiRotationMatrix;
+        CMatrix4f mViewMatrix;
+        CMatrix4f mProjectionMatrix;
 
-    CMatrix4f mRotationMatrix;
-    CMatrix4f mAntiRotationMatrix;
-    CMatrix4f mViewMatrix;
-    CMatrix4f mProjectionMatrix;
+        CMatrix4f mViewMatrixTransposed;
+        CMatrix4f mProjectionMatrixTransposed;
 
-    CMatrix4f mViewMatrixTransposed;
-    CMatrix4f mProjectionMatrixTransposed;
+        float mAspectRatio = 1.0f;
+        CAnimator<float> mAspectRatioAnimator = mAspectRatio;
+    };
 
-    float mAspectRatio = 1.0f;
-    CAnimator<float> mAspectRatioAnimator = mAspectRatio;
-};
+    inline void CCamera::SetOrtho(bool _ortho) { mOrtho = _ortho; }
 
-inline void CCamera::SetOrtho(bool _ortho)
-{
-    mOrtho = _ortho;
-}
+    inline bool CCamera::IsOrtho() const { return mOrtho; }
 
-inline bool CCamera::IsOrtho() const
-{
-    return mOrtho;
-}
+    inline CAnimator<float> &CCamera::GetOrthoWidth() {
+        return mOrthoWidthAnimator;
+    }
 
-inline CAnimator<float> &CCamera::GetOrthoWidth()
-{
-    return mOrthoWidthAnimator;
-}
+    inline CAnimator<float> &CCamera::GetFov() { return mFovAnimator; }
 
-inline CAnimator<float> &CCamera::GetFov()
-{
-    return mFovAnimator;
-}
+    inline CAnimator<float> &CCamera::GetDepthOfView() {
+        return mDepthOfViewAnimator;
+    }
 
-inline CAnimator<float> &CCamera::GetDepthOfView()
-{
-    return mDepthOfViewAnimator;
-}
+    inline CAnimator<CVec3f> &CCamera::GetPos() { return mPosAnimator; }
 
-inline CAnimator<CVec3f> &CCamera::GetPos()
-{
-    return mPosAnimator;
-}
+    inline const CAnimator<CVec3f> &CCamera::GetPos() const {
+        return mPosAnimator;
+    }
 
-inline const CAnimator<CVec3f> &CCamera::GetPos() const
-{
-    return mPosAnimator;
-}
+    inline CAnimator<CVec2f> &CCamera::GetRotation() {
+        return mRotationAnimator;
+    }
 
-inline CAnimator<CVec2f> &CCamera::GetRotation()
-{
-    return mRotationAnimator;
-}
+    inline CAnimator<float> &CCamera::GetAspectRatio() {
+        return mAspectRatioAnimator;
+    }
 
-inline CAnimator<float> &CCamera::GetAspectRatio()
-{
-    return mAspectRatioAnimator;
-}
+    inline const CMatrix4f &CCamera::GetRotationMatrix() const {
+        return mRotationMatrix;
+    }
 
-inline const CMatrix4f &CCamera::GetRotationMatrix() const
-{
-    return mRotationMatrix;
-}
+    inline const CMatrix4f &CCamera::GetAntiRotationMatrix() const {
+        return mAntiRotationMatrix;
+    }
 
-inline const CMatrix4f &CCamera::GetAntiRotationMatrix() const
-{
-    return mAntiRotationMatrix;
-}
+    inline const CMatrix4f &CCamera::GetViewMatrix() const {
+        return mViewMatrix;
+    }
 
-inline const CMatrix4f &CCamera::GetViewMatrix() const
-{
-    return mViewMatrix;
-}
+    inline const CMatrix4f &CCamera::GetViewMatrixTransposed() const {
+        return mViewMatrixTransposed;
+    }
 
-inline const CMatrix4f &CCamera::GetViewMatrixTransposed() const
-{
-    return mViewMatrixTransposed;
-}
+    inline const CMatrix4f &CCamera::GetProjectionMatrix() const {
+        return mProjectionMatrix;
+    }
 
-inline const CMatrix4f &CCamera::GetProjectionMatrix() const
-{
-    return mProjectionMatrix;
-}
+    inline const CMatrix4f &CCamera::GetProjectionMatrixTransposed() const {
+        return mProjectionMatrixTransposed;
+    }
 
-inline const CMatrix4f &CCamera::GetProjectionMatrixTransposed() const
-{
-    return mProjectionMatrixTransposed;
-}
-
-}// namespace greng
+} // namespace greng
 
 #endif // COBJECTCAMERA_H

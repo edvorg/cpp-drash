@@ -25,19 +25,17 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRENG_TEXTURE_H
 #define GRENG_TEXTURE_H
 
-namespace greng
-{
+namespace greng {
 
-class CTexture : public drash::CObjectFactory<CTexture>::CFactoryProduct
-{
-public:
-    CTexture() = default;
+    class CTexture : public drash::CObjectFactory<CTexture>::CFactoryProduct {
+      public:
+        CTexture() = default;
 
-    unsigned int mTextureBufferId = 0;
+        unsigned int mTextureBufferId = 0;
 
-protected:
-private:
-};
+      protected:
+      private:
+    };
 
 } // namespace greng
 

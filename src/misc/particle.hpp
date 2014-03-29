@@ -29,13 +29,22 @@ namespace drash {
 
     class Particle {
 
-    public:
+      public:
         inline void SetPosX(float newX) { x = newX; }
         inline void SetPosY(float newY) { y = newY; }
-        inline void SetPos(float newX, float newY) { x = newX; y = newY; }
+        inline void SetPos(float newX, float newY) {
+            x = newX;
+            y = newY;
+        }
 
-        inline void IncPos(float incX, float incY) { x += incX; y += incY; }
-        inline void DecPos(float decX, float decY) { x -= decX; y -= decY; }
+        inline void IncPos(float incX, float incY) {
+            x += incX;
+            y += incY;
+        }
+        inline void DecPos(float decX, float decY) {
+            x -= decX;
+            y -= decY;
+        }
 
         inline void IncPosX(float incX) { x += incX; }
         inline void DecPosX(float decX) { x -= decX; }
@@ -45,10 +54,18 @@ namespace drash {
 
         inline void SetVelX(float newVelX) { velX = newVelX; }
         inline void SetVelY(float newVelY) { velY = newVelY; }
-        inline void SetVel(float newVelX, float newVelY) { velX = newVelX, velY = newVelY; }
+        inline void SetVel(float newVelX, float newVelY) {
+            velX = newVelX, velY = newVelY;
+        }
 
-        inline void IncVel(float incVelX, float incVelY) { velX += incVelX; velY += incVelY; }
-        inline void DecVel(float decVelX, float decVelY) { velX -= decVelX; velY -= decVelY; }
+        inline void IncVel(float incVelX, float incVelY) {
+            velX += incVelX;
+            velY += incVelY;
+        }
+        inline void DecVel(float decVelX, float decVelY) {
+            velX -= decVelX;
+            velY -= decVelY;
+        }
 
         inline void IncVelX(float incVelX) { velX += incVelX; }
         inline void DecVelX(float decVelX) { velX -= decVelX; }
@@ -61,7 +78,9 @@ namespace drash {
 
         inline void SetSize(float newSize) { size = newSize; }
         inline void SetDead(bool newDead) { dead = newDead; }
-        inline void SetLifeTimer(float newLifeTimer) { lifeTimer = newLifeTimer; }
+        inline void SetLifeTimer(float newLifeTimer) {
+            lifeTimer = newLifeTimer;
+        }
 
         inline float GetPosX() const { return x; }
         inline float GetPosY() const { return y; }
@@ -76,8 +95,8 @@ namespace drash {
         inline bool GetDead() const { return dead; }
         inline float GetLifeTimer() const { return lifeTimer; }
 
-    protected:
-    private:
+      protected:
+      private:
         float x = 0.0f;
         float y = 0.0f;
         float angle = 0;
@@ -88,7 +107,6 @@ namespace drash {
         bool dead = false;
         float lifeTimer = 0.0f;
     };
-
 }
 
-#endif// PARTICLE_HPP
+#endif // PARTICLE_HPP

@@ -25,198 +25,165 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "moveablepoint.h"
 #include "plane.h"
 
-namespace drash
-{
+namespace drash {
 
-CMoveablePoint::CMoveablePoint()
-{
-    mCenter.Set(0,0,0);
-}
+    CMoveablePoint::CMoveablePoint() { mCenter.Set(0, 0, 0); }
 
-CMoveablePoint::CMoveablePoint(CVec3f _point, greng::CCamera *_camera):
-    mCurrentCamera(_camera),
-    mCenter(_point)
-{
-}
+    CMoveablePoint::CMoveablePoint(CVec3f _point, greng::CCamera *_camera)
+        : mCurrentCamera(_camera), mCenter(_point) {}
 
-void CMoveablePoint::SetCenter(const CVec3f &_center)
-{
-    mCenter = _center;
+    void CMoveablePoint::SetCenter(const CVec3f &_center) { mCenter = _center; }
 
-}
-
-void CMoveablePoint::SetCamera(greng::CCamera *_camera)
-{
-    mCurrentCamera = _camera;
-}
-
-void CMoveablePoint::Step(double)
-{
-    if (mCurrentCamera == nullptr)
-    {
-        return;
+    void CMoveablePoint::SetCamera(greng::CCamera *_camera) {
+        mCurrentCamera = _camera;
     }
 
-    CVec4f normal(0, 0, -1, 0);
-    CVec4f normal_transformed;
-    MatrixMultiply(mCurrentCamera->GetAntiRotationMatrix(), normal, normal_transformed);
+    void CMoveablePoint::Step(double) {
+        if (mCurrentCamera == nullptr) {
+            return;
+        }
 
-    CPlane p;
-    p.SetPoint(mCenter);
-    p.SetNormal(normal_transformed);
+        CVec4f normal(0, 0, -1, 0);
+        CVec4f normal_transformed;
+        MatrixMultiply(mCurrentCamera->GetAntiRotationMatrix(), normal,
+                       normal_transformed);
 
-    CVec2f p1(0, 0);
-    CVec2f p2(mLineSizeScreen, 0);
+        CPlane p;
+        p.SetPoint(mCenter);
+        p.SetNormal(normal_transformed);
 
-    CVec3f wp1;
-    CVec3f wp2;
+        CVec2f p1(0, 0);
+        CVec2f p2(mLineSizeScreen, 0);
 
-    mCurrentCamera->CastRay(p1, p, wp1);
-    mCurrentCamera->CastRay(p2, p, wp2);
+        CVec3f wp1;
+        CVec3f wp2;
 
-    wp1 -= wp2;
+        mCurrentCamera->CastRay(p1, p, wp1);
+        mCurrentCamera->CastRay(p2, p, wp2);
 
-    mLineSizeWorld = wp1.Length();
+        wp1 -= wp2;
 
-    mX = mCenter;
-    mY = mCenter;
-    mZ = mCenter;
+        mLineSizeWorld = wp1.Length();
 
-    mX.mX += mLineSizeWorld;
-    mY.mY += mLineSizeWorld;
-    mZ.mZ += mLineSizeWorld;
-}
+        mX = mCenter;
+        mY = mCenter;
+        mZ = mCenter;
 
-void CMoveablePoint::Render( greng::CRenderer &_render )
-{
-    if (mCurrentCamera == nullptr) {
-        return;
+        mX.mX += mLineSizeWorld;
+        mY.mY += mLineSizeWorld;
+        mZ.mZ += mLineSizeWorld;
     }
-   _render.DrawLine(GetCamera(), mCenter, mX, 1, CColor4f(1 * mAxisDrawK.mX+10, 0, 0, 1), false);
-   _render.DrawLine(GetCamera(), mCenter, mY, 1, CColor4f(0, 1 * mAxisDrawK.mY+10, 0, 1), false);
-   _render.DrawLine(GetCamera(), mCenter, mZ, 1, CColor4f(0, 0, 1 * mAxisDrawK.mZ+10, 1), false);
-}
 
-greng::CCamera *CMoveablePoint::GetCamera()
-{
-    return mCurrentCamera;
-}
-
-void CMoveablePoint::ClickBegin()
-{
-    if (mAxisOver == 0) {
-        return;
+    void CMoveablePoint::Render(greng::CRenderer &_render) {
+        if (mCurrentCamera == nullptr) {
+            return;
+        }
+        _render.DrawLine(GetCamera(), mCenter, mX, 1,
+                         CColor4f(1 * mAxisDrawK.mX + 10, 0, 0, 1), false);
+        _render.DrawLine(GetCamera(), mCenter, mY, 1,
+                         CColor4f(0, 1 * mAxisDrawK.mY + 10, 0, 1), false);
+        _render.DrawLine(GetCamera(), mCenter, mZ, 1,
+                         CColor4f(0, 0, 1 * mAxisDrawK.mZ + 10, 1), false);
     }
-    if (mAxisOver == 2) {
+
+    greng::CCamera *CMoveablePoint::GetCamera() { return mCurrentCamera; }
+
+    void CMoveablePoint::ClickBegin() {
+        if (mAxisOver == 0) {
+            return;
+        }
+        if (mAxisOver == 2) {
             CPlane xy(PlaneXY);
             xy.SetPoint(mCenter);
             GetCamera()->CastRay(mCursorPos, xy, mFirstClick);
             mAxisMoving = mAxisOver;
             mMoving = true;
-    } else {
+        } else {
             CPlane xz(PlaneXZ);
             xz.SetPoint(mCenter);
             GetCamera()->CastRay(mCursorPos, xz, mFirstClick);
             mAxisMoving = mAxisOver;
             mMoving = true;
+        }
     }
-}
 
+    void CMoveablePoint::ClickPressing() {
+        if (mAxisMoving == 1) {
+            CPlane xz(PlaneXZ);
+            xz.SetPoint(mCenter);
+            CVec3f new_pos;
+            GetCamera()->CastRay(mCursorPos, xz, new_pos);
 
-void CMoveablePoint::ClickPressing()
-{
-    if (mAxisMoving == 1)
-    {
+            mCenter.mX += new_pos.mX - mFirstClick.mX;
+            mFirstClick = new_pos;
+        } else if (mAxisMoving == 2) {
+            CPlane xy(PlaneXY);
+            xy.SetPoint(mCenter);
+            CVec3f new_pos;
+            GetCamera()->CastRay(mCursorPos, xy, new_pos);
+
+            mCenter.mY += new_pos.mY - mFirstClick.mY;
+            mFirstClick = new_pos;
+        } else if (mAxisMoving == 3) {
+            CPlane xz(PlaneXZ);
+            xz.SetPoint(mCenter);
+            CVec3f new_pos;
+            GetCamera()->CastRay(mCursorPos, xz, new_pos);
+
+            mCenter.mZ += new_pos.mZ - mFirstClick.mZ;
+
+            mFirstClick = new_pos;
+        }
+    }
+
+    void CMoveablePoint::ClickEnd() {
+        mAxisMoving = 0;
+        mMoving = false;
+    }
+
+    void CMoveablePoint::SetCursorPos(const CVec2f &_pos) {
+        mCursorPos = _pos;
+        Calculate();
+    }
+
+    void CMoveablePoint::Calculate() {
         CPlane xz(PlaneXZ);
         xz.SetPoint(mCenter);
-        CVec3f new_pos;
-        GetCamera()->CastRay(mCursorPos, xz, new_pos);
-
-        mCenter.mX += new_pos.mX - mFirstClick.mX;
-        mFirstClick = new_pos;
-    }
-    else if (mAxisMoving == 2)
-    {
         CPlane xy(PlaneXY);
         xy.SetPoint(mCenter);
-        CVec3f new_pos;
-        GetCamera()->CastRay(mCursorPos, xy, new_pos);
 
-        mCenter.mY += new_pos.mY - mFirstClick.mY;
-        mFirstClick = new_pos;
+        CVec3f r1;
+        GetCamera()->CastRay(mCursorPos, xz, r1);
+        CVec3f r2;
+        GetCamera()->CastRay(mCursorPos, xy, r2);
+
+        CVec2f dstz = r1;
+        dstz -= mCenter.Vec2();
+        CVec2f dstx(r1.mZ, r1.mY);
+        dstx -= CVec2f(mCenter.mZ, mCenter.mY);
+        CVec2f dsty(r2.mZ, r2.mX);
+        dsty -= CVec2f(mCenter.mZ, mCenter.mX);
+
+        if (mMoving == true) {
+            return;
+        }
+
+        mAxisOver = 0;
+        mAxisDrawK.Set(1, 1, 1);
+
+        if (mAxisOZ == true && dstz.Length() < mLineSizeWorld * 0.1 &&
+            mCenter.mZ < r1.mZ && r1.mZ < mCenter.mZ + mLineSizeWorld) {
+            mAxisDrawK.mZ *= 0.5;
+            mAxisOver = 3;
+        } else if (mAxisOX == true && dstx.Length() < mLineSizeWorld * 0.1 &&
+                   mCenter.mX < r1.mX && r1.mX < mCenter.mX + mLineSizeWorld) {
+            mAxisDrawK.mX *= 0.5;
+            mAxisOver = 1;
+        } else if (mAxisOY == true && dsty.Length() < mLineSizeWorld * 0.1 &&
+                   mCenter.mY < r2.mY && r2.mY < mCenter.mY + mLineSizeWorld) {
+            mAxisDrawK.mY *= 0.5;
+            mAxisOver = 2;
+        }
     }
-    else if (mAxisMoving == 3)
-    {
-        CPlane xz(PlaneXZ);
-        xz.SetPoint(mCenter);
-        CVec3f new_pos;
-        GetCamera()->CastRay(mCursorPos, xz, new_pos);
-
-        mCenter.mZ += new_pos.mZ - mFirstClick.mZ;
-
-        mFirstClick = new_pos;
-    }
-}
-
-void CMoveablePoint::ClickEnd()
-{
-    mAxisMoving = 0;
-    mMoving = false;
-}
-
-void CMoveablePoint::SetCursorPos(const CVec2f &_pos)
-{
-    mCursorPos = _pos;
-    Calculate();
-}
-
-void CMoveablePoint::Calculate()
-{
-    CPlane xz(PlaneXZ);
-    xz.SetPoint(mCenter);
-    CPlane xy(PlaneXY);
-    xy.SetPoint(mCenter);
-
-    CVec3f r1;
-    GetCamera()->CastRay(mCursorPos, xz, r1);
-    CVec3f r2;
-    GetCamera()->CastRay(mCursorPos, xy, r2);
-
-    CVec2f dstz = r1;
-    dstz -= mCenter.Vec2();
-    CVec2f dstx(r1.mZ, r1.mY);
-    dstx -= CVec2f(mCenter.mZ, mCenter.mY);
-    CVec2f dsty(r2.mZ, r2.mX);
-    dsty -= CVec2f(mCenter.mZ, mCenter.mX);
-
-    if (mMoving == true) {
-        return;
-    }
-
-    mAxisOver = 0;
-    mAxisDrawK.Set(1, 1, 1);
-
-    if (mAxisOZ == true && dstz.Length() < mLineSizeWorld * 0.1 &&
-        mCenter.mZ < r1.mZ &&
-        r1.mZ < mCenter.mZ + mLineSizeWorld)
-    {
-        mAxisDrawK.mZ *= 0.5;
-        mAxisOver = 3;
-    }
-    else if (mAxisOX == true && dstx.Length() < mLineSizeWorld * 0.1 &&
-             mCenter.mX < r1.mX &&
-             r1.mX < mCenter.mX + mLineSizeWorld)
-    {
-        mAxisDrawK.mX *= 0.5;
-        mAxisOver = 1;
-    }
-    else if (mAxisOY == true && dsty.Length() < mLineSizeWorld * 0.1 &&
-             mCenter.mY < r2.mY &&
-             r2.mY < mCenter.mY + mLineSizeWorld)
-    {
-        mAxisDrawK.mY *= 0.5;
-        mAxisOver = 2;
-    }
-}
 
 } // namespace drash

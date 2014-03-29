@@ -25,16 +25,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRENG_VERTEXSHADER_H
 #define GRENG_VERTEXSHADER_H
 
-namespace greng
-{
+namespace greng {
 
-class CVertexShader : public drash::CObjectFactory<CVertexShader>::CFactoryProduct
-{
-public:
-    CVertexShader() = default;
+    class CVertexShader
+        : public drash::CObjectFactory<CVertexShader>::CFactoryProduct {
+      public:
+        CVertexShader() = default;
 
-    unsigned int mVertexShaderId = 0;
-};
+        unsigned int mVertexShaderId = 0;
+    };
 
 } // namespace greng
 

@@ -26,50 +26,42 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CTIMER_H
 #define CTIMER_H
 
-namespace drash
-{
+namespace drash {
 
-class CLogger;
+    class CLogger;
 
-class CTimer
-{
-public:
-    CTimer();
+    class CTimer {
+      public:
+        CTimer();
 
-    /// if _start is true - automaticly starts timer
-    void Reset( bool _start );
-    /// updates full time and delta time
-    void Tick();
+        /// if _start is true - automaticly starts timer
+        void Reset(bool _start);
+        /// updates full time and delta time
+        void Tick();
 
-    inline void SetPaused( bool _paused );
-    inline bool IsPaused() const;
+        inline void SetPaused(bool _paused);
+        inline bool IsPaused() const;
 
-    /// time (seconds) from mStartTime
-    double GetFullTime() const;
+        /// time (seconds) from mStartTime
+        double GetFullTime() const;
 
-    /// time (seconds) spent between last two Tick() invokations
-    double GetDeltaTime() const;
+        /// time (seconds) spent between last two Tick() invokations
+        double GetDeltaTime() const;
 
-    friend CLogger &operator <<(CLogger &_logger, const CTimer &_timer);
+        friend CLogger &operator<<(CLogger &_logger, const CTimer &_timer);
 
-private:
-    void Update();
+      private:
+        void Update();
 
-    unsigned long mStartTime = 0;
-    unsigned long mPrevTime = 0;
-    unsigned long mCurrTime = 0;
-    bool mPaused = true;
-};
+        unsigned long mStartTime = 0;
+        unsigned long mPrevTime = 0;
+        unsigned long mCurrTime = 0;
+        bool mPaused = true;
+    };
 
-inline void CTimer::SetPaused( bool _paused )
-{
-    mPaused = _paused;
-}
+    inline void CTimer::SetPaused(bool _paused) { mPaused = _paused; }
 
-inline bool CTimer::IsPaused() const
-{
-    return mPaused;
-}
+    inline bool CTimer::IsPaused() const { return mPaused; }
 
 } // namespace drash
 

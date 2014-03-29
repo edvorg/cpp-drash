@@ -28,135 +28,116 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../diag/logger.h"
 #include "../scene/scene.h"
 
-namespace drash
-{
+namespace drash {
 
-CPlayersSystem::CPlayersSystem():
-    mPlayersFactory(mPlayersCountLimit, "CPlayer")
-{
-}
+    CPlayersSystem::CPlayersSystem()
+        : mPlayersFactory(mPlayersCountLimit, "CPlayer") {}
 
-CPlayersSystem::~CPlayersSystem()
-{
-}
+    CPlayersSystem::~CPlayersSystem() {}
 
-bool CPlayersSystem::Init()
-{
-    return true;
-}
+    bool CPlayersSystem::Init() { return true; }
 
-void CPlayersSystem::Step(double)
-{
-}
+    void CPlayersSystem::Step(double) {}
 
-void CPlayersSystem::Release()
-{
-    while (mPlayersFactory.EnumObjects() != 0)
-    {
-        DestroyPlayer(mPlayersFactory.GetObjects()[0]);
-    }
-}
-
-CPlayer *CPlayersSystem::CreatePlayer(const CSceneObjectGeometry &_g, const CPlayerParams &_p)
-{
-    if (GetScene() == nullptr)
-    {
-        LOG_ERR("CPlayersSystem::CreatePlayer(): Scene is not connected");
-        return nullptr;
-    }
-
-    CPlayer *res = mPlayersFactory.CreateObject();
-
-    if (res == nullptr)
-    {
-        return nullptr;
-    }
-
-    res->mSceneObject = GetScene()->CreateObject(_g, _p.mSceneObjectParams);
-
-    if (res->mSceneObject == nullptr)
-    {
-        mPlayersFactory.DestroyObject(res);
-        return nullptr;
-    }
-
-    res->mSceneObject->SetFixedRotation(true);
-    res->mVelocityLimit = _p.mVelocityLimit;
-
-    return res;
-}
-
-bool CPlayersSystem::DestroyPlayer(CPlayer *_player)
-{
-    if (mPlayersFactory.IsObject(_player) == false)
-    {
-        return false;
-    }
-
-    if (GetScene() == nullptr)
-    {
-        LOG_ERR("CPlayersSystem::DestroyPlayer(): Memory leak. Scene disconnected");
-        return false;
-    }
-
-    if (_player->mSceneObject != nullptr)
-    {
-        GetScene()->DestroyObject(_player->mSceneObject);
-    }
-
-    mPlayersFactory.DestroyObject(_player);
-
-    return true;
-}
-
-bool CPlayersSystem::SendMessage(CPlayer *_player, const PlayerMessage &_message)
-{
-    if (mPlayersFactory.IsObject(_player) == false)
-    {
-        LOG_ERR("CPlayersSystem::SendMessage(): Wrong player");
-        return false;
-    }
-
-    switch (_message)
-    {
-    case PlayerMessage::Left:
-        if (_player->GetSceneObject()->GetLinearVelocity().Length() < _player->mVelocityLimit)
-        {
-            _player->GetSceneObject()->ApplyLinearImpulse(CVec2f(-1.0, 0),
-                                                          _player->GetSceneObject()->GetMassCenter());
+    void CPlayersSystem::Release() {
+        while (mPlayersFactory.EnumObjects() != 0) {
+            DestroyPlayer(mPlayersFactory.GetObjects()[0]);
         }
-        break;
-
-    case PlayerMessage::Right:
-        if (_player->GetSceneObject()->GetLinearVelocity().Length() < _player->mVelocityLimit)
-        {
-            _player->GetSceneObject()->ApplyLinearImpulse(CVec2f(1.0, 0),
-                                                          _player->GetSceneObject()->GetMassCenter());
-        }
-        break;
-
-    case PlayerMessage::Deep:
-        _player->GetSceneObject()->GetPosZ().SetTarget(_player->GetSceneObject()->GetPosZ() - 5.0,
-                                                       0.5,
-                                                       AnimatorBehavior::Single);
-        break;
-
-    case PlayerMessage::AntiDeep:
-        _player->GetSceneObject()->GetPosZ().SetTarget(_player->GetSceneObject()->GetPosZ() + 5.0,
-                                                       0.5,
-                                                       AnimatorBehavior::Single);
-        break;
-
-    case PlayerMessage::Jump:
-        _player->GetSceneObject()->ApplyLinearImpulse(CVec2f(0, 0.5),
-                                                      _player->GetSceneObject()->GetMassCenter());
-        break;
-
-    default:
-        break;
     }
 
-    return true;
-}
+    CPlayer *CPlayersSystem::CreatePlayer(const CSceneObjectGeometry &_g,
+                                          const CPlayerParams &_p) {
+        if (GetScene() == nullptr) {
+            LOG_ERR("CPlayersSystem::CreatePlayer(): Scene is not connected");
+            return nullptr;
+        }
 
-}// namespace drash
+        CPlayer *res = mPlayersFactory.CreateObject();
+
+        if (res == nullptr) {
+            return nullptr;
+        }
+
+        res->mSceneObject = GetScene()->CreateObject(_g, _p.mSceneObjectParams);
+
+        if (res->mSceneObject == nullptr) {
+            mPlayersFactory.DestroyObject(res);
+            return nullptr;
+        }
+
+        res->mSceneObject->SetFixedRotation(true);
+        res->mVelocityLimit = _p.mVelocityLimit;
+
+        return res;
+    }
+
+    bool CPlayersSystem::DestroyPlayer(CPlayer *_player) {
+        if (mPlayersFactory.IsObject(_player) == false) {
+            return false;
+        }
+
+        if (GetScene() == nullptr) {
+            LOG_ERR("CPlayersSystem::DestroyPlayer(): Memory leak. Scene "
+                    "disconnected");
+            return false;
+        }
+
+        if (_player->mSceneObject != nullptr) {
+            GetScene()->DestroyObject(_player->mSceneObject);
+        }
+
+        mPlayersFactory.DestroyObject(_player);
+
+        return true;
+    }
+
+    bool CPlayersSystem::SendMessage(CPlayer *_player,
+                                     const PlayerMessage &_message) {
+        if (mPlayersFactory.IsObject(_player) == false) {
+            LOG_ERR("CPlayersSystem::SendMessage(): Wrong player");
+            return false;
+        }
+
+        switch (_message) {
+        case PlayerMessage::Left:
+            if (_player->GetSceneObject()->GetLinearVelocity().Length() <
+                _player->mVelocityLimit) {
+                _player->GetSceneObject()->ApplyLinearImpulse(
+                    CVec2f(-1.0, 0),
+                    _player->GetSceneObject()->GetMassCenter());
+            }
+            break;
+
+        case PlayerMessage::Right:
+            if (_player->GetSceneObject()->GetLinearVelocity().Length() <
+                _player->mVelocityLimit) {
+                _player->GetSceneObject()->ApplyLinearImpulse(
+                    CVec2f(1.0, 0), _player->GetSceneObject()->GetMassCenter());
+            }
+            break;
+
+        case PlayerMessage::Deep:
+            _player->GetSceneObject()->GetPosZ().SetTarget(
+                _player->GetSceneObject()->GetPosZ() - 5.0, 0.5,
+                AnimatorBehavior::Single);
+            break;
+
+        case PlayerMessage::AntiDeep:
+            _player->GetSceneObject()->GetPosZ().SetTarget(
+                _player->GetSceneObject()->GetPosZ() + 5.0, 0.5,
+                AnimatorBehavior::Single);
+            break;
+
+        case PlayerMessage::Jump:
+            _player->GetSceneObject()->ApplyLinearImpulse(
+                CVec2f(0, 0.5), _player->GetSceneObject()->GetMassCenter());
+            break;
+
+        default:
+            break;
+        }
+
+        return true;
+    }
+
+} // namespace drash

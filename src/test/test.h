@@ -25,18 +25,16 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef TEST_H
 #define TEST_H
 
-namespace drash
-{
+namespace drash {
 
-class CApp;
+    class CApp;
 
-namespace test
-{
+    namespace test {
 
-CApp *StartApp(const char *_name);
+        CApp *StartApp(const char *_name);
 
-} // namespace test
+    } // namespace test
 
-}// namespace drash
+} // namespace drash
 
 #endif // TEST_H

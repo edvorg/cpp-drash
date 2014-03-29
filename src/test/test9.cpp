@@ -26,94 +26,73 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../greng/camera.h"
 
-namespace drash
-{
+namespace drash {
 
-namespace test
-{
+    namespace test {
 
-bool CTest9::Init()
-{
-    if (CApp::Init() == false ||
-        InitCamera() == false ||
-        InitLights() == false ||
-        InitRotationablePoint() == false)
-    {
-        return false;
-    }
+        bool CTest9::Init() {
+            if (CApp::Init() == false || InitCamera() == false ||
+                InitLights() == false || InitRotationablePoint() == false) {
+                return false;
+            }
 
-    return true;
-}
+            return true;
+        }
 
-void CTest9::Step(double _dt)
-{
-    CApp::Step(_dt);
+        void CTest9::Step(double _dt) {
+            CApp::Step(_dt);
 
-    mPoint1.SetCursorPos(GetCursorPos());
-    mPoint1.Step(_dt);
-}
+            mPoint1.SetCursorPos(GetCursorPos());
+            mPoint1.Step(_dt);
+        }
 
-void CTest9::Render()
-{
-    CApp::Render();
+        void CTest9::Render() {
+            CApp::Render();
 
-    mPoint1.Render();
-}
+            mPoint1.Render();
+        }
 
-bool CTest9::InitCamera()
-{
-    greng::CCameraParams p;
-    p.mPos.Set(10, 10, 10);
-    p.mFov = M_PI / 6.0;
-    mCamera = GetGrengSystems().GetCameraManager().CreateCamera(p);
-    mCamera->LookAt(CVec3f(0));
+        bool CTest9::InitCamera() {
+            greng::CCameraParams p;
+            p.mPos.Set(10, 10, 10);
+            p.mFov = M_PI / 6.0;
+            mCamera = GetGrengSystems().GetCameraManager().CreateCamera(p);
+            mCamera->LookAt(CVec3f(0));
 
-    if (mCamera == nullptr)
-    {
-        return false;
-    }
+            if (mCamera == nullptr) {
+                return false;
+            }
 
-    GetDebugRenderer().SetCamera(mCamera);
+            GetDebugRenderer().SetCamera(mCamera);
 
-    return true;
-}
+            return true;
+        }
 
-bool CTest9::InitLights()
-{
-    mLight1.mPosition.Set(0, 10, 0);
-    GetDebugRenderer().SetLight(&mLight1);
+        bool CTest9::InitLights() {
+            mLight1.mPosition.Set(0, 10, 0);
+            GetDebugRenderer().SetLight(&mLight1);
 
-    return true;
-}
+            return true;
+        }
 
-bool CTest9::InitRotationablePoint()
-{
-    mPoint1.SetCamera(mCamera);
-    mPoint1.SetRenderer(&GetGrengSystems().GetRenderer());
+        bool CTest9::InitRotationablePoint() {
+            mPoint1.SetCamera(mCamera);
+            mPoint1.SetRenderer(&GetGrengSystems().GetRenderer());
 
-    if (mPoint1.Init() == false)
-    {
-        return false;
-    }
+            if (mPoint1.Init() == false) {
+                return false;
+            }
 
-    mPoint1.SetPoint(CVec3f(0));
+            mPoint1.SetPoint(CVec3f(0));
 
-    GetEventSystem().SetProcessor("LB", CAppEventProcessor(
-    [this] ()
-    {
-        mPoint1.RotateBegin();
-    },
-    [] ()
-    {
-    },
-    [this] ()
-    {
-        mPoint1.RotateEnd();
-    }));
+            GetEventSystem().SetProcessor(
+                "LB",
+                CAppEventProcessor([this]() { mPoint1.RotateBegin(); }, []() {},
+                                   [this]() { mPoint1.RotateEnd(); }));
 
-    return true;
-}
+            return true;
+        }
 
-} // namespace test
+    } // namespace test
 
 } // namespace drash

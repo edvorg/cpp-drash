@@ -25,11 +25,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "dimensions.hpp"
 
 namespace drash {
-    
+
     Dimensions::Dimensions(float newX, float newY, float newRad) {
         x = newX;
         y = newY;
         rad = newRad;
     }
-
 }

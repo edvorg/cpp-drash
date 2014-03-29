@@ -24,22 +24,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ray.h"
 
-namespace drash
-{
+namespace drash {
 
-CRay::CRay()
-{
-}
+    CRay::CRay() {}
 
-void CRay::SetPoint(const CVec3f &_point)
-{
-    mPoint = _point;
-}
+    void CRay::SetPoint(const CVec3f &_point) { mPoint = _point; }
 
-void CRay::SetDirection(const CVec3f &_direction)
-{
-    mDirection = _direction;
-    mDirection.Normalize();
-}
+    void CRay::SetDirection(const CVec3f &_direction) {
+        mDirection = _direction;
+        mDirection.Normalize();
+    }
 
 } // namespace drash

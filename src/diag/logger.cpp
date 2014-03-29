@@ -22,142 +22,114 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
- #include "logger.h"
+#include "logger.h"
 
- #include <iostream>
+#include <iostream>
 
 using namespace std;
 
-namespace drash
-{
+namespace drash {
 
-class GnLogStarter
-{
-public:
-    GnLogStarter()
-    {
-		ofstream out;
-        out.open( "drash.log", ios_base::ate );
-        out.close();
-	}
-} starter;
+    class GnLogStarter {
+      public:
+        GnLogStarter() {
+            ofstream out;
+            out.open("drash.log", ios_base::ate);
+            out.close();
+        }
+    } starter;
 
-std::ostringstream CLogger::mTailStream;
+    std::ostringstream CLogger::mTailStream;
 
-CLogger::CLogger( ostream &_stream ):
-    mStream(_stream)
-{
-    out.open( "./drash.log", ios_base::app );
+    CLogger::CLogger(ostream &_stream) : mStream(_stream) {
+        out.open("./drash.log", ios_base::app);
 
-    mOpened = out.is_open();
+        mOpened = out.is_open();
 
-    mTailStream.str("");
-    mTailStream.clear();
-}
-
-CLogger::~CLogger(void)
-{
-    if ( mOpened == true )
-	{
-		out<<endl;
-        mStream<<endl;
-		out.close();
-	}
-}
-
-CLogger& CLogger::operator<<( char _c )
-{
-    if ( mOpened == true )
-	{
-        out<<_c;
-        mStream<<_c;
-        mTailStream<<_c;
-	}
-	return (*this);
-}
-
-CLogger& CLogger::operator<<( const char* _str )
-{
-    if ( mOpened == true )
-	{
-        out<<_str;
-        mStream<<_str;
-        mTailStream<<_str;
-	}
-	return (*this);
-}
-
-CLogger& CLogger::operator<<( int _v )
-{
-    if ( mOpened == true )
-	{
-        out<<_v;
-        mStream<<_v;
-        mTailStream<<_v;
-	}
-	return (*this);
-}
-
-
-CLogger& CLogger::operator<<( unsigned int _v )
-{
-    if ( mOpened == true )
-	{
-        out<<_v;
-        mStream<<_v;
-        mTailStream<<_v;
+        mTailStream.str("");
+        mTailStream.clear();
     }
-    return (*this);
-}
 
-CLogger& CLogger::operator<<( long _v )
-{
-    if ( mOpened == true )
-    {
-        out<<_v;
-        mStream<<_v;
-        mTailStream<<_v;
+    CLogger::~CLogger(void) {
+        if (mOpened == true) {
+            out << endl;
+            mStream << endl;
+            out.close();
+        }
     }
-    return (*this);
-}
 
-
-CLogger& CLogger::operator<<( unsigned long _v )
-{
-    if ( mOpened == true )
-    {
-        out<<_v;
-        mStream<<_v;
-        mTailStream<<_v;
+    CLogger &CLogger::operator<<(char _c) {
+        if (mOpened == true) {
+            out << _c;
+            mStream << _c;
+            mTailStream << _c;
+        }
+        return (*this);
     }
-    return (*this);
-}
 
-CLogger& CLogger::operator<<( float _v )
-{
-    if ( mOpened == true )
-	{
-        out<<_v;
-        mStream<<_v;
-        mTailStream<<_v;
-	}
-    return (*this);
-}
-
-CLogger &CLogger::operator <<(double _v)
-{
-    if ( mOpened == true )
-    {
-        out<<_v;
-        mStream<<_v;
-        mTailStream<<_v;
+    CLogger &CLogger::operator<<(const char *_str) {
+        if (mOpened == true) {
+            out << _str;
+            mStream << _str;
+            mTailStream << _str;
+        }
+        return (*this);
     }
-    return (*this);
-}
 
-const string CLogger::Tail()
-{
-    return mTailStream.str();
-}
+    CLogger &CLogger::operator<<(int _v) {
+        if (mOpened == true) {
+            out << _v;
+            mStream << _v;
+            mTailStream << _v;
+        }
+        return (*this);
+    }
+
+    CLogger &CLogger::operator<<(unsigned int _v) {
+        if (mOpened == true) {
+            out << _v;
+            mStream << _v;
+            mTailStream << _v;
+        }
+        return (*this);
+    }
+
+    CLogger &CLogger::operator<<(long _v) {
+        if (mOpened == true) {
+            out << _v;
+            mStream << _v;
+            mTailStream << _v;
+        }
+        return (*this);
+    }
+
+    CLogger &CLogger::operator<<(unsigned long _v) {
+        if (mOpened == true) {
+            out << _v;
+            mStream << _v;
+            mTailStream << _v;
+        }
+        return (*this);
+    }
+
+    CLogger &CLogger::operator<<(float _v) {
+        if (mOpened == true) {
+            out << _v;
+            mStream << _v;
+            mTailStream << _v;
+        }
+        return (*this);
+    }
+
+    CLogger &CLogger::operator<<(double _v) {
+        if (mOpened == true) {
+            out << _v;
+            mStream << _v;
+            mTailStream << _v;
+        }
+        return (*this);
+    }
+
+    const string CLogger::Tail() { return mTailStream.str(); }
 
 } // namespace drash

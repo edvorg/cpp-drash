@@ -27,36 +27,35 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../misc/objectfactory.h"
 
-namespace greng
-{
+namespace greng {
 
-class CVertexShader;
-class CFragmentShader;
-class CShaderProgram;
+    class CVertexShader;
+    class CFragmentShader;
+    class CShaderProgram;
 
-class CShaderProgramManager
-{
-public:
-    constexpr static unsigned int mProgramsCountLimit = 32;
+    class CShaderProgramManager {
+      public:
+        constexpr static unsigned int mProgramsCountLimit = 32;
 
-    CShaderProgramManager();
-    CShaderProgramManager(const CShaderProgramManager &) = delete;
-    CShaderProgramManager(CShaderProgramManager &&) = delete;
-    CShaderProgramManager &operator =(const CShaderProgramManager &) = delete;
-    CShaderProgramManager &operator =(CShaderProgramManager &&) = delete;
-    ~CShaderProgramManager();
+        CShaderProgramManager();
+        CShaderProgramManager(const CShaderProgramManager &) = delete;
+        CShaderProgramManager(CShaderProgramManager &&) = delete;
+        CShaderProgramManager &operator=(const CShaderProgramManager &) =
+            delete;
+        CShaderProgramManager &operator=(CShaderProgramManager &&) = delete;
+        ~CShaderProgramManager();
 
-    bool Init();
-    void Release();
+        bool Init();
+        void Release();
 
-    CShaderProgram *CreateProgram();
-    CShaderProgram *CreateProgram(CVertexShader *_vs, CFragmentShader *_fs);
-    bool DestroyProgram(CShaderProgram *_program);
+        CShaderProgram *CreateProgram();
+        CShaderProgram *CreateProgram(CVertexShader *_vs, CFragmentShader *_fs);
+        bool DestroyProgram(CShaderProgram *_program);
 
-protected:
-private:
-    drash::CObjectFactory<CShaderProgram> mProgramFactory;
-};
+      protected:
+      private:
+        drash::CObjectFactory<CShaderProgram> mProgramFactory;
+    };
 
 } // namespace greng
 

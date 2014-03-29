@@ -28,134 +28,122 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "vertexshader.h"
 #include "fragmentshader.h"
 
-namespace greng
-{
+namespace greng {
 
-using drash::CLogger;
+    using drash::CLogger;
 
-CShaderProgramManager::CShaderProgramManager():
-    mProgramFactory(mProgramsCountLimit, "CShaderProgram")
-{
-}
+    CShaderProgramManager::CShaderProgramManager()
+        : mProgramFactory(mProgramsCountLimit, "CShaderProgram") {}
 
-CShaderProgramManager::~CShaderProgramManager()
-{
-    while (mProgramFactory.EnumObjects() != 0)
-    {
-        DestroyProgram(mProgramFactory.GetObjects()[0]);
-    }
-}
-
-bool CShaderProgramManager::Init()
-{
-    Release();
-
-    return true;
-}
-
-void CShaderProgramManager::Release()
-{
-}
-
-CShaderProgram *CShaderProgramManager::CreateProgram()
-{
-    CShaderProgram *res = mProgramFactory.CreateObject();
-
-    if (res == nullptr)
-    {
-        return nullptr;
+    CShaderProgramManager::~CShaderProgramManager() {
+        while (mProgramFactory.EnumObjects() != 0) {
+            DestroyProgram(mProgramFactory.GetObjects()[0]);
+        }
     }
 
-    res->mProgramId = glCreateProgram();
+    bool CShaderProgramManager::Init() {
+        Release();
 
-    if (res->mProgramId == 0)
-    {
-        mProgramFactory.DestroyObject(res);
-        res = nullptr;
+        return true;
     }
 
-    return res;
-}
+    void CShaderProgramManager::Release() {}
 
-CShaderProgram *CShaderProgramManager::CreateProgram(CVertexShader *_vs, CFragmentShader *_fs)
-{
-    if (_vs == nullptr || _fs == nullptr)
-    {
-        return nullptr;
+    CShaderProgram *CShaderProgramManager::CreateProgram() {
+        CShaderProgram *res = mProgramFactory.CreateObject();
+
+        if (res == nullptr) {
+            return nullptr;
+        }
+
+        res->mProgramId = glCreateProgram();
+
+        if (res->mProgramId == 0) {
+            mProgramFactory.DestroyObject(res);
+            res = nullptr;
+        }
+
+        return res;
     }
 
-    CShaderProgram *res = CreateProgram();
+    CShaderProgram *CShaderProgramManager::CreateProgram(CVertexShader *_vs,
+                                                         CFragmentShader *_fs) {
+        if (_vs == nullptr || _fs == nullptr) {
+            return nullptr;
+        }
 
-    if (res == nullptr)
-    {
-        return nullptr;
+        CShaderProgram *res = CreateProgram();
+
+        if (res == nullptr) {
+            return nullptr;
+        }
+
+        glAttachShader(res->mProgramId, _vs->mVertexShaderId);
+        glAttachShader(res->mProgramId, _fs->mVertexShaderId);
+        glLinkProgram(res->mProgramId);
+
+        int status = GL_FALSE;
+
+        glGetProgramiv(res->mProgramId, GL_LINK_STATUS, &status);
+
+        if (status == GL_FALSE) {
+            const int buffer_size = 2048;
+            char buffer[buffer_size];
+            int length = 0;
+
+            glGetProgramInfoLog(res->mProgramId, buffer_size - 1, &length,
+                                buffer);
+
+            LOG_ERR(
+                "CShaderProgramManager::CreateProgram(): glLinkProgram failed");
+            LOG_ERR("Message: " << buffer);
+
+            DestroyProgram(res);
+
+            return nullptr;
+        }
+
+        glUseProgram(res->mProgramId);
+        glValidateProgram(res->mProgramId);
+
+        status = GL_FALSE;
+
+        glGetProgramiv(res->mProgramId, GL_VALIDATE_STATUS, &status);
+
+        if (status == GL_FALSE) {
+            const int buffer_size = 2048;
+            char buffer[buffer_size];
+            int length = 0;
+
+            glGetProgramInfoLog(res->mProgramId, buffer_size - 1, &length,
+                                buffer);
+
+            LOG_ERR("CShaderProgramManager::CreateProgram(): glValidateProgram "
+                    "failed");
+            LOG_ERR("Message: " << buffer);
+
+            DestroyProgram(res);
+
+            return nullptr;
+        }
+
+        glUseProgram(0);
+
+        return res;
     }
 
-    glAttachShader(res->mProgramId, _vs->mVertexShaderId);
-    glAttachShader(res->mProgramId, _fs->mVertexShaderId);
-    glLinkProgram(res->mProgramId);
+    bool CShaderProgramManager::DestroyProgram(CShaderProgram *_program) {
+        if (mProgramFactory.IsObject(_program) == false) {
+            LOG_ERR("CShaderProgramManager::DestroyProgram(): invalid program "
+                    "taken");
+            return false;
+        }
 
-    int status = GL_FALSE;
+        glDeleteProgram(_program->mProgramId);
 
-    glGetProgramiv(res->mProgramId, GL_LINK_STATUS, &status);
+        mProgramFactory.DestroyObject(_program);
 
-    if (status == GL_FALSE)
-    {
-        const int buffer_size = 2048;
-        char buffer[buffer_size];
-        int length = 0;
-
-        glGetProgramInfoLog(res->mProgramId, buffer_size - 1, &length, buffer);
-
-        LOG_ERR("CShaderProgramManager::CreateProgram(): glLinkProgram failed");
-        LOG_ERR("Message: "<<buffer);
-
-        DestroyProgram(res);
-
-        return nullptr;
-    }
-
-    glUseProgram(res->mProgramId);
-    glValidateProgram(res->mProgramId);
-
-    status = GL_FALSE;
-
-    glGetProgramiv(res->mProgramId, GL_VALIDATE_STATUS, &status);
-
-    if (status == GL_FALSE)
-    {
-        const int buffer_size = 2048;
-        char buffer[buffer_size];
-        int length = 0;
-
-        glGetProgramInfoLog(res->mProgramId, buffer_size - 1, &length, buffer);
-
-        LOG_ERR("CShaderProgramManager::CreateProgram(): glValidateProgram failed");
-        LOG_ERR("Message: "<<buffer);
-
-        DestroyProgram(res);
-
-        return nullptr;
-    }
-
-    glUseProgram(0);
-
-    return res;
-}
-
-bool CShaderProgramManager::DestroyProgram(CShaderProgram *_program)
-{
-    if (mProgramFactory.IsObject(_program) == false)
-    {
-        LOG_ERR("CShaderProgramManager::DestroyProgram(): invalid program taken");
         return false;
     }
-
-    glDeleteProgram(_program->mProgramId);
-
-    mProgramFactory.DestroyObject(_program);
-
-    return false;
-}
 
 } // namespace greng

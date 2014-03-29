@@ -30,20 +30,20 @@ namespace drash {
     // TODO extend with more complex dimensions definition (maby by polygons)
     // dimensions definition using object radius
     class Dimensions {
-    public:
+      public:
         Dimensions() = default;
         Dimensions(float newX, float newY, float newRad);
 
-        inline bool Intersect(const Dimensions & another) const;
+        inline bool Intersect(const Dimensions &another) const;
 
-    protected:
-    private:
+      protected:
+      private:
         float x = 0;
         float y = 0;
         float rad = 0;
     };
 
-    inline bool Dimensions::Intersect(const Dimensions & another) const {
+    inline bool Dimensions::Intersect(const Dimensions &another) const {
         float deltax = x - another.x;
         float deltay = y - another.y;
         float rads = rad + another.rad;
@@ -51,4 +51,4 @@ namespace drash {
     }
 }
 
-#endif// DIMENSIONS_HPP
+#endif // DIMENSIONS_HPP

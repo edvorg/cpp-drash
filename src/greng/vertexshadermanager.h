@@ -27,36 +27,34 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../misc/objectfactory.h"
 
-namespace greng
-{
+namespace greng {
 
-class CVertexShader;
+    class CVertexShader;
 
-class CVertexShaderManager
-{
-public:
-    constexpr static unsigned int mShadersCountLimit = 32;
+    class CVertexShaderManager {
+      public:
+        constexpr static unsigned int mShadersCountLimit = 32;
 
-    CVertexShaderManager();
-    CVertexShaderManager(const CVertexShaderManager &) = delete;
-    CVertexShaderManager(CVertexShaderManager &&) = delete;
-    CVertexShaderManager &operator =(const CVertexShaderManager &) = delete;
-    CVertexShaderManager &operator =(CVertexShaderManager &&) = delete;
-    ~CVertexShaderManager();
+        CVertexShaderManager();
+        CVertexShaderManager(const CVertexShaderManager &) = delete;
+        CVertexShaderManager(CVertexShaderManager &&) = delete;
+        CVertexShaderManager &operator=(const CVertexShaderManager &) = delete;
+        CVertexShaderManager &operator=(CVertexShaderManager &&) = delete;
+        ~CVertexShaderManager();
 
-    bool Init();
-    void Release();
+        bool Init();
+        void Release();
 
-    CVertexShader *CreateShader();
-    CVertexShader *CreateShaderDummy();
-    CVertexShader *CreateShaderFromSource(const char *_source);
-    CVertexShader *CreateShaderFromFile(const char *_path);
-    bool DestroyShader(CVertexShader *_shader);
+        CVertexShader *CreateShader();
+        CVertexShader *CreateShaderDummy();
+        CVertexShader *CreateShaderFromSource(const char *_source);
+        CVertexShader *CreateShaderFromFile(const char *_path);
+        bool DestroyShader(CVertexShader *_shader);
 
-protected:
-private:
-    drash::CObjectFactory<CVertexShader> mShaderFactory;
-};
+      protected:
+      private:
+        drash::CObjectFactory<CVertexShader> mShaderFactory;
+    };
 
 } // namespace greng
 

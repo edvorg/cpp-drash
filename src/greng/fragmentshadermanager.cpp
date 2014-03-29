@@ -28,144 +28,130 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstring>
 #include <fstream>
 
-namespace greng
-{
+namespace greng {
 
-using drash::CLogger;
+    using drash::CLogger;
 
-CFragmentShaderManager::CFragmentShaderManager():
-    mShaderFactory(mShadersCountLimit, "CFragmentShader")
-{
-}
+    CFragmentShaderManager::CFragmentShaderManager()
+        : mShaderFactory(mShadersCountLimit, "CFragmentShader") {}
 
-CFragmentShaderManager::~CFragmentShaderManager()
-{
-    while (mShaderFactory.EnumObjects() != 0)
-    {
-        DestroyShader(mShaderFactory.GetObjects()[0]);
-    }
-}
-
-bool CFragmentShaderManager::Init()
-{
-    Release();
-
-    return true;
-}
-
-void CFragmentShaderManager::Release()
-{
-}
-
-CFragmentShader *CFragmentShaderManager::CreateShader()
-{
-    CFragmentShader *res = mShaderFactory.CreateObject();
-
-    if (res == nullptr)
-    {
-        return nullptr;
+    CFragmentShaderManager::~CFragmentShaderManager() {
+        while (mShaderFactory.EnumObjects() != 0) {
+            DestroyShader(mShaderFactory.GetObjects()[0]);
+        }
     }
 
-    res->mVertexShaderId = glCreateShader(GL_FRAGMENT_SHADER);
+    bool CFragmentShaderManager::Init() {
+        Release();
 
-    if (res->mVertexShaderId == 0)
-    {
-        mShaderFactory.DestroyObject(res);
-        return nullptr;
+        return true;
     }
 
-    return res;
-}
+    void CFragmentShaderManager::Release() {}
 
-CFragmentShader *CFragmentShaderManager::CreateShaderDummy()
-{
-    const char *source = "#version 120\n\n"
-    "void main(void)\n"
-    "{\n"
-    "gl_FragColor = vec4(0, 1, 0, 1);\n"
-    "}\n";
+    CFragmentShader *CFragmentShaderManager::CreateShader() {
+        CFragmentShader *res = mShaderFactory.CreateObject();
 
-    return CreateShaderFromSource(source);
-}
+        if (res == nullptr) {
+            return nullptr;
+        }
 
-CFragmentShader *CFragmentShaderManager::CreateShaderFromSource(const char *_source)
-{
-    if (_source == nullptr)
-    {
-        return nullptr;
+        res->mVertexShaderId = glCreateShader(GL_FRAGMENT_SHADER);
+
+        if (res->mVertexShaderId == 0) {
+            mShaderFactory.DestroyObject(res);
+            return nullptr;
+        }
+
+        return res;
     }
 
-    CFragmentShader *res = CreateShader();
+    CFragmentShader *CFragmentShaderManager::CreateShaderDummy() {
+        const char *source = "#version 120\n\n"
+                             "void main(void)\n"
+                             "{\n"
+                             "gl_FragColor = vec4(0, 1, 0, 1);\n"
+                             "}\n";
 
-    if (res == nullptr)
-    {
-        return nullptr;
+        return CreateShaderFromSource(source);
     }
 
-    int len = strlen(_source);
+    CFragmentShader *
+    CFragmentShaderManager::CreateShaderFromSource(const char *_source) {
+        if (_source == nullptr) {
+            return nullptr;
+        }
 
-    glShaderSource(res->mVertexShaderId, 1, &_source, &len);
+        CFragmentShader *res = CreateShader();
 
-    glCompileShader(res->mVertexShaderId);
+        if (res == nullptr) {
+            return nullptr;
+        }
 
-    int status = GL_FALSE;
+        int len = strlen(_source);
 
-    glGetShaderiv(res->mVertexShaderId, GL_COMPILE_STATUS, &status);
+        glShaderSource(res->mVertexShaderId, 1, &_source, &len);
 
-    if (status == GL_FALSE)
-    {
-        const int buffer_size = 2048;
-        char buffer[buffer_size];
-        int length = 0;
+        glCompileShader(res->mVertexShaderId);
 
-        glGetShaderInfoLog(res->mVertexShaderId, buffer_size - 1, &length, buffer);
+        int status = GL_FALSE;
 
-        LOG_ERR("CFragmentShaderManager::CreateShaderFromSource(): glCompileShader failed");
-        LOG_ERR("Message: "<<buffer);
+        glGetShaderiv(res->mVertexShaderId, GL_COMPILE_STATUS, &status);
 
-        DestroyShader(res);
-        res = nullptr;
+        if (status == GL_FALSE) {
+            const int buffer_size = 2048;
+            char buffer[buffer_size];
+            int length = 0;
+
+            glGetShaderInfoLog(res->mVertexShaderId, buffer_size - 1, &length,
+                               buffer);
+
+            LOG_ERR("CFragmentShaderManager::CreateShaderFromSource(): "
+                    "glCompileShader failed");
+            LOG_ERR("Message: " << buffer);
+
+            DestroyShader(res);
+            res = nullptr;
+        }
+
+        return res;
     }
 
-    return res;
-}
+    CFragmentShader *
+    CFragmentShaderManager::CreateShaderFromFile(const char *_path) {
+        if (_path == nullptr) {
+            return nullptr;
+        }
 
-CFragmentShader *CFragmentShaderManager::CreateShaderFromFile(const char *_path)
-{
-    if (_path == nullptr)
-    {
-        return nullptr;
+        std::ifstream in(_path);
+
+        if (in.is_open() == false) {
+            LOG_ERR("CFragmentShaderManager::CreateShaderFromFile(): unable to "
+                    "load fragment shader \""
+                    << _path << "\"");
+            return nullptr;
+        }
+
+        const unsigned int buffer_size = 4096;
+        char buffer[buffer_size] = "";
+        in.read(buffer, buffer_size - 1);
+
+        return CreateShaderFromSource(buffer);
     }
 
-    std::ifstream in(_path);
+    bool CFragmentShaderManager::DestroyShader(CFragmentShader *_shader) {
+        if (mShaderFactory.IsObject(_shader) == false) {
+            LOG_ERR("CFragmentShaderManager::DestroyShader(): invalid shader "
+                    "taken");
+            return false;
+        }
 
-    if (in.is_open() == false)
-    {
-        LOG_ERR("CFragmentShaderManager::CreateShaderFromFile(): unable to load fragment shader \""<<_path<<"\"");
-        return nullptr;
+        glDeleteShader(_shader->mVertexShaderId);
+        _shader->mVertexShaderId = 0;
+
+        mShaderFactory.DestroyObject(_shader);
+
+        return true;
     }
-
-    const unsigned int buffer_size = 4096;
-    char buffer[buffer_size] = "";
-    in.read(buffer, buffer_size - 1);
-
-    return CreateShaderFromSource(buffer);
-}
-
-bool CFragmentShaderManager::DestroyShader(CFragmentShader *_shader)
-{
-    if (mShaderFactory.IsObject(_shader) == false)
-    {
-        LOG_ERR("CFragmentShaderManager::DestroyShader(): invalid shader taken");
-        return false;
-    }
-
-    glDeleteShader(_shader->mVertexShaderId);
-    _shader->mVertexShaderId = 0;
-
-    mShaderFactory.DestroyObject(_shader);
-
-    return true;
-}
 
 } // namespace greng

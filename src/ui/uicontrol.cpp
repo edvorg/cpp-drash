@@ -24,12 +24,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "uicontrol.h"
 
-namespace drash
-{
+namespace drash {
 
-namespace ui
-{
-
-} // namepsace ui
+    namespace ui {} // namepsace ui
 
 } // namespace drash

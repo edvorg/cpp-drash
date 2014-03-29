@@ -25,16 +25,14 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRENG_POINTLIGHT_H
 #define GRENG_POINTLIGHT_H
 
-namespace greng
-{
+namespace greng {
 
-class CPointLight
-{
-public:
-    CPointLight() = default;
+    class CPointLight {
+      public:
+        CPointLight() = default;
 
-    drash::CVec3f mPosition = 0;
-};
+        drash::CVec3f mPosition = 0;
+    };
 
 } // namespace greng
 

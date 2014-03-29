@@ -29,121 +29,93 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../misc/color4.h"
 #include <vector>
 
-namespace drash
-{
+namespace drash {
 
-class CMatrix4f;
-
+    class CMatrix4f;
 }
 
-namespace greng
-{
+namespace greng {
 
-class CCamera;
-class CMesh;
-class CTexture;
-class CShaderProgram;
-class CPointLight;
-class CSpotLight;
+    class CCamera;
+    class CMesh;
+    class CTexture;
+    class CShaderProgram;
+    class CPointLight;
+    class CSpotLight;
 
-using drash::CVec2f;
-using drash::CVec3f;
-using drash::CColor4f;
+    using drash::CVec2f;
+    using drash::CVec3f;
+    using drash::CColor4f;
 
-class CRenderer
-{
-public:
-    CRenderer() = default;
-    CRenderer(const CRenderer &) = delete;
-    CRenderer(CRenderer &&) = delete;
-    CRenderer &operator =(const CRenderer &) = delete;
-    CRenderer &operator =(CRenderer &&) = delete;
-    ~CRenderer() = default;
+    class CRenderer {
+      public:
+        CRenderer() = default;
+        CRenderer(const CRenderer &) = delete;
+        CRenderer(CRenderer &&) = delete;
+        CRenderer &operator=(const CRenderer &) = delete;
+        CRenderer &operator=(CRenderer &&) = delete;
+        ~CRenderer() = default;
 
-    bool Init();
-    void Release();
+        bool Init();
+        void Release();
 
-    void RenderMesh(const CMesh *_mesh,
-                    unsigned int _submesh,
-                    const CTexture * const *_textures, unsigned int _textures_count,
-                    const CShaderProgram *_program,
-                    const drash::CMatrix4f *_model,
-                    const drash::CMatrix4f *_view,
-                    const drash::CMatrix4f *_model_view,
-                    const drash::CMatrix4f *_proj_matrix,
-                    const CPointLight *_light,
-                    const CSpotLight *_spot_light = nullptr,
-                    const CVec3f *_view_pos = nullptr);
+        void RenderMesh(
+            const CMesh *_mesh, unsigned int _submesh,
+            const CTexture *const *_textures, unsigned int _textures_count,
+            const CShaderProgram *_program, const drash::CMatrix4f *_model,
+            const drash::CMatrix4f *_view, const drash::CMatrix4f *_model_view,
+            const drash::CMatrix4f *_proj_matrix, const CPointLight *_light,
+            const CSpotLight *_spot_light = nullptr,
+            const CVec3f *_view_pos = nullptr);
 
-    /// draws triangle giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) and color
-    void DrawTriangle(const CVec2f &_p1,
-                      const CVec2f &_p2,
-                      const CVec2f &_p3,
-                      const CColor4f &_col,
-                      bool _depth_test = false) const;
+        /// draws triangle giving screen space coordinates (-0.5,-0.5)..(0.5,
+        /// 0.5) and color
+        void DrawTriangle(const CVec2f &_p1, const CVec2f &_p2,
+                          const CVec2f &_p3, const CColor4f &_col,
+                          bool _depth_test = false) const;
 
-    /// draws line giving world space coordinates and color
-    void DrawTriangle(const CCamera *_camera,
-                      const CVec3f &_p1,
-                      const CVec3f &_p2,
-                      const CVec3f &_p3,
-                      const CColor4f &_col,
+        /// draws line giving world space coordinates and color
+        void DrawTriangle(const CCamera *_camera, const CVec3f &_p1,
+                          const CVec3f &_p2, const CVec3f &_p3,
+                          const CColor4f &_col, bool _depth_test = true) const;
+
+        /// draws line giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
+        /// start and end points
+        /// and color
+        void DrawLine(const CVec2f &_p1, const CVec2f &_p2, float _width,
+                      const CColor4f &_col, bool _depth_test = false) const;
+
+        /// draws line giving world space coordinates start and end points
+        /// and color
+        void DrawLine(const CCamera *_camera, const CVec3f &_p1,
+                      const CVec3f &_p2, float _width, const CColor4f &_col,
                       bool _depth_test = true) const;
 
-    /// draws line giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) start and end points
-    /// and color
-    void DrawLine(const CVec2f &_p1,
-                  const CVec2f &_p2,
-                  float _width,
-                  const CColor4f &_col,
-                  bool _depth_test = false) const;
+        /// draws lines giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
+        /// and color
+        void DrawLines(const std::vector<CVec2f> &lines, float _width,
+                       const CColor4f &_col, bool _depth_test = false) const;
 
-    /// draws line giving world space coordinates start and end points
-    /// and color
-    void DrawLine(const CCamera *_camera,
-                  const CVec3f &_p1,
-                  const CVec3f &_p2,
-                  float _width,
-                  const CColor4f &_col,
-                  bool _depth_test = true) const;
+        /// draws lines giving world space coordinates
+        /// and color
+        void DrawLines(const CCamera *_camera, const std::vector<CVec3f> &lines,
+                       float _width, const CColor4f &_col,
+                       bool _depth_test = true) const;
 
-    /// draws lines giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) 
-    /// and color
-    void DrawLines(const std::vector<CVec2f> &lines,
-                   float _width,
-                   const CColor4f &_col,
-                   bool _depth_test = false) const;
+        /// draws point giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
+        void DrawPoint(const CVec2f &_p, float _size, const CColor4f &_col,
+                       bool _depth_test = false) const;
 
-    /// draws lines giving world space coordinates 
-    /// and color
-    void DrawLines(const CCamera *_camera,
-                   const std::vector<CVec3f> &lines,
-                   float _width,
-                   const CColor4f &_col,
-                   bool _depth_test = true) const;
+        /// draws point giving world space coordinates
+        void DrawPoint(const CCamera *_camera, const CVec3f &_p, float _size,
+                       const CColor4f &_col, bool _depth_test = true) const;
 
-    /// draws point giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
-    void DrawPoint(const CVec2f &_p,
-                   float _size,
-                   const CColor4f &_col,
-                   bool _depth_test = false) const;
+        void DrawDigit(const CVec2f &_pos, const CVec2f &_size,
+                       unsigned int _digit);
 
-    /// draws point giving world space coordinates
-    void DrawPoint(const CCamera *_camera,
-                   const CVec3f &_p,
-                   float _size,
-                   const CColor4f &_col,
-                   bool _depth_test = true) const;
-
-    void DrawDigit(const CVec2f& _pos,
-                   const CVec2f& _size,
-                   unsigned int _digit);
-    
-    void DrawNumber(bool fromLeft,
-                    const CVec2f& _pos,
-                    const CVec2f& _size,
-                    unsigned int number);
-};
+        void DrawNumber(bool fromLeft, const CVec2f &_pos, const CVec2f &_size,
+                        unsigned int number);
+    };
 
 } // namespace greng
 

@@ -31,89 +31,76 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 class b2Fixture;
 
-namespace drash
-{
+namespace drash {
 
-class CSceneObject;
+    class CSceneObject;
 
-class CFigureParams
-{
-public:
-    CFigureParams();
+    class CFigureParams {
+      public:
+        CFigureParams();
 
-    float mFriction = 1;
-    float mRestitution = 0;
-    float mMass = 1;
+        float mFriction = 1;
+        float mRestitution = 0;
+        float mMass = 1;
 
-    /// if size of mVertices is nullptr, creates a box with (1, 1) dimentions
-    std::vector<CVec2f> mVertices;
+        /// if size of mVertices is nullptr, creates a box with (1, 1)
+        /// dimentions
+        std::vector<CVec2f> mVertices;
 
-    float mDepth = 1;
-    float mZ = 0;
-};
+        float mDepth = 1;
+        float mZ = 0;
+    };
 
-class CFigure
-{
-public:
-    friend class CScene;
-    friend class CSceneObject;
+    class CFigure {
+      public:
+        friend class CScene;
+        friend class CSceneObject;
 
-    CSceneObject *GetSceneObject() const;
+        CSceneObject *GetSceneObject() const;
 
-    void SetVertices(const CVec2f *_vertices, unsigned int _count);
-    const CVec2f *GetVertices() const;
-    unsigned int EnumVertices() const;
+        void SetVertices(const CVec2f *_vertices, unsigned int _count);
+        const CVec2f *GetVertices() const;
+        unsigned int EnumVertices() const;
 
-    inline float GetZ() const;
-    inline void SetZ(float _z);
-    inline float GetDepth() const;
-    inline void SetDepth(float _depth);
-    float GetFriction()const;
-    friend CLogger &operator <<(CLogger &_logger, const CFigure &_figure);
+        inline float GetZ() const;
+        inline void SetZ(float _z);
+        inline float GetDepth() const;
+        inline void SetDepth(float _depth);
+        float GetFriction() const;
+        friend CLogger &operator<<(CLogger &_logger, const CFigure &_figure);
 
-    bool TestPoint(const CVec2f &_xy) const;
+        bool TestPoint(const CVec2f &_xy) const;
 
-    inline void AddDestroyHandler(const std::function<void (CFigure *)> & _handler);
+        inline void
+        AddDestroyHandler(const std::function<void(CFigure *)> &_handler);
 
-protected:
-private:
-    CFigure() = default;
+      protected:
+      private:
+        CFigure() = default;
 
-    b2Fixture *mFixture = nullptr;
-    float mZ = 0;
-    float mDepth = 1;
-    float mMass = 1;
-    int mInternalId = -1;
-    bool mDead = false;
+        b2Fixture *mFixture = nullptr;
+        float mZ = 0;
+        float mDepth = 1;
+        float mMass = 1;
+        int mInternalId = -1;
+        bool mDead = false;
 
-    std::vector<std::function<void (CFigure *)>> mDestroyHandlers;
-};
+        std::vector<std::function<void(CFigure *)> > mDestroyHandlers;
+    };
 
-inline float CFigure::GetZ() const
-{
-    return mZ;
-}
+    inline float CFigure::GetZ() const { return mZ; }
 
-inline void CFigure::SetZ(float _z)
-{
-    mZ = _z;
-}
+    inline void CFigure::SetZ(float _z) { mZ = _z; }
 
-inline float CFigure::GetDepth() const
-{
-    return mDepth;
-}
+    inline float CFigure::GetDepth() const { return mDepth; }
 
-inline void CFigure::SetDepth(float _depth)
-{
-    mDepth = _depth;
-}
+    inline void CFigure::SetDepth(float _depth) { mDepth = _depth; }
 
-inline void CFigure::AddDestroyHandler(const std::function<void (CFigure *)> & _handler)
-{
-    mDestroyHandlers.push_back(_handler);
-}
+    inline void
+    CFigure::AddDestroyHandler(const std::function<void(CFigure *)> &_handler) {
+        mDestroyHandlers.push_back(_handler);
+    }
 
-}// namespace drash
+} // namespace drash
 
 #endif // FIGURE_H

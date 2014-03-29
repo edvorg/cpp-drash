@@ -26,77 +26,61 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "sceneobject.h"
 #include <Box2D/Box2D.h>
 
-namespace drash
-{
+namespace drash {
 
-CFigureParams::CFigureParams()
-{
-}
+    CFigureParams::CFigureParams() {}
 
-CSceneObject *CFigure::GetSceneObject() const
-{
-    return static_cast<CSceneObject*>(mFixture->GetBody()->GetUserData());
-}
-
-void CFigure::SetVertices(const CVec2f *_vertices, unsigned int _count)
-{
-    if (mFixture == nullptr ||
-        mFixture->GetShape() == nullptr ||
-        mFixture->GetShape()->GetType() != b2Shape::e_polygon)
-    {
-        return;
+    CSceneObject *CFigure::GetSceneObject() const {
+        return static_cast<CSceneObject *>(mFixture->GetBody()->GetUserData());
     }
 
-    static_cast<b2PolygonShape*>(mFixture->GetShape())->Set(&CVec2ToB2Vec2(*_vertices), _count);
-    mFixture->GetBody()->ResetMassData();
-}
-
-const CVec2f *CFigure::GetVertices() const
-{
-    if (mFixture == nullptr ||
-        mFixture->GetShape() == nullptr ||
-        mFixture->GetShape()->GetType() != b2Shape::e_polygon)
-    {
-        return nullptr;
-    }
-
-    return &B2Vec2ToCVec2(*static_cast<b2PolygonShape*>(mFixture->GetShape())->m_vertices);
-}
-
-unsigned int CFigure::EnumVertices() const
-{
-    if (mFixture == nullptr ||
-        mFixture->GetShape() == nullptr ||
-        mFixture->GetShape()->GetType() != b2Shape::e_polygon)
-    {
-        return 0;
-    }
-
-    return static_cast<b2PolygonShape*>(mFixture->GetShape())->GetVertexCount();
-}
-
-float CFigure::GetFriction() const
-{
-    return mFixture->GetFriction();
-}
-
-CLogger &operator <<(CLogger &_logger, const CFigure &_figure)
-{
-    if (_figure.EnumVertices())
-    {
-        _logger<<'{';
-        for (unsigned int i = 0; i < _figure.EnumVertices(); i++)
-        {
-            _logger<<_figure.GetVertices()[i]<<' ';
+    void CFigure::SetVertices(const CVec2f *_vertices, unsigned int _count) {
+        if (mFixture == nullptr || mFixture->GetShape() == nullptr ||
+            mFixture->GetShape()->GetType() != b2Shape::e_polygon) {
+            return;
         }
-        _logger<<"} depth: "<<_figure.mDepth<<" local_z: "<<_figure.mZ;
+
+        static_cast<b2PolygonShape *>(mFixture->GetShape())
+            ->Set(&CVec2ToB2Vec2(*_vertices), _count);
+        mFixture->GetBody()->ResetMassData();
     }
-    return _logger;
-}
 
-bool CFigure::TestPoint(const CVec2f &_xy) const
-{
-    return mFixture->TestPoint(CVec2ToB2Vec2(_xy));
-}
+    const CVec2f *CFigure::GetVertices() const {
+        if (mFixture == nullptr || mFixture->GetShape() == nullptr ||
+            mFixture->GetShape()->GetType() != b2Shape::e_polygon) {
+            return nullptr;
+        }
 
-}// namespace drash
+        return &B2Vec2ToCVec2(*static_cast<b2PolygonShape *>(
+                                   mFixture->GetShape())->m_vertices);
+    }
+
+    unsigned int CFigure::EnumVertices() const {
+        if (mFixture == nullptr || mFixture->GetShape() == nullptr ||
+            mFixture->GetShape()->GetType() != b2Shape::e_polygon) {
+            return 0;
+        }
+
+        return static_cast<b2PolygonShape *>(mFixture->GetShape())
+            ->GetVertexCount();
+    }
+
+    float CFigure::GetFriction() const { return mFixture->GetFriction(); }
+
+    CLogger &operator<<(CLogger &_logger, const CFigure &_figure) {
+        if (_figure.EnumVertices()) {
+            _logger << '{';
+            for (unsigned int i = 0; i < _figure.EnumVertices(); i++) {
+                _logger << _figure.GetVertices()[i] << ' ';
+            }
+            _logger << "} depth: " << _figure.mDepth
+                    << " local_z: " << _figure.mZ;
+        }
+        return _logger;
+    }
+
+    bool CFigure::TestPoint(const CVec2f &_xy) const {
+        return mFixture->TestPoint(CVec2ToB2Vec2(_xy));
+    }
+
+} // namespace drash

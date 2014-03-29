@@ -25,16 +25,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRENG_SHADERPROGRAM_H
 #define GRENG_SHADERPROGRAM_H
 
-namespace greng
-{
+namespace greng {
 
-class CShaderProgram : public drash::CObjectFactory<CShaderProgram>::CFactoryProduct
-{
-public:
-    CShaderProgram() = default;
+    class CShaderProgram
+        : public drash::CObjectFactory<CShaderProgram>::CFactoryProduct {
+      public:
+        CShaderProgram() = default;
 
-    unsigned int mProgramId = 0;
-};
+        unsigned int mProgramId = 0;
+    };
 
 } // namespace greng
 

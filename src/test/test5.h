@@ -29,65 +29,62 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/pointlight.h"
 #include "../misc/matrix4.h"
 
-namespace drash
-{
+namespace drash {
 
-namespace test
-{
+    namespace test {
 
-class CTest5 : public CTest3
-{
-public:
-    CTest5() = default;
+        class CTest5 : public CTest3 {
+          public:
+            CTest5() = default;
 
-protected:
-    virtual bool Init() override;
-    virtual void Step(double _dt) override;
-    virtual void Render() override;
+          protected:
+            virtual bool Init() override;
+            virtual void Step(double _dt) override;
+            virtual void Render() override;
 
-protected:
-private:
-    void SetupMeshes();
-    void SetupTextures();
-    void SetupShaders();
-    void SetupProcessors();
-    void SetupLights();
+          protected:
+          private:
+            void SetupMeshes();
+            void SetupTextures();
+            void SetupShaders();
+            void SetupProcessors();
+            void SetupLights();
 
-    greng::CMesh *mMesh1 = nullptr;
-    greng::CMesh *mMesh2 = nullptr;
-    greng::CMesh *mMesh3 = nullptr;
-    greng::CMesh *mMesh4 = nullptr;
-    CMatrix4f mMesh3ConstMatrix;
-    greng::CTexture *mTex1 = nullptr;
-    greng::CTexture *mTex2 = nullptr;
-    greng::CTexture *mTex3 = nullptr;
-    greng::CTexture *mTex3normal = nullptr;
-    greng::CTexture *mTex4 = nullptr;
-    greng::CTexture *mTex4normal = nullptr;
-    greng::CTexture *mTex5 = nullptr;
-    greng::CTexture *mTex5normal = nullptr;
-    greng::CTexture *mTex6 = nullptr;
-    greng::CTexture *mTex7 = nullptr;
-    greng::CTexture *mTex7normal = nullptr;
-    greng::CVertexShader *mVertexShader1 = nullptr;
-    greng::CFragmentShader *mFragmentShader1 = nullptr;
-    greng::CShaderProgram *mShaderProgram1 = nullptr;
-    greng::CVertexShader *mVertexShader2 = nullptr;
-    greng::CFragmentShader *mFragmentShader2 = nullptr;
-    greng::CShaderProgram *mShaderProgram2 = nullptr;
-    greng::CVertexShader *mVertexShader3 = nullptr;
-    greng::CFragmentShader *mFragmentShader3 = nullptr;
-    greng::CShaderProgram *mShaderProgram3 = nullptr;
-    greng::CVertexShader *mVertexShader4 = nullptr;
-    greng::CFragmentShader *mFragmentShader4 = nullptr;
-    greng::CShaderProgram *mShaderProgram4 = nullptr;
+            greng::CMesh *mMesh1 = nullptr;
+            greng::CMesh *mMesh2 = nullptr;
+            greng::CMesh *mMesh3 = nullptr;
+            greng::CMesh *mMesh4 = nullptr;
+            CMatrix4f mMesh3ConstMatrix;
+            greng::CTexture *mTex1 = nullptr;
+            greng::CTexture *mTex2 = nullptr;
+            greng::CTexture *mTex3 = nullptr;
+            greng::CTexture *mTex3normal = nullptr;
+            greng::CTexture *mTex4 = nullptr;
+            greng::CTexture *mTex4normal = nullptr;
+            greng::CTexture *mTex5 = nullptr;
+            greng::CTexture *mTex5normal = nullptr;
+            greng::CTexture *mTex6 = nullptr;
+            greng::CTexture *mTex7 = nullptr;
+            greng::CTexture *mTex7normal = nullptr;
+            greng::CVertexShader *mVertexShader1 = nullptr;
+            greng::CFragmentShader *mFragmentShader1 = nullptr;
+            greng::CShaderProgram *mShaderProgram1 = nullptr;
+            greng::CVertexShader *mVertexShader2 = nullptr;
+            greng::CFragmentShader *mFragmentShader2 = nullptr;
+            greng::CShaderProgram *mShaderProgram2 = nullptr;
+            greng::CVertexShader *mVertexShader3 = nullptr;
+            greng::CFragmentShader *mFragmentShader3 = nullptr;
+            greng::CShaderProgram *mShaderProgram3 = nullptr;
+            greng::CVertexShader *mVertexShader4 = nullptr;
+            greng::CFragmentShader *mFragmentShader4 = nullptr;
+            greng::CShaderProgram *mShaderProgram4 = nullptr;
 
-    double mAngle = 0.0;
+            double mAngle = 0.0;
 
-    greng::CPointLight mLight1;
-};
+            greng::CPointLight mLight1;
+        };
 
-} // namespace test
+    } // namespace test
 
 } // namespace drash
 

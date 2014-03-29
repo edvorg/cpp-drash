@@ -31,36 +31,33 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../ui/uislider.h"
 #include "../ui/uibutton.h"
 
-namespace drash
-{
+namespace drash {
 
-namespace test
-{
+    namespace test {
 
-class CTest3 : public CTest1
-{
-public:
-    CTest3() = default;
+        class CTest3 : public CTest1 {
+          public:
+            CTest3() = default;
 
-protected:
-    virtual bool Init() override;
-    virtual void Step(double _dt) override;
-    virtual void Render() override;
+          protected:
+            virtual bool Init() override;
+            virtual void Step(double _dt) override;
+            virtual void Render() override;
 
-private:
-    void SetProcessors();
-    void InitObjects();
-    CSceneObject *mMoveObject = nullptr;
+          private:
+            void SetProcessors();
+            void InitObjects();
+            CSceneObject *mMoveObject = nullptr;
 
-    // gravity in y axis
-    ui::CUISlider mSlider1;
-    // gravity in x axis
-    ui::CUISlider mSlider2;
+            // gravity in y axis
+            ui::CUISlider mSlider1;
+            // gravity in x axis
+            ui::CUISlider mSlider2;
 
-    greng::CPointLight mLight1;
-};
+            greng::CPointLight mLight1;
+        };
 
-} // namespace test
+    } // namespace test
 
 } // namespace drash
 

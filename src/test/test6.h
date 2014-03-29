@@ -28,51 +28,48 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "test1.h"
 #include "../greng/pointlight.h"
 
-namespace drash
-{
+namespace drash {
 
-namespace test
-{
+    namespace test {
 
-class CTest6 : public CTest1
-{
-public:
-    CTest6() = default;
+        class CTest6 : public CTest1 {
+          public:
+            CTest6() = default;
 
-protected:
-    virtual bool Init() override;
-    virtual void Step(double _dt) override;
-    virtual void Render() override;
+          protected:
+            virtual bool Init() override;
+            virtual void Step(double _dt) override;
+            virtual void Render() override;
 
-private:
-    bool InitCamera();
-    bool InitLevel();
-    bool InitPlayer();
-    bool InitLight();
-    bool InitProcessors();
-    bool InitTarget();
+          private:
+            bool InitCamera();
+            bool InitLevel();
+            bool InitPlayer();
+            bool InitLight();
+            bool InitProcessors();
+            bool InitTarget();
 
-    CPlayer *mPlayer1 = nullptr;
-    greng::CMesh *mPlayer1Mesh = nullptr;
-    greng::CTexture *mPlayer1Texture = nullptr;
-    greng::CVertexShader *mPlayer1VertexShader = nullptr;
-    greng::CFragmentShader *mPlayer1FragmentShader = nullptr;
-    greng::CShaderProgram * mPlayer1ShaderProgram = nullptr;
-    CVec2f mPlayer1MeshDir = CVec2f(1, 0);
-    CVec3f mPlayer1OldPos;
+            CPlayer *mPlayer1 = nullptr;
+            greng::CMesh *mPlayer1Mesh = nullptr;
+            greng::CTexture *mPlayer1Texture = nullptr;
+            greng::CVertexShader *mPlayer1VertexShader = nullptr;
+            greng::CFragmentShader *mPlayer1FragmentShader = nullptr;
+            greng::CShaderProgram *mPlayer1ShaderProgram = nullptr;
+            CVec2f mPlayer1MeshDir = CVec2f(1, 0);
+            CVec3f mPlayer1OldPos;
 
-    float mAngle = 0;
+            float mAngle = 0;
 
-    bool mFollowPlayer = true;
+            bool mFollowPlayer = true;
 
-    float mTargetCreateTimer = 0;
-    bool mTargetDestroyed = true;
-    CSceneObjectGeometry * mTargetGeometry = nullptr;
+            float mTargetCreateTimer = 0;
+            bool mTargetDestroyed = true;
+            CSceneObjectGeometry *mTargetGeometry = nullptr;
 
-    greng::CPointLight mLight1;
-};
+            greng::CPointLight mLight1;
+        };
 
-} // namespace test
+    } // namespace test
 } // namespace drash
 
 #endif // DRASH_TEST_TEST6_H

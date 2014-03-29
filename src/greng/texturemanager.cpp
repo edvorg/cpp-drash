@@ -29,158 +29,135 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <SDL/SDL_image.h>
 #include "../misc/color4.h"
 
-namespace greng
-{
+namespace greng {
 
-using drash::CLogger;
+    using drash::CLogger;
 
-CTextureManager::CTextureManager():
-    mTextureFactory(mTexturesCountLimit, "CTexture")
-{
-}
+    CTextureManager::CTextureManager()
+        : mTextureFactory(mTexturesCountLimit, "CTexture") {}
 
-CTextureManager::~CTextureManager()
-{
-    while (mTextureFactory.EnumObjects() != 0)
-    {
-        DestroyTexture(mTextureFactory.GetObjects()[0]);
-    }
-}
-
-bool CTextureManager::Init()
-{
-    Release();
-
-    return true;
-}
-
-void CTextureManager::Release()
-{
-}
-
-CTexture *CTextureManager::CreateTexture()
-{    
-    CTexture *res = mTextureFactory.CreateObject();
-
-    if (res == nullptr)
-    {
-        return nullptr;
+    CTextureManager::~CTextureManager() {
+        while (mTextureFactory.EnumObjects() != 0) {
+            DestroyTexture(mTextureFactory.GetObjects()[0]);
+        }
     }
 
-    glGenTextures(1, &res->mTextureBufferId);
+    bool CTextureManager::Init() {
+        Release();
 
-    if (res->mTextureBufferId == 0)
-    {
-        mTextureFactory.DestroyObject(res);
-        res = nullptr;
+        return true;
     }
 
-    return res;
-}
+    void CTextureManager::Release() {}
 
-CTexture *CTextureManager::CreateTextureFromFile(const char *_path)
-{
-    CTexture *res = CreateTexture();
+    CTexture *CTextureManager::CreateTexture() {
+        CTexture *res = mTextureFactory.CreateObject();
 
-    if (res == nullptr)
-    {
-        return nullptr;
+        if (res == nullptr) {
+            return nullptr;
+        }
+
+        glGenTextures(1, &res->mTextureBufferId);
+
+        if (res->mTextureBufferId == 0) {
+            mTextureFactory.DestroyObject(res);
+            res = nullptr;
+        }
+
+        return res;
     }
 
-    SDL_Surface *s = IMG_Load(_path);
+    CTexture *CTextureManager::CreateTextureFromFile(const char *_path) {
+        CTexture *res = CreateTexture();
 
-    if (s == nullptr)
-    {
-        LOG_ERR("CTextureManager::CreateTextureFromFile(): unable to load texture \""<<_path<<"\"");
-        DestroyTexture(res);
-        return nullptr;
+        if (res == nullptr) {
+            return nullptr;
+        }
+
+        SDL_Surface *s = IMG_Load(_path);
+
+        if (s == nullptr) {
+            LOG_ERR("CTextureManager::CreateTextureFromFile(): unable to load "
+                    "texture \""
+                    << _path << "\"");
+            DestroyTexture(res);
+            return nullptr;
+        }
+
+        unsigned int comps_count =
+            (s->format->Rmask ? 1 : 0) + (s->format->Gmask ? 1 : 0) +
+            (s->format->Bmask ? 1 : 0) + (s->format->Amask ? 1 : 0);
+
+        glBindTexture(GL_TEXTURE_2D, res->mTextureBufferId);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, comps_count, s->w, s->h, 0,
+                     comps_count == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
+                     s->pixels);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        SDL_FreeSurface(s);
+
+        return res;
     }
 
-    unsigned int comps_count = (s->format->Rmask ? 1 : 0) +
-                               (s->format->Gmask ? 1 : 0) +
-                               (s->format->Bmask ? 1 : 0) +
-                               (s->format->Amask ? 1 : 0);
+    CTexture *CTextureManager::CreateTextureDummy() {
+        CTexture *res = CreateTexture();
 
-    glBindTexture(GL_TEXTURE_2D, res->mTextureBufferId);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D,
-                 0,
-                 comps_count,
-                 s->w,
-                 s->h,
-                 0,
-                 comps_count == 4 ? GL_RGBA : GL_RGB,
-                 GL_UNSIGNED_BYTE,
-                 s->pixels);
-    glBindTexture(GL_TEXTURE_2D, 0);
+        if (res == nullptr) {
+            return nullptr;
+        }
 
-    SDL_FreeSurface(s);
+        drash::CColor4f data[4];
+        data[0].Set(1, 0, 0, 1);
+        data[1].Set(0, 1, 0, 1);
+        data[2].Set(0, 0, 1, 1);
+        data[3].Set(1, 1, 1, 0.5f);
 
-    return res;
-}
+        glBindTexture(GL_TEXTURE_2D, res->mTextureBufferId);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_FLOAT,
+                     data);
+        glBindTexture(GL_TEXTURE_2D, 0);
 
-CTexture *CTextureManager::CreateTextureDummy()
-{
-    CTexture *res = CreateTexture();
-
-    if (res == nullptr)
-    {
-        return nullptr;
+        return res;
     }
 
-    drash::CColor4f data[4];
-    data[0].Set(1, 0, 0, 1);
-    data[1].Set(0, 1, 0, 1);
-    data[2].Set(0, 0, 1, 1);
-    data[3].Set(1, 1, 1, 0.5f);
+    CTexture *CTextureManager::CreateTextureWhite() {
+        CTexture *res = CreateTexture();
 
-    glBindTexture(GL_TEXTURE_2D, res->mTextureBufferId);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_FLOAT, data);
-    glBindTexture(GL_TEXTURE_2D, 0);
+        if (res == nullptr) {
+            return nullptr;
+        }
 
-    return res;
-}
+        drash::CColor4f data[4];
+        data[0].Set(1, 1, 1, 1);
+        data[1].Set(1, 1, 1, 1);
+        data[2].Set(1, 1, 1, 1);
+        data[3].Set(1, 1, 1, 1);
 
-CTexture *CTextureManager::CreateTextureWhite()
-{
-    CTexture *res = CreateTexture();
+        glBindTexture(GL_TEXTURE_2D, res->mTextureBufferId);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_FLOAT,
+                     data);
+        glBindTexture(GL_TEXTURE_2D, 0);
 
-    if (res == nullptr)
-    {
-        return nullptr;
+        return res;
     }
 
-    drash::CColor4f data[4];
-    data[0].Set(1, 1, 1, 1);
-    data[1].Set(1, 1, 1, 1);
-    data[2].Set(1, 1, 1, 1);
-    data[3].Set(1, 1, 1, 1);
+    bool CTextureManager::DestroyTexture(CTexture *_texture) {
+        if (mTextureFactory.IsObject(_texture) == false) {
+            return false;
+        }
 
-    glBindTexture(GL_TEXTURE_2D, res->mTextureBufferId);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_FLOAT, data);
-    glBindTexture(GL_TEXTURE_2D, 0);
+        glDeleteTextures(1, &_texture->mTextureBufferId);
+        _texture->mTextureBufferId = 0;
 
-    return res;
-}
+        mTextureFactory.DestroyObject(_texture);
 
-bool CTextureManager::DestroyTexture(CTexture *_texture)
-{
-    if (mTextureFactory.IsObject(_texture) == false)
-    {
-        return false;
+        return true;
     }
-
-    glDeleteTextures(1, &_texture->mTextureBufferId);
-    _texture->mTextureBufferId = 0;
-
-    mTextureFactory.DestroyObject(_texture);
-
-    return true;
-}
 
 } // namespace greng

@@ -26,216 +26,152 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../diag/logger.h"
 
-namespace drash
-{
+namespace drash {
 
-CAppEvent::CAppEvent()
-{
-}
+    CAppEvent::CAppEvent() {}
 
-CAppEvent::CAppEvent(const CAppEvent &_src):
-    mKey(_src.mKey)
-{
-}
+    CAppEvent::CAppEvent(const CAppEvent &_src) : mKey(_src.mKey) {}
 
-CAppEvent::CAppEvent(EventKey _key):
-    mKey(_key)
-{
-}
+    CAppEvent::CAppEvent(EventKey _key) : mKey(_key) {}
 
-std::string CAppEvent::ToString() const
-{
-    switch (this->mKey)
-    {
-    case EventKeyQ:
-        return std::string("q");
+    std::string CAppEvent::ToString() const {
+        switch (this->mKey) {
+        case EventKeyQ:
+            return std::string("q");
 
-    case EventKeyW:
-        return std::string("w");
+        case EventKeyW:
+            return std::string("w");
 
-    case EventKeyE:
-        return std::string("e");
+        case EventKeyE:
+            return std::string("e");
 
-    case EventKeyR:
-        return std::string("r");
+        case EventKeyR:
+            return std::string("r");
 
-    case EventKeyA:
-        return std::string("a");
+        case EventKeyA:
+            return std::string("a");
 
-    case EventKeyS:
-        return std::string("s");
+        case EventKeyS:
+            return std::string("s");
 
-    case EventKeyD:
-        return std::string("d");
+        case EventKeyD:
+            return std::string("d");
 
-    case EventKeyF:
-        return std::string("f");
+        case EventKeyF:
+            return std::string("f");
 
-    case EventKeyZ:
-        return std::string("z");
+        case EventKeyZ:
+            return std::string("z");
 
-    case EventKeyX:
-        return std::string("x");
+        case EventKeyX:
+            return std::string("x");
 
-    case EventKeyC:
-        return std::string("c");
+        case EventKeyC:
+            return std::string("c");
 
-    case EventKeyV:
-        return std::string("v");
+        case EventKeyV:
+            return std::string("v");
 
-    case EventKeySpace:
-        return std::string("SPC");
+        case EventKeySpace:
+            return std::string("SPC");
 
-    case EventKeyEscape:
-        return std::string("ESC");
+        case EventKeyEscape:
+            return std::string("ESC");
 
-    case EventKeyControl:
-        return std::string("C");
+        case EventKeyControl:
+            return std::string("C");
 
-    case EventKeyShift:
-        return std::string("S");
+        case EventKeyShift:
+            return std::string("S");
 
-    case EventKeyAlt:
-        return std::string("A");
+        case EventKeyAlt:
+            return std::string("A");
 
-    case EventKeyMeta:
-        return std::string("M");
+        case EventKeyMeta:
+            return std::string("M");
 
-    case EventKeyLeftButton:
-        return std::string("LB");
+        case EventKeyLeftButton:
+            return std::string("LB");
 
-    case EventKeyRightButton:
-        return std::string("RB");
+        case EventKeyRightButton:
+            return std::string("RB");
 
-    case EventKeyMiddleButton:
-        return std::string("MB");
+        case EventKeyMiddleButton:
+            return std::string("MB");
 
-    case EventKeyWheelUp:
-        return std::string("WHUP");
+        case EventKeyWheelUp:
+            return std::string("WHUP");
 
-    case EventKeyWheelDown:
-        return std::string("WHDN");
+        case EventKeyWheelDown:
+            return std::string("WHDN");
 
-    case EventDragDrop:
-        return std::string("DRDP");
-    case EventDragLeave:
-        return std::string("DRL");
-    default:
-        return std::string("<unknown key>");
+        case EventDragDrop:
+            return std::string("DRDP");
+        case EventDragLeave:
+            return std::string("DRL");
+        default:
+            return std::string("<unknown key>");
+        }
     }
-}
 
-void CAppEvent::FromString(const std::string &_str)
-{
-    if (_str == "q")
-    {
-        this->mKey = EventKeyQ;
+    void CAppEvent::FromString(const std::string &_str) {
+        if (_str == "q") {
+            this->mKey = EventKeyQ;
+        } else if (_str == "w") {
+            this->mKey = EventKeyW;
+        } else if (_str == "e") {
+            this->mKey = EventKeyE;
+        } else if (_str == "r") {
+            this->mKey = EventKeyR;
+        } else if (_str == "a") {
+            this->mKey = EventKeyA;
+        } else if (_str == "s") {
+            this->mKey = EventKeyS;
+        } else if (_str == "d") {
+            this->mKey = EventKeyD;
+        } else if (_str == "f") {
+            this->mKey = EventKeyF;
+        } else if (_str == "z") {
+            this->mKey = EventKeyZ;
+        } else if (_str == "x") {
+            this->mKey = EventKeyX;
+        } else if (_str == "c") {
+            this->mKey = EventKeyC;
+        } else if (_str == "v") {
+            this->mKey = EventKeyV;
+        } else if (_str == "SPC") {
+            this->mKey = EventKeySpace;
+        } else if (_str == "ESC") {
+            this->mKey = EventKeyEscape;
+        } else if (_str == "C") {
+            this->mKey = EventKeyControl;
+        } else if (_str == "S") {
+            this->mKey = EventKeyShift;
+        } else if (_str == "A") {
+            this->mKey = EventKeyAlt;
+        } else if (_str == "M") {
+            this->mKey = EventKeyMeta;
+        } else if (_str == "LB") {
+            this->mKey = EventKeyLeftButton;
+        } else if (_str == "RB") {
+            this->mKey = EventKeyRightButton;
+        } else if (_str == "MB") {
+            this->mKey = EventKeyMiddleButton;
+        } else if (_str == "WHUP") {
+            this->mKey = EventKeyWheelUp;
+        } else if (_str == "WHDN") {
+            this->mKey = EventKeyWheelDown;
+        } else if (_str == "DRDP") {
+            this->mKey = EventDragDrop;
+        } else if (_str == "DRL") {
+            this->mKey = EventDragLeave;
+        } else {
+            this->mKey = EventKeyUnknown;
+        }
     }
-    else if (_str == "w")
-    {
-        this->mKey = EventKeyW;
-    }
-    else if (_str == "e")
-    {
-        this->mKey = EventKeyE;
-    }
-    else if (_str == "r")
-    {
-        this->mKey = EventKeyR;
-    }
-    else if (_str == "a")
-    {
-        this->mKey = EventKeyA;
-    }
-    else if (_str == "s")
-    {
-        this->mKey = EventKeyS;
-    }
-    else if (_str == "d")
-    {
-        this->mKey = EventKeyD;
-    }
-    else if (_str == "f")
-    {
-        this->mKey = EventKeyF;
-    }
-    else if (_str == "z")
-    {
-        this->mKey = EventKeyZ;
-    }
-    else if (_str == "x")
-    {
-        this->mKey = EventKeyX;
-    }
-    else if (_str == "c")
-    {
-        this->mKey = EventKeyC;
-    }
-    else if (_str == "v")
-    {
-        this->mKey = EventKeyV;
-    }
-    else if (_str == "SPC")
-    {
-        this->mKey = EventKeySpace;
-    }
-    else if (_str == "ESC")
-    {
-        this->mKey = EventKeyEscape;
-    }
-    else if (_str == "C")
-    {
-        this->mKey = EventKeyControl;
-    }
-    else if (_str == "S")
-    {
-        this->mKey = EventKeyShift;
-    }
-    else if (_str == "A")
-    {
-        this->mKey = EventKeyAlt;
-    }
-    else if (_str == "M")
-    {
-        this->mKey = EventKeyMeta;
-    }
-    else if (_str == "LB")
-    {
-        this->mKey = EventKeyLeftButton;
-    }
-    else if (_str == "RB")
-    {
-        this->mKey = EventKeyRightButton;
-    }
-    else if (_str == "MB")
-    {
-        this->mKey = EventKeyMiddleButton;
-    }    
-    else if (_str == "WHUP")
-    {
-        this->mKey = EventKeyWheelUp;
-    }
-    else if (_str == "WHDN")
-    {
-        this->mKey = EventKeyWheelDown;
-    }
-    else if (_str == "DRDP")
-    {
-        this->mKey = EventDragDrop;
-    }
-    else if (_str == "DRL")
-    {
-        this->mKey = EventDragLeave;
-    }
-    else
-    {
-        this->mKey = EventKeyUnknown;
-    }
-}
 
-void CAppEvent::Dump() const
-{
-    LOG_INFO("CAppEvent dump: "<<(unsigned int)mKey);
-}
+    void CAppEvent::Dump() const {
+        LOG_INFO("CAppEvent dump: " << (unsigned int)mKey);
+    }
 
 } // namespace drash

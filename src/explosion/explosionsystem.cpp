@@ -24,20 +24,12 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "explosionsystem.h"
 
-namespace drash
-{
+namespace drash {
 
-bool CExplosionSystem::Init()
-{
-    return true;
-}
+    bool CExplosionSystem::Init() { return true; }
 
-void CExplosionSystem::Step(double)
-{
-}
+    void CExplosionSystem::Step(double) {}
 
-void CExplosionSystem::Release()
-{
-}
+    void CExplosionSystem::Release() {}
 
-}// namespace drash
+} // namespace drash

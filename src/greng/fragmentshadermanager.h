@@ -27,36 +27,35 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../misc/objectfactory.h"
 
-namespace greng
-{
+namespace greng {
 
-class CFragmentShader;
+    class CFragmentShader;
 
-class CFragmentShaderManager
-{
-public:
-    constexpr static unsigned int mShadersCountLimit = 32;
+    class CFragmentShaderManager {
+      public:
+        constexpr static unsigned int mShadersCountLimit = 32;
 
-    CFragmentShaderManager();
-    CFragmentShaderManager(const CFragmentShaderManager &) = delete;
-    CFragmentShaderManager(CFragmentShaderManager &&) = delete;
-    CFragmentShaderManager &operator =(const CFragmentShaderManager &) = delete;
-    CFragmentShaderManager &operator =(CFragmentShaderManager &&) = delete;
-    ~CFragmentShaderManager();
+        CFragmentShaderManager();
+        CFragmentShaderManager(const CFragmentShaderManager &) = delete;
+        CFragmentShaderManager(CFragmentShaderManager &&) = delete;
+        CFragmentShaderManager &operator=(const CFragmentShaderManager &) =
+            delete;
+        CFragmentShaderManager &operator=(CFragmentShaderManager &&) = delete;
+        ~CFragmentShaderManager();
 
-    bool Init();
-    void Release();
+        bool Init();
+        void Release();
 
-    CFragmentShader *CreateShader();
-    CFragmentShader *CreateShaderDummy();
-    CFragmentShader *CreateShaderFromSource(const char *_source);
-    CFragmentShader *CreateShaderFromFile(const char *_path);
-    bool DestroyShader(CFragmentShader *_shader);
+        CFragmentShader *CreateShader();
+        CFragmentShader *CreateShaderDummy();
+        CFragmentShader *CreateShaderFromSource(const char *_source);
+        CFragmentShader *CreateShaderFromFile(const char *_path);
+        bool DestroyShader(CFragmentShader *_shader);
 
-protected:
-private:
-    drash::CObjectFactory<CFragmentShader> mShaderFactory;
-};
+      protected:
+      private:
+        drash::CObjectFactory<CFragmentShader> mShaderFactory;
+    };
 
 } // namespace greng
 

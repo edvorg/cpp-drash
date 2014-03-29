@@ -28,15 +28,18 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <cassert>
 #include "logger.h"
 
-namespace drash
-{
+namespace drash {
 
 #if defined(DRASH_DEBUG)
 #define DRASH_ASSERT(cond) assert(cond)
 #else
-#define DRASH_ASSERT(cond) { if (!(cond)) LOG_ERR("Assertion failed: "<<#cond); }
+#define DRASH_ASSERT(cond)                                                     \
+    {                                                                          \
+        if (!(cond))                                                           \
+            LOG_ERR("Assertion failed: " << #cond);                            \
+    }
 #endif
 
-}// namespace drash
+} // namespace drash
 
 #endif // ASSERT_H

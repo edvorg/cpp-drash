@@ -25,16 +25,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRENG_FRAGMENTSHADER_H
 #define GRENG_FRAGMENTSHADER_H
 
-namespace greng
-{
+namespace greng {
 
-class CFragmentShader : public drash::CObjectFactory<CFragmentShader>::CFactoryProduct
-{
-public:
-    CFragmentShader() = default;
+    class CFragmentShader
+        : public drash::CObjectFactory<CFragmentShader>::CFactoryProduct {
+      public:
+        CFragmentShader() = default;
 
-    unsigned int mVertexShaderId = 0;
-};
+        unsigned int mVertexShaderId = 0;
+    };
 
 } // namespace greng
 

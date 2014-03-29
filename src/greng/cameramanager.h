@@ -28,67 +28,59 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../misc/vec3.h"
 #include "../misc/objectfactory.h"
 
-namespace greng
-{
+namespace greng {
 
-using drash::CVec3f;
-class CCamera;
+    using drash::CVec3f;
+    class CCamera;
 
-class CCameraParams
-{
-public:
-    bool mOrtho = false;
-    float mOrthoWidth = 1.0f;
-    float mFov = M_PI / 4.0f;
-    float mDepthOfView = 1000.0f;
-    CVec3f mPos;
-    CVec3f mRotation;
-};
+    class CCameraParams {
+      public:
+        bool mOrtho = false;
+        float mOrthoWidth = 1.0f;
+        float mFov = M_PI / 4.0f;
+        float mDepthOfView = 1000.0f;
+        CVec3f mPos;
+        CVec3f mRotation;
+    };
 
-class CCameraManager
-{
-public:
-    static const unsigned int mCamerasCountLimit = 3;
+    class CCameraManager {
+      public:
+        static const unsigned int mCamerasCountLimit = 3;
 
-    CCameraManager();
-    ~CCameraManager();
+        CCameraManager();
+        ~CCameraManager();
 
-    bool Init();
-    void Release();
-    void Step(double _dt);
+        bool Init();
+        void Release();
+        void Step(double _dt);
 
-    CCamera *CreateCamera(const CCameraParams &_params);
-    bool DestroyCamera(CCamera *_camera);
-    inline CCamera * const * GetCameras() const;
-    inline unsigned int EnumCameras() const;
+        CCamera *CreateCamera(const CCameraParams &_params);
+        bool DestroyCamera(CCamera *_camera);
+        inline CCamera *const *GetCameras() const;
+        inline unsigned int EnumCameras() const;
 
-    /// aspect ratio is window width in pixels divided on widow height
-    void SetAspectRatio(float _ratio);
+        /// aspect ratio is window width in pixels divided on widow height
+        void SetAspectRatio(float _ratio);
 
-    /// aspect ratio is window width in pixels divided on widow height
-    inline float GetAspectRatio() const;
+        /// aspect ratio is window width in pixels divided on widow height
+        inline float GetAspectRatio() const;
 
-protected:
-private:
-    drash::CObjectFactory<CCamera> mCameraFactory;
+      protected:
+      private:
+        drash::CObjectFactory<CCamera> mCameraFactory;
 
-    float mAspectRatio = 1;
-};
+        float mAspectRatio = 1;
+    };
 
-inline CCamera *const*CCameraManager::GetCameras() const
-{
-    return mCameraFactory.GetObjects();
-}
+    inline CCamera *const *CCameraManager::GetCameras() const {
+        return mCameraFactory.GetObjects();
+    }
 
-inline unsigned int CCameraManager::EnumCameras() const
-{
-    return mCameraFactory.EnumObjects();
-}
+    inline unsigned int CCameraManager::EnumCameras() const {
+        return mCameraFactory.EnumObjects();
+    }
 
-inline float CCameraManager::GetAspectRatio() const
-{
-    return mAspectRatio;
-}
+    inline float CCameraManager::GetAspectRatio() const { return mAspectRatio; }
 
 } // namespace greng
 

@@ -26,156 +26,130 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace std;
 
-namespace drash
-{
+namespace drash {
 
-CLevelDesc::CLevelDesc():
-    mObjectsFactory(mObjectsCountLimit, "CLevelObjectDesc")
-{
-}
+    CLevelDesc::CLevelDesc()
+        : mObjectsFactory(mObjectsCountLimit, "CLevelObjectDesc") {}
 
-CLevelDesc::~CLevelDesc()
-{
-    mObjectsFactory.DestroyObjects();
-}
+    CLevelDesc::~CLevelDesc() { mObjectsFactory.DestroyObjects(); }
 
-CLevelObjectDesc * CLevelDesc::AddObject(const std::string & _geometry,
-                                         const std::string & _name)
-{
-    auto o = mObjectsFactory.CreateObject();
+    CLevelObjectDesc *CLevelDesc::AddObject(const std::string &_geometry,
+                                            const std::string &_name) {
+        auto o = mObjectsFactory.CreateObject();
 
-    if (o == nullptr)
-    {
+        if (o == nullptr) {
+            return nullptr;
+        }
+
+        o->mGeometryName = _geometry;
+        o->mLevelObjectName = _name;
+
+        return o;
+    }
+
+    bool CLevelDesc::DestroyObject(CLevelObjectDesc *_desc) {
+        if (!mObjectsFactory.IsObject(_desc)) {
+            LOG_ERR("CLevelDesc::DestroyObject(): invalid object taken");
+            return false;
+        }
+
+        mObjectsFactory.DestroyObject(_desc);
+        return true;
+    }
+
+    CLevelObjectDesc *CLevelDesc::GetObject(const std::string &_name) {
+        for (unsigned int i = 0; i < mObjectsFactory.EnumObjects(); i++) {
+            if (mObjectsFactory.GetObjects()[i]->mLevelObjectName == _name) {
+                return mObjectsFactory.GetObjects()[i];
+            }
+        }
+
         return nullptr;
     }
 
-    o->mGeometryName = _geometry;
-    o->mLevelObjectName = _name;
+    void CLevelDesc::DestroyObjects() { mObjectsFactory.DestroyObjects(); }
 
-    return o;
-}
+    std::string CLevelDesc::GetUniqueObjectName() const {
+        std::string res("object_0");
 
-bool CLevelDesc::DestroyObject(CLevelObjectDesc *_desc)
-{
-    if (!mObjectsFactory.IsObject(_desc))
-    {
-        LOG_ERR("CLevelDesc::DestroyObject(): invalid object taken");
-        return false;
-    }
-
-    mObjectsFactory.DestroyObject(_desc);
-    return true;
-}
-
-CLevelObjectDesc *CLevelDesc::GetObject(const std::string &_name)
-{
-    for (unsigned int i = 0; i < mObjectsFactory.EnumObjects(); i++)
-    {
-        if (mObjectsFactory.GetObjects()[i]->mLevelObjectName == _name)
-        {
-            return mObjectsFactory.GetObjects()[i];
+        for (unsigned int i = 0; i < mObjectsFactory.EnumObjects(); i++) {
+            if (mObjectsFactory.GetObjects()[i]->mLevelObjectName == res) {
+                res += "0";
+            }
         }
+
+        return res;
     }
 
-    return nullptr;
-}
+    bool CLevelDesc::Store(const string &_filename) const {
+        ofstream out(_filename);
 
-void CLevelDesc::DestroyObjects()
-{
-    mObjectsFactory.DestroyObjects();
-}
-
-std::string CLevelDesc::GetUniqueObjectName() const
-{
-    std::string res("object_0");
-
-    for (unsigned int i = 0; i < mObjectsFactory.EnumObjects(); i++)
-    {
-        if (mObjectsFactory.GetObjects()[i]->mLevelObjectName == res)
-        {
-            res += "0";
+        if (out.is_open() == false) {
+            LOG_ERR("Can not load level from file " << _filename.c_str());
+            return false;
         }
-    }
 
-    return res;
-}
+        out << mObjectsFactory.EnumObjects() << endl;
+        for (unsigned int i = 0; i < mObjectsFactory.EnumObjects(); i++) {
+            CLevelObjectDesc *desc = mObjectsFactory.GetObjects()[i];
 
-bool CLevelDesc::Store(const string & _filename) const
-{
-    ofstream out(_filename);
+            // Save name Template
+            out << desc->mLevelObjectName << endl;
+            out << desc->mGeometryName << endl;
 
-    if (out.is_open() == false)
-    {
-        LOG_ERR("Can not load level from file " << _filename.c_str());
-        return false;
-    }
+            const CSceneObjectParams &cur = desc->mParams;
 
-    out << mObjectsFactory.EnumObjects() << endl;
-    for (unsigned int i = 0; i < mObjectsFactory.EnumObjects(); i++)
-    {
-        CLevelObjectDesc * desc = mObjectsFactory.GetObjects()[i];
-
-        // Save name Template
-        out << desc->mLevelObjectName << endl;
-        out << desc->mGeometryName << endl;
-
-        const CSceneObjectParams &cur = desc->mParams;
-
-        out << cur.mAngle << endl;
-        out << cur.mDynamic << endl;
-        out << cur.mFixedRotation << endl;
-        out << cur.mPos.mX << endl;
-        out << cur.mPos.mY << endl;
-        out << cur.mPos.mZ << endl;
-    }
-
-    out.close();
-
-    return true;
-}
-
-bool CLevelDesc::Load(const string & _filename)
-{
-    ifstream in(_filename);
-
-    if (in.is_open() == false)
-    {
-        LOG_ERR("Can not store level from file " << _filename.c_str());
-        return false;
-    }
-
-    DestroyObjects();
-
-    int objects_count = 0;
-    in >> objects_count;
-    for (int i = 0 ; i < objects_count ; i++)
-    {
-        string name_object = "";
-        std::string name_geometry = "";
-        CSceneObjectParams params;
-
-        in >> name_object;
-        in >> name_geometry;
-        in >> params.mAngle;
-        in >> params.mDynamic;
-        in >> params.mFixedRotation;
-        in >> params.mPos.mX;
-        in >> params.mPos.mY;
-        in >> params.mPos.mZ;
-
-        CLevelObjectDesc * desc = AddObject(name_geometry, name_object);
-
-        if (desc != nullptr)
-        {
-            desc->mGeometryName = name_geometry;
-            desc->mLevelObjectName = name_object;
-            desc->mParams = params;
+            out << cur.mAngle << endl;
+            out << cur.mDynamic << endl;
+            out << cur.mFixedRotation << endl;
+            out << cur.mPos.mX << endl;
+            out << cur.mPos.mY << endl;
+            out << cur.mPos.mZ << endl;
         }
+
+        out.close();
+
+        return true;
     }
 
-    in.close();
+    bool CLevelDesc::Load(const string &_filename) {
+        ifstream in(_filename);
 
-    return true;
-}
+        if (in.is_open() == false) {
+            LOG_ERR("Can not store level from file " << _filename.c_str());
+            return false;
+        }
+
+        DestroyObjects();
+
+        int objects_count = 0;
+        in >> objects_count;
+        for (int i = 0; i < objects_count; i++) {
+            string name_object = "";
+            std::string name_geometry = "";
+            CSceneObjectParams params;
+
+            in >> name_object;
+            in >> name_geometry;
+            in >> params.mAngle;
+            in >> params.mDynamic;
+            in >> params.mFixedRotation;
+            in >> params.mPos.mX;
+            in >> params.mPos.mY;
+            in >> params.mPos.mZ;
+
+            CLevelObjectDesc *desc = AddObject(name_geometry, name_object);
+
+            if (desc != nullptr) {
+                desc->mGeometryName = name_geometry;
+                desc->mLevelObjectName = name_object;
+                desc->mParams = params;
+            }
+        }
+
+        in.close();
+
+        return true;
+    }
 
 } // namespace drash

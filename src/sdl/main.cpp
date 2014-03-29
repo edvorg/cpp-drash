@@ -39,76 +39,67 @@ void WindowSpaceToScreenSpace(CVec2f &_from);
 static double gWindowWidth = 1366;
 static double gWindowHeight = 700;
 
-int main(int _argc, char **_argv)
-{
+int main(int _argc, char **_argv) {
     bool fail = false;
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         LOG_ERR("SDL_Init() failed");
         return 0;
     }
 
-    SDL_GL_SetAttribute(SDL_GL_RED_SIZE,            8);
-    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE,          8);
-    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,           8);
-    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE,          8);
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,          8);
-    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE,         24);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 24);
 
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE,      8);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE,    8);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE,     8);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE,    8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 8);
 
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS,  0);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,  0);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
 
     SDL_WM_SetCaption("Drash", nullptr);
 
-    if (SDL_SetVideoMode(gWindowWidth, gWindowHeight, 32, SDL_HWSURFACE |
-                                                          SDL_OPENGL |
-                                                          SDL_GL_DOUBLEBUFFER) == nullptr)
-    {
+    if (SDL_SetVideoMode(gWindowWidth, gWindowHeight, 32,
+                         SDL_HWSURFACE | SDL_OPENGL | SDL_GL_DOUBLEBUFFER) ==
+        nullptr) {
         LOG_ERR("SDL_SetVideoMode() failed");
         fail = true;
     }
 
     glViewport(0, 0, gWindowWidth, gWindowHeight);
 
-    if (glewInit() != GLEW_OK)
-    {
-		LOG_ERR("glewInit() failed");
+    if (glewInit() != GLEW_OK) {
+        LOG_ERR("glewInit() failed");
         fail = true;
     }
 
     int img_flags = IMG_INIT_PNG;
 
-    if (IMG_Init(img_flags) != img_flags)
-    {
+    if (IMG_Init(img_flags) != img_flags) {
         LOG_ERR("IMG_Init() failed");
         fail = true;
     }
 
-    LOG_INFO("OpenGL version: "<<(const char*)glGetString(GL_VERSION));
-    LOG_INFO("Vendor: "<<(const char*)glGetString(GL_VENDOR));
-    LOG_INFO("GLSL version: "<<(const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
+    LOG_INFO("OpenGL version: " << (const char *)glGetString(GL_VERSION));
+    LOG_INFO("Vendor: " << (const char *)glGetString(GL_VENDOR));
+    LOG_INFO("GLSL version: " << (const char *)glGetString(
+                                     GL_SHADING_LANGUAGE_VERSION));
 
     CApp *app = nullptr;
 
-    if (fail == false)
-    {
-        for (int i = 0; i < _argc; i++)
-        {
-            if (strcmp("--test", _argv[i]) == 0)
-            {
-                if (++i < _argc)
-                {
+    if (fail == false) {
+        for (int i = 0; i < _argc; i++) {
+            if (strcmp("--test", _argv[i]) == 0) {
+                if (++i < _argc) {
                     app = test::StartApp(_argv[i]);
 
-                    if (app == nullptr)
-                    {
+                    if (app == nullptr) {
                         LOG_ERR("drash::test::StartApp() failed");
                     }
 
@@ -121,25 +112,20 @@ int main(int _argc, char **_argv)
     CTimer timer;
     timer.Reset(true);
 
-    if (fail == false && app != nullptr)
-    {
-        if (app->Init() == true)
-        {
+    if (fail == false && app != nullptr) {
+        if (app->Init() == true) {
             glViewport(0, 0, gWindowWidth, gWindowHeight);
-            app->GetGrengSystems().GetCameraManager().SetAspectRatio(gWindowWidth / gWindowHeight);
+            app->GetGrengSystems().GetCameraManager().SetAspectRatio(
+                gWindowWidth / gWindowHeight);
             app->GetUISystem().SetAspectRatio(gWindowWidth / gWindowHeight);
             app->GetUISystem().SetWidth(gWindowWidth);
 
             bool exit = false;
             SDL_Event e;
 
-            app->SetQuitHandler([&exit] ()
-            {
-                exit = true;
-            });
+            app->SetQuitHandler([&exit]() { exit = true; });
 
-            auto update_cursor = [&app] (int _x, int _y)
-            {
+            auto update_cursor = [&app](int _x, int _y) {
                 CVec2f pos(_x, _y);
                 WindowSpaceToScreenSpace(pos);
                 app->SetCursorPos(pos);
@@ -149,54 +135,46 @@ int main(int _argc, char **_argv)
                 app->GetUISystem().SetCursorPos(x, y);
             };
 
-            for (;;)
-            {
-                while (SDL_PollEvent(&e))
-                {
-                    if (e.type == SDL_QUIT)
-                    {
+            for (;;) {
+                while (SDL_PollEvent(&e)) {
+                    if (e.type == SDL_QUIT) {
                         exit = true;
                         break;
-                    }
-                    else if (e.type == SDL_KEYDOWN)
-                    {
-                        app->GetEventSystem().BeginEvent(ConvertKey(e.key.keysym.sym));
-                    }
-                    else if (e.type == SDL_KEYUP)
-                    {
-                        app->GetEventSystem().EndEvent(ConvertKey(e.key.keysym.sym));
-                    }
-                    else if (e.type == SDL_MOUSEBUTTONDOWN)
-                    {
+                    } else if (e.type == SDL_KEYDOWN) {
+                        app->GetEventSystem().BeginEvent(
+                            ConvertKey(e.key.keysym.sym));
+                    } else if (e.type == SDL_KEYUP) {
+                        app->GetEventSystem().EndEvent(
+                            ConvertKey(e.key.keysym.sym));
+                    } else if (e.type == SDL_MOUSEBUTTONDOWN) {
                         update_cursor(e.button.x, e.button.y);
                         app->GetUISystem().BeginEvent();
-                        app->GetEventSystem().BeginEvent(ConvertButton(e.button.button));
-                    }
-                    else if (e.type == SDL_MOUSEBUTTONUP)
-                    {
+                        app->GetEventSystem().BeginEvent(
+                            ConvertButton(e.button.button));
+                    } else if (e.type == SDL_MOUSEBUTTONUP) {
                         update_cursor(e.button.x, e.button.y);
                         app->GetUISystem().EndEvent();
-                        app->GetEventSystem().EndEvent(ConvertButton(e.button.button));
-                    }
-                    else if (e.type == SDL_MOUSEMOTION)
-                    {
+                        app->GetEventSystem().EndEvent(
+                            ConvertButton(e.button.button));
+                    } else if (e.type == SDL_MOUSEMOTION) {
                         update_cursor(e.motion.x, e.motion.y);
-                    }
-                    else if (e.type == SDL_VIDEORESIZE)
-                    {
+                    } else if (e.type == SDL_VIDEORESIZE) {
                         gWindowWidth = e.resize.w;
                         gWindowHeight = e.resize.h;
-                        if (SDL_SetVideoMode(gWindowWidth, gWindowHeight, 32, SDL_HWSURFACE |
-                                             SDL_OPENGL |
-                                             SDL_GL_DOUBLEBUFFER) == nullptr)
-                        {
+                        if (SDL_SetVideoMode(gWindowWidth, gWindowHeight, 32,
+                                             SDL_HWSURFACE | SDL_OPENGL |
+                                                 SDL_GL_DOUBLEBUFFER) ==
+                            nullptr) {
                             LOG_ERR("SDL_SetVideoMode() failed");
                             exit = true;
                         }
 
                         glViewport(0, 0, gWindowWidth, gWindowHeight);
-                        app->GetGrengSystems().GetCameraManager().SetAspectRatio(gWindowWidth / gWindowHeight);
-                        app->GetUISystem().SetAspectRatio(gWindowWidth / gWindowHeight);
+                        app->GetGrengSystems()
+                            .GetCameraManager()
+                            .SetAspectRatio(gWindowWidth / gWindowHeight);
+                        app->GetUISystem().SetAspectRatio(gWindowWidth /
+                                                          gWindowHeight);
                         app->GetUISystem().SetWidth(gWindowWidth);
                     }
                 }
@@ -204,18 +182,15 @@ int main(int _argc, char **_argv)
                 timer.Tick();
                 app->Step(timer.GetDeltaTime());
                 glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-                glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 app->Render();
                 SDL_GL_SwapBuffers();
 
-                if (exit == true)
-                {
+                if (exit == true) {
                     break;
                 }
             }
-        }
-        else
-        {
+        } else {
             LOG_ERR("CApp::Init() failed");
         }
 
@@ -230,10 +205,8 @@ int main(int _argc, char **_argv)
     return 0;
 }
 
-drash::EventKey ConvertKey(SDLKey _key)
-{
-    switch (_key)
-    {
+drash::EventKey ConvertKey(SDLKey _key) {
+    switch (_key) {
     case SDLK_q:
         return EventKeyQ;
     case SDLK_w:
@@ -275,10 +248,8 @@ drash::EventKey ConvertKey(SDLKey _key)
     }
 }
 
-drash::EventKey ConvertButton(int _button)
-{
-    switch (_button)
-    {
+drash::EventKey ConvertButton(int _button) {
+    switch (_button) {
     case SDL_BUTTON_LEFT:
         return EventKeyLeftButton;
     case SDL_BUTTON_RIGHT:
@@ -294,8 +265,7 @@ drash::EventKey ConvertButton(int _button)
     }
 }
 
-void WindowSpaceToScreenSpace(CVec2f &_from)
-{
+void WindowSpaceToScreenSpace(CVec2f &_from) {
     _from.mX /= gWindowWidth;
     _from.mY /= gWindowHeight;
 

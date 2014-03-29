@@ -24,7 +24,4 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "player.h"
 
-namespace drash
-{
-
-}// namespace drash
+namespace drash {} // namespace drash

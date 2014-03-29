@@ -29,32 +29,29 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/pointlight.h"
 #include "../misc/rotationablepoint.h"
 
-namespace drash
-{
+namespace drash {
 
-namespace test
-{
+    namespace test {
 
-class CTest9 : public CApp
-{
-public:
-    CTest9() = default;
+        class CTest9 : public CApp {
+          public:
+            CTest9() = default;
 
-private:
-    virtual bool Init() override;
-    virtual void Step(double _dt) override;
-    virtual void Render() override;
-    bool InitCamera();
-    bool InitLights();
-    bool InitRotationablePoint();
+          private:
+            virtual bool Init() override;
+            virtual void Step(double _dt) override;
+            virtual void Render() override;
+            bool InitCamera();
+            bool InitLights();
+            bool InitRotationablePoint();
 
-    greng::CPointLight mLight1;
-    greng::CCamera *mCamera = nullptr;
+            greng::CPointLight mLight1;
+            greng::CCamera *mCamera = nullptr;
 
-    CRotationablePoint mPoint1;
-};
+            CRotationablePoint mPoint1;
+        };
 
-} // namespace test
+    } // namespace test
 
 } // namespace drash
 

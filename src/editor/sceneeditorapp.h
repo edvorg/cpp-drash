@@ -34,147 +34,149 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-class CSceneEditorApp : public CApp
-{
-public:
-    CSceneEditorApp();
+    class CSceneEditorApp : public CApp {
+      public:
+        CSceneEditorApp();
 
-    virtual bool Init() override;
-    virtual void Step(double _dt) override;
-    virtual void Render() override;
-    virtual void Release() override;
+        virtual bool Init() override;
+        virtual void Step(double _dt) override;
+        virtual void Render() override;
+        virtual void Release() override;
 
-    void UpdateTemplateSystem();
+        void UpdateTemplateSystem();
 
-    bool LoadLevel(const std::string &_filename);
+        bool LoadLevel(const std::string &_filename);
 
-    bool SaveLevelAs(const std::string &_filename);
+        bool SaveLevelAs(const std::string &_filename);
 
-    bool NewLevel();
+        bool NewLevel();
 
-    void StartCurrentLevel();
+        void StartCurrentLevel();
 
-    void AddObject(const std::string &_name, const CVec3f &_pos);
+        void AddObject(const std::string &_name, const CVec3f &_pos);
 
-    //
-    inline bool SaveLevel();
+        //
+        inline bool SaveLevel();
 
-    inline bool IsSetFileName()const;
-    inline bool IsSetLevel() const;
-    inline CLevelDesc * GetCurrentLevel() const;
-    inline std::string GetLevelFileName() const;
+        inline bool IsSetFileName() const;
+        inline bool IsSetLevel() const;
+        inline CLevelDesc *GetCurrentLevel() const;
+        inline std::string GetLevelFileName() const;
 
-    inline void SetTreeRefreshHandler(const std::function<void ()> & _han);
-    inline void SetGetSelectedHandler(const std::function<std::string ()> & _han);
-    inline void PauseLevel();
-    void StopLevel();
+        inline void SetTreeRefreshHandler(const std::function<void()> &_han);
+        inline void
+        SetGetSelectedHandler(const std::function<std::string()> &_han);
+        inline void PauseLevel();
+        void StopLevel();
 
-    void ResetLevel();
+        void ResetLevel();
 
-    void LookObject(const std::string &_geometryname,const std::string &_objectname);
+        void LookObject(const std::string &_geometryname,
+                        const std::string &_objectname);
 
-    void SetDynamicParam(bool _val);
-    void SetFixedRotationParam(bool _val);
-    void SetAngleParams(float _angle);
+        void SetDynamicParam(bool _val);
+        void SetFixedRotationParam(bool _val);
+        void SetAngleParams(float _angle);
 
-    inline bool IsChangedParams() const;
-    inline void ResetChangedFlag();
+        inline bool IsChangedParams() const;
+        inline void ResetChangedFlag();
 
-    float GetAngleParams()const;
+        float GetAngleParams() const;
 
-    inline bool IsObjectSelected() const;
+        inline bool IsObjectSelected() const;
 
-    drash::CSceneObjectParams GetSelectedParams()const;
+        drash::CSceneObjectParams GetSelectedParams() const;
 
-private:
-    void SetProcessors();
-    void SetCameraProcessors();
-    void SetDragDropProcessors();
+      private:
+        void SetProcessors();
+        void SetCameraProcessors();
+        void SetDragDropProcessors();
 
-    bool InitCamera();
-    bool InitPointLight();
-    bool InitSpecialPoint();
+        bool InitCamera();
+        bool InitPointLight();
+        bool InitSpecialPoint();
 
+        std::string mFileNameLevel = "";
 
-    std::string mFileNameLevel = "";
+        CLevelDesc *mCurrentLevel = nullptr;
+        greng::CPointLight mLight1;
+        greng::CCamera *mCamera = nullptr;
 
-    CLevelDesc * mCurrentLevel = nullptr;
-    greng::CPointLight mLight1;
-    greng::CCamera *mCamera = nullptr;
+        std::function<void()> mTreeRefreshHandler = []() {};
+        std::function<std::string()> mGetSelectedTemplateHandler = []() {
+            return std::string("");
+        };
+        bool mPlayLevel = false;
+        bool mPaused = false;
+        bool mChangedParams = false;
 
-    std::function<void ()> mTreeRefreshHandler = [] () {};
-    std::function<std::string ()> mGetSelectedTemplateHandler = [] () { return std::string(""); };
-    bool mPlayLevel = false;
-    bool mPaused = false;
-    bool mChangedParams = false;
+        CLevelObjectDesc *mSelectedObject = nullptr;
 
-    CLevelObjectDesc * mSelectedObject = nullptr;
+        CMoveablePoint mMoveablePoint;
+        CRotationablePoint mRotationablePoint;
+        void RatateObject();
+        void RenderPoints();
 
-    CMoveablePoint mMoveablePoint;
-    CRotationablePoint mRotationablePoint;
-    void RatateObject();
-    void RenderPoints();
+        CVec3f mOldpositon;
 
-    CVec3f mOldpositon;
+        CTimer mTimer;
 
-    CTimer mTimer;
+        CVec2f mCamRotFirstClick;
 
-    CVec2f mCamRotFirstClick;
+        static const int MOVING_SPEED = 15;
 
-    static const int MOVING_SPEED = 15;
+        void RenderDragTemplate();
+        bool mDragNow = false;
+        std::string mDragTemplateName = "";
 
-    void RenderDragTemplate();
-    bool mDragNow = false;
-    std::string mDragTemplateName = "";
+      private:
+        CLevelObjectDesc *SelectObject();
+        void MoveOfAxis();
+    };
 
-private:
-    CLevelObjectDesc * SelectObject();
-    void MoveOfAxis();
-};
+    inline bool CSceneEditorApp::IsSetFileName() const {
+        return mFileNameLevel != "";
+    }
 
-inline bool CSceneEditorApp::IsSetFileName()const {
-    return mFileNameLevel != "";
-}
+    inline bool CSceneEditorApp::SaveLevel() {
+        return SaveLevelAs(mFileNameLevel);
+    }
 
-inline bool CSceneEditorApp::SaveLevel() {
-    return SaveLevelAs(mFileNameLevel);
-}
+    inline CLevelDesc *CSceneEditorApp::GetCurrentLevel() const {
+        return mCurrentLevel;
+    }
 
-inline CLevelDesc * CSceneEditorApp::GetCurrentLevel() const {
-    return mCurrentLevel;
-}
+    inline std::string CSceneEditorApp::GetLevelFileName() const {
+        return mFileNameLevel;
+    }
 
-inline std::string CSceneEditorApp::GetLevelFileName() const {
-    return mFileNameLevel;
-}
+    inline bool CSceneEditorApp::IsSetLevel() const {
+        return mCurrentLevel != nullptr;
+    }
 
-inline bool CSceneEditorApp::IsSetLevel() const {
-    return mCurrentLevel != nullptr;
-}
+    inline void
+    CSceneEditorApp::SetTreeRefreshHandler(const std::function<void()> &_han) {
+        mTreeRefreshHandler = _han;
+    }
 
-inline void CSceneEditorApp::SetTreeRefreshHandler(const std::function<void ()> &_han) {
-    mTreeRefreshHandler = _han;
-}
+    inline void CSceneEditorApp::SetGetSelectedHandler(
+        const std::function<std::string()> &_han) {
+        mGetSelectedTemplateHandler = _han;
+    }
 
-inline void CSceneEditorApp::SetGetSelectedHandler(const std::function<std::string ()> & _han) {
-    mGetSelectedTemplateHandler = _han;
-}
+    inline void CSceneEditorApp::PauseLevel() {
+        mPlayLevel = false;
+        mPaused = true;
+    }
 
-inline void CSceneEditorApp::PauseLevel() {
-    mPlayLevel = false;
-    mPaused = true;
-}
+    inline bool CSceneEditorApp::IsObjectSelected() const {
+        return mSelectedObject != nullptr;
+    }
 
-inline bool CSceneEditorApp::IsObjectSelected() const{
-    return mSelectedObject != nullptr;
-}
+    inline bool CSceneEditorApp::IsChangedParams() const {
+        return mChangedParams;
+    }
 
-inline bool CSceneEditorApp::IsChangedParams() const {
-    return mChangedParams;
-}
-
-inline void CSceneEditorApp::ResetChangedFlag() {
-    mChangedParams = false;
-}
+    inline void CSceneEditorApp::ResetChangedFlag() { mChangedParams = false; }
 } // namespace drash
 #endif // SCENEEDITORAPP_H

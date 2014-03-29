@@ -30,93 +30,75 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../scene/geometrymanager.h"
 #include <map>
 
+namespace drash {
 
-namespace drash
-{
+    using drash::CLogger;
 
-using drash::CLogger;
+    CLevelManager::CLevelManager()
+        : mLevelFactory(mLevelsCountLimit, "CLevel") {}
 
-CLevelManager::CLevelManager():
-    mLevelFactory(mLevelsCountLimit, "CLevel")
-{
-}
+    CLevelManager::~CLevelManager() {}
 
-CLevelManager::~CLevelManager()
-{
-}
-
-bool CLevelManager::Init()
-{
-    if (mScene == nullptr)
-    {
-        return false;
-    }
-
-    Release();
-
-    return true;
-}
-
-void CLevelManager::Release()
-{
-    while (mLevelFactory.EnumObjects() != 0)
-    {
-        DestroyLevel(mLevelFactory.GetObjects()[0]);
-    }
-}
-
-CLevelDesc *CLevelManager::CreateLevel()
-{
-    CLevelDesc *res = mLevelFactory.CreateObject();
-
-    if (res == nullptr)
-    {
-        return nullptr;
-    }
-
-    return res;
-}
-
-bool CLevelManager::DestroyLevel(CLevelDesc *_level)
-{
-    if (mLevelFactory.IsObject(_level) == false)
-    {
-        LOG_ERR("CLevelManager::DestroyLevel(): invalid level taken");
-        return false;
-    }
-
-    mLevelFactory.DestroyObject(_level);
-
-    return true;
-}
-
-bool CLevelManager::StartLevel(CLevelDesc *_level)
-{
-    if (mLevelFactory.IsObject(_level) == false)
-    {
-        LOG_ERR("CLevelManager::StartLevel(): invalid level taken");
-        return false;
-    }
-
-    mScene->DestroyObjects();
-
-    for (unsigned int i = 0; i < _level->EnumObjects(); i++)
-    {
-        CLevelObjectDesc * desc = _level->GetObjects()[i];
-
-        CSceneObjectGeometry *g = mTemplateSystem->GetGeometry(desc->mGeometryName);
-
-        if (g != nullptr)
-        {
-            auto obj = mScene->CreateObject(*g, desc->mParams);
+    bool CLevelManager::Init() {
+        if (mScene == nullptr) {
+            return false;
         }
-        else
-        {
-            LOG_ERR("CLevelManager::StartLevel(): geometry '"<<desc->mGeometryName<<"' doesn't exists");
+
+        Release();
+
+        return true;
+    }
+
+    void CLevelManager::Release() {
+        while (mLevelFactory.EnumObjects() != 0) {
+            DestroyLevel(mLevelFactory.GetObjects()[0]);
         }
     }
 
-    return true;
-}
+    CLevelDesc *CLevelManager::CreateLevel() {
+        CLevelDesc *res = mLevelFactory.CreateObject();
+
+        if (res == nullptr) {
+            return nullptr;
+        }
+
+        return res;
+    }
+
+    bool CLevelManager::DestroyLevel(CLevelDesc *_level) {
+        if (mLevelFactory.IsObject(_level) == false) {
+            LOG_ERR("CLevelManager::DestroyLevel(): invalid level taken");
+            return false;
+        }
+
+        mLevelFactory.DestroyObject(_level);
+
+        return true;
+    }
+
+    bool CLevelManager::StartLevel(CLevelDesc *_level) {
+        if (mLevelFactory.IsObject(_level) == false) {
+            LOG_ERR("CLevelManager::StartLevel(): invalid level taken");
+            return false;
+        }
+
+        mScene->DestroyObjects();
+
+        for (unsigned int i = 0; i < _level->EnumObjects(); i++) {
+            CLevelObjectDesc *desc = _level->GetObjects()[i];
+
+            CSceneObjectGeometry *g =
+                mTemplateSystem->GetGeometry(desc->mGeometryName);
+
+            if (g != nullptr) {
+                auto obj = mScene->CreateObject(*g, desc->mParams);
+            } else {
+                LOG_ERR("CLevelManager::StartLevel(): geometry '"
+                        << desc->mGeometryName << "' doesn't exists");
+            }
+        }
+
+        return true;
+    }
 
 } // namespace drash

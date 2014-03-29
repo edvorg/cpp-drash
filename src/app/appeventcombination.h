@@ -28,37 +28,36 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "appevent.h"
 #include <vector>
 
-namespace drash
-{
+namespace drash {
 
-class CLogger;
+    class CLogger;
 
-class CAppEventCombination
-{
-public:
-    constexpr static const unsigned int mCatchEventsCountLimit = 3;
+    class CAppEventCombination {
+      public:
+        constexpr static const unsigned int mCatchEventsCountLimit = 3;
 
-    void AddEvent(const CAppEvent &_e);
-    void RemoveEvent(const CAppEvent &_e);
-    inline unsigned int GetEventsCount() const;
-    void Clear();
+        void AddEvent(const CAppEvent &_e);
+        void RemoveEvent(const CAppEvent &_e);
+        inline unsigned int GetEventsCount() const;
+        void Clear();
 
-    bool ContainsEvent(const CAppEvent &_e) const;
-    bool ContainsCombination(const CAppEventCombination &_c) const;
+        bool ContainsEvent(const CAppEvent &_e) const;
+        bool ContainsCombination(const CAppEventCombination &_c) const;
 
-    bool operator ==(const CAppEventCombination &_src) const;
-    bool operator !=(const CAppEventCombination &_src) const;
+        bool operator==(const CAppEventCombination &_src) const;
+        bool operator!=(const CAppEventCombination &_src) const;
 
-    friend CLogger &operator <<(CLogger &_logger, const CAppEventCombination &_c);
-private:
-protected:
-    std::vector<CAppEvent> mCatchEvents;
-};
+        friend CLogger &operator<<(CLogger &_logger,
+                                   const CAppEventCombination &_c);
 
-inline unsigned int CAppEventCombination::GetEventsCount() const
-{
-    return mCatchEvents.size();
-}
+      private:
+      protected:
+        std::vector<CAppEvent> mCatchEvents;
+    };
+
+    inline unsigned int CAppEventCombination::GetEventsCount() const {
+        return mCatchEvents.size();
+    }
 
 } // namespace drash
 

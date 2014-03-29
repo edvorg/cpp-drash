@@ -29,27 +29,25 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "vertex.h"
 #include <vector>
 
-namespace greng
-{
+namespace greng {
 
-class CMesh : public drash::CObjectFactory<CMesh>::CFactoryProduct
-{
-public:
-    friend class CMeshManager;
-    friend class CRenderer;
+    class CMesh : public drash::CObjectFactory<CMesh>::CFactoryProduct {
+      public:
+        friend class CMeshManager;
+        friend class CRenderer;
 
-    CMesh() = default;
+        CMesh() = default;
 
-    std::vector<CVertex> mVertices;
-    std::vector<unsigned int> mIndices;
-    std::vector<unsigned int> mMaterialOffsets;
-    std::vector<std::string> mMaterialNames;
-    unsigned int mVertexBufferId = 0;
-    unsigned int mIndexBufferId = 0;
+        std::vector<CVertex> mVertices;
+        std::vector<unsigned int> mIndices;
+        std::vector<unsigned int> mMaterialOffsets;
+        std::vector<std::string> mMaterialNames;
+        unsigned int mVertexBufferId = 0;
+        unsigned int mIndexBufferId = 0;
 
-protected:
-private:
-};
+      protected:
+      private:
+    };
 
 } // namespace greng
 

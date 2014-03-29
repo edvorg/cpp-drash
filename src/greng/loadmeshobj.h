@@ -25,13 +25,11 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef LOADMESHOBJ_H
 #define LOADMESHOBJ_H
 
-namespace greng
-{
+namespace greng {
 
-class CMesh;
+    class CMesh;
 
-bool LoadMeshObj(const char *_path, CMesh *_mesh);
-
+    bool LoadMeshObj(const char *_path, CMesh *_mesh);
 }
 
 #endif // LOADMESHOBJ_H
