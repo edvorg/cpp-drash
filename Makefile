@@ -57,6 +57,7 @@ SOURCES += \
     src/test/test9.cpp \
     src/greng/grengsystemsset.cpp \
     src/test/test10.cpp \
+    src/test/test11.cpp \
     src/greng/spotlight.cpp \
     3rd/Box2D/Collision/b2BroadPhase.cpp \
     3rd/Box2D/Collision/b2CollideCircle.cpp \
