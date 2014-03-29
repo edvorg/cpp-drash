@@ -1,5 +1,7 @@
 #version 120
 
+/// normal shader
+
 varying vec3 fragNormal;
 
 void main(void)

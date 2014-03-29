@@ -1,5 +1,7 @@
 #version 120
 
+/// spot light shader with normal mapping
+
 uniform sampler2D gTex1;
 uniform sampler2D gTex2;
 

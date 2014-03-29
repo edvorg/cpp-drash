@@ -1,5 +1,7 @@
 #version 120
 
+/// point light shader
+
 uniform sampler2D gTex1;
 
 uniform vec3 gLight1Position;
