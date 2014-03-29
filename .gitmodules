@@ -1,0 +1,6 @@
+[submodule "3rd/react"]
+	path = 3rd/react
+	url = http://github.com/edvorg/cpp-react
+[submodule "3rd/tuple"]
+	path = 3rd/tuple
+	url = http://github.com/edvorg/tuple

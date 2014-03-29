@@ -29,6 +29,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../test/test.h"
 #include "../diag/logger.h"
 #include "../diag/timer.h"
+#include <tuple/tuple.hpp>
+#include <react/react.hpp>
 
 using namespace drash;
 
