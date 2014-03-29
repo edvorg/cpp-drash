@@ -50,28 +50,30 @@ namespace greng {
 
         void Step(double _dt);
 
-        inline void SetOrtho(bool _ortho);
-        inline bool IsOrtho() const;
+        void SetOrtho(bool _ortho) { ortho = _ortho; }
+        bool IsOrtho() const { return ortho; }
 
-        inline CAnimator<float>& GetOrthoWidth();
-        inline CAnimator<float>& GetFov();
-        inline CAnimator<float>& GetDepthOfView();
-        inline CAnimator<CVec3f>& GetPos();
-        inline const CAnimator<CVec3f>& GetPos() const;
-        inline CAnimator<CVec2f>& GetRotation();
-        inline CAnimator<float>& GetAspectRatio();
+        auto& GetOrthoWidth() { return orthoWidthAnimator; }
+        auto& GetFov() { return fovAnimator; }
+        auto& GetDepthOfView() { return depthOfViewAnimator; }
+        auto& GetPos() { return posAnimator; }
+        auto& GetPos() const { return posAnimator; }
+        auto& GetRotation() { return rotationAnimator; }
+        auto& GetAspectRatio() { return aspectRatioAnimator; }
 
         void LookAt(const CVec3f& _point);
 
         void Forward(float _distance);
         void Strafe(float _distance);
 
-        inline const CMatrix4f& GetRotationMatrix() const;
-        inline const CMatrix4f& GetAntiRotationMatrix() const;
-        inline const CMatrix4f& GetViewMatrix() const;
-        inline const CMatrix4f& GetViewMatrixTransposed() const;
-        inline const CMatrix4f& GetProjectionMatrix() const;
-        inline const CMatrix4f& GetProjectionMatrixTransposed() const;
+        auto& GetRotationMatrix() const { return rotationMatrix; }
+        auto& GetAntiRotationMatrix() const { return antiRotationMatrix; }
+        auto& GetViewMatrix() const { return viewMatrix; }
+        auto& GetProjectionMatrix() const { return projectionMatrix; }
+        auto& GetViewMatrixTransposed() const { return viewMatrixTransposed; }
+        auto& GetProjectionMatrixTransposed() const {
+            return projectionMatrixTransposed;
+        }
 
         void CastRay(const CVec2f& _pos, const drash::CPlane& _plane,
                      CVec3f& _result) const;
@@ -103,58 +105,6 @@ namespace greng {
         float aspectRatio = 1.0f;
         CAnimator<float> aspectRatioAnimator = aspectRatio;
     };
-
-    inline void CCamera::SetOrtho(bool _ortho) { ortho = _ortho; }
-
-    inline bool CCamera::IsOrtho() const { return ortho; }
-
-    inline CAnimator<float>& CCamera::GetOrthoWidth() {
-        return orthoWidthAnimator;
-    }
-
-    inline CAnimator<float>& CCamera::GetFov() { return fovAnimator; }
-
-    inline CAnimator<float>& CCamera::GetDepthOfView() {
-        return depthOfViewAnimator;
-    }
-
-    inline CAnimator<CVec3f>& CCamera::GetPos() { return posAnimator; }
-
-    inline const CAnimator<CVec3f>& CCamera::GetPos() const {
-        return posAnimator;
-    }
-
-    inline CAnimator<CVec2f>& CCamera::GetRotation() {
-        return rotationAnimator;
-    }
-
-    inline CAnimator<float>& CCamera::GetAspectRatio() {
-        return aspectRatioAnimator;
-    }
-
-    inline const CMatrix4f& CCamera::GetRotationMatrix() const {
-        return rotationMatrix;
-    }
-
-    inline const CMatrix4f& CCamera::GetAntiRotationMatrix() const {
-        return antiRotationMatrix;
-    }
-
-    inline const CMatrix4f& CCamera::GetViewMatrix() const {
-        return viewMatrix;
-    }
-
-    inline const CMatrix4f& CCamera::GetViewMatrixTransposed() const {
-        return viewMatrixTransposed;
-    }
-
-    inline const CMatrix4f& CCamera::GetProjectionMatrix() const {
-        return projectionMatrix;
-    }
-
-    inline const CMatrix4f& CCamera::GetProjectionMatrixTransposed() const {
-        return projectionMatrixTransposed;
-    }
 
 } // namespace greng
 
