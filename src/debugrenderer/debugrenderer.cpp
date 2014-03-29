@@ -493,7 +493,7 @@ CLevelObjectDesc *CDebugRenderer::FindObject(const greng::CCamera * _camera,
 bool CDebugRenderer::InitTextures()
 {
     mTexture1Diffuse = mGrengSystems->GetTextureManager().CreateTextureFromFile("assets/floor/diffuse.png");
-    mTexture1Normal = mGrengSystems->GetTextureManager().CreateTextureFromFile("assets/floor/diffuse.png");
+    mTexture1Normal = mGrengSystems->GetTextureManager().CreateTextureFromFile("assets/floor/normal.png");
 
     if (mTexture1Diffuse == nullptr ||
         mTexture1Normal == nullptr)
