@@ -32,11 +32,11 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    bool CGeometryManager::Init() { return true; }
+    CGeometryManager::CGeometryManager(CScene& _scene) : mScene(_scene) {}
 
     void CGeometryManager::Step(double) {}
 
-    void CGeometryManager::Release() {
+    CGeometryManager::~CGeometryManager() {
         for (auto i = mSceneObjectTemplates.begin(),
                   i_e = mSceneObjectTemplates.end();
              i != i_e; i++) {
@@ -45,8 +45,8 @@ namespace drash {
         mSceneObjectTemplates.clear();
     }
 
-    CSceneObjectGeometry *
-    CGeometryManager::CreateGeometry(const std::string &_name) {
+    CSceneObjectGeometry*
+    CGeometryManager::CreateGeometry(const std::string& _name) {
         if (_name == "") {
             return nullptr;
         } else {
@@ -64,7 +64,7 @@ namespace drash {
         }
     }
 
-    void CGeometryManager::DestroyGeometry(CSceneObjectGeometry *_t) {
+    void CGeometryManager::DestroyGeometry(CSceneObjectGeometry* _t) {
         for (auto i = mSceneObjectTemplates.begin(),
                   i_e = mSceneObjectTemplates.end();
              i != i_e; i++) {
@@ -76,7 +76,7 @@ namespace drash {
         }
     }
 
-    void CGeometryManager::DestroyGeometry(const std::string &_name) {
+    void CGeometryManager::DestroyGeometry(const std::string& _name) {
         auto iter = mSceneObjectTemplates.find(_name);
         if (iter != mSceneObjectTemplates.end()) {
             delete iter->second;
@@ -84,20 +84,20 @@ namespace drash {
         }
     }
 
-    CSceneObject *
-    CGeometryManager::CreateSceneObject(const std::string &_name,
-                                        const CSceneObjectParams &_params) {
+    CSceneObject*
+    CGeometryManager::CreateSceneObject(const std::string& _name,
+                                        const CSceneObjectParams& _params) {
         auto iter = mSceneObjectTemplates.find(_name);
         if (iter == mSceneObjectTemplates.end()) {
             LOG_ERR("Object" << _name.c_str()
                              << "not found in CTemplateSystem");
             return nullptr;
         }
-        return GetScene()->CreateObject(*(iter->second), _params);
+        return mScene.CreateObject(*(iter->second), _params);
     }
 
-    CSceneObjectGeometry *
-    CGeometryManager::GetGeometry(const std::string &_name) {
+    CSceneObjectGeometry*
+    CGeometryManager::GetGeometry(const std::string& _name) {
         auto iter = mSceneObjectTemplates.find(_name);
         if (iter == mSceneObjectTemplates.end()) {
             LOG_ERR("Object " << _name.c_str()
@@ -108,12 +108,17 @@ namespace drash {
         }
     }
 
-    CGeometryManager::SceneObjectTemplatesT &CGeometryManager::GetGeometries() {
+    CGeometryManager::SceneObjectTemplatesT& CGeometryManager::GetGeometries() {
         return this->mSceneObjectTemplates;
     }
 
     bool CGeometryManager::Load() {
-        Release();
+        for (auto i = mSceneObjectTemplates.begin(),
+                  i_e = mSceneObjectTemplates.end();
+             i != i_e; i++) {
+            delete i->second;
+        }
+        mSceneObjectTemplates.clear();
 
         std::ifstream in("templates.txt");
 
@@ -138,7 +143,7 @@ namespace drash {
             in >> name;
             in >> figures_count;
 
-            CSceneObjectGeometry *g = CreateGeometry(name.c_str());
+            CSceneObjectGeometry* g = CreateGeometry(name.c_str());
 
             g->mFigures.resize(figures_count);
 
@@ -180,17 +185,17 @@ namespace drash {
 
         out << mSceneObjectTemplates.size() << endl;
 
-        for (auto &i : mSceneObjectTemplates) {
+        for (auto& i : mSceneObjectTemplates) {
             out << i.first << std::endl;
 
             out << i.second->mFigures.size() << endl;
 
-            for (auto &j : i.second->mFigures) {
+            for (auto& j : i.second->mFigures) {
                 out << j.mZ << endl;
                 out << j.mDepth << endl;
                 out << j.mVertices.size() << endl;
 
-                for (auto &k : j.mVertices) {
+                for (auto& k : j.mVertices) {
                     out << k.mX << ' ' << k.mY << endl;
                 }
             }

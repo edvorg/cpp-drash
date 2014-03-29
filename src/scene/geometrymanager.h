@@ -37,43 +37,37 @@ namespace drash {
 
     class CGeometryManager final {
       public:
-        typedef std::map<std::string, CSceneObjectGeometry *>
+        typedef std::map<std::string, CSceneObjectGeometry*>
         SceneObjectTemplatesT;
-        typedef std::pair<std::string, CSceneObjectGeometry *>
+        typedef std::pair<std::string, CSceneObjectGeometry*>
         MapSceneObjectItem;
 
-        bool Init();
+        CGeometryManager(CScene& _scene);
+        ~CGeometryManager();
+
         void Step(double);
-        void Release();
 
         /// template is just named CSceneObjectGeometry
         /// we can use it to create many instances of one object at any time we
         /// want
-        CSceneObjectGeometry *CreateGeometry(const std::string &_name);
-        void DestroyGeometry(CSceneObjectGeometry *_t);
-        void DestroyGeometry(const std::string &_name);
-        CSceneObject *CreateSceneObject(const std::string &_name,
-                                        const CSceneObjectParams &_params);
+        CSceneObjectGeometry* CreateGeometry(const std::string& _name);
+        void DestroyGeometry(CSceneObjectGeometry* _t);
+        void DestroyGeometry(const std::string& _name);
+        CSceneObject* CreateSceneObject(const std::string& _name,
+                                        const CSceneObjectParams& _params);
 
-        CSceneObjectGeometry *GetGeometry(const std::string &_name);
-        SceneObjectTemplatesT &GetGeometries();
+        CSceneObjectGeometry* GetGeometry(const std::string& _name);
+        SceneObjectTemplatesT& GetGeometries();
 
         bool Load();
         bool Store();
-
-        inline void SetScene(CScene *_scene);
-        inline CScene *GetScene();
 
       protected:
       private:
         SceneObjectTemplatesT mSceneObjectTemplates;
 
-        CScene *mScene = nullptr;
+        CScene& mScene;
     };
-
-    inline void CGeometryManager::SetScene(CScene *_scene) { mScene = _scene; }
-
-    inline CScene *CGeometryManager::GetScene() { return mScene; }
 
 } // namespace drash
 

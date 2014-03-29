@@ -36,7 +36,7 @@ class SceneWidget : public QGLWidget {
     Q_OBJECT
 
   public:
-    SceneWidget(QWidget *parent = 0);
+    SceneWidget(QWidget* parent = 0);
     virtual ~SceneWidget();
 
     /// converts coordinates from window space (0,0)..(mWidth, mHeight)
@@ -46,32 +46,32 @@ class SceneWidget : public QGLWidget {
     virtual void resizeGL(int _w, int _h) override;
     virtual void paintGL() override;
 
-    inline void SetApp(drash::CApp *_app);
-    inline drash::CApp *GetApp();
+    inline void SetApp(drash::CApp* _app);
+    inline drash::CApp* GetApp();
 
   protected:
-    virtual void mousePressEvent(QMouseEvent *_event) override;
-    virtual void mouseReleaseEvent(QMouseEvent *_event) override;
-    virtual void mouseMoveEvent(QMouseEvent *_event) override;
-    virtual void keyPressEvent(QKeyEvent *_event) override;
-    virtual void keyReleaseEvent(QKeyEvent *_event) override;
-    virtual void wheelEvent(QWheelEvent *_event) override;
+    virtual void mousePressEvent(QMouseEvent* _event) override;
+    virtual void mouseReleaseEvent(QMouseEvent* _event) override;
+    virtual void mouseMoveEvent(QMouseEvent* _event) override;
+    virtual void keyPressEvent(QKeyEvent* _event) override;
+    virtual void keyReleaseEvent(QKeyEvent* _event) override;
+    virtual void wheelEvent(QWheelEvent* _event) override;
 
-    virtual void dropEvent(QDropEvent *_event) override;
-    virtual void dragMoveEvent(QDragMoveEvent *_event) override;
-    virtual void dragEnterEvent(QDragEnterEvent *_event) override;
-    virtual void dragLeaveEvent(QDragLeaveEvent *_event) override;
+    virtual void dropEvent(QDropEvent* _event) override;
+    virtual void dragMoveEvent(QDragMoveEvent* _event) override;
+    virtual void dragEnterEvent(QDragEnterEvent* _event) override;
+    virtual void dragLeaveEvent(QDragLeaveEvent* _event) override;
 
-    drash::CApp *mApp = nullptr;
+    drash::CApp* mApp = nullptr;
     float mWidth = 1.0f;
     float mHeight = 1.0f;
 
   private:
-    drash::CVec2f WidgetSpaceToScreenSpace(const drash::CVec2f &_from) const;
+    drash::CVec2f WidgetSpaceToScreenSpace(const drash::CVec2f& _from) const;
 };
 
-inline void SceneWidget::SetApp(drash::CApp *_app) { mApp = _app; }
+inline void SceneWidget::SetApp(drash::CApp* _app) { mApp = _app; }
 
-inline drash::CApp *SceneWidget::GetApp() { return mApp; }
+inline drash::CApp* SceneWidget::GetApp() { return mApp; }
 
 #endif // SCENEWIDGET_H

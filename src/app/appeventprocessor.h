@@ -34,10 +34,10 @@ namespace drash {
         typedef std::function<void()> FuncT;
 
         CAppEventProcessor();
-        CAppEventProcessor(const FuncT &_begin,
-                           const FuncT &_processing = []() {},
-                           const FuncT &_end = []() {});
-        CAppEventProcessor(const CAppEventProcessor &_src);
+        CAppEventProcessor(const FuncT& _begin,
+                           const FuncT& _processing = []() {},
+                           const FuncT& _end = []() {});
+        CAppEventProcessor(const CAppEventProcessor& _src);
 
         inline void Begin();
         inline void Processing();

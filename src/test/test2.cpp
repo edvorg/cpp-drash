@@ -36,18 +36,10 @@ namespace drash {
 
     namespace test {
 
-        bool CTest2::Init() {
-            if (CApp::Init() == false) {
-                return false;
-            }
-
+        CTest2::CTest2() {
             greng::CCameraParams cp;
             cp.mPos.Set(0, 0, 300);
             mCamera = GetGrengSystems().GetCameraManager().CreateCamera(cp);
-
-            if (mCamera == nullptr) {
-                return false;
-            }
 
             GetDebugRenderer().SetCamera(mCamera);
 
@@ -98,8 +90,6 @@ namespace drash {
             mLight1.mPosition.Set(0, 30, 0);
 
             GetDebugRenderer().SetLight(&mLight1);
-
-            return true;
         }
 
         void CTest2::SetProcessors() {
@@ -129,8 +119,8 @@ namespace drash {
             {
                 // choose object here
                 mSelectedObject = nullptr;
-                CFigure *f =
-                    GetDebugRenderer().FindFigure(mCamera, GetCursorPos());
+                CFigure* f =
+                    GetDebugRenderer().FindFigure(*mCamera, GetCursorPos());
                 if (f != nullptr) {
                     mSelectedObject = f->GetSceneObject();
                 }

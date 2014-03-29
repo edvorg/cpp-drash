@@ -45,7 +45,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace drash;
 
-EditorWindow::EditorWindow(QWidget *parent)
+EditorWindow::EditorWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::EditorWindow), mModeActions(parent) {
     ui->setupUi(this);
 
@@ -56,8 +56,8 @@ EditorWindow::EditorWindow(QWidget *parent)
 
     CreateActions();
     mModeActions.setExclusive(true);
-    connect(&mModeActions, SIGNAL(selected(QAction *)), this,
-            SLOT(ChangeMode(QAction *)));
+    connect(&mModeActions, SIGNAL(selected(QAction*)), this,
+            SLOT(ChangeMode(QAction*)));
 
     mLabelOfStatusBar = new QLabel("Editor Object");
 
@@ -94,7 +94,7 @@ EditorWindow::EditorWindow(QWidget *parent)
     //    ui->mTreeTemplates->setDragDropMode(QAbstractItemView::InternalMove);
     mWidgetForScene->hide();
     mSceneApp->SetGetSelectedHandler([this]() {
-        QTreeWidgetItem *item = ui->mTreeTemplates->currentItem();
+        QTreeWidgetItem* item = ui->mTreeTemplates->currentItem();
         if (item->parent() == NULL) {
             return item->text(0).toStdString();
         } else {
@@ -103,7 +103,7 @@ EditorWindow::EditorWindow(QWidget *parent)
     });
 
     mObjectApp->SetGetSelectedHandler([this]() {
-        QTreeWidgetItem *item = ui->mTreeObjects->currentItem();
+        QTreeWidgetItem* item = ui->mTreeObjects->currentItem();
         if (item->parent() == NULL) {
             return item->text(0).toStdString();
         } else {
@@ -117,9 +117,7 @@ EditorWindow::EditorWindow(QWidget *parent)
 
 EditorWindow::~EditorWindow() {
     delete ui;
-    mObjectApp->Release();
     delete mObjectApp;
-    mSceneApp->Release();
     delete mSceneApp;
 }
 
@@ -148,7 +146,7 @@ bool EditorWindow::InitScene() {
     return true;
 }
 
-void EditorWindow::timerEvent(QTimerEvent *) {
+void EditorWindow::timerEvent(QTimerEvent*) {
     mTimer.Tick();
 
     if (mCurrentSceneWidget->GetApp() != nullptr) {
@@ -185,7 +183,7 @@ void EditorWindow::CreateNewObject() {
 
     str_name += QString::number(
         mObjectApp->GetGeometryManager().GetGeometries().size() + 1);
-    QTreeWidgetItem *newItem =
+    QTreeWidgetItem* newItem =
         new QTreeWidgetItem(ui->mTreeObjects, QStringList(str_name));
     ui->mTreeObjects->addTopLevelItem(newItem);
     newItem->setSelected(true);
@@ -232,7 +230,7 @@ void EditorWindow::CombineFigureModeActive() {
     }
 }
 
-void EditorWindow::ChangeMode(QAction *_action) {
+void EditorWindow::ChangeMode(QAction* _action) {
     mLabelOfStatusBar->setText(_action->text());
     //    if (_action == mCombineFiguresMode && _action->isChecked()) {
     //        mDragActivated = true;
@@ -301,7 +299,7 @@ void EditorWindow::CreateActions() {
     mQuit->setShortcut(tr("Ctrl+Q"));
     this->addAction(mQuit);
     connect(mQuit, SIGNAL(triggered()), this, SLOT(close()));
-    QList<QAction *> listActions;
+    QList<QAction*> listActions;
 
     mNewObjectAction = new QAction("New SceneObject", this);
     mNewObjectAction->setShortcut(tr("Ctrl+N"));
@@ -410,19 +408,19 @@ void EditorWindow::CreateActions() {
     mSceneToolbar->addActions(listActions);
 }
 
-bool EditorWindow::UpdateTreeTemplates(QTreeWidget *_tree, drash::CApp *_app) {
+bool EditorWindow::UpdateTreeTemplates(QTreeWidget* _tree, drash::CApp* _app) {
     _tree->clear();
-    QList<QTreeWidgetItem *> list;
+    QList<QTreeWidgetItem*> list;
     CGeometryManager tSys = _app->GetGeometryManager();
     for (auto item = tSys.GetGeometries().begin();
          item != tSys.GetGeometries().end(); item++) {
 
-        QTreeWidgetItem *objectItem = new QTreeWidgetItem(
+        QTreeWidgetItem* objectItem = new QTreeWidgetItem(
             _tree, QStringList(QString::fromStdString(item->first)));
         _tree->addTopLevelItem(objectItem);
 
-        const CSceneObjectGeometry &geo = *(item->second);
-        const std::vector<CFigureParams> &mF = geo.mFigures;
+        const CSceneObjectGeometry& geo = *(item->second);
+        const std::vector<CFigureParams>& mF = geo.mFigures;
         objectItem->setText(1, QString::number(mF.size()));
         //       for (auto fig = mF.begin() ; fig != mF.end() ; fig++) {
         //           CFigureParams par = *fig;
@@ -448,14 +446,14 @@ bool EditorWindow::UpdateTreeTemplates(QTreeWidget *_tree, drash::CApp *_app) {
 
 void EditorWindow::UpdateTreeSceneObjects() {
     ui->mTreeSceneObjects->clear();
-    QTreeWidget *tree = ui->mTreeSceneObjects;
+    QTreeWidget* tree = ui->mTreeSceneObjects;
 
     for (unsigned int i = 0; i < mSceneApp->GetCurrentLevel()->EnumObjects();
          i++) {
-        CLevelObjectDesc *cur_obj_desc =
+        CLevelObjectDesc* cur_obj_desc =
             mSceneApp->GetCurrentLevel()->GetObjects()[i];
 
-        QTreeWidgetItem *geometryItem =
+        QTreeWidgetItem* geometryItem =
             new QTreeWidgetItem(tree, QStringList(QString::fromStdString(
                                           cur_obj_desc->mLevelObjectName)));
 
@@ -470,7 +468,7 @@ void EditorWindow::on_mTreeObjects_itemSelectionChanged() {
     if (mDragActivated == true) {
         return;
     }
-    QTreeWidgetItem *item = nullptr;
+    QTreeWidgetItem* item = nullptr;
     if (ui->mTreeObjects->selectedItems().size() != 0) {
         item = ui->mTreeObjects->selectedItems().at(0);
     } else {
@@ -482,7 +480,7 @@ void EditorWindow::on_mTreeObjects_itemSelectionChanged() {
 }
 
 void EditorWindow::Remove_Object() {
-    QTreeWidgetItem *item = nullptr;
+    QTreeWidgetItem* item = nullptr;
     if (ui->mTreeObjects->selectedItems().size() != 0) {
         item = ui->mTreeObjects->selectedItems().at(0);
     } else {
@@ -536,9 +534,9 @@ void EditorWindow::on_mManageWidget_currentChanged(int index) {
     }
 }
 
-void EditorWindow::on_mTreeSceneObjects_clicked(const QModelIndex &) {
+void EditorWindow::on_mTreeSceneObjects_clicked(const QModelIndex&) {
 
-    QTreeWidgetItem *item = ui->mTreeSceneObjects->selectedItems().at(0);
+    QTreeWidgetItem* item = ui->mTreeSceneObjects->selectedItems().at(0);
     if (item->parent() != nullptr) {
         mSceneApp->LookObject(item->parent()->text(0).toStdString(),
                               item->text(0).toStdString());
@@ -565,7 +563,7 @@ void EditorWindow::on_mAngleBox_valueChanged(double arg1) {
     mSceneApp->SetAngleParams((float)arg1);
 }
 
-void EditorWindow::SetObjectParams(const CSceneObjectParams &_params) {
+void EditorWindow::SetObjectParams(const CSceneObjectParams& _params) {
     ui->mAngleBox->setValue(_params.mAngle);
     ui->mCheckBoxDynamic->setChecked(_params.mDynamic);
     ui->mCheckBoxFixedRotation->setChecked(_params.mFixedRotation);

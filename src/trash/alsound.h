@@ -38,10 +38,10 @@ namespace Sound {
         explicit AlSound();
         /// when using this constructor, instances will use shred buffer,
         /// which will be destroyed with last sharing instance
-        explicit AlSound(const AlSound &_src);
+        explicit AlSound(const AlSound& _src);
         virtual ~AlSound();
 
-        AlSound &operator=(const AlSound &_src);
+        AlSound& operator=(const AlSound& _src);
 
         bool IsValid() const;
 
@@ -56,9 +56,9 @@ namespace Sound {
         static void SetListenerOri(float _x, float _y, float _z);
 
         /// load sound from ogg file
-        bool LoadFromFile(const char *_path);
+        bool LoadFromFile(const char* _path);
         /// load sound from memory with ogg format
-        bool LoadFromMem(void *_data, size_t _size);
+        bool LoadFromMem(void* _data, size_t _size);
 
         void Play();
         void Pause();

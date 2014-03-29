@@ -32,16 +32,12 @@ namespace drash {
 
     namespace test {
 
-        bool CTest10::Init() {
-            if (CApp::Init() == false || InitCamera() == false ||
-                InitObjects() == false || InitLights() == false ||
-                InitProcessors() == false) {
-                return false;
-            }
-
+        CTest10::CTest10() : CApp() {
+            InitCamera();
+            InitObjects();
+            InitLights();
+            InitProcessors();
             GetDebugRenderer().SetTexCoordsScale(0.2);
-
-            return true;
         }
 
         void CTest10::Step(double _dt) {
@@ -61,7 +57,7 @@ namespace drash {
             CVec3f p1(mLamp1Object->GetWorldPoint(CVec2f(0, 0.5)),
                       mLamp1Object->GetPosZ());
             GetGrengSystems().GetRenderer().DrawLine(
-                mCamera, p1, mWallTopObject->GetPos(), 2, CColor4f(0, 0, 0, 1),
+                *mCamera, p1, mWallTopObject->GetPos(), 2, CColor4f(0, 0, 0, 1),
                 true);
         }
 
@@ -70,7 +66,7 @@ namespace drash {
             params.mPos.Set(0, 2, 20);
             params.mRotation.mX = -M_PI / 18.0;
 
-            greng::CCamera *cam =
+            greng::CCamera* cam =
                 GetGrengSystems().GetCameraManager().CreateCamera(params);
 
             if (cam == nullptr) {
@@ -85,15 +81,15 @@ namespace drash {
         }
 
         bool CTest10::InitObjects() {
-            CSceneObjectGeometry *g1 =
+            CSceneObjectGeometry* g1 =
                 GetGeometryManager().CreateGeometry("wall_back");
-            CSceneObjectGeometry *g2 =
+            CSceneObjectGeometry* g2 =
                 GetGeometryManager().CreateGeometry("wall_top");
-            CSceneObjectGeometry *g3 =
+            CSceneObjectGeometry* g3 =
                 GetGeometryManager().CreateGeometry("wall_bottom");
-            CSceneObjectGeometry *g4 =
+            CSceneObjectGeometry* g4 =
                 GetGeometryManager().CreateGeometry("wall");
-            CSceneObjectGeometry *g5 =
+            CSceneObjectGeometry* g5 =
                 GetGeometryManager().CreateGeometry("lamp");
 
             if (g1 == nullptr || g2 == nullptr || g3 == nullptr ||
@@ -145,7 +141,7 @@ namespace drash {
             CSceneObjectParams p2;
             p2.mPos.Set(0, 5, 0);
             p2.mDynamic = true;
-            CSceneObject *o2 =
+            CSceneObject* o2 =
                 GetGeometryManager().CreateSceneObject("wall_top", p2);
 
             CSceneObjectParams p3;
@@ -166,7 +162,7 @@ namespace drash {
             CSceneObjectParams p6;
             p6.mPos.Set(-3, 3, 0);
             p6.mDynamic = true;
-            CSceneObject *o6 =
+            CSceneObject* o6 =
                 GetGeometryManager().CreateSceneObject("lamp", p6);
 
             CVec3f anchor1(0, 0, 0);

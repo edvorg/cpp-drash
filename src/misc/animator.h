@@ -39,24 +39,24 @@ namespace drash {
     template <class T> class CAnimator {
       public:
         CAnimator() = delete;
-        CAnimator(const CAnimator &_src) = delete;
-        CAnimator &operator=(const CAnimator &_src) = delete;
-        CAnimator &operator=(CAnimator &&_src) = delete;
+        CAnimator(const CAnimator& _src) = delete;
+        CAnimator& operator=(const CAnimator& _src) = delete;
+        CAnimator& operator=(CAnimator&& _src) = delete;
 
-        CAnimator(CAnimator &&_src);
-        CAnimator(T &_value_ref);
+        CAnimator(CAnimator&& _src);
+        CAnimator(T& _value_ref);
 
-        CAnimator &operator=(const T &_src);
-        CAnimator &operator=(T &&_src);
-        CAnimator &Set(const T &_src);
-        CAnimator &Set(T &&_src);
-        void SetTarget(const T &_target, double _time,
-                       const AnimatorBehavior &_behavior);
+        CAnimator& operator=(const T& _src);
+        CAnimator& operator=(T&& _src);
+        CAnimator& Set(const T& _src);
+        CAnimator& Set(T&& _src);
+        void SetTarget(const T& _target, double _time,
+                       const AnimatorBehavior& _behavior);
         inline void RemoveTarget();
 
-        inline operator const T &() const;
-        inline const T &Get() const;
-        inline const T &GetTarget() const;
+        inline operator const T&() const;
+        inline const T& Get() const;
+        inline const T& GetTarget() const;
         inline double GetTime() const;
         inline double GetTimeRemains() const;
         inline bool IsTargetSet() const;
@@ -64,7 +64,7 @@ namespace drash {
         bool Step(double _dt);
 
       private:
-        T &mValue;
+        T& mValue;
         T mFromValue;
         T mTargetValue;
 
@@ -78,14 +78,14 @@ namespace drash {
     };
 
     template <class T>
-    CAnimator<T>::CAnimator(CAnimator &&_src)
+    CAnimator<T>::CAnimator(CAnimator&& _src)
         : mValue(_src.mValue) {}
 
     template <class T>
-    CAnimator<T>::CAnimator(T &_value_ref)
+    CAnimator<T>::CAnimator(T& _value_ref)
         : mValue(_value_ref) {}
 
-    template <class T> CAnimator<T> &CAnimator<T>::operator=(const T &_src) {
+    template <class T> CAnimator<T>& CAnimator<T>::operator=(const T& _src) {
         mValue = _src;
         mTargetSet = false;
         mValueUpdated = true;
@@ -93,7 +93,7 @@ namespace drash {
         return *this;
     }
 
-    template <class T> CAnimator<T> &CAnimator<T>::operator=(T &&_src) {
+    template <class T> CAnimator<T>& CAnimator<T>::operator=(T&& _src) {
         mValue = std::move(_src);
         mTargetSet = false;
         mValueUpdated = true;
@@ -101,7 +101,7 @@ namespace drash {
         return *this;
     }
 
-    template <class T> CAnimator<T> &CAnimator<T>::Set(const T &_src) {
+    template <class T> CAnimator<T>& CAnimator<T>::Set(const T& _src) {
         mValue = _src;
         mTargetSet = false;
         mValueUpdated = true;
@@ -109,7 +109,7 @@ namespace drash {
         return *this;
     }
 
-    template <class T> CAnimator<T> &CAnimator<T>::Set(T &&_src) {
+    template <class T> CAnimator<T>& CAnimator<T>::Set(T&& _src) {
         mValue = std::move(_src);
         mTargetSet = false;
         mValueUpdated = true;
@@ -118,8 +118,8 @@ namespace drash {
     }
 
     template <class T>
-    void CAnimator<T>::SetTarget(const T &_target, double _time,
-                                 const AnimatorBehavior &_behavior) {
+    void CAnimator<T>::SetTarget(const T& _target, double _time,
+                                 const AnimatorBehavior& _behavior) {
         mFromValue = mValue;
         mTargetValue = _target;
         mTime = 0;
@@ -132,15 +132,15 @@ namespace drash {
         mTargetSet = false;
     }
 
-    template <class T> inline CAnimator<T>::operator const T &() const {
+    template <class T> inline CAnimator<T>::operator const T&() const {
         return mValue;
     }
 
-    template <class T> inline const T &CAnimator<T>::Get() const {
+    template <class T> inline const T& CAnimator<T>::Get() const {
         return mValue;
     }
 
-    template <class T> inline const T &CAnimator<T>::GetTarget() const {
+    template <class T> inline const T& CAnimator<T>::GetTarget() const {
         if (mTargetSet == true) {
             return mTargetValue;
         } else {

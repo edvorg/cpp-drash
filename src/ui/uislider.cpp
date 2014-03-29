@@ -34,7 +34,7 @@ namespace drash {
 
         using namespace drash::math;
 
-        void CUISlider::Connect(CUISystem *_system) {
+        void CUISlider::Connect(CUISystem* _system) {
             CUIWidget::Connect(_system);
 
             SetPressHandler([this]() { mPressed = true; });
@@ -69,10 +69,10 @@ namespace drash {
                     GetPos().mX + GetSize().mX, GetPos().mY + GetSize().mY, p3);
                 GetUISystem()->UISpaceToScreenSpace(GetPos().mX + GetSize().mX,
                                                     GetPos().mY, p4);
-                GetUISystem()->GetRenderer()->DrawLine(p1, p2, 1, c);
-                GetUISystem()->GetRenderer()->DrawLine(p3, p2, 1, c);
-                GetUISystem()->GetRenderer()->DrawLine(p3, p4, 1, c);
-                GetUISystem()->GetRenderer()->DrawLine(p1, p4, 1, c);
+                GetUISystem()->GetRenderer().DrawLine(p1, p2, 1, c);
+                GetUISystem()->GetRenderer().DrawLine(p3, p2, 1, c);
+                GetUISystem()->GetRenderer().DrawLine(p3, p4, 1, c);
+                GetUISystem()->GetRenderer().DrawLine(p1, p4, 1, c);
 
                 const unsigned int l = GetSize().mX - mSliderWidth;
 
@@ -91,15 +91,15 @@ namespace drash {
                 GetUISystem()->UISpaceToScreenSpace(
                     GetPos().mX + l * GetPercent(), GetPos().mY + GetSize().mY,
                     p8);
-                GetUISystem()->GetRenderer()->DrawLine(p5, p6, 1, c);
-                GetUISystem()->GetRenderer()->DrawLine(p7, p6, 1, c);
-                GetUISystem()->GetRenderer()->DrawLine(p7, p8, 1, c);
-                GetUISystem()->GetRenderer()->DrawLine(p5, p8, 1, c);
+                GetUISystem()->GetRenderer().DrawLine(p5, p6, 1, c);
+                GetUISystem()->GetRenderer().DrawLine(p7, p6, 1, c);
+                GetUISystem()->GetRenderer().DrawLine(p7, p8, 1, c);
+                GetUISystem()->GetRenderer().DrawLine(p5, p8, 1, c);
             });
         }
 
         void CUISlider::SetValueHandler(
-            const std::function<void(float _value)> &_handler) {
+            const std::function<void(float _value)>& _handler) {
             mValueHandler = _handler;
         }
 

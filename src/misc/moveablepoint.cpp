@@ -29,12 +29,12 @@ namespace drash {
 
     CMoveablePoint::CMoveablePoint() { mCenter.Set(0, 0, 0); }
 
-    CMoveablePoint::CMoveablePoint(CVec3f _point, greng::CCamera *_camera)
+    CMoveablePoint::CMoveablePoint(CVec3f _point, greng::CCamera* _camera)
         : mCurrentCamera(_camera), mCenter(_point) {}
 
-    void CMoveablePoint::SetCenter(const CVec3f &_center) { mCenter = _center; }
+    void CMoveablePoint::SetCenter(const CVec3f& _center) { mCenter = _center; }
 
-    void CMoveablePoint::SetCamera(greng::CCamera *_camera) {
+    void CMoveablePoint::SetCamera(greng::CCamera* _camera) {
         mCurrentCamera = _camera;
     }
 
@@ -74,19 +74,19 @@ namespace drash {
         mZ.mZ += mLineSizeWorld;
     }
 
-    void CMoveablePoint::Render(greng::CRenderer &_render) {
+    void CMoveablePoint::Render(greng::CRenderer& _render) {
         if (mCurrentCamera == nullptr) {
             return;
         }
-        _render.DrawLine(GetCamera(), mCenter, mX, 1,
+        _render.DrawLine(*GetCamera(), mCenter, mX, 1,
                          CColor4f(1 * mAxisDrawK.mX + 10, 0, 0, 1), false);
-        _render.DrawLine(GetCamera(), mCenter, mY, 1,
+        _render.DrawLine(*GetCamera(), mCenter, mY, 1,
                          CColor4f(0, 1 * mAxisDrawK.mY + 10, 0, 1), false);
-        _render.DrawLine(GetCamera(), mCenter, mZ, 1,
+        _render.DrawLine(*GetCamera(), mCenter, mZ, 1,
                          CColor4f(0, 0, 1 * mAxisDrawK.mZ + 10, 1), false);
     }
 
-    greng::CCamera *CMoveablePoint::GetCamera() { return mCurrentCamera; }
+    greng::CCamera* CMoveablePoint::GetCamera() { return mCurrentCamera; }
 
     void CMoveablePoint::ClickBegin() {
         if (mAxisOver == 0) {
@@ -141,7 +141,7 @@ namespace drash {
         mMoving = false;
     }
 
-    void CMoveablePoint::SetCursorPos(const CVec2f &_pos) {
+    void CMoveablePoint::SetCursorPos(const CVec2f& _pos) {
         mCursorPos = _pos;
         Calculate();
     }

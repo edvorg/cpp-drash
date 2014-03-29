@@ -33,15 +33,15 @@ namespace drash {
     class CMoveablePoint {
       public:
         CMoveablePoint();
-        CMoveablePoint(CVec3f _point, greng::CCamera *_camera);
+        CMoveablePoint(CVec3f _point, greng::CCamera* _camera);
 
-        void SetCenter(const CVec3f &_center);
-        void SetCamera(greng::CCamera *_camera);
+        void SetCenter(const CVec3f& _center);
+        void SetCamera(greng::CCamera* _camera);
         inline CVec3f GetCenter() const;
         void Step(double);
-        void Render(greng::CRenderer &_render);
+        void Render(greng::CRenderer& _render);
 
-        void SetCursorPos(const CVec2f &_pos);
+        void SetCursorPos(const CVec2f& _pos);
 
         void ClickBegin();
         void ClickPressing();
@@ -58,11 +58,11 @@ namespace drash {
         bool mAxisOY = true;
         bool mAxisOZ = true;
 
-        greng::CCamera *mCurrentCamera = nullptr;
+        greng::CCamera* mCurrentCamera = nullptr;
 
         void Calculate();
 
-        greng::CCamera *GetCamera();
+        greng::CCamera* GetCamera();
 
         CVec3f mCenter;
         CVec3f mX;

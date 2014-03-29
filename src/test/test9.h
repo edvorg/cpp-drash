@@ -35,18 +35,17 @@ namespace drash {
 
         class CTest9 : public CApp {
           public:
-            CTest9() = default;
+            CTest9();
 
-          private:
-            virtual bool Init() override;
             virtual void Step(double _dt) override;
             virtual void Render() override;
+
             bool InitCamera();
             bool InitLights();
             bool InitRotationablePoint();
 
             greng::CPointLight mLight1;
-            greng::CCamera *mCamera = nullptr;
+            greng::CCamera* mCamera = nullptr;
 
             CRotationablePoint mPoint1;
         };

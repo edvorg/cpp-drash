@@ -1,4 +1,4 @@
-CPP_FLAGS=-std=c++1y -stdlib=libc++
+CPP_FLAGS=-std=c++1y -stdlib=libc++ -O3 -Wall
 INCLUDES=-I3rd
 CC=clang++
 
@@ -20,7 +20,6 @@ SOURCES += \
     src/test/test.cpp \
     src/scene/geometrymanager.cpp \
     src/players/playerssystem.cpp \
-    src/explosion/explosionsystem.cpp \
     src/scene/sceneobject.cpp \
     src/scene/scene.cpp \
 	src/players/player.cpp \

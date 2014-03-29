@@ -31,7 +31,7 @@ namespace drash {
 
     namespace test {
 
-        CApp *StartApp(const char *_name);
+        CApp* StartApp(const char* _name);
 
     } // namespace test
 

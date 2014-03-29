@@ -35,7 +35,7 @@ namespace drash {
 
       protected:
       private:
-        b2Joint *mJoint = nullptr;
+        b2Joint* mJoint = nullptr;
     };
 
 } // namespace drash

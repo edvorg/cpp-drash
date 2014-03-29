@@ -35,18 +35,15 @@ namespace drash {
 
         class CTest2 : public CApp {
           public:
-            CTest2() = default;
-
-          protected:
-            virtual bool Init() override;
+            CTest2();
 
           private:
             void SetProcessors();
-            CSceneObject *mSelectedObject = nullptr;
+            CSceneObject* mSelectedObject = nullptr;
 
             greng::CPointLight mLight1;
 
-            greng::CCamera *mCamera = nullptr;
+            greng::CCamera* mCamera = nullptr;
         };
 
     } // namespace test

@@ -30,9 +30,10 @@ namespace drash {
 
     namespace ui {
 
-        bool CUISystem::Init() { return true; }
+        CUISystem::CUISystem(greng::CRenderer& _renderer)
+            : mRenderer(_renderer) {}
 
-        void CUISystem::Release() {
+        CUISystem::~CUISystem() {
             for (unsigned int i = 0; i < mControlsCount; i++) {
                 delete mControls[i];
                 mControls[i] = nullptr;
@@ -40,7 +41,7 @@ namespace drash {
             mControlsCount = 0;
         }
 
-        CUIControl *CUISystem::CreateControl() {
+        CUIControl* CUISystem::CreateControl() {
             if (mControlsCount == mControlsCountLimit) {
                 return nullptr;
             }
@@ -48,7 +49,7 @@ namespace drash {
             return mControls[mControlsCount++] = new CUIControl;
         }
 
-        void CUISystem::DestroyControl(CUIControl *_control) {
+        void CUISystem::DestroyControl(CUIControl* _control) {
             for (unsigned int i = 0; i < mControlsCount; i++) {
                 if (mControls[i] == _control) {
                     _control->mDestroyHandler();
@@ -70,14 +71,14 @@ namespace drash {
             mHeight = mWidth / mAspectRatio;
         }
 
-        bool CUISystem::ScreenSpaceToUISpace(const CVec2f &_from, int &_x,
-                                             int &_y) {
+        bool CUISystem::ScreenSpaceToUISpace(const CVec2f& _from, int& _x,
+                                             int& _y) {
             _x = (_from.mX + 0.5f) * static_cast<float>(mWidth);
             _y = (_from.mY + 0.5f) * static_cast<float>(mHeight);
             return true;
         }
 
-        bool CUISystem::UISpaceToScreenSpace(int _x, int _y, CVec2f &_v) {
+        bool CUISystem::UISpaceToScreenSpace(int _x, int _y, CVec2f& _v) {
             _v.mX =
                 (static_cast<float>(_x) / static_cast<float>(mWidth)) - 0.5f;
             _v.mY =

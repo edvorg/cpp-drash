@@ -56,29 +56,29 @@ namespace drash {
             unsigned mSplitIntersection2Index = 0;
             unsigned int mSplitIntersectionsCount = 0;
 
-            CFigure *mFigure = nullptr;
+            CFigure* mFigure = nullptr;
         };
 
       public:
-        virtual bool Init() override;
+        CObjectEditorApp();
+
         virtual void Step(double _dt) override;
         inline virtual void Render() override;
-        virtual void Release() override;
 
         void StartBuild();
 
         inline bool IsStartBuild() const;
 
-        bool BuildFigure(const std::string &_objectName);
+        bool BuildFigure(const std::string& _objectName);
 
-        bool AddNewObjectToTemplate(const std::string &_name);
+        bool AddNewObjectToTemplate(const std::string& _name);
 
-        void ShowObject(const std::string &_name);
+        void ShowObject(const std::string& _name);
 
-        inline void SetCurrentTemplateName(const std::string &_name);
-        inline void SetTreeRefreshHandler(const std::function<void()> &_han);
+        inline void SetCurrentTemplateName(const std::string& _name);
+        inline void SetTreeRefreshHandler(const std::function<void()>& _han);
         inline void
-        SetGetSelectedHandler(const std::function<std::string()> &_han);
+        SetGetSelectedHandler(const std::function<std::string()>& _han);
 
         inline void ActiveMoveMode();
         inline void ActiveSplitFigureMode();
@@ -89,7 +89,7 @@ namespace drash {
 
         void SaveCurrentObject();
 
-        inline greng::CCamera *GetCamera();
+        inline greng::CCamera* GetCamera();
 
       private:
         float GetCurDepth();
@@ -101,7 +101,7 @@ namespace drash {
         bool ValidateFigure();
         void RemoveCurrentObject();
 
-        CFigure *SelectFigure(const CVec2f &_pos);
+        CFigure* SelectFigure(const CVec2f& _pos);
 
         void MoveFigure();
 
@@ -118,20 +118,20 @@ namespace drash {
         std::function<std::string()> mGetSelectedTemplateHandler = []() {
             return std::string("");
         };
-        CSceneObjectGeometry *mDragTemplate = nullptr;
+        CSceneObjectGeometry* mDragTemplate = nullptr;
         bool mDragNow = false;
         void DrawDragTemplate();
         void ApplyDrop();
 
         // For current object
-        CSceneObject *mCurrentObject = nullptr;
+        CSceneObject* mCurrentObject = nullptr;
         State mState = Simple;
         std::string mCurrentTemplateName = "";
         std::function<void()> mTreeRefreshHandler = []() {};
 
         std::vector<drash::CVec2f> mVertexs;
 
-        CFigure *mSelectedFigure = nullptr;
+        CFigure* mSelectedFigure = nullptr;
 
         CVec3f mOldPositionCursor = CVec3f(0);
 
@@ -143,7 +143,7 @@ namespace drash {
 
         bool mFrontSide = true;
 
-        greng::CCamera *mCamera = nullptr;
+        greng::CCamera* mCamera = nullptr;
 
         greng::CPointLight mPointLight;
 
@@ -173,10 +173,10 @@ namespace drash {
         SplitContext mSplitFigureContext;
 
         void BeginSplit();
-        void DetectNewSplitPoint(const CVec2f &_p1, const CVec2f &_p2,
-                                 unsigned int _index, const CRay &_r,
-                                 SplitContext &_context) const;
-        void ComputeIntersections(SplitContext &_context) const;
+        void DetectNewSplitPoint(const CVec2f& _p1, const CVec2f& _p2,
+                                 unsigned int _index, const CRay& _r,
+                                 SplitContext& _context) const;
+        void ComputeIntersections(SplitContext& _context) const;
         void EndSplit();
 
         void RenderSplitPlane();
@@ -203,16 +203,16 @@ namespace drash {
     }
 
     inline void
-    CObjectEditorApp::SetCurrentTemplateName(const std::string &_name) {
+    CObjectEditorApp::SetCurrentTemplateName(const std::string& _name) {
         mCurrentTemplateName = _name;
     }
 
     inline void
-    CObjectEditorApp::SetTreeRefreshHandler(const std::function<void()> &_han) {
+    CObjectEditorApp::SetTreeRefreshHandler(const std::function<void()>& _han) {
         mTreeRefreshHandler = _han;
     }
 
-    inline greng::CCamera *CObjectEditorApp::GetCamera() { return mCamera; }
+    inline greng::CCamera* CObjectEditorApp::GetCamera() { return mCamera; }
 
     inline void CObjectEditorApp::ActiveSplitFigureMode() {
         mState = SplitFigureState;
@@ -231,7 +231,7 @@ namespace drash {
     }
 
     inline void CObjectEditorApp::SetGetSelectedHandler(
-        const std::function<std::string()> &_han) {
+        const std::function<std::string()>& _han) {
         mGetSelectedTemplateHandler = _han;
     }
 

@@ -38,41 +38,39 @@ namespace drash {
       public:
         CSceneEditorApp();
 
-        virtual bool Init() override;
         virtual void Step(double _dt) override;
         virtual void Render() override;
-        virtual void Release() override;
 
         void UpdateTemplateSystem();
 
-        bool LoadLevel(const std::string &_filename);
+        bool LoadLevel(const std::string& _filename);
 
-        bool SaveLevelAs(const std::string &_filename);
+        bool SaveLevelAs(const std::string& _filename);
 
         bool NewLevel();
 
         void StartCurrentLevel();
 
-        void AddObject(const std::string &_name, const CVec3f &_pos);
+        void AddObject(const std::string& _name, const CVec3f& _pos);
 
         //
         inline bool SaveLevel();
 
         inline bool IsSetFileName() const;
         inline bool IsSetLevel() const;
-        inline CLevelDesc *GetCurrentLevel() const;
+        inline CLevelDesc* GetCurrentLevel() const;
         inline std::string GetLevelFileName() const;
 
-        inline void SetTreeRefreshHandler(const std::function<void()> &_han);
+        inline void SetTreeRefreshHandler(const std::function<void()>& _han);
         inline void
-        SetGetSelectedHandler(const std::function<std::string()> &_han);
+        SetGetSelectedHandler(const std::function<std::string()>& _han);
         inline void PauseLevel();
         void StopLevel();
 
         void ResetLevel();
 
-        void LookObject(const std::string &_geometryname,
-                        const std::string &_objectname);
+        void LookObject(const std::string& _geometryname,
+                        const std::string& _objectname);
 
         void SetDynamicParam(bool _val);
         void SetFixedRotationParam(bool _val);
@@ -98,9 +96,9 @@ namespace drash {
 
         std::string mFileNameLevel = "";
 
-        CLevelDesc *mCurrentLevel = nullptr;
+        CLevelDesc* mCurrentLevel = nullptr;
         greng::CPointLight mLight1;
-        greng::CCamera *mCamera = nullptr;
+        greng::CCamera* mCamera = nullptr;
 
         std::function<void()> mTreeRefreshHandler = []() {};
         std::function<std::string()> mGetSelectedTemplateHandler = []() {
@@ -110,7 +108,7 @@ namespace drash {
         bool mPaused = false;
         bool mChangedParams = false;
 
-        CLevelObjectDesc *mSelectedObject = nullptr;
+        CLevelObjectDesc* mSelectedObject = nullptr;
 
         CMoveablePoint mMoveablePoint;
         CRotationablePoint mRotationablePoint;
@@ -130,7 +128,7 @@ namespace drash {
         std::string mDragTemplateName = "";
 
       private:
-        CLevelObjectDesc *SelectObject();
+        CLevelObjectDesc* SelectObject();
         void MoveOfAxis();
     };
 
@@ -142,7 +140,7 @@ namespace drash {
         return SaveLevelAs(mFileNameLevel);
     }
 
-    inline CLevelDesc *CSceneEditorApp::GetCurrentLevel() const {
+    inline CLevelDesc* CSceneEditorApp::GetCurrentLevel() const {
         return mCurrentLevel;
     }
 
@@ -155,12 +153,12 @@ namespace drash {
     }
 
     inline void
-    CSceneEditorApp::SetTreeRefreshHandler(const std::function<void()> &_han) {
+    CSceneEditorApp::SetTreeRefreshHandler(const std::function<void()>& _han) {
         mTreeRefreshHandler = _han;
     }
 
     inline void CSceneEditorApp::SetGetSelectedHandler(
-        const std::function<std::string()> &_han) {
+        const std::function<std::string()>& _han) {
         mGetSelectedTemplateHandler = _han;
     }
 

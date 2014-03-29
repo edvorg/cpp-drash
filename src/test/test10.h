@@ -35,11 +35,9 @@ namespace drash {
 
         class CTest10 : public CApp {
           public:
-            CTest10() = default;
+            CTest10();
 
-          protected:
           private:
-            virtual bool Init() override;
             virtual void Step(double _dt) override;
             virtual void Render() override;
             bool InitCamera();
@@ -47,11 +45,11 @@ namespace drash {
             bool InitLights();
             bool InitProcessors();
 
-            greng::CCamera *mCamera = nullptr;
+            greng::CCamera* mCamera = nullptr;
             greng::CPointLight mLightPoint1;
             greng::CSpotLight mSpotLight;
-            CSceneObject *mLamp1Object = nullptr;
-            CSceneObject *mWallTopObject = nullptr;
+            CSceneObject* mLamp1Object = nullptr;
+            CSceneObject* mWallTopObject = nullptr;
         };
 
     } // namespace test

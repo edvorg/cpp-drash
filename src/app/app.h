@@ -26,7 +26,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CTESTAPP_H
 #define CTESTAPP_H
 
-#include "../explosion/explosionsystem.h"
 #include "../players/playerssystem.h"
 #include "../scene/scene.h"
 #include "../scene/geometrymanager.h"
@@ -41,51 +40,47 @@ namespace drash {
     class CApp {
       public:
         CApp();
-        virtual ~CApp() {}
+        virtual ~CApp() = default;
 
-        virtual bool Init();
-        virtual void Release();
         virtual void Step(double _dt);
         virtual void Render();
 
         inline void Quit();
         inline void SetQuitHandler(std::function<void()> _handler);
 
-        inline CScene &GetScene();
-        inline CAppEventSystem &GetEventSystem();
-        inline CExplosionSystem &GetExplosionSystem();
-        inline CPlayersSystem &GetPlayersSystem();
-        inline CGeometryManager &GetGeometryManager();
-        inline CDebugRenderer &GetDebugRenderer();
-        inline ui::CUISystem &GetUISystem();
-        inline CLevelManager &GetLevelManager();
-        inline greng::CGrengSystemsSet &GetGrengSystems();
+        inline CScene& GetScene();
+        inline CAppEventSystem& GetEventSystem();
+        inline CPlayersSystem& GetPlayersSystem();
+        inline CGeometryManager& GetGeometryManager();
+        inline CDebugRenderer& GetDebugRenderer();
+        inline ui::CUISystem& GetUISystem();
+        inline CLevelManager& GetLevelManager();
+        inline greng::CGrengSystemsSet& GetGrengSystems();
 
         /// used to make CApp childs about mouse moving event
         /// use this from your CApp back end (Qt, SDL, etc.)
         /// we assume that _pos is coordinates in screen space (-0.5, -0.5)
         /// (0.5, 0.5)
-        inline void SetCursorPos(const CVec2f &_pos);
+        inline void SetCursorPos(const CVec2f& _pos);
 
         /// used by CApp childs for detection, where mouse cursor is
         /// returns coordinates in screen space (-0.5, -0.5) (0.5, 0.5)
-        inline const CVec2f &GetCursorPos() const;
+        inline const CVec2f& GetCursorPos() const;
 
         inline double GetCurrentTimeDelta() const;
 
       protected:
       private:
-        CAppEventSystem mEventSystem;
         CVec2f mCursorPos = CVec2f(0);
 
+        greng::CGrengSystemsSet mGrengSystems;
         CScene mScene;
-        CExplosionSystem mExplosionSystem;
         CPlayersSystem mPlayersSystem;
         CGeometryManager mGeometryManager;
-        CDebugRenderer mDebugRenderer;
+        CAppEventSystem mEventSystem;
         ui::CUISystem mUISystem;
         CLevelManager mLevelManager;
-        greng::CGrengSystemsSet mGrengSystems;
+        CDebugRenderer mDebugRenderer;
 
         std::function<void()> mQuitHandler = []() {};
         bool mQuit = false;
@@ -98,33 +93,29 @@ namespace drash {
         mQuitHandler = _handler;
     }
 
-    inline CScene &CApp::GetScene() { return mScene; }
+    inline CScene& CApp::GetScene() { return mScene; }
 
-    inline CAppEventSystem &CApp::GetEventSystem() { return mEventSystem; }
+    inline CAppEventSystem& CApp::GetEventSystem() { return mEventSystem; }
 
-    inline CExplosionSystem &CApp::GetExplosionSystem() {
-        return mExplosionSystem;
-    }
+    inline CPlayersSystem& CApp::GetPlayersSystem() { return mPlayersSystem; }
 
-    inline CPlayersSystem &CApp::GetPlayersSystem() { return mPlayersSystem; }
-
-    inline CGeometryManager &CApp::GetGeometryManager() {
+    inline CGeometryManager& CApp::GetGeometryManager() {
         return mGeometryManager;
     }
 
-    inline CDebugRenderer &CApp::GetDebugRenderer() { return mDebugRenderer; }
+    inline CDebugRenderer& CApp::GetDebugRenderer() { return mDebugRenderer; }
 
-    inline ui::CUISystem &CApp::GetUISystem() { return mUISystem; }
+    inline ui::CUISystem& CApp::GetUISystem() { return mUISystem; }
 
-    inline CLevelManager &CApp::GetLevelManager() { return mLevelManager; }
+    inline CLevelManager& CApp::GetLevelManager() { return mLevelManager; }
 
-    inline greng::CGrengSystemsSet &CApp::GetGrengSystems() {
+    inline greng::CGrengSystemsSet& CApp::GetGrengSystems() {
         return mGrengSystems;
     }
 
-    inline void CApp::SetCursorPos(const CVec2f &_pos) { mCursorPos = _pos; }
+    inline void CApp::SetCursorPos(const CVec2f& _pos) { mCursorPos = _pos; }
 
-    inline const CVec2f &CApp::GetCursorPos() const { return mCursorPos; }
+    inline const CVec2f& CApp::GetCursorPos() const { return mCursorPos; }
 
     inline double CApp::GetCurrentTimeDelta() const {
         return mCurrentTimeDelta;

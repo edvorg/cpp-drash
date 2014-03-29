@@ -37,27 +37,24 @@ namespace greng {
         constexpr static unsigned int mMeshesCountLimit = 1024;
 
         CMeshManager();
-        CMeshManager(const CMeshManager &) = delete;
-        CMeshManager(CMeshManager &&) = delete;
-        CMeshManager &operator=(const CMeshManager &) = delete;
-        CMeshManager &operator=(CMeshManager &&) = delete;
+        CMeshManager(const CMeshManager&) = delete;
+        CMeshManager(CMeshManager&&) = delete;
+        CMeshManager& operator=(const CMeshManager&) = delete;
+        CMeshManager& operator=(CMeshManager&&) = delete;
         ~CMeshManager();
 
-        bool Init();
-        void Release();
-
-        CMesh *CreateMesh();
-        CMesh *CreateMeshFromObjFile(const char *_path);
-        CMesh *CreateMeshQuad();
-        CMesh *CreateMeshCube();
-        CMesh *CreateMeshFromVertices(const CVertex *_vertices,
+        CMesh* CreateMesh();
+        CMesh* CreateMeshFromObjFile(const char* _path);
+        CMesh* CreateMeshQuad();
+        CMesh* CreateMeshCube();
+        CMesh* CreateMeshFromVertices(const CVertex* _vertices,
                                       unsigned int _vertices_count,
-                                      const unsigned int *_indices,
+                                      const unsigned int* _indices,
                                       unsigned int _indices_count);
-        bool DestroyMesh(CMesh *_mesh);
+        bool DestroyMesh(CMesh* _mesh);
 
-        void ComputeNormals(CMesh *_mesh);
-        void ComputeTangentSpace(CMesh *_mesh);
+        void ComputeNormals(CMesh* _mesh);
+        void ComputeTangentSpace(CMesh* _mesh);
 
       protected:
       private:

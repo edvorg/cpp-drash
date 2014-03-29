@@ -56,10 +56,10 @@ namespace drash {
         friend class CScene;
         friend class CSceneObject;
 
-        CSceneObject *GetSceneObject() const;
+        CSceneObject* GetSceneObject() const;
 
-        void SetVertices(const CVec2f *_vertices, unsigned int _count);
-        const CVec2f *GetVertices() const;
+        void SetVertices(const CVec2f* _vertices, unsigned int _count);
+        const CVec2f* GetVertices() const;
         unsigned int EnumVertices() const;
 
         inline float GetZ() const;
@@ -67,25 +67,25 @@ namespace drash {
         inline float GetDepth() const;
         inline void SetDepth(float _depth);
         float GetFriction() const;
-        friend CLogger &operator<<(CLogger &_logger, const CFigure &_figure);
+        friend CLogger& operator<<(CLogger& _logger, const CFigure& _figure);
 
-        bool TestPoint(const CVec2f &_xy) const;
+        bool TestPoint(const CVec2f& _xy) const;
 
         inline void
-        AddDestroyHandler(const std::function<void(CFigure *)> &_handler);
+        AddDestroyHandler(const std::function<void(CFigure*)>& _handler);
 
       protected:
       private:
         CFigure() = default;
 
-        b2Fixture *mFixture = nullptr;
+        b2Fixture* mFixture = nullptr;
         float mZ = 0;
         float mDepth = 1;
         float mMass = 1;
         int mInternalId = -1;
         bool mDead = false;
 
-        std::vector<std::function<void(CFigure *)> > mDestroyHandlers;
+        std::vector<std::function<void(CFigure*)> > mDestroyHandlers;
     };
 
     inline float CFigure::GetZ() const { return mZ; }
@@ -97,7 +97,7 @@ namespace drash {
     inline void CFigure::SetDepth(float _depth) { mDepth = _depth; }
 
     inline void
-    CFigure::AddDestroyHandler(const std::function<void(CFigure *)> &_handler) {
+    CFigure::AddDestroyHandler(const std::function<void(CFigure*)>& _handler) {
         mDestroyHandlers.push_back(_handler);
     }
 

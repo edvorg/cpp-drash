@@ -35,12 +35,11 @@ namespace drash {
 
         class CTest8 : public CApp {
           public:
-            CTest8() = default;
+            CTest8();
+            ~CTest8();
 
           private:
-            virtual bool Init() override;
             virtual void Render() override;
-            virtual void Release() override;
 
             bool InitUI();
             bool InitLevels();
@@ -49,8 +48,8 @@ namespace drash {
 
             ui::CUIButton mButton1;
             ui::CUIButton mButton2;
-            CLevelDesc *mLevel1 = nullptr;
-            CLevelDesc *mLevel2 = nullptr;
+            CLevelDesc* mLevel1 = nullptr;
+            CLevelDesc* mLevel2 = nullptr;
             greng::CPointLight mLight1;
         };
 

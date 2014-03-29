@@ -29,7 +29,7 @@ namespace greng {
 
     class CMesh;
 
-    bool LoadMeshObj(const char *_path, CMesh *_mesh);
+    bool LoadMeshObj(const char* _path, CMesh* _mesh);
 }
 
 #endif // LOADMESHOBJ_H

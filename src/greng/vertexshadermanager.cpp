@@ -40,16 +40,8 @@ namespace greng {
         }
     }
 
-    bool CVertexShaderManager::Init() {
-        Release();
-
-        return true;
-    }
-
-    void CVertexShaderManager::Release() {}
-
-    CVertexShader *CVertexShaderManager::CreateShader() {
-        CVertexShader *res = mShaderFactory.CreateObject();
+    CVertexShader* CVertexShaderManager::CreateShader() {
+        CVertexShader* res = mShaderFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
@@ -65,14 +57,14 @@ namespace greng {
         return res;
     }
 
-    CVertexShader *CVertexShaderManager::CreateShaderDummy() {
-        CVertexShader *res = CreateShader();
+    CVertexShader* CVertexShaderManager::CreateShaderDummy() {
+        CVertexShader* res = CreateShader();
 
         if (res == nullptr) {
             return nullptr;
         }
 
-        const char *source =
+        const char* source =
             "#version 120\n\n"
             "uniform mat4 gModelViewMatrix;\n"
             "uniform mat4 gProjMatrix;\n\n"
@@ -84,13 +76,13 @@ namespace greng {
         return CreateShaderFromSource(source);
     }
 
-    CVertexShader *
-    CVertexShaderManager::CreateShaderFromSource(const char *_source) {
+    CVertexShader*
+    CVertexShaderManager::CreateShaderFromSource(const char* _source) {
         if (_source == nullptr) {
             return nullptr;
         }
 
-        CVertexShader *res = CreateShader();
+        CVertexShader* res = CreateShader();
 
         if (res == nullptr) {
             return nullptr;
@@ -125,8 +117,8 @@ namespace greng {
         return res;
     }
 
-    CVertexShader *
-    CVertexShaderManager::CreateShaderFromFile(const char *_path) {
+    CVertexShader*
+    CVertexShaderManager::CreateShaderFromFile(const char* _path) {
         if (_path == nullptr) {
             return nullptr;
         }
@@ -147,7 +139,7 @@ namespace greng {
         return CreateShaderFromSource(buffer);
     }
 
-    bool CVertexShaderManager::DestroyShader(CVertexShader *_shader) {
+    bool CVertexShaderManager::DestroyShader(CVertexShader* _shader) {
         if (mShaderFactory.IsObject(_shader) == false) {
             LOG_ERR(
                 "CVertexShaderManager::DestroyShader(): invalid shader taken");

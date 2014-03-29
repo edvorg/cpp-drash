@@ -38,32 +38,32 @@ namespace drash {
         class CUIWidget {
           public:
             CUIWidget() = default;
-            CUIWidget(const CUIWidget &) = delete;
-            CUIWidget(CUIWidget &&) = delete;
-            CUIWidget &operator=(const CUIWidget &) = delete;
-            CUIWidget &operator=(CUIWidget &&) = delete;
+            CUIWidget(const CUIWidget&) = delete;
+            CUIWidget(CUIWidget&&) = delete;
+            CUIWidget& operator=(const CUIWidget&) = delete;
+            CUIWidget& operator=(CUIWidget&&) = delete;
             virtual ~CUIWidget();
 
-            virtual void Connect(CUISystem *_system);
+            virtual void Connect(CUISystem* _system);
             virtual void Disconnect();
 
-            CUISystem *GetUISystem() const;
+            CUISystem* GetUISystem() const;
 
-            void SetPressHandler(const std::function<void()> &_handler);
-            void SetReleaseHandler(const std::function<void()> &_handler);
+            void SetPressHandler(const std::function<void()>& _handler);
+            void SetReleaseHandler(const std::function<void()>& _handler);
             void
-            SetStepHandler(const std::function<void(double _dt)> &_handler);
-            void SetDrawHandler(const std::function<void()> &_handler);
+            SetStepHandler(const std::function<void(double _dt)>& _handler);
+            void SetDrawHandler(const std::function<void()>& _handler);
 
-            void SetPos(const CVec2i &_pos);
-            void SetSize(const CVec2ui &_size);
+            void SetPos(const CVec2i& _pos);
+            void SetSize(const CVec2ui& _size);
             const CVec2i GetPos() const;
             const CVec2ui GetSize() const;
 
           protected:
           private:
-            CUIControl *mUIControl = nullptr;
-            CUISystem *mUISystem = nullptr;
+            CUIControl* mUIControl = nullptr;
+            CUISystem* mUISystem = nullptr;
         };
 
     } // namepsace ui

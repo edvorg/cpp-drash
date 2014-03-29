@@ -31,11 +31,7 @@ namespace drash {
 
     namespace test {
 
-        bool CTest5::Init() {
-            if (CTest3::Init() == false) {
-                return false;
-            }
-
+        CTest5::CTest5() {
             SetupProcessors();
             SetupMeshes();
             SetupTextures();
@@ -45,8 +41,6 @@ namespace drash {
             mLight1.mPosition.Set(0, 50, 0);
 
             GetDebugRenderer().SetLight(&mLight1);
-
-            return true;
         }
 
         void CTest5::Step(double _dt) {
@@ -83,11 +77,11 @@ namespace drash {
                 MatrixMultiply(transl, rot, model);
 
                 CMatrix4f model_view;
-                MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
+                MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
                 GetGrengSystems().GetRenderer().RenderMesh(
                     mMesh1, 0, &mTex6, 1, mShaderProgram2, &model, nullptr,
-                    &model_view, &GetCamera()->GetProjectionMatrix(), &mLight1);
+                    &model_view, &GetCamera().GetProjectionMatrix(), &mLight1);
             }
 
             if (mMesh2 != nullptr) {
@@ -107,11 +101,11 @@ namespace drash {
                 MatrixMultiply(transl, rot, model);
 
                 CMatrix4f model_view;
-                MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
+                MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
                 GetGrengSystems().GetRenderer().RenderMesh(
                     mMesh2, 0, &mTex2, 1, mShaderProgram2, &model, nullptr,
-                    &model_view, &GetCamera()->GetProjectionMatrix(), &mLight1);
+                    &model_view, &GetCamera().GetProjectionMatrix(), &mLight1);
             }
 
             if (mMesh3 != nullptr) {
@@ -122,9 +116,9 @@ namespace drash {
                 MatrixMultiply(rangle, mMesh3ConstMatrix, model);
 
                 CMatrix4f model_view;
-                MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
+                MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
-                greng::CTexture *texts[6] = { mTex4, mTex4normal,
+                greng::CTexture* texts[6] = { mTex4, mTex4normal,
                                               mTex3, mTex3normal,
                                               mTex5, mTex5normal };
 
@@ -132,8 +126,8 @@ namespace drash {
                     GetGrengSystems().GetRenderer().RenderMesh(
                         mMesh3, i, &texts[i * 2], 2, mShaderProgram4, &model,
                         nullptr, &model_view,
-                        &GetCamera()->GetProjectionMatrix(), &mLight1, nullptr,
-                        &GetCamera()->GetPos().Get());
+                        &GetCamera().GetProjectionMatrix(), &mLight1, nullptr,
+                        &GetCamera().GetPos().Get());
                 }
             }
 
@@ -151,9 +145,9 @@ namespace drash {
                 MatrixMultiply(trans, model_1, model);
 
                 CMatrix4f model_view;
-                MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
+                MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
-                greng::CTexture *texts[6] = { mTex7, mTex7normal,
+                greng::CTexture* texts[6] = { mTex7, mTex7normal,
                                               mTex7, mTex7normal,
                                               mTex7, mTex7normal, };
 
@@ -161,8 +155,8 @@ namespace drash {
                     GetGrengSystems().GetRenderer().RenderMesh(
                         mMesh4, i, &texts[i * 2], 2, mShaderProgram4, &model,
                         nullptr, &model_view,
-                        &GetCamera()->GetProjectionMatrix(), &mLight1, nullptr,
-                        &GetCamera()->GetPos().Get());
+                        &GetCamera().GetProjectionMatrix(), &mLight1, nullptr,
+                        &GetCamera().GetPos().Get());
                 }
             }
 

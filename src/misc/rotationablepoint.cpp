@@ -29,15 +29,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    bool CRotationablePoint::Init() {
-        if (mRenderer == nullptr || mCamera == nullptr) {
-            return false;
-        }
-
-        Release();
-
-        return true;
-    }
+    CRotationablePoint::CRotationablePoint(greng::CRenderer& _renderer,
+                                           greng::CCamera& _camera)
+        : mRenderer(_renderer), mCamera(_camera) {}
 
     void CRotationablePoint::Step(double) {
         CMatrix4f rotx;
@@ -80,13 +74,13 @@ namespace drash {
         yz.SetNormal(yz_normal_transposed);
 
         CVec3f xy_proj;
-        mCamera->CastRay(mCursorPos, xy, xy_proj);
+        mCamera.CastRay(mCursorPos, xy, xy_proj);
 
         CVec3f xz_proj;
-        mCamera->CastRay(mCursorPos, xz, xz_proj);
+        mCamera.CastRay(mCursorPos, xz, xz_proj);
 
         CVec3f yz_proj;
-        mCamera->CastRay(mCursorPos, yz, yz_proj);
+        mCamera.CastRay(mCursorPos, yz, yz_proj);
 
         xy_proj -= mPoint;
         xz_proj -= mPoint;
@@ -166,8 +160,8 @@ namespace drash {
         x_transposed.Vec3() *= radius;
         x_transposed.Vec3() += mPoint;
 
-        mRenderer->DrawLine(mCamera, mPoint, x_transposed, 1,
-                            CColor4f(1, 0, 0, 1), false);
+        mRenderer.DrawLine(mCamera, mPoint, x_transposed, 1,
+                           CColor4f(1, 0, 0, 1), false);
 
         CVec4f z(0, 0, 1, 0);
 
@@ -178,8 +172,8 @@ namespace drash {
         z_transposed.Vec3() *= radius;
         z_transposed.Vec3() += mPoint;
 
-        mRenderer->DrawLine(mCamera, mPoint, z_transposed, 1,
-                            CColor4f(0, 0, 1, 1), false);
+        mRenderer.DrawLine(mCamera, mPoint, z_transposed, 1,
+                           CColor4f(0, 0, 1, 1), false);
 
         CVec4f y(0, 1, 0, 0);
 
@@ -190,8 +184,8 @@ namespace drash {
         y_transposed.Vec3() *= radius;
         y_transposed.Vec3() += mPoint;
 
-        mRenderer->DrawLine(mCamera, mPoint, y_transposed, 1,
-                            CColor4f(0, 1, 0, 1), false);
+        mRenderer.DrawLine(mCamera, mPoint, y_transposed, 1,
+                           CColor4f(0, 1, 0, 1), false);
 
         if (mAxisOX == true) {
             for (unsigned int i = 0; i < segments; i++) {
@@ -208,7 +202,7 @@ namespace drash {
                 p1_transposed.Vec3() += mPoint;
                 p2_transposed.Vec3() += mPoint;
 
-                mRenderer->DrawLine(
+                mRenderer.DrawLine(
                     mCamera, p1_transposed, p2_transposed, 1,
                     CColor4f(1, 0, 0, mAxisOvered == 1 ? 0.5 : 1), false);
 
@@ -232,7 +226,7 @@ namespace drash {
                 p1_transposed.Vec3() += mPoint;
                 p2_transposed.Vec3() += mPoint;
 
-                mRenderer->DrawLine(
+                mRenderer.DrawLine(
                     mCamera, p1_transposed, p2_transposed, 1,
                     CColor4f(0, 0, 1, mAxisOvered == 3 ? 0.5 : 1), false);
 
@@ -256,7 +250,7 @@ namespace drash {
                 p1_transposed.Vec3() += mPoint;
                 p2_transposed.Vec3() += mPoint;
 
-                mRenderer->DrawLine(
+                mRenderer.DrawLine(
                     mCamera, p1_transposed, p2_transposed, 1,
                     CColor4f(0, 1, 0, mAxisOvered == 2 ? 0.5 : 1), false);
 
@@ -264,8 +258,6 @@ namespace drash {
             }
         }
     }
-
-    void CRotationablePoint::Release() {}
 
     void CRotationablePoint::RotateBegin() {
         if ((mAxisOvered == 1 && mAxisOX == true) ||
@@ -314,13 +306,13 @@ namespace drash {
             yz.SetNormal(yz_normal_transposed);
 
             CVec3f xy_proj;
-            mCamera->CastRay(mCursorPos, xy, xy_proj);
+            mCamera.CastRay(mCursorPos, xy, xy_proj);
 
             CVec3f xz_proj;
-            mCamera->CastRay(mCursorPos, xz, xz_proj);
+            mCamera.CastRay(mCursorPos, xz, xz_proj);
 
             CVec3f yz_proj;
-            mCamera->CastRay(mCursorPos, yz, yz_proj);
+            mCamera.CastRay(mCursorPos, yz, yz_proj);
 
             xy_proj -= mPoint;
             xz_proj -= mPoint;

@@ -36,21 +36,15 @@ namespace greng {
 
     using drash::CLogger;
 
-    bool CRenderer::Init() {
-        Release();
-
-        return true;
-    }
-
-    void CRenderer::Release() {}
+    CRenderer::~CRenderer() {}
 
     void CRenderer::RenderMesh(
-        const CMesh *_mesh, unsigned int _submesh,
-        const CTexture *const *_textures, unsigned int _textures_count,
-        const CShaderProgram *_program, const drash::CMatrix4f *_model,
-        const drash::CMatrix4f *_view, const drash::CMatrix4f *_model_view,
-        const drash::CMatrix4f *_proj_matrix, const CPointLight *_light,
-        const CSpotLight *_spot_light, const CVec3f *_view_pos) {
+        const CMesh* _mesh, unsigned int _submesh,
+        const CTexture* const* _textures, unsigned int _textures_count,
+        const CShaderProgram* _program, const drash::CMatrix4f* _model,
+        const drash::CMatrix4f* _view, const drash::CMatrix4f* _model_view,
+        const drash::CMatrix4f* _proj_matrix, const CPointLight* _light,
+        const CSpotLight* _spot_light, const CVec3f* _view_pos) {
         if (_submesh >= _mesh->mMaterialOffsets.size() - 1) {
             return;
         }
@@ -71,14 +65,14 @@ namespace greng {
         glBindBuffer(GL_ARRAY_BUFFER, _mesh->mVertexBufferId);
         glVertexPointer(3, GL_FLOAT, sizeof(CVertex), nullptr);
         glTexCoordPointer(2, GL_FLOAT, sizeof(CVertex),
-                          reinterpret_cast<GLvoid *>(sizeof(drash::CVec3f)));
+                          reinterpret_cast<GLvoid*>(sizeof(drash::CVec3f)));
         glNormalPointer(GL_FLOAT, sizeof(CVertex),
-                        reinterpret_cast<GLvoid *>(sizeof(drash::CVec3f) +
-                                                   sizeof(drash::CVec2f)));
+                        reinterpret_cast<GLvoid*>(sizeof(drash::CVec3f) +
+                                                  sizeof(drash::CVec2f)));
         glColorPointer(4, GL_FLOAT, sizeof(CVertex),
-                       reinterpret_cast<GLvoid *>(sizeof(drash::CVec3f) +
-                                                  sizeof(drash::CVec2f) +
-                                                  sizeof(drash::CVec3f)));
+                       reinterpret_cast<GLvoid*>(sizeof(drash::CVec3f) +
+                                                 sizeof(drash::CVec2f) +
+                                                 sizeof(drash::CVec3f)));
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->mIndexBufferId);
 
@@ -90,7 +84,7 @@ namespace greng {
             glEnableVertexAttribArray(tangent_loc);
             glVertexAttribPointer(
                 tangent_loc, 3, GL_FLOAT, 1, sizeof(CVertex),
-                reinterpret_cast<GLvoid *>(
+                reinterpret_cast<GLvoid*>(
                     sizeof(drash::CVec3f) + sizeof(drash::CVec2f) +
                     sizeof(drash::CVec3f) + sizeof(drash::CColor4f)));
         }
@@ -102,7 +96,7 @@ namespace greng {
             glEnableVertexAttribArray(binormal_loc);
             glVertexAttribPointer(
                 binormal_loc, 3, GL_FLOAT, 1, sizeof(CVertex),
-                reinterpret_cast<GLvoid *>(
+                reinterpret_cast<GLvoid*>(
                     sizeof(drash::CVec3f) + sizeof(drash::CVec2f) +
                     sizeof(drash::CVec3f) + sizeof(drash::CColor4f) +
                     sizeof(drash::CVec3f)));
@@ -152,7 +146,7 @@ namespace greng {
                 glGetUniformLocation(_program->mProgramId, "gViewPosition");
             if (vploc != -1) {
                 glUniform3fv(vploc, 1,
-                             reinterpret_cast<const GLfloat *>(_view_pos));
+                             reinterpret_cast<const GLfloat*>(_view_pos));
             } else {
                 LOG_ERR("CRenderer::RenderMesh(): Unable to find gViewPosition "
                         "attribute");
@@ -196,7 +190,7 @@ namespace greng {
             int l1ploc =
                 glGetUniformLocation(_program->mProgramId, "gLight1Position");
             if (l1ploc != -1) {
-                glUniform3fv(l1ploc, 1, reinterpret_cast<const GLfloat *>(
+                glUniform3fv(l1ploc, 1, reinterpret_cast<const GLfloat*>(
                                             &_light->mPosition));
             } else {
                 LOG_ERR("CRenderer::RenderMesh(): Unable to find "
@@ -208,7 +202,7 @@ namespace greng {
             int sl1ploc =
                 glGetUniformLocation(_program->mProgramId, "gLight1Position");
             if (sl1ploc != -1) {
-                glUniform3fv(sl1ploc, 1, reinterpret_cast<const GLfloat *>(
+                glUniform3fv(sl1ploc, 1, reinterpret_cast<const GLfloat*>(
                                              &_spot_light->mPosition));
             } else {
                 LOG_ERR("CRenderer::RenderMesh(): Unable to find "
@@ -218,7 +212,7 @@ namespace greng {
             int sl1dloc =
                 glGetUniformLocation(_program->mProgramId, "gLight1Direction");
             if (sl1dloc != -1) {
-                glUniform3fv(sl1dloc, 1, reinterpret_cast<const GLfloat *>(
+                glUniform3fv(sl1dloc, 1, reinterpret_cast<const GLfloat*>(
                                              &_spot_light->mDirection));
             } else {
                 LOG_ERR("CRenderer::RenderMesh(): Unable to find "
@@ -228,7 +222,7 @@ namespace greng {
 
         glDrawElements(GL_TRIANGLES, _mesh->mMaterialOffsets[_submesh + 1] -
                                          _mesh->mMaterialOffsets[_submesh],
-                       GL_UNSIGNED_INT, reinterpret_cast<const GLvoid *>(
+                       GL_UNSIGNED_INT, reinterpret_cast<const GLvoid*>(
                                             sizeof(unsigned int) *
                                             _mesh->mMaterialOffsets[_submesh]));
 
@@ -253,8 +247,8 @@ namespace greng {
         glDisable(GL_TEXTURE_2D);
     }
 
-    void CRenderer::DrawTriangle(const CVec2f &_p1, const CVec2f &_p2,
-                                 const CVec2f &_p3, const CColor4f &_col,
+    void CRenderer::DrawTriangle(const CVec2f& _p1, const CVec2f& _p2,
+                                 const CVec2f& _p3, const CColor4f& _col,
                                  bool _depth_test) const {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
@@ -281,14 +275,9 @@ namespace greng {
         glEnd();
     }
 
-    void CRenderer::DrawTriangle(const CCamera *_camera, const CVec3f &_p1,
-                                 const CVec3f &_p2, const CVec3f &_p3,
-                                 const CColor4f &_col, bool _depth_test) const {
-        if (_camera == nullptr) {
-            LOG_ERR("CRenderer::DrawTriangle(): _camera is not specified");
-            return;
-        }
-
+    void CRenderer::DrawTriangle(const CCamera& _camera, const CVec3f& _p1,
+                                 const CVec3f& _p2, const CVec3f& _p3,
+                                 const CColor4f& _col, bool _depth_test) const {
         if (_depth_test == true) {
             glEnable(GL_DEPTH_TEST);
         } else {
@@ -299,9 +288,9 @@ namespace greng {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(_camera->GetViewMatrixTransposed().mData);
+        glLoadMatrixf(_camera.GetViewMatrixTransposed().mData);
         glMatrixMode(GL_PROJECTION);
-        glLoadMatrixf(_camera->GetProjectionMatrixTransposed().mData);
+        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().mData);
 
         glBegin(GL_TRIANGLES);
         glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
@@ -313,8 +302,8 @@ namespace greng {
         glEnd();
     }
 
-    void CRenderer::DrawLine(const CVec2f &_p1, const CVec2f &_p2, float _width,
-                             const CColor4f &_col, bool _depth_test) const {
+    void CRenderer::DrawLine(const CVec2f& _p1, const CVec2f& _p2, float _width,
+                             const CColor4f& _col, bool _depth_test) const {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glMatrixMode(GL_PROJECTION);
@@ -339,13 +328,9 @@ namespace greng {
         glEnd();
     }
 
-    void CRenderer::DrawLine(const CCamera *_camera, const CVec3f &_p1,
-                             const CVec3f &_p2, float _width,
-                             const CColor4f &_col, bool _depth_test) const {
-        if (_camera == nullptr) {
-            return;
-        }
-
+    void CRenderer::DrawLine(const CCamera& _camera, const CVec3f& _p1,
+                             const CVec3f& _p2, float _width,
+                             const CColor4f& _col, bool _depth_test) const {
         if (_depth_test == true) {
             glEnable(GL_DEPTH_TEST);
         } else {
@@ -355,9 +340,9 @@ namespace greng {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(_camera->GetViewMatrixTransposed().mData);
+        glLoadMatrixf(_camera.GetViewMatrixTransposed().mData);
         glMatrixMode(GL_PROJECTION);
-        glLoadMatrixf(_camera->GetProjectionMatrixTransposed().mData);
+        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().mData);
 
         glLineWidth(_width);
 
@@ -369,8 +354,8 @@ namespace greng {
         glEnd();
     }
 
-    void CRenderer::DrawLines(const std::vector<CVec2f> &lines, float _width,
-                              const CColor4f &_col, bool _depth_test) const {
+    void CRenderer::DrawLines(const std::vector<CVec2f>& lines, float _width,
+                              const CColor4f& _col, bool _depth_test) const {
         if (lines.size() < 2)
             return;
 
@@ -379,9 +364,9 @@ namespace greng {
         }
     }
 
-    void CRenderer::DrawLines(const CCamera *_camera,
-                              const std::vector<CVec3f> &lines, float _width,
-                              const CColor4f &_col, bool _depth_test) const {
+    void CRenderer::DrawLines(const CCamera& _camera,
+                              const std::vector<CVec3f>& lines, float _width,
+                              const CColor4f& _col, bool _depth_test) const {
         if (lines.size() < 2)
             return;
 
@@ -390,8 +375,8 @@ namespace greng {
         }
     }
 
-    void CRenderer::DrawPoint(const CVec2f &_p, float _size,
-                              const CColor4f &_col, bool _depth_test) const {
+    void CRenderer::DrawPoint(const CVec2f& _p, float _size,
+                              const CColor4f& _col, bool _depth_test) const {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glMatrixMode(GL_PROJECTION);
@@ -414,13 +399,9 @@ namespace greng {
         glEnd();
     }
 
-    void CRenderer::DrawPoint(const CCamera *_camera, const CVec3f &_p,
-                              float _size, const CColor4f &_col,
+    void CRenderer::DrawPoint(const CCamera& _camera, const CVec3f& _p,
+                              float _size, const CColor4f& _col,
                               bool _depth_test) const {
-        if (_camera == nullptr) {
-            return;
-        }
-
         if (_depth_test == true) {
             glEnable(GL_DEPTH_TEST);
         } else {
@@ -430,9 +411,9 @@ namespace greng {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(_camera->GetViewMatrixTransposed().mData);
+        glLoadMatrixf(_camera.GetViewMatrixTransposed().mData);
         glMatrixMode(GL_PROJECTION);
-        glLoadMatrixf(_camera->GetProjectionMatrixTransposed().mData);
+        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().mData);
 
         glPointSize(_size);
 
@@ -442,11 +423,11 @@ namespace greng {
         glEnd();
     }
 
-    void CRenderer::DrawDigit(const CVec2f &_pos, const CVec2f &_size,
+    void CRenderer::DrawDigit(const CVec2f& _pos, const CVec2f& _size,
                               unsigned int _digit) {
         int corners = 0;
-        void *vertices = nullptr;
-        void *indices = nullptr;
+        void* vertices = nullptr;
+        void* indices = nullptr;
 
         if (_digit == 0) {
             static const int corn = 5;
@@ -564,8 +545,8 @@ namespace greng {
         }
     }
 
-    void CRenderer::DrawNumber(bool fromLeft, const CVec2f &_pos,
-                               const CVec2f &_size, unsigned int number) {
+    void CRenderer::DrawNumber(bool fromLeft, const CVec2f& _pos,
+                               const CVec2f& _size, unsigned int number) {
         auto pos = _pos;
 
         if (fromLeft) {

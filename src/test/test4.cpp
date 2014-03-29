@@ -32,11 +32,7 @@ namespace drash {
 
         using namespace greng;
 
-        bool CTest4::Init() {
-            if (CApp::Init() == false) {
-                return false;
-            }
-
+        CTest4::CTest4() {
             mTestButton1.Connect(&GetUISystem());
 
             mTestButton1.SetClickHandler([]() { LOG_INFO("click 1"); });
@@ -76,12 +72,8 @@ namespace drash {
             CCameraParams params;
             params.mPos.Set(10, 10, 10.0f);
             params.mRotation.Set(-M_PI / 4, M_PI / 4, 0);
-            CCamera *camera =
+            CCamera* camera =
                 GetGrengSystems().GetCameraManager().CreateCamera(params);
-
-            if (camera == nullptr) {
-                return false;
-            }
 
             mPoint.SetCamera(camera);
             mPoint.SetCenter(mTestPoint);
@@ -92,7 +84,6 @@ namespace drash {
                                          [this]() { mPoint.ClickEnd(); }));
 
             GetDebugRenderer().SetCamera(camera);
-            return true;
         }
 
         void CTest4::Step(double _dt) {

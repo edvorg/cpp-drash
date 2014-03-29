@@ -42,7 +42,7 @@ namespace Ui {
 
 class GameWindowParams {
   public:
-    void SetCommandLine(unsigned int _argc, char *_argv[]);
+    void SetCommandLine(unsigned int _argc, char* _argv[]);
 
     std::vector<std::string> mArgv;
 };
@@ -51,7 +51,7 @@ class GameWindow : public QMainWindow {
     Q_OBJECT
 
   public:
-    explicit GameWindow(QWidget *parent = 0);
+    explicit GameWindow(QWidget* parent = 0);
     ~GameWindow();
 
   public
@@ -59,15 +59,15 @@ slots:
     void UpdateScene();
 
   public:
-    bool Init(const GameWindowParams &_params);
+    bool Init(const GameWindowParams& _params);
 
   private:
-    Ui::GameWindow *ui = nullptr;
-    drash::CApp *mApp = nullptr;
-    SceneWidget *mSceneWidget = nullptr;
+    Ui::GameWindow* ui = nullptr;
+    drash::CApp* mApp = nullptr;
+    SceneWidget* mSceneWidget = nullptr;
     QTimer mUpdateTimer;
     drash::CTimer mGameTimer;
-    QLabel *mStatusLabel = nullptr;
+    QLabel* mStatusLabel = nullptr;
 };
 
 #endif // GAMEWINDOW_H

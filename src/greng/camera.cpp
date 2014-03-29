@@ -62,7 +62,7 @@ namespace greng {
         }
     }
 
-    void CCamera::LookAt(const CVec3f &_point) {
+    void CCamera::LookAt(const CVec3f& _point) {
         CVec3f dir = _point;
         dir -= mPos;
 
@@ -117,8 +117,8 @@ namespace greng {
         mPosAnimator = strafe_dir;
     }
 
-    void CCamera::CastRay(const CVec2f &_pos, const drash::CPlane &_plane,
-                          CVec3f &_result) const {
+    void CCamera::CastRay(const CVec2f& _pos, const drash::CPlane& _plane,
+                          CVec3f& _result) const {
         double c = 1.0 / cos(mFov / 2.0); // hypotenuse
 
         double frame_height = 2.0 * sqrt(c * c - 1.0);

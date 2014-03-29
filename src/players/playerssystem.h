@@ -46,36 +46,26 @@ namespace drash {
       public:
         static const unsigned int mPlayersCountLimit = 2;
 
-        CPlayersSystem();
+        CPlayersSystem(CScene& _scene);
         ~CPlayersSystem();
 
-        bool Init();
         void Step(double);
-        void Release();
 
-        inline void SetScene(CScene *_scene);
-        inline CScene *GetScene();
+        CPlayer* CreatePlayer(const CSceneObjectGeometry& _g,
+                              const CPlayerParams& _p);
+        bool DestroyPlayer(CPlayer* _player);
 
-        CPlayer *CreatePlayer(const CSceneObjectGeometry &_g,
-                              const CPlayerParams &_p);
-        bool DestroyPlayer(CPlayer *_player);
-
-        inline CPlayer *const *GetPlayers();
+        inline CPlayer* const* GetPlayers();
         inline unsigned int EnumPlayers() const;
 
-        bool SendMessage(CPlayer *_player, const PlayerMessage &_message);
+        bool SendMessage(CPlayer* _player, const PlayerMessage& _message);
 
       private:
+        CScene& mScene;
         CObjectFactory<CPlayer> mPlayersFactory;
-
-        CScene *mScene = nullptr;
     };
 
-    inline void CPlayersSystem::SetScene(CScene *_scene) { mScene = _scene; }
-
-    inline CScene *CPlayersSystem::GetScene() { return mScene; }
-
-    inline CPlayer *const *CPlayersSystem::GetPlayers() {
+    inline CPlayer* const* CPlayersSystem::GetPlayers() {
         return mPlayersFactory.GetObjects();
     }
 

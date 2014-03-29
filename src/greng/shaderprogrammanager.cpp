@@ -41,16 +41,8 @@ namespace greng {
         }
     }
 
-    bool CShaderProgramManager::Init() {
-        Release();
-
-        return true;
-    }
-
-    void CShaderProgramManager::Release() {}
-
-    CShaderProgram *CShaderProgramManager::CreateProgram() {
-        CShaderProgram *res = mProgramFactory.CreateObject();
+    CShaderProgram* CShaderProgramManager::CreateProgram() {
+        CShaderProgram* res = mProgramFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
@@ -66,13 +58,13 @@ namespace greng {
         return res;
     }
 
-    CShaderProgram *CShaderProgramManager::CreateProgram(CVertexShader *_vs,
-                                                         CFragmentShader *_fs) {
+    CShaderProgram* CShaderProgramManager::CreateProgram(CVertexShader* _vs,
+                                                         CFragmentShader* _fs) {
         if (_vs == nullptr || _fs == nullptr) {
             return nullptr;
         }
 
-        CShaderProgram *res = CreateProgram();
+        CShaderProgram* res = CreateProgram();
 
         if (res == nullptr) {
             return nullptr;
@@ -132,7 +124,7 @@ namespace greng {
         return res;
     }
 
-    bool CShaderProgramManager::DestroyProgram(CShaderProgram *_program) {
+    bool CShaderProgramManager::DestroyProgram(CShaderProgram* _program) {
         if (mProgramFactory.IsObject(_program) == false) {
             LOG_ERR("CShaderProgramManager::DestroyProgram(): invalid program "
                     "taken");

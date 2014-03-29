@@ -33,8 +33,8 @@ namespace drash {
 
     CLevelDesc::~CLevelDesc() { mObjectsFactory.DestroyObjects(); }
 
-    CLevelObjectDesc *CLevelDesc::AddObject(const std::string &_geometry,
-                                            const std::string &_name) {
+    CLevelObjectDesc* CLevelDesc::AddObject(const std::string& _geometry,
+                                            const std::string& _name) {
         auto o = mObjectsFactory.CreateObject();
 
         if (o == nullptr) {
@@ -47,7 +47,7 @@ namespace drash {
         return o;
     }
 
-    bool CLevelDesc::DestroyObject(CLevelObjectDesc *_desc) {
+    bool CLevelDesc::DestroyObject(CLevelObjectDesc* _desc) {
         if (!mObjectsFactory.IsObject(_desc)) {
             LOG_ERR("CLevelDesc::DestroyObject(): invalid object taken");
             return false;
@@ -57,7 +57,7 @@ namespace drash {
         return true;
     }
 
-    CLevelObjectDesc *CLevelDesc::GetObject(const std::string &_name) {
+    CLevelObjectDesc* CLevelDesc::GetObject(const std::string& _name) {
         for (unsigned int i = 0; i < mObjectsFactory.EnumObjects(); i++) {
             if (mObjectsFactory.GetObjects()[i]->mLevelObjectName == _name) {
                 return mObjectsFactory.GetObjects()[i];
@@ -81,7 +81,7 @@ namespace drash {
         return res;
     }
 
-    bool CLevelDesc::Store(const string &_filename) const {
+    bool CLevelDesc::Store(const string& _filename) const {
         ofstream out(_filename);
 
         if (out.is_open() == false) {
@@ -91,13 +91,13 @@ namespace drash {
 
         out << mObjectsFactory.EnumObjects() << endl;
         for (unsigned int i = 0; i < mObjectsFactory.EnumObjects(); i++) {
-            CLevelObjectDesc *desc = mObjectsFactory.GetObjects()[i];
+            CLevelObjectDesc* desc = mObjectsFactory.GetObjects()[i];
 
             // Save name Template
             out << desc->mLevelObjectName << endl;
             out << desc->mGeometryName << endl;
 
-            const CSceneObjectParams &cur = desc->mParams;
+            const CSceneObjectParams& cur = desc->mParams;
 
             out << cur.mAngle << endl;
             out << cur.mDynamic << endl;
@@ -112,7 +112,7 @@ namespace drash {
         return true;
     }
 
-    bool CLevelDesc::Load(const string &_filename) {
+    bool CLevelDesc::Load(const string& _filename) {
         ifstream in(_filename);
 
         if (in.is_open() == false) {
@@ -138,7 +138,7 @@ namespace drash {
             in >> params.mPos.mY;
             in >> params.mPos.mZ;
 
-            CLevelObjectDesc *desc = AddObject(name_geometry, name_object);
+            CLevelObjectDesc* desc = AddObject(name_geometry, name_object);
 
             if (desc != nullptr) {
                 desc->mGeometryName = name_geometry;

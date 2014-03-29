@@ -36,21 +36,18 @@ namespace greng {
         constexpr static unsigned int mShadersCountLimit = 32;
 
         CFragmentShaderManager();
-        CFragmentShaderManager(const CFragmentShaderManager &) = delete;
-        CFragmentShaderManager(CFragmentShaderManager &&) = delete;
-        CFragmentShaderManager &operator=(const CFragmentShaderManager &) =
+        CFragmentShaderManager(const CFragmentShaderManager&) = delete;
+        CFragmentShaderManager(CFragmentShaderManager&&) = delete;
+        CFragmentShaderManager& operator=(const CFragmentShaderManager&) =
             delete;
-        CFragmentShaderManager &operator=(CFragmentShaderManager &&) = delete;
+        CFragmentShaderManager& operator=(CFragmentShaderManager&&) = delete;
         ~CFragmentShaderManager();
 
-        bool Init();
-        void Release();
-
-        CFragmentShader *CreateShader();
-        CFragmentShader *CreateShaderDummy();
-        CFragmentShader *CreateShaderFromSource(const char *_source);
-        CFragmentShader *CreateShaderFromFile(const char *_path);
-        bool DestroyShader(CFragmentShader *_shader);
+        CFragmentShader* CreateShader();
+        CFragmentShader* CreateShaderDummy();
+        CFragmentShader* CreateShaderFromSource(const char* _source);
+        CFragmentShader* CreateShaderFromFile(const char* _path);
+        bool DestroyShader(CFragmentShader* _shader);
 
       protected:
       private:

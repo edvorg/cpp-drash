@@ -36,20 +36,17 @@ namespace greng {
         constexpr static unsigned int mShadersCountLimit = 32;
 
         CVertexShaderManager();
-        CVertexShaderManager(const CVertexShaderManager &) = delete;
-        CVertexShaderManager(CVertexShaderManager &&) = delete;
-        CVertexShaderManager &operator=(const CVertexShaderManager &) = delete;
-        CVertexShaderManager &operator=(CVertexShaderManager &&) = delete;
+        CVertexShaderManager(const CVertexShaderManager&) = delete;
+        CVertexShaderManager(CVertexShaderManager&&) = delete;
+        CVertexShaderManager& operator=(const CVertexShaderManager&) = delete;
+        CVertexShaderManager& operator=(CVertexShaderManager&&) = delete;
         ~CVertexShaderManager();
 
-        bool Init();
-        void Release();
-
-        CVertexShader *CreateShader();
-        CVertexShader *CreateShaderDummy();
-        CVertexShader *CreateShaderFromSource(const char *_source);
-        CVertexShader *CreateShaderFromFile(const char *_path);
-        bool DestroyShader(CVertexShader *_shader);
+        CVertexShader* CreateShader();
+        CVertexShader* CreateShaderDummy();
+        CVertexShader* CreateShaderFromSource(const char* _source);
+        CVertexShader* CreateShaderFromFile(const char* _path);
+        bool DestroyShader(CVertexShader* _shader);
 
       protected:
       private:

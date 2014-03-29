@@ -37,10 +37,9 @@ namespace drash {
 
         class CTest4 : public CApp {
           public:
-            CTest4() = default;
+            CTest4();
 
           protected:
-            virtual bool Init() override;
             virtual void Step(double _dt) override;
             virtual void Render() override;
 

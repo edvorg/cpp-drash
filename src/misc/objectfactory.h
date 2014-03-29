@@ -41,25 +41,25 @@ namespace drash {
         };
 
         CObjectFactory() = delete;
-        CObjectFactory(const CObjectFactory &) = delete;
-        CObjectFactory(CObjectFactory &&) = delete;
-        CObjectFactory &operator=(const CObjectFactory &) = delete;
-        CObjectFactory &operator=(CObjectFactory &&) = delete;
+        CObjectFactory(const CObjectFactory&) = delete;
+        CObjectFactory(CObjectFactory&&) = delete;
+        CObjectFactory& operator=(const CObjectFactory&) = delete;
+        CObjectFactory& operator=(CObjectFactory&&) = delete;
 
-        explicit CObjectFactory(unsigned int _size, const char *_product_name);
+        explicit CObjectFactory(unsigned int _size, const char* _product_name);
         ~CObjectFactory();
 
-        T *CreateObject();
-        bool DestroyObjectSafe(T *_obj);
-        void DestroyObject(T *_obj);
+        T* CreateObject();
+        bool DestroyObjectSafe(T* _obj);
+        void DestroyObject(T* _obj);
         void DestroyObjects();
-        inline bool IsObject(T *_obj) const;
-        inline T *const *GetObjects() const;
+        inline bool IsObject(T* _obj) const;
+        inline T* const* GetObjects() const;
         inline unsigned int EnumObjects() const;
 
       protected:
       private:
-        T **mObjects = nullptr;
+        T** mObjects = nullptr;
         unsigned int mObjectsCount = 0;
         unsigned int mObjectsCountLimit = 0;
         std::string mProductName;
@@ -67,7 +67,7 @@ namespace drash {
 
     template <class T>
     CObjectFactory<T>::CObjectFactory(unsigned int _size,
-                                      const char *_product_name)
+                                      const char* _product_name)
         : mObjectsCountLimit(_size), mProductName(_product_name) {
         if (mObjectsCountLimit == 0) {
             LOG_ERR("CObjectFactory<"
@@ -76,7 +76,7 @@ namespace drash {
             return;
         }
 
-        mObjects = new T *[mObjectsCountLimit];
+        mObjects = new T* [mObjectsCountLimit];
         for (unsigned int i = 0; i < mObjectsCount; i++) {
             mObjects[i] = nullptr;
         }
@@ -99,7 +99,7 @@ namespace drash {
         mObjects = nullptr;
     }
 
-    template <class T> T *CObjectFactory<T>::CreateObject() {
+    template <class T> T* CObjectFactory<T>::CreateObject() {
         if (mObjectsCount >= mObjectsCountLimit) {
             LOG_ERR("CObjectFactory<"
                     << mProductName.c_str()
@@ -108,12 +108,12 @@ namespace drash {
             return nullptr;
         }
 
-        T *res = mObjects[mObjectsCount] = new T();
+        T* res = mObjects[mObjectsCount] = new T();
         res->mInternalId = mObjectsCount++;
         return res;
     }
 
-    template <class T> bool CObjectFactory<T>::DestroyObjectSafe(T *_obj) {
+    template <class T> bool CObjectFactory<T>::DestroyObjectSafe(T* _obj) {
         if (IsObject(_obj) == false) {
             LOG_ERR("CObjectFactory<" << mProductName.c_str()
                                       << ">::DestroyObject(): Something wrong "
@@ -127,7 +127,7 @@ namespace drash {
         return true;
     }
 
-    template <class T> void CObjectFactory<T>::DestroyObject(T *_obj) {
+    template <class T> void CObjectFactory<T>::DestroyObject(T* _obj) {
         if (_obj->mInternalId < --mObjectsCount) {
             mObjects[_obj->mInternalId] = mObjects[mObjectsCount];
             mObjects[_obj->mInternalId]->mInternalId = _obj->mInternalId;
@@ -148,12 +148,12 @@ namespace drash {
         mObjectsCount = 0;
     }
 
-    template <class T> inline bool CObjectFactory<T>::IsObject(T *_obj) const {
+    template <class T> inline bool CObjectFactory<T>::IsObject(T* _obj) const {
         return _obj != nullptr && _obj->mInternalId < mObjectsCount &&
                _obj == mObjects[_obj->mInternalId];
     }
 
-    template <class T> inline T *const *CObjectFactory<T>::GetObjects() const {
+    template <class T> inline T* const* CObjectFactory<T>::GetObjects() const {
         return mObjects;
     }
 

@@ -33,28 +33,28 @@ namespace drash {
 
     CPlane::CPlane() {}
 
-    CPlane::CPlane(const CPlane &_plane)
+    CPlane::CPlane(const CPlane& _plane)
         : mPoint(_plane.mPoint), mNormal(_plane.mNormal), mD(_plane.mD) {}
 
-    CPlane::CPlane(const CVec3f &_point, const CVec3f &_normal) {
+    CPlane::CPlane(const CVec3f& _point, const CVec3f& _normal) {
         mPoint = _point;
         mNormal = _normal;
         mNormal.Normalize();
         ComputeD();
     }
 
-    void CPlane::SetPoint(const CVec3f &_point) {
+    void CPlane::SetPoint(const CVec3f& _point) {
         mPoint = _point;
         ComputeD();
     }
 
-    void CPlane::SetNormal(const CVec3f &_normal) {
+    void CPlane::SetNormal(const CVec3f& _normal) {
         mNormal = _normal;
         mNormal.Normalize();
         ComputeD();
     }
 
-    void CPlane::Set(const CVec3f &_p1, const CVec3f &_p2, const CVec3f &_p3) {
+    void CPlane::Set(const CVec3f& _p1, const CVec3f& _p2, const CVec3f& _p3) {
         mPoint = _p1;
         CVec3f a(_p2);
         CVec3f b(_p3);
@@ -65,7 +65,7 @@ namespace drash {
         ComputeD();
     }
 
-    void CPlane::CastRay(const CRay &_ray, CVec3f &_result) const {
+    void CPlane::CastRay(const CRay& _ray, CVec3f& _result) const {
         float tmp1 = _ray.GetDirection().mX * mNormal.mX +
                      _ray.GetDirection().mY * mNormal.mY +
                      _ray.GetDirection().mZ * mNormal.mZ;

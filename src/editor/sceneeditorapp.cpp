@@ -37,9 +37,9 @@ namespace drash {
 
     CSceneEditorApp::CSceneEditorApp() {}
 
-    bool CSceneEditorApp::Init() {
+    CSceneEditorApp::CSceneEditorApp() {
 
-        if (CApp::Init() == false) {
+        if (CApp::CApp() == false) {
             return false;
         }
 
@@ -99,16 +99,11 @@ namespace drash {
         }
     }
 
-    void CSceneEditorApp::Release() {
-        CApp::Release();
-        mRotationablePoint.Release();
-    }
-
     void CSceneEditorApp::UpdateTemplateSystem() {
         GetGeometryManager().Load();
     }
 
-    bool CSceneEditorApp::LoadLevel(const std::string &_filename) {
+    bool CSceneEditorApp::LoadLevel(const std::string& _filename) {
         if (mCurrentLevel != nullptr) {
             GetLevelManager().DestroyLevel(mCurrentLevel);
             mCurrentLevel = nullptr;
@@ -134,7 +129,7 @@ namespace drash {
         // GetLevelManager().StartLevel(level);
     }
 
-    bool CSceneEditorApp::SaveLevelAs(const std::string &_filename) {
+    bool CSceneEditorApp::SaveLevelAs(const std::string& _filename) {
         if (mCurrentLevel == nullptr) {
             LOG_ERR("Level not saved, because not created.");
             return false;
@@ -174,14 +169,14 @@ namespace drash {
         }
     }
 
-    void CSceneEditorApp::AddObject(const std::string &_name,
-                                    const CVec3f &_pos) {
+    void CSceneEditorApp::AddObject(const std::string& _name,
+                                    const CVec3f& _pos) {
         if (mCurrentLevel == nullptr) {
             LOG_WARN("Not set current level");
             return;
         }
 
-        CSceneObjectGeometry *obj = GetGeometryManager().GetGeometry(_name);
+        CSceneObjectGeometry* obj = GetGeometryManager().GetGeometry(_name);
         if (obj == nullptr) {
             LOG_ERR(_name.c_str() << " not found in Template System");
             return;
@@ -189,7 +184,7 @@ namespace drash {
 
         std::string obj_name = mCurrentLevel->GetUniqueObjectName();
 
-        CLevelObjectDesc *p = mCurrentLevel->AddObject(_name, obj_name);
+        CLevelObjectDesc* p = mCurrentLevel->AddObject(_name, obj_name);
         if (p == nullptr) {
             return;
         }
@@ -251,7 +246,7 @@ namespace drash {
                         if (mPlayLevel) {
                             return;
                         }
-                        CLevelObjectDesc *temp = SelectObject();
+                        CLevelObjectDesc* temp = SelectObject();
                         if (temp != nullptr) {
                             temp->mParams.mDynamic = !temp->mParams.mDynamic;
                         }
@@ -398,7 +393,7 @@ namespace drash {
         }
         // qDebug() << mDragTemplateName.c_str();
         if (mDragTemplateName != "") {
-            CSceneObjectGeometry *g =
+            CSceneObjectGeometry* g =
                 GetGeometryManager().GetGeometry(mDragTemplateName);
             if (g == nullptr) {
                 return;
@@ -421,7 +416,7 @@ namespace drash {
         }
     }
 
-    CLevelObjectDesc *CSceneEditorApp::SelectObject() {
+    CLevelObjectDesc* CSceneEditorApp::SelectObject() {
         auto f = [this](unsigned int i) {
             return mCurrentLevel->GetObjects()[i];
         };
@@ -450,8 +445,8 @@ namespace drash {
         }
     }
 
-    void CSceneEditorApp::LookObject(const std::string &_geometryname,
-                                     const std::string &_objectname) {
+    void CSceneEditorApp::LookObject(const std::string& _geometryname,
+                                     const std::string& _objectname) {
         if (mCurrentLevel != nullptr) {
             for (unsigned int i = 0; i < mCurrentLevel->EnumObjects(); i++) {
                 if (mCurrentLevel->GetObjects()[i]->mLevelObjectName ==

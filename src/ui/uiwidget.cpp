@@ -33,7 +33,7 @@ namespace drash {
 
         CUIWidget::~CUIWidget() { this->Disconnect(); }
 
-        void CUIWidget::Connect(CUISystem *_system) {
+        void CUIWidget::Connect(CUISystem* _system) {
             mUISystem = _system;
             mUIControl = mUISystem->CreateControl();
             mUIControl->SetDestroyHandler([this]() {
@@ -50,41 +50,41 @@ namespace drash {
             }
         }
 
-        CUISystem *CUIWidget::GetUISystem() const { return mUISystem; }
+        CUISystem* CUIWidget::GetUISystem() const { return mUISystem; }
 
-        void CUIWidget::SetPressHandler(const std::function<void()> &_handler) {
+        void CUIWidget::SetPressHandler(const std::function<void()>& _handler) {
             if (mUIControl != nullptr) {
                 mUIControl->SetPressHandler(_handler);
             }
         }
 
         void
-        CUIWidget::SetReleaseHandler(const std::function<void()> &_handler) {
+        CUIWidget::SetReleaseHandler(const std::function<void()>& _handler) {
             if (mUIControl != nullptr) {
                 mUIControl->SetReleaseHandler(_handler);
             }
         }
 
         void
-        CUIWidget::SetStepHandler(const std::function<void(double)> &_handler) {
+        CUIWidget::SetStepHandler(const std::function<void(double)>& _handler) {
             if (mUIControl != nullptr) {
                 mUIControl->SetStepHandler(_handler);
             }
         }
 
-        void CUIWidget::SetDrawHandler(const std::function<void()> &_handler) {
+        void CUIWidget::SetDrawHandler(const std::function<void()>& _handler) {
             if (mUIControl != nullptr) {
                 mUIControl->SetDrawHandler(_handler);
             }
         }
 
-        void CUIWidget::SetPos(const CVec2i &_pos) {
+        void CUIWidget::SetPos(const CVec2i& _pos) {
             if (mUIControl != nullptr) {
                 mUIControl->SetPos(_pos);
             }
         }
 
-        void CUIWidget::SetSize(const CVec2ui &_size) {
+        void CUIWidget::SetSize(const CVec2ui& _size) {
             if (mUIControl != nullptr) {
                 mUIControl->SetSize(_size);
             }

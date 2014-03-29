@@ -34,30 +34,30 @@ namespace drash {
 
     class CLogger {
       public:
-        explicit CLogger(std::ostream &_stream);
+        explicit CLogger(std::ostream& _stream);
         ~CLogger(void);
-        CLogger &operator<<(char _c);
-        CLogger &operator<<(const char *_str);
-        CLogger &operator<<(int _v);
-        CLogger &operator<<(unsigned int _v);
-        CLogger &operator<<(long _v);
-        CLogger &operator<<(unsigned long _v);
-        CLogger &operator<<(float _v);
-        CLogger &operator<<(double _v);
+        CLogger& operator<<(char _c);
+        CLogger& operator<<(const char* _str);
+        CLogger& operator<<(int _v);
+        CLogger& operator<<(unsigned int _v);
+        CLogger& operator<<(long _v);
+        CLogger& operator<<(unsigned long _v);
+        CLogger& operator<<(float _v);
+        CLogger& operator<<(double _v);
 
-        inline CLogger &operator<<(const std::string &_str);
+        inline CLogger& operator<<(const std::string& _str);
 
         static const std::string Tail();
 
       private:
         std::ofstream out;
-        std::ostream &mStream;
+        std::ostream& mStream;
         bool mOpened = false;
 
         static std::ostringstream mTailStream;
     };
 
-    inline CLogger &CLogger::operator<<(const std::string &_str) {
+    inline CLogger& CLogger::operator<<(const std::string& _str) {
         return (*this) << _str.c_str();
     }
 

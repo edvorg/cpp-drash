@@ -39,23 +39,23 @@ namespace Sound {
 
     class Block {
       public:
-        void *data;
+        void* data;
         size_t size;
         size_t red;
     };
 
     typedef std::map<ALuint, unsigned int> BuffersT;
 
-    static ALCdevice *g_Device = NULL;
-    static ALCcontext *g_Context = NULL;
+    static ALCdevice* g_Device = NULL;
+    static ALCcontext* g_Context = NULL;
     static bool g_SysInitialized = false;
     static unsigned int g_TotalInstances = 0;
     static BuffersT g_Buffers;
 
-    size_t ReadOgg(void *_ptr, size_t _size, size_t _nmemb, void *_datasource);
-    int SeekOgg(void *_datasource, ogg_int64_t _offset, int _whence);
-    long TellOgg(void *_datasource);
-    int CloseOgg(void *_datasource);
+    size_t ReadOgg(void* _ptr, size_t _size, size_t _nmemb, void* _datasource);
+    int SeekOgg(void* _datasource, ogg_int64_t _offset, int _whence);
+    long TellOgg(void* _datasource);
+    int CloseOgg(void* _datasource);
 
     AlSound::AlSound() : mSourceId(0), mBufferId(0) {
         g_TotalInstances++;
@@ -78,7 +78,7 @@ namespace Sound {
         this->SetLoop(false);
     }
 
-    AlSound::AlSound(const AlSound &_src) {
+    AlSound::AlSound(const AlSound& _src) {
         g_TotalInstances++;
 
         alGenSources(1, &mSourceId);
@@ -122,7 +122,7 @@ namespace Sound {
         }
     }
 
-    AlSound &AlSound::operator=(const AlSound &_src) {
+    AlSound& AlSound::operator=(const AlSound& _src) {
         cout << "operator=(AlSound&) " << mBufferId << " to " << _src.mBufferId
              << endl;
         BuffersT::iterator i = g_Buffers.find(mBufferId);
@@ -173,7 +173,7 @@ namespace Sound {
         alListener3f(AL_ORIENTATION, _x, _y, _z);
     }
 
-    bool AlSound::LoadFromFile(const char *_path) {
+    bool AlSound::LoadFromFile(const char* _path) {
         if (!g_SysInitialized) {
             return false;
         }
@@ -188,9 +188,9 @@ namespace Sound {
             return false;
         }
 
-        char *buf = NULL;
+        char* buf = NULL;
         size_t size = 0;
-        FILE *file = NULL;
+        FILE* file = NULL;
 
         file = fopen(_path, "rb");
 
@@ -225,7 +225,7 @@ namespace Sound {
         return true;
     }
 
-    bool AlSound::LoadFromMem(void *_data, size_t _size) {
+    bool AlSound::LoadFromMem(void* _data, size_t _size) {
         if (!g_SysInitialized) {
             return false;
         }
@@ -233,11 +233,11 @@ namespace Sound {
         ov_callbacks callbacks;
         int block_size = 0;
         OggVorbis_File vorbis_file;
-        vorbis_info *info = NULL;
+        vorbis_info* info = NULL;
         int current_section = 0;
         long total_ret = 0;
         long ret = 0;
-        char *PCM = NULL;
+        char* PCM = NULL;
 
         callbacks.close_func = CloseOgg;
         callbacks.read_func = ReadOgg;
@@ -285,7 +285,7 @@ namespace Sound {
         if (total_ret > 0) {
             alBufferData(mBufferId, (info->channels == 1) ? AL_FORMAT_MONO16
                                                           : AL_FORMAT_STEREO16,
-                         (void *)PCM, total_ret, info->rate);
+                         (void*)PCM, total_ret, info->rate);
         }
 
         delete[] PCM;
@@ -428,17 +428,15 @@ namespace Sound {
         }
 
         g_SysInitialized = false;
-
-        cout << "OpenAl released" << endl;
     }
 
-    size_t ReadOgg(void *_ptr, size_t _size, size_t _nmemb, void *_datasource) {
-        auto b = (Block *)_datasource;
+    size_t ReadOgg(void* _ptr, size_t _size, size_t _nmemb, void* _datasource) {
+        auto b = (Block*)_datasource;
         size_t toread = 0;
 
-        if ((char *)b->data + b->red < (char *)b->data + b->size) {
+        if ((char*)b->data + b->red < (char*)b->data + b->size) {
             toread = min(_nmemb * _size, b->size - b->red);
-            memcpy((char *)_ptr, (const char *)b->data + b->red, toread);
+            memcpy((char*)_ptr, (const char*)b->data + b->red, toread);
             b->red += toread;
             return toread;
         } else {
@@ -446,8 +444,8 @@ namespace Sound {
         }
     }
 
-    int SeekOgg(void *_datasource, ogg_int64_t _offset, int _whence) {
-        auto b = (Block *)_datasource;
+    int SeekOgg(void* _datasource, ogg_int64_t _offset, int _whence) {
+        auto b = (Block*)_datasource;
         size_t pos = 0;
 
         switch (_whence) {
@@ -477,10 +475,10 @@ namespace Sound {
         return 0;
     }
 
-    long TellOgg(void *_datasource) {
-        auto b = (Block *)_datasource;
+    long TellOgg(void* _datasource) {
+        auto b = (Block*)_datasource;
         return b->red;
     }
 
-    int CloseOgg(void *_datasource) { return 0; }
+    int CloseOgg(void* _datasource) { return 0; }
 }

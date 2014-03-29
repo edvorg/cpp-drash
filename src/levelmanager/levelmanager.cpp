@@ -34,29 +34,19 @@ namespace drash {
 
     using drash::CLogger;
 
-    CLevelManager::CLevelManager()
-        : mLevelFactory(mLevelsCountLimit, "CLevel") {}
+    CLevelManager::CLevelManager(CScene& _scene,
+                                 CGeometryManager& _geometry_manager)
+        : mScene(_scene), mTemplateSystem(_geometry_manager),
+          mLevelFactory(mLevelsCountLimit, "CLevel") {}
 
-    CLevelManager::~CLevelManager() {}
-
-    bool CLevelManager::Init() {
-        if (mScene == nullptr) {
-            return false;
-        }
-
-        Release();
-
-        return true;
-    }
-
-    void CLevelManager::Release() {
+    CLevelManager::~CLevelManager() {
         while (mLevelFactory.EnumObjects() != 0) {
             DestroyLevel(mLevelFactory.GetObjects()[0]);
         }
     }
 
-    CLevelDesc *CLevelManager::CreateLevel() {
-        CLevelDesc *res = mLevelFactory.CreateObject();
+    CLevelDesc* CLevelManager::CreateLevel() {
+        CLevelDesc* res = mLevelFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
@@ -65,7 +55,7 @@ namespace drash {
         return res;
     }
 
-    bool CLevelManager::DestroyLevel(CLevelDesc *_level) {
+    bool CLevelManager::DestroyLevel(CLevelDesc* _level) {
         if (mLevelFactory.IsObject(_level) == false) {
             LOG_ERR("CLevelManager::DestroyLevel(): invalid level taken");
             return false;
@@ -76,22 +66,22 @@ namespace drash {
         return true;
     }
 
-    bool CLevelManager::StartLevel(CLevelDesc *_level) {
+    bool CLevelManager::StartLevel(CLevelDesc* _level) {
         if (mLevelFactory.IsObject(_level) == false) {
             LOG_ERR("CLevelManager::StartLevel(): invalid level taken");
             return false;
         }
 
-        mScene->DestroyObjects();
+        mScene.DestroyObjects();
 
         for (unsigned int i = 0; i < _level->EnumObjects(); i++) {
-            CLevelObjectDesc *desc = _level->GetObjects()[i];
+            CLevelObjectDesc* desc = _level->GetObjects()[i];
 
-            CSceneObjectGeometry *g =
-                mTemplateSystem->GetGeometry(desc->mGeometryName);
+            CSceneObjectGeometry* g =
+                mTemplateSystem.GetGeometry(desc->mGeometryName);
 
             if (g != nullptr) {
-                auto obj = mScene->CreateObject(*g, desc->mParams);
+                mScene.CreateObject(*g, desc->mParams);
             } else {
                 LOG_ERR("CLevelManager::StartLevel(): geometry '"
                         << desc->mGeometryName << "' doesn't exists");

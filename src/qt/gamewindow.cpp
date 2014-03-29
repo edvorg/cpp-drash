@@ -31,7 +31,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace drash;
 
-void GameWindowParams::SetCommandLine(unsigned int _argc, char *_argv[]) {
+void GameWindowParams::SetCommandLine(unsigned int _argc, char* _argv[]) {
     mArgv.resize(_argc);
 
     for (unsigned int i = 0; i < _argc; i++) {
@@ -39,7 +39,7 @@ void GameWindowParams::SetCommandLine(unsigned int _argc, char *_argv[]) {
     }
 }
 
-GameWindow::GameWindow(QWidget *parent)
+GameWindow::GameWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::GameWindow), mSceneWidget(nullptr) {
     ui->setupUi(this);
 
@@ -57,7 +57,6 @@ GameWindow::~GameWindow() {
     disconnect(&mUpdateTimer);
 
     if (mApp != nullptr) {
-        mApp->Release();
         delete mApp;
         mApp = nullptr;
     }
@@ -65,7 +64,7 @@ GameWindow::~GameWindow() {
     delete ui;
 }
 
-bool GameWindow::Init(const GameWindowParams &_params) {
+bool GameWindow::Init(const GameWindowParams& _params) {
     CSceneParams params;
     params.mGravity.Set(0.0f, -9.8f);
 
@@ -77,7 +76,7 @@ bool GameWindow::Init(const GameWindowParams &_params) {
                 mApp = test::StartApp(_params.mArgv[i + 1].c_str());
 
                 if (mApp == nullptr) {
-                    LOG_ERR("CApp::Init(): test app "
+                    LOG_ERR("CApp::CApp(): test app "
                             << _params.mArgv[i + 1].c_str() << " not found");
                     return false;
                 }
@@ -92,7 +91,7 @@ bool GameWindow::Init(const GameWindowParams &_params) {
 
                 break;
             } else {
-                LOG_ERR("CApp::Init(): test app name expected");
+                LOG_ERR("CApp::CApp(): test app name expected");
                 return false;
             }
         }

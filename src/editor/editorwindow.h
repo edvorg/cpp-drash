@@ -52,7 +52,7 @@ class EditorWindow : public QMainWindow {
     Q_OBJECT
 
   public:
-    explicit EditorWindow(QWidget *parent = 0);
+    explicit EditorWindow(QWidget* parent = 0);
     ~EditorWindow();
 
   private
@@ -61,17 +61,17 @@ slots:
     void on_mTreeObjects_itemSelectionChanged();
 
   private:
-    Ui::EditorWindow *ui;
+    Ui::EditorWindow* ui;
     bool InitScene();
-    drash::CObjectEditorApp *mObjectApp = nullptr;
-    drash::CSceneEditorApp *mSceneApp = nullptr;
-    drash::CApp *mCurrentApp = nullptr;
+    drash::CObjectEditorApp* mObjectApp = nullptr;
+    drash::CSceneEditorApp* mSceneApp = nullptr;
+    drash::CApp* mCurrentApp = nullptr;
 
-    virtual void timerEvent(QTimerEvent *) override;
+    virtual void timerEvent(QTimerEvent*) override;
 
-    SceneWidget *mWidgetForScene = nullptr;
-    SceneWidget *mWidgetForObjects = nullptr;
-    SceneWidget *mCurrentSceneWidget = nullptr;
+    SceneWidget* mWidgetForScene = nullptr;
+    SceneWidget* mWidgetForObjects = nullptr;
+    SceneWidget* mCurrentSceneWidget = nullptr;
     // drash::CSceneObject * mCurrentObject = nullptr;
 
     bool mDragActivated = false;
@@ -79,27 +79,27 @@ slots:
     // Actions
   private:
     // for editor object
-    QAction *mQuit;
-    QAction *mRemoveAction;
-    QAction *mMoveActiveAction;
-    QAction *mStretchActiveAction;
-    QAction *mMoveOfAxisActiveAction;
-    QAction *mNewFigureAction;
-    QAction *mNewObjectAction;
-    QAction *mDeleteModeActiveAction;
-    QAction *mSplitFigureActiveAction;
-    QAction *mSplitObjectActiveAction;
+    QAction* mQuit;
+    QAction* mRemoveAction;
+    QAction* mMoveActiveAction;
+    QAction* mStretchActiveAction;
+    QAction* mMoveOfAxisActiveAction;
+    QAction* mNewFigureAction;
+    QAction* mNewObjectAction;
+    QAction* mDeleteModeActiveAction;
+    QAction* mSplitFigureActiveAction;
+    QAction* mSplitObjectActiveAction;
     QActionGroup mModeActions;
-    QAction *mCombineFiguresMode;
+    QAction* mCombineFiguresMode;
 
     // for editor scene
-    QAction *mOpenLevelAction;
-    QAction *mSaveLevelAction;
-    QAction *mSaveLevelAsAction;
-    QAction *mPlayLevelAction;
-    QAction *mPauseLevelAction;
-    QAction *mStopLevelAction;
-    QAction *mNewLevelAction;
+    QAction* mOpenLevelAction;
+    QAction* mSaveLevelAction;
+    QAction* mSaveLevelAsAction;
+    QAction* mPlayLevelAction;
+    QAction* mPauseLevelAction;
+    QAction* mStopLevelAction;
+    QAction* mNewLevelAction;
 
     // for other
     // Slots for Actions
@@ -116,7 +116,7 @@ slots:
     void DeleteModeActive();
     void CombineFigureModeActive();
 
-    void ChangeMode(QAction *_action);
+    void ChangeMode(QAction* _action);
 
     // for editor scene
     void OpenLevel();
@@ -129,7 +129,7 @@ slots:
     void NewLevel();
     void on_mManageWidget_currentChanged(int index);
 
-    void on_mTreeSceneObjects_clicked(const QModelIndex &);
+    void on_mTreeSceneObjects_clicked(const QModelIndex&);
 
     void on_mCheckBoxDynamic_clicked();
 
@@ -139,26 +139,26 @@ slots:
 
   private:
     // GuiObjects
-    QLabel *mLabelOfStatusBar;
+    QLabel* mLabelOfStatusBar;
 
-    QToolBar *mObjectToolBar;
-    QToolBar *mSceneToolbar;
+    QToolBar* mObjectToolBar;
+    QToolBar* mSceneToolbar;
 
   private:
     void CreateActions();
 
-    bool UpdateTreeTemplates(QTreeWidget *_tree, drash::CApp *_app);
+    bool UpdateTreeTemplates(QTreeWidget* _tree, drash::CApp* _app);
 
     void UpdateTreeSceneObjects();
 
     drash::CTimer mTimer;
 
     void AddFigure();
-    void SetObjectParams(const drash::CSceneObjectParams &_params);
+    void SetObjectParams(const drash::CSceneObjectParams& _params);
     drash::CSceneObjectParams GetObjectParams() const;
 
   private:
-    QHBoxLayout *mLayoutForScene;
+    QHBoxLayout* mLayoutForScene;
 
   public:
 };

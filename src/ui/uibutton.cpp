@@ -32,7 +32,7 @@ namespace drash {
 
     namespace ui {
 
-        void CUIButton::Connect(CUISystem *_system) {
+        void CUIButton::Connect(CUISystem* _system) {
             CUIWidget::Connect(_system);
 
             SetStepHandler([this](double _dt) {
@@ -66,13 +66,13 @@ namespace drash {
                 GetUISystem()->UISpaceToScreenSpace(GetPos().mX + GetSize().mX,
                                                     GetPos().mY, p4);
 
-                GetUISystem()->GetRenderer()->DrawTriangle(p4, p2, p1, c);
-                GetUISystem()->GetRenderer()->DrawTriangle(p3, p2, p4, c);
+                GetUISystem()->GetRenderer().DrawTriangle(p4, p2, p1, c);
+                GetUISystem()->GetRenderer().DrawTriangle(p3, p2, p4, c);
 
-                GetUISystem()->GetRenderer()->DrawLine(p1, p2, 1, c);
-                GetUISystem()->GetRenderer()->DrawLine(p3, p2, 1, c);
-                GetUISystem()->GetRenderer()->DrawLine(p3, p4, 1, c);
-                GetUISystem()->GetRenderer()->DrawLine(p1, p4, 1, c);
+                GetUISystem()->GetRenderer().DrawLine(p1, p2, 1, c);
+                GetUISystem()->GetRenderer().DrawLine(p3, p2, 1, c);
+                GetUISystem()->GetRenderer().DrawLine(p3, p4, 1, c);
+                GetUISystem()->GetRenderer().DrawLine(p1, p4, 1, c);
             });
 
             SetPressHandler([this]() { mPressed = true; });
@@ -94,7 +94,7 @@ namespace drash {
             });
         }
 
-        void CUIButton::SetClickHandler(const std::function<void()> &_handler) {
+        void CUIButton::SetClickHandler(const std::function<void()>& _handler) {
             mClickHandler = _handler;
         }
 

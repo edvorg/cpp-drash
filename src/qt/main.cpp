@@ -28,7 +28,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstdlib>
 #include <ctime>
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     srand(time(nullptr));
 
     QApplication a(argc, argv);
@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
 
     // allocate and init editor or game window
 
-    QMainWindow *w = nullptr;
+    QMainWindow* w = nullptr;
 
     if (editor) {
         w = new EditorWindow();
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
         GameWindowParams p;
         p.SetCommandLine(argc, argv);
         w = new GameWindow();
-        if (static_cast<GameWindow *>(w)->Init(p) == false) {
+        if (static_cast<GameWindow*>(w)->Init(p) == false) {
             delete w;
             w = nullptr;
         }

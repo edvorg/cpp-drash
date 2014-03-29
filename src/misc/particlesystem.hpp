@@ -39,8 +39,8 @@ namespace drash {
       public:
         using Period = std::function<float()>;
         using Life = std::function<float()>;
-        using PostSpawn = std::function<void(PARTICLE &)>;
-        using PreDestroy = std::function<void(PARTICLE &)>;
+        using PostSpawn = std::function<void(PARTICLE&)>;
+        using PreDestroy = std::function<void(PARTICLE&)>;
 
         ParticleSystem() = default;
         virtual ~ParticleSystem() = default;
@@ -48,7 +48,6 @@ namespace drash {
         virtual void Init();
         virtual void Update(double dt);
         virtual void Draw();
-        virtual void Release();
         // unuse all particles
         virtual void Clean();
         // resize system pool
@@ -56,12 +55,12 @@ namespace drash {
 
         // collide with some object
         template <class ANOTHER>
-        void Collide(ANOTHER &another,
-                     std::function<void(PARTICLE &, ANOTHER &)> callback);
+        void Collide(ANOTHER& another,
+                     std::function<void(PARTICLE&, ANOTHER&)> callback);
         // collide with another particle system
         template <class ANOTHER>
-        void Collide(ParticleSystem<ANOTHER> &another,
-                     std::function<void(PARTICLE &, ANOTHER &)> callback);
+        void Collide(ParticleSystem<ANOTHER>& another,
+                     std::function<void(PARTICLE&, ANOTHER&)> callback);
 
         void FieldSize(float newWidth, float newHeight);
         void FieldPos(float newX, float newY);
@@ -134,7 +133,7 @@ namespace drash {
         std::stack<PreDestroy> preDestroys;
     };
 
-    template <class PARTICLE> void ParticleSystem<PARTICLE>::Init() {
+    template <class PARTICLE> ParticleSystem<PARTICLE>::ParticleSystem() {
         pool.resize(poolSize);
         for (unsigned int i = 0; i < poolSize; i++) {
             pool[i].Init();
@@ -189,12 +188,6 @@ namespace drash {
         }
     }
 
-    template <class PARTICLE> void ParticleSystem<PARTICLE>::Release() {
-        for (unsigned int i = 0; i < poolSize; i++) {
-            pool[i].Release();
-        }
-    }
-
     template <class PARTICLE> void ParticleSystem<PARTICLE>::Clean() {
         used = 0;
     }
@@ -209,7 +202,7 @@ namespace drash {
     template <class PARTICLE>
     template <class ANOTHER>
     void ParticleSystem<PARTICLE>::Collide(
-        ANOTHER &another, std::function<void(PARTICLE &, ANOTHER &)> callback) {
+        ANOTHER& another, std::function<void(PARTICLE&, ANOTHER&)> callback) {
         // TODO optimize this. complexity n now, use aabb or something else
         for (unsigned int i = 0; i < used; ++i) {
             if (another.GetDimensions().Intersect(pool[i].GetDimensions())) {
@@ -221,10 +214,10 @@ namespace drash {
     template <class PARTICLE>
     template <class ANOTHER>
     void ParticleSystem<PARTICLE>::Collide(
-        ParticleSystem<ANOTHER> &another,
-        std::function<void(PARTICLE &, ANOTHER &)> callback) {
+        ParticleSystem<ANOTHER>& another,
+        std::function<void(PARTICLE&, ANOTHER&)> callback) {
         // TODO optimize this. complexity n^2 now, use aabb or something else
-        auto reversed = [&](ANOTHER &a, PARTICLE &p) { callback(p, a); };
+        auto reversed = [&](ANOTHER& a, PARTICLE& p) { callback(p, a); };
         for (unsigned i = 0; i < used; i++) {
             another.template Collide<PARTICLE>(pool[i], reversed);
         }

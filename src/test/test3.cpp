@@ -25,7 +25,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "test3.h"
 
 #include "../scene/scene.h"
-#include "../explosion/explosion.h"
 #include "../players/player.h"
 #include "../scene/figure.h"
 #include "../greng/camera.h"
@@ -34,19 +33,15 @@ namespace drash {
 
     namespace test {
 
-        bool CTest3::Init() {
-            if (CTest1::Init() == false) {
-                return false;
-            }
-
+        CTest3::CTest3() {
             SetProcessors();
 
             InitObjects();
 
-            auto c = GetCamera();
-            c->GetPos().SetTarget(CVec3f(0, 50, 180), 1.0f,
-                                  AnimatorBehavior::Single);
-            c->GetRotation().Set(CVec3f(-M_PI / 12, 0, 0));
+            auto& c = GetCamera();
+            c.GetPos().SetTarget({ 0, 50, 180 }, 1.0f,
+                                 AnimatorBehavior::Single);
+            c.GetRotation().Set(CVec3f(-M_PI / 12.0f, 0.0f, 0.0f));
 
             mSlider1.Connect(&GetUISystem());
             mSlider1.SetPos(CVec2i(10, 10));
@@ -71,8 +66,6 @@ namespace drash {
             mLight1.mPosition.Set(0, 40, 0);
 
             GetDebugRenderer().SetLight(&mLight1);
-
-            return true;
         }
 
         void CTest3::Step(double _dt) { CTest1::Step(_dt); }
@@ -147,7 +140,7 @@ namespace drash {
                 "MB",
                 CAppEventProcessor([this]() {
                                        if (mMoveObject == nullptr) {
-                                           CFigure *f =
+                                           CFigure* f =
                                                GetDebugRenderer().FindFigure(
                                                    GetCamera(), GetCursorPos());
                                            if (f != nullptr) {
@@ -163,8 +156,8 @@ namespace drash {
 
                                            CVec3f pos;
 
-                                           GetCamera()->CastRay(GetCursorPos(),
-                                                                p, pos);
+                                           GetCamera().CastRay(GetCursorPos(),
+                                                               p, pos);
 
                                            pos.Vec2() -=
                                                mMoveObject->GetMassCenter();
@@ -187,15 +180,15 @@ namespace drash {
                 "WHUP", CAppEventProcessor([this]() {
                             CVec3f pos;
 
-                            if (GetCamera()->GetPos().IsTargetSet()) {
-                                pos = GetCamera()->GetPos().GetTarget();
+                            if (GetCamera().GetPos().IsTargetSet()) {
+                                pos = GetCamera().GetPos().GetTarget();
                             } else {
-                                pos = GetCamera()->GetPos().Get();
+                                pos = GetCamera().GetPos().Get();
                             }
 
                             pos.mZ += 10.0f;
 
-                            GetCamera()->GetPos().SetTarget(
+                            GetCamera().GetPos().SetTarget(
                                 pos, 0.3, AnimatorBehavior::Single);
                         }));
 
@@ -203,15 +196,15 @@ namespace drash {
                 "WHDN", CAppEventProcessor([this]() {
                             CVec3f pos;
 
-                            if (GetCamera()->GetPos().IsTargetSet()) {
-                                pos = GetCamera()->GetPos().GetTarget();
+                            if (GetCamera().GetPos().IsTargetSet()) {
+                                pos = GetCamera().GetPos().GetTarget();
                             } else {
-                                pos = GetCamera()->GetPos().Get();
+                                pos = GetCamera().GetPos().Get();
                             }
 
                             pos.mZ -= 10.0f;
 
-                            GetCamera()->GetPos().SetTarget(
+                            GetCamera().GetPos().SetTarget(
                                 pos, 0.3, AnimatorBehavior::Single);
                         }));
 
@@ -220,20 +213,19 @@ namespace drash {
 
             GetEventSystem().SetProcessor(
                 "e", CAppEventProcessor([this]() {},
-                                        [this]() { GetCamera()->Forward(5); }));
+                                        [this]() { GetCamera().Forward(5); }));
 
             GetEventSystem().SetProcessor(
-                "q", CAppEventProcessor([this]() {}, [this]() {
-                         GetCamera()->Forward(-5);
-                     }));
+                "q", CAppEventProcessor([this]() {},
+                                        [this]() { GetCamera().Forward(-5); }));
 
             GetEventSystem().SetProcessor(
                 "z", CAppEventProcessor([this]() {},
-                                        [this]() { GetCamera()->Strafe(5); }));
+                                        [this]() { GetCamera().Strafe(5); }));
 
             GetEventSystem().SetProcessor(
                 "c", CAppEventProcessor([this]() {},
-                                        [this]() { GetCamera()->Strafe(-5); }));
+                                        [this]() { GetCamera().Strafe(-5); }));
         }
 
         void CTest3::InitObjects() {

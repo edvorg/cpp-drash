@@ -42,23 +42,21 @@ namespace drash {
           public:
             constexpr static const unsigned int mControlsCountLimit = 10;
 
-            CUISystem() = default;
-            CUISystem(const CUISystem &) = delete;
-            CUISystem(CUISystem &&) = delete;
-            CUISystem &operator=(const CUISystem &) = delete;
-            CUISystem &operator=(CUISystem &&) = delete;
+            CUISystem(greng::CRenderer& _renderer);
+            CUISystem(const CUISystem&) = delete;
+            CUISystem(CUISystem&&) = delete;
+            CUISystem& operator=(const CUISystem&) = delete;
+            CUISystem& operator=(CUISystem&&) = delete;
+            ~CUISystem();
 
-            bool Init();
-            void Release();
-
-            CUIControl *CreateControl();
-            void DestroyControl(CUIControl *_control);
+            CUIControl* CreateControl();
+            void DestroyControl(CUIControl* _control);
 
             void SetAspectRatio(float _ratio);
             void SetWidth(unsigned int _width);
 
-            bool ScreenSpaceToUISpace(const CVec2f &_from, int &_x, int &_y);
-            bool UISpaceToScreenSpace(int _x, int _y, CVec2f &_v);
+            bool ScreenSpaceToUISpace(const CVec2f& _from, int& _x, int& _y);
+            bool UISpaceToScreenSpace(int _x, int _y, CVec2f& _v);
 
             void SetCursorPos(int _x, int _y);
             inline int GetCursorPosX() const;
@@ -67,15 +65,14 @@ namespace drash {
             void BeginEvent();
             void EndEvent();
 
-            void SetRenderer(greng::CRenderer *_renderer);
-            inline greng::CRenderer *GetRenderer() const;
-
             void Step(double _dt);
             void DebugDraw() const;
 
+            auto& GetRenderer() { return mRenderer; }
+
           protected:
           private:
-            CUIControl *mControls[mControlsCountLimit];
+            CUIControl* mControls[mControlsCountLimit];
             unsigned int mControlsCount = 0;
 
             float mAspectRatio = 1;
@@ -85,22 +82,13 @@ namespace drash {
             int mCursorX = 0;
             int mCursorY = 0;
 
-            CUIControl *mPressedControl = nullptr;
+            CUIControl* mPressedControl = nullptr;
 
-            greng::CRenderer *mRenderer = nullptr;
+            greng::CRenderer& mRenderer;
         };
 
         inline int CUISystem::GetCursorPosX() const { return mCursorX; }
-
         inline int CUISystem::GetCursorPosY() const { return mCursorY; }
-
-        inline void CUISystem::SetRenderer(greng::CRenderer *_renderer) {
-            mRenderer = _renderer;
-        }
-
-        inline greng::CRenderer *CUISystem::GetRenderer() const {
-            return mRenderer;
-        }
 
     } // namepsace ui
 

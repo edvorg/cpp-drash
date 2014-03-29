@@ -39,8 +39,8 @@ namespace greng {
         float mOrthoWidth = 1.0f;
         float mFov = M_PI / 4.0f;
         float mDepthOfView = 1000.0f;
-        CVec3f mPos;
-        CVec3f mRotation;
+        CVec3f mPos = { 0, 0, 0 };
+        CVec3f mRotation = { 0, 0, 0 };
     };
 
     class CCameraManager {
@@ -50,13 +50,11 @@ namespace greng {
         CCameraManager();
         ~CCameraManager();
 
-        bool Init();
-        void Release();
         void Step(double _dt);
 
-        CCamera *CreateCamera(const CCameraParams &_params);
-        bool DestroyCamera(CCamera *_camera);
-        inline CCamera *const *GetCameras() const;
+        CCamera* CreateCamera(const CCameraParams& _params);
+        bool DestroyCamera(CCamera* _camera);
+        inline CCamera* const* GetCameras() const;
         inline unsigned int EnumCameras() const;
 
         /// aspect ratio is window width in pixels divided on widow height
@@ -72,7 +70,7 @@ namespace greng {
         float mAspectRatio = 1;
     };
 
-    inline CCamera *const *CCameraManager::GetCameras() const {
+    inline CCamera* const* CCameraManager::GetCameras() const {
         return mCameraFactory.GetObjects();
     }
 

@@ -41,16 +41,8 @@ namespace greng {
         }
     }
 
-    bool CFragmentShaderManager::Init() {
-        Release();
-
-        return true;
-    }
-
-    void CFragmentShaderManager::Release() {}
-
-    CFragmentShader *CFragmentShaderManager::CreateShader() {
-        CFragmentShader *res = mShaderFactory.CreateObject();
+    CFragmentShader* CFragmentShaderManager::CreateShader() {
+        CFragmentShader* res = mShaderFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
@@ -66,8 +58,8 @@ namespace greng {
         return res;
     }
 
-    CFragmentShader *CFragmentShaderManager::CreateShaderDummy() {
-        const char *source = "#version 120\n\n"
+    CFragmentShader* CFragmentShaderManager::CreateShaderDummy() {
+        const char* source = "#version 120\n\n"
                              "void main(void)\n"
                              "{\n"
                              "gl_FragColor = vec4(0, 1, 0, 1);\n"
@@ -76,13 +68,13 @@ namespace greng {
         return CreateShaderFromSource(source);
     }
 
-    CFragmentShader *
-    CFragmentShaderManager::CreateShaderFromSource(const char *_source) {
+    CFragmentShader*
+    CFragmentShaderManager::CreateShaderFromSource(const char* _source) {
         if (_source == nullptr) {
             return nullptr;
         }
 
-        CFragmentShader *res = CreateShader();
+        CFragmentShader* res = CreateShader();
 
         if (res == nullptr) {
             return nullptr;
@@ -117,8 +109,8 @@ namespace greng {
         return res;
     }
 
-    CFragmentShader *
-    CFragmentShaderManager::CreateShaderFromFile(const char *_path) {
+    CFragmentShader*
+    CFragmentShaderManager::CreateShaderFromFile(const char* _path) {
         if (_path == nullptr) {
             return nullptr;
         }
@@ -139,7 +131,7 @@ namespace greng {
         return CreateShaderFromSource(buffer);
     }
 
-    bool CFragmentShaderManager::DestroyShader(CFragmentShader *_shader) {
+    bool CFragmentShaderManager::DestroyShader(CFragmentShader* _shader) {
         if (mShaderFactory.IsObject(_shader) == false) {
             LOG_ERR("CFragmentShaderManager::DestroyShader(): invalid shader "
                     "taken");

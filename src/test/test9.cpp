@@ -30,13 +30,13 @@ namespace drash {
 
     namespace test {
 
-        bool CTest9::Init() {
-            if (CApp::Init() == false || InitCamera() == false ||
-                InitLights() == false || InitRotationablePoint() == false) {
-                return false;
-            }
-
-            return true;
+        CTest9::CTest9()
+            : CApp(),
+              mCamera{ GetGrengSystems().GetCameraManager().CreateCamera({}) },
+              mPoint1{ GetGrengSystems().GetRenderer(), *mCamera } {
+            InitCamera();
+            InitLights();
+            InitRotationablePoint();
         }
 
         void CTest9::Step(double _dt) {
@@ -53,10 +53,8 @@ namespace drash {
         }
 
         bool CTest9::InitCamera() {
-            greng::CCameraParams p;
-            p.mPos.Set(10, 10, 10);
-            p.mFov = M_PI / 6.0;
-            mCamera = GetGrengSystems().GetCameraManager().CreateCamera(p);
+            mCamera->GetPos().Set({ 10, 10, 10 });
+            mCamera->GetFov().Set(M_PI / 6.0);
             mCamera->LookAt(CVec3f(0));
 
             if (mCamera == nullptr) {
@@ -76,13 +74,6 @@ namespace drash {
         }
 
         bool CTest9::InitRotationablePoint() {
-            mPoint1.SetCamera(mCamera);
-            mPoint1.SetRenderer(&GetGrengSystems().GetRenderer());
-
-            if (mPoint1.Init() == false) {
-                return false;
-            }
-
             mPoint1.SetPoint(CVec3f(0));
 
             GetEventSystem().SetProcessor(

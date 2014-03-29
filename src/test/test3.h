@@ -37,17 +37,16 @@ namespace drash {
 
         class CTest3 : public CTest1 {
           public:
-            CTest3() = default;
+            CTest3();
 
           protected:
-            virtual bool Init() override;
             virtual void Step(double _dt) override;
             virtual void Render() override;
 
           private:
             void SetProcessors();
             void InitObjects();
-            CSceneObject *mMoveObject = nullptr;
+            CSceneObject* mMoveObject = nullptr;
 
             // gravity in y axis
             ui::CUISlider mSlider1;

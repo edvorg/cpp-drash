@@ -41,17 +41,14 @@ namespace greng {
 
 namespace drash {
 
-    bool CDebugRenderer::Init() {
-        Release();
-
-        if (InitTextures() == false || InitShaders() == false) {
-            return false;
-        }
-
-        return true;
+    CDebugRenderer::CDebugRenderer(greng::CGrengSystemsSet& _greng_systems,
+                                   CScene& _scene,
+                                   CGeometryManager& _geometry_manager)
+        : mGrengSystems(_greng_systems), mScene(_scene),
+          mGeometryManager(_geometry_manager) {
+        InitTextures();
+        InitShaders();
     }
-
-    void CDebugRenderer::Release() {}
 
     void CDebugRenderer::Render() const {
         if (mCamera == nullptr) {
@@ -65,25 +62,25 @@ namespace drash {
             return;
         }
 
-        unsigned int ic = mScene->EnumObjects();
+        unsigned int ic = mScene.EnumObjects();
 
         for (unsigned int i = 0; i < ic; i++) {
-            CSceneObject *o = mScene->GetObjects()[i];
+            CSceneObject* o = mScene.GetObjects()[i];
             unsigned int jc = o->EnumFigures();
 
             for (unsigned int j = 0; j < jc; j++) {
-                CFigure *f = o->GetFigures()[j];
+                CFigure* f = o->GetFigures()[j];
 
                 std::vector<greng::CVertex> mv;
                 std::vector<unsigned int> mi;
 
-                greng::CMesh *m =
+                greng::CMesh* m =
                     CreateMesh(f->GetVertices(), f->EnumVertices(), f->GetZ(),
                                f->GetDepth());
 
                 if (m != nullptr) {
-                    mGrengSystems->GetMeshManager().ComputeNormals(m);
-                    mGrengSystems->GetMeshManager().ComputeTangentSpace(m);
+                    mGrengSystems.GetMeshManager().ComputeNormals(m);
+                    mGrengSystems.GetMeshManager().ComputeTangentSpace(m);
 
                     CMatrix4f rot;
                     MatrixRotationZ(rot, o->GetAngle());
@@ -98,17 +95,17 @@ namespace drash {
                     MatrixMultiply(GetCamera()->GetViewMatrix(), model,
                                    model_view);
 
-                    greng::CTexture *textures[2] = { mTexture1Diffuse,
+                    greng::CTexture* textures[2] = { mTexture1Diffuse,
                                                      mTexture1Normal };
 
-                    mGrengSystems->GetRenderer().RenderMesh(
+                    mGrengSystems.GetRenderer().RenderMesh(
                         m, 0, textures, 2,
                         mLight == nullptr ? mShaderProgram1 : mShaderProgram2,
                         &model, nullptr, &model_view,
                         &mCamera->GetProjectionMatrix(), mLight, mSpotLight1,
                         &mCamera->GetPos().Get());
 
-                    mGrengSystems->GetMeshManager().DestroyMesh(m);
+                    mGrengSystems.GetMeshManager().DestroyMesh(m);
                 }
 
                 for (unsigned int k = 0; k < jc; k++) {
@@ -140,8 +137,8 @@ namespace drash {
                                       o->GetPosZ() +
                                           o->GetFigures()[k]->GetZ());
 
-                            mGrengSystems->GetRenderer().DrawLine(
-                                mCamera, c1, c2, 2, CColor4f(1, 0, 0, 1),
+                            mGrengSystems.GetRenderer().DrawLine(
+                                *mCamera, c1, c2, 2, CColor4f(1, 0, 0, 1),
                                 false);
                         } else if (o->GetDestructionGraph()[k * jc + j] != 0) {
                             CVec3f c1(o->GetWorldPoint(compute_centroid(
@@ -153,8 +150,8 @@ namespace drash {
                                       o->GetPosZ() +
                                           o->GetFigures()[k]->GetZ());
 
-                            mGrengSystems->GetRenderer().DrawLine(
-                                mCamera, c1, c2, 2, CColor4f(1, 0, 0, 1),
+                            mGrengSystems.GetRenderer().DrawLine(
+                                *mCamera, c1, c2, 2, CColor4f(1, 0, 0, 1),
                                 false);
                         }
                     }
@@ -163,17 +160,17 @@ namespace drash {
         }
     }
 
-    void CDebugRenderer::RenderObject(const CSceneObjectGeometry &_geometry,
-                                      const CSceneObjectParams &_params) {
+    void CDebugRenderer::RenderObject(const CSceneObjectGeometry& _geometry,
+                                      const CSceneObjectParams& _params) {
         for (unsigned int i = 0; i < _geometry.mFigures.size(); i++) {
-            greng::CMesh *m = CreateMesh(&_geometry.mFigures[i].mVertices[0],
+            greng::CMesh* m = CreateMesh(&_geometry.mFigures[i].mVertices[0],
                                          _geometry.mFigures[i].mVertices.size(),
                                          _geometry.mFigures[i].mZ,
                                          _geometry.mFigures[i].mDepth);
 
             if (m != nullptr) {
-                mGrengSystems->GetMeshManager().ComputeNormals(m);
-                mGrengSystems->GetMeshManager().ComputeTangentSpace(m);
+                mGrengSystems.GetMeshManager().ComputeNormals(m);
+                mGrengSystems.GetMeshManager().ComputeTangentSpace(m);
 
                 CMatrix4f rot;
                 MatrixRotationZ(rot, _params.mAngle);
@@ -187,38 +184,34 @@ namespace drash {
                 CMatrix4f model_view;
                 MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
 
-                greng::CTexture *textures[2] = { mTexture1Diffuse,
+                greng::CTexture* textures[2] = { mTexture1Diffuse,
                                                  mTexture1Normal };
 
-                mGrengSystems->GetRenderer().RenderMesh(
+                mGrengSystems.GetRenderer().RenderMesh(
                     m, 0, textures, 2,
                     mLight == nullptr ? mShaderProgram1 : mShaderProgram2,
                     &model, nullptr, &model_view,
                     &mCamera->GetProjectionMatrix(), mLight, mSpotLight1,
                     &mCamera->GetPos().Get());
 
-                mGrengSystems->GetMeshManager().DestroyMesh(m);
+                mGrengSystems.GetMeshManager().DestroyMesh(m);
             }
         }
     }
 
-    CFigure *CDebugRenderer::FindFigure(const greng::CCamera *_camera,
-                                        const CVec2f &_pos) const {
-        if (_camera == nullptr) {
-            return nullptr;
-        }
-
-        CFigure *res = nullptr;
+    CFigure* CDebugRenderer::FindFigure(const greng::CCamera& _camera,
+                                        const CVec2f& _pos) const {
+        CFigure* res = nullptr;
 
         unsigned int i = 0;
         bool brk = false;
         float z_nearest = 0;
 
-        for (i = 0; i < mScene->EnumObjects(); i++) {
-            CSceneObject *cur_obj = mScene->GetObjects()[i];
+        for (i = 0; i < mScene.EnumObjects(); i++) {
+            CSceneObject* cur_obj = mScene.GetObjects()[i];
 
             for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++) {
-                CFigure *cur_fgr = cur_obj->GetFigures()[j];
+                CFigure* cur_fgr = cur_obj->GetFigures()[j];
 
                 CPlane plane;
                 plane.SetNormal(CVec3f(0, 0, 1));
@@ -226,11 +219,11 @@ namespace drash {
                     CVec3f(0, 0, cur_obj->GetPosZ() + cur_fgr->GetZ()));
 
                 CVec3f pos;
-                _camera->CastRay(_pos, plane, pos);
+                _camera.CastRay(_pos, plane, pos);
 
                 if (cur_fgr->TestPoint(pos)) {
                     res = cur_fgr;
-                    pos -= _camera->GetPos().Get();
+                    pos -= _camera.GetPos().Get();
                     z_nearest = pos.LengthSquared();
                     brk = true;
                 }
@@ -245,11 +238,11 @@ namespace drash {
             }
         }
 
-        for (; i < mScene->EnumObjects(); i++) {
-            CSceneObject *cur_obj = mScene->GetObjects()[i];
+        for (; i < mScene.EnumObjects(); i++) {
+            CSceneObject* cur_obj = mScene.GetObjects()[i];
 
             for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++) {
-                CFigure *cur_fgr = cur_obj->GetFigures()[j];
+                CFigure* cur_fgr = cur_obj->GetFigures()[j];
 
                 CPlane plane;
                 plane.SetNormal(CVec3f(0, 0, 1));
@@ -257,10 +250,10 @@ namespace drash {
                     CVec3f(0, 0, cur_obj->GetPosZ() + cur_fgr->GetZ()));
 
                 CVec3f pos;
-                _camera->CastRay(_pos, plane, pos);
+                _camera.CastRay(_pos, plane, pos);
 
                 if (cur_fgr->TestPoint(pos)) {
-                    pos -= _camera->GetPos().Get();
+                    pos -= _camera.GetPos().Get();
 
                     float z = pos.LengthSquared();
 
@@ -275,23 +268,19 @@ namespace drash {
         return res;
     }
 
-    CSceneObject *CDebugRenderer::FindObject(const greng::CCamera *_camera,
-                                             const CVec2f &_pos) const {
-        if (_camera == nullptr) {
-            return nullptr;
-        }
-
-        CSceneObject *res = nullptr;
+    CSceneObject* CDebugRenderer::FindObject(const greng::CCamera& _camera,
+                                             const CVec2f& _pos) const {
+        CSceneObject* res = nullptr;
 
         unsigned int i = 0;
         bool brk = false;
         float z_nearest = 0;
 
-        for (i = 0; i < mScene->EnumObjects(); i++) {
-            CSceneObject *cur_obj = mScene->GetObjects()[i];
+        for (i = 0; i < mScene.EnumObjects(); i++) {
+            CSceneObject* cur_obj = mScene.GetObjects()[i];
 
             for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++) {
-                CFigure *cur_fgr = cur_obj->GetFigures()[j];
+                CFigure* cur_fgr = cur_obj->GetFigures()[j];
 
                 CPlane plane;
                 plane.SetNormal(CVec3f(0, 0, 1));
@@ -299,11 +288,11 @@ namespace drash {
                     CVec3f(0, 0, cur_obj->GetPosZ() + cur_fgr->GetZ()));
 
                 CVec3f pos;
-                _camera->CastRay(_pos, plane, pos);
+                _camera.CastRay(_pos, plane, pos);
 
                 if (cur_fgr->TestPoint(pos)) {
                     res = cur_obj;
-                    pos -= _camera->GetPos().Get();
+                    pos -= _camera.GetPos().Get();
                     z_nearest = pos.LengthSquared();
                     brk = true;
                 }
@@ -318,11 +307,11 @@ namespace drash {
             }
         }
 
-        for (; i < mScene->EnumObjects(); i++) {
-            CSceneObject *cur_obj = mScene->GetObjects()[i];
+        for (; i < mScene.EnumObjects(); i++) {
+            CSceneObject* cur_obj = mScene.GetObjects()[i];
 
             for (unsigned int j = 0; j < cur_obj->EnumFigures(); j++) {
-                CFigure *cur_fgr = cur_obj->GetFigures()[j];
+                CFigure* cur_fgr = cur_obj->GetFigures()[j];
 
                 CPlane plane;
                 plane.SetNormal(CVec3f(0, 0, 1));
@@ -330,10 +319,10 @@ namespace drash {
                     CVec3f(0, 0, cur_obj->GetPosZ() + cur_fgr->GetZ()));
 
                 CVec3f pos;
-                _camera->CastRay(_pos, plane, pos);
+                _camera.CastRay(_pos, plane, pos);
 
                 if (cur_fgr->TestPoint(pos)) {
-                    pos -= _camera->GetPos().Get();
+                    pos -= _camera.GetPos().Get();
 
                     float z = pos.LengthSquared();
 
@@ -348,13 +337,13 @@ namespace drash {
         return res;
     }
 
-    CLevelObjectDesc *CDebugRenderer::FindObject(
-        const greng::CCamera *_camera, const CVec2f &_pos,
-        std::function<CLevelObjectDesc *(unsigned int)> _object_getter,
+    CLevelObjectDesc* CDebugRenderer::FindObject(
+        const greng::CCamera& _camera, const CVec2f& _pos,
+        std::function<CLevelObjectDesc*(unsigned int)> _object_getter,
         unsigned int _objects_count) {
         CVec4f v(0, 0, -1, 1);
         CVec4f res;
-        MatrixMultiply(_camera->GetAntiRotationMatrix(), v, res);
+        MatrixMultiply(_camera.GetAntiRotationMatrix(), v, res);
 
         res.Normalize();
 
@@ -363,15 +352,15 @@ namespace drash {
         CVec3f center(0);
         float size = 0;
 
-        auto compute_dummy = [this, &center, &size](CLevelObjectDesc *_desc) {
+        auto compute_dummy = [this, &center, &size](CLevelObjectDesc* _desc) {
             CVec3f min(0, 0, 0);
             CVec3f max(0, 0, 0);
 
             center = 0;
             size = 0;
 
-            CSceneObjectGeometry *_geometry =
-                mGeometryManager->GetGeometry(_desc->mGeometryName);
+            CSceneObjectGeometry* _geometry =
+                mGeometryManager.GetGeometry(_desc->mGeometryName);
 
             if (_geometry == nullptr) {
                 return;
@@ -412,14 +401,14 @@ namespace drash {
         };
 
         for (unsigned int i = 0; i < _objects_count; i++) {
-            CLevelObjectDesc *desc = _object_getter(i);
+            CLevelObjectDesc* desc = _object_getter(i);
 
             compute_dummy(desc);
 
             CPlane plane(center, res);
 
             CVec3f p;
-            _camera->CastRay(_pos, plane, p);
+            _camera.CastRay(_pos, plane, p);
 
             p -= center;
 
@@ -435,10 +424,10 @@ namespace drash {
 
     bool CDebugRenderer::InitTextures() {
         mTexture1Diffuse =
-            mGrengSystems->GetTextureManager().CreateTextureFromFile(
+            mGrengSystems.GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
         mTexture1Normal =
-            mGrengSystems->GetTextureManager().CreateTextureFromFile(
+            mGrengSystems.GetTextureManager().CreateTextureFromFile(
                 "assets/floor/normal.png");
 
         if (mTexture1Diffuse == nullptr || mTexture1Normal == nullptr) {
@@ -449,20 +438,20 @@ namespace drash {
     }
 
     bool CDebugRenderer::InitShaders() {
-        greng::CVertexShader *vs =
-            mGrengSystems->GetVertexShaderManager().CreateShaderFromFile(
+        greng::CVertexShader* vs =
+            mGrengSystems.GetVertexShaderManager().CreateShaderFromFile(
                 "shaders/shader5.120.vs");
-        greng::CFragmentShader *fs =
-            mGrengSystems->GetFragmentShaderManager().CreateShaderFromFile(
+        greng::CFragmentShader* fs =
+            mGrengSystems.GetFragmentShaderManager().CreateShaderFromFile(
                 "shaders/shader5.120.fs");
         mShaderProgram1 =
-            mGrengSystems->GetShaderProgramManager().CreateProgram(vs, fs);
-        vs = mGrengSystems->GetVertexShaderManager().CreateShaderFromFile(
+            mGrengSystems.GetShaderProgramManager().CreateProgram(vs, fs);
+        vs = mGrengSystems.GetVertexShaderManager().CreateShaderFromFile(
             "shaders/shader4.120.vs");
-        fs = mGrengSystems->GetFragmentShaderManager().CreateShaderFromFile(
+        fs = mGrengSystems.GetFragmentShaderManager().CreateShaderFromFile(
             "shaders/shader4.120.fs");
         mShaderProgram2 =
-            mGrengSystems->GetShaderProgramManager().CreateProgram(vs, fs);
+            mGrengSystems.GetShaderProgramManager().CreateProgram(vs, fs);
 
         if (mShaderProgram1 == nullptr && mShaderProgram2 == nullptr) {
             return false;
@@ -471,14 +460,14 @@ namespace drash {
         return true;
     }
 
-    greng::CMesh *CDebugRenderer::CreateMesh(const CVec2f *_vertices,
+    greng::CMesh* CDebugRenderer::CreateMesh(const CVec2f* _vertices,
                                              unsigned int _vertices_count,
                                              float _z, float _depth) const {
         if (_vertices == nullptr) {
             return nullptr;
         }
 
-        greng::CMesh *m = nullptr;
+        greng::CMesh* m = nullptr;
 
         std::vector<greng::CVertex> mv;
         std::vector<unsigned int> mi;
@@ -586,7 +575,7 @@ namespace drash {
             mi.push_back(2 * _vertices_count + (_vertices_count - 1) * 4 + 3);
             mi.push_back(2 * _vertices_count + (_vertices_count - 1) * 4 + 0);
 
-            m = mGrengSystems->GetMeshManager().CreateMeshFromVertices(
+            m = mGrengSystems.GetMeshManager().CreateMeshFromVertices(
                 &mv[0], mv.size(), &mi[0], mi.size());
         }
 

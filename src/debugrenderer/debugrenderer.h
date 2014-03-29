@@ -51,36 +51,33 @@ namespace drash {
 
     class CDebugRenderer final {
       public:
-        inline void SetScene(CScene *_scene);
-        inline void SetGeometryManager(CGeometryManager *_geometry_manager);
-        inline void SetGrengSystems(greng::CGrengSystemsSet *_greng_systems);
-
-        inline void SetCamera(greng::CCamera *_camera);
-        inline greng::CCamera *GetCamera() const;
-        inline void SetLight(greng::CPointLight *_light);
-        inline greng::CPointLight *GetLight() const;
-        inline void SetSpotLight(greng::CSpotLight *_light);
+        inline void SetCamera(greng::CCamera* _camera);
+        inline greng::CCamera* GetCamera() const;
+        inline void SetLight(greng::CPointLight* _light);
+        inline greng::CPointLight* GetLight() const;
+        inline void SetSpotLight(greng::CSpotLight* _light);
 
         inline void SetTexCoordsScale(float _scale);
 
-        bool Init();
-        void Release();
+        CDebugRenderer(greng::CGrengSystemsSet& _greng_systems, CScene& _scene,
+                       CGeometryManager& _geometry_manager);
+
         void Render() const;
 
-        void RenderObject(const CSceneObjectGeometry &_geometry,
-                          const CSceneObjectParams &_params);
+        void RenderObject(const CSceneObjectGeometry& _geometry,
+                          const CSceneObjectParams& _params);
 
         /// finds objects, visible at specified postion in screen space
         /// coordinates
         /// returns nearest one
-        CFigure *FindFigure(const greng::CCamera *_camera,
-                            const CVec2f &_pos) const;
-        CSceneObject *FindObject(const greng::CCamera *_camera,
-                                 const CVec2f &_pos) const;
+        CFigure* FindFigure(const greng::CCamera& _camera,
+                            const CVec2f& _pos) const;
+        CSceneObject* FindObject(const greng::CCamera& _camera,
+                                 const CVec2f& _pos) const;
 
-        CLevelObjectDesc *FindObject(
-            const greng::CCamera *_camera, const CVec2f &_pos,
-            std::function<CLevelObjectDesc *(unsigned int)> _object_getter,
+        CLevelObjectDesc* FindObject(
+            const greng::CCamera& _camera, const CVec2f& _pos,
+            std::function<CLevelObjectDesc*(unsigned int)> _object_getter,
             unsigned int _objects_count);
 
       protected:
@@ -88,52 +85,40 @@ namespace drash {
         bool InitTextures();
         bool InitShaders();
 
-        greng::CMesh *CreateMesh(const CVec2f *_vertices,
+        greng::CMesh* CreateMesh(const CVec2f* _vertices,
                                  unsigned int _vertices_count, float _z,
                                  float _depth) const;
 
-        CScene *mScene = nullptr;
-        CGeometryManager *mGeometryManager = nullptr;
-        greng::CGrengSystemsSet *mGrengSystems = nullptr;
+        greng::CGrengSystemsSet& mGrengSystems;
+        CScene& mScene;
+        CGeometryManager& mGeometryManager;
 
-        greng::CShaderProgram *mShaderProgram1 = nullptr;
-        greng::CShaderProgram *mShaderProgram2 = nullptr;
-        greng::CCamera *mCamera = nullptr;
-        greng::CPointLight *mLight = nullptr;
-        greng::CSpotLight *mSpotLight1 = nullptr;
-        greng::CTexture *mTexture1Diffuse = nullptr;
-        greng::CTexture *mTexture1Normal = nullptr;
+        greng::CShaderProgram* mShaderProgram1 = nullptr;
+        greng::CShaderProgram* mShaderProgram2 = nullptr;
+        greng::CCamera* mCamera = nullptr;
+        greng::CPointLight* mLight = nullptr;
+        greng::CSpotLight* mSpotLight1 = nullptr;
+        greng::CTexture* mTexture1Diffuse = nullptr;
+        greng::CTexture* mTexture1Normal = nullptr;
 
         float mTexCoordsScale = 1.0 / 40.0;
     };
 
-    inline void CDebugRenderer::SetScene(CScene *_scene) { mScene = _scene; }
-
-    inline void
-    CDebugRenderer::SetGeometryManager(CGeometryManager *_geometry_manager) {
-        mGeometryManager = _geometry_manager;
-    }
-
-    inline void
-    CDebugRenderer::SetGrengSystems(greng::CGrengSystemsSet *_greng_systems) {
-        mGrengSystems = _greng_systems;
-    }
-
-    inline void CDebugRenderer::SetCamera(greng::CCamera *_camera) {
+    inline void CDebugRenderer::SetCamera(greng::CCamera* _camera) {
         mCamera = _camera;
     }
 
-    inline greng::CCamera *CDebugRenderer::GetCamera() const { return mCamera; }
+    inline greng::CCamera* CDebugRenderer::GetCamera() const { return mCamera; }
 
-    inline void CDebugRenderer::SetLight(greng::CPointLight *_light) {
+    inline void CDebugRenderer::SetLight(greng::CPointLight* _light) {
         mLight = _light;
     }
 
-    inline greng::CPointLight *CDebugRenderer::GetLight() const {
+    inline greng::CPointLight* CDebugRenderer::GetLight() const {
         return mLight;
     }
 
-    inline void CDebugRenderer::SetSpotLight(greng::CSpotLight *_light) {
+    inline void CDebugRenderer::SetSpotLight(greng::CSpotLight* _light) {
         mSpotLight1 = _light;
     }
 

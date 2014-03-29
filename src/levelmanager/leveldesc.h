@@ -51,18 +51,18 @@ namespace drash {
         CLevelDesc();
         ~CLevelDesc();
 
-        CLevelObjectDesc *AddObject(const std::string &_geometry,
-                                    const std::string &_name);
-        bool DestroyObject(CLevelObjectDesc *_desc);
-        CLevelObjectDesc *GetObject(const std::string &_name);
+        CLevelObjectDesc* AddObject(const std::string& _geometry,
+                                    const std::string& _name);
+        bool DestroyObject(CLevelObjectDesc* _desc);
+        CLevelObjectDesc* GetObject(const std::string& _name);
         inline unsigned int EnumObjects() const;
-        inline CLevelObjectDesc *const *GetObjects() const;
+        inline CLevelObjectDesc* const* GetObjects() const;
         void DestroyObjects();
 
         std::string GetUniqueObjectName() const;
 
-        bool Store(const string &_filename) const;
-        bool Load(const string &_filename);
+        bool Store(const string& _filename) const;
+        bool Load(const string& _filename);
 
       private:
         CObjectFactory<CLevelObjectDesc> mObjectsFactory;
@@ -72,7 +72,7 @@ namespace drash {
         return mObjectsFactory.EnumObjects();
     }
 
-    inline CLevelObjectDesc *const *CLevelDesc::GetObjects() const {
+    inline CLevelObjectDesc* const* CLevelDesc::GetObjects() const {
         return mObjectsFactory.GetObjects();
     }
 

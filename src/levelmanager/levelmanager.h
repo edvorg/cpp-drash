@@ -39,32 +39,18 @@ namespace drash {
       public:
         static const unsigned int mLevelsCountLimit = 10;
 
-        CLevelManager();
+        CLevelManager(CScene& _scene, CGeometryManager& _geometry_manager);
         ~CLevelManager();
 
-        bool Init();
-        void Release();
-
-        inline void SetScene(CScene *_scene);
-        inline void SetGeometryManager(CGeometryManager *_geometry_manager);
-
-        CLevelDesc *CreateLevel();
-        bool DestroyLevel(CLevelDesc *_level);
-        bool StartLevel(CLevelDesc *_level);
+        CLevelDesc* CreateLevel();
+        bool DestroyLevel(CLevelDesc* _level);
+        bool StartLevel(CLevelDesc* _level);
 
       private:
-        CScene *mScene = nullptr;
-        CGeometryManager *mTemplateSystem = nullptr;
-
+        CScene& mScene;
+        CGeometryManager& mTemplateSystem;
         CObjectFactory<CLevelDesc> mLevelFactory;
     };
-
-    inline void CLevelManager::SetScene(CScene *_scene) { mScene = _scene; }
-
-    inline void
-    CLevelManager::SetGeometryManager(CGeometryManager *_geometry_manager) {
-        mTemplateSystem = _geometry_manager;
-    }
 
 } // namespace drash
 

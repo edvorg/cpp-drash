@@ -83,14 +83,14 @@ drash::EventKey ConvertKey(int _key) {
     }
 }
 
-SceneWidget::SceneWidget(QWidget *parent) : QGLWidget(parent) {
+SceneWidget::SceneWidget(QWidget* parent) : QGLWidget(parent) {
     setMouseTracking(true);
     setAcceptDrops(true);
 }
 
 SceneWidget::~SceneWidget() { IMG_Quit(); }
 
-CVec2f SceneWidget::WidgetSpaceToScreenSpace(const CVec2f &_from) const {
+CVec2f SceneWidget::WidgetSpaceToScreenSpace(const CVec2f& _from) const {
     CVec2f res = _from;
 
     res.mX /= mWidth;
@@ -151,7 +151,7 @@ void SceneWidget::paintGL() {
     }
 }
 
-void SceneWidget::mousePressEvent(QMouseEvent *_event) {
+void SceneWidget::mousePressEvent(QMouseEvent* _event) {
     QGLWidget::mousePressEvent(_event);
     setFocus();
     if (mApp == nullptr) {
@@ -169,7 +169,7 @@ void SceneWidget::mousePressEvent(QMouseEvent *_event) {
     mApp->GetUISystem().BeginEvent();
 }
 
-void SceneWidget::mouseReleaseEvent(QMouseEvent *_event) {
+void SceneWidget::mouseReleaseEvent(QMouseEvent* _event) {
     QGLWidget::mouseReleaseEvent(_event);
 
     if (mApp == nullptr) {
@@ -180,7 +180,7 @@ void SceneWidget::mouseReleaseEvent(QMouseEvent *_event) {
     mApp->GetUISystem().EndEvent();
 }
 
-void SceneWidget::mouseMoveEvent(QMouseEvent *_event) {
+void SceneWidget::mouseMoveEvent(QMouseEvent* _event) {
     QGLWidget::mouseMoveEvent(_event);
 
     if (mApp == nullptr) {
@@ -195,7 +195,7 @@ void SceneWidget::mouseMoveEvent(QMouseEvent *_event) {
     mApp->GetUISystem().SetCursorPos(x, y);
 }
 
-void SceneWidget::keyPressEvent(QKeyEvent *_event) {
+void SceneWidget::keyPressEvent(QKeyEvent* _event) {
     QGLWidget::keyPressEvent(_event);
 
     if (mApp == nullptr) {
@@ -207,7 +207,7 @@ void SceneWidget::keyPressEvent(QKeyEvent *_event) {
     }
 }
 
-void SceneWidget::keyReleaseEvent(QKeyEvent *_event) {
+void SceneWidget::keyReleaseEvent(QKeyEvent* _event) {
     QGLWidget::keyReleaseEvent(_event);
 
     if (mApp == nullptr) {
@@ -219,7 +219,7 @@ void SceneWidget::keyReleaseEvent(QKeyEvent *_event) {
     }
 }
 
-void SceneWidget::wheelEvent(QWheelEvent *_event) {
+void SceneWidget::wheelEvent(QWheelEvent* _event) {
     QGLWidget::wheelEvent(_event);
 
     if (mApp == nullptr) {
@@ -232,13 +232,13 @@ void SceneWidget::wheelEvent(QWheelEvent *_event) {
         CAppEvent(_event->delta() > 0 ? EventKeyWheelUp : EventKeyWheelDown));
 }
 
-void SceneWidget::dropEvent(QDropEvent *_event) {
+void SceneWidget::dropEvent(QDropEvent* _event) {
     qDebug() << "Drop event";
     mApp->GetEventSystem().EndEvent(CAppEvent(EventDragDrop));
     _event->accept();
 }
 
-void SceneWidget::dragMoveEvent(QDragMoveEvent *_event) {
+void SceneWidget::dragMoveEvent(QDragMoveEvent* _event) {
     _event->accept();
     //    QGLWidget::mouseMoveEvent(_event);
 
@@ -254,7 +254,7 @@ void SceneWidget::dragMoveEvent(QDragMoveEvent *_event) {
     mApp->GetUISystem().SetCursorPos(x, y);
 }
 
-void SceneWidget::dragEnterEvent(QDragEnterEvent *_event) {
+void SceneWidget::dragEnterEvent(QDragEnterEvent* _event) {
     qDebug() << "Drag eneter event";
 
     mApp->GetEventSystem().BeginEvent(CAppEvent(EventDragDrop));
@@ -262,7 +262,7 @@ void SceneWidget::dragEnterEvent(QDragEnterEvent *_event) {
     _event->accept();
 }
 
-void SceneWidget::dragLeaveEvent(QDragLeaveEvent *_event) {
+void SceneWidget::dragLeaveEvent(QDragLeaveEvent* _event) {
     qDebug() << "Drag leave event";
 
     mApp->GetEventSystem().BeginEvent(CAppEvent(EventDragLeave));

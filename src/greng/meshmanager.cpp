@@ -44,16 +44,8 @@ namespace greng {
         }
     }
 
-    bool CMeshManager::Init() {
-        Release();
-
-        return true;
-    }
-
-    void CMeshManager::Release() {}
-
-    CMesh *CMeshManager::CreateMesh() {
-        CMesh *res = mMeshFactory.CreateObject();
+    CMesh* CMeshManager::CreateMesh() {
+        CMesh* res = mMeshFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
@@ -84,8 +76,8 @@ namespace greng {
         return res;
     }
 
-    CMesh *CMeshManager::CreateMeshFromObjFile(const char *_path) {
-        CMesh *res = CreateMesh();
+    CMesh* CMeshManager::CreateMeshFromObjFile(const char* _path) {
+        CMesh* res = CreateMesh();
 
         if (res == nullptr) {
             return nullptr;
@@ -112,8 +104,8 @@ namespace greng {
         return res;
     }
 
-    CMesh *CMeshManager::CreateMeshQuad() {
-        CMesh *res = CreateMesh();
+    CMesh* CMeshManager::CreateMeshQuad() {
+        CMesh* res = CreateMesh();
 
         if (res == nullptr) {
             return nullptr;
@@ -165,8 +157,8 @@ namespace greng {
         return res;
     }
 
-    CMesh *CMeshManager::CreateMeshCube() {
-        CMesh *res = CreateMesh();
+    CMesh* CMeshManager::CreateMeshCube() {
+        CMesh* res = CreateMesh();
 
         if (res == nullptr) {
             return nullptr;
@@ -259,9 +251,9 @@ namespace greng {
         return res;
     }
 
-    CMesh *CMeshManager::CreateMeshFromVertices(const CVertex *_vertices,
+    CMesh* CMeshManager::CreateMeshFromVertices(const CVertex* _vertices,
                                                 unsigned int _vertices_count,
-                                                const unsigned int *_indices,
+                                                const unsigned int* _indices,
                                                 unsigned int _indices_count) {
         if (_vertices == nullptr || _vertices_count == 0) {
             LOG_ERR("CMeshManager::CreateMeshFromVertices(): _vertices must be "
@@ -275,7 +267,7 @@ namespace greng {
             return nullptr;
         }
 
-        CMesh *res = CreateMesh();
+        CMesh* res = CreateMesh();
 
         if (res == nullptr) {
             return nullptr;
@@ -304,7 +296,7 @@ namespace greng {
         return res;
     }
 
-    bool CMeshManager::DestroyMesh(CMesh *_mesh) {
+    bool CMeshManager::DestroyMesh(CMesh* _mesh) {
         if (mMeshFactory.IsObject(_mesh) == false) {
             return false;
         }
@@ -319,7 +311,7 @@ namespace greng {
         return true;
     }
 
-    void CMeshManager::ComputeNormals(CMesh *_mesh) {
+    void CMeshManager::ComputeNormals(CMesh* _mesh) {
         if (_mesh == nullptr) {
             LOG_ERR("CMeshManager::ComputeNormals() invalid mesh taken");
             return;
@@ -352,7 +344,7 @@ namespace greng {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    void CMeshManager::ComputeTangentSpace(CMesh *_mesh) {
+    void CMeshManager::ComputeTangentSpace(CMesh* _mesh) {
         if (_mesh == nullptr) {
             LOG_ERR("CMeshManager::ComputeTangentSpace() invalid mesh taken");
             return;
@@ -361,9 +353,9 @@ namespace greng {
         unsigned int triangles_count = _mesh->mIndices.size() / 3;
 
         for (unsigned int i = 0; i < triangles_count; i++) {
-            CVertex &v1 = _mesh->mVertices[_mesh->mIndices[i * 3]];
-            CVertex &v2 = _mesh->mVertices[_mesh->mIndices[i * 3 + 1]];
-            CVertex &v3 = _mesh->mVertices[_mesh->mIndices[i * 3 + 2]];
+            CVertex& v1 = _mesh->mVertices[_mesh->mIndices[i * 3]];
+            CVertex& v2 = _mesh->mVertices[_mesh->mIndices[i * 3 + 1]];
+            CVertex& v3 = _mesh->mVertices[_mesh->mIndices[i * 3 + 2]];
 
             drash::CVec3f q1 = v2.mPos;
             drash::CVec3f q2 = v3.mPos;

@@ -26,30 +26,11 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    bool CGrengSystemsSet::Init() {
-        Release();
-
-        if (mRenderer.Init() == false || mCameraManager.Init() == false ||
-            mMeshManager.Init() == false || mTextureManager.Init() == false ||
-            mVertexShaderManager.Init() == false ||
-            mFragmentShaderManager.Init() == false ||
-            mShaderProgramManager.Init() == false) {
-            return false;
-        }
-
-        return true;
-    }
+    CGrengSystemsSet::CGrengSystemsSet()
+        : mRenderer(), mCameraManager(), mMeshManager(), mTextureManager(),
+          mVertexShaderManager(), mFragmentShaderManager(),
+          mShaderProgramManager() {}
 
     void CGrengSystemsSet::Step(double _dt) { mCameraManager.Step(_dt); }
-
-    void CGrengSystemsSet::Release() {
-        mVertexShaderManager.Release();
-        mFragmentShaderManager.Release();
-        mShaderProgramManager.Release();
-        mTextureManager.Release();
-        mMeshManager.Release();
-        mCameraManager.Release();
-        mRenderer.Release();
-    }
 
 } // namespace greng

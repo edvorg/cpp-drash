@@ -31,25 +31,22 @@ namespace greng {
 
     class CTexture;
 
-    class CTextureManager {
+    class CTextureManager final {
       public:
         constexpr static unsigned int mTexturesCountLimit = 1024;
 
         CTextureManager();
-        CTextureManager(const CTextureManager &) = delete;
-        CTextureManager(CTextureManager &&) = delete;
-        CTextureManager &operator=(const CTextureManager &) = delete;
-        CTextureManager &operator=(CTextureManager &&) = delete;
+        CTextureManager(const CTextureManager&) = delete;
+        CTextureManager(CTextureManager&&) = delete;
+        CTextureManager& operator=(const CTextureManager&) = delete;
+        CTextureManager& operator=(CTextureManager&&) = delete;
         ~CTextureManager();
 
-        bool Init();
-        void Release();
-
-        CTexture *CreateTexture();
-        CTexture *CreateTextureFromFile(const char *_path);
-        CTexture *CreateTextureDummy();
-        CTexture *CreateTextureWhite();
-        bool DestroyTexture(CTexture *_texture);
+        CTexture* CreateTexture();
+        CTexture* CreateTextureFromFile(const char* _path);
+        CTexture* CreateTextureDummy();
+        CTexture* CreateTextureWhite();
+        bool DestroyTexture(CTexture* _texture);
 
       protected:
       private:

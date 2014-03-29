@@ -35,20 +35,16 @@ namespace drash {
 
     class CRotationablePoint {
       public:
-        CRotationablePoint() = default;
+        CRotationablePoint(greng::CRenderer& _renderer,
+                           greng::CCamera& _camera);
 
-        inline void SetRenderer(greng::CRenderer *_renderer);
-        inline void SetCamera(greng::CCamera *_camera);
-
-        bool Init();
         void Step(double);
         void Render();
-        void Release();
 
-        inline void SetPoint(const CVec3f &_point);
-        inline void SetRotation(const CVec3f &_rotation);
+        inline void SetPoint(const CVec3f& _point);
+        inline void SetRotation(const CVec3f& _rotation);
 
-        inline void SetCursorPos(const CVec2f &_pos);
+        inline void SetCursorPos(const CVec2f& _pos);
         void RotateBegin();
         void RotateEnd();
 
@@ -58,14 +54,14 @@ namespace drash {
         inline void SetAxisOY(const bool _val);
         inline void SetAxisOZ(const bool _val);
 
-        inline const CVec3f &GetRotation() const;
+        inline const CVec3f& GetRotation() const;
 
       private:
         CVec3f mRotationDelta;
         CVec2f mCursorPos = CVec2f(0);
 
-        greng::CRenderer *mRenderer = nullptr;
-        greng::CCamera *mCamera = nullptr;
+        greng::CRenderer& mRenderer;
+        greng::CCamera& mCamera;
 
         CVec3f mPoint = CVec3f(0);
         CVec3f mRotation = CVec3f(0);
@@ -78,23 +74,15 @@ namespace drash {
         bool mAxisOZ = true;
     };
 
-    inline void CRotationablePoint::SetRenderer(greng::CRenderer *_renderer) {
-        mRenderer = _renderer;
-    }
-
-    inline void CRotationablePoint::SetCamera(greng::CCamera *_camera) {
-        mCamera = _camera;
-    }
-
-    inline void CRotationablePoint::SetPoint(const CVec3f &_point) {
+    inline void CRotationablePoint::SetPoint(const CVec3f& _point) {
         mPoint = _point;
     }
 
-    inline void CRotationablePoint::SetRotation(const CVec3f &_rotation) {
+    inline void CRotationablePoint::SetRotation(const CVec3f& _rotation) {
         mRotation = _rotation;
     }
 
-    inline void CRotationablePoint::SetCursorPos(const CVec2f &_pos) {
+    inline void CRotationablePoint::SetCursorPos(const CVec2f& _pos) {
         mCursorPos = _pos;
     }
 
@@ -110,7 +98,7 @@ namespace drash {
         mAxisOZ = _val;
     }
 
-    inline const CVec3f &CRotationablePoint::GetRotation() const {
+    inline const CVec3f& CRotationablePoint::GetRotation() const {
         return mRotation;
     }
 

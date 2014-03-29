@@ -36,19 +36,19 @@ namespace drash {
       public:
         constexpr static const unsigned int mCatchEventsCountLimit = 3;
 
-        void AddEvent(const CAppEvent &_e);
-        void RemoveEvent(const CAppEvent &_e);
+        void AddEvent(const CAppEvent& _e);
+        void RemoveEvent(const CAppEvent& _e);
         inline unsigned int GetEventsCount() const;
         void Clear();
 
-        bool ContainsEvent(const CAppEvent &_e) const;
-        bool ContainsCombination(const CAppEventCombination &_c) const;
+        bool ContainsEvent(const CAppEvent& _e) const;
+        bool ContainsCombination(const CAppEventCombination& _c) const;
 
-        bool operator==(const CAppEventCombination &_src) const;
-        bool operator!=(const CAppEventCombination &_src) const;
+        bool operator==(const CAppEventCombination& _src) const;
+        bool operator!=(const CAppEventCombination& _src) const;
 
-        friend CLogger &operator<<(CLogger &_logger,
-                                   const CAppEventCombination &_c);
+        friend CLogger& operator<<(CLogger& _logger,
+                                   const CAppEventCombination& _c);
 
       private:
       protected:

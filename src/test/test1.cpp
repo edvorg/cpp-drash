@@ -36,22 +36,12 @@ namespace drash {
 
     namespace test {
 
-        bool CTest1::Init() {
-            if (CApp::Init() == false) {
-                return false;
-            }
-
-            if (GetGeometryManager().Load() == false) {
-                return false;
-            }
+        CTest1::CTest1() {
+            GetGeometryManager().Load();
 
             greng::CCameraParams cp;
             cp.mPos.Set(0, 0, 100);
             mCamera = GetGrengSystems().GetCameraManager().CreateCamera(cp);
-
-            if (mCamera == nullptr) {
-                return false;
-            }
 
             mLight1.mPosition.Set(0, 0, 20);
 
@@ -61,8 +51,6 @@ namespace drash {
             GetDebugRenderer().SetLight(&mLight1);
 
             SetProcessors();
-
-            return true;
         }
 
         void CTest1::Step(double _dt) {
@@ -119,7 +107,7 @@ namespace drash {
             }
         }
 
-        float Area(const CVec2f &_p1, const CVec2f &_p2, const CVec2f &_p3) {
+        float Area(const CVec2f& _p1, const CVec2f& _p2, const CVec2f& _p3) {
             return (_p2.mX - _p1.mX) * (_p3.mY - _p1.mY) -
                    (_p2.mY - _p1.mY) * (_p3.mX - _p1.mX);
         }
@@ -132,8 +120,8 @@ namespace drash {
             return math::Max(_x, _a) <= math::Min(_y, _b);
         }
 
-        bool Intersect(const CVec2f &_p1, const CVec2f &_p2, const CVec2f &_p3,
-                       const CVec2f &_p4) {
+        bool Intersect(const CVec2f& _p1, const CVec2f& _p2, const CVec2f& _p3,
+                       const CVec2f& _p4) {
             return Intersect_1(_p1.mX, _p2.mX, _p3.mX, _p4.mX) &&
                    Intersect_1(_p1.mY, _p2.mY, _p3.mY, _p4.mY) &&
                    Area(_p1, _p2, _p3) * Area(_p1, _p2, _p4) <= 0 &&
@@ -217,11 +205,7 @@ namespace drash {
             }
         }
 
-        void CTest1::Release() {
-            GetGeometryManager().Store();
-
-            CApp::Release();
-        }
+        CTest1::~CTest1() { GetGeometryManager().Store(); }
 
         void CTest1::SetProcessors() {
             GetEventSystem().SetMode(std::string("figure_movement"));
@@ -264,7 +248,7 @@ namespace drash {
                             CVec3f new_pos;
                             mCamera->CastRay(GetCursorPos(), xz, new_pos);
 
-                            CVec2f *v =
+                            CVec2f* v =
                                 new CVec2f[mCurrentFigure->EnumVertices()];
                             for (unsigned int i = 0;
                                  i < mCurrentFigure->EnumVertices(); i++) {
@@ -285,7 +269,7 @@ namespace drash {
                             CVec3f new_pos;
                             mCamera->CastRay(GetCursorPos(), xy, new_pos);
 
-                            CVec2f *v =
+                            CVec2f* v =
                                 new CVec2f[mCurrentFigure->EnumVertices()];
                             for (unsigned int i = 0;
                                  i < mCurrentFigure->EnumVertices(); i++) {
@@ -388,7 +372,7 @@ namespace drash {
                             GetScene().CreateObject(*mCurrentTemplate, p);
                         mCurrentObject->SetActive(false);
                     } else {
-                        auto &t = GetGeometryManager().GetGeometries();
+                        auto& t = GetGeometryManager().GetGeometries();
                         for (auto i = t.begin(); i != t.end(); i++) {
                             if (mCurrentTemplate == i->second) {
                                 i++;
@@ -472,8 +456,8 @@ namespace drash {
             }
         }
 
-        void CTest1::DetectNewSplitPoint(const CVec2f &_p1, const CVec2f &_p2,
-                                         unsigned int _index, const CRay &_r) {
+        void CTest1::DetectNewSplitPoint(const CVec2f& _p1, const CVec2f& _p2,
+                                         unsigned int _index, const CRay& _r) {
             float centerz = mCurrentObject->GetPosZ() + mCurrentFigure->GetZ();
 
             CPlane p;
@@ -703,7 +687,7 @@ namespace drash {
                             GetScene().CreateObject(*mCurrentTemplate, p);
                         mCurrentObject->SetActive(false);
                     } else {
-                        auto &t = GetGeometryManager().GetGeometries();
+                        auto& t = GetGeometryManager().GetGeometries();
                         for (auto i = t.begin(); i != t.end(); i++) {
                             if (mCurrentTemplate == i->second) {
                                 if (i == t.begin()) {
@@ -802,7 +786,7 @@ namespace drash {
 
         void CTest1::SelectFigure() {
             mCurrentFigure =
-                GetDebugRenderer().FindFigure(mCamera, GetCursorPos());
+                GetDebugRenderer().FindFigure(*mCamera, GetCursorPos());
 
             if (mCurrentFigure != nullptr) {
                 GetEventSystem().SetMode("figure_movement");

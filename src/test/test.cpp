@@ -41,7 +41,7 @@ namespace drash {
 
     namespace test {
 
-        CApp *StartApp(const char *_name) {
+        CApp* StartApp(const char* _name) {
             if (strcmp(_name, "test1") == 0)
                 return new CTest1;
             if (strcmp(_name, "test2") == 0)

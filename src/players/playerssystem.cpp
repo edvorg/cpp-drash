@@ -30,35 +30,26 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    CPlayersSystem::CPlayersSystem()
-        : mPlayersFactory(mPlayersCountLimit, "CPlayer") {}
-
-    CPlayersSystem::~CPlayersSystem() {}
-
-    bool CPlayersSystem::Init() { return true; }
+    CPlayersSystem::CPlayersSystem(CScene& _scene)
+        : mScene(_scene), mPlayersFactory(mPlayersCountLimit, "CPlayer") {}
 
     void CPlayersSystem::Step(double) {}
 
-    void CPlayersSystem::Release() {
+    CPlayersSystem::~CPlayersSystem() {
         while (mPlayersFactory.EnumObjects() != 0) {
             DestroyPlayer(mPlayersFactory.GetObjects()[0]);
         }
     }
 
-    CPlayer *CPlayersSystem::CreatePlayer(const CSceneObjectGeometry &_g,
-                                          const CPlayerParams &_p) {
-        if (GetScene() == nullptr) {
-            LOG_ERR("CPlayersSystem::CreatePlayer(): Scene is not connected");
-            return nullptr;
-        }
-
-        CPlayer *res = mPlayersFactory.CreateObject();
+    CPlayer* CPlayersSystem::CreatePlayer(const CSceneObjectGeometry& _g,
+                                          const CPlayerParams& _p) {
+        CPlayer* res = mPlayersFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
         }
 
-        res->mSceneObject = GetScene()->CreateObject(_g, _p.mSceneObjectParams);
+        res->mSceneObject = mScene.CreateObject(_g, _p.mSceneObjectParams);
 
         if (res->mSceneObject == nullptr) {
             mPlayersFactory.DestroyObject(res);
@@ -71,19 +62,13 @@ namespace drash {
         return res;
     }
 
-    bool CPlayersSystem::DestroyPlayer(CPlayer *_player) {
+    bool CPlayersSystem::DestroyPlayer(CPlayer* _player) {
         if (mPlayersFactory.IsObject(_player) == false) {
             return false;
         }
 
-        if (GetScene() == nullptr) {
-            LOG_ERR("CPlayersSystem::DestroyPlayer(): Memory leak. Scene "
-                    "disconnected");
-            return false;
-        }
-
         if (_player->mSceneObject != nullptr) {
-            GetScene()->DestroyObject(_player->mSceneObject);
+            mScene.DestroyObject(_player->mSceneObject);
         }
 
         mPlayersFactory.DestroyObject(_player);
@@ -91,8 +76,8 @@ namespace drash {
         return true;
     }
 
-    bool CPlayersSystem::SendMessage(CPlayer *_player,
-                                     const PlayerMessage &_message) {
+    bool CPlayersSystem::SendMessage(CPlayer* _player,
+                                     const PlayerMessage& _message) {
         if (mPlayersFactory.IsObject(_player) == false) {
             LOG_ERR("CPlayersSystem::SendMessage(): Wrong player");
             return false;

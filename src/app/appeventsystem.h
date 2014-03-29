@@ -58,23 +58,21 @@ namespace drash {
       public:
         CAppEventSystem();
 
-        bool Init();
-        void Release();
+        static bool ValidateModeName(const std::string& _name);
 
-        static bool ValidateModeName(const std::string &_name);
-        bool SetMode(const std::string &_name);
-        void SetProcessor(const char *_combinations,
-                          const CAppEventProcessor &_processor);
+        bool SetMode(const std::string& _name);
+        void SetProcessor(const char* _combinations,
+                          const CAppEventProcessor& _processor);
 
         void Process();
 
-        void BeginEvent(const CAppEvent &_event);
-        void EndEvent(const CAppEvent &_event);
-        void CancelEvent(const CAppEvent &_event);
+        void BeginEvent(const CAppEvent& _event);
+        void EndEvent(const CAppEvent& _event);
+        void CancelEvent(const CAppEvent& _event);
 
       protected:
       private:
-        int PressEventImpl(const CAppEvent &_event);
+        int PressEventImpl(const CAppEvent& _event);
 
         /// contains all current events
         /// BeginEvent invokation adds event to mCurrentState
@@ -82,7 +80,7 @@ namespace drash {
         CAppEventCombination mCurrentState;
 
         /// contains combinations being processed
-        std::list<CAppEventCombinationTree *> mCurrentCombinations;
+        std::list<CAppEventCombinationTree*> mCurrentCombinations;
 
         /// name of mode currently in use. mode is just name for one
         /// combinations tree.
@@ -96,10 +94,10 @@ namespace drash {
         std::map<std::string, CAppEventCombinationTree> mTrees;
 
         /// root of current mode tree
-        CAppEventCombinationTree *mCurrentModeRoot = nullptr;
+        CAppEventCombinationTree* mCurrentModeRoot = nullptr;
 
         /// start point for searching of combinations to process
-        CAppEventCombinationTree *mCurrentNode = nullptr;
+        CAppEventCombinationTree* mCurrentNode = nullptr;
     };
 
 } // namespace drash

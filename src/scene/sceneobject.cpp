@@ -27,7 +27,6 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "figure.h"
 #include "../diag/logger.h"
 #include "../diag/assert.h"
-#include "../explosion/explosion.h"
 #include "scene.h"
 
 #include <Box2D/Box2D.h>
@@ -71,7 +70,7 @@ namespace drash {
         }
     }
 
-    CFigure *CSceneObject::CreateFigure(const CFigureParams &_params) {
+    CFigure* CSceneObject::CreateFigure(const CFigureParams& _params) {
         if (mFiguresCount >= mFiguresCountLimit) {
             LOG_ERR("CSceneObject::CreateFigure(): figures count exceedes it's "
                     "limit ("
@@ -99,9 +98,9 @@ namespace drash {
         fdef.shape = &s;
         fdef.userData = nullptr;
 
-        b2Fixture *f = mBody->CreateFixture(&fdef);
+        b2Fixture* f = mBody->CreateFixture(&fdef);
 
-        CFigure *figure = new CFigure;
+        CFigure* figure = new CFigure;
 
         figure->mFixture = f;
         figure->mMass = _params.mMass;
@@ -121,7 +120,7 @@ namespace drash {
         mPosZAnimator.Set(_pos.mZ);
     }
 
-    void CSceneObject::DestroyFigure(CFigure *_figure) {
+    void CSceneObject::DestroyFigure(CFigure* _figure) {
         if (_figure->mInternalId >= static_cast<int>(mFiguresCountLimit) ||
             mFigures[_figure->mInternalId] != _figure) {
             LOG_ERR("CSceneObject::DestroyFigure(): something wrong with "
@@ -129,10 +128,10 @@ namespace drash {
             return;
         }
 
-        for (auto &i : mFigureDestroyHandlers) {
+        for (auto& i : mFigureDestroyHandlers) {
             i(_figure);
         }
-        for (auto &i : _figure->mDestroyHandlers) {
+        for (auto& i : _figure->mDestroyHandlers) {
             i(_figure);
         }
 
@@ -162,13 +161,13 @@ namespace drash {
         return mBody->GetType() == b2_dynamicBody ? true : false;
     }
 
-    void CSceneObject::ApplyLinearImpulse(const CVec2f &_dir,
-                                          const CVec2f &_pos) {
+    void CSceneObject::ApplyLinearImpulse(const CVec2f& _dir,
+                                          const CVec2f& _pos) {
         mBody->ApplyLinearImpulse(CVec2ToB2Vec2(_dir), CVec2ToB2Vec2(_pos),
                                   true);
     }
 
-    void CSceneObject::SetLinearVelocity(const CVec2f &_vel) {
+    void CSceneObject::SetLinearVelocity(const CVec2f& _vel) {
         mBody->SetLinearVelocity(CVec2ToB2Vec2(_vel));
     }
 
@@ -190,7 +189,7 @@ namespace drash {
 
     void CSceneObject::SetActive(bool _active) { mBody->SetActive(_active); }
 
-    CVec2f CSceneObject::GetWorldPoint(const CVec2f &_local_point) const {
+    CVec2f CSceneObject::GetWorldPoint(const CVec2f& _local_point) const {
         return B2Vec2ToCVec2(mBody->GetWorldPoint(CVec2ToB2Vec2(_local_point)));
     }
 
@@ -198,7 +197,7 @@ namespace drash {
         return B2Vec2ToCVec2(mBody->GetWorldCenter());
     }
 
-    CLogger &operator<<(CLogger &_logger, const CSceneObject &_object) {
+    CLogger& operator<<(CLogger& _logger, const CSceneObject& _object) {
         _logger << "pos: " << _object.mPos << " angle: " << _object.mAngle
                 << '\n';
         for (unsigned int i = 0; i < _object.EnumFigures(); i++) {
@@ -207,7 +206,7 @@ namespace drash {
         return _logger;
     }
 
-    void CSceneObject::DumpGeometry(CSceneObjectGeometry *_geometry) const {
+    void CSceneObject::DumpGeometry(CSceneObjectGeometry* _geometry) const {
         _geometry->mFigures.resize(EnumFigures());
 
         for (unsigned int i = 0; i < EnumFigures(); i++) {

@@ -33,25 +33,13 @@ namespace drash {
 
     CAppEventCombinationTree::CAppEventCombinationTree() {}
 
-    CAppEventSystem::CAppEventSystem() {}
+    CAppEventSystem::CAppEventSystem() { SetMode(std::string("normal")); }
 
-    bool CAppEventSystem::Init() {
-        if (mCurrentMode == "") {
-            if (SetMode(std::string("normal")) == false) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    void CAppEventSystem::Release() {}
-
-    bool CAppEventSystem::ValidateModeName(const std::string &_name) {
+    bool CAppEventSystem::ValidateModeName(const std::string& _name) {
         return std::find(_name.begin(), _name.end(), ' ') == _name.end();
     }
 
-    bool CAppEventSystem::SetMode(const std::string &_name) {
+    bool CAppEventSystem::SetMode(const std::string& _name) {
         if (ValidateModeName(_name) == false) {
             LOG_ERR("CAppEventSystem::SetMode(): invalid mode name \""
                     << _name.c_str() << "\"");
@@ -81,8 +69,8 @@ namespace drash {
         return true;
     }
 
-    void CAppEventSystem::SetProcessor(const char *_combinations,
-                                       const CAppEventProcessor &_processor) {
+    void CAppEventSystem::SetProcessor(const char* _combinations,
+                                       const CAppEventProcessor& _processor) {
         using std::list;
         using std::string;
         using std::for_each;
@@ -94,19 +82,19 @@ namespace drash {
         list<string> simple_combinations;
         list<CAppEventCombination> combinations;
 
-        for (char *c = strtok(str, " "); c != nullptr;
+        for (char* c = strtok(str, " "); c != nullptr;
              c = strtok(nullptr, " ")) {
             simple_combinations.push_back(string(c));
         }
 
         std::for_each(simple_combinations.begin(), simple_combinations.end(),
-                      [&combinations](string &_str) {
+                      [&combinations](string& _str) {
             char str2[128];
             strncpy(str2, _str.c_str(), 127);
             str2[127] = 0;
 
             CAppEventCombination comb;
-            for (char *c2 = strtok(str2, "-"); c2 != nullptr;
+            for (char* c2 = strtok(str2, "-"); c2 != nullptr;
                  c2 = strtok(nullptr, "-")) {
                 CAppEvent e;
                 e.FromString(std::string(c2));
@@ -116,7 +104,7 @@ namespace drash {
             combinations.push_back(comb);
         });
 
-        CAppEventCombinationTree *node = mCurrentModeRoot;
+        CAppEventCombinationTree* node = mCurrentModeRoot;
         for (auto i = combinations.begin(); i != combinations.end(); i++) {
             bool found = false;
 
@@ -142,7 +130,7 @@ namespace drash {
     void CAppEventSystem::Process() {
         for (auto i = mCurrentCombinations.begin();
              i != mCurrentCombinations.end();) {
-            CAppEventCombinationTree *c = *i;
+            CAppEventCombinationTree* c = *i;
 
             if (c->mState & STATE_BEGIN) {
                 c->mState ^= STATE_BEGIN;
@@ -171,7 +159,7 @@ namespace drash {
         }
     }
 
-    void CAppEventSystem::BeginEvent(const CAppEvent &_event) {
+    void CAppEventSystem::BeginEvent(const CAppEvent& _event) {
         mCurrentState.AddEvent(_event);
 
         // now we find key combination in current combination tree root
@@ -191,7 +179,7 @@ namespace drash {
         }
     }
 
-    void CAppEventSystem::EndEvent(const CAppEvent &_event) {
+    void CAppEventSystem::EndEvent(const CAppEvent& _event) {
         mCurrentState.RemoveEvent(_event);
 
         // find key combinations, thas is not intersect current events state
@@ -221,7 +209,7 @@ namespace drash {
         }
     }
 
-    void CAppEventSystem::CancelEvent(const CAppEvent &_event) {
+    void CAppEventSystem::CancelEvent(const CAppEvent& _event) {
         mCurrentState.RemoveEvent(_event);
 
         // find key combinations, thas is not intersect current events state
@@ -251,7 +239,7 @@ namespace drash {
         }
     }
 
-    int CAppEventSystem::PressEventImpl(const CAppEvent &_event) {
+    int CAppEventSystem::PressEventImpl(const CAppEvent& _event) {
         int res = 0;
 
         for (auto i = mCurrentNode->mChilds.begin();

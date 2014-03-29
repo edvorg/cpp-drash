@@ -38,11 +38,7 @@ namespace drash {
     // const
     const float CObjectEditorApp::MOVING_SPEED = 60.0f;
 
-    bool CObjectEditorApp::Init() {
-        if (CApp::Init() == false) {
-            return false;
-        }
-
+    CObjectEditorApp::CObjectEditorApp() {
         SetProcessors();
         SetCameraProcessors();
         SetDragDrop();
@@ -52,13 +48,7 @@ namespace drash {
         cp.mPos.Set(10, 10, 10.0f);
         cp.mRotation.Set(-M_PI / 4, M_PI / 4, 0);
         mCamera = GetGrengSystems().GetCameraManager().CreateCamera(cp);
-
-        if (mCamera == nullptr) {
-            return false;
-        }
-
-        this->GetDebugRenderer().SetCamera(mCamera);
-
+        GetDebugRenderer().SetCamera(mCamera);
         mPointLight.mPosition = GetCamera()->GetPos();
 
         GetDebugRenderer().SetLight(&mPointLight);
@@ -75,8 +65,6 @@ namespace drash {
         mTimer.Reset(true);
 
         LOG_INFO("EditorObject App initzializeted");
-
-        return true;
     }
 
     void CObjectEditorApp::Step(double _dt) {
@@ -157,7 +145,7 @@ namespace drash {
         }
         if (mState == StretchState && mCurrentObject != nullptr) {
             for (unsigned int i = 0; i < mCurrentObject->EnumFigures(); i++) {
-                CFigure *figure = mCurrentObject->GetFigures()[i];
+                CFigure* figure = mCurrentObject->GetFigures()[i];
                 for (unsigned int j = 0; j < figure->EnumVertices(); j++) {
                     CVec3f position(figure->GetVertices()[j],
                                     mCurrentObject->GetPosZ() + figure->GetZ() +
@@ -219,10 +207,8 @@ namespace drash {
         DrawDragTemplate();
     }
 
-    void CObjectEditorApp::Release() {
+    void CObjectEditorApp::~CObjectEditorApp() {
         GetGeometryManager().Store();
-        mRotationPoint.Release();
-        CApp::Release();
     }
 
     void CObjectEditorApp::StartBuild() {
@@ -270,7 +256,7 @@ namespace drash {
                                        break;
                                    }
                                    case DeleteFigure: {
-                                       CFigure *fig =
+                                       CFigure* fig =
                                            SelectFigure(GetCursorPos());
                                        if (fig != nullptr) {
                                            mCurrentObject->DestroyFigure(fig);
@@ -385,7 +371,7 @@ namespace drash {
                         if (mCurrentObject != nullptr) {
                             for (unsigned int i = 0;
                                  i < mCurrentObject->EnumFigures(); i++) {
-                                CFigure *fig = mCurrentObject->GetFigures()[i];
+                                CFigure* fig = mCurrentObject->GetFigures()[i];
                                 fig->SetDepth(fig->GetDepth() + 0.5);
                             }
                             SaveCurrentObject();
@@ -396,7 +382,7 @@ namespace drash {
                         if (mCurrentObject != nullptr) {
                             for (unsigned int i = 0;
                                  i < mCurrentObject->EnumFigures(); i++) {
-                                CFigure *fig = mCurrentObject->GetFigures()[i];
+                                CFigure* fig = mCurrentObject->GetFigures()[i];
                                 if (fig->GetDepth() - 0.5 > 0.01) {
                                     fig->SetDepth(fig->GetDepth() - 0.5);
                                 }
@@ -485,7 +471,7 @@ namespace drash {
             }));
     }
 
-    bool CObjectEditorApp::BuildFigure(const std::string &_objectName) {
+    bool CObjectEditorApp::BuildFigure(const std::string& _objectName) {
         if (mVertexs.size() < 3 || mCurrentObject == nullptr) {
             return false;
         }
@@ -503,7 +489,7 @@ namespace drash {
         }
 
         CFigureParams param;
-        std::for_each(mVertexs.begin(), mVertexs.end(), [this](CVec2f &v) {
+        std::for_each(mVertexs.begin(), mVertexs.end(), [this](CVec2f& v) {
             CPlane plane;
             plane.SetNormal(CVec3f(0, 0, 1));
             plane.SetPoint(CVec3f(0, 0, 0));
@@ -523,7 +509,7 @@ namespace drash {
         return true;
     }
 
-    bool CObjectEditorApp::AddNewObjectToTemplate(const std::string &_name) {
+    bool CObjectEditorApp::AddNewObjectToTemplate(const std::string& _name) {
         if (GetGeometryManager().CreateGeometry(_name) == nullptr) {
             return false;
         }
@@ -531,7 +517,7 @@ namespace drash {
         return true;
     }
 
-    void CObjectEditorApp::ShowObject(const std::string &_name) {
+    void CObjectEditorApp::ShowObject(const std::string& _name) {
         RemoveCurrentObject();
         SetCurrentTemplateName(_name);
         CSceneObjectParams params;
@@ -550,7 +536,7 @@ namespace drash {
 
         CVec2f pRef(0.0f, 0.0f);
 
-        std::vector<drash::CVec2f> &vs = mVertexs;
+        std::vector<drash::CVec2f>& vs = mVertexs;
 
         for (unsigned int i = 0; i < vs.size(); ++i) {
             CVec2f p1 = pRef;
@@ -579,7 +565,7 @@ namespace drash {
         }
     }
 
-    CFigure *CObjectEditorApp::SelectFigure(const CVec2f &_pos) {
+    CFigure* CObjectEditorApp::SelectFigure(const CVec2f& _pos) {
         if (mCurrentObject != nullptr) {
             return GetDebugRenderer().FindFigure(mCamera, _pos);
         }
@@ -605,8 +591,8 @@ namespace drash {
 
         mOldPositionCursor = pos;
 
-        const CVec2f *v = mSelectedFigure->GetVertices();
-        CVec2f *new_vertices = new CVec2f[mSelectedFigure->EnumVertices()];
+        const CVec2f* v = mSelectedFigure->GetVertices();
+        CVec2f* new_vertices = new CVec2f[mSelectedFigure->EnumVertices()];
         for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++) {
             new_vertices[i] = v[i];
             new_vertices[i].mX += disX;
@@ -622,7 +608,7 @@ namespace drash {
         if (mVertexIndex == -1) {
             return;
         }
-        CVec2f *ver = new CVec2f[mSelectedFigure->EnumVertices()];
+        CVec2f* ver = new CVec2f[mSelectedFigure->EnumVertices()];
         for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++) {
             if (i == (unsigned int)mVertexIndex) {
                 CVec2f posCur = GetCursorPos();
@@ -688,7 +674,7 @@ namespace drash {
 
     void CObjectEditorApp::SelectVertex() {
         for (unsigned int i = 0; i < mCurrentObject->EnumFigures(); i++) {
-            CFigure *figure = mCurrentObject->GetFigures()[i];
+            CFigure* figure = mCurrentObject->GetFigures()[i];
 
             for (unsigned int j = 0; j < figure->EnumVertices(); j++) {
                 CVec3f position(figure->GetVertices()[j],
@@ -770,8 +756,8 @@ namespace drash {
         float disY = newCenter.mY - mOldCenterFigure.mY;
         mOldPositionCursor = pos;
 
-        const CVec2f *v = mSelectedFigure->GetVertices();
-        CVec2f *new_vertices = new CVec2f[mSelectedFigure->EnumVertices()];
+        const CVec2f* v = mSelectedFigure->GetVertices();
+        CVec2f* new_vertices = new CVec2f[mSelectedFigure->EnumVertices()];
         for (unsigned int i = 0; i < mSelectedFigure->EnumVertices(); i++) {
             new_vertices[i] = v[i];
             new_vertices[i].mX += disX;
@@ -821,10 +807,10 @@ namespace drash {
             return;
         }
 
-        CSceneObjectGeometry *geometry = new CSceneObjectGeometry();
+        CSceneObjectGeometry* geometry = new CSceneObjectGeometry();
         mCurrentObject->DumpGeometry(geometry);
 
-        CSceneObjectGeometry *g =
+        CSceneObjectGeometry* g =
             GetGeometryManager().GetGeometry(mCurrentTemplateName);
         g->mDestructionGraph = geometry->mDestructionGraph;
         g->mFigures = geometry->mFigures;
@@ -840,7 +826,7 @@ namespace drash {
 
     // For Split mode
 
-    float Area(const CVec2f &_p1, const CVec2f &_p2, const CVec2f &_p3) {
+    float Area(const CVec2f& _p1, const CVec2f& _p2, const CVec2f& _p3) {
         return (_p2.mX - _p1.mX) * (_p3.mY - _p1.mY) -
                (_p2.mY - _p1.mY) * (_p3.mX - _p1.mX);
     }
@@ -853,8 +839,8 @@ namespace drash {
         return math::Max(_x, _a) <= math::Min(_y, _b);
     }
 
-    bool Intersect(const CVec2f &_p1, const CVec2f &_p2, const CVec2f &_p3,
-                   const CVec2f &_p4) {
+    bool Intersect(const CVec2f& _p1, const CVec2f& _p2, const CVec2f& _p3,
+                   const CVec2f& _p4) {
         return Intersect_1(_p1.mX, _p2.mX, _p3.mX, _p4.mX) &&
                Intersect_1(_p1.mY, _p2.mY, _p3.mY, _p4.mY) &&
                Area(_p1, _p2, _p3) * Area(_p1, _p2, _p4) <= 0 &&
@@ -929,7 +915,7 @@ namespace drash {
 
                     for (unsigned int i = 0; i < mCurrentObject->EnumFigures();
                          i++) {
-                        CFigure *figure = mCurrentObject->GetFigures()[i];
+                        CFigure* figure = mCurrentObject->GetFigures()[i];
                         for (unsigned int i = 1; i < figure->EnumVertices();
                              i++) {
                             mSplitMin.mX = math::Min<float>(
@@ -965,7 +951,7 @@ namespace drash {
                                0.5f * (mSplitMin.mZ + mSplitMax.mZ)));
 
                     ComputeSplitPlanePoints();
-                    for (SplitContext &context : mObjectContexts) {
+                    for (SplitContext& context : mObjectContexts) {
                         ComputeIntersections(context);
                     }
                 }
@@ -982,11 +968,11 @@ namespace drash {
         mMoveablePoint.SetAxisOZ(false);
     }
 
-    void CObjectEditorApp::DetectNewSplitPoint(const CVec2f &_p1,
-                                               const CVec2f &_p2,
+    void CObjectEditorApp::DetectNewSplitPoint(const CVec2f& _p1,
+                                               const CVec2f& _p2,
                                                unsigned int _index,
-                                               const CRay &_r,
-                                               SplitContext &_context) const {
+                                               const CRay& _r,
+                                               SplitContext& _context) const {
         if (mCurrentObject == nullptr) {
             return;
         }
@@ -1035,7 +1021,7 @@ namespace drash {
         mSplitPlane.CastRay(r, mSplitPlanePoint4);
     }
 
-    void CObjectEditorApp::ComputeIntersections(SplitContext &_context) const {
+    void CObjectEditorApp::ComputeIntersections(SplitContext& _context) const {
 
         if (_context.mFigure != nullptr) {
             CVec3f dir = mSplitPlanePoint1;
@@ -1073,7 +1059,7 @@ namespace drash {
             mObjectContexts.push_back(mSplitFigureContext);
         }
 
-        for (SplitContext &context : mObjectContexts) {
+        for (SplitContext& context : mObjectContexts) {
 
             if (context.mFigure == nullptr) {
                 continue;
@@ -1122,10 +1108,10 @@ namespace drash {
 
                 mCurrentObject->DestroyFigure(context.mFigure);
 
-                CSceneObjectGeometry *geometry = new CSceneObjectGeometry();
+                CSceneObjectGeometry* geometry = new CSceneObjectGeometry();
                 mCurrentObject->DumpGeometry(geometry);
 
-                CSceneObjectGeometry *g =
+                CSceneObjectGeometry* g =
                     GetGeometryManager().GetGeometry(mCurrentTemplateName);
                 g->mDestructionGraph = geometry->mDestructionGraph;
                 g->mFigures = geometry->mFigures;
@@ -1151,7 +1137,7 @@ namespace drash {
             GetCamera(), mSplitPlanePoint4, mSplitPlanePoint2,
             mSplitPlanePoint3, CColor4f(1, 0, 0.5, 0.5), true);
 
-        for (SplitContext &context : mObjectContexts) {
+        for (SplitContext& context : mObjectContexts) {
             if (context.mSplitIntersectionsCount == 2) {
                 auto draw_split = [&](CVec3f _split_intersection) {
                     CVec3f p1 = _split_intersection;
@@ -1193,7 +1179,7 @@ namespace drash {
         if (mState == SplitFigureState) {
             ComputeIntersections(mSplitFigureContext);
         } else {
-            for (SplitContext &context : mObjectContexts) {
+            for (SplitContext& context : mObjectContexts) {
                 ComputeIntersections(context);
             }
         }
@@ -1236,11 +1222,11 @@ namespace drash {
         CVec2f cpos = GetCursorPos();
         mCamera->CastRay(cpos, plane, position);
 
-        CSceneObjectGeometry *currg =
+        CSceneObjectGeometry* currg =
             GetGeometryManager().GetGeometry(mCurrentTemplateName);
 
         for (CFigureParams figure : mDragTemplate->mFigures) {
-            for (auto &v : figure.mVertices) {
+            for (auto& v : figure.mVertices) {
                 v.Set(v.mX + position.mX, v.mY + position.mY);
                 qDebug() << v.mX << " " << v.mY;
             }

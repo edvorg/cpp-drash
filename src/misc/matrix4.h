@@ -52,11 +52,11 @@ namespace drash {
         constexpr static const unsigned int m33 = 15;
 
         CMatrix4f() = default;
-        CMatrix4f(const CMatrix4f &_m);
+        CMatrix4f(const CMatrix4f& _m);
 
-        CMatrix4f &Zero();
-        CMatrix4f &Identity();
-        CMatrix4f &Transpose();
+        CMatrix4f& Zero();
+        CMatrix4f& Identity();
+        CMatrix4f& Transpose();
 
         float mData[mElemsCount];
 
@@ -64,16 +64,16 @@ namespace drash {
       private:
     };
 
-    CMatrix4f &MatrixMultiply(const CMatrix4f &_m1, const CMatrix4f &_m2,
-                              CMatrix4f &_result);
-    CVec4f &MatrixMultiply(const CMatrix4f &_m, const CVec4f &_v,
-                           CVec4f &_result);
-    CMatrix4f &MatrixScale(CMatrix4f &_m, const CVec3f _scale);
-    CMatrix4f &MatrixRotationX(CMatrix4f &_m, float _angle);
-    CMatrix4f &MatrixRotationY(CMatrix4f &_m, float _angle);
-    CMatrix4f &MatrixRotationZ(CMatrix4f &_m, float _angle);
-    CMatrix4f &MatrixTranslation(CMatrix4f &_m, const CVec3f &_translation);
-    CMatrix4f &Matrix4Perspective(CMatrix4f &_m, float _fov, float _aspect,
+    CMatrix4f& MatrixMultiply(const CMatrix4f& _m1, const CMatrix4f& _m2,
+                              CMatrix4f& _result);
+    CVec4f& MatrixMultiply(const CMatrix4f& _m, const CVec4f& _v,
+                           CVec4f& _result);
+    CMatrix4f& MatrixScale(CMatrix4f& _m, const CVec3f _scale);
+    CMatrix4f& MatrixRotationX(CMatrix4f& _m, float _angle);
+    CMatrix4f& MatrixRotationY(CMatrix4f& _m, float _angle);
+    CMatrix4f& MatrixRotationZ(CMatrix4f& _m, float _angle);
+    CMatrix4f& MatrixTranslation(CMatrix4f& _m, const CVec3f& _translation);
+    CMatrix4f& Matrix4Perspective(CMatrix4f& _m, float _fov, float _aspect,
                                   float _znear, float _zfar);
 
 } // namespace drash

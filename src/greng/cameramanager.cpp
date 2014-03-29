@@ -34,15 +34,7 @@ namespace greng {
     CCameraManager::CCameraManager()
         : mCameraFactory(mCamerasCountLimit, "CCamera") {}
 
-    CCameraManager::~CCameraManager() {}
-
-    bool CCameraManager::Init() {
-        Release();
-
-        return true;
-    }
-
-    void CCameraManager::Release() {
+    CCameraManager::~CCameraManager() {
         while (mCameraFactory.EnumObjects() != 0) {
             DestroyCamera(mCameraFactory.GetObjects()[0]);
         }
@@ -54,8 +46,8 @@ namespace greng {
         }
     }
 
-    CCamera *CCameraManager::CreateCamera(const CCameraParams &_params) {
-        CCamera *res = mCameraFactory.CreateObject();
+    CCamera* CCameraManager::CreateCamera(const CCameraParams& _params) {
+        CCamera* res = mCameraFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
@@ -73,7 +65,7 @@ namespace greng {
         return res;
     }
 
-    bool CCameraManager::DestroyCamera(CCamera *_camera) {
+    bool CCameraManager::DestroyCamera(CCamera* _camera) {
         if (mCameraFactory.IsObject(_camera) == false) {
             LOG_ERR("CCameraManager::DestroyCamera(): Invalid object taken");
             return false;

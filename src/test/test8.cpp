@@ -32,23 +32,20 @@ namespace drash {
 
     namespace test {
 
-        bool CTest8::Init() {
-            if (CApp::Init() == false || InitUI() == false ||
-                InitLevels() == false || InitCamera() == false ||
-                InitLights() == false) {
-                return false;
-            }
+        CTest8::CTest8() : CApp() {
+            InitUI();
+            InitLevels();
+            InitCamera();
+            InitLights();
             GetGeometryManager().Load();
-            return true;
         }
 
         void CTest8::Render() { CApp::Render(); }
 
-        void CTest8::Release() {
+        CTest8::~CTest8() {
             GetGeometryManager().Store();
             mLevel1->Store("level1");
             mLevel2->Store("level2");
-            CApp::Release();
         }
 
         bool CTest8::InitUI() {
@@ -88,9 +85,9 @@ namespace drash {
                 return false;
             }
 
-            CSceneObjectGeometry *g1 =
+            CSceneObjectGeometry* g1 =
                 GetGeometryManager().CreateGeometry("object1_geometry");
-            CSceneObjectGeometry *g2 =
+            CSceneObjectGeometry* g2 =
                 GetGeometryManager().CreateGeometry("object2_geometry");
 
             if (g1 == nullptr || g2 == nullptr) {
@@ -110,9 +107,9 @@ namespace drash {
             g2->mFigures[0].mVertices.push_back(CVec2f(1, 1));
             g2->mFigures[0].mVertices.push_back(CVec2f(-1, 1));
 
-            CLevelObjectDesc *p1 =
+            CLevelObjectDesc* p1 =
                 mLevel1->AddObject("object1_geometry", "obj1");
-            CLevelObjectDesc *p2 =
+            CLevelObjectDesc* p2 =
                 mLevel1->AddObject("object2_geometry", "obj2");
 
             if (p1 == nullptr || p2 == nullptr) {
@@ -121,9 +118,9 @@ namespace drash {
 
             p2->mParams.mPos.Set(3, 0, 0);
 
-            CLevelObjectDesc *p3 =
+            CLevelObjectDesc* p3 =
                 mLevel2->AddObject("object1_geometry", "obj1");
-            CLevelObjectDesc *p4 =
+            CLevelObjectDesc* p4 =
                 mLevel2->AddObject("object2_geometry", "obj2");
 
             if (p3 == nullptr || p4 == nullptr) {

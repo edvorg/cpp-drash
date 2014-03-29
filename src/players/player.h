@@ -42,15 +42,15 @@ namespace drash {
       public:
         friend class CPlayersSystem;
 
-        inline CSceneObject *GetSceneObject();
+        inline CSceneObject* GetSceneObject();
 
       protected:
       private:
-        CSceneObject *mSceneObject = nullptr;
+        CSceneObject* mSceneObject = nullptr;
         float mVelocityLimit = 1;
     };
 
-    inline CSceneObject *CPlayer::GetSceneObject() { return mSceneObject; }
+    inline CSceneObject* CPlayer::GetSceneObject() { return mSceneObject; }
 
 } // namespace drash
 

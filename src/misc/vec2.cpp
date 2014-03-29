@@ -33,19 +33,19 @@ namespace drash {
     static const b2Vec2 v1;
     static const CVec2f v2(0, 0);
 
-    constexpr const void *p1 = &v1;
-    constexpr const void *p2 = &v1.x;
-    constexpr const void *p3 = &v2;
-    constexpr const void *p4 = &v2.mX;
+    constexpr const void* p1 = &v1;
+    constexpr const void* p2 = &v1.x;
+    constexpr const void* p3 = &v2;
+    constexpr const void* p4 = &v2.mX;
 
 #if (b2Vec2size == CVec2fsize && p1 == p2 && p3 == p4)
 
-    const b2Vec2 &CVec2ToB2Vec2(const CVec2f &_v) {
-        return reinterpret_cast<const b2Vec2 &>(_v);
+    const b2Vec2& CVec2ToB2Vec2(const CVec2f& _v) {
+        return reinterpret_cast<const b2Vec2&>(_v);
     }
 
-    const CVec2f &B2Vec2ToCVec2(const b2Vec2 &_v) {
-        return reinterpret_cast<const CVec2f &>(_v);
+    const CVec2f& B2Vec2ToCVec2(const b2Vec2& _v) {
+        return reinterpret_cast<const CVec2f&>(_v);
     }
 
 #else

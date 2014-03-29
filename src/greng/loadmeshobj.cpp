@@ -33,12 +33,12 @@ namespace greng {
     using drash::CLogger;
     using drash::CVec2f;
 
-    void LoadVertices(CMesh *res, std::ifstream &f, unsigned int);
-    void LoadTexCoords(std::vector<CVec2f> &uv, std::ifstream &f, unsigned int);
-    void LoadFaces(CMesh *res, std::ifstream &f, unsigned int,
-                   std::vector<CVec2f> &uv);
+    void LoadVertices(CMesh* res, std::ifstream& f, unsigned int);
+    void LoadTexCoords(std::vector<CVec2f>& uv, std::ifstream& f, unsigned int);
+    void LoadFaces(CMesh* res, std::ifstream& f, unsigned int,
+                   std::vector<CVec2f>& uv);
 
-    bool LoadMeshObj(const char *_path, CMesh *_mesh) {
+    bool LoadMeshObj(const char* _path, CMesh* _mesh) {
         std::ifstream f(_path);
         if (!f.is_open()) {
             LOG_ERR("LoadMeshObj(): failed to load " << _path);
@@ -71,7 +71,7 @@ namespace greng {
         return true;
     }
 
-    void LoadVertex(CVertex &v, const char *buf) {
+    void LoadVertex(CVertex& v, const char* buf) {
         sscanf(buf, "%f %f %f", &v.mPos.mX, &v.mPos.mY, &v.mPos.mZ);
         v.mUV.mX = 0;
         v.mUV.mY = 0;
@@ -81,7 +81,7 @@ namespace greng {
         v.mColor.mA = 1;
     }
 
-    void LoadVertices(CMesh *res, std::ifstream &f, unsigned int) {
+    void LoadVertices(CMesh* res, std::ifstream& f, unsigned int) {
         f.clear(std::ios_base::goodbit);
         f.seekg(0, std::ios_base::beg);
 
@@ -114,7 +114,7 @@ namespace greng {
         bool tc;
     };
 
-    void LoadFace(face &f, const char *buf) {
+    void LoadFace(face& f, const char* buf) {
         char buf1[1024] = { 0 };
         char buf2[1024] = { 0 };
         char buf3[1024] = { 0 };
@@ -155,8 +155,8 @@ namespace greng {
         }
     }
 
-    void LoadFaces(CMesh *res, std::ifstream &f, unsigned int,
-                   std::vector<CVec2f> &uv) {
+    void LoadFaces(CMesh* res, std::ifstream& f, unsigned int,
+                   std::vector<CVec2f>& uv) {
         f.clear(std::ios_base::goodbit);
         f.seekg(0, std::ios_base::beg);
 
@@ -230,12 +230,12 @@ namespace greng {
         }
     }
 
-    void LoadTexCoord(CVec2f &tc, const char *buf) {
+    void LoadTexCoord(CVec2f& tc, const char* buf) {
         sscanf(buf, "%f %f", &tc.mX, &tc.mY);
         tc.mY *= -1;
     }
 
-    void LoadTexCoords(std::vector<CVec2f> &uv, std::ifstream &f,
+    void LoadTexCoords(std::vector<CVec2f>& uv, std::ifstream& f,
                        unsigned int) {
         f.clear(std::ios_base::goodbit);
         f.seekg(0, std::ios_base::beg);

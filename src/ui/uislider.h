@@ -34,15 +34,15 @@ namespace drash {
         class CUISlider : public CUIWidget {
           public:
             CUISlider() = default;
-            CUISlider(const CUISlider &) = delete;
-            CUISlider(CUISlider &&) = delete;
-            CUISlider &operator=(const CUISlider &) = delete;
-            CUISlider &operator=(CUISlider &&) = delete;
+            CUISlider(const CUISlider&) = delete;
+            CUISlider(CUISlider&&) = delete;
+            CUISlider& operator=(const CUISlider&) = delete;
+            CUISlider& operator=(CUISlider&&) = delete;
 
-            virtual void Connect(CUISystem *_system) override;
+            virtual void Connect(CUISystem* _system) override;
 
             void
-            SetValueHandler(const std::function<void(float _value)> &_handler);
+            SetValueHandler(const std::function<void(float _value)>& _handler);
 
             void SetValue(float _value);
             float GetValue() const;

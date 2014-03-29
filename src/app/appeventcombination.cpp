@@ -29,7 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    void CAppEventCombination::AddEvent(const CAppEvent &_e) {
+    void CAppEventCombination::AddEvent(const CAppEvent& _e) {
         if (mCatchEvents.size() < mCatchEventsCountLimit) {
             auto i = std::find(mCatchEvents.begin(), mCatchEvents.end(), _e);
 
@@ -42,7 +42,7 @@ namespace drash {
         }
     }
 
-    void CAppEventCombination::RemoveEvent(const CAppEvent &_e) {
+    void CAppEventCombination::RemoveEvent(const CAppEvent& _e) {
         auto i = std::find(mCatchEvents.begin(), mCatchEvents.end(), _e);
 
         if (i != mCatchEvents.end()) {
@@ -52,13 +52,13 @@ namespace drash {
 
     void CAppEventCombination::Clear() { mCatchEvents.clear(); }
 
-    bool CAppEventCombination::ContainsEvent(const CAppEvent &_e) const {
+    bool CAppEventCombination::ContainsEvent(const CAppEvent& _e) const {
         return std::find(mCatchEvents.begin(), mCatchEvents.end(), _e) !=
                mCatchEvents.end();
     }
 
     bool CAppEventCombination::ContainsCombination(
-        const CAppEventCombination &_c) const {
+        const CAppEventCombination& _c) const {
         bool res = false;
 
         for (unsigned int i = 0; i < mCatchEvents.size(); i++) {
@@ -84,7 +84,7 @@ namespace drash {
     }
 
     bool CAppEventCombination::
-    operator==(const CAppEventCombination &_src) const {
+    operator==(const CAppEventCombination& _src) const {
         if (mCatchEvents.size() != _src.mCatchEvents.size()) {
             return false;
         }
@@ -106,11 +106,11 @@ namespace drash {
     }
 
     bool CAppEventCombination::
-    operator!=(const CAppEventCombination &_src) const {
+    operator!=(const CAppEventCombination& _src) const {
         return !(*this == _src);
     }
 
-    CLogger &operator<<(CLogger &_logger, const CAppEventCombination &_c) {
+    CLogger& operator<<(CLogger& _logger, const CAppEventCombination& _c) {
         auto i = _c.mCatchEvents.begin();
 
         if (i != _c.mCatchEvents.end()) {

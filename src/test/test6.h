@@ -34,10 +34,8 @@ namespace drash {
 
         class CTest6 : public CTest1 {
           public:
-            CTest6() = default;
+            CTest6();
 
-          protected:
-            virtual bool Init() override;
             virtual void Step(double _dt) override;
             virtual void Render() override;
 
@@ -49,12 +47,12 @@ namespace drash {
             bool InitProcessors();
             bool InitTarget();
 
-            CPlayer *mPlayer1 = nullptr;
-            greng::CMesh *mPlayer1Mesh = nullptr;
-            greng::CTexture *mPlayer1Texture = nullptr;
-            greng::CVertexShader *mPlayer1VertexShader = nullptr;
-            greng::CFragmentShader *mPlayer1FragmentShader = nullptr;
-            greng::CShaderProgram *mPlayer1ShaderProgram = nullptr;
+            CPlayer* mPlayer1 = nullptr;
+            greng::CMesh* mPlayer1Mesh = nullptr;
+            greng::CTexture* mPlayer1Texture = nullptr;
+            greng::CVertexShader* mPlayer1VertexShader = nullptr;
+            greng::CFragmentShader* mPlayer1FragmentShader = nullptr;
+            greng::CShaderProgram* mPlayer1ShaderProgram = nullptr;
             CVec2f mPlayer1MeshDir = CVec2f(1, 0);
             CVec3f mPlayer1OldPos;
 
@@ -64,7 +62,7 @@ namespace drash {
 
             float mTargetCreateTimer = 0;
             bool mTargetDestroyed = true;
-            CSceneObjectGeometry *mTargetGeometry = nullptr;
+            CSceneObjectGeometry* mTargetGeometry = nullptr;
 
             greng::CPointLight mLight1;
         };

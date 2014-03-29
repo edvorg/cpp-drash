@@ -34,7 +34,7 @@ namespace drash {
         Dimensions() = default;
         Dimensions(float newX, float newY, float newRad);
 
-        inline bool Intersect(const Dimensions &another) const;
+        inline bool Intersect(const Dimensions& another) const;
 
       protected:
       private:
@@ -43,7 +43,7 @@ namespace drash {
         float rad = 0;
     };
 
-    inline bool Dimensions::Intersect(const Dimensions &another) const {
+    inline bool Dimensions::Intersect(const Dimensions& another) const {
         float deltax = x - another.x;
         float deltay = y - another.y;
         float rads = rad + another.rad;

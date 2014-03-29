@@ -30,7 +30,7 @@ namespace drash {
 
     CAppEvent::CAppEvent() {}
 
-    CAppEvent::CAppEvent(const CAppEvent &_src) : mKey(_src.mKey) {}
+    CAppEvent::CAppEvent(const CAppEvent& _src) : mKey(_src.mKey) {}
 
     CAppEvent::CAppEvent(EventKey _key) : mKey(_key) {}
 
@@ -114,7 +114,7 @@ namespace drash {
         }
     }
 
-    void CAppEvent::FromString(const std::string &_str) {
+    void CAppEvent::FromString(const std::string& _str) {
         if (_str == "q") {
             this->mKey = EventKeyQ;
         } else if (_str == "w") {

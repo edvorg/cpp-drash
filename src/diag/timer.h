@@ -48,7 +48,7 @@ namespace drash {
         /// time (seconds) spent between last two Tick() invokations
         double GetDeltaTime() const;
 
-        friend CLogger &operator<<(CLogger &_logger, const CTimer &_timer);
+        friend CLogger& operator<<(CLogger& _logger, const CTimer& _timer);
 
       private:
         void Update();

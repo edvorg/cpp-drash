@@ -32,28 +32,14 @@ namespace drash {
 
     namespace test {
 
-        bool CTest7::Init() {
-            if (CTest3::Init() == false) {
-                return false;
-            }
-
-            if (InitTextures() == false) {
-                return false;
-            }
-
-            if (InitShaders() == false) {
-                return false;
-            }
-
-            if (InitLights() == false) {
-                return false;
-            }
+        CTest7::CTest7() : CTest3() {
+            InitTextures();
+            InitShaders();
+            InitLights();
 
             mLight1.mPosition.Set(0, 30, 0);
 
             GetDebugRenderer().SetLight(&mLight1);
-
-            return true;
         }
 
         void CTest7::Step(double _dt) {
@@ -81,10 +67,10 @@ namespace drash {
         }
 
         bool CTest7::InitShaders() {
-            greng::CVertexShader *v =
+            greng::CVertexShader* v =
                 GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader2.120.vs");
-            greng::CFragmentShader *f =
+            greng::CFragmentShader* f =
                 GetGrengSystems()
                     .GetFragmentShaderManager()
                     .CreateShaderFromFile("shaders/shader2.120.fs");
@@ -109,17 +95,17 @@ namespace drash {
             unsigned int ic = GetScene().EnumObjects();
 
             for (unsigned int i = 0; i < ic; i++) {
-                CSceneObject *o = GetScene().GetObjects()[i];
+                CSceneObject* o = GetScene().GetObjects()[i];
                 unsigned int jc = o->EnumFigures();
 
                 for (unsigned int j = 0; j < jc; j++) {
-                    CFigure *f = o->GetFigures()[j];
+                    CFigure* f = o->GetFigures()[j];
                     unsigned int kc = f->EnumVertices();
 
                     std::vector<greng::CVertex> mv;
                     std::vector<unsigned int> mi;
 
-                    greng::CMesh *m = nullptr;
+                    greng::CMesh* m = nullptr;
 
                     if (kc >= 3) {
                         CVec3f min(f->GetVertices()[0],
@@ -249,12 +235,12 @@ namespace drash {
                         MatrixMultiply(trans, rot, model);
 
                         CMatrix4f model_view;
-                        MatrixMultiply(GetCamera()->GetViewMatrix(), model,
+                        MatrixMultiply(GetCamera().GetViewMatrix(), model,
                                        model_view);
 
                         GetGrengSystems().GetRenderer().RenderMesh(
                             m, 0, &mDebugTexture, 1, mProgram, &model, nullptr,
-                            &model_view, &GetCamera()->GetProjectionMatrix(),
+                            &model_view, &GetCamera().GetProjectionMatrix(),
                             &mLight1);
 
                         GetGrengSystems().GetMeshManager().DestroyMesh(m);

@@ -35,17 +35,15 @@ namespace drash {
 
     namespace test {
 
-        bool CTest6::Init() {
-            if (CTest1::Init() == false || InitCamera() == false ||
-                InitLevel() == false || InitPlayer() == false ||
-                InitLight() == false || InitProcessors() == false ||
-                InitTarget() == false) {
-                return false;
-            }
+        CTest6::CTest6() : CTest1() {
+            InitCamera();
+            InitLevel();
+            InitPlayer();
+            InitLight();
+            InitProcessors();
+            InitTarget();
 
             GetDebugRenderer().SetTexCoordsScale(0.5);
-
-            return true;
         }
 
         void CTest6::Step(double _dt) {
@@ -106,10 +104,10 @@ namespace drash {
             mPlayer1OldPos = mPlayer1->GetSceneObject()->GetPos();
 
             if (mFollowPlayer == true) {
-                CVec3f t = GetCamera()->GetPos().GetTarget();
+                CVec3f t = GetCamera().GetPos().GetTarget();
                 t.mX = mPlayer1->GetSceneObject()->GetPos().mX;
-                GetCamera()->GetPos().SetTarget(t, 1.0,
-                                                AnimatorBehavior::Single);
+                GetCamera().GetPos().SetTarget(t, 1.0,
+                                               AnimatorBehavior::Single);
             }
 
             if (mTargetCreateTimer > 5.0 && mTargetDestroyed) {
@@ -121,7 +119,7 @@ namespace drash {
                 mTargetDestroyed = false;
                 mTargetCreateTimer = 0.0;
 
-                o->AddDestroyHandler([this](CSceneObject *) {
+                o->AddDestroyHandler([this](CSceneObject*) {
                     mTargetDestroyed = true;
                 });
             }
@@ -153,13 +151,13 @@ namespace drash {
             MatrixMultiply(transl, rot, model);
 
             CMatrix4f model_view;
-            MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
+            MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
             for (unsigned int i = 0; i < 6; i++) {
                 GetGrengSystems().GetRenderer().RenderMesh(
                     mPlayer1Mesh, i, &mPlayer1Texture, 1, mPlayer1ShaderProgram,
                     &model, nullptr, &model_view,
-                    &GetCamera()->GetProjectionMatrix(), &mLight1);
+                    &GetCamera().GetProjectionMatrix(), &mLight1);
             }
 
             GetGrengSystems().GetRenderer().DrawPoint(
@@ -167,21 +165,21 @@ namespace drash {
         }
 
         bool CTest6::InitCamera() {
-            GetCamera()->GetPos().Set(CVec3f(0, 15, 30));
-            GetCamera()->GetRotation().Set(CVec2f(-M_PI / 12.0, 0));
+            GetCamera().GetPos().Set(CVec3f(0, 15, 30));
+            GetCamera().GetRotation().Set(CVec2f(-M_PI / 12.0, 0));
 
             return true;
         }
 
         bool CTest6::InitLevel() {
-            std::map<std::string, CSceneObjectGeometry *> &geometries =
+            std::map<std::string, CSceneObjectGeometry*>& geometries =
                 GetGeometryManager().GetGeometries();
 
             for (auto i = geometries.begin(); i != geometries.end(); i++) {
                 i->second->ComputeDestructionGraph(0.5);
             }
 
-            CLevelDesc *l = GetLevelManager().CreateLevel();
+            CLevelDesc* l = GetLevelManager().CreateLevel();
 
             if (l == nullptr) {
                 return false;
@@ -206,14 +204,14 @@ namespace drash {
                     return false;
                 }
 
-                o->AddContactBeginHandler([this](CFigure *_f1, CFigure *_f2) {
+                o->AddContactBeginHandler([this](CFigure* _f1, CFigure* _f2) {
                     if (_f2->GetSceneObject() == mPlayer1->GetSceneObject()) {
                         _f1->GetSceneObject()->GetPosXY().SetTarget(
                             CVec2f(8, 8), 2.0, AnimatorBehavior::Single);
                     }
                 });
 
-                o->AddContactEndHandler([this](CFigure *_f1, CFigure *_f2) {
+                o->AddContactEndHandler([this](CFigure* _f1, CFigure* _f2) {
                     if (_f2->GetSceneObject() == mPlayer1->GetSceneObject()) {
                         _f1->GetSceneObject()->GetPosXY().SetTarget(
                             CVec2f(3, -2), 2.0, AnimatorBehavior::Single);
@@ -363,7 +361,7 @@ namespace drash {
 
                           CPlane pl(PlaneXY);
                           CVec3f pos;
-                          GetCamera()->CastRay(GetCursorPos(), pl, pos);
+                          GetCamera().CastRay(GetCursorPos(), pl, pos);
                           pos.Vec2() -=
                               mPlayer1->GetSceneObject()->GetPos().Vec2();
                           pos *= 2;
@@ -377,7 +375,7 @@ namespace drash {
                               p.mPos.mX -= 1;
                           }
 
-                          CSceneObject *o = GetScene().CreateObject(g, p);
+                          CSceneObject* o = GetScene().CreateObject(g, p);
                           o->SetLinearVelocity(pos.Vec2());
                       }));
 

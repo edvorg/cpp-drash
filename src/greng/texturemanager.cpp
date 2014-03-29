@@ -42,16 +42,8 @@ namespace greng {
         }
     }
 
-    bool CTextureManager::Init() {
-        Release();
-
-        return true;
-    }
-
-    void CTextureManager::Release() {}
-
-    CTexture *CTextureManager::CreateTexture() {
-        CTexture *res = mTextureFactory.CreateObject();
+    CTexture* CTextureManager::CreateTexture() {
+        CTexture* res = mTextureFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
@@ -67,14 +59,14 @@ namespace greng {
         return res;
     }
 
-    CTexture *CTextureManager::CreateTextureFromFile(const char *_path) {
-        CTexture *res = CreateTexture();
+    CTexture* CTextureManager::CreateTextureFromFile(const char* _path) {
+        CTexture* res = CreateTexture();
 
         if (res == nullptr) {
             return nullptr;
         }
 
-        SDL_Surface *s = IMG_Load(_path);
+        SDL_Surface* s = IMG_Load(_path);
 
         if (s == nullptr) {
             LOG_ERR("CTextureManager::CreateTextureFromFile(): unable to load "
@@ -101,8 +93,8 @@ namespace greng {
         return res;
     }
 
-    CTexture *CTextureManager::CreateTextureDummy() {
-        CTexture *res = CreateTexture();
+    CTexture* CTextureManager::CreateTextureDummy() {
+        CTexture* res = CreateTexture();
 
         if (res == nullptr) {
             return nullptr;
@@ -124,8 +116,8 @@ namespace greng {
         return res;
     }
 
-    CTexture *CTextureManager::CreateTextureWhite() {
-        CTexture *res = CreateTexture();
+    CTexture* CTextureManager::CreateTextureWhite() {
+        CTexture* res = CreateTexture();
 
         if (res == nullptr) {
             return nullptr;
@@ -147,7 +139,7 @@ namespace greng {
         return res;
     }
 
-    bool CTextureManager::DestroyTexture(CTexture *_texture) {
+    bool CTextureManager::DestroyTexture(CTexture* _texture) {
         if (mTextureFactory.IsObject(_texture) == false) {
             return false;
         }

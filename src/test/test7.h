@@ -33,16 +33,18 @@ namespace drash {
     namespace test {
 
         class CTest7 : public CTest3 {
+          public:
+            CTest7();
+
           private:
-            virtual bool Init() override;
             virtual void Step(double _dt) override;
             bool InitTextures();
             bool InitShaders();
             bool InitLights();
             virtual void Render() override;
 
-            greng::CTexture *mDebugTexture = nullptr;
-            greng::CShaderProgram *mProgram = nullptr;
+            greng::CTexture* mDebugTexture = nullptr;
+            greng::CShaderProgram* mProgram = nullptr;
 
             float mPointLight1PosAngle = 0;
 
