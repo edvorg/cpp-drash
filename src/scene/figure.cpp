@@ -35,7 +35,7 @@ CFigureParams::CFigureParams()
 
 CSceneObject *CFigure::GetSceneObject() const
 {
-    return reinterpret_cast<CSceneObject*>(mFixture->GetBody()->GetUserData());
+    return static_cast<CSceneObject*>(mFixture->GetBody()->GetUserData());
 }
 
 void CFigure::SetVertices(const CVec2f *_vertices, unsigned int _count)
@@ -47,7 +47,7 @@ void CFigure::SetVertices(const CVec2f *_vertices, unsigned int _count)
         return;
     }
 
-    reinterpret_cast<b2PolygonShape*>(mFixture->GetShape())->Set(&CVec2ToB2Vec2(*_vertices), _count);
+    static_cast<b2PolygonShape*>(mFixture->GetShape())->Set(&CVec2ToB2Vec2(*_vertices), _count);
     mFixture->GetBody()->ResetMassData();
 }
 
@@ -60,7 +60,7 @@ const CVec2f *CFigure::GetVertices() const
         return nullptr;
     }
 
-    return &B2Vec2ToCVec2(*reinterpret_cast<b2PolygonShape*>(mFixture->GetShape())->m_vertices);
+    return &B2Vec2ToCVec2(*static_cast<b2PolygonShape*>(mFixture->GetShape())->m_vertices);
 }
 
 unsigned int CFigure::EnumVertices() const
@@ -72,7 +72,7 @@ unsigned int CFigure::EnumVertices() const
         return 0;
     }
 
-    return reinterpret_cast<b2PolygonShape*>(mFixture->GetShape())->GetVertexCount();
+    return static_cast<b2PolygonShape*>(mFixture->GetShape())->GetVertexCount();
 }
 
 float CFigure::GetFriction() const

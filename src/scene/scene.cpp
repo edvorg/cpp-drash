@@ -63,7 +63,7 @@ void CScene::Release(void)
 {
     while (auto j = mWorld.GetJointList())
     {
-        delete reinterpret_cast<CJoint*>(j->GetUserData());
+        delete static_cast<CJoint*>(j->GetUserData());
         j->SetUserData(nullptr);
         mWorld.DestroyJoint(j);
     }
@@ -392,7 +392,7 @@ void CScene::DestroyJoint(CJoint *_joint)
     {
         if (j->GetUserData() == _joint)
         {
-            delete reinterpret_cast<CJoint*>(j->GetUserData());
+            delete static_cast<CJoint*>(j->GetUserData());
             mWorld.DestroyJoint(j);
             return;
         }
@@ -436,11 +436,11 @@ bool CScene::ShouldCollide(b2Fixture * fixtureA, b2Fixture * fixtureB)
         return false;
     }
 
-    CSceneObject *o1 = reinterpret_cast<CSceneObject*>(fixtureA->GetBody()->GetUserData());
-    CSceneObject *o2 = reinterpret_cast<CSceneObject*>(fixtureB->GetBody()->GetUserData());
+    CSceneObject *o1 = static_cast<CSceneObject*>(fixtureA->GetBody()->GetUserData());
+    CSceneObject *o2 = static_cast<CSceneObject*>(fixtureB->GetBody()->GetUserData());
 
-    CFigure *f1 = reinterpret_cast<CFigure*>( fixtureA->GetUserData() );
-    CFigure *f2 = reinterpret_cast<CFigure*>( fixtureB->GetUserData() );
+    CFigure *f1 = static_cast<CFigure*>( fixtureA->GetUserData() );
+    CFigure *f2 = static_cast<CFigure*>( fixtureB->GetUserData() );
 
     float z1 = f1->GetZ() + o1->GetPosZ();
     float z2 = f2->GetZ() + o2->GetPosZ();
@@ -452,8 +452,8 @@ void CScene::BeginContact(b2Contact * _contact)
 {
     b2ContactListener::BeginContact(_contact);
 
-    CFigure *f1 = reinterpret_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
-    CFigure *f2 = reinterpret_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
+    CFigure *f1 = static_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
+    CFigure *f2 = static_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
 
     if ( f1 == nullptr || f2 == nullptr )
     {
@@ -512,8 +512,8 @@ void CScene::PreSolve(b2Contact * _contact, const b2Manifold * _old_manifold)
     b2ContactListener::PreSolve(_contact, _old_manifold);
 
     /*
-    CFigure *f1 = reinterpret_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
-    CFigure *f2 = reinterpret_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
+    CFigure *f1 = static_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
+    CFigure *f2 = static_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
 
     if ( f1 == nullptr || f2 == nullptr )
     {
@@ -540,8 +540,8 @@ void CScene::EndContact(b2Contact * _contact)
 {
     b2ContactListener::EndContact(_contact);
 
-    CFigure *f1 = reinterpret_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
-    CFigure *f2 = reinterpret_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
+    CFigure *f1 = static_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
+    CFigure *f2 = static_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
 
     if ( f1 == nullptr || f2 == nullptr )
     {

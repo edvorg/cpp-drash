@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
         GameWindowParams p;
         p.SetCommandLine( argc, argv );
         w = new GameWindow();
-        if (reinterpret_cast<GameWindow*>(w)->Init(p) == false)
+        if (static_cast<GameWindow*>(w)->Init(p) == false)
         {
             delete w;
             w = nullptr;
