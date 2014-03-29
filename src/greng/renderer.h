@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../misc/vec3.h"
 #include "../misc/color4.h"
+#include <vector>
 
 namespace drash
 {
@@ -106,6 +107,21 @@ public:
                   const CColor4f &_col,
                   bool _depth_test = true) const;
 
+    /// draws lines giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5) 
+    /// and color
+    void DrawLines(const std::vector<CVec2f> &lines,
+                   float _width,
+                   const CColor4f &_col,
+                   bool _depth_test = false) const;
+
+    /// draws lines giving world space coordinates 
+    /// and color
+    void DrawLines(const CCamera *_camera,
+                   const std::vector<CVec3f> &lines,
+                   float _width,
+                   const CColor4f &_col,
+                   bool _depth_test = true) const;
+
     /// draws point giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
     void DrawPoint(const CVec2f &_p,
                    float _size,
@@ -118,6 +134,15 @@ public:
                    float _size,
                    const CColor4f &_col,
                    bool _depth_test = true) const;
+
+    void DrawDigit(const CVec2f& _pos,
+                   const CVec2f& _size,
+                   unsigned int _digit);
+    
+    void DrawNumber(bool fromLeft,
+                    const CVec2f& _pos,
+                    const CVec2f& _size,
+                    unsigned int number);
 };
 
 } // namespace greng

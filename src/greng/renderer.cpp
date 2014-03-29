@@ -23,6 +23,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #include <GL/glew.h>
+#include <stack>
 #include "renderer.h"
 #include "mesh.h"
 #include "texture.h"
@@ -418,6 +419,31 @@ void CRenderer::DrawLine(const CCamera *_camera, const CVec3f &_p1,
     glEnd();
 }
 
+void CRenderer::DrawLines(const std::vector<CVec2f> &lines,
+                          float _width,
+                          const CColor4f &_col,
+                          bool _depth_test) const
+{
+    if (lines.size() < 2) return;
+
+    for (auto i = lines.begin() + 1; i != lines.end(); ++i) {
+        DrawLine(*(i-1), *i, _width, _col, _depth_test);
+    }
+}
+
+ void CRenderer::DrawLines(const CCamera *_camera,
+                           const std::vector<CVec3f> &lines,
+                           float _width,
+                           const CColor4f &_col,
+                           bool _depth_test) const
+ {
+     if (lines.size() < 2) return;
+
+     for (auto i = lines.begin() + 1; i != lines.end(); ++i) {
+         DrawLine(_camera, *(i-1), *i, _width, _col, _depth_test);
+     }        
+ }
+
 void CRenderer::DrawPoint(const CVec2f &_p,
                           float _size,
                           const CColor4f &_col,
@@ -481,6 +507,242 @@ void CRenderer::DrawPoint(const CCamera *_camera,
     glColor4f(_col.mR, _col.mG, _col.mB, _col.mA);
     glVertex3f(_p.mX, _p.mY, _p.mZ);
     glEnd();
+}
+    
+void CRenderer::DrawDigit(const CVec2f& _pos,
+                          const CVec2f& _size,
+                          unsigned int _digit)
+{
+	int corners = 0;
+	void * vertices = nullptr;
+	void * indices = nullptr;
+
+	if (_digit == 0) {
+        static const int corn = 5;
+        static GLfloat verts[corn * 2] = {
+            - 1.0f, - 1.0f,
+            - 1.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, - 1.0f,
+            - 1.0f, - 1.0f,
+        };
+        static GLubyte inds[corn] = {
+            0, 1, 2, 3, 4
+        };
+        corners = corn;
+        vertices = verts;
+        indices = inds;
+	}
+	else if (_digit == 1) {
+        static const int corn = 2;
+        static GLfloat verts[corn * 2] = {
+            1.0f, 1.0f,
+            1.0f, - 1.0f,
+        };
+        static GLubyte inds[corn] = {
+            0, 1,
+        };
+        corners = corn;
+        vertices = verts;
+        indices = inds;
+	}
+	else if (_digit == 2) {
+        static const int corn = 6;
+        static GLfloat verts[corn * 2] = {
+            - 1.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+            - 1.0f, 0.0f,
+            - 1.0f, - 1.0f,
+            1.0f, - 1.0f,
+        };
+        static GLubyte inds[corn] = {
+            0, 1, 2, 3, 4, 5,
+        };
+        corners = corn;
+        vertices = verts;
+        indices = inds;
+	}
+	else if (_digit == 3) {
+        static const int corn = 7;
+        static GLfloat verts[corn * 2] = {
+            - 1.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+            -1.0f, 0.0f,
+            1.0f, 0.0f,
+            1.0f, -1.0f,
+            - 1.0f, - 1.0f,
+        };
+        static GLubyte inds[corn] = {
+            0, 1, 2, 3, 4, 5, 6,
+        };
+        corners = corn;
+        vertices = verts;
+        indices = inds;
+	}
+	else if (_digit == 4) {
+        static const int corn = 5;
+        static GLfloat verts[corn * 2] = {
+            - 1.0f, 1.0f,
+            - 1.0f, 0.0f,
+            1.0f, 0.0f,
+            1.0f, 1.0f,
+            1.0f, -1.0f,
+        };
+        static GLubyte inds[corn] = {
+            0, 1, 2, 3, 4,
+        };
+        corners = corn;
+        vertices = verts;
+        indices = inds;
+	}
+	else if (_digit == 5) {
+        static const int corn = 6;
+        static GLfloat verts[corn * 2] = {
+            1.0f, 1.0f,
+            - 1.0f, 1.0f,
+            - 1.0f, 0.0f,
+            1.0f, 0.0f,
+            1.0f, - 1.0f,
+            - 1.0f, - 1.0f,
+        };
+        static GLubyte inds[corn] = {
+            0, 1, 2, 3, 4, 5,
+        };
+        corners = corn;
+        vertices = verts;
+        indices = inds;
+	}
+	else if (_digit == 6) {
+        static const int corn = 7;
+        static GLfloat verts[corn * 2] = {
+            1.0f, 1.0f,
+            - 1.0f, 1.0f,
+            - 1.0f, 0.0f,
+            1.0f, 0.0f,
+            1.0f, - 1.0f,
+            - 1.0f, - 1.0f,
+            - 1.0f, 0.0f,
+        };
+        static GLubyte inds[corn] = {
+            0, 1, 2, 3, 4, 5, 6,
+        };
+        corners = corn;
+        vertices = verts;
+        indices = inds;
+	}
+	else if (_digit == 7) {
+        static const int corn = 3;
+        static GLfloat verts[corn * 2] = {
+            - 1.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, - 1.0f,
+        };
+        static GLubyte inds[corn] = {
+            0, 1, 2,
+        };
+        corners = corn;
+        vertices = verts;
+        indices = inds;
+	}
+	else if (_digit == 8) {
+        static const int corn = 8;
+        static GLfloat verts[corn * 2] = {
+            - 1.0f, 0.0f,
+            - 1.0f, - 1.0f,
+            1.0f,- 1.0f,
+            1.0f, 0.0f,
+            - 1.0f, 0.0f,
+            - 1.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+        };
+        static GLubyte inds[corn] = {
+            0, 1, 2, 3, 4, 5, 6, 7,
+        };
+        corners = corn;
+        vertices = verts;
+        indices = inds;
+	}
+	else if (_digit == 9) {
+        static const int corn = 7;
+        static GLfloat verts[corn * 2] = {
+            - 1.0f, - 1.0f,
+            1.0f,- 1.0f,
+            1.0f, 0.0f,
+            - 1.0f, 0.0f,
+            - 1.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+        };
+        static GLubyte inds[corn] = {
+            0, 1, 2, 3, 4, 5, 6,
+        };
+        corners = corn;
+        vertices = verts;
+        indices = inds;
+	}
+
+	// render
+	if (corners > 1 && vertices && indices) {
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+        glLoadIdentity();
+        glOrtho(-100, 100, -100, 100, -100, 100);
+        
+        glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();        
+        glLoadIdentity();
+        glTranslatef(_pos.mX, _pos.mY, 0);
+        glScalef(_size.mX, _size.mY, 1);
+        
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(2, GL_FLOAT, 0, vertices);
+        glDrawElements(GL_LINE_STRIP, corners, GL_UNSIGNED_BYTE, indices);
+        glDisableClientState(GL_VERTEX_ARRAY);
+        
+        glMatrixMode(GL_MODELVIEW);
+        glPopMatrix();
+        
+        glMatrixMode(GL_PROJECTION);
+        glPopMatrix();
+	}
+}
+
+void CRenderer::DrawNumber(bool fromLeft,
+                           const CVec2f& _pos,
+                           const CVec2f& _size,
+                           unsigned int number)
+{
+    auto pos = _pos;
+    
+    if (fromLeft)
+    {
+        std::stack<unsigned int> digits;
+
+        do
+        {
+            digits.push(number % 10);
+            number /= 10;
+        } while (number);
+
+        while (digits.size())
+        {
+            DrawDigit(pos, _size, digits.top());
+            pos.mX += _size.mX * 2.5f;
+            digits.pop();
+        }
+    }
+    else
+    {
+        do
+        {
+            DrawDigit(pos, _size, number % 10);
+            pos.mX -= _size.mX * 2.5f;
+            number /= 10;
+        } while (number);
+    }
 }
 
 } // namespace greng
