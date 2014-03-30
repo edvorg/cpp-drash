@@ -93,13 +93,14 @@ namespace drash {
         CScene& scene;
         CGeometryManager& geometryManager;
 
-        greng::CShaderProgram* shaderProgram1 = nullptr;
-        greng::CShaderProgram* shaderProgram2 = nullptr;
-        greng::CCamera* camera = nullptr;
-        greng::CPointLight* light = nullptr;
-        greng::CSpotLight* spotLight1 = nullptr;
-        greng::CTexture* texture1Diffuse = nullptr;
-        greng::CTexture* texture1Normal = nullptr;
+        greng::CShaderProgram* shaderProgram1 = {};
+        greng::CShaderProgram* shaderProgram2 = {};
+        greng::CCamera* camera = {};
+        greng::CPointLight* light = {};
+        greng::CSpotLight* spotLight1 = {};
+        greng::CTexture* texture1Diffuse = {};
+        greng::CTexture* texture1Normal = {};
+        greng::CTexture* texture1Specular = {};
 
         float texCoordsScale = 1.0 / 40.0;
     };

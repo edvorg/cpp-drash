@@ -95,11 +95,12 @@ namespace drash {
                     MatrixMultiply(GetCamera()->GetViewMatrix(), model,
                                    model_view);
 
-                    greng::CTexture* textures[2] = { texture1Diffuse,
-                                                     texture1Normal };
+                    greng::CTexture* textures[3] = { texture1Diffuse,
+                                                     texture1Normal,
+                                                     texture1Specular };
 
                     grengSystems.GetRenderer().RenderMesh(
-                        m, 0, textures, 2,
+                        m, 0, textures, 3,
                         light == nullptr ? shaderProgram1 : shaderProgram2,
                         &model, nullptr, &model_view,
                         &camera->GetProjectionMatrix(), light, spotLight1,
@@ -184,11 +185,12 @@ namespace drash {
                 CMatrix4f model_view;
                 MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
 
-                greng::CTexture* textures[2] = { texture1Diffuse,
-                                                 texture1Normal };
+                greng::CTexture* textures[3] = { texture1Diffuse,
+                                                 texture1Normal,
+                                                 texture1Specular };
 
                 grengSystems.GetRenderer().RenderMesh(
-                    m, 0, textures, 2,
+                    m, 0, textures, 3,
                     light == nullptr ? shaderProgram1 : shaderProgram2, &model,
                     nullptr, &model_view, &camera->GetProjectionMatrix(), light,
                     spotLight1, &camera->GetPos().Get());
@@ -427,8 +429,11 @@ namespace drash {
                 "assets/floor/diffuse.png");
         texture1Normal = grengSystems.GetTextureManager().CreateTextureFromFile(
             "assets/floor/normal.png");
+        texture1Specular = grengSystems.GetTextureManager().CreateTextureFromFile(
+            "assets/floor/specular.png");
 
-        if (texture1Diffuse == nullptr || texture1Normal == nullptr) {
+        if (texture1Diffuse == nullptr || texture1Normal == nullptr  ||
+            texture1Specular == nullptr) {
             return false;
         }
 
@@ -438,16 +443,16 @@ namespace drash {
     bool CDebugRenderer::InitShaders() {
         greng::CVertexShader* vs =
             grengSystems.GetVertexShaderManager().CreateShaderFromFile(
-                "shaders/shader5.120.vs");
+                "shaders/shader6.120.vs");
         greng::CFragmentShader* fs =
             grengSystems.GetFragmentShaderManager().CreateShaderFromFile(
-                "shaders/shader5.120.fs");
+                "shaders/shader6.120.fs");
         shaderProgram1 =
             grengSystems.GetShaderProgramManager().CreateProgram(vs, fs);
         vs = grengSystems.GetVertexShaderManager().CreateShaderFromFile(
-            "shaders/shader4.120.vs");
+            "shaders/shader7.120.vs");
         fs = grengSystems.GetFragmentShaderManager().CreateShaderFromFile(
-            "shaders/shader4.120.fs");
+            "shaders/shader7.120.fs");
         shaderProgram2 =
             grengSystems.GetShaderProgramManager().CreateProgram(vs, fs);
 
