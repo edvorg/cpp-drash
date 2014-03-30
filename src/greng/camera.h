@@ -54,6 +54,7 @@ namespace greng {
         bool IsOrtho() const { return ortho; }
 
         auto& GetOrthoWidth() { return orthoWidthAnimator; }
+        auto& GetOrthoHeight() { return orthoHeightAnimator; }
         auto& GetFov() { return fovAnimator; }
         auto& GetDepthOfView() { return depthOfViewAnimator; }
         auto& GetPos() { return posAnimator; }
@@ -85,11 +86,13 @@ namespace greng {
 
         bool ortho = false;
         float orthoWidth;
+        float orthoHeight;
         float fov;
         float depthOfView;
         CVec3f pos;
         CVec2f rotation;
         CAnimator<float> orthoWidthAnimator = orthoWidth;
+        CAnimator<float> orthoHeightAnimator = orthoHeight;
         CAnimator<float> fovAnimator = fov;
         CAnimator<float> depthOfViewAnimator = depthOfView;
         CAnimator<CVec3f> posAnimator = pos;
