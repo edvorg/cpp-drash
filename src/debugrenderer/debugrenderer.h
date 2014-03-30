@@ -37,6 +37,7 @@ namespace greng {
     class SpotLight;
     class Mesh;
     class ShaderProgram;
+    class FrameBuffer;
 }
 
 namespace drash {
@@ -51,13 +52,16 @@ namespace drash {
 
     class DebugRenderer final {
     public:
-        inline void SetCamera(greng::Camera* _camera);
-        inline greng::Camera* GetCamera() const;
-        inline void SetLight(greng::PointLight* _light);
-        inline greng::PointLight* GetLight() const;
-        inline void SetSpotLight(greng::SpotLight* _light);
+        void SetCamera(greng::Camera* _camera);
+        greng::Camera* GetCamera() const;
+        void SetLight(greng::PointLight* _light);
+        greng::PointLight* GetLight() const;
+        void SetSpotLight(greng::SpotLight* _light);
+        void SetFrameBuffer(greng::FrameBuffer* _frameBuffer) {
+            FrameBuffer = _frameBuffer;
+        }
 
-        inline void SetTexCoordsScale(float _scale);
+        void SetTexCoordsScale(float _scale);
 
         DebugRenderer(greng::Greng& _greng, Scene& _scene,
                       GeometryManager& _geometry_manager);
@@ -101,6 +105,7 @@ namespace drash {
         greng::Texture* texture1Diffuse = {};
         greng::Texture* texture1Normal = {};
         greng::Texture* texture1Specular = {};
+        greng::FrameBuffer* FrameBuffer;
 
         float texCoordsScale = 1.0 / 40.0;
     };

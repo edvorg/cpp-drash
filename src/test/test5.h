@@ -40,6 +40,9 @@ namespace drash {
         protected:
             virtual void Step(double _dt) override;
             virtual void Render() override;
+            void SetFrameBuffer(greng::FrameBuffer* _frameBuffer) {
+                GetDebugRenderer().SetFrameBuffer(frameBuffer = _frameBuffer);
+            }
 
         protected:
         private:
@@ -77,6 +80,7 @@ namespace drash {
             greng::VertexShader* vertexShader4 = nullptr;
             greng::FragmentShader* fragmentShader4 = nullptr;
             greng::ShaderProgram* shaderProgram4 = nullptr;
+            greng::FrameBuffer* frameBuffer;
 
             double angle = 0.0;
 

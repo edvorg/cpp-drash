@@ -81,7 +81,8 @@ namespace drash {
 
                 GetGreng().GetRenderer().RenderMesh(
                     mesh1, 0, &tex6, 1, shaderProgram2, &model, nullptr,
-                    &model_view, &GetCamera().GetProjectionMatrix(), &light1);
+                    &model_view, &GetCamera().GetProjectionMatrix(), &light1,
+                    {}, {}, frameBuffer);
             }
 
             if (mesh2 != nullptr) {
@@ -105,7 +106,8 @@ namespace drash {
 
                 GetGreng().GetRenderer().RenderMesh(
                     mesh2, 0, &tex2, 1, shaderProgram2, &model, nullptr,
-                    &model_view, &GetCamera().GetProjectionMatrix(), &light1);
+                    &model_view, &GetCamera().GetProjectionMatrix(), &light1,
+                    {}, {}, frameBuffer);
             }
 
             if (mesh3 != nullptr) {
@@ -127,7 +129,7 @@ namespace drash {
                         mesh3, i, &texts[i * 2], 2, shaderProgram4, &model,
                         nullptr, &model_view,
                         &GetCamera().GetProjectionMatrix(), &light1, nullptr,
-                        &GetCamera().GetPos().Get());
+                        &GetCamera().GetPos().Get(), frameBuffer);
                 }
             }
 
@@ -156,14 +158,15 @@ namespace drash {
                         mesh4, i, &texts[i * 2], 2, shaderProgram4, &model,
                         nullptr, &model_view,
                         &GetCamera().GetProjectionMatrix(), &light1, nullptr,
-                        &GetCamera().GetPos().Get());
+                        &GetCamera().GetPos().Get(), frameBuffer);
                 }
             }
 
-            GetGreng().GetRenderer().DrawPoint(GetCamera(), light1.position, 10,
-                                               Color4f(1, 1, 1, 1), false);
+            // FIXME
+            // GetGreng().GetRenderer().DrawPoint(GetCamera(), light1.position, 10,
+            //                                    Color4f(1, 1, 1, 1), false);
         }
-
+        
         void Test5::SetupMeshes() {
             mesh1 = GetGreng().GetMeshManager().CreateMeshCube();
             mesh2 = GetGreng().GetMeshManager().CreateMeshQuad();

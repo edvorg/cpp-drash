@@ -101,7 +101,7 @@ namespace drash {
                         light == nullptr ? shaderProgram1 : shaderProgram2,
                         &model, nullptr, &model_view,
                         &camera->GetProjectionMatrix(), light, spotLight1,
-                        &camera->GetPos().Get());
+                        &camera->GetPos().Get(), FrameBuffer);
 
                     greng.GetMeshManager().DestroyMesh(m);
                 }
@@ -185,7 +185,7 @@ namespace drash {
                     m, 0, textures, 3,
                     light == nullptr ? shaderProgram1 : shaderProgram2, &model,
                     nullptr, &model_view, &camera->GetProjectionMatrix(), light,
-                    spotLight1, &camera->GetPos().Get());
+                    spotLight1, &camera->GetPos().Get(), FrameBuffer);
 
                 greng.GetMeshManager().DestroyMesh(m);
             }
