@@ -59,24 +59,10 @@ namespace drash {
         std::ostream& stream;
         bool opened = false;
 
-        std::string lastMessaage = "";
-        unsigned int messageRepeats = 0;
-
         static std::ostringstream tailStream;
     };
 
     inline CLogger& CLogger::operator<<(const std::string& _str) {
-        if (lastMessaage == _str) {
-            messageRepeats++;
-            return *this;
-        }
-
-        if (messageRepeats)
-            (*this) << "repeated " << messageRepeats << "times";
-
-        lastMessaage = _str;
-        messageRepeats = 0;
-
         return (*this) << _str.c_str();
     }
 
@@ -85,11 +71,11 @@ namespace drash {
 #define LOG_INFO_PREFIX std::string("[I]: ")
 
 #ifdef DRASH_DEBUG
-#define LOG_ERR(mes) CLogger::shared() << LOG_ERR_PREFIX + mes
-#define LOG_WARN(mes) CLogger::shared() << LOG_WARN_PREFIX + mes
-#define LOG_INFO(mes) CLogger::shared() << LOG_INFO_PREFIX + mes
+#define LOG_ERR(mes) CLogger::shared() << LOG_ERR_PREFIX << mes
+#define LOG_WARN(mes) CLogger::shared() << LOG_WARN_PREFIX << mes
+#define LOG_INFO(mes) CLogger::shared() << LOG_INFO_PREFIX << mes
 #else
-#define LOG_ERR(mes) CLogger::shared() << LOG_ERR_PREFIX + mes
+#define LOG_ERR(mes) CLogger::shared() << LOG_ERR_PREFIX << mes
 #define LOG_WARN(mes)
 #define LOG_INFO(mes)
 #endif
