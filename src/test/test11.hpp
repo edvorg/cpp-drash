@@ -42,6 +42,7 @@ namespace drash {
             virtual void Render() override;
 
             greng::Camera* camera = {};
+            greng::Camera* uiCamera = {};
             greng::PointLight light{};
             unsigned int delta = 0;
         };

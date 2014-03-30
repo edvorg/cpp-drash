@@ -766,13 +766,11 @@ namespace greng {
         if (corners > 1 && vertices && indices) {
             glMatrixMode(GL_PROJECTION);
             glPushMatrix();
-            glLoadIdentity();
-            glOrtho(-100, 100, -100 / _camera.GetAspectRatio(),
-                    100 / _camera.GetAspectRatio(), -100, 100);
-
+            glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
+        
             glMatrixMode(GL_MODELVIEW);
             glPushMatrix();
-            glLoadIdentity();
+            glLoadMatrixf(_camera.GetViewMatrixTransposed().data);
             glTranslatef(_pos.x, _pos.y, 0);
             glScalef(_size.x, _size.y, 1);
 

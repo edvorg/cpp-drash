@@ -40,14 +40,22 @@ namespace drash {
                                        AnimatorBehavior::Bounce);
             camera->SetOrtho(true);
             
-            camera->GetOrthoWidth().Set(10);
-            camera->GetOrthoHeight().Set(
-                10.0 / GetGrengSystems().GetViewport().GetAspectRatio());
+            camera->GetOrthoWidth() = 10;
+            camera->GetOrthoHeight() =
+                10.0 / GetGrengSystems().GetViewport().GetAspectRatio();
             
             camera->GetOrthoWidth().SetTarget(2, 5, AnimatorBehavior::Bounce);
             camera->GetOrthoHeight().SetTarget(
                 2 / GetGrengSystems().GetViewport().GetAspectRatio(), 5,
                 AnimatorBehavior::Bounce);
+
+            uiCamera = GetGrengSystems().GetCameraManager().CreateCamera({});
+            uiCamera->SetOrtho(true);
+            uiCamera->GetOrthoWidth() = 100;
+            uiCamera->GetOrthoHeight() =
+                100.0 / GetGrengSystems().GetViewport().GetAspectRatio();
+            uiCamera->GetPos() = { 0, 0, 10 };
+            uiCamera->GetDepthOfView() = 50;
 
             GetDebugRenderer().SetCamera(camera);
             GetDebugRenderer().SetLight(&light);
@@ -88,7 +96,7 @@ namespace drash {
             std::ostringstream str;
             str << "abcdefghijklmnopqrstuvwxyz_ " << delta;
             GetGrengSystems().GetRenderer().DrawString(
-                *camera, true,
+                *uiCamera, true,
                 { -100 + 10, 100 / camera->GetAspectRatio() - 10 }, { 1, 1 },
                 str.str());
         }
