@@ -94,7 +94,8 @@ namespace drash {
             bool splitDepth = false;
             float splitFigureCenterZ = 0;
 
-            greng::Camera* camera = nullptr;
+            greng::Camera* camera;
+            greng::Camera* uiCamera;
             greng::PointLight light1;
         };
 

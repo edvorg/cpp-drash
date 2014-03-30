@@ -43,6 +43,13 @@ namespace drash {
             cp.pos.Set(0, 0, 100);
             camera = GetGreng().GetCameraManager().CreateCamera(cp);
 
+            uiCamera = GetGreng().GetCameraManager().CreateCamera({});
+            uiCamera->GetPos() = { 0, 0, 1 };
+            uiCamera->SetOrtho(true);
+            uiCamera->GetOrthoWidth() = 0.5;
+            uiCamera->GetOrthoHeight() = 0.5;
+            uiCamera->GetDepthOfView() = 100;
+
             light1.position.Set(0, 0, 20);
 
             GetDebugRenderer().SetCamera(camera);
@@ -133,13 +140,13 @@ namespace drash {
 
             if (vertices.size()) {
                 for (int i = 0; i < (int)vertices.size() - 1; i++) {
-                    GetGreng().GetRenderer().DrawLine(
+                    GetGreng().GetRenderer().DrawLine(*uiCamera,
                         vertices[i], vertices[i + 1], 1, Color4f(0, 1, 0, 1));
                 }
-                GetGreng().GetRenderer().DrawLine(
+                GetGreng().GetRenderer().DrawLine(*uiCamera,
                     vertices[vertices.size() - 1], GetCursorPos(), 1,
                     Color4f(0, 1, 0, 1), false);
-                GetGreng().GetRenderer().DrawLine(
+                GetGreng().GetRenderer().DrawLine(*uiCamera,
                     vertices[0], GetCursorPos(), 1, Color4f(0, 1, 0, 1),
                     false);
             }

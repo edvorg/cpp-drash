@@ -202,7 +202,7 @@ namespace greng {
                 glGetUniformLocation(_program->programId, "gLight1Position");
             if (l1ploc != -1) {
                 glUniform3fv(l1ploc, 1, reinterpret_cast<const GLfloat*>(
-                                            &_light->position));
+                                 &_light->position));
             } else {
                 LOG_ERR("Renderer::RenderMesh(): Unable to find "
                         "gLight1Position attribute");
@@ -214,7 +214,7 @@ namespace greng {
                 glGetUniformLocation(_program->programId, "gLight1Position");
             if (sl1ploc != -1) {
                 glUniform3fv(sl1ploc, 1, reinterpret_cast<const GLfloat*>(
-                                             &_spot_light->position));
+                                 &_spot_light->position));
             } else {
                 LOG_ERR("Renderer::RenderMesh(): Unable to find "
                         "gLight1Position attribute");
@@ -224,7 +224,7 @@ namespace greng {
                 glGetUniformLocation(_program->programId, "gLight1Direction");
             if (sl1dloc != -1) {
                 glUniform3fv(sl1dloc, 1, reinterpret_cast<const GLfloat*>(
-                                             &_spot_light->direction));
+                                 &_spot_light->direction));
             } else {
                 LOG_ERR("Renderer::RenderMesh(): Unable to find "
                         "gLight1Direction attribute");
@@ -232,10 +232,10 @@ namespace greng {
         }
 
         glDrawElements(GL_TRIANGLES, _mesh->materialOffsets[_submesh + 1] -
-                                         _mesh->materialOffsets[_submesh],
+                       _mesh->materialOffsets[_submesh],
                        GL_UNSIGNED_INT, reinterpret_cast<const GLvoid*>(
-                                            sizeof(unsigned int) *
-                                            _mesh->materialOffsets[_submesh]));
+                           sizeof(unsigned int) *
+                           _mesh->materialOffsets[_submesh]));
 
         glDisableVertexAttribArray(tangent_loc);
         glDisableVertexAttribArray(binormal_loc);
@@ -258,15 +258,9 @@ namespace greng {
         glDisable(GL_TEXTURE_2D);
     }
 
-    void Renderer::DrawTriangle(const Vec2f& _p1, const Vec2f& _p2,
-                                 const Vec2f& _p3, const Color4f& _col,
-                                 bool _depth_test) const {
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(-0.5, 0.5, -0.5, 0.5, 1, -1);
-
+    void Renderer::DrawTriangle(const Camera& _camera, const Vec2f& _p1,
+                                const Vec2f& _p2, const Vec2f& _p3,
+                                const Color4f& _col, bool _depth_test) const {
         if (_depth_test == true) {
             glEnable(GL_DEPTH_TEST);
         } else {
@@ -275,6 +269,11 @@ namespace greng {
         glDisable(GL_CULL_FACE);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadMatrixf(_camera.GetViewMatrixTransposed().data);
+        glMatrixMode(GL_PROJECTION);
+        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
 
         glBegin(GL_TRIANGLES);
         glColor4f(_col.r, _col.g, _col.b, _col.a);
@@ -287,8 +286,8 @@ namespace greng {
     }
 
     void Renderer::DrawTriangle(const Camera& _camera, const Vec3f& _p1,
-                                 const Vec3f& _p2, const Vec3f& _p3,
-                                 const Color4f& _col, bool _depth_test) const {
+                                const Vec3f& _p2, const Vec3f& _p3,
+                                const Color4f& _col, bool _depth_test) const {
         if (_depth_test == true) {
             glEnable(GL_DEPTH_TEST);
         } else {
@@ -313,14 +312,9 @@ namespace greng {
         glEnd();
     }
 
-    void Renderer::DrawLine(const Vec2f& _p1, const Vec2f& _p2, float _width,
-                             const Color4f& _col, bool _depth_test) const {
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(-0.5, 0.5, -0.5, 0.5, 1, -1);
-
+    void Renderer::DrawLine(const Camera& _camera, const Vec2f& _p1,
+                            const Vec2f& _p2, float _width,
+                            const Color4f& _col, bool _depth_test) const {
         if (_depth_test == true) {
             glEnable(GL_DEPTH_TEST);
         } else {
@@ -328,6 +322,11 @@ namespace greng {
         }
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadMatrixf(_camera.GetViewMatrixTransposed().data);
+        glMatrixMode(GL_PROJECTION);
+        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
 
         glLineWidth(_width);
 
@@ -340,8 +339,8 @@ namespace greng {
     }
 
     void Renderer::DrawLine(const Camera& _camera, const Vec3f& _p1,
-                             const Vec3f& _p2, float _width,
-                             const Color4f& _col, bool _depth_test) const {
+                            const Vec3f& _p2, float _width,
+                            const Color4f& _col, bool _depth_test) const {
         if (_depth_test == true) {
             glEnable(GL_DEPTH_TEST);
         } else {
@@ -365,19 +364,9 @@ namespace greng {
         glEnd();
     }
 
-    void Renderer::DrawLines(const std::vector<Vec2f>& lines, float _width,
-                              const Color4f& _col, bool _depth_test) const {
-        if (lines.size() < 2)
-            return;
-
-        for (auto i = lines.begin() + 1; i != lines.end(); ++i) {
-            DrawLine(*(i - 1), *i, _width, _col, _depth_test);
-        }
-    }
-
     void Renderer::DrawLines(const Camera& _camera,
-                              const std::vector<Vec3f>& lines, float _width,
-                              const Color4f& _col, bool _depth_test) const {
+                             const std::vector<Vec2f>& lines, float _width,
+                             const Color4f& _col, bool _depth_test) const {
         if (lines.size() < 2)
             return;
 
@@ -386,14 +375,20 @@ namespace greng {
         }
     }
 
-    void Renderer::DrawPoint(const Vec2f& _p, float _size,
-                              const Color4f& _col, bool _depth_test) const {
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(-0.5, 0.5, -0.5, 0.5, 1, -1);
+    void Renderer::DrawLines(const Camera& _camera,
+                             const std::vector<Vec3f>& lines, float _width,
+                             const Color4f& _col, bool _depth_test) const {
+        if (lines.size() < 2)
+            return;
 
+        for (auto i = lines.begin() + 1; i != lines.end(); ++i) {
+            DrawLine(_camera, *(i - 1), *i, _width, _col, _depth_test);
+        }
+    }
+
+    void Renderer::DrawPoint(const Camera& _camera, const Vec2f& _p,
+                             float _size, const Color4f& _col,
+                             bool _depth_test) const {
         if (_depth_test == true) {
             glEnable(GL_DEPTH_TEST);
         } else {
@@ -401,6 +396,11 @@ namespace greng {
         }
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadMatrixf(_camera.GetViewMatrixTransposed().data);
+        glMatrixMode(GL_PROJECTION);
+        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
 
         glPointSize(_size);
 
@@ -411,8 +411,8 @@ namespace greng {
     }
 
     void Renderer::DrawPoint(const Camera& _camera, const Vec3f& _p,
-                              float _size, const Color4f& _col,
-                              bool _depth_test) const {
+                             float _size, const Color4f& _col,
+                             bool _depth_test) const {
         if (_depth_test == true) {
             glEnable(GL_DEPTH_TEST);
         } else {
@@ -435,7 +435,7 @@ namespace greng {
     }
 
     void Renderer::DrawChar(const Camera& _camera, const Vec2f& _pos,
-                             const Vec2f& _size, char _c) {
+                            const Vec2f& _size, char _c) {
         int corners = 0;
         void* vertices = nullptr;
         void* indices = nullptr;
@@ -765,11 +765,9 @@ namespace greng {
         // render
         if (corners > 1 && vertices && indices) {
             glMatrixMode(GL_PROJECTION);
-            glPushMatrix();
             glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
         
             glMatrixMode(GL_MODELVIEW);
-            glPushMatrix();
             glLoadMatrixf(_camera.GetViewMatrixTransposed().data);
             glTranslatef(_pos.x, _pos.y, 0);
             glScalef(_size.x, _size.y, 1);
@@ -778,12 +776,6 @@ namespace greng {
             glVertexPointer(2, GL_FLOAT, 0, vertices);
             glDrawElements(GL_LINE_STRIP, corners, GL_UNSIGNED_BYTE, indices);
             glDisableClientState(GL_VERTEX_ARRAY);
-
-            glMatrixMode(GL_MODELVIEW);
-            glPopMatrix();
-
-            glMatrixMode(GL_PROJECTION);
-            glPopMatrix();
         }
     }
 
@@ -799,8 +791,8 @@ namespace greng {
     }
 
     void Renderer::DrawNumber(const Camera& _camera, bool fromLeft,
-                               const Vec2f& _pos, const Vec2f& _size,
-                               unsigned int number) {
+                              const Vec2f& _pos, const Vec2f& _size,
+                              unsigned int number) {
         auto pos = _pos;
 
         if (fromLeft) {
@@ -826,8 +818,8 @@ namespace greng {
     }
 
     void Renderer::DrawString(const Camera& _camera, bool fromLeft,
-                               const Vec2f& _pos, const Vec2f& _size,
-                               const std::string& _str) {
+                              const Vec2f& _pos, const Vec2f& _size,
+                              const std::string& _str) {
         auto pos = _pos;
 
         if (fromLeft) {

@@ -70,7 +70,7 @@ namespace greng {
 
         /// draws triangle giving screen space coordinates (-0.5,-0.5)..(0.5,
         /// 0.5) and color
-        void DrawTriangle(const Vec2f& _p1, const Vec2f& _p2,
+        void DrawTriangle(const Camera& _camera, const Vec2f& _p1, const Vec2f& _p2,
                           const Vec2f& _p3, const Color4f& _col,
                           bool _depth_test = false) const;
 
@@ -82,7 +82,7 @@ namespace greng {
         /// draws line giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
         /// start and end points
         /// and color
-        void DrawLine(const Vec2f& _p1, const Vec2f& _p2, float _width,
+        void DrawLine(const Camera& _camera, const Vec2f& _p1, const Vec2f& _p2, float _width,
                       const Color4f& _col, bool _depth_test = false) const;
 
         /// draws line giving world space coordinates start and end points
@@ -93,7 +93,7 @@ namespace greng {
 
         /// draws lines giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
         /// and color
-        void DrawLines(const std::vector<Vec2f>& lines, float _width,
+        void DrawLines(const Camera& _camera, const std::vector<Vec2f>& lines, float _width,
                        const Color4f& _col, bool _depth_test = false) const;
 
         /// draws lines giving world space coordinates
@@ -103,7 +103,7 @@ namespace greng {
                        bool _depth_test = true) const;
 
         /// draws point giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
-        void DrawPoint(const Vec2f& _p, float _size, const Color4f& _col,
+        void DrawPoint(const Camera& _camera, const Vec2f& _p, float _size, const Color4f& _col,
                        bool _depth_test = false) const;
 
         /// draws point giving world space coordinates

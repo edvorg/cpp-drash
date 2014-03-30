@@ -68,10 +68,11 @@ namespace drash {
                     GetPos().x + GetSize().x, GetPos().y + GetSize().y, p3);
                 GetUISystem()->UISpaceToScreenSpace(GetPos().x + GetSize().x,
                                                     GetPos().y, p4);
-                GetUISystem()->GetRenderer().DrawLine(p1, p2, 1, c);
-                GetUISystem()->GetRenderer().DrawLine(p3, p2, 1, c);
-                GetUISystem()->GetRenderer().DrawLine(p3, p4, 1, c);
-                GetUISystem()->GetRenderer().DrawLine(p1, p4, 1, c);
+                // FIXME 
+                // GetUISystem()->GetRenderer().DrawLine(p1, p2, 1, c);
+                // GetUISystem()->GetRenderer().DrawLine(p3, p2, 1, c);
+                // GetUISystem()->GetRenderer().DrawLine(p3, p4, 1, c);
+                // GetUISystem()->GetRenderer().DrawLine(p1, p4, 1, c);
 
                 const unsigned int l = GetSize().x - sliderWidth;
 
@@ -90,10 +91,11 @@ namespace drash {
                 GetUISystem()->UISpaceToScreenSpace(
                     GetPos().x + l * GetPercent(), GetPos().y + GetSize().y,
                     p8);
-                GetUISystem()->GetRenderer().DrawLine(p5, p6, 1, c);
-                GetUISystem()->GetRenderer().DrawLine(p7, p6, 1, c);
-                GetUISystem()->GetRenderer().DrawLine(p7, p8, 1, c);
-                GetUISystem()->GetRenderer().DrawLine(p5, p8, 1, c);
+                // FIXME 
+                // GetUISystem()->GetRenderer().DrawLine(p5, p6, 1, c);
+                // GetUISystem()->GetRenderer().DrawLine(p7, p6, 1, c);
+                // GetUISystem()->GetRenderer().DrawLine(p7, p8, 1, c);
+                // GetUISystem()->GetRenderer().DrawLine(p5, p8, 1, c);
             });
         }
 

@@ -65,13 +65,14 @@ namespace drash {
                 GetUISystem()->UISpaceToScreenSpace(GetPos().x + GetSize().x,
                                                     GetPos().y, p4);
 
-                GetUISystem()->GetRenderer().DrawTriangle(p4, p2, p1, c);
-                GetUISystem()->GetRenderer().DrawTriangle(p3, p2, p4, c);
+                // FIXME
+                // GetUISystem()->GetRenderer().DrawTriangle(p4, p2, p1, c);
+                // GetUISystem()->GetRenderer().DrawTriangle(p3, p2, p4, c);
 
-                GetUISystem()->GetRenderer().DrawLine(p1, p2, 1, c);
-                GetUISystem()->GetRenderer().DrawLine(p3, p2, 1, c);
-                GetUISystem()->GetRenderer().DrawLine(p3, p4, 1, c);
-                GetUISystem()->GetRenderer().DrawLine(p1, p4, 1, c);
+                // GetUISystem()->GetRenderer().DrawLine(p1, p2, 1, c);
+                // GetUISystem()->GetRenderer().DrawLine(p3, p2, 1, c);
+                // GetUISystem()->GetRenderer().DrawLine(p3, p4, 1, c);
+                // GetUISystem()->GetRenderer().DrawLine(p1, p4, 1, c);
             });
 
             SetPressHandler([this]() { pressed = true; });
