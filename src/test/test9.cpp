@@ -30,10 +30,10 @@ namespace drash {
 
     namespace test {
 
-        Test9::Test9(greng::GrengSystemsSet& greng)
+        Test9::Test9(greng::Greng& greng)
             : App(greng),
-              camera{ GetGrengSystems().GetCameraManager().CreateCamera({}) },
-              point1{ GetGrengSystems().GetRenderer(), *camera } {
+              camera{ GetGreng().GetCameraManager().CreateCamera({}) },
+              point1{ GetGreng().GetRenderer(), *camera } {
             InitCamera();
             InitLights();
             InitRotationablePoint();

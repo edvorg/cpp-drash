@@ -32,7 +32,7 @@ namespace drash {
 
     namespace test {
 
-        Test8::Test8(greng::GrengSystemsSet& greng) : App(greng) {
+        Test8::Test8(greng::Greng& greng) : App(greng) {
             InitUI();
             InitLevels();
             InitCamera();
@@ -136,7 +136,7 @@ namespace drash {
             greng::CameraParams p;
             p.pos.Set(0, 0, 10);
             p.fov = M_PI / 6.0;
-            auto c = GetGrengSystems().GetCameraManager().CreateCamera(p);
+            auto c = GetGreng().GetCameraManager().CreateCamera(p);
             GetDebugRenderer().SetCamera(c);
 
             return true;

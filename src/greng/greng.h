@@ -22,8 +22,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#ifndef GRENG_GRENGSYSTEMSSET_H
-#define GRENG_GRENGSYSTEMSSET_H
+#ifndef GRENG_GRENG_H
+#define GRENG_GRENG_H
 
 #include "meshmanager.h"
 #include "texturemanager.h"
@@ -37,9 +37,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class GrengSystemsSet {
+    class Greng {
     public:
-        GrengSystemsSet();
+        Greng();
 
         void Step(double _dt);
 
@@ -67,4 +67,4 @@ namespace greng {
 
 } // namespace greng
 
-#endif // GRENG_GRENGSYSTEMSSET_H
+#endif // GRENG_GRENG_H

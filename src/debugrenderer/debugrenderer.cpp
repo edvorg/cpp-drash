@@ -29,7 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../scene/figure.h"
 #include "../greng/vertex.h"
 #include "../greng/camera.h"
-#include "../greng/grengsystemsset.h"
+#include "../greng/greng.h"
 #include "../misc/plane.h"
 #include "../misc/ray.h"
 #include "../levelmanager/leveldesc.h"
@@ -41,10 +41,10 @@ namespace greng {
 
 namespace drash {
 
-    DebugRenderer::DebugRenderer(greng::GrengSystemsSet& _greng_systems,
+    DebugRenderer::DebugRenderer(greng::Greng& _greng,
                                    Scene& _scene,
                                    GeometryManager& _geometry_manager)
-        : grengSystems(_greng_systems), scene(_scene),
+        : greng(_greng), scene(_scene),
           geometryManager(_geometry_manager) {
         InitTextures();
         InitShaders();
@@ -79,8 +79,8 @@ namespace drash {
                                f->GetDepth());
 
                 if (m != nullptr) {
-                    grengSystems.GetMeshManager().ComputeNormals(m);
-                    grengSystems.GetMeshManager().ComputeTangentSpace(m);
+                    greng.GetMeshManager().ComputeNormals(m);
+                    greng.GetMeshManager().ComputeTangentSpace(m);
 
                     Matrix4f rot;
                     MatrixRotationZ(rot, o->GetAngle());
@@ -99,14 +99,14 @@ namespace drash {
                                                      texture1Normal,
                                                      texture1Specular };
 
-                    grengSystems.GetRenderer().RenderMesh(
+                    greng.GetRenderer().RenderMesh(
                         m, 0, textures, 3,
                         light == nullptr ? shaderProgram1 : shaderProgram2,
                         &model, nullptr, &model_view,
                         &camera->GetProjectionMatrix(), light, spotLight1,
                         &camera->GetPos().Get());
 
-                    grengSystems.GetMeshManager().DestroyMesh(m);
+                    greng.GetMeshManager().DestroyMesh(m);
                 }
 
                 for (unsigned int k = 0; k < jc; k++) {
@@ -138,7 +138,7 @@ namespace drash {
                                       o->GetPosZ() +
                                           o->GetFigures()[k]->GetZ());
 
-                            grengSystems.GetRenderer().DrawLine(
+                            greng.GetRenderer().DrawLine(
                                 *camera, c1, c2, 2, Color4f(1, 0, 0, 1),
                                 false);
                         } else if (o->GetDestructionGraph()[k * jc + j] != 0) {
@@ -151,7 +151,7 @@ namespace drash {
                                       o->GetPosZ() +
                                           o->GetFigures()[k]->GetZ());
 
-                            grengSystems.GetRenderer().DrawLine(
+                            greng.GetRenderer().DrawLine(
                                 *camera, c1, c2, 2, Color4f(1, 0, 0, 1),
                                 false);
                         }
@@ -170,8 +170,8 @@ namespace drash {
                            _geometry.figures[i].z, _geometry.figures[i].depth);
 
             if (m != nullptr) {
-                grengSystems.GetMeshManager().ComputeNormals(m);
-                grengSystems.GetMeshManager().ComputeTangentSpace(m);
+                greng.GetMeshManager().ComputeNormals(m);
+                greng.GetMeshManager().ComputeTangentSpace(m);
 
                 Matrix4f rot;
                 MatrixRotationZ(rot, _params.angle);
@@ -189,13 +189,13 @@ namespace drash {
                                                  texture1Normal,
                                                  texture1Specular };
 
-                grengSystems.GetRenderer().RenderMesh(
+                greng.GetRenderer().RenderMesh(
                     m, 0, textures, 3,
                     light == nullptr ? shaderProgram1 : shaderProgram2, &model,
                     nullptr, &model_view, &camera->GetProjectionMatrix(), light,
                     spotLight1, &camera->GetPos().Get());
 
-                grengSystems.GetMeshManager().DestroyMesh(m);
+                greng.GetMeshManager().DestroyMesh(m);
             }
         }
     }
@@ -425,12 +425,12 @@ namespace drash {
 
     bool DebugRenderer::InitTextures() {
         texture1Diffuse =
-            grengSystems.GetTextureManager().CreateTextureFromFile(
+            greng.GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
-        texture1Normal = grengSystems.GetTextureManager().CreateTextureFromFile(
+        texture1Normal = greng.GetTextureManager().CreateTextureFromFile(
             "assets/floor/normal.png");
         texture1Specular =
-            grengSystems.GetTextureManager().CreateTextureFromFile(
+            greng.GetTextureManager().CreateTextureFromFile(
                 "assets/floor/specular.png");
 
         if (texture1Diffuse == nullptr || texture1Normal == nullptr ||
@@ -443,19 +443,19 @@ namespace drash {
 
     bool DebugRenderer::InitShaders() {
         greng::VertexShader* vs =
-            grengSystems.GetVertexShaderManager().CreateShaderFromFile(
+            greng.GetVertexShaderManager().CreateShaderFromFile(
                 "shaders/shader6.120.vs");
         greng::FragmentShader* fs =
-            grengSystems.GetFragmentShaderManager().CreateShaderFromFile(
+            greng.GetFragmentShaderManager().CreateShaderFromFile(
                 "shaders/shader6.120.fs");
         shaderProgram1 =
-            grengSystems.GetShaderProgramManager().CreateProgram(vs, fs);
-        vs = grengSystems.GetVertexShaderManager().CreateShaderFromFile(
+            greng.GetShaderProgramManager().CreateProgram(vs, fs);
+        vs = greng.GetVertexShaderManager().CreateShaderFromFile(
             "shaders/shader7.120.vs");
-        fs = grengSystems.GetFragmentShaderManager().CreateShaderFromFile(
+        fs = greng.GetFragmentShaderManager().CreateShaderFromFile(
             "shaders/shader7.120.fs");
         shaderProgram2 =
-            grengSystems.GetShaderProgramManager().CreateProgram(vs, fs);
+            greng.GetShaderProgramManager().CreateProgram(vs, fs);
 
         if (shaderProgram1 == nullptr && shaderProgram2 == nullptr) {
             return false;
@@ -579,7 +579,7 @@ namespace drash {
             mi.push_back(2 * _vertices_count + (_vertices_count - 1) * 4 + 3);
             mi.push_back(2 * _vertices_count + (_vertices_count - 1) * 4 + 0);
 
-            m = grengSystems.GetMeshManager().CreateMeshFromVertices(
+            m = greng.GetMeshManager().CreateMeshFromVertices(
                 &mv[0], mv.size(), &mi[0], mi.size());
         }
 

@@ -32,7 +32,7 @@ namespace drash {
 
     namespace test {
 
-        Test7::Test7(greng::GrengSystemsSet& greng) : Test3(greng) {
+        Test7::Test7(greng::Greng& greng) : Test3(greng) {
             InitTextures();
             InitShaders();
             InitLights();
@@ -56,7 +56,7 @@ namespace drash {
 
         bool Test7::InitTextures() {
             debugTexture =
-                GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+                GetGreng().GetTextureManager().CreateTextureFromFile(
                     "assets/floor/diffuse.png");
 
             if (debugTexture == nullptr) {
@@ -68,15 +68,15 @@ namespace drash {
 
         bool Test7::InitShaders() {
             greng::VertexShader* v =
-                GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile(
+                GetGreng().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader2.120.vs");
             greng::FragmentShader* f =
-                GetGrengSystems()
+                GetGreng()
                     .GetFragmentShaderManager()
                     .CreateShaderFromFile("shaders/shader2.120.fs");
 
             program =
-                GetGrengSystems().GetShaderProgramManager().CreateProgram(v, f);
+                GetGreng().GetShaderProgramManager().CreateProgram(v, f);
 
             if (program == nullptr) {
                 return false;
@@ -215,14 +215,14 @@ namespace drash {
                         mi.push_back(2 * kc + (kc - 1) * 4 + 3);
                         mi.push_back(2 * kc + (kc - 1) * 4 + 0);
 
-                        m = GetGrengSystems()
+                        m = GetGreng()
                                 .GetMeshManager()
                                 .CreateMeshFromVertices(&mv[0], mv.size(),
                                                         &mi[0], mi.size());
                     }
 
                     if (m != nullptr) {
-                        GetGrengSystems().GetMeshManager().ComputeNormals(m);
+                        GetGreng().GetMeshManager().ComputeNormals(m);
 
                         Matrix4f rot;
                         MatrixRotationZ(rot, o->GetAngle());
@@ -237,12 +237,12 @@ namespace drash {
                         MatrixMultiply(GetCamera().GetViewMatrix(), model,
                                        model_view);
 
-                        GetGrengSystems().GetRenderer().RenderMesh(
+                        GetGreng().GetRenderer().RenderMesh(
                             m, 0, &debugTexture, 1, program, &model, nullptr,
                             &model_view, &GetCamera().GetProjectionMatrix(),
                             &light1);
 
-                        GetGrengSystems().GetMeshManager().DestroyMesh(m);
+                        GetGreng().GetMeshManager().DestroyMesh(m);
                     }
                 }
             }

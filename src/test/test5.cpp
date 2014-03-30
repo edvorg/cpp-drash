@@ -31,7 +31,7 @@ namespace drash {
 
     namespace test {
 
-        Test5::Test5(greng::GrengSystemsSet& greng) : Test3(greng) {
+        Test5::Test5(greng::Greng& greng) : Test3(greng) {
             SetupProcessors();
             SetupMeshes();
             SetupTextures();
@@ -79,7 +79,7 @@ namespace drash {
                 Matrix4f model_view;
                 MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
-                GetGrengSystems().GetRenderer().RenderMesh(
+                GetGreng().GetRenderer().RenderMesh(
                     mesh1, 0, &tex6, 1, shaderProgram2, &model, nullptr,
                     &model_view, &GetCamera().GetProjectionMatrix(), &light1);
             }
@@ -103,7 +103,7 @@ namespace drash {
                 Matrix4f model_view;
                 MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
-                GetGrengSystems().GetRenderer().RenderMesh(
+                GetGreng().GetRenderer().RenderMesh(
                     mesh2, 0, &tex2, 1, shaderProgram2, &model, nullptr,
                     &model_view, &GetCamera().GetProjectionMatrix(), &light1);
             }
@@ -123,7 +123,7 @@ namespace drash {
                 };
 
                 for (unsigned int i = 0; i < 3; i++) {
-                    GetGrengSystems().GetRenderer().RenderMesh(
+                    GetGreng().GetRenderer().RenderMesh(
                         mesh3, i, &texts[i * 2], 2, shaderProgram4, &model,
                         nullptr, &model_view,
                         &GetCamera().GetProjectionMatrix(), &light1, nullptr,
@@ -152,7 +152,7 @@ namespace drash {
                                               tex7, tex7normal, };
 
                 for (unsigned int i = 0; i < 3; i++) {
-                    GetGrengSystems().GetRenderer().RenderMesh(
+                    GetGreng().GetRenderer().RenderMesh(
                         mesh4, i, &texts[i * 2], 2, shaderProgram4, &model,
                         nullptr, &model_view,
                         &GetCamera().GetProjectionMatrix(), &light1, nullptr,
@@ -160,21 +160,21 @@ namespace drash {
                 }
             }
 
-            GetGrengSystems().GetRenderer().DrawPoint(
+            GetGreng().GetRenderer().DrawPoint(
                 GetCamera(), light1.position, 10, Color4f(1, 1, 1, 1), false);
         }
 
         void Test5::SetupMeshes() {
-            mesh1 = GetGrengSystems().GetMeshManager().CreateMeshCube();
-            mesh2 = GetGrengSystems().GetMeshManager().CreateMeshQuad();
-            mesh3 = GetGrengSystems().GetMeshManager().CreateMeshFromObjFile(
+            mesh1 = GetGreng().GetMeshManager().CreateMeshCube();
+            mesh2 = GetGreng().GetMeshManager().CreateMeshQuad();
+            mesh3 = GetGreng().GetMeshManager().CreateMeshFromObjFile(
                 "assets/mt.obj");
-            mesh4 = GetGrengSystems().GetMeshManager().CreateMeshFromObjFile(
+            mesh4 = GetGreng().GetMeshManager().CreateMeshFromObjFile(
                 "assets/RB-BumbleBee.obj");
 
-            GetGrengSystems().GetMeshManager().ComputeNormals(mesh3);
-            GetGrengSystems().GetMeshManager().ComputeTangentSpace(mesh3);
-            GetGrengSystems().GetMeshManager().ComputeNormals(mesh4);
+            GetGreng().GetMeshManager().ComputeNormals(mesh3);
+            GetGreng().GetMeshManager().ComputeTangentSpace(mesh3);
+            GetGreng().GetMeshManager().ComputeNormals(mesh4);
 
             Matrix4f s;
             MatrixScale(s, Vec3f(0.1));
@@ -192,73 +192,73 @@ namespace drash {
         }
 
         void Test5::SetupTextures() {
-            tex1 = GetGrengSystems().GetTextureManager().CreateTextureDummy();
-            tex2 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+            tex1 = GetGreng().GetTextureManager().CreateTextureDummy();
+            tex2 = GetGreng().GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
-            tex3 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+            tex3 = GetGreng().GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
             tex3normal =
-                GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+                GetGreng().GetTextureManager().CreateTextureFromFile(
                     "assets/floor/normal.png");
-            tex4 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+            tex4 = GetGreng().GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
             tex4normal =
-                GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+                GetGreng().GetTextureManager().CreateTextureFromFile(
                     "assets/floor/normal.png");
-            tex5 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+            tex5 = GetGreng().GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
             tex5normal =
-                GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+                GetGreng().GetTextureManager().CreateTextureFromFile(
                     "assets/floor/normal.png");
-            tex6 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+            tex6 = GetGreng().GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
-            tex7 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+            tex7 = GetGreng().GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
             tex7normal =
-                GetGrengSystems().GetTextureManager().CreateTextureFromFile(
+                GetGreng().GetTextureManager().CreateTextureFromFile(
                     "assets/floor/normal.png");
         }
 
         void Test5::SetupShaders() {
             vertexShader1 =
-                GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile(
+                GetGreng().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader1.120.vs");
             fragmentShader1 =
-                GetGrengSystems()
+                GetGreng()
                     .GetFragmentShaderManager()
                     .CreateShaderFromFile("shaders/shader1.120.fs");
             shaderProgram1 =
-                GetGrengSystems().GetShaderProgramManager().CreateProgram(
+                GetGreng().GetShaderProgramManager().CreateProgram(
                     vertexShader1, fragmentShader1);
             vertexShader2 =
-                GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile(
+                GetGreng().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader2.120.vs");
             fragmentShader2 =
-                GetGrengSystems()
+                GetGreng()
                     .GetFragmentShaderManager()
                     .CreateShaderFromFile("shaders/shader2.120.fs");
             shaderProgram2 =
-                GetGrengSystems().GetShaderProgramManager().CreateProgram(
+                GetGreng().GetShaderProgramManager().CreateProgram(
                     vertexShader2, fragmentShader2);
             vertexShader3 =
-                GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile(
+                GetGreng().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader3.120.vs");
             fragmentShader3 =
-                GetGrengSystems()
+                GetGreng()
                     .GetFragmentShaderManager()
                     .CreateShaderFromFile("shaders/shader3.120.fs");
             shaderProgram3 =
-                GetGrengSystems().GetShaderProgramManager().CreateProgram(
+                GetGreng().GetShaderProgramManager().CreateProgram(
                     vertexShader3, fragmentShader3);
             vertexShader4 =
-                GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile(
+                GetGreng().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader4.120.vs");
             fragmentShader4 =
-                GetGrengSystems()
+                GetGreng()
                     .GetFragmentShaderManager()
                     .CreateShaderFromFile("shaders/shader4.120.fs");
             shaderProgram4 =
-                GetGrengSystems().GetShaderProgramManager().CreateProgram(
+                GetGreng().GetShaderProgramManager().CreateProgram(
                     vertexShader4, fragmentShader4);
         }
 

@@ -26,7 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define TEST_H
 
 namespace greng {
-    class GrengSystemsSet;
+    class Greng;
 }
 
 namespace drash {
@@ -35,7 +35,7 @@ namespace drash {
 
     namespace test {
 
-        App* StartApp(greng::GrengSystemsSet& greng, const char* _name);
+        App* StartApp(greng::Greng& greng, const char* _name);
 
     } // namespace test
 

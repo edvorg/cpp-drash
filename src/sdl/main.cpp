@@ -74,7 +74,7 @@ int main(int _argc, char** _argv) {
     }
 
     glViewport(0, 0, gWindowWidth, gWindowHeight);
-    greng::GrengSystemsSet greng;
+    greng::Greng greng;
     greng.GetViewport().SetSize({ gWindowWidth, gWindowHeight });
 
     if (glewInit() != GLEW_OK) {
@@ -117,7 +117,7 @@ int main(int _argc, char** _argv) {
 
     if (fail == false && app != nullptr) {
         glViewport(0, 0, gWindowWidth, gWindowHeight);
-        app->GetGrengSystems().GetCameraManager().SetAspectRatio(gWindowWidth /
+        app->GetGreng().GetCameraManager().SetAspectRatio(gWindowWidth /
                                                                  gWindowHeight);
         greng.GetViewport().SetSize({ gWindowWidth, gWindowHeight });
         app->GetUISystem().SetAspectRatio(gWindowWidth / gWindowHeight);
@@ -172,7 +172,7 @@ int main(int _argc, char** _argv) {
                     }
 
                     glViewport(0, 0, gWindowWidth, gWindowHeight);
-                    app->GetGrengSystems().GetCameraManager().SetAspectRatio(
+                    app->GetGreng().GetCameraManager().SetAspectRatio(
                         gWindowWidth / gWindowHeight);
                     greng.GetViewport().SetSize(
                         { gWindowWidth, gWindowHeight });

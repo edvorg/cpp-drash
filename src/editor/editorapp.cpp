@@ -47,7 +47,7 @@ namespace drash {
         CameraParams cp;
         cp.pos.Set(10, 10, 10.0f);
         cp.rotation.Set(-M_PI / 4, M_PI / 4, 0);
-        camera = GetGrengSystems().GetCameraManager().CreateCamera(cp);
+        camera = GetGreng().GetCameraManager().CreateCamera(cp);
         GetDebugRenderer().SetCamera(camera);
         pointLight.position = GetCamera()->GetPos();
 
@@ -58,7 +58,7 @@ namespace drash {
 
         moveablePoint.SetCamera(camera);
         rotationPoint.SetCamera(camera);
-        rotationPoint.SetRenderer(&GetGrengSystems().GetRenderer());
+        rotationPoint.SetRenderer(&GetGreng().GetRenderer());
         rotationPoint.Init();
         rotationPoint.SetAxisOX(false);
         rotationPoint.SetAxisOY(false);
@@ -108,23 +108,23 @@ namespace drash {
                 p4.x -= grid_size_half.x;
                 p4.z -= grid_size_half.y;
 
-                GetGrengSystems().GetRenderer().DrawLine(camera, p1, p2, 1,
+                GetGreng().GetRenderer().DrawLine(camera, p1, p2, 1,
                                                          gridColor, true);
-                GetGrengSystems().GetRenderer().DrawLine(camera, p2, p3, 1,
+                GetGreng().GetRenderer().DrawLine(camera, p2, p3, 1,
                                                          gridColor, true);
-                GetGrengSystems().GetRenderer().DrawLine(camera, p3, p4, 1,
+                GetGreng().GetRenderer().DrawLine(camera, p3, p4, 1,
                                                          gridColor, true);
-                GetGrengSystems().GetRenderer().DrawLine(camera, p4, p1, 1,
+                GetGreng().GetRenderer().DrawLine(camera, p4, p1, 1,
                                                          gridColor, true);
             }
         }
 
-        GetGrengSystems().GetRenderer().DrawLine(
+        GetGreng().GetRenderer().DrawLine(
             camera, Vec3f(-segments_counts.x * gridSegmentSize / 2, 0, 0),
             Vec3f(-1 + segments_counts.x * gridSegmentSize / 2, 0, 0), 2,
             Color4f(0, 0, 0, 1), false);
 
-        GetGrengSystems().GetRenderer().DrawLine(
+        GetGreng().GetRenderer().DrawLine(
             camera, Vec3f(0, 0, -segments_counts.y * gridSegmentSize / 2),
             Vec3f(0, 0, -1 + segments_counts.y * gridSegmentSize / 2), 2,
             Color4f(0, 0, 0, 1), false);
@@ -133,13 +133,13 @@ namespace drash {
 
         if (vertexs.size() != 0 && state == BuildState) {
             for (unsigned int i = 1; i < vertexs.size(); i++) {
-                GetGrengSystems().GetRenderer().DrawLine(
+                GetGreng().GetRenderer().DrawLine(
                     vertexs[i - 1], vertexs[i], 1, Color4f(0, 1, 0, 1));
             }
-            GetGrengSystems().GetRenderer().DrawLine(
+            GetGreng().GetRenderer().DrawLine(
                 vertexs[vertexs.size() - 1], GetCursorPos(), 1,
                 Color4f(0, 1, 0, 1));
-            GetGrengSystems().GetRenderer().DrawLine(vertexs[0], GetCursorPos(),
+            GetGreng().GetRenderer().DrawLine(vertexs[0], GetCursorPos(),
                                                      1, Color4f(0, 1, 0, 1));
         }
         if (state == StretchState && currentObject != nullptr) {
@@ -164,7 +164,7 @@ namespace drash {
                         color.Col3().Set(255, 0, 0);
                     }
 
-                    GetGrengSystems().GetRenderer().DrawPoint(camera, position,
+                    GetGreng().GetRenderer().DrawPoint(camera, position,
                                                               10.0f, color);
 
                     color.Col3().Set(255, 155, 0);
@@ -181,26 +181,26 @@ namespace drash {
                         color.Col3().Set(255, 0, 0);
                     }
 
-                    GetGrengSystems().GetRenderer().DrawPoint(camera, position,
+                    GetGreng().GetRenderer().DrawPoint(camera, position,
                                                               10.0f, color);
                 }
             }
         }
 
         if (state == MoveOfAxisState && selectedFigure != nullptr) {
-            moveablePoint.Render(GetGrengSystems().GetRenderer());
+            moveablePoint.Render(GetGreng().GetRenderer());
         }
 
         RenderSplitPlane();
 
         if (state == SplitObjectState) {
             rotationPoint.Render();
-            moveablePoint.Render(GetGrengSystems().GetRenderer());
+            moveablePoint.Render(GetGreng().GetRenderer());
         }
 
         if (state == SplitFigureState && selectedFigure != nullptr) {
             rotationPoint.Render();
-            moveablePoint.Render(GetGrengSystems().GetRenderer());
+            moveablePoint.Render(GetGreng().GetRenderer());
         }
 
         DrawDragTemplate();
@@ -1117,10 +1117,10 @@ namespace drash {
             return;
         }
 
-        GetGrengSystems().GetRenderer().DrawTriangle(
+        GetGreng().GetRenderer().DrawTriangle(
             GetCamera(), splitPlanePoint1, splitPlanePoint2, splitPlanePoint4,
             Color4f(1, 0, 0.5, 0.5), true);
-        GetGrengSystems().GetRenderer().DrawTriangle(
+        GetGreng().GetRenderer().DrawTriangle(
             GetCamera(), splitPlanePoint4, splitPlanePoint2, splitPlanePoint3,
             Color4f(1, 0, 0.5, 0.5), true);
 
@@ -1135,7 +1135,7 @@ namespace drash {
                     p2.z = currentObject->GetPosZ() + context.figure->GetZ() +
                            context.figure->GetDepth() * 0.5f;
 
-                    GetGrengSystems().GetRenderer().DrawLine(
+                    GetGreng().GetRenderer().DrawLine(
                         GetCamera(), p1, p2, 2, Color4f(1, 1, 1), false);
                 };
 

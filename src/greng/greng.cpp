@@ -22,16 +22,16 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#include "grengsystemsset.h"
+#include "greng.h"
 
 namespace greng {
 
-    GrengSystemsSet::GrengSystemsSet()
+    Greng::Greng()
         : viewport(), renderer(viewport), cameraManager(),
           meshManager(), textureManager(), frameBufferManager(),
           vertexShaderManager(), fragmentShaderManager(),
           shaderProgramManager() {}
 
-    void GrengSystemsSet::Step(double _dt) { cameraManager.Step(_dt); }
+    void Greng::Step(double _dt) { cameraManager.Step(_dt); }
 
 } // namespace greng

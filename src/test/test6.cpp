@@ -35,7 +35,7 @@ namespace drash {
 
     namespace test {
 
-        Test6::Test6(greng::GrengSystemsSet& greng) : Test1(greng) {
+        Test6::Test6(greng::Greng& greng) : Test1(greng) {
             InitCamera();
             InitLevel();
             InitPlayer();
@@ -154,13 +154,13 @@ namespace drash {
             MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
             for (unsigned int i = 0; i < 6; i++) {
-                GetGrengSystems().GetRenderer().RenderMesh(
+                GetGreng().GetRenderer().RenderMesh(
                     player1Mesh, i, &player1Texture, 1, player1ShaderProgram,
                     &model, nullptr, &model_view,
                     &GetCamera().GetProjectionMatrix(), &light1);
             }
 
-            GetGrengSystems().GetRenderer().DrawPoint(
+            GetGreng().GetRenderer().DrawPoint(
                 GetCamera(), light1.position, 10, Color4f(1, 1, 1, 1), true);
         }
 
@@ -243,23 +243,23 @@ namespace drash {
                 return false;
             }
 
-            player1Mesh = GetGrengSystems().GetMeshManager().CreateMeshCube();
+            player1Mesh = GetGreng().GetMeshManager().CreateMeshCube();
 
             if (player1Mesh == nullptr) {
                 return false;
             }
 
-            GetGrengSystems().GetMeshManager().ComputeNormals(player1Mesh);
+            GetGreng().GetMeshManager().ComputeNormals(player1Mesh);
 
             player1Texture =
-                GetGrengSystems().GetTextureManager().CreateTextureDummy();
+                GetGreng().GetTextureManager().CreateTextureDummy();
 
             if (player1Texture == nullptr) {
                 return false;
             }
 
             player1VertexShader =
-                GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile(
+                GetGreng().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader2.120.vs");
 
             if (player1VertexShader == nullptr) {
@@ -267,7 +267,7 @@ namespace drash {
             }
 
             player1FragmentShader =
-                GetGrengSystems()
+                GetGreng()
                     .GetFragmentShaderManager()
                     .CreateShaderFromFile("shaders/shader2.120.fs");
 
@@ -276,7 +276,7 @@ namespace drash {
             }
 
             player1ShaderProgram =
-                GetGrengSystems().GetShaderProgramManager().CreateProgram(
+                GetGreng().GetShaderProgramManager().CreateProgram(
                     player1VertexShader, player1FragmentShader);
 
             if (player1ShaderProgram == nullptr) {

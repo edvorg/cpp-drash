@@ -36,12 +36,12 @@ namespace drash {
 
     namespace test {
 
-        Test1::Test1(greng::GrengSystemsSet& greng) : App(greng) {
+        Test1::Test1(greng::Greng& greng) : App(greng) {
             GetGeometryManager().Load();
 
             greng::CameraParams cp;
             cp.pos.Set(0, 0, 100);
-            camera = GetGrengSystems().GetCameraManager().CreateCamera(cp);
+            camera = GetGreng().GetCameraManager().CreateCamera(cp);
 
             light1.position.Set(0, 0, 20);
 
@@ -133,25 +133,25 @@ namespace drash {
 
             if (vertices.size()) {
                 for (int i = 0; i < (int)vertices.size() - 1; i++) {
-                    GetGrengSystems().GetRenderer().DrawLine(
+                    GetGreng().GetRenderer().DrawLine(
                         vertices[i], vertices[i + 1], 1, Color4f(0, 1, 0, 1));
                 }
-                GetGrengSystems().GetRenderer().DrawLine(
+                GetGreng().GetRenderer().DrawLine(
                     vertices[vertices.size() - 1], GetCursorPos(), 1,
                     Color4f(0, 1, 0, 1), false);
-                GetGrengSystems().GetRenderer().DrawLine(
+                GetGreng().GetRenderer().DrawLine(
                     vertices[0], GetCursorPos(), 1, Color4f(0, 1, 0, 1),
                     false);
             }
 
             if (currentFigure != nullptr && currentObject != nullptr) {
-                GetGrengSystems().GetRenderer().DrawLine(
+                GetGreng().GetRenderer().DrawLine(
                     GetCamera(), center, x, 1,
                     Color4f(1 * axisDrawK.x, 0, 0, 1), false);
-                GetGrengSystems().GetRenderer().DrawLine(
+                GetGreng().GetRenderer().DrawLine(
                     GetCamera(), center, y, 1,
                     Color4f(0, 1 * axisDrawK.y, 0, 1), false);
-                GetGrengSystems().GetRenderer().DrawLine(
+                GetGreng().GetRenderer().DrawLine(
                     GetCamera(), center, z, 1,
                     Color4f(0, 0, 1 * axisDrawK.z, 1), false);
             }
@@ -159,10 +159,10 @@ namespace drash {
             if (splitMode == true && currentTemplate != nullptr &&
                 currentObject != nullptr && currentFigure != nullptr) {
                 if (splitDepth == false) {
-                    GetGrengSystems().GetRenderer().DrawTriangle(
+                    GetGreng().GetRenderer().DrawTriangle(
                         GetCamera(), splitPlanePoint1, splitPlanePoint2,
                         splitPlanePoint4, Color4f(1, 0, 0.5, 0.5), true);
-                    GetGrengSystems().GetRenderer().DrawTriangle(
+                    GetGreng().GetRenderer().DrawTriangle(
                         GetCamera(), splitPlanePoint4, splitPlanePoint2,
                         splitPlanePoint3, Color4f(1, 0, 0.5, 0.5), true);
 
@@ -178,7 +178,7 @@ namespace drash {
                                    currentFigure->GetZ() +
                                    currentFigure->GetDepth() * 0.5f;
 
-                            GetGrengSystems().GetRenderer().DrawLine(
+                            GetGreng().GetRenderer().DrawLine(
                                 GetCamera(), p1, p2, 2, Color4f(1, 1, 1),
                                 false);
                         };
@@ -194,10 +194,10 @@ namespace drash {
                     Vec3f p4(splitFigureMax.x, splitFigureMin.y,
                               splitFigureCenterZ);
 
-                    GetGrengSystems().GetRenderer().DrawTriangle(
+                    GetGreng().GetRenderer().DrawTriangle(
                         GetCamera(), p1, p2, p4, Color4f(1, 0, 0.5, 0.5),
                         true);
-                    GetGrengSystems().GetRenderer().DrawTriangle(
+                    GetGreng().GetRenderer().DrawTriangle(
                         GetCamera(), p4, p2, p3, Color4f(1, 0, 0.5, 0.5),
                         true);
                 }

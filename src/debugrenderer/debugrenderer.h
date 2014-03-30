@@ -32,7 +32,7 @@ namespace greng {
 
     class Texture;
     class Camera;
-    class GrengSystemsSet;
+    class Greng;
     class PointLight;
     class SpotLight;
     class Mesh;
@@ -59,7 +59,7 @@ namespace drash {
 
         inline void SetTexCoordsScale(float _scale);
 
-        DebugRenderer(greng::GrengSystemsSet& _greng_systems, Scene& _scene,
+        DebugRenderer(greng::Greng& _greng, Scene& _scene,
                        GeometryManager& _geometry_manager);
 
         void Render() const;
@@ -89,7 +89,7 @@ namespace drash {
                                  unsigned int _vertices_count, float _z,
                                  float _depth) const;
 
-        greng::GrengSystemsSet& grengSystems;
+        greng::Greng& greng;
         Scene& scene;
         GeometryManager& geometryManager;
 

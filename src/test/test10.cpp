@@ -32,7 +32,7 @@ namespace drash {
 
     namespace test {
 
-        Test10::Test10(greng::GrengSystemsSet& greng) : App(greng) {
+        Test10::Test10(greng::Greng& greng) : App(greng) {
             InitCamera();
             InitObjects();
             InitLights();
@@ -56,7 +56,7 @@ namespace drash {
 
             Vec3f p1(lamp1Object->GetWorldPoint(Vec2f(0, 0.5)),
                       lamp1Object->GetPosZ());
-            GetGrengSystems().GetRenderer().DrawLine(
+            GetGreng().GetRenderer().DrawLine(
                 *camera, p1, wallTopObject->GetPos(), 2, Color4f(0, 0, 0, 1),
                 true);
         }
@@ -67,7 +67,7 @@ namespace drash {
             params.rotation.x = -M_PI / 18.0;
 
             greng::Camera* cam =
-                GetGrengSystems().GetCameraManager().CreateCamera(params);
+                GetGreng().GetCameraManager().CreateCamera(params);
 
             if (cam == nullptr) {
                 return false;

@@ -33,8 +33,8 @@ namespace drash {
 
     namespace test {
 
-        Test11::Test11(greng::GrengSystemsSet& greng) : App(greng) {
-            camera = GetGrengSystems().GetCameraManager().CreateCamera({});
+        Test11::Test11(greng::Greng& greng) : App(greng) {
+            camera = GetGreng().GetCameraManager().CreateCamera({});
             camera->GetPos() = { -10, 10, 10 };
             camera->GetPos().SetTarget({ 10, -10, 10 }, 10,
                                        AnimatorBehavior::Bounce);
@@ -42,18 +42,18 @@ namespace drash {
             
             camera->GetOrthoWidth() = 10;
             camera->GetOrthoHeight() =
-                10.0 / GetGrengSystems().GetViewport().GetAspectRatio();
+                10.0 / GetGreng().GetViewport().GetAspectRatio();
             
             camera->GetOrthoWidth().SetTarget(2, 5, AnimatorBehavior::Bounce);
             camera->GetOrthoHeight().SetTarget(
-                2 / GetGrengSystems().GetViewport().GetAspectRatio(), 5,
+                2 / GetGreng().GetViewport().GetAspectRatio(), 5,
                 AnimatorBehavior::Bounce);
 
-            uiCamera = GetGrengSystems().GetCameraManager().CreateCamera({});
+            uiCamera = GetGreng().GetCameraManager().CreateCamera({});
             uiCamera->SetOrtho(true);
             uiCamera->GetOrthoWidth() = 100;
             uiCamera->GetOrthoHeight() =
-                100.0 / GetGrengSystems().GetViewport().GetAspectRatio();
+                100.0 / GetGreng().GetViewport().GetAspectRatio();
             uiCamera->GetPos() = { 0, 0, 10 };
             uiCamera->GetDepthOfView() = 50;
 
@@ -95,7 +95,7 @@ namespace drash {
             App::Render();
             std::ostringstream str;
             str << "abcdefghijklmnopqrstuvwxyz_ " << delta;
-            GetGrengSystems().GetRenderer().DrawString(
+            GetGreng().GetRenderer().DrawString(
                 *uiCamera, true,
                 { -100 + 10, 100 / camera->GetAspectRatio() - 10 }, { 1, 1 },
                 str.str());

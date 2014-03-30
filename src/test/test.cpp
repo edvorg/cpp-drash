@@ -43,7 +43,7 @@ namespace drash {
 
     namespace test {
 
-        App* StartApp(greng::GrengSystemsSet& greng, const char* _name) {
+        App* StartApp(greng::Greng& greng, const char* _name) {
             if (strcmp(_name, "test1") == 0)
                 return new Test1(greng);
             if (strcmp(_name, "test2") == 0)

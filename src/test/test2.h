@@ -35,7 +35,7 @@ namespace drash {
 
         class Test2 : public App {
         public:
-            Test2(greng::GrengSystemsSet& greng);
+            Test2(greng::Greng& greng);
 
         private:
             void SetProcessors();

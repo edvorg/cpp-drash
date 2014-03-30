@@ -33,7 +33,7 @@ namespace drash {
 
     namespace test {
 
-        Test3::Test3(greng::GrengSystemsSet& greng) : Test1(greng) {
+        Test3::Test3(greng::Greng& greng) : Test1(greng) {
             SetProcessors();
 
             InitObjects();
@@ -80,7 +80,7 @@ namespace drash {
             Matrix4f m;
             MatrixRotationX(m, angle);
             MatrixMultiply(m, origin, pos);
-            GetGrengSystems().GetRenderer().DrawPoint(GetCamera(), pos, 10,
+            GetGreng().GetRenderer().DrawPoint(GetCamera(), pos, 10,
                                                       Color4f(1, 0, 0), false);
 
             angle += 0.01;

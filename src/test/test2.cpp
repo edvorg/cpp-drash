@@ -36,10 +36,10 @@ namespace drash {
 
     namespace test {
 
-        Test2::Test2(greng::GrengSystemsSet& greng) : App(greng) {
+        Test2::Test2(greng::Greng& greng) : App(greng) {
             greng::CameraParams cp;
             cp.pos.Set(0, 0, 300);
-            camera = GetGrengSystems().GetCameraManager().CreateCamera(cp);
+            camera = GetGreng().GetCameraManager().CreateCamera(cp);
 
             GetDebugRenderer().SetCamera(camera);
 

@@ -35,7 +35,7 @@ namespace drash {
 
         class Test5 : public Test3 {
         public:
-            Test5(greng::GrengSystemsSet& greng);
+            Test5(greng::Greng& greng);
 
         protected:
             virtual void Step(double _dt) override;

@@ -56,7 +56,7 @@ SOURCES += \
     src/test/test8.cpp \
     src/misc/rotationablepoint.cpp \
     src/test/test9.cpp \
-    src/greng/grengsystemsset.cpp \
+    src/greng/greng.cpp \
     src/test/test10.cpp \
     src/test/test11.cpp \
     src/test/test12.cpp \

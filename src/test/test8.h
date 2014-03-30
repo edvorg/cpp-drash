@@ -35,7 +35,7 @@ namespace drash {
 
         class Test8 : public App {
         public:
-            Test8(greng::GrengSystemsSet& greng);
+            Test8(greng::Greng& greng);
             ~Test8();
 
         private:

@@ -27,12 +27,12 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    App::App(greng::GrengSystemsSet& greng)
-        : grengSystems(greng), scene({}), playersSystem(scene),
+    App::App(greng::Greng& greng)
+        : greng(greng), scene({}), playersSystem(scene),
           geometryManager(scene), eventSystem(),
-          uISystem(GetGrengSystems().GetRenderer()),
+          uISystem(GetGreng().GetRenderer()),
           levelManager(scene, geometryManager),
-          debugRenderer(grengSystems, scene, geometryManager) {}
+          debugRenderer(greng, scene, geometryManager) {}
 
     void App::Step(double _dt) {
         if (quit) {
@@ -42,7 +42,7 @@ namespace drash {
 
         currentTimeDelta = _dt;
 
-        grengSystems.Step(_dt);
+        greng.Step(_dt);
         eventSystem.Process();
         scene.Step(_dt);
         playersSystem.Step(_dt);

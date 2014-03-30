@@ -32,14 +32,14 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../debugrenderer/debugrenderer.h"
 #include "appeventsystem.h"
 #include "../ui/uisystem.h"
-#include "../greng/grengsystemsset.h"
+#include "../greng/greng.h"
 #include "../levelmanager/levelmanager.h"
 
 namespace drash {
 
     class App {
     public:
-        App(greng::GrengSystemsSet& greng);
+        App(greng::Greng& greng);
         virtual ~App() = default;
 
         virtual void Step(double _dt);
@@ -57,7 +57,7 @@ namespace drash {
         auto& GetDebugRenderer() { return debugRenderer; }
         auto& GetUISystem() { return uISystem; }
         auto& GetLevelManager() { return levelManager; }
-        auto& GetGrengSystems() { return grengSystems; }
+        auto& GetGreng() { return greng; }
 
         /// used to make App childs about mouse moving event
         /// use this from your App back end (Qt, SDL, etc.)
@@ -75,7 +75,7 @@ namespace drash {
     private:
         Vec2f cursorPos = Vec2f(0);
 
-        greng::GrengSystemsSet& grengSystems;
+        greng::Greng& greng;
         Scene scene;
         PlayersSystem playersSystem;
         GeometryManager geometryManager;

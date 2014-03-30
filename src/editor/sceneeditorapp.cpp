@@ -330,7 +330,7 @@ namespace drash {
         greng::CameraParams p;
         p.pos.Set(10, 10, 10.0f);
         p.rotation.Set(-M_PI / 4, M_PI / 4, 0);
-        camera = GetGrengSystems().GetCameraManager().CreateCamera(p);
+        camera = GetGreng().GetCameraManager().CreateCamera(p);
 
         if (camera == nullptr) {
             return false;
@@ -350,7 +350,7 @@ namespace drash {
     bool SceneEditorApp::InitSpecialPoint() {
         moveablePoint.SetCamera(camera);
 
-        rotationablePoint.SetRenderer(&GetGrengSystems().GetRenderer());
+        rotationablePoint.SetRenderer(&GetGreng().GetRenderer());
 
         rotationablePoint.SetCamera(camera);
 
@@ -379,7 +379,7 @@ namespace drash {
             return;
         }
 
-        moveablePoint.Render(GetGrengSystems().GetRenderer());
+        moveablePoint.Render(GetGreng().GetRenderer());
         rotationablePoint.Render();
     }
 

@@ -32,7 +32,7 @@ namespace drash {
 
         using namespace greng;
 
-        Test4::Test4(greng::GrengSystemsSet& greng) : App(greng) {
+        Test4::Test4(greng::Greng& greng) : App(greng) {
             testButton1.Connect(&GetUISystem());
 
             testButton1.SetClickHandler([]() { LOG_INFO("click 1"); });
@@ -71,7 +71,7 @@ namespace drash {
             params.pos.Set(10, 10, 10.0f);
             params.rotation.Set(-M_PI / 4, M_PI / 4, 0);
             Camera* camera =
-                GetGrengSystems().GetCameraManager().CreateCamera(params);
+                GetGreng().GetCameraManager().CreateCamera(params);
 
             point.SetCamera(camera);
             point.SetCenter(testPoint);
@@ -92,7 +92,7 @@ namespace drash {
 
         void Test4::Render() {
             App::Render();
-            point.Render(GetGrengSystems().GetRenderer());
+            point.Render(GetGreng().GetRenderer());
         }
 
     } // namespace test
