@@ -60,6 +60,7 @@ namespace greng {
         auto& GetPos() const { return posAnimator; }
         auto& GetRotation() { return rotationAnimator; }
         auto& GetAspectRatio() { return aspectRatioAnimator; }
+        auto& GetAspectRatio() const { return aspectRatioAnimator; }
 
         void LookAt(const CVec3f& _point);
 

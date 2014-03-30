@@ -43,6 +43,7 @@ namespace drash {
 
             greng::CCamera* camera = {};
             greng::CPointLight light{};
+            unsigned int delta = 0;
         };
 
     } // namespace test
@@ -50,6 +51,9 @@ namespace drash {
 } // namespace drash
 
 #endif // DRASH_TEST_TEST11_H
+
+
+
 
 
 

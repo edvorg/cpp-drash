@@ -107,11 +107,16 @@ namespace greng {
         void DrawPoint(const CCamera& _camera, const CVec3f& _p, float _size,
                        const CColor4f& _col, bool _depth_test = true) const;
 
-        void DrawDigit(const CVec2f& _pos, const CVec2f& _size,
-                       unsigned int _digit);
+        void DrawChar(const CCamera& _camera, const CVec2f& _pos,
+                      const CVec2f& _size, char _c);
 
-        void DrawNumber(bool fromLeft, const CVec2f& _pos, const CVec2f& _size,
+        void DrawNumber(const CCamera& _camera, bool fromLeft,
+                        const CVec2f& _pos, const CVec2f& _size,
                         unsigned int number);
+
+        void DrawString(const CCamera& _camera, bool fromLeft,
+                        const CVec2f& _pos, const CVec2f& _size,
+                        const std::string& _str);
     };
 
 } // namespace greng

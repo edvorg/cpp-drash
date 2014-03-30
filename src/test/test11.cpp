@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../greng/camera.h"
 #include "../scene/sceneobject.h"
 #include "../scene/figure.h"
+#include <sstream>
 
 namespace drash {
 
@@ -61,16 +62,26 @@ namespace drash {
             GetEventSystem().SetProcessor("SPC", CAppEventProcessor([this] {
                         camera->SetOrtho(!camera->IsOrtho());                    
                     }));
+
+            GetEventSystem().SetProcessor("C-q", CAppEventProcessor([this] {
+                        Quit();
+                    }));
         }
 
         void CTest11::Step(double _dt) {
             CApp::Step(_dt);
             camera->LookAt({0, 0, 0});
             light.position = camera->GetPos();
+            delta = _dt * 1000;
         }
 
         void CTest11::Render() {
             CApp::Render();
+            std::ostringstream str;
+            str << "abcdefghijklmnopqrstuvwxyz_ " << delta;
+            GetGrengSystems().GetRenderer().DrawString(
+                *camera, true, {-100 + 10, 100 / camera->GetAspectRatio() - 10}, {1, 1},
+                str.str());
         }
 
     } // namespace test
