@@ -46,8 +46,7 @@ namespace drash {
             uiCamera = GetGreng().GetCameraManager().CreateCamera({});
             uiCamera->GetPos() = { 0, 0, 1 };
             uiCamera->SetOrtho(true);
-            uiCamera->GetOrthoWidth() = 0.5;
-            uiCamera->GetOrthoHeight() = 0.5;
+            uiCamera->GetOrthoSize() = { 0.5, 0.5 };
             uiCamera->GetDepthOfView() = 100;
 
             light1.position.Set(0, 0, 20);

@@ -53,8 +53,7 @@ namespace greng {
         void SetOrtho(bool _ortho) { ortho = _ortho; }
         bool IsOrtho() const { return ortho; }
 
-        auto& GetOrthoWidth() { return orthoWidthAnimator; }
-        auto& GetOrthoHeight() { return orthoHeightAnimator; }
+        auto& GetOrthoSize() { return orthoSizeAnimator; }
         auto& GetFov() { return fovAnimator; }
         auto& GetDepthOfView() { return depthOfViewAnimator; }
         auto& GetPos() { return posAnimator; }
@@ -85,14 +84,12 @@ namespace greng {
         void ComputeMatrices();
 
         bool ortho = false;
-        float orthoWidth;
-        float orthoHeight;
+        Vec2f orthoSize;
         float fov;
         float depthOfView;
         Vec3f pos;
         Vec2f rotation;
-        Animator<float> orthoWidthAnimator = orthoWidth;
-        Animator<float> orthoHeightAnimator = orthoHeight;
+        Animator<Vec2f> orthoSizeAnimator = orthoSize;
         Animator<float> fovAnimator = fov;
         Animator<float> depthOfViewAnimator = depthOfView;
         Animator<Vec3f> posAnimator = pos;

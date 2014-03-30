@@ -54,7 +54,7 @@ namespace greng {
         }
 
         res->aspectRatioAnimator = aspectRatio;
-        res->orthoWidthAnimator = _params.orthoWidth;
+        res->orthoSizeAnimator = _params.orthoSize;
         res->fovAnimator = _params.fov;
         res->depthOfViewAnimator = _params.depthOfView;
         res->posAnimator = _params.pos;

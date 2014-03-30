@@ -43,8 +43,7 @@ namespace drash {
             camera->GetDepthOfView() = 100;
             camera->GetPos() = { 0, 0, 10 };
             camera->SetOrtho(true);
-            camera->GetOrthoWidth() = 1;
-            camera->GetOrthoHeight() = 1;
+            camera->GetOrthoSize() = { 1, 1 };
             texture = GetGreng().GetTextureManager().CreateTextureFromFile(
                 "assets/space/diffuse.png");
             renderTarget = GetGreng().GetTextureManager().CreateTexture(

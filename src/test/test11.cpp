@@ -40,20 +40,17 @@ namespace drash {
                                        AnimatorBehavior::Bounce);
             camera->SetOrtho(true);
 
-            camera->GetOrthoWidth() = 10;
-            camera->GetOrthoHeight() =
-                10.0 / GetGreng().GetViewport().GetAspectRatio();
+            camera->GetOrthoSize() =
+                { 10, 10.0 / GetGreng().GetViewport().GetAspectRatio() };
 
-            camera->GetOrthoWidth().SetTarget(2, 5, AnimatorBehavior::Bounce);
-            camera->GetOrthoHeight().SetTarget(
-                2 / GetGreng().GetViewport().GetAspectRatio(), 5,
+            camera->GetOrthoSize().SetTarget(
+                { 2, 2 / GetGreng().GetViewport().GetAspectRatio() }, 5,
                 AnimatorBehavior::Bounce);
 
             uiCamera = GetGreng().GetCameraManager().CreateCamera({});
             uiCamera->SetOrtho(true);
-            uiCamera->GetOrthoWidth() = 100;
-            uiCamera->GetOrthoHeight() =
-                100.0 / GetGreng().GetViewport().GetAspectRatio();
+            uiCamera->GetOrthoSize() =
+                { 100, 100.0 / GetGreng().GetViewport().GetAspectRatio() };
             uiCamera->GetPos() = { 0, 0, 10 };
             uiCamera->GetDepthOfView() = 50;
 

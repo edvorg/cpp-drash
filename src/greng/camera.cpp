@@ -33,11 +33,7 @@ namespace greng {
     void Camera::Step(double _dt) {
         bool compute_matrices = false;
 
-        if (orthoWidthAnimator.Step(_dt)) {
-            compute_matrices = true;
-        }
-
-        if (orthoHeightAnimator.Step(_dt)) {
+        if (orthoSizeAnimator.Step(_dt)) {
             compute_matrices = true;
         }
 
@@ -163,8 +159,8 @@ namespace greng {
 
         if (ortho) {
             projectionMatrix.Identity();
-            projectionMatrix.data[projectionMatrix.i00] = 1.0 / orthoWidth;
-            projectionMatrix.data[projectionMatrix.i11] = 1.0 / orthoHeight;
+            projectionMatrix.data[projectionMatrix.i00] = 1.0 / orthoSize.x;
+            projectionMatrix.data[projectionMatrix.i11] = 1.0 / orthoSize.y;
             projectionMatrix.data[projectionMatrix.i22] = -1.0 / depthOfView;
         } else {
             Matrix4Perspective(projectionMatrix, fov, aspectRatio, 1.0,

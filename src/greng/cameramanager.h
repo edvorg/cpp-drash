@@ -31,12 +31,13 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace greng {
 
     using drash::Vec3f;
+    using drash::Vec2f;
     class Camera;
 
     class CameraParams {
     public:
         bool ortho = false;
-        float orthoWidth = 1.0f;
+        Vec2f orthoSize = { 1, 1 };
         float fov = M_PI / 4.0f;
         float depthOfView = 1000.0f;
         Vec3f pos = { 0, 0, 0 };
