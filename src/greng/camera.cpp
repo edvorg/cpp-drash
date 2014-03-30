@@ -159,14 +159,14 @@ namespace greng {
 
         if (ortho) {
             projectionMatrix.Identity();
-            projectionMatrix.data[projectionMatrix.i00] = 1.0 / orthoWidth;         
-            projectionMatrix.data[projectionMatrix.i11] = aspectRatio / orthoWidth;
-            projectionMatrix.data[projectionMatrix.i22] = - 1.0 / depthOfView;
-        }
-        else {
+            projectionMatrix.data[projectionMatrix.i00] = 1.0 / orthoWidth;
+            projectionMatrix.data[projectionMatrix.i11] =
+                aspectRatio / orthoWidth;
+            projectionMatrix.data[projectionMatrix.i22] = -1.0 / depthOfView;
+        } else {
             Matrix4Perspective(projectionMatrix, fov, aspectRatio, 1.0,
                                depthOfView + 1.0f);
-        }            
+        }
 
         viewMatrixTransposed = viewMatrix;
         viewMatrixTransposed.Transpose();
@@ -176,12 +176,3 @@ namespace greng {
     }
 
 } // namespace greng
-
-
-
-
-
-
-
-
-

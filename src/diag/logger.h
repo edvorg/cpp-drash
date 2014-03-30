@@ -71,11 +71,12 @@ namespace drash {
             return *this;
         }
 
-        if (messageRepeats) (*this) << "repeated " << messageRepeats << "times";
-        
-        lastMessaage = _str;        
-        messageRepeats = 0;        
-        
+        if (messageRepeats)
+            (*this) << "repeated " << messageRepeats << "times";
+
+        lastMessaage = _str;
+        messageRepeats = 0;
+
         return (*this) << _str.c_str();
     }
 

@@ -35,42 +35,43 @@ namespace drash {
 
         CTest11::CTest11() {
             camera = GetGrengSystems().GetCameraManager().CreateCamera({});
-            camera->GetPos() = {-10,10,10};            
-            camera->GetPos().SetTarget({10,-10,10}, 10, AnimatorBehavior::Bounce);
+            camera->GetPos() = { -10, 10, 10 };
+            camera->GetPos().SetTarget({ 10, -10, 10 }, 10,
+                                       AnimatorBehavior::Bounce);
             camera->SetOrtho(true);
             camera->GetOrthoWidth().Set(10);
             camera->GetOrthoWidth().SetTarget(2, 5, AnimatorBehavior::Bounce);
-            
+
             GetDebugRenderer().SetCamera(camera);
             GetDebugRenderer().SetLight(&light);
             GetDebugRenderer().SetTexCoordsScale(0.3);
 
             CFigureParams f;
-            f.vertices.push_back({-1, 0});
-            f.vertices.push_back({0, 1});
-            f.vertices.push_back({1, 0});
+            f.vertices.push_back({ -1, 0 });
+            f.vertices.push_back({ 0, 1 });
+            f.vertices.push_back({ 1, 0 });
             f.depth = 1;
-            
+
             CSceneObjectGeometry g;
             g.figures.push_back(f);
-            
+
             CSceneObjectParams p;
             p.dynamic = false;
-            
+
             GetScene().CreateObject(g, p);
 
             GetEventSystem().SetProcessor("SPC", CAppEventProcessor([this] {
-                        camera->SetOrtho(!camera->IsOrtho());                    
-                    }));
+                                                     camera->SetOrtho(
+                                                         !camera->IsOrtho());
+                                                 }));
 
-            GetEventSystem().SetProcessor("C-q", CAppEventProcessor([this] {
-                        Quit();
-                    }));
+            GetEventSystem().SetProcessor(
+                "C-q", CAppEventProcessor([this] { Quit(); }));
         }
 
         void CTest11::Step(double _dt) {
             CApp::Step(_dt);
-            camera->LookAt({0, 0, 0});
+            camera->LookAt({ 0, 0, 0 });
             light.position = camera->GetPos();
             delta = _dt * 1000;
         }
@@ -80,20 +81,11 @@ namespace drash {
             std::ostringstream str;
             str << "abcdefghijklmnopqrstuvwxyz_ " << delta;
             GetGrengSystems().GetRenderer().DrawString(
-                *camera, true, {-100 + 10, 100 / camera->GetAspectRatio() - 10}, {1, 1},
+                *camera, true,
+                { -100 + 10, 100 / camera->GetAspectRatio() - 10 }, { 1, 1 },
                 str.str());
         }
 
     } // namespace test
 
 } // namespace drash
-
-
-
-
-
-
-
-
-
-

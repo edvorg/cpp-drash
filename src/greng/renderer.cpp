@@ -244,10 +244,10 @@ namespace greng {
 
         glDisable(GL_TEXTURE_2D);
     }
-    
-    void CRenderer::DrawTriangle(const CVec2f& _p1,
-                                 const CVec2f& _p2, const CVec2f& _p3,
-                                 const CColor4f& _col, bool _depth_test) const {
+
+    void CRenderer::DrawTriangle(const CVec2f& _p1, const CVec2f& _p2,
+                                 const CVec2f& _p3, const CColor4f& _col,
+                                 bool _depth_test) const {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glMatrixMode(GL_PROJECTION);
@@ -517,68 +517,62 @@ namespace greng {
             indices = inds;
         } else if (_c == 'a') {
             static const int corn = 6;
-            static GLfloat verts[corn * 2] = {-1.0f, 0.0f,
-                                              1.0f, 0.0f,
-                                              1.0f, -1.0f,
-                                              -1.0f, -1.0f, 
-                                              -1.0f, -0.5f, 
-                                              1.0f, -0.5f,};
-            static GLubyte inds[corn] = {0, 1, 2, 3, 4, 5,};
+            static GLfloat verts[corn * 2] = { -1.0f, 0.0f,  1.0f,  0.0f,
+                                               1.0f,  -1.0f, -1.0f, -1.0f,
+                                               -1.0f, -0.5f, 1.0f,  -0.5f, };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, 4, 5, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'b') {
             static const int corn = 5;
-            static GLfloat verts[corn * 2] = {-1.0f, 1.0f, -1.0f, -1.0f, 1.0f,
-                                              -1.0f,  1.0f, 0.0f, -1.0f, 0.0f,};
-            static GLubyte inds[corn] = {0, 1, 2, 3, 4,};
+            static GLfloat verts[corn * 2] = {
+                -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 0.0f, -1.0f, 0.0f,
+            };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, 4, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'c') {
             static const int corn = 4;
-            static GLfloat verts[corn * 2] = {1.0f, -1.0f, -1.0f, -1.0f, -1.0f,
-                                              0.0f, 1.0f, 0.0f,};
-            static GLubyte inds[corn] = {0, 1, 2, 3,};
+            static GLfloat verts[corn * 2] = { 1.0f,  -1.0f, -1.0f, -1.0f,
+                                               -1.0f, 0.0f,  1.0f,  0.0f, };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'd') {
             static const int corn = 5;
-            static GLfloat verts[corn * 2] = {1.0f, 1.0f, 1.0f, -1.0f, -1.0f,
-                                              -1.0f,  -1.0f, 0.0f, 1.0f, 0.0f,};
-            static GLubyte inds[corn] = {0, 1, 2, 3, 4,};
+            static GLfloat verts[corn * 2] = {
+                1.0f, 1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+            };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, 4, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'e') {
             static const int corn = 7;
-            static GLfloat verts[corn * 2] = {1.0f, 0.0f,
-                                              -1.0f, 0.0f,
-                                              -1.0f, -0.5f,
-                                              1.0f, -0.5f,
-                                              -1.0f, -0.5f,
-                                              -1.0f, -1.0f,
-                                              1.0f, -1.0f,};
-            static GLubyte inds[corn] = {0, 1, 2, 3, 4, 5, 6,};
+            static GLfloat verts[corn * 2] = { 1.0f,  0.0f,  -1.0f, 0.0f,
+                                               -1.0f, -0.5f, 1.0f,  -0.5f,
+                                               -1.0f, -0.5f, -1.0f, -1.0f,
+                                               1.0f,  -1.0f, };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, 4, 5, 6, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'f') {
             static const int corn = 5;
-            static GLfloat verts[corn * 2] = {0.0f, 1.0f,
-                                              -1.0f, 1.0f,
-                                              -1.0f, -1.0f,
-                                              -1.0f, 0.0f, 
-                                              0.0f, 0.0f,};
-            static GLubyte inds[corn] = {0, 1, 2, 3, 4,};
+            static GLfloat verts[corn * 2] = {
+                0.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+            };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, 4, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'g') {
             static const int corn = 7;
-            static GLfloat verts[corn * 2] = { 0.0f,  1.0f,  1.0f, 1.0f, 1.0f,
-                                               0.0f,  -1.0f,  0.0f,  -1.0f, -1.0f,
+            static GLfloat verts[corn * 2] = { 0.0f, 1.0f,  1.0f, 1.0f,  1.0f,
+                                               0.0f, -1.0f, 0.0f, -1.0f, -1.0f,
                                                1.0f, -1.0f, 1.0f, 0.0f, };
             static GLubyte inds[corn] = { 0, 1, 2, 3, 4, 5, 6, };
             corners = corn;
@@ -595,179 +589,161 @@ namespace greng {
             indices = inds;
         } else if (_c == 'i') {
             static const int corn = 2;
-            static GLfloat verts[corn * 2] = {-1.0f, 0.0f,
-                                              -1.0f, -1.0f,};
-            static GLubyte inds[corn] = {0, 1,};
+            static GLfloat verts[corn * 2] = { -1.0f, 0.0f, -1.0f, -1.0f, };
+            static GLubyte inds[corn] = { 0, 1, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'j') {
             static const int corn = 3;
-            static GLfloat verts[corn * 2] = {-1.0f, -1.0f,
-                                              0.0f, -1.0f,
-                                              0.0f, 1.0f,};
-            static GLubyte inds[corn] = {0, 1, 2,};
+            static GLfloat verts[corn * 2] = { -1.0f, -1.0f, 0.0f,
+                                               -1.0f, 0.0f,  1.0f, };
+            static GLubyte inds[corn] = { 0, 1, 2, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'k') {
             static const int corn = 6;
-            static GLfloat verts[corn * 2] = {-1.0f, 1.0f,
-                                              -1.0f, -1.0f,
-                                              -1.0f, -0.25f,
-                                              0.0f, .0f,
-                                              -1.0f, -0.25f,
-                                              0.0f, -1.0f,};
-            static GLubyte inds[corn] = {0, 1, 2, 3, 4, 5,};
+            static GLfloat verts[corn * 2] = { -1.0f, 1.0f,   -1.0f, -1.0f,
+                                               -1.0f, -0.25f, 0.0f,  .0f,
+                                               -1.0f, -0.25f, 0.0f,  -1.0f, };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, 4, 5, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'l') {
             static const int corn = 2;
-            static GLfloat verts[corn * 2] = {-1.0f, 1.0f,
-                                              -1.0f, -1.0f,};
-            static GLubyte inds[corn] = {0, 1,};
+            static GLfloat verts[corn * 2] = { -1.0f, 1.0f, -1.0f, -1.0f, };
+            static GLubyte inds[corn] = { 0, 1, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'm') {
-            static const int corn = 7;            
-            static GLfloat verts[corn * 2] = {-1.0f, -1.0f,
-                                              -1.0f, 0.0f,
-                                              1.0f, 0.0f,
-                                              1.0f, -1.0f,
-                                              1.0f, 0.0f,
-                                              0.0f, 0.0f,
-                                              0.0f, -1.0f,};
-            static GLubyte inds[corn] = {0, 1, 2, 3, 4, 5, 6,};
+            static const int corn = 7;
+            static GLfloat verts[corn * 2] = { -1.0f, -1.0f, -1.0f, 0.0f,  1.0f,
+                                               0.0f,  1.0f,  -1.0f, 1.0f,  0.0f,
+                                               0.0f,  0.0f,  0.0f,  -1.0f, };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, 4, 5, 6, };
             corners = corn;
             vertices = verts;
-            indices = inds;            
+            indices = inds;
         } else if (_c == 'n') {
-            static const int corn = 4;            
-            static GLfloat verts[corn * 2] = {-1.0f, -1.0f,
-                                              -1.0f, 0.0f,
-                                              0.0f, 0.0f,
-                                              0.0f, -1.0f,};
-            static GLubyte inds[corn] = {0, 1, 2, 3,};
+            static const int corn = 4;
+            static GLfloat verts[corn * 2] = { -1.0f, -1.0f, -1.0f, 0.0f,
+                                               0.0f,  0.0f,  0.0f,  -1.0f, };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'o') {
             static const int corn = 5;
-            static GLfloat verts[corn * 2] = {1.0f, -1.0f, -1.0f, -1.0f, -1.0f,
-                                              0.0f, 1.0f, 0.0f, 1.0f, -1.0f, };
-            static GLubyte inds[corn] = {0, 1, 2, 3, 4,};
+            static GLfloat verts[corn * 2] = {
+                1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f, -1.0f,
+            };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, 4, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'p') {
             static const int corn = 5;
-            static GLfloat verts[corn * 2] = {-1.0f, -2.0f, -1.0f, 0.0f, 1.0f,
-                                              0.0f, 1.0f, -1.0f, -1.0f, -1.0f,};
-            static GLubyte inds[corn] = {0, 1, 2, 3, 4,};
+            static GLfloat verts[corn * 2] = { -1.0f, -2.0f, -1.0f, 0.0f,
+                                               1.0f,  0.0f,  1.0f,  -1.0f,
+                                               -1.0f, -1.0f, };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, 4, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'q') {
             static const int corn = 5;
-            static GLfloat verts[corn * 2] = {1.0f, -2.0f, 1.0f, 0.0f, -1.0f,
-                                              0.0f, -1.0f, -1.0f, 1.0f, -1.0f,};
-            static GLubyte inds[corn] = {0, 1, 2, 3, 4,};
+            static GLfloat verts[corn * 2] = {
+                1.0f, -2.0f, 1.0f, 0.0f, -1.0f, 0.0f, -1.0f, -1.0f, 1.0f, -1.0f,
+            };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, 4, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'r') {
             static const int corn = 3;
-            static GLfloat verts[corn * 2] = {-1.0f, -1.0f,
-                                              -1.0f, 0.0f,
-                                              0.0f, 0.0f,};
-            static GLubyte inds[corn] = {0, 1, 2,};
+            static GLfloat verts[corn * 2] = { -1.0f, -1.0f, -1.0f,
+                                               0.0f,  0.0f,  0.0f, };
+            static GLubyte inds[corn] = { 0, 1, 2, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 's') {
             static const int corn = 6;
-            static GLfloat verts[corn * 2] = { 1.0f, 0.0f,  -1.0f,  0.0f,
-                                               -1.0f,  -0.5f,  1.0f, -0.5f,
-                                               1.0f, -1.0f, -1.0f,  -1.0f, };
+            static GLfloat verts[corn * 2] = { 1.0f,  0.0f,  -1.0f, 0.0f,
+                                               -1.0f, -0.5f, 1.0f,  -0.5f,
+                                               1.0f,  -1.0f, -1.0f, -1.0f, };
             static GLubyte inds[corn] = { 0, 1, 2, 3, 4, 5, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 't') {
             static const int corn = 5;
-            static GLfloat verts[corn * 2] = {0.0f, -1.0f,
-                                              -1.0f, -1.0f,
-                                              -1.0f, 1.0f,
-                                              -1.0f, 0.0f, 
-                                              0.0f, 0.0f,};
-            static GLubyte inds[corn] = {0, 1, 2, 3, 4,};
+            static GLfloat verts[corn * 2] = {
+                0.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+            };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, 4, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'u') {
             static const int corn = 4;
-            static GLfloat verts[corn * 2] = {-1.0f, 0.0f,
-                                              -1.0f, -1.0f,
-                                              1.0f, -1.0f,
-                                              1.0f, 0.0f,};
-            static GLubyte inds[corn] = {0, 1, 2, 3,};
+            static GLfloat verts[corn * 2] = { -1.0f, 0.0f,  -1.0f, -1.0f,
+                                               1.0f,  -1.0f, 1.0f,  0.0f, };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'v') {
             static const int corn = 3;
-            static GLfloat verts[corn * 2] = {-1.0f, 0.0f,
-                                              -0.5f, -1.0f,
-                                              0.0f, 0.0f,};
-            static GLubyte inds[corn] = {0, 1, 2,};
+            static GLfloat verts[corn * 2] = { -1.0f, 0.0f, -0.5f,
+                                               -1.0f, 0.0f, 0.0f, };
+            static GLubyte inds[corn] = { 0, 1, 2, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'w') {
             static const int corn = 5;
-            static GLfloat verts[corn * 2] = {-1.0f, 0.0f,
-                                              -0.5f, -1.0f,
-                                              0.0f, 0.0f,
-                                              0.5f, -1.0f,
-                                              1.0f, 0.0f,};
-            static GLubyte inds[corn] = {0, 1, 2, 3, 4,};
+            static GLfloat verts[corn * 2] = {
+                -1.0f, 0.0f, -0.5f, -1.0f, 0.0f, 0.0f, 0.5f, -1.0f, 1.0f, 0.0f,
+            };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, 4, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'x') {
             static const int corn = 5;
-            static GLfloat verts[corn * 2] = {-1.0f, -1.0f,  0.0f,  0.0f,
-                                              -0.5f, -0.5f, -1.0f,  0.0f,
-                                              0.0f,  -1.0f,};
-            static GLubyte inds[corn] = { 0, 1, 2, 3, 4,};
+            static GLfloat verts[corn * 2] = {
+                -1.0f, -1.0f, 0.0f, 0.0f, -0.5f,
+                -0.5f, -1.0f, 0.0f, 0.0f, -1.0f,
+            };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, 4, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'y') {
             static const int corn = 6;
-            static GLfloat verts[corn * 2] = {
-                -1.0f, 0.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 1.0f, -2.0f,
-                 0.0f, -2.0f,
-            };
-            static GLubyte inds[corn] = { 0, 1, 2, 3, 4, 5,};
+            static GLfloat verts[corn * 2] = { -1.0f, 0.0f,  -1.0f, -1.0f,
+                                               1.0f,  -1.0f, 1.0f,  0.0f,
+                                               1.0f,  -2.0f, 0.0f,  -2.0f, };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, 4, 5, };
             corners = corn;
             vertices = verts;
             indices = inds;
         } else if (_c == 'z') {
             static const int corn = 4;
-            static GLfloat verts[corn * 2] = { -1.0f, 0.0f,  1.0f,  0.0f,
-                                               -1.0f, -1.0f, 1.0f,  -1.0f, };
-            static GLubyte inds[corn] = { 0, 1, 2, 3,};
+            static GLfloat verts[corn * 2] = { -1.0f, 0.0f,  1.0f, 0.0f,
+                                               -1.0f, -1.0f, 1.0f, -1.0f, };
+            static GLubyte inds[corn] = { 0, 1, 2, 3, };
             corners = corn;
             vertices = verts;
             indices = inds;
-        }
-        else if (_c == '_') {
+        } else if (_c == '_') {
             static const int corn = 2;
-            static GLfloat verts[corn * 2] = {-1.0f, -1.0f, 1.0f, -1.0f,};
-            static GLubyte inds[corn] = {0, 1,};
+            static GLfloat verts[corn * 2] = { -1.0f, -1.0f, 1.0f, -1.0f, };
+            static GLubyte inds[corn] = { 0, 1, };
             corners = corn;
             vertices = verts;
             indices = inds;
@@ -801,19 +777,11 @@ namespace greng {
     }
 
     static float CharWidth(char _c) {
-        if (_c == 'l' ||
-            _c == '1' ||
-            _c == 'i')
+        if (_c == 'l' || _c == '1' || _c == 'i')
             return 0.5f;
 
-        if (_c == 'f' ||
-            _c == 't' ||
-            _c == 'k' ||
-            _c == 'j' ||
-            _c == 'n' ||
-            _c == 'r' ||
-            _c == 'v' ||
-            _c == 'x')
+        if (_c == 'f' || _c == 't' || _c == 'k' || _c == 'j' || _c == 'n' ||
+            _c == 'r' || _c == 'v' || _c == 'x')
             return 1.5f;
 
         return 2.5f;
@@ -835,7 +803,7 @@ namespace greng {
             while (digits.size()) {
                 DrawChar(_camera, pos, _size, digits.top() + '0');
                 pos.x += _size.x * CharWidth(digits.top() + '0');
-                digits.pop();                
+                digits.pop();
             }
         } else {
             do {
@@ -848,7 +816,7 @@ namespace greng {
 
     void CRenderer::DrawString(const CCamera& _camera, bool fromLeft,
                                const CVec2f& _pos, const CVec2f& _size,
-                               const std::string& _str) {        
+                               const std::string& _str) {
         auto pos = _pos;
 
         if (fromLeft) {
@@ -856,30 +824,12 @@ namespace greng {
                 DrawChar(_camera, pos, _size, c);
                 pos.x += _size.x * CharWidth(c);
             }
-        }
-        else {
+        } else {
             for (auto i = _str.size() - 1; i > 0; --i) {
                 DrawChar(_camera, pos, _size, _str[i]);
-                pos.x -= _size.x * 2.5f;                
+                pos.x -= _size.x * 2.5f;
             }
         }
     }
 
 } // namespace greng
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -429,10 +429,11 @@ namespace drash {
                 "assets/floor/diffuse.png");
         texture1Normal = grengSystems.GetTextureManager().CreateTextureFromFile(
             "assets/floor/normal.png");
-        texture1Specular = grengSystems.GetTextureManager().CreateTextureFromFile(
-            "assets/floor/specular.png");
+        texture1Specular =
+            grengSystems.GetTextureManager().CreateTextureFromFile(
+                "assets/floor/specular.png");
 
-        if (texture1Diffuse == nullptr || texture1Normal == nullptr  ||
+        if (texture1Diffuse == nullptr || texture1Normal == nullptr ||
             texture1Specular == nullptr) {
             return false;
         }
