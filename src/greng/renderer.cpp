@@ -22,6 +22,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
+#define GL_GLEXT_PROTOTYPES
 #include <GL/glew.h>
 #include <stack>
 #include "renderer.h"
@@ -31,12 +32,12 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "pointlight.h"
 #include "spotlight.h"
 #include "camera.h"
+#include "framebuffer.hpp"
+#include "viewport.hpp"
 
 namespace greng {
 
     using drash::CLogger;
-
-    CRenderer::~CRenderer() {}
 
     void CRenderer::RenderMesh(
         const CMesh* _mesh, unsigned int _submesh,
@@ -44,9 +45,21 @@ namespace greng {
         const CShaderProgram* _program, const drash::CMatrix4f* _model,
         const drash::CMatrix4f* _view, const drash::CMatrix4f* _model_view,
         const drash::CMatrix4f* _proj_matrix, const CPointLight* _light,
-        const CSpotLight* _spot_light, const CVec3f* _view_pos) {
+        const CSpotLight* _spot_light, const CVec3f* _view_pos,
+        const CFrameBuffer* _frame_buffer) {
         if (_submesh >= _mesh->materialOffsets.size() - 1) {
             return;
+        }
+
+        if (_frame_buffer != lastFrameBuffer) {
+            lastFrameBuffer = _frame_buffer;
+            auto bufferId =
+                lastFrameBuffer ? lastFrameBuffer->frameBufferBufferId : 0;
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, bufferId);
+            glClearColor(1, 0, 0, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
+            glViewport(viewport.GetLeftBottom().x, viewport.GetLeftBottom().y,
+                       viewport.GetRightTop().x, viewport.GetRightTop().y);
         }
 
         // glCullFace(GL_BACK);

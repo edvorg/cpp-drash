@@ -35,7 +35,7 @@ namespace drash {
 
     namespace test {
 
-        CTest6::CTest6() : CTest1() {
+        CTest6::CTest6(greng::CGrengSystemsSet& greng) : CTest1(greng) {
             InitCamera();
             InitLevel();
             InitPlayer();

@@ -22,6 +22,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
+#define GL_GLEXT_PROTOTYPES
 #include <GL/glew.h>
 #include "meshmanager.h"
 #include "mesh.h"

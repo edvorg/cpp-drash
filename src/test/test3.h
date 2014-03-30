@@ -37,7 +37,7 @@ namespace drash {
 
         class CTest3 : public CTest1 {
         public:
-            CTest3();
+            CTest3(greng::CGrengSystemsSet& greng);
 
         protected:
             virtual void Step(double _dt) override;

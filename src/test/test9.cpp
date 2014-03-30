@@ -30,8 +30,8 @@ namespace drash {
 
     namespace test {
 
-        CTest9::CTest9()
-            : CApp(),
+        CTest9::CTest9(greng::CGrengSystemsSet& greng)
+            : CApp(greng),
               camera{ GetGrengSystems().GetCameraManager().CreateCamera({}) },
               point1{ GetGrengSystems().GetRenderer(), *camera } {
             InitCamera();

@@ -27,7 +27,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace greng {
 
     CGrengSystemsSet::CGrengSystemsSet()
-        : renderer(), cameraManager(), meshManager(), textureManager(),
+        : viewport(), renderer(viewport), cameraManager(),
+          meshManager(), textureManager(), frameBufferManager(),
           vertexShaderManager(), fragmentShaderManager(),
           shaderProgramManager() {}
 

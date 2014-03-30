@@ -33,14 +33,21 @@ namespace drash {
 
     namespace test {
 
-        CTest11::CTest11() {
+        CTest11::CTest11(greng::CGrengSystemsSet& greng) : CApp(greng) {
             camera = GetGrengSystems().GetCameraManager().CreateCamera({});
             camera->GetPos() = { -10, 10, 10 };
             camera->GetPos().SetTarget({ 10, -10, 10 }, 10,
                                        AnimatorBehavior::Bounce);
             camera->SetOrtho(true);
+            
             camera->GetOrthoWidth().Set(10);
+            camera->GetOrthoHeight().Set(
+                10.0 / GetGrengSystems().GetViewport().GetAspectRatio());
+            
             camera->GetOrthoWidth().SetTarget(2, 5, AnimatorBehavior::Bounce);
+            camera->GetOrthoHeight().SetTarget(
+                2 / GetGrengSystems().GetViewport().GetAspectRatio(), 5,
+                AnimatorBehavior::Bounce);
 
             GetDebugRenderer().SetCamera(camera);
             GetDebugRenderer().SetLight(&light);

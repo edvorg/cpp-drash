@@ -39,7 +39,7 @@ namespace drash {
 
     class CApp {
     public:
-        CApp();
+        CApp(greng::CGrengSystemsSet& greng);
         virtual ~CApp() = default;
 
         virtual void Step(double _dt);
@@ -75,7 +75,7 @@ namespace drash {
     private:
         CVec2f cursorPos = CVec2f(0);
 
-        greng::CGrengSystemsSet grengSystems;
+        greng::CGrengSystemsSet& grengSystems;
         CScene scene;
         CPlayersSystem playersSystem;
         CGeometryManager geometryManager;

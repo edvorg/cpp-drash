@@ -35,6 +35,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "test9.h"
 #include "test10.h"
 #include "test11.hpp"
+#include "test12.hpp"
 
 #include <cstring>
 
@@ -42,29 +43,31 @@ namespace drash {
 
     namespace test {
 
-        CApp* StartApp(const char* _name) {
+        CApp* StartApp(greng::CGrengSystemsSet& greng, const char* _name) {
             if (strcmp(_name, "test1") == 0)
-                return new CTest1;
+                return new CTest1(greng);
             if (strcmp(_name, "test2") == 0)
-                return new CTest2;
+                return new CTest2(greng);
             if (strcmp(_name, "test3") == 0)
-                return new CTest3;
+                return new CTest3(greng);
             if (strcmp(_name, "test4") == 0)
-                return new CTest4;
+                return new CTest4(greng);
             if (strcmp(_name, "test5") == 0)
-                return new CTest5;
+                return new CTest5(greng);
             if (strcmp(_name, "test6") == 0)
-                return new CTest6;
+                return new CTest6(greng);
             if (strcmp(_name, "test7") == 0)
-                return new CTest7;
+                return new CTest7(greng);
             if (strcmp(_name, "test8") == 0)
-                return new CTest8;
+                return new CTest8(greng);
             if (strcmp(_name, "test9") == 0)
-                return new CTest9;
+                return new CTest9(greng);
             if (strcmp(_name, "test10") == 0)
-                return new CTest10;
+                return new CTest10(greng);
             if (strcmp(_name, "test11") == 0)
-                return new CTest11;
+                return new CTest11(greng);
+            if (strcmp(_name, "test12") == 0)
+                return new CTest12(greng);
             return nullptr;
         }
 

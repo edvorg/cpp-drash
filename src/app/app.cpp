@@ -27,8 +27,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    CApp::CApp()
-        : grengSystems(), scene({}), playersSystem(scene),
+    CApp::CApp(greng::CGrengSystemsSet& greng)
+        : grengSystems(greng), scene({}), playersSystem(scene),
           geometryManager(scene), eventSystem(),
           uISystem(GetGrengSystems().GetRenderer()),
           levelManager(scene, geometryManager),

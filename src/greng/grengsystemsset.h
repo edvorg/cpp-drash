@@ -32,6 +32,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "shaderprogrammanager.h"
 #include "renderer.h"
 #include "cameramanager.h"
+#include "viewport.hpp"
+#include "framebuffermanager.hpp"
 
 namespace greng {
 
@@ -41,54 +43,27 @@ namespace greng {
 
         void Step(double _dt);
 
-        inline greng::CMeshManager& GetMeshManager();
-        inline greng::CTextureManager& GetTextureManager();
-        inline greng::CVertexShaderManager& GetVertexShaderManager();
-        inline greng::CFragmentShaderManager& GetFragmentShaderManager();
-        inline greng::CShaderProgramManager& GetShaderProgramManager();
-        inline greng::CRenderer& GetRenderer();
-        inline greng::CCameraManager& GetCameraManager();
+        auto& GetMeshManager() { return meshManager; }
+        auto& GetTextureManager() { return textureManager; }
+        auto& GetFrameBufferManager() { return frameBufferManager; }
+        auto& GetVertexShaderManager() { return vertexShaderManager; }
+        auto& GetFragmentShaderManager() { return fragmentShaderManager; }
+        auto& GetShaderProgramManager() { return shaderProgramManager; }
+        auto& GetRenderer() { return renderer; }
+        auto& GetCameraManager() { return cameraManager; }
+        auto& GetViewport() { return viewport; }
 
     private:
+        greng::CViewport viewport;
         greng::CRenderer renderer;
         greng::CCameraManager cameraManager;
         greng::CMeshManager meshManager;
         greng::CTextureManager textureManager;
+        greng::CFrameBufferManager frameBufferManager;
         greng::CVertexShaderManager vertexShaderManager;
         greng::CFragmentShaderManager fragmentShaderManager;
         greng::CShaderProgramManager shaderProgramManager;
     };
-
-    inline greng::CMeshManager& CGrengSystemsSet::GetMeshManager() {
-        return meshManager;
-    }
-
-    inline greng::CTextureManager& CGrengSystemsSet::GetTextureManager() {
-        return textureManager;
-    }
-
-    inline greng::CVertexShaderManager&
-    CGrengSystemsSet::GetVertexShaderManager() {
-        return vertexShaderManager;
-    }
-
-    inline greng::CFragmentShaderManager&
-    CGrengSystemsSet::GetFragmentShaderManager() {
-        return fragmentShaderManager;
-    }
-
-    inline greng::CShaderProgramManager&
-    CGrengSystemsSet::GetShaderProgramManager() {
-        return shaderProgramManager;
-    }
-
-    inline greng::CRenderer& CGrengSystemsSet::GetRenderer() {
-        return renderer;
-    }
-
-    inline greng::CCameraManager& CGrengSystemsSet::GetCameraManager() {
-        return cameraManager;
-    }
 
 } // namespace greng
 

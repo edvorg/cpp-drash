@@ -32,7 +32,7 @@ namespace drash {
 
         using namespace greng;
 
-        CTest4::CTest4() {
+        CTest4::CTest4(greng::CGrengSystemsSet& greng) : CApp(greng) {
             testButton1.Connect(&GetUISystem());
 
             testButton1.SetClickHandler([]() { LOG_INFO("click 1"); });

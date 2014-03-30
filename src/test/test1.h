@@ -37,7 +37,7 @@ namespace drash {
 
         class CTest1 : public CApp {
         public:
-            CTest1();
+            CTest1(greng::CGrengSystemsSet& greng);
             ~CTest1();
 
         protected:

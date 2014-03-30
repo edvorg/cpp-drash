@@ -31,7 +31,7 @@ namespace drash {
 
     namespace test {
 
-        CTest5::CTest5() {
+        CTest5::CTest5(greng::CGrengSystemsSet& greng) : CTest3(greng) {
             SetupProcessors();
             SetupMeshes();
             SetupTextures();

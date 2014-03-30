@@ -42,6 +42,8 @@ namespace greng {
     class CShaderProgram;
     class CPointLight;
     class CSpotLight;
+    class CFrameBuffer;
+    class CViewport;
 
     using drash::CVec2f;
     using drash::CVec3f;
@@ -49,12 +51,12 @@ namespace greng {
 
     class CRenderer {
     public:
-        CRenderer() = default;
+        CRenderer(const CViewport& newViewport)
+            : viewport(newViewport) {}
         CRenderer(const CRenderer&) = delete;
         CRenderer(CRenderer&&) = delete;
         CRenderer& operator=(const CRenderer&) = delete;
         CRenderer& operator=(CRenderer&&) = delete;
-        ~CRenderer();
 
         void RenderMesh(
             const CMesh* _mesh, unsigned int _submesh,
@@ -63,7 +65,8 @@ namespace greng {
             const drash::CMatrix4f* _view, const drash::CMatrix4f* _model_view,
             const drash::CMatrix4f* _proj_matrix, const CPointLight* _light,
             const CSpotLight* _spot_light = nullptr,
-            const CVec3f* _view_pos = nullptr);
+            const CVec3f* _view_pos = nullptr,
+            const CFrameBuffer* _frame_buffer = nullptr);
 
         /// draws triangle giving screen space coordinates (-0.5,-0.5)..(0.5,
         /// 0.5) and color
@@ -117,6 +120,10 @@ namespace greng {
         void DrawString(const CCamera& _camera, bool fromLeft,
                         const CVec2f& _pos, const CVec2f& _size,
                         const std::string& _str);
+
+    private:
+        const CFrameBuffer* lastFrameBuffer;
+        const CViewport& viewport;
     };
 
 } // namespace greng

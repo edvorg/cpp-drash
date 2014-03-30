@@ -35,7 +35,7 @@ namespace drash {
 
         class CTest8 : public CApp {
         public:
-            CTest8();
+            CTest8(greng::CGrengSystemsSet& greng);
             ~CTest8();
 
         private:

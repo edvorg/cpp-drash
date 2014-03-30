@@ -32,7 +32,7 @@ namespace drash {
 
     namespace test {
 
-        CTest10::CTest10() : CApp() {
+        CTest10::CTest10(greng::CGrengSystemsSet& greng) : CApp(greng) {
             InitCamera();
             InitObjects();
             InitLights();

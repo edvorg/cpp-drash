@@ -36,7 +36,7 @@ namespace drash {
 
     namespace test {
 
-        CTest1::CTest1() {
+        CTest1::CTest1(greng::CGrengSystemsSet& greng) : CApp(greng) {
             GetGeometryManager().Load();
 
             greng::CCameraParams cp;

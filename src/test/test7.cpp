@@ -32,7 +32,7 @@ namespace drash {
 
     namespace test {
 
-        CTest7::CTest7() : CTest3() {
+        CTest7::CTest7(greng::CGrengSystemsSet& greng) : CTest3(greng) {
             InitTextures();
             InitShaders();
             InitLights();

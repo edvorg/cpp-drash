@@ -25,6 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "texturemanager.h"
 #include "texture.h"
 #include "../diag/logger.h"
+#define GL_GLEXT_PROTOTYPES
 #include <GL/glew.h>
 #include <SDL/SDL_image.h>
 #include "../misc/color4.h"
@@ -134,6 +135,23 @@ namespace greng {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_FLOAT,
                      data);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        return res;
+    }
+
+    CTexture* CTextureManager::CreateTexture(const drash::CVec2i& size) {
+        CTexture* res = CreateTexture();
+
+        if (res == nullptr) {
+            return nullptr;
+        }
+
+        glBindTexture(GL_TEXTURE_2D, res->textureBufferId);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, size.x, size.y, 0, GL_RGB,
+                     GL_UNSIGNED_BYTE, {});
         glBindTexture(GL_TEXTURE_2D, 0);
 
         return res;

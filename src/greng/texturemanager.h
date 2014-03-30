@@ -26,6 +26,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define GRENG_TEXTUREMANAGER_H
 
 #include "../misc/objectfactory.h"
+#include "../misc/vec2.h"
 
 namespace greng {
 
@@ -46,6 +47,7 @@ namespace greng {
         CTexture* CreateTextureFromFile(const char* _path);
         CTexture* CreateTextureDummy();
         CTexture* CreateTextureWhite();
+        CTexture* CreateTexture(const drash::CVec2i& size);
         bool DestroyTexture(CTexture* _texture);
 
     protected:

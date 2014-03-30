@@ -25,13 +25,17 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef TEST_H
 #define TEST_H
 
+namespace greng {
+    class CGrengSystemsSet;
+}
+
 namespace drash {
 
     class CApp;
 
     namespace test {
 
-        CApp* StartApp(const char* _name);
+        CApp* StartApp(greng::CGrengSystemsSet& greng, const char* _name);
 
     } // namespace test
 

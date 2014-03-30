@@ -33,7 +33,7 @@ namespace drash {
 
     namespace test {
 
-        CTest3::CTest3() {
+        CTest3::CTest3(greng::CGrengSystemsSet& greng) : CTest1(greng) {
             SetProcessors();
 
             InitObjects();

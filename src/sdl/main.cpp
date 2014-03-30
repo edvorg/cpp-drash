@@ -22,6 +22,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
+#define GL_GLEXT_PROTOTYPES
 #include <GL/glew.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
@@ -73,6 +74,8 @@ int main(int _argc, char** _argv) {
     }
 
     glViewport(0, 0, gWindowWidth, gWindowHeight);
+    greng::CGrengSystemsSet greng;
+    greng.GetViewport().SetSize({ gWindowWidth, gWindowHeight });
 
     if (glewInit() != GLEW_OK) {
         LOG_ERR("glewInit() failed");
@@ -97,7 +100,7 @@ int main(int _argc, char** _argv) {
         for (int i = 0; i < _argc; i++) {
             if (strcmp("--test", _argv[i]) == 0) {
                 if (++i < _argc) {
-                    app = test::StartApp(_argv[i]);
+                    app = test::StartApp(greng, _argv[i]);
 
                     if (app == nullptr) {
                         LOG_ERR("drash::test::StartApp() failed");
@@ -116,6 +119,7 @@ int main(int _argc, char** _argv) {
         glViewport(0, 0, gWindowWidth, gWindowHeight);
         app->GetGrengSystems().GetCameraManager().SetAspectRatio(gWindowWidth /
                                                                  gWindowHeight);
+        greng.GetViewport().SetSize({ gWindowWidth, gWindowHeight });
         app->GetUISystem().SetAspectRatio(gWindowWidth / gWindowHeight);
         app->GetUISystem().SetWidth(gWindowWidth);
 
@@ -170,6 +174,8 @@ int main(int _argc, char** _argv) {
                     glViewport(0, 0, gWindowWidth, gWindowHeight);
                     app->GetGrengSystems().GetCameraManager().SetAspectRatio(
                         gWindowWidth / gWindowHeight);
+                    greng.GetViewport().SetSize(
+                        { gWindowWidth, gWindowHeight });
                     app->GetUISystem().SetAspectRatio(gWindowWidth /
                                                       gWindowHeight);
                     app->GetUISystem().SetWidth(gWindowWidth);

@@ -36,7 +36,7 @@ namespace drash {
 
     namespace test {
 
-        CTest2::CTest2() {
+        CTest2::CTest2(greng::CGrengSystemsSet& greng) : CApp(greng) {
             greng::CCameraParams cp;
             cp.pos.Set(0, 0, 300);
             camera = GetGrengSystems().GetCameraManager().CreateCamera(cp);

@@ -22,32 +22,41 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#pragma once
-#ifndef CTESTAPP2_H
-#define CTESTAPP2_H
+#ifndef DRASH_TEST_TEST12_H
+#define DRASH_TEST_TEST12_H
 
 #include "../app/app.h"
 #include "../greng/pointlight.h"
+#include "../greng/spotlight.h"
 
 namespace drash {
 
     namespace test {
 
-        class CTest2 : public CApp {
+        class CTest12 : public CApp {
         public:
-            CTest2(greng::CGrengSystemsSet& greng);
+            CTest12(greng::CGrengSystemsSet& greng);
 
         private:
-            void SetProcessors();
-            CSceneObject* selectedObject = nullptr;
+            virtual void Step(double _dt) override;
+            virtual void Render() override;
 
-            greng::CPointLight light1;
-
-            greng::CCamera* camera = nullptr;
+            greng::CCamera* camera;
+            greng::CPointLight light;
+            greng::CTexture* texture;
+            greng::CTexture* renderTarget;
+            greng::CFrameBuffer* frameBuffer;
+            greng::CMesh* quad;
+            greng::CVertexShader* vertexShader1;
+            greng::CFragmentShader* fragmentShader1;
+            greng::CShaderProgram* shaderProgram1;
+            greng::CVertexShader* vertexShader2;
+            greng::CFragmentShader* fragmentShader2;
+            greng::CShaderProgram* shaderProgram2;
         };
 
     } // namespace test
 
 } // namespace drash
 
-#endif // CTESTAPP2_H
+#endif // DRASH_TEST_TEST12_H

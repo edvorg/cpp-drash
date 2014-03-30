@@ -40,6 +40,7 @@ SOURCES += \
     src/sdl/main.cpp \
     src/greng/loadmeshobj.cpp \
     src/greng/texturemanager.cpp \
+    src/greng/framebuffermanager.cpp \
     src/greng/vertexshadermanager.cpp \
     src/greng/fragmentshadermanager.cpp \
     src/greng/shaderprogrammanager.cpp \
@@ -58,6 +59,7 @@ SOURCES += \
     src/greng/grengsystemsset.cpp \
     src/test/test10.cpp \
     src/test/test11.cpp \
+    src/test/test12.cpp \
     src/greng/spotlight.cpp \
     3rd/Box2D/Collision/b2BroadPhase.cpp \
     3rd/Box2D/Collision/b2CollideCircle.cpp \

@@ -34,7 +34,7 @@ namespace drash {
 
         class CTest6 : public CTest1 {
         public:
-            CTest6();
+            CTest6(greng::CGrengSystemsSet& greng);
 
             virtual void Step(double _dt) override;
             virtual void Render() override;
