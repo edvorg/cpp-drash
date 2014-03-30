@@ -29,36 +29,36 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CMesh;
-    class CVertex;
+    class Mesh;
+    class Vertex;
 
-    class CMeshManager final {
+    class MeshManager final {
     public:
         constexpr static unsigned int meshesCountLimit = 1024;
 
-        CMeshManager();
-        CMeshManager(const CMeshManager&) = delete;
-        CMeshManager(CMeshManager&&) = delete;
-        CMeshManager& operator=(const CMeshManager&) = delete;
-        CMeshManager& operator=(CMeshManager&&) = delete;
-        ~CMeshManager();
+        MeshManager();
+        MeshManager(const MeshManager&) = delete;
+        MeshManager(MeshManager&&) = delete;
+        MeshManager& operator=(const MeshManager&) = delete;
+        MeshManager& operator=(MeshManager&&) = delete;
+        ~MeshManager();
 
-        CMesh* CreateMesh();
-        CMesh* CreateMeshFromObjFile(const char* _path);
-        CMesh* CreateMeshQuad();
-        CMesh* CreateMeshCube();
-        CMesh* CreateMeshFromVertices(const CVertex* _vertices,
+        Mesh* CreateMesh();
+        Mesh* CreateMeshFromObjFile(const char* _path);
+        Mesh* CreateMeshQuad();
+        Mesh* CreateMeshCube();
+        Mesh* CreateMeshFromVertices(const Vertex* _vertices,
                                       unsigned int _vertices_count,
                                       const unsigned int* _indices,
                                       unsigned int _indices_count);
-        bool DestroyMesh(CMesh* _mesh);
+        bool DestroyMesh(Mesh* _mesh);
 
-        void ComputeNormals(CMesh* _mesh);
-        void ComputeTangentSpace(CMesh* _mesh);
+        void ComputeNormals(Mesh* _mesh);
+        void ComputeTangentSpace(Mesh* _mesh);
 
     protected:
     private:
-        drash::CObjectFactory<CMesh> meshFactory;
+        drash::ObjectFactory<Mesh> meshFactory;
     };
 
 } // namespace greng

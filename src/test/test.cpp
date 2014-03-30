@@ -43,31 +43,31 @@ namespace drash {
 
     namespace test {
 
-        CApp* StartApp(greng::CGrengSystemsSet& greng, const char* _name) {
+        App* StartApp(greng::GrengSystemsSet& greng, const char* _name) {
             if (strcmp(_name, "test1") == 0)
-                return new CTest1(greng);
+                return new Test1(greng);
             if (strcmp(_name, "test2") == 0)
-                return new CTest2(greng);
+                return new Test2(greng);
             if (strcmp(_name, "test3") == 0)
-                return new CTest3(greng);
+                return new Test3(greng);
             if (strcmp(_name, "test4") == 0)
-                return new CTest4(greng);
+                return new Test4(greng);
             if (strcmp(_name, "test5") == 0)
-                return new CTest5(greng);
+                return new Test5(greng);
             if (strcmp(_name, "test6") == 0)
-                return new CTest6(greng);
+                return new Test6(greng);
             if (strcmp(_name, "test7") == 0)
-                return new CTest7(greng);
+                return new Test7(greng);
             if (strcmp(_name, "test8") == 0)
-                return new CTest8(greng);
+                return new Test8(greng);
             if (strcmp(_name, "test9") == 0)
-                return new CTest9(greng);
+                return new Test9(greng);
             if (strcmp(_name, "test10") == 0)
-                return new CTest10(greng);
+                return new Test10(greng);
             if (strcmp(_name, "test11") == 0)
-                return new CTest11(greng);
+                return new Test11(greng);
             if (strcmp(_name, "test12") == 0)
-                return new CTest12(greng);
+                return new Test12(greng);
             return nullptr;
         }
 

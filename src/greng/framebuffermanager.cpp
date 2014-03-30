@@ -35,19 +35,19 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    using drash::CLogger;
+    using drash::Logger;
 
-    CFrameBufferManager::CFrameBufferManager()
-        : frameBufferFactory(frameBuffersCountLimit, "CFrameBuffer") {}
+    FrameBufferManager::FrameBufferManager()
+        : frameBufferFactory(frameBuffersCountLimit, "FrameBuffer") {}
 
-    CFrameBufferManager::~CFrameBufferManager() {
+    FrameBufferManager::~FrameBufferManager() {
         while (frameBufferFactory.EnumObjects() != 0) {
             DestroyFrameBuffer(frameBufferFactory.GetObjects()[0]);
         }
     }
 
-    CFrameBuffer* CFrameBufferManager::CreateFrameBuffer(const CTexture& _tex) {
-        CFrameBuffer* res = frameBufferFactory.CreateObject();
+    FrameBuffer* FrameBufferManager::CreateFrameBuffer(const Texture& _tex) {
+        FrameBuffer* res = frameBufferFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
@@ -76,7 +76,7 @@ namespace greng {
         return res;
     }
 
-    bool CFrameBufferManager::DestroyFrameBuffer(CFrameBuffer* _frameBuffer) {
+    bool FrameBufferManager::DestroyFrameBuffer(FrameBuffer* _frameBuffer) {
         if (frameBufferFactory.IsObject(_frameBuffer) == false) {
             return false;
         }

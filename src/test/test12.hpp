@@ -33,26 +33,26 @@ namespace drash {
 
     namespace test {
 
-        class CTest12 : public CApp {
+        class Test12 : public App {
         public:
-            CTest12(greng::CGrengSystemsSet& greng);
+            Test12(greng::GrengSystemsSet& greng);
 
         private:
             virtual void Step(double _dt) override;
             virtual void Render() override;
 
-            greng::CCamera* camera;
-            greng::CPointLight light;
-            greng::CTexture* texture;
-            greng::CTexture* renderTarget;
-            greng::CFrameBuffer* frameBuffer;
-            greng::CMesh* quad;
-            greng::CVertexShader* vertexShader1;
-            greng::CFragmentShader* fragmentShader1;
-            greng::CShaderProgram* shaderProgram1;
-            greng::CVertexShader* vertexShader2;
-            greng::CFragmentShader* fragmentShader2;
-            greng::CShaderProgram* shaderProgram2;
+            greng::Camera* camera;
+            greng::PointLight light;
+            greng::Texture* texture;
+            greng::Texture* renderTarget;
+            greng::FrameBuffer* frameBuffer;
+            greng::Mesh* quad;
+            greng::VertexShader* vertexShader1;
+            greng::FragmentShader* fragmentShader1;
+            greng::ShaderProgram* shaderProgram1;
+            greng::VertexShader* vertexShader2;
+            greng::FragmentShader* fragmentShader2;
+            greng::ShaderProgram* shaderProgram2;
         };
 
     } // namespace test

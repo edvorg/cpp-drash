@@ -27,9 +27,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CMesh;
+    class Mesh;
 
-    bool LoadMeshObj(const char* _path, CMesh* _mesh);
+    bool LoadMeshObj(const char* _path, Mesh* _mesh);
 }
 
 #endif // LOADMESHOBJ_H

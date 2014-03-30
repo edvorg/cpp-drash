@@ -31,7 +31,7 @@ namespace drash {
 
     namespace test {
 
-        CTest5::CTest5(greng::CGrengSystemsSet& greng) : CTest3(greng) {
+        Test5::Test5(greng::GrengSystemsSet& greng) : Test3(greng) {
             SetupProcessors();
             SetupMeshes();
             SetupTextures();
@@ -43,8 +43,8 @@ namespace drash {
             GetDebugRenderer().SetLight(&light1);
         }
 
-        void CTest5::Step(double _dt) {
-            CTest3::Step(_dt);
+        void Test5::Step(double _dt) {
+            Test3::Step(_dt);
 
             angle += 0.5 * _dt;
 
@@ -57,26 +57,26 @@ namespace drash {
             light1.position.z = 200 * cos(angle);
         }
 
-        void CTest5::Render() {
-            CTest3::Render();
+        void Test5::Render() {
+            Test3::Render();
 
             if (mesh1 != nullptr) {
-                CMatrix4f r;
+                Matrix4f r;
                 MatrixRotationZ(r, angle);
 
-                CMatrix4f s;
-                MatrixScale(s, CVec3f(10));
+                Matrix4f s;
+                MatrixScale(s, Vec3f(10));
 
-                CMatrix4f rot;
+                Matrix4f rot;
                 MatrixMultiply(r, s, rot);
 
-                CMatrix4f transl;
-                MatrixTranslation(transl, CVec3f(-100, 30, 0));
+                Matrix4f transl;
+                MatrixTranslation(transl, Vec3f(-100, 30, 0));
 
-                CMatrix4f model;
+                Matrix4f model;
                 MatrixMultiply(transl, rot, model);
 
-                CMatrix4f model_view;
+                Matrix4f model_view;
                 MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
                 GetGrengSystems().GetRenderer().RenderMesh(
@@ -85,22 +85,22 @@ namespace drash {
             }
 
             if (mesh2 != nullptr) {
-                CMatrix4f r;
+                Matrix4f r;
                 MatrixRotationZ(r, -angle);
 
-                CMatrix4f s;
-                MatrixScale(s, CVec3f(10));
+                Matrix4f s;
+                MatrixScale(s, Vec3f(10));
 
-                CMatrix4f rot;
+                Matrix4f rot;
                 MatrixMultiply(r, s, rot);
 
-                CMatrix4f transl;
-                MatrixTranslation(transl, CVec3f(100, 30, 0));
+                Matrix4f transl;
+                MatrixTranslation(transl, Vec3f(100, 30, 0));
 
-                CMatrix4f model;
+                Matrix4f model;
                 MatrixMultiply(transl, rot, model);
 
-                CMatrix4f model_view;
+                Matrix4f model_view;
                 MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
                 GetGrengSystems().GetRenderer().RenderMesh(
@@ -109,16 +109,16 @@ namespace drash {
             }
 
             if (mesh3 != nullptr) {
-                CMatrix4f rangle;
+                Matrix4f rangle;
                 MatrixRotationY(rangle, 0);
 
-                CMatrix4f model;
+                Matrix4f model;
                 MatrixMultiply(rangle, mesh3ConstMatrix, model);
 
-                CMatrix4f model_view;
+                Matrix4f model_view;
                 MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
-                greng::CTexture* texts[6] = {
+                greng::Texture* texts[6] = {
                     tex4, tex4normal, tex3, tex3normal, tex5, tex5normal
                 };
 
@@ -132,22 +132,22 @@ namespace drash {
             }
 
             if (mesh4 != nullptr) {
-                CMatrix4f rangle;
+                Matrix4f rangle;
                 MatrixRotationY(rangle, 0);
 
-                CMatrix4f model_1;
+                Matrix4f model_1;
                 MatrixMultiply(rangle, mesh3ConstMatrix, model_1);
 
-                CMatrix4f trans;
-                MatrixTranslation(trans, CVec3f(-150, 0, 0));
+                Matrix4f trans;
+                MatrixTranslation(trans, Vec3f(-150, 0, 0));
 
-                CMatrix4f model;
+                Matrix4f model;
                 MatrixMultiply(trans, model_1, model);
 
-                CMatrix4f model_view;
+                Matrix4f model_view;
                 MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
-                greng::CTexture* texts[6] = { tex7, tex7normal,
+                greng::Texture* texts[6] = { tex7, tex7normal,
                                               tex7, tex7normal,
                                               tex7, tex7normal, };
 
@@ -161,10 +161,10 @@ namespace drash {
             }
 
             GetGrengSystems().GetRenderer().DrawPoint(
-                GetCamera(), light1.position, 10, CColor4f(1, 1, 1, 1), false);
+                GetCamera(), light1.position, 10, Color4f(1, 1, 1, 1), false);
         }
 
-        void CTest5::SetupMeshes() {
+        void Test5::SetupMeshes() {
             mesh1 = GetGrengSystems().GetMeshManager().CreateMeshCube();
             mesh2 = GetGrengSystems().GetMeshManager().CreateMeshQuad();
             mesh3 = GetGrengSystems().GetMeshManager().CreateMeshFromObjFile(
@@ -176,22 +176,22 @@ namespace drash {
             GetGrengSystems().GetMeshManager().ComputeTangentSpace(mesh3);
             GetGrengSystems().GetMeshManager().ComputeNormals(mesh4);
 
-            CMatrix4f s;
-            MatrixScale(s, CVec3f(0.1));
+            Matrix4f s;
+            MatrixScale(s, Vec3f(0.1));
 
-            CMatrix4f rx;
+            Matrix4f rx;
             MatrixRotationX(rx, -M_PI / 2.0);
 
-            CMatrix4f ry;
+            Matrix4f ry;
             MatrixRotationY(ry, -M_PI / 2.0);
 
-            CMatrix4f rxy;
+            Matrix4f rxy;
             MatrixMultiply(ry, rx, rxy);
 
             MatrixMultiply(rxy, s, mesh3ConstMatrix);
         }
 
-        void CTest5::SetupTextures() {
+        void Test5::SetupTextures() {
             tex1 = GetGrengSystems().GetTextureManager().CreateTextureDummy();
             tex2 = GetGrengSystems().GetTextureManager().CreateTextureFromFile(
                 "assets/floor/diffuse.png");
@@ -219,7 +219,7 @@ namespace drash {
                     "assets/floor/normal.png");
         }
 
-        void CTest5::SetupShaders() {
+        void Test5::SetupShaders() {
             vertexShader1 =
                 GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader1.120.vs");
@@ -262,9 +262,9 @@ namespace drash {
                     vertexShader4, fragmentShader4);
         }
 
-        void CTest5::SetupProcessors() {}
+        void Test5::SetupProcessors() {}
 
-        void CTest5::SetupLights() { light1.position.Set(-50, 100, 0); }
+        void Test5::SetupLights() { light1.position.Set(-50, 100, 0); }
 
     } // namespace test
 

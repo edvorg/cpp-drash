@@ -29,23 +29,23 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    class CRay {
+    class Ray {
     public:
-        CRay();
+        Ray();
 
-        void SetPoint(const CVec3f& _point);
-        inline const CVec3f& GetPoint() const;
-        void SetDirection(const CVec3f& _direction);
-        inline const CVec3f& GetDirection() const;
+        void SetPoint(const Vec3f& _point);
+        inline const Vec3f& GetPoint() const;
+        void SetDirection(const Vec3f& _direction);
+        inline const Vec3f& GetDirection() const;
 
     private:
-        CVec3f point;
-        CVec3f direction;
+        Vec3f point;
+        Vec3f direction;
     };
 
-    inline const CVec3f& CRay::GetPoint() const { return point; }
+    inline const Vec3f& Ray::GetPoint() const { return point; }
 
-    inline const CVec3f& CRay::GetDirection() const { return direction; }
+    inline const Vec3f& Ray::GetDirection() const { return direction; }
 
 } // namespace drash
 

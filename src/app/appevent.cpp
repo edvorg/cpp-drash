@@ -28,13 +28,13 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    CAppEvent::CAppEvent() {}
+    AppEvent::AppEvent() {}
 
-    CAppEvent::CAppEvent(const CAppEvent& _src) : key(_src.key) {}
+    AppEvent::AppEvent(const AppEvent& _src) : key(_src.key) {}
 
-    CAppEvent::CAppEvent(EventKey _key) : key(_key) {}
+    AppEvent::AppEvent(EventKey _key) : key(_key) {}
 
-    std::string CAppEvent::ToString() const {
+    std::string AppEvent::ToString() const {
         switch (this->key) {
         case EventKeyQ:
             return std::string("q");
@@ -114,7 +114,7 @@ namespace drash {
         }
     }
 
-    void CAppEvent::FromString(const std::string& _str) {
+    void AppEvent::FromString(const std::string& _str) {
         if (_str == "q") {
             this->key = EventKeyQ;
         } else if (_str == "w") {
@@ -170,8 +170,8 @@ namespace drash {
         }
     }
 
-    void CAppEvent::Dump() const {
-        LOG_INFO("CAppEvent dump: " << (unsigned int)key);
+    void AppEvent::Dump() const {
+        LOG_INFO("AppEvent dump: " << (unsigned int)key);
     }
 
 } // namespace drash

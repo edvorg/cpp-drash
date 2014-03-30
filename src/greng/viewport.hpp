@@ -29,16 +29,16 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CViewport;
+    class Viewport;
 
-    class CViewport {
+    class Viewport {
     public:
         auto& GetLeftBottom() { return leftBottom; }
         auto& GetLeftBottom() const { return leftBottom; }
         auto& GetRightTop() { return rightTop; }
         auto& GetRightTop() const { return rightTop; }
         auto GetSize() const { return rightTop - leftBottom; }
-        void SetSize(const drash::CVec2i& size) {
+        void SetSize(const drash::Vec2i& size) {
             rightTop = leftBottom + size;
         }
         auto GetAspectRatio() const {
@@ -46,14 +46,14 @@ namespace greng {
             return size.y ? static_cast<float>(size.x) / size.y : 1.0f;
         }
 
-        void SetScreenSize(const drash::CVec2i& _size) {
+        void SetScreenSize(const drash::Vec2i& _size) {
             leftBottom = { 0, 0 };
             rightTop = _size;
         }
 
     private:
-        drash::CVec2i leftBottom;
-        drash::CVec2i rightTop;
+        drash::Vec2i leftBottom;
+        drash::Vec2i rightTop;
     };
 
 } // namespace greng

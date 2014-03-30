@@ -31,19 +31,19 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    using drash::CLogger;
+    using drash::Logger;
 
-    CShaderProgramManager::CShaderProgramManager()
-        : programFactory(programsCountLimit, "CShaderProgram") {}
+    ShaderProgramManager::ShaderProgramManager()
+        : programFactory(programsCountLimit, "ShaderProgram") {}
 
-    CShaderProgramManager::~CShaderProgramManager() {
+    ShaderProgramManager::~ShaderProgramManager() {
         while (programFactory.EnumObjects() != 0) {
             DestroyProgram(programFactory.GetObjects()[0]);
         }
     }
 
-    CShaderProgram* CShaderProgramManager::CreateProgram() {
-        CShaderProgram* res = programFactory.CreateObject();
+    ShaderProgram* ShaderProgramManager::CreateProgram() {
+        ShaderProgram* res = programFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
@@ -59,13 +59,13 @@ namespace greng {
         return res;
     }
 
-    CShaderProgram* CShaderProgramManager::CreateProgram(CVertexShader* _vs,
-                                                         CFragmentShader* _fs) {
+    ShaderProgram* ShaderProgramManager::CreateProgram(VertexShader* _vs,
+                                                         FragmentShader* _fs) {
         if (_vs == nullptr || _fs == nullptr) {
             return nullptr;
         }
 
-        CShaderProgram* res = CreateProgram();
+        ShaderProgram* res = CreateProgram();
 
         if (res == nullptr) {
             return nullptr;
@@ -88,7 +88,7 @@ namespace greng {
                                 buffer);
 
             LOG_ERR(
-                "CShaderProgramManager::CreateProgram(): glLinkProgram failed");
+                "ShaderProgramManager::CreateProgram(): glLinkProgram failed");
             LOG_ERR("Message: " << buffer);
 
             DestroyProgram(res);
@@ -111,7 +111,7 @@ namespace greng {
             glGetProgramInfoLog(res->programId, buffer_size - 1, &length,
                                 buffer);
 
-            LOG_ERR("CShaderProgramManager::CreateProgram(): glValidateProgram "
+            LOG_ERR("ShaderProgramManager::CreateProgram(): glValidateProgram "
                     "failed");
             LOG_ERR("Message: " << buffer);
 
@@ -125,9 +125,9 @@ namespace greng {
         return res;
     }
 
-    bool CShaderProgramManager::DestroyProgram(CShaderProgram* _program) {
+    bool ShaderProgramManager::DestroyProgram(ShaderProgram* _program) {
         if (programFactory.IsObject(_program) == false) {
-            LOG_ERR("CShaderProgramManager::DestroyProgram(): invalid program "
+            LOG_ERR("ShaderProgramManager::DestroyProgram(): invalid program "
                     "taken");
             return false;
         }

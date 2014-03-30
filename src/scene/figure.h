@@ -33,11 +33,11 @@ class b2Fixture;
 
 namespace drash {
 
-    class CSceneObject;
+    class SceneObject;
 
-    class CFigureParams {
+    class FigureParams {
     public:
-        CFigureParams();
+        FigureParams();
 
         float friction = 1;
         float restitution = 0;
@@ -45,21 +45,21 @@ namespace drash {
 
         /// if size of vertices is nullptr, creates a box with (1, 1)
         /// dimentions
-        std::vector<CVec2f> vertices;
+        std::vector<Vec2f> vertices;
 
         float depth = 1;
         float z = 0;
     };
 
-    class CFigure {
+    class Figure {
     public:
-        friend class CScene;
-        friend class CSceneObject;
+        friend class Scene;
+        friend class SceneObject;
 
-        CSceneObject* GetSceneObject() const;
+        SceneObject* GetSceneObject() const;
 
-        void SetVertices(const CVec2f* _vertices, unsigned int _count);
-        const CVec2f* GetVertices() const;
+        void SetVertices(const Vec2f* _vertices, unsigned int _count);
+        const Vec2f* GetVertices() const;
         unsigned int EnumVertices() const;
 
         inline float GetZ() const;
@@ -67,16 +67,16 @@ namespace drash {
         inline float GetDepth() const;
         inline void SetDepth(float _depth);
         float GetFriction() const;
-        friend CLogger& operator<<(CLogger& _logger, const CFigure& _figure);
+        friend Logger& operator<<(Logger& _logger, const Figure& _figure);
 
-        bool TestPoint(const CVec2f& _xy) const;
+        bool TestPoint(const Vec2f& _xy) const;
 
         inline void
-        AddDestroyHandler(const std::function<void(CFigure*)>& _handler);
+        AddDestroyHandler(const std::function<void(Figure*)>& _handler);
 
     protected:
     private:
-        CFigure() = default;
+        Figure() = default;
 
         b2Fixture* fixture = nullptr;
         float z = 0;
@@ -85,19 +85,19 @@ namespace drash {
         int internalId = -1;
         bool dead = false;
 
-        std::vector<std::function<void(CFigure*)> > destroyHandlers;
+        std::vector<std::function<void(Figure*)> > destroyHandlers;
     };
 
-    inline float CFigure::GetZ() const { return z; }
+    inline float Figure::GetZ() const { return z; }
 
-    inline void CFigure::SetZ(float _z) { z = _z; }
+    inline void Figure::SetZ(float _z) { z = _z; }
 
-    inline float CFigure::GetDepth() const { return depth; }
+    inline float Figure::GetDepth() const { return depth; }
 
-    inline void CFigure::SetDepth(float _depth) { depth = _depth; }
+    inline void Figure::SetDepth(float _depth) { depth = _depth; }
 
     inline void
-    CFigure::AddDestroyHandler(const std::function<void(CFigure*)>& _handler) {
+    Figure::AddDestroyHandler(const std::function<void(Figure*)>& _handler) {
         destroyHandlers.push_back(_handler);
     }
 

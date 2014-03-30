@@ -27,10 +27,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CShaderProgram
-        : public drash::CObjectFactory<CShaderProgram>::CFactoryProduct {
+    class ShaderProgram
+        : public drash::ObjectFactory<ShaderProgram>::FactoryProduct {
     public:
-        CShaderProgram() = default;
+        ShaderProgram() = default;
 
         unsigned int programId = 0;
     };

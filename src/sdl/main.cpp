@@ -35,7 +35,7 @@ using namespace drash;
 
 EventKey ConvertKey(SDLKey _key);
 EventKey ConvertButton(int _button);
-void WindowSpaceToScreenSpace(CVec2f& _from);
+void WindowSpaceToScreenSpace(Vec2f& _from);
 
 static double gWindowWidth = 1366;
 static double gWindowHeight = 700;
@@ -74,7 +74,7 @@ int main(int _argc, char** _argv) {
     }
 
     glViewport(0, 0, gWindowWidth, gWindowHeight);
-    greng::CGrengSystemsSet greng;
+    greng::GrengSystemsSet greng;
     greng.GetViewport().SetSize({ gWindowWidth, gWindowHeight });
 
     if (glewInit() != GLEW_OK) {
@@ -94,7 +94,7 @@ int main(int _argc, char** _argv) {
     LOG_INFO("GLSL version: " << (const char*)glGetString(
                                      GL_SHADING_LANGUAGE_VERSION));
 
-    CApp* app = nullptr;
+    App* app = nullptr;
 
     if (fail == false) {
         for (int i = 0; i < _argc; i++) {
@@ -112,7 +112,7 @@ int main(int _argc, char** _argv) {
         }
     }
 
-    CTimer timer;
+    Timer timer;
     timer.Reset(true);
 
     if (fail == false && app != nullptr) {
@@ -129,7 +129,7 @@ int main(int _argc, char** _argv) {
         app->SetQuitHandler([&exit]() { exit = true; });
 
         auto update_cursor = [&app](int _x, int _y) {
-            CVec2f pos(_x, _y);
+            Vec2f pos(_x, _y);
             WindowSpaceToScreenSpace(pos);
             app->SetCursorPos(pos);
             int x;
@@ -264,7 +264,7 @@ drash::EventKey ConvertButton(int _button) {
     }
 }
 
-void WindowSpaceToScreenSpace(CVec2f& _from) {
+void WindowSpaceToScreenSpace(Vec2f& _from) {
     _from.x /= gWindowWidth;
     _from.y /= gWindowHeight;
 

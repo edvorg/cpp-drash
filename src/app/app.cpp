@@ -27,14 +27,14 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    CApp::CApp(greng::CGrengSystemsSet& greng)
+    App::App(greng::GrengSystemsSet& greng)
         : grengSystems(greng), scene({}), playersSystem(scene),
           geometryManager(scene), eventSystem(),
           uISystem(GetGrengSystems().GetRenderer()),
           levelManager(scene, geometryManager),
           debugRenderer(grengSystems, scene, geometryManager) {}
 
-    void CApp::Step(double _dt) {
+    void App::Step(double _dt) {
         if (quit) {
             quitHandler();
             return;
@@ -50,7 +50,7 @@ namespace drash {
         uISystem.Step(_dt);
     }
 
-    void CApp::Render() {
+    void App::Render() {
         debugRenderer.Render();
         uISystem.DebugDraw();
     }

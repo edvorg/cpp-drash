@@ -32,15 +32,15 @@ namespace drash {
 
     namespace ui {
 
-        class CUIControl final {
+        class UIControl final {
         public:
-            friend class CUISystem;
+            friend class UISystem;
 
-            CUIControl() = default;
-            CUIControl(const CUIControl&) = delete;
-            CUIControl(CUIControl&&) = delete;
-            CUIControl& operator=(const CUIControl&) = delete;
-            CUIControl& operator=(CUIControl&&) = delete;
+            UIControl() = default;
+            UIControl(const UIControl&) = delete;
+            UIControl(UIControl&&) = delete;
+            UIControl& operator=(const UIControl&) = delete;
+            UIControl& operator=(UIControl&&) = delete;
 
             inline void
             SetDestroyHandler(const std::function<void()>& _handler);
@@ -51,10 +51,10 @@ namespace drash {
             SetStepHandler(const std::function<void(double _dt)>& _handler);
             inline void SetDrawHandler(const std::function<void()>& _handler);
 
-            inline void SetPos(const CVec2i& _pos);
-            inline void SetSize(const CVec2ui& _size);
-            inline const CVec2i& GetPos() const;
-            inline const CVec2ui& GetSize() const;
+            inline void SetPos(const Vec2i& _pos);
+            inline void SetSize(const Vec2ui& _size);
+            inline const Vec2i& GetPos() const;
+            inline const Vec2ui& GetSize() const;
 
         protected:
         private:
@@ -64,42 +64,42 @@ namespace drash {
             std::function<void(double)> stepHandler = [](double) {};
             std::function<void()> drawHandler = []() {};
 
-            CVec2i pos;
-            CVec2ui size;
+            Vec2i pos;
+            Vec2ui size;
         };
 
         inline void
-        CUIControl::SetDestroyHandler(const std::function<void()>& _handler) {
+        UIControl::SetDestroyHandler(const std::function<void()>& _handler) {
             destroyHandler = _handler;
         }
 
         inline void
-        CUIControl::SetPressHandler(const std::function<void()>& _handler) {
+        UIControl::SetPressHandler(const std::function<void()>& _handler) {
             pressHandler = _handler;
         }
 
         inline void
-        CUIControl::SetReleaseHandler(const std::function<void()>& _handler) {
+        UIControl::SetReleaseHandler(const std::function<void()>& _handler) {
             releaseHandler = _handler;
         }
 
-        inline void CUIControl::SetStepHandler(
+        inline void UIControl::SetStepHandler(
             const std::function<void(double _dt)>& _handler) {
             stepHandler = _handler;
         }
 
         inline void
-        CUIControl::SetDrawHandler(const std::function<void()>& _handler) {
+        UIControl::SetDrawHandler(const std::function<void()>& _handler) {
             drawHandler = _handler;
         }
 
-        inline void CUIControl::SetPos(const CVec2i& _pos) { pos = _pos; }
+        inline void UIControl::SetPos(const Vec2i& _pos) { pos = _pos; }
 
-        inline void CUIControl::SetSize(const CVec2ui& _size) { size = _size; }
+        inline void UIControl::SetSize(const Vec2ui& _size) { size = _size; }
 
-        inline const CVec2i& CUIControl::GetPos() const { return pos; }
+        inline const Vec2i& UIControl::GetPos() const { return pos; }
 
-        inline const CVec2ui& CUIControl::GetSize() const { return size; }
+        inline const Vec2ui& UIControl::GetSize() const { return size; }
 
     } // namepsace ui
 

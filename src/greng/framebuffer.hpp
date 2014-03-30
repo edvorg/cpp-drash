@@ -27,10 +27,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CFrameBuffer
-        : public drash::CObjectFactory<CFrameBuffer>::CFactoryProduct {
+    class FrameBuffer
+        : public drash::ObjectFactory<FrameBuffer>::FactoryProduct {
     public:
-        CFrameBuffer() = default;
+        FrameBuffer() = default;
 
         unsigned int frameBufferBufferId = 0;
 

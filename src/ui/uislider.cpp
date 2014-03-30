@@ -34,8 +34,8 @@ namespace drash {
 
         using namespace drash::math;
 
-        void CUISlider::Connect(CUISystem* _system) {
-            CUIWidget::Connect(_system);
+        void UISlider::Connect(UISystem* _system) {
+            UIWidget::Connect(_system);
 
             SetPressHandler([this]() { pressed = true; });
 
@@ -55,12 +55,12 @@ namespace drash {
             });
 
             SetDrawHandler([this]() {
-                CColor4f c(1, 0, 0, 1);
+                Color4f c(1, 0, 0, 1);
 
-                CVec2f p1;
-                CVec2f p2;
-                CVec2f p3;
-                CVec2f p4;
+                Vec2f p1;
+                Vec2f p2;
+                Vec2f p3;
+                Vec2f p4;
                 GetUISystem()->UISpaceToScreenSpace(GetPos().x, GetPos().y, p1);
                 GetUISystem()->UISpaceToScreenSpace(
                     GetPos().x, GetPos().y + GetSize().y, p2);
@@ -75,10 +75,10 @@ namespace drash {
 
                 const unsigned int l = GetSize().x - sliderWidth;
 
-                CVec2f p5;
-                CVec2f p6;
-                CVec2f p7;
-                CVec2f p8;
+                Vec2f p5;
+                Vec2f p6;
+                Vec2f p7;
+                Vec2f p8;
                 GetUISystem()->UISpaceToScreenSpace(
                     GetPos().x + l * GetPercent(), GetPos().y, p5);
                 GetUISystem()->UISpaceToScreenSpace(
@@ -97,44 +97,44 @@ namespace drash {
             });
         }
 
-        void CUISlider::SetValueHandler(
+        void UISlider::SetValueHandler(
             const std::function<void(float _value)>& _handler) {
             valueHandler = _handler;
         }
 
-        void CUISlider::SetValue(float _value) {
+        void UISlider::SetValue(float _value) {
             value = Clamp<float>(_value, min, max);
         }
 
-        float CUISlider::GetValue() const { return value; }
+        float UISlider::GetValue() const { return value; }
 
-        void CUISlider::SetPercent(float _percent) {
+        void UISlider::SetPercent(float _percent) {
             value = min + Clamp<float>(_percent, 0, 1) * (max - min);
         }
 
-        float CUISlider::GetPercent() const {
+        float UISlider::GetPercent() const {
             return (value - min) / (max - min);
         }
 
-        void CUISlider::SetSliderWidth(unsigned int _width) {
+        void UISlider::SetSliderWidth(unsigned int _width) {
             sliderWidth = Min(_width, GetSize().x / 2);
         }
 
-        unsigned int CUISlider::GetSliderWidth() const { return sliderWidth; }
+        unsigned int UISlider::GetSliderWidth() const { return sliderWidth; }
 
-        void CUISlider::SetMin(float _min) {
+        void UISlider::SetMin(float _min) {
             min = Min(_min, max);
             SetValue(value);
         }
 
-        float CUISlider::GetMin() const { return min; }
+        float UISlider::GetMin() const { return min; }
 
-        void CUISlider::SetMax(float _max) {
+        void UISlider::SetMax(float _max) {
             max = Max(_max, min);
             SetValue(value);
         }
 
-        float CUISlider::GetMax() const { return max; }
+        float UISlider::GetMax() const { return max; }
 
     } // namepsace ui
 

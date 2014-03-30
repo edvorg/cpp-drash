@@ -30,18 +30,18 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    class CMoveablePoint {
+    class MoveablePoint {
     public:
-        CMoveablePoint();
-        CMoveablePoint(CVec3f _point, greng::CCamera* _camera);
+        MoveablePoint();
+        MoveablePoint(Vec3f _point, greng::Camera* _camera);
 
-        void SetCenter(const CVec3f& _center);
-        void SetCamera(greng::CCamera* _camera);
-        inline CVec3f GetCenter() const;
+        void SetCenter(const Vec3f& _center);
+        void SetCamera(greng::Camera* _camera);
+        inline Vec3f GetCenter() const;
         void Step(double);
-        void Render(greng::CRenderer& _render);
+        void Render(greng::Renderer& _render);
 
-        void SetCursorPos(const CVec2f& _pos);
+        void SetCursorPos(const Vec2f& _pos);
 
         void ClickBegin();
         void ClickPressing();
@@ -58,41 +58,41 @@ namespace drash {
         bool axisOY = true;
         bool axisOZ = true;
 
-        greng::CCamera* currentCamera = nullptr;
+        greng::Camera* currentCamera = nullptr;
 
         void Calculate();
 
-        greng::CCamera* GetCamera();
+        greng::Camera* GetCamera();
 
-        CVec3f center;
-        CVec3f x;
-        CVec3f y;
-        CVec3f z;
+        Vec3f center;
+        Vec3f x;
+        Vec3f y;
+        Vec3f z;
 
-        CVec3f axisDrawK;
+        Vec3f axisDrawK;
         unsigned int axisOver = 0;
-        CVec3f firstClick;
+        Vec3f firstClick;
         unsigned int axisMoving = 0;
 
         bool moving = false;
 
-        CVec2f cursorPos;
+        Vec2f cursorPos;
 
         float lineSizeWorld = 1.0f;
         float lineSizeScreen = 0.05;
     };
 
-    inline CVec3f CMoveablePoint::GetCenter() const { return center; }
+    inline Vec3f MoveablePoint::GetCenter() const { return center; }
 
-    inline void CMoveablePoint::SetSize(float _size) {
+    inline void MoveablePoint::SetSize(float _size) {
         lineSizeScreen = math::Abs(_size);
     }
 
-    inline void CMoveablePoint::SetAxisOX(bool _val) { axisOX = _val; }
+    inline void MoveablePoint::SetAxisOX(bool _val) { axisOX = _val; }
 
-    inline void CMoveablePoint::SetAxisOY(bool _val) { axisOY = _val; }
+    inline void MoveablePoint::SetAxisOY(bool _val) { axisOY = _val; }
 
-    inline void CMoveablePoint::SetAxisOZ(bool _val) { axisOZ = _val; }
+    inline void MoveablePoint::SetAxisOZ(bool _val) { axisOZ = _val; }
 
 } // namespace drash
 #endif // MOVEABLEPOINT_H

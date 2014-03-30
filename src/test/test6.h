@@ -32,9 +32,9 @@ namespace drash {
 
     namespace test {
 
-        class CTest6 : public CTest1 {
+        class Test6 : public Test1 {
         public:
-            CTest6(greng::CGrengSystemsSet& greng);
+            Test6(greng::GrengSystemsSet& greng);
 
             virtual void Step(double _dt) override;
             virtual void Render() override;
@@ -47,14 +47,14 @@ namespace drash {
             bool InitProcessors();
             bool InitTarget();
 
-            CPlayer* player1 = nullptr;
-            greng::CMesh* player1Mesh = nullptr;
-            greng::CTexture* player1Texture = nullptr;
-            greng::CVertexShader* player1VertexShader = nullptr;
-            greng::CFragmentShader* player1FragmentShader = nullptr;
-            greng::CShaderProgram* player1ShaderProgram = nullptr;
-            CVec2f player1MeshDir = CVec2f(1, 0);
-            CVec3f player1OldPos;
+            Player* player1 = nullptr;
+            greng::Mesh* player1Mesh = nullptr;
+            greng::Texture* player1Texture = nullptr;
+            greng::VertexShader* player1VertexShader = nullptr;
+            greng::FragmentShader* player1FragmentShader = nullptr;
+            greng::ShaderProgram* player1ShaderProgram = nullptr;
+            Vec2f player1MeshDir = Vec2f(1, 0);
+            Vec3f player1OldPos;
 
             float angle = 0;
 
@@ -62,9 +62,9 @@ namespace drash {
 
             float targetCreateTimer = 0;
             bool targetDestroyed = true;
-            CSceneObjectGeometry* targetGeometry = nullptr;
+            SceneObjectGeometry* targetGeometry = nullptr;
 
-            greng::CPointLight light1;
+            greng::PointLight light1;
         };
 
     } // namespace test

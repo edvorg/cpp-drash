@@ -31,99 +31,99 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    class CMatrix4f;
+    class Matrix4f;
 }
 
 namespace greng {
 
-    class CCamera;
-    class CMesh;
-    class CTexture;
-    class CShaderProgram;
-    class CPointLight;
-    class CSpotLight;
-    class CFrameBuffer;
-    class CViewport;
+    class Camera;
+    class Mesh;
+    class Texture;
+    class ShaderProgram;
+    class PointLight;
+    class SpotLight;
+    class FrameBuffer;
+    class Viewport;
 
-    using drash::CVec2f;
-    using drash::CVec3f;
-    using drash::CColor4f;
+    using drash::Vec2f;
+    using drash::Vec3f;
+    using drash::Color4f;
 
-    class CRenderer {
+    class Renderer {
     public:
-        CRenderer(const CViewport& newViewport)
+        Renderer(const Viewport& newViewport)
             : viewport(newViewport) {}
-        CRenderer(const CRenderer&) = delete;
-        CRenderer(CRenderer&&) = delete;
-        CRenderer& operator=(const CRenderer&) = delete;
-        CRenderer& operator=(CRenderer&&) = delete;
+        Renderer(const Renderer&) = delete;
+        Renderer(Renderer&&) = delete;
+        Renderer& operator=(const Renderer&) = delete;
+        Renderer& operator=(Renderer&&) = delete;
 
         void RenderMesh(
-            const CMesh* _mesh, unsigned int _submesh,
-            const CTexture* const* _textures, unsigned int _textures_count,
-            const CShaderProgram* _program, const drash::CMatrix4f* _model,
-            const drash::CMatrix4f* _view, const drash::CMatrix4f* _model_view,
-            const drash::CMatrix4f* _proj_matrix, const CPointLight* _light,
-            const CSpotLight* _spot_light = nullptr,
-            const CVec3f* _view_pos = nullptr,
-            const CFrameBuffer* _frame_buffer = nullptr);
+            const Mesh* _mesh, unsigned int _submesh,
+            const Texture* const* _textures, unsigned int _textures_count,
+            const ShaderProgram* _program, const drash::Matrix4f* _model,
+            const drash::Matrix4f* _view, const drash::Matrix4f* _model_view,
+            const drash::Matrix4f* _proj_matrix, const PointLight* _light,
+            const SpotLight* _spot_light = nullptr,
+            const Vec3f* _view_pos = nullptr,
+            const FrameBuffer* _frame_buffer = nullptr);
 
         /// draws triangle giving screen space coordinates (-0.5,-0.5)..(0.5,
         /// 0.5) and color
-        void DrawTriangle(const CVec2f& _p1, const CVec2f& _p2,
-                          const CVec2f& _p3, const CColor4f& _col,
+        void DrawTriangle(const Vec2f& _p1, const Vec2f& _p2,
+                          const Vec2f& _p3, const Color4f& _col,
                           bool _depth_test = false) const;
 
         /// draws line giving world space coordinates and color
-        void DrawTriangle(const CCamera& _camera, const CVec3f& _p1,
-                          const CVec3f& _p2, const CVec3f& _p3,
-                          const CColor4f& _col, bool _depth_test = true) const;
+        void DrawTriangle(const Camera& _camera, const Vec3f& _p1,
+                          const Vec3f& _p2, const Vec3f& _p3,
+                          const Color4f& _col, bool _depth_test = true) const;
 
         /// draws line giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
         /// start and end points
         /// and color
-        void DrawLine(const CVec2f& _p1, const CVec2f& _p2, float _width,
-                      const CColor4f& _col, bool _depth_test = false) const;
+        void DrawLine(const Vec2f& _p1, const Vec2f& _p2, float _width,
+                      const Color4f& _col, bool _depth_test = false) const;
 
         /// draws line giving world space coordinates start and end points
         /// and color
-        void DrawLine(const CCamera& _camera, const CVec3f& _p1,
-                      const CVec3f& _p2, float _width, const CColor4f& _col,
+        void DrawLine(const Camera& _camera, const Vec3f& _p1,
+                      const Vec3f& _p2, float _width, const Color4f& _col,
                       bool _depth_test = true) const;
 
         /// draws lines giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
         /// and color
-        void DrawLines(const std::vector<CVec2f>& lines, float _width,
-                       const CColor4f& _col, bool _depth_test = false) const;
+        void DrawLines(const std::vector<Vec2f>& lines, float _width,
+                       const Color4f& _col, bool _depth_test = false) const;
 
         /// draws lines giving world space coordinates
         /// and color
-        void DrawLines(const CCamera& _camera, const std::vector<CVec3f>& lines,
-                       float _width, const CColor4f& _col,
+        void DrawLines(const Camera& _camera, const std::vector<Vec3f>& lines,
+                       float _width, const Color4f& _col,
                        bool _depth_test = true) const;
 
         /// draws point giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
-        void DrawPoint(const CVec2f& _p, float _size, const CColor4f& _col,
+        void DrawPoint(const Vec2f& _p, float _size, const Color4f& _col,
                        bool _depth_test = false) const;
 
         /// draws point giving world space coordinates
-        void DrawPoint(const CCamera& _camera, const CVec3f& _p, float _size,
-                       const CColor4f& _col, bool _depth_test = true) const;
+        void DrawPoint(const Camera& _camera, const Vec3f& _p, float _size,
+                       const Color4f& _col, bool _depth_test = true) const;
 
-        void DrawChar(const CCamera& _camera, const CVec2f& _pos,
-                      const CVec2f& _size, char _c);
+        void DrawChar(const Camera& _camera, const Vec2f& _pos,
+                      const Vec2f& _size, char _c);
 
-        void DrawNumber(const CCamera& _camera, bool fromLeft,
-                        const CVec2f& _pos, const CVec2f& _size,
+        void DrawNumber(const Camera& _camera, bool fromLeft,
+                        const Vec2f& _pos, const Vec2f& _size,
                         unsigned int number);
 
-        void DrawString(const CCamera& _camera, bool fromLeft,
-                        const CVec2f& _pos, const CVec2f& _size,
+        void DrawString(const Camera& _camera, bool fromLeft,
+                        const Vec2f& _pos, const Vec2f& _size,
                         const std::string& _str);
 
     private:
-        const CFrameBuffer* lastFrameBuffer;
-        const CViewport& viewport;
+        const FrameBuffer* lastFrameBuffer;
+        const Viewport& viewport;
     };
 
 } // namespace greng

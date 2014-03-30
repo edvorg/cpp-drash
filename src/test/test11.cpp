@@ -33,7 +33,7 @@ namespace drash {
 
     namespace test {
 
-        CTest11::CTest11(greng::CGrengSystemsSet& greng) : CApp(greng) {
+        Test11::Test11(greng::GrengSystemsSet& greng) : App(greng) {
             camera = GetGrengSystems().GetCameraManager().CreateCamera({});
             camera->GetPos() = { -10, 10, 10 };
             camera->GetPos().SetTarget({ 10, -10, 10 }, 10,
@@ -53,38 +53,38 @@ namespace drash {
             GetDebugRenderer().SetLight(&light);
             GetDebugRenderer().SetTexCoordsScale(0.3);
 
-            CFigureParams f;
+            FigureParams f;
             f.vertices.push_back({ -1, 0 });
             f.vertices.push_back({ 0, 1 });
             f.vertices.push_back({ 1, 0 });
             f.depth = 1;
 
-            CSceneObjectGeometry g;
+            SceneObjectGeometry g;
             g.figures.push_back(f);
 
-            CSceneObjectParams p;
+            SceneObjectParams p;
             p.dynamic = false;
 
             GetScene().CreateObject(g, p);
 
-            GetEventSystem().SetProcessor("SPC", CAppEventProcessor([this] {
+            GetEventSystem().SetProcessor("SPC", AppEventProcessor([this] {
                                                      camera->SetOrtho(
                                                          !camera->IsOrtho());
                                                  }));
 
             GetEventSystem().SetProcessor(
-                "C-q", CAppEventProcessor([this] { Quit(); }));
+                "C-q", AppEventProcessor([this] { Quit(); }));
         }
 
-        void CTest11::Step(double _dt) {
-            CApp::Step(_dt);
+        void Test11::Step(double _dt) {
+            App::Step(_dt);
             camera->LookAt({ 0, 0, 0 });
             light.position = camera->GetPos();
             delta = _dt * 1000;
         }
 
-        void CTest11::Render() {
-            CApp::Render();
+        void Test11::Render() {
+            App::Render();
             std::ostringstream str;
             str << "abcdefghijklmnopqrstuvwxyz_ " << delta;
             GetGrengSystems().GetRenderer().DrawString(

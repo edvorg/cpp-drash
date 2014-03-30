@@ -29,10 +29,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    class CScene;
-    class CSceneObjectGeometry;
-    class CPlayer;
-    class CPlayerParams;
+    class Scene;
+    class SceneObjectGeometry;
+    class Player;
+    class PlayerParams;
 
     enum class PlayerMessage : unsigned int {
         Left,
@@ -42,34 +42,34 @@ namespace drash {
         Jump,
     };
 
-    class CPlayersSystem final {
+    class PlayersSystem final {
     public:
         static const unsigned int playersCountLimit = 2;
 
-        CPlayersSystem(CScene& _scene);
-        ~CPlayersSystem();
+        PlayersSystem(Scene& _scene);
+        ~PlayersSystem();
 
         void Step(double);
 
-        CPlayer* CreatePlayer(const CSceneObjectGeometry& _g,
-                              const CPlayerParams& _p);
-        bool DestroyPlayer(CPlayer* _player);
+        Player* CreatePlayer(const SceneObjectGeometry& _g,
+                              const PlayerParams& _p);
+        bool DestroyPlayer(Player* _player);
 
-        inline CPlayer* const* GetPlayers();
+        inline Player* const* GetPlayers();
         inline unsigned int EnumPlayers() const;
 
-        bool SendMessage(CPlayer* _player, const PlayerMessage& _message);
+        bool SendMessage(Player* _player, const PlayerMessage& _message);
 
     private:
-        CScene& scene;
-        CObjectFactory<CPlayer> playersFactory;
+        Scene& scene;
+        ObjectFactory<Player> playersFactory;
     };
 
-    inline CPlayer* const* CPlayersSystem::GetPlayers() {
+    inline Player* const* PlayersSystem::GetPlayers() {
         return playersFactory.GetObjects();
     }
 
-    inline unsigned int CPlayersSystem::EnumPlayers() const {
+    inline unsigned int PlayersSystem::EnumPlayers() const {
         return playersFactory.EnumObjects();
     }
 

@@ -33,9 +33,9 @@ namespace drash {
 
     namespace test {
 
-        class CTest9 : public CApp {
+        class Test9 : public App {
         public:
-            CTest9(greng::CGrengSystemsSet& greng);
+            Test9(greng::GrengSystemsSet& greng);
 
             virtual void Step(double _dt) override;
             virtual void Render() override;
@@ -44,10 +44,10 @@ namespace drash {
             bool InitLights();
             bool InitRotationablePoint();
 
-            greng::CPointLight light1;
-            greng::CCamera* camera = nullptr;
+            greng::PointLight light1;
+            greng::Camera* camera = nullptr;
 
-            CRotationablePoint point1;
+            RotationablePoint point1;
         };
 
     } // namespace test

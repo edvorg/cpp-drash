@@ -30,19 +30,19 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    using drash::CLogger;
+    using drash::Logger;
 
-    CVertexShaderManager::CVertexShaderManager()
-        : shaderFactory(shadersCountLimit, "CVertexShader") {}
+    VertexShaderManager::VertexShaderManager()
+        : shaderFactory(shadersCountLimit, "VertexShader") {}
 
-    CVertexShaderManager::~CVertexShaderManager() {
+    VertexShaderManager::~VertexShaderManager() {
         while (shaderFactory.EnumObjects() != 0) {
             DestroyShader(shaderFactory.GetObjects()[0]);
         }
     }
 
-    CVertexShader* CVertexShaderManager::CreateShader() {
-        CVertexShader* res = shaderFactory.CreateObject();
+    VertexShader* VertexShaderManager::CreateShader() {
+        VertexShader* res = shaderFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
@@ -58,8 +58,8 @@ namespace greng {
         return res;
     }
 
-    CVertexShader* CVertexShaderManager::CreateShaderDummy() {
-        CVertexShader* res = CreateShader();
+    VertexShader* VertexShaderManager::CreateShaderDummy() {
+        VertexShader* res = CreateShader();
 
         if (res == nullptr) {
             return nullptr;
@@ -77,13 +77,13 @@ namespace greng {
         return CreateShaderFromSource(source);
     }
 
-    CVertexShader*
-    CVertexShaderManager::CreateShaderFromSource(const char* _source) {
+    VertexShader*
+    VertexShaderManager::CreateShaderFromSource(const char* _source) {
         if (_source == nullptr) {
             return nullptr;
         }
 
-        CVertexShader* res = CreateShader();
+        VertexShader* res = CreateShader();
 
         if (res == nullptr) {
             return nullptr;
@@ -107,7 +107,7 @@ namespace greng {
             glGetShaderInfoLog(res->vertexShaderId, buffer_size - 1, &length,
                                buffer);
 
-            LOG_ERR("CVertexShaderManager::CreateShaderFromSource(): "
+            LOG_ERR("VertexShaderManager::CreateShaderFromSource(): "
                     "glCompileShader failed");
             LOG_ERR("Message: " << buffer);
 
@@ -118,8 +118,8 @@ namespace greng {
         return res;
     }
 
-    CVertexShader*
-    CVertexShaderManager::CreateShaderFromFile(const char* _path) {
+    VertexShader*
+    VertexShaderManager::CreateShaderFromFile(const char* _path) {
         if (_path == nullptr) {
             return nullptr;
         }
@@ -127,7 +127,7 @@ namespace greng {
         std::ifstream in(_path);
 
         if (in.is_open() == false) {
-            LOG_ERR("CVertexShaderManager::CreateShaderFromFile(): unable to "
+            LOG_ERR("VertexShaderManager::CreateShaderFromFile(): unable to "
                     "load vertex shader \""
                     << _path << "\"");
             return nullptr;
@@ -140,10 +140,10 @@ namespace greng {
         return CreateShaderFromSource(buffer);
     }
 
-    bool CVertexShaderManager::DestroyShader(CVertexShader* _shader) {
+    bool VertexShaderManager::DestroyShader(VertexShader* _shader) {
         if (shaderFactory.IsObject(_shader) == false) {
             LOG_ERR(
-                "CVertexShaderManager::DestroyShader(): invalid shader taken");
+                "VertexShaderManager::DestroyShader(): invalid shader taken");
             return false;
         }
 

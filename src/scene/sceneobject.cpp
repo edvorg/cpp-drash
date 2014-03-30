@@ -33,7 +33,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    void CSceneObjectGeometry::ComputeDestructionGraph(const float _accuracy) {
+    void SceneObjectGeometry::ComputeDestructionGraph(const float _accuracy) {
         destructionGraph.clear();
         destructionGraph.resize(figures.size() * figures.size());
         memset(&*destructionGraph.begin(), 0,
@@ -49,7 +49,7 @@ namespace drash {
                      k < figures[i].vertices.size() && cont < 2; k++) {
                     for (unsigned int l = 0;
                          l < figures[j].vertices.size() && cont < 2; l++) {
-                        CVec2f dist = figures[i].vertices[k];
+                        Vec2f dist = figures[i].vertices[k];
                         dist -= figures[j].vertices[l];
 
                         unsigned int res = 0;
@@ -70,9 +70,9 @@ namespace drash {
         }
     }
 
-    CFigure* CSceneObject::CreateFigure(const CFigureParams& _params) {
+    Figure* SceneObject::CreateFigure(const FigureParams& _params) {
         if (figuresCount >= figuresCountLimit) {
-            LOG_ERR("CSceneObject::CreateFigure(): figures count exceedes it's "
+            LOG_ERR("SceneObject::CreateFigure(): figures count exceedes it's "
                     "limit ("
                     << figuresCountLimit << ")");
             return nullptr;
@@ -83,7 +83,7 @@ namespace drash {
         if (_params.vertices.size() == 0) {
             s.SetAsBox(1.0f, 1.0f);
         } else {
-            s.Set(&CVec2ToB2Vec2(*_params.vertices.begin()),
+            s.Set(&Vec2ToB2Vec2(*_params.vertices.begin()),
                   _params.vertices.size());
         }
 
@@ -100,7 +100,7 @@ namespace drash {
 
         b2Fixture* f = body->CreateFixture(&fdef);
 
-        CFigure* figure = new CFigure;
+        Figure* figure = new Figure;
 
         figure->fixture = f;
         figure->mass = _params.mass;
@@ -115,15 +115,15 @@ namespace drash {
         return figure;
     }
 
-    void CSceneObject::SetPos(const CVec3f _pos) {
+    void SceneObject::SetPos(const Vec3f _pos) {
         posXYAnimator.Set(_pos);
         posZAnimator.Set(_pos.z);
     }
 
-    void CSceneObject::DestroyFigure(CFigure* _figure) {
+    void SceneObject::DestroyFigure(Figure* _figure) {
         if (_figure->internalId >= static_cast<int>(figuresCountLimit) ||
             figures[_figure->internalId] != _figure) {
-            LOG_ERR("CSceneObject::DestroyFigure(): something wrong with "
+            LOG_ERR("SceneObject::DestroyFigure(): something wrong with "
                     "figures creation logic");
             return;
         }
@@ -139,7 +139,7 @@ namespace drash {
             body->DestroyFixture(_figure->fixture);
             _figure->fixture = nullptr;
         } else {
-            LOG_WARN("CSceneObject::DestroyFigure(): empty figure destoyed");
+            LOG_WARN("SceneObject::DestroyFigure(): empty figure destoyed");
         }
 
         if (static_cast<unsigned int>(_figure->internalId) < --figuresCount) {
@@ -153,51 +153,51 @@ namespace drash {
         delete _figure;
     }
 
-    void CSceneObject::SetDynamic(bool _dynamic) {
+    void SceneObject::SetDynamic(bool _dynamic) {
         body->SetType(_dynamic ? b2_dynamicBody : b2_kinematicBody);
     }
 
-    bool CSceneObject::IsDynamic() const {
+    bool SceneObject::IsDynamic() const {
         return body->GetType() == b2_dynamicBody ? true : false;
     }
 
-    void CSceneObject::ApplyLinearImpulse(const CVec2f& _dir,
-                                          const CVec2f& _pos) {
-        body->ApplyLinearImpulse(CVec2ToB2Vec2(_dir), CVec2ToB2Vec2(_pos),
+    void SceneObject::ApplyLinearImpulse(const Vec2f& _dir,
+                                          const Vec2f& _pos) {
+        body->ApplyLinearImpulse(Vec2ToB2Vec2(_dir), Vec2ToB2Vec2(_pos),
                                  true);
     }
 
-    void CSceneObject::SetLinearVelocity(const CVec2f& _vel) {
-        body->SetLinearVelocity(CVec2ToB2Vec2(_vel));
+    void SceneObject::SetLinearVelocity(const Vec2f& _vel) {
+        body->SetLinearVelocity(Vec2ToB2Vec2(_vel));
     }
 
-    CVec2f CSceneObject::GetLinearVelocity() const {
+    Vec2f SceneObject::GetLinearVelocity() const {
         return B2Vec2ToCVec2(body->GetLinearVelocity());
     }
 
-    void CSceneObject::SetAngularVelocity(float _vel) {
+    void SceneObject::SetAngularVelocity(float _vel) {
         body->SetAngularVelocity(_vel);
     }
 
-    float CSceneObject::GetAngularVelocity() const {
+    float SceneObject::GetAngularVelocity() const {
         return body->GetAngularVelocity();
     }
 
-    void CSceneObject::SetFixedRotation(bool _fixed) {
+    void SceneObject::SetFixedRotation(bool _fixed) {
         body->SetFixedRotation(_fixed);
     }
 
-    void CSceneObject::SetActive(bool _active) { body->SetActive(_active); }
+    void SceneObject::SetActive(bool _active) { body->SetActive(_active); }
 
-    CVec2f CSceneObject::GetWorldPoint(const CVec2f& _local_point) const {
-        return B2Vec2ToCVec2(body->GetWorldPoint(CVec2ToB2Vec2(_local_point)));
+    Vec2f SceneObject::GetWorldPoint(const Vec2f& _local_point) const {
+        return B2Vec2ToCVec2(body->GetWorldPoint(Vec2ToB2Vec2(_local_point)));
     }
 
-    CVec2f CSceneObject::GetMassCenter() const {
+    Vec2f SceneObject::GetMassCenter() const {
         return B2Vec2ToCVec2(body->GetWorldCenter());
     }
 
-    CLogger& operator<<(CLogger& _logger, const CSceneObject& _object) {
+    Logger& operator<<(Logger& _logger, const SceneObject& _object) {
         _logger << "pos: " << _object.pos << " angle: " << _object.angle
                 << '\n';
         for (unsigned int i = 0; i < _object.EnumFigures(); i++) {
@@ -206,7 +206,7 @@ namespace drash {
         return _logger;
     }
 
-    void CSceneObject::DumpGeometry(CSceneObjectGeometry* _geometry) const {
+    void SceneObject::DumpGeometry(SceneObjectGeometry* _geometry) const {
         _geometry->figures.resize(EnumFigures());
 
         for (unsigned int i = 0; i < EnumFigures(); i++) {

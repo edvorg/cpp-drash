@@ -27,10 +27,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CFragmentShader
-        : public drash::CObjectFactory<CFragmentShader>::CFactoryProduct {
+    class FragmentShader
+        : public drash::ObjectFactory<FragmentShader>::FactoryProduct {
     public:
-        CFragmentShader() = default;
+        FragmentShader() = default;
 
         unsigned int vertexShaderId = 0;
     };

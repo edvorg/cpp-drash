@@ -30,20 +30,20 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    CPlayersSystem::CPlayersSystem(CScene& _scene)
-        : scene(_scene), playersFactory(playersCountLimit, "CPlayer") {}
+    PlayersSystem::PlayersSystem(Scene& _scene)
+        : scene(_scene), playersFactory(playersCountLimit, "Player") {}
 
-    void CPlayersSystem::Step(double) {}
+    void PlayersSystem::Step(double) {}
 
-    CPlayersSystem::~CPlayersSystem() {
+    PlayersSystem::~PlayersSystem() {
         while (playersFactory.EnumObjects() != 0) {
             DestroyPlayer(playersFactory.GetObjects()[0]);
         }
     }
 
-    CPlayer* CPlayersSystem::CreatePlayer(const CSceneObjectGeometry& _g,
-                                          const CPlayerParams& _p) {
-        CPlayer* res = playersFactory.CreateObject();
+    Player* PlayersSystem::CreatePlayer(const SceneObjectGeometry& _g,
+                                          const PlayerParams& _p) {
+        Player* res = playersFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
@@ -62,7 +62,7 @@ namespace drash {
         return res;
     }
 
-    bool CPlayersSystem::DestroyPlayer(CPlayer* _player) {
+    bool PlayersSystem::DestroyPlayer(Player* _player) {
         if (playersFactory.IsObject(_player) == false) {
             return false;
         }
@@ -76,10 +76,10 @@ namespace drash {
         return true;
     }
 
-    bool CPlayersSystem::SendMessage(CPlayer* _player,
+    bool PlayersSystem::SendMessage(Player* _player,
                                      const PlayerMessage& _message) {
         if (playersFactory.IsObject(_player) == false) {
-            LOG_ERR("CPlayersSystem::SendMessage(): Wrong player");
+            LOG_ERR("PlayersSystem::SendMessage(): Wrong player");
             return false;
         }
 
@@ -88,7 +88,7 @@ namespace drash {
             if (_player->GetSceneObject()->GetLinearVelocity().Length() <
                 _player->velocityLimit) {
                 _player->GetSceneObject()->ApplyLinearImpulse(
-                    CVec2f(-1.0, 0),
+                    Vec2f(-1.0, 0),
                     _player->GetSceneObject()->GetMassCenter());
             }
             break;
@@ -97,7 +97,7 @@ namespace drash {
             if (_player->GetSceneObject()->GetLinearVelocity().Length() <
                 _player->velocityLimit) {
                 _player->GetSceneObject()->ApplyLinearImpulse(
-                    CVec2f(1.0, 0), _player->GetSceneObject()->GetMassCenter());
+                    Vec2f(1.0, 0), _player->GetSceneObject()->GetMassCenter());
             }
             break;
 
@@ -115,7 +115,7 @@ namespace drash {
 
         case PlayerMessage::Jump:
             _player->GetSceneObject()->ApplyLinearImpulse(
-                CVec2f(0, 0.5), _player->GetSceneObject()->GetMassCenter());
+                Vec2f(0, 0.5), _player->GetSceneObject()->GetMassCenter());
             break;
 
         default:

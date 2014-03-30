@@ -32,19 +32,19 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    using drash::CLogger;
+    using drash::Logger;
 
-    CTextureManager::CTextureManager()
-        : textureFactory(texturesCountLimit, "CTexture") {}
+    TextureManager::TextureManager()
+        : textureFactory(texturesCountLimit, "Texture") {}
 
-    CTextureManager::~CTextureManager() {
+    TextureManager::~TextureManager() {
         while (textureFactory.EnumObjects() != 0) {
             DestroyTexture(textureFactory.GetObjects()[0]);
         }
     }
 
-    CTexture* CTextureManager::CreateTexture() {
-        CTexture* res = textureFactory.CreateObject();
+    Texture* TextureManager::CreateTexture() {
+        Texture* res = textureFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
@@ -60,8 +60,8 @@ namespace greng {
         return res;
     }
 
-    CTexture* CTextureManager::CreateTextureFromFile(const char* _path) {
-        CTexture* res = CreateTexture();
+    Texture* TextureManager::CreateTextureFromFile(const char* _path) {
+        Texture* res = CreateTexture();
 
         if (res == nullptr) {
             return nullptr;
@@ -70,7 +70,7 @@ namespace greng {
         SDL_Surface* s = IMG_Load(_path);
 
         if (s == nullptr) {
-            LOG_ERR("CTextureManager::CreateTextureFromFile(): unable to load "
+            LOG_ERR("TextureManager::CreateTextureFromFile(): unable to load "
                     "texture \""
                     << _path << "\"");
             DestroyTexture(res);
@@ -94,14 +94,14 @@ namespace greng {
         return res;
     }
 
-    CTexture* CTextureManager::CreateTextureDummy() {
-        CTexture* res = CreateTexture();
+    Texture* TextureManager::CreateTextureDummy() {
+        Texture* res = CreateTexture();
 
         if (res == nullptr) {
             return nullptr;
         }
 
-        drash::CColor4f data[4];
+        drash::Color4f data[4];
         data[0].Set(1, 0, 0, 1);
         data[1].Set(0, 1, 0, 1);
         data[2].Set(0, 0, 1, 1);
@@ -117,14 +117,14 @@ namespace greng {
         return res;
     }
 
-    CTexture* CTextureManager::CreateTextureWhite() {
-        CTexture* res = CreateTexture();
+    Texture* TextureManager::CreateTextureWhite() {
+        Texture* res = CreateTexture();
 
         if (res == nullptr) {
             return nullptr;
         }
 
-        drash::CColor4f data[4];
+        drash::Color4f data[4];
         data[0].Set(1, 1, 1, 1);
         data[1].Set(1, 1, 1, 1);
         data[2].Set(1, 1, 1, 1);
@@ -140,8 +140,8 @@ namespace greng {
         return res;
     }
 
-    CTexture* CTextureManager::CreateTexture(const drash::CVec2i& size) {
-        CTexture* res = CreateTexture();
+    Texture* TextureManager::CreateTexture(const drash::Vec2i& size) {
+        Texture* res = CreateTexture();
 
         if (res == nullptr) {
             return nullptr;
@@ -157,7 +157,7 @@ namespace greng {
         return res;
     }
 
-    bool CTextureManager::DestroyTexture(CTexture* _texture) {
+    bool TextureManager::DestroyTexture(Texture* _texture) {
         if (textureFactory.IsObject(_texture) == false) {
             return false;
         }

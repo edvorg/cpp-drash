@@ -38,66 +38,66 @@ namespace drash {
 #define STATE_END 0x08
 #define STATE_CANCEL 0x10
 
-    class CAppEvent;
+    class AppEvent;
 
-    class CAppEventCombinationTree {
+    class AppEventCombinationTree {
     public:
-        friend class CAppEventSystem;
+        friend class AppEventSystem;
 
-        CAppEventCombinationTree();
+        AppEventCombinationTree();
 
     protected:
     private:
-        CAppEventProcessor processor;
-        CAppEventCombination combination;
-        std::list<CAppEventCombinationTree> childs;
+        AppEventProcessor processor;
+        AppEventCombination combination;
+        std::list<AppEventCombinationTree> childs;
         int state = STATE_NORMAL;
     };
 
-    class CAppEventSystem {
+    class AppEventSystem {
     public:
-        CAppEventSystem();
+        AppEventSystem();
 
         static bool ValidateModeName(const std::string& _name);
 
         bool SetMode(const std::string& _name);
         void SetProcessor(const char* _combinations,
-                          const CAppEventProcessor& _processor);
+                          const AppEventProcessor& _processor);
 
         void Process();
 
-        void BeginEvent(const CAppEvent& _event);
-        void EndEvent(const CAppEvent& _event);
-        void CancelEvent(const CAppEvent& _event);
+        void BeginEvent(const AppEvent& _event);
+        void EndEvent(const AppEvent& _event);
+        void CancelEvent(const AppEvent& _event);
 
     protected:
     private:
-        int PressEventImpl(const CAppEvent& _event);
+        int PressEventImpl(const AppEvent& _event);
 
         /// contains all current events
         /// BeginEvent invokation adds event to currentState
         /// EndEvent invokation removes event from currentState
-        CAppEventCombination currentState;
+        AppEventCombination currentState;
 
         /// contains combinations being processed
-        std::list<CAppEventCombinationTree*> currentCombinations;
+        std::list<AppEventCombinationTree*> currentCombinations;
 
         /// name of mode currently in use. mode is just name for one
         /// combinations tree.
         /// the reason for using of modes is processor conflicts when we need to
         /// bind
-        /// more than one CAppEventProcessor instances to the same combination
+        /// more than one AppEventProcessor instances to the same combination
         /// but execute only one instance at time
         std::string currentMode = "";
 
         /// combination trees for each mode
-        std::map<std::string, CAppEventCombinationTree> trees;
+        std::map<std::string, AppEventCombinationTree> trees;
 
         /// root of current mode tree
-        CAppEventCombinationTree* currentModeRoot = nullptr;
+        AppEventCombinationTree* currentModeRoot = nullptr;
 
         /// start point for searching of combinations to process
-        CAppEventCombinationTree* currentNode = nullptr;
+        AppEventCombinationTree* currentNode = nullptr;
     };
 
 } // namespace drash

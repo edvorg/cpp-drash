@@ -29,15 +29,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    class CAppEventProcessor {
+    class AppEventProcessor {
     public:
         typedef std::function<void()> FuncT;
 
-        CAppEventProcessor();
-        CAppEventProcessor(const FuncT& _begin,
+        AppEventProcessor();
+        AppEventProcessor(const FuncT& _begin,
                            const FuncT& _processing = []() {},
                            const FuncT& _end = []() {});
-        CAppEventProcessor(const CAppEventProcessor& _src);
+        AppEventProcessor(const AppEventProcessor& _src);
 
         inline void Begin();
         inline void Processing();
@@ -50,11 +50,11 @@ namespace drash {
         FuncT end = []() {};
     };
 
-    inline void CAppEventProcessor::Begin() { begin(); }
+    inline void AppEventProcessor::Begin() { begin(); }
 
-    inline void CAppEventProcessor::Processing() { processing(); }
+    inline void AppEventProcessor::Processing() { processing(); }
 
-    inline void CAppEventProcessor::End() { end(); }
+    inline void AppEventProcessor::End() { end(); }
 
 } // namespace drash
 

@@ -23,35 +23,35 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #pragma once
-#ifndef CPLAYER_H
-#define CPLAYER_H
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include "../scene/sceneobject.h"
 
 namespace drash {
 
-    class CSceneObject;
+    class SceneObject;
 
-    class CPlayerParams final {
+    class PlayerParams final {
     public:
-        CSceneObjectParams sceneObjectParams;
+        SceneObjectParams sceneObjectParams;
         float velocityLimit = 1;
     };
 
-    class CPlayer final : public CObjectFactory<CPlayer>::CFactoryProduct {
+    class Player final : public ObjectFactory<Player>::FactoryProduct {
     public:
-        friend class CPlayersSystem;
+        friend class PlayersSystem;
 
-        inline CSceneObject* GetSceneObject();
+        inline SceneObject* GetSceneObject();
 
     protected:
     private:
-        CSceneObject* sceneObject = nullptr;
+        SceneObject* sceneObject = nullptr;
         float velocityLimit = 1;
     };
 
-    inline CSceneObject* CPlayer::GetSceneObject() { return sceneObject; }
+    inline SceneObject* Player::GetSceneObject() { return sceneObject; }
 
 } // namespace drash
 
-#endif // CPLAYER_H
+#endif // PLAYER_H

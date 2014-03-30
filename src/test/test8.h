@@ -33,10 +33,10 @@ namespace drash {
 
     namespace test {
 
-        class CTest8 : public CApp {
+        class Test8 : public App {
         public:
-            CTest8(greng::CGrengSystemsSet& greng);
-            ~CTest8();
+            Test8(greng::GrengSystemsSet& greng);
+            ~Test8();
 
         private:
             virtual void Render() override;
@@ -46,11 +46,11 @@ namespace drash {
             bool InitCamera();
             bool InitLights();
 
-            ui::CUIButton button1;
-            ui::CUIButton button2;
-            CLevelDesc* level1 = nullptr;
-            CLevelDesc* level2 = nullptr;
-            greng::CPointLight light1;
+            ui::UIButton button1;
+            ui::UIButton button2;
+            LevelDesc* level1 = nullptr;
+            LevelDesc* level2 = nullptr;
+            greng::PointLight light1;
         };
 
     } // namespace test

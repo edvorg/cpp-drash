@@ -27,9 +27,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CTexture : public drash::CObjectFactory<CTexture>::CFactoryProduct {
+    class Texture : public drash::ObjectFactory<Texture>::FactoryProduct {
     public:
-        CTexture() = default;
+        Texture() = default;
 
         unsigned int textureBufferId = 0;
 

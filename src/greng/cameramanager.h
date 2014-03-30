@@ -30,31 +30,31 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    using drash::CVec3f;
-    class CCamera;
+    using drash::Vec3f;
+    class Camera;
 
-    class CCameraParams {
+    class CameraParams {
     public:
         bool ortho = false;
         float orthoWidth = 1.0f;
         float fov = M_PI / 4.0f;
         float depthOfView = 1000.0f;
-        CVec3f pos = { 0, 0, 0 };
-        CVec3f rotation = { 0, 0, 0 };
+        Vec3f pos = { 0, 0, 0 };
+        Vec3f rotation = { 0, 0, 0 };
     };
 
-    class CCameraManager {
+    class CameraManager {
     public:
         static const unsigned int camerasCountLimit = 3;
 
-        CCameraManager();
-        ~CCameraManager();
+        CameraManager();
+        ~CameraManager();
 
         void Step(double _dt);
 
-        CCamera* CreateCamera(const CCameraParams& _params);
-        bool DestroyCamera(CCamera* _camera);
-        inline CCamera* const* GetCameras() const;
+        Camera* CreateCamera(const CameraParams& _params);
+        bool DestroyCamera(Camera* _camera);
+        inline Camera* const* GetCameras() const;
         inline unsigned int EnumCameras() const;
 
         /// aspect ratio is window width in pixels divided on widow height
@@ -65,20 +65,20 @@ namespace greng {
 
     protected:
     private:
-        drash::CObjectFactory<CCamera> cameraFactory;
+        drash::ObjectFactory<Camera> cameraFactory;
 
         float aspectRatio = 1;
     };
 
-    inline CCamera* const* CCameraManager::GetCameras() const {
+    inline Camera* const* CameraManager::GetCameras() const {
         return cameraFactory.GetObjects();
     }
 
-    inline unsigned int CCameraManager::EnumCameras() const {
+    inline unsigned int CameraManager::EnumCameras() const {
         return cameraFactory.EnumObjects();
     }
 
-    inline float CCameraManager::GetAspectRatio() const { return aspectRatio; }
+    inline float CameraManager::GetAspectRatio() const { return aspectRatio; }
 
 } // namespace greng
 

@@ -23,8 +23,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #pragma once
-#ifndef CTESTAPP3DRASHTEST_H
-#define CTESTAPP3DRASHTEST_H
+#ifndef TESTAPP3DRASHTEST_H
+#define TESTAPP3DRASHTEST_H
 
 #include "test1.h"
 
@@ -35,9 +35,9 @@ namespace drash {
 
     namespace test {
 
-        class CTest3 : public CTest1 {
+        class Test3 : public Test1 {
         public:
-            CTest3(greng::CGrengSystemsSet& greng);
+            Test3(greng::GrengSystemsSet& greng);
 
         protected:
             virtual void Step(double _dt) override;
@@ -46,18 +46,18 @@ namespace drash {
         private:
             void SetProcessors();
             void InitObjects();
-            CSceneObject* moveObject = nullptr;
+            SceneObject* moveObject = nullptr;
 
             // gravity in y axis
-            ui::CUISlider slider1;
+            ui::UISlider slider1;
             // gravity in x axis
-            ui::CUISlider slider2;
+            ui::UISlider slider2;
 
-            greng::CPointLight light1;
+            greng::PointLight light1;
         };
 
     } // namespace test
 
 } // namespace drash
 
-#endif // CTESTAPP3DRASHTEST_H
+#endif // TESTAPP3DRASHTEST_H

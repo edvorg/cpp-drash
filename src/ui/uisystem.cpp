@@ -30,10 +30,10 @@ namespace drash {
 
     namespace ui {
 
-        CUISystem::CUISystem(greng::CRenderer& _renderer)
+        UISystem::UISystem(greng::Renderer& _renderer)
             : renderer(_renderer) {}
 
-        CUISystem::~CUISystem() {
+        UISystem::~UISystem() {
             for (unsigned int i = 0; i < controlsCount; i++) {
                 delete controls[i];
                 controls[i] = nullptr;
@@ -41,15 +41,15 @@ namespace drash {
             controlsCount = 0;
         }
 
-        CUIControl* CUISystem::CreateControl() {
+        UIControl* UISystem::CreateControl() {
             if (controlsCount == controlsCountLimit) {
                 return nullptr;
             }
 
-            return controls[controlsCount++] = new CUIControl;
+            return controls[controlsCount++] = new UIControl;
         }
 
-        void CUISystem::DestroyControl(CUIControl* _control) {
+        void UISystem::DestroyControl(UIControl* _control) {
             for (unsigned int i = 0; i < controlsCount; i++) {
                 if (controls[i] == _control) {
                     _control->destroyHandler();
@@ -61,35 +61,35 @@ namespace drash {
             }
         }
 
-        void CUISystem::SetAspectRatio(float _ratio) {
+        void UISystem::SetAspectRatio(float _ratio) {
             aspectRatio = _ratio;
             SetWidth(width);
         }
 
-        void CUISystem::SetWidth(unsigned int _width) {
+        void UISystem::SetWidth(unsigned int _width) {
             width = _width;
             height = width / aspectRatio;
         }
 
-        bool CUISystem::ScreenSpaceToUISpace(const CVec2f& _from, int& _x,
+        bool UISystem::ScreenSpaceToUISpace(const Vec2f& _from, int& _x,
                                              int& _y) {
             _x = (_from.x + 0.5f) * static_cast<float>(width);
             _y = (_from.y + 0.5f) * static_cast<float>(height);
             return true;
         }
 
-        bool CUISystem::UISpaceToScreenSpace(int _x, int _y, CVec2f& _v) {
+        bool UISystem::UISpaceToScreenSpace(int _x, int _y, Vec2f& _v) {
             _v.x = (static_cast<float>(_x) / static_cast<float>(width)) - 0.5f;
             _v.y = (static_cast<float>(_y) / static_cast<float>(height)) - 0.5f;
             return true;
         }
 
-        void CUISystem::SetCursorPos(int _x, int _y) {
+        void UISystem::SetCursorPos(int _x, int _y) {
             cursorX = _x;
             cursorY = _y;
         }
 
-        void CUISystem::BeginEvent() {
+        void UISystem::BeginEvent() {
             for (unsigned int i = 0; i < controlsCount; i++) {
                 int local_x = GetCursorPosX() - controls[i]->GetPos().x;
                 int local_y = GetCursorPosY() - controls[i]->GetPos().y;
@@ -105,20 +105,20 @@ namespace drash {
             }
         }
 
-        void CUISystem::EndEvent() {
+        void UISystem::EndEvent() {
             if (pressedControl != nullptr) {
                 pressedControl->releaseHandler();
                 pressedControl = nullptr;
             }
         }
 
-        void CUISystem::Step(double _dt) {
+        void UISystem::Step(double _dt) {
             for (unsigned int i = 0; i < controlsCount; i++) {
                 controls[i]->stepHandler(_dt);
             }
         }
 
-        void CUISystem::DebugDraw() const {
+        void UISystem::DebugDraw() const {
             for (unsigned int i = 0; i < controlsCount; i++) {
                 controls[i]->drawHandler();
             }

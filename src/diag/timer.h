@@ -23,16 +23,16 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #pragma once
-#ifndef CTIMER_H
-#define CTIMER_H
+#ifndef TIMER_H
+#define TIMER_H
 
 namespace drash {
 
-    class CLogger;
+    class Logger;
 
-    class CTimer {
+    class Timer {
     public:
-        CTimer();
+        Timer();
 
         /// if _start is true - automaticly starts timer
         void Reset(bool _start);
@@ -48,7 +48,7 @@ namespace drash {
         /// time (seconds) spent between last two Tick() invokations
         double GetDeltaTime() const;
 
-        friend CLogger& operator<<(CLogger& _logger, const CTimer& _timer);
+        friend Logger& operator<<(Logger& _logger, const Timer& _timer);
 
     private:
         void Update();
@@ -59,10 +59,10 @@ namespace drash {
         bool paused = true;
     };
 
-    inline void CTimer::SetPaused(bool _paused) { paused = _paused; }
+    inline void Timer::SetPaused(bool _paused) { paused = _paused; }
 
-    inline bool CTimer::IsPaused() const { return paused; }
+    inline bool Timer::IsPaused() const { return paused; }
 
 } // namespace drash
 
-#endif // CTIMER_H
+#endif // TIMER_H

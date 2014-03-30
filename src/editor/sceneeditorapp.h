@@ -34,9 +34,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    class CSceneEditorApp : public CApp {
+    class SceneEditorApp : public App {
     public:
-        CSceneEditorApp();
+        SceneEditorApp();
 
         virtual void Step(double _dt) override;
         virtual void Render() override;
@@ -51,14 +51,14 @@ namespace drash {
 
         void StartCurrentLevel();
 
-        void AddObject(const std::string& _name, const CVec3f& _pos);
+        void AddObject(const std::string& _name, const Vec3f& _pos);
 
         //
         inline bool SaveLevel();
 
         inline bool IsSetFileName() const;
         inline bool IsSetLevel() const;
-        inline CLevelDesc* GetCurrentLevel() const;
+        inline LevelDesc* GetCurrentLevel() const;
         inline std::string GetLevelFileName() const;
 
         inline void SetTreeRefreshHandler(const std::function<void()>& _han);
@@ -83,7 +83,7 @@ namespace drash {
 
         inline bool IsObjectSelected() const;
 
-        drash::CSceneObjectParams GetSelectedParams() const;
+        drash::SceneObjectParams GetSelectedParams() const;
 
     private:
         void SetProcessors();
@@ -96,9 +96,9 @@ namespace drash {
 
         std::string fileNameLevel = "";
 
-        CLevelDesc* currentLevel = nullptr;
-        greng::CPointLight light1;
-        greng::CCamera* camera = nullptr;
+        LevelDesc* currentLevel = nullptr;
+        greng::PointLight light1;
+        greng::Camera* camera = nullptr;
 
         std::function<void()> treeRefreshHandler = []() {};
         std::function<std::string()> getSelectedTemplateHandler = []() {
@@ -108,18 +108,18 @@ namespace drash {
         bool paused = false;
         bool changedParams = false;
 
-        CLevelObjectDesc* selectedObject = nullptr;
+        LevelObjectDesc* selectedObject = nullptr;
 
-        CMoveablePoint moveablePoint;
-        CRotationablePoint rotationablePoint;
+        MoveablePoint moveablePoint;
+        RotationablePoint rotationablePoint;
         void RatateObject();
         void RenderPoints();
 
-        CVec3f oldpositon;
+        Vec3f oldpositon;
 
-        CTimer timer;
+        Timer timer;
 
-        CVec2f camRotFirstClick;
+        Vec2f camRotFirstClick;
 
         static const int MOVING_SPEED = 15;
 
@@ -128,53 +128,53 @@ namespace drash {
         std::string dragTemplateName = "";
 
     private:
-        CLevelObjectDesc* SelectObject();
+        LevelObjectDesc* SelectObject();
         void MoveOfAxis();
     };
 
-    inline bool CSceneEditorApp::IsSetFileName() const {
+    inline bool SceneEditorApp::IsSetFileName() const {
         return fileNameLevel != "";
     }
 
-    inline bool CSceneEditorApp::SaveLevel() {
+    inline bool SceneEditorApp::SaveLevel() {
         return SaveLevelAs(fileNameLevel);
     }
 
-    inline CLevelDesc* CSceneEditorApp::GetCurrentLevel() const {
+    inline LevelDesc* SceneEditorApp::GetCurrentLevel() const {
         return currentLevel;
     }
 
-    inline std::string CSceneEditorApp::GetLevelFileName() const {
+    inline std::string SceneEditorApp::GetLevelFileName() const {
         return fileNameLevel;
     }
 
-    inline bool CSceneEditorApp::IsSetLevel() const {
+    inline bool SceneEditorApp::IsSetLevel() const {
         return currentLevel != nullptr;
     }
 
     inline void
-    CSceneEditorApp::SetTreeRefreshHandler(const std::function<void()>& _han) {
+    SceneEditorApp::SetTreeRefreshHandler(const std::function<void()>& _han) {
         treeRefreshHandler = _han;
     }
 
-    inline void CSceneEditorApp::SetGetSelectedHandler(
+    inline void SceneEditorApp::SetGetSelectedHandler(
         const std::function<std::string()>& _han) {
         getSelectedTemplateHandler = _han;
     }
 
-    inline void CSceneEditorApp::PauseLevel() {
+    inline void SceneEditorApp::PauseLevel() {
         playLevel = false;
         paused = true;
     }
 
-    inline bool CSceneEditorApp::IsObjectSelected() const {
+    inline bool SceneEditorApp::IsObjectSelected() const {
         return selectedObject != nullptr;
     }
 
-    inline bool CSceneEditorApp::IsChangedParams() const {
+    inline bool SceneEditorApp::IsChangedParams() const {
         return changedParams;
     }
 
-    inline void CSceneEditorApp::ResetChangedFlag() { changedParams = false; }
+    inline void SceneEditorApp::ResetChangedFlag() { changedParams = false; }
 } // namespace drash
 #endif // SCENEEDITORAPP_H

@@ -29,9 +29,9 @@ class b2Joint;
 
 namespace drash {
 
-    class CJoint {
+    class Joint {
     public:
-        friend class CScene;
+        friend class Scene;
 
     protected:
     private:

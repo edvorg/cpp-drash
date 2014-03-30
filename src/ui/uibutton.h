@@ -31,15 +31,15 @@ namespace drash {
 
     namespace ui {
 
-        class CUIButton : public CUIWidget {
+        class UIButton : public UIWidget {
         public:
-            CUIButton() = default;
-            CUIButton(const CUIButton&) = delete;
-            CUIButton(CUIButton&&) = delete;
-            CUIButton& operator=(const CUIButton&) = delete;
-            CUIButton& operator=(CUIButton&&) = delete;
+            UIButton() = default;
+            UIButton(const UIButton&) = delete;
+            UIButton(UIButton&&) = delete;
+            UIButton& operator=(const UIButton&) = delete;
+            UIButton& operator=(UIButton&&) = delete;
 
-            virtual void Connect(CUISystem* _system) override;
+            virtual void Connect(UISystem* _system) override;
 
             void SetClickHandler(const std::function<void()>& _handler);
 

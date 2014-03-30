@@ -122,11 +122,11 @@ EditorWindow::~EditorWindow() {
 }
 
 bool EditorWindow::InitScene() {
-    drash::CSceneParams params;
+    drash::SceneParams params;
     params.gravity.Set(0.0f, -9.8f);
 
-    sceneApp = new CSceneEditorApp();
-    objectApp = new CObjectEditorApp();
+    sceneApp = new SceneEditorApp();
+    objectApp = new ObjectEditorApp();
 
     widgetForObjects = new SceneWidget(this);
     widgetForScene = new SceneWidget(this);
@@ -408,10 +408,10 @@ void EditorWindow::CreateActions() {
     sceneToolbar->addActions(listActions);
 }
 
-bool EditorWindow::UpdateTreeTemplates(QTreeWidget* _tree, drash::CApp* _app) {
+bool EditorWindow::UpdateTreeTemplates(QTreeWidget* _tree, drash::App* _app) {
     _tree->clear();
     QList<QTreeWidgetItem*> list;
-    CGeometryManager tSys = _app->GetGeometryManager();
+    GeometryManager tSys = _app->GetGeometryManager();
     for (auto item = tSys.GetGeometries().begin();
          item != tSys.GetGeometries().end(); item++) {
 
@@ -419,11 +419,11 @@ bool EditorWindow::UpdateTreeTemplates(QTreeWidget* _tree, drash::CApp* _app) {
             _tree, QStringList(QString::fromStdString(item->first)));
         _tree->addTopLevelItem(objectItem);
 
-        const CSceneObjectGeometry& geo = *(item->second);
-        const std::vector<CFigureParams>& f = geo.figures;
+        const SceneObjectGeometry& geo = *(item->second);
+        const std::vector<FigureParams>& f = geo.figures;
         objectItem->setText(1, QString::number(f.size()));
         //       for (auto fig = f.begin() ; fig != f.end() ; fig++) {
-        //           CFigureParams par = *fig;
+        //           FigureParams par = *fig;
 
         //           QString vecs("");
         //           vecs.append("[");
@@ -450,7 +450,7 @@ void EditorWindow::UpdateTreeSceneObjects() {
 
     for (unsigned int i = 0; i < sceneApp->GetCurrentLevel()->EnumObjects();
          i++) {
-        CLevelObjectDesc* cur_obj_desc =
+        LevelObjectDesc* cur_obj_desc =
             sceneApp->GetCurrentLevel()->GetObjects()[i];
 
         QTreeWidgetItem* geometryItem = new QTreeWidgetItem(
@@ -543,7 +543,7 @@ void EditorWindow::on_mTreeSceneObjects_clicked(const QModelIndex&) {
 }
 
 CSceneObjectParams EditorWindow::GetObjectParams() const {
-    CSceneObjectParams buff;
+    SceneObjectParams buff;
     buff.dynamic = ui->checkBoxDynamic->isChecked();
     buff.angle = (float)ui->angleBox->value();
     buff.fixedRotation = ui->checkBoxFixedRotation->isChecked();
@@ -562,7 +562,7 @@ void EditorWindow::on_mAngleBox_valueChanged(double arg1) {
     sceneApp->SetAngleParams((float)arg1);
 }
 
-void EditorWindow::SetObjectParams(const CSceneObjectParams& _params) {
+void EditorWindow::SetObjectParams(const SceneObjectParams& _params) {
     ui->angleBox->setValue(_params.angle);
     ui->checkBoxDynamic->setChecked(_params.dynamic);
     ui->checkBoxFixedRotation->setChecked(_params.fixedRotation);

@@ -28,12 +28,12 @@ using namespace std;
 
 namespace drash {
 
-    CLevelDesc::CLevelDesc()
-        : objectsFactory(objectsCountLimit, "CLevelObjectDesc") {}
+    LevelDesc::LevelDesc()
+        : objectsFactory(objectsCountLimit, "LevelObjectDesc") {}
 
-    CLevelDesc::~CLevelDesc() { objectsFactory.DestroyObjects(); }
+    LevelDesc::~LevelDesc() { objectsFactory.DestroyObjects(); }
 
-    CLevelObjectDesc* CLevelDesc::AddObject(const std::string& _geometry,
+    LevelObjectDesc* LevelDesc::AddObject(const std::string& _geometry,
                                             const std::string& _name) {
         auto o = objectsFactory.CreateObject();
 
@@ -47,9 +47,9 @@ namespace drash {
         return o;
     }
 
-    bool CLevelDesc::DestroyObject(CLevelObjectDesc* _desc) {
+    bool LevelDesc::DestroyObject(LevelObjectDesc* _desc) {
         if (!objectsFactory.IsObject(_desc)) {
-            LOG_ERR("CLevelDesc::DestroyObject(): invalid object taken");
+            LOG_ERR("LevelDesc::DestroyObject(): invalid object taken");
             return false;
         }
 
@@ -57,7 +57,7 @@ namespace drash {
         return true;
     }
 
-    CLevelObjectDesc* CLevelDesc::GetObject(const std::string& _name) {
+    LevelObjectDesc* LevelDesc::GetObject(const std::string& _name) {
         for (unsigned int i = 0; i < objectsFactory.EnumObjects(); i++) {
             if (objectsFactory.GetObjects()[i]->levelObjectName == _name) {
                 return objectsFactory.GetObjects()[i];
@@ -67,9 +67,9 @@ namespace drash {
         return nullptr;
     }
 
-    void CLevelDesc::DestroyObjects() { objectsFactory.DestroyObjects(); }
+    void LevelDesc::DestroyObjects() { objectsFactory.DestroyObjects(); }
 
-    std::string CLevelDesc::GetUniqueObjectName() const {
+    std::string LevelDesc::GetUniqueObjectName() const {
         std::string res("object_0");
 
         for (unsigned int i = 0; i < objectsFactory.EnumObjects(); i++) {
@@ -81,7 +81,7 @@ namespace drash {
         return res;
     }
 
-    bool CLevelDesc::Store(const string& _filename) const {
+    bool LevelDesc::Store(const string& _filename) const {
         ofstream out(_filename);
 
         if (out.is_open() == false) {
@@ -91,13 +91,13 @@ namespace drash {
 
         out << objectsFactory.EnumObjects() << endl;
         for (unsigned int i = 0; i < objectsFactory.EnumObjects(); i++) {
-            CLevelObjectDesc* desc = objectsFactory.GetObjects()[i];
+            LevelObjectDesc* desc = objectsFactory.GetObjects()[i];
 
             // Save name Template
             out << desc->levelObjectName << endl;
             out << desc->geometryName << endl;
 
-            const CSceneObjectParams& cur = desc->params;
+            const SceneObjectParams& cur = desc->params;
 
             out << cur.angle << endl;
             out << cur.dynamic << endl;
@@ -112,7 +112,7 @@ namespace drash {
         return true;
     }
 
-    bool CLevelDesc::Load(const string& _filename) {
+    bool LevelDesc::Load(const string& _filename) {
         ifstream in(_filename);
 
         if (in.is_open() == false) {
@@ -127,7 +127,7 @@ namespace drash {
         for (int i = 0; i < objects_count; i++) {
             string name_object = "";
             std::string name_geometry = "";
-            CSceneObjectParams params;
+            SceneObjectParams params;
 
             in >> name_object;
             in >> name_geometry;
@@ -138,7 +138,7 @@ namespace drash {
             in >> params.pos.y;
             in >> params.pos.z;
 
-            CLevelObjectDesc* desc = AddObject(name_geometry, name_object);
+            LevelObjectDesc* desc = AddObject(name_geometry, name_object);
 
             if (desc != nullptr) {
                 desc->geometryName = name_geometry;

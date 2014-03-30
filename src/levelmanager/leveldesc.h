@@ -34,29 +34,29 @@ namespace drash {
     using std::vector;
     using std::pair;
 
-    class CLevelObjectDesc
-        : public CObjectFactory<CLevelObjectDesc>::CFactoryProduct {
+    class LevelObjectDesc
+        : public ObjectFactory<LevelObjectDesc>::FactoryProduct {
     public:
         std::string geometryName = "";
         std::string levelObjectName = "";
-        CSceneObjectParams params;
+        SceneObjectParams params;
     };
 
-    class CLevelDesc : public CObjectFactory<CLevelDesc>::CFactoryProduct {
+    class LevelDesc : public ObjectFactory<LevelDesc>::FactoryProduct {
     public:
-        friend class CLevelManager;
+        friend class LevelManager;
 
         static const unsigned int objectsCountLimit = 128;
 
-        CLevelDesc();
-        ~CLevelDesc();
+        LevelDesc();
+        ~LevelDesc();
 
-        CLevelObjectDesc* AddObject(const std::string& _geometry,
+        LevelObjectDesc* AddObject(const std::string& _geometry,
                                     const std::string& _name);
-        bool DestroyObject(CLevelObjectDesc* _desc);
-        CLevelObjectDesc* GetObject(const std::string& _name);
+        bool DestroyObject(LevelObjectDesc* _desc);
+        LevelObjectDesc* GetObject(const std::string& _name);
         inline unsigned int EnumObjects() const;
-        inline CLevelObjectDesc* const* GetObjects() const;
+        inline LevelObjectDesc* const* GetObjects() const;
         void DestroyObjects();
 
         std::string GetUniqueObjectName() const;
@@ -65,14 +65,14 @@ namespace drash {
         bool Load(const string& _filename);
 
     private:
-        CObjectFactory<CLevelObjectDesc> objectsFactory;
+        ObjectFactory<LevelObjectDesc> objectsFactory;
     };
 
-    inline unsigned int drash::CLevelDesc::EnumObjects() const {
+    inline unsigned int drash::LevelDesc::EnumObjects() const {
         return objectsFactory.EnumObjects();
     }
 
-    inline CLevelObjectDesc* const* CLevelDesc::GetObjects() const {
+    inline LevelObjectDesc* const* LevelDesc::GetObjects() const {
         return objectsFactory.GetObjects();
     }
 

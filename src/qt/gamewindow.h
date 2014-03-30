@@ -33,7 +33,7 @@ class SceneWidget;
 class QLabel;
 
 namespace drash {
-    class CApp;
+    class App;
 }
 
 namespace Ui {
@@ -63,10 +63,10 @@ public:
 
 private:
     Ui::GameWindow* ui = nullptr;
-    drash::CApp* app = nullptr;
+    drash::App* app = nullptr;
     SceneWidget* sceneWidget = nullptr;
     QTimer updateTimer;
-    drash::CTimer gameTimer;
+    drash::Timer gameTimer;
     QLabel* statusLabel = nullptr;
 };
 

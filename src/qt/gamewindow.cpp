@@ -65,7 +65,7 @@ GameWindow::~GameWindow() {
 }
 
 bool GameWindow::Init(const GameWindowParams& _params) {
-    CSceneParams params;
+    SceneParams params;
     params.gravity.Set(0.0f, -9.8f);
 
     QString title = "drash";
@@ -76,7 +76,7 @@ bool GameWindow::Init(const GameWindowParams& _params) {
                 app = test::StartApp(_params.argv[i + 1].c_str());
 
                 if (app == nullptr) {
-                    LOG_ERR("CApp::CApp(): test app "
+                    LOG_ERR("App::App(): test app "
                             << _params.argv[i + 1].c_str() << " not found");
                     return false;
                 }
@@ -91,7 +91,7 @@ bool GameWindow::Init(const GameWindowParams& _params) {
 
                 break;
             } else {
-                LOG_ERR("CApp::CApp(): test app name expected");
+                LOG_ERR("App::App(): test app name expected");
                 return false;
             }
         }
@@ -118,7 +118,7 @@ void GameWindow::UpdateScene() {
         app->Step(gameTimer.GetDeltaTime());
     }
 
-    statusLabel->setText(QString(drash::CLogger::Tail().c_str()));
+    statusLabel->setText(QString(drash::Logger::Tail().c_str()));
 
     sceneWidget->updateGL();
 }

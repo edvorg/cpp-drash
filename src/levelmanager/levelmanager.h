@@ -29,27 +29,27 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    class CScene;
-    class CLevelDesc;
-    class CSceneObjectParams;
-    class CGeometryManager;
-    class CSceneObject;
+    class Scene;
+    class LevelDesc;
+    class SceneObjectParams;
+    class GeometryManager;
+    class SceneObject;
 
-    class CLevelManager {
+    class LevelManager {
     public:
         static const unsigned int levelsCountLimit = 10;
 
-        CLevelManager(CScene& _scene, CGeometryManager& _geometry_manager);
-        ~CLevelManager();
+        LevelManager(Scene& _scene, GeometryManager& _geometry_manager);
+        ~LevelManager();
 
-        CLevelDesc* CreateLevel();
-        bool DestroyLevel(CLevelDesc* _level);
-        bool StartLevel(CLevelDesc* _level);
+        LevelDesc* CreateLevel();
+        bool DestroyLevel(LevelDesc* _level);
+        bool StartLevel(LevelDesc* _level);
 
     private:
-        CScene& scene;
-        CGeometryManager& templateSystem;
-        CObjectFactory<CLevelDesc> levelFactory;
+        Scene& scene;
+        GeometryManager& templateSystem;
+        ObjectFactory<LevelDesc> levelFactory;
     };
 
 } // namespace drash

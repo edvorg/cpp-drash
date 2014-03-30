@@ -91,8 +91,8 @@ SceneWidget::SceneWidget(QWidget* parent) : QGLWidget(parent) {
 
 SceneWidget::~SceneWidget() { IMG_Quit(); }
 
-CVec2f SceneWidget::WidgetSpaceToScreenSpace(const CVec2f& _from) const {
-    CVec2f res = _from;
+CVec2f SceneWidget::WidgetSpaceToScreenSpace(const Vec2f& _from) const {
+    Vec2f res = _from;
 
     res.x /= width;
     res.y /= height;
@@ -159,14 +159,14 @@ void SceneWidget::mousePressEvent(QMouseEvent* _event) {
         return;
     }
 
-    CVec2f pos = WidgetSpaceToScreenSpace(CVec2f(_event->x(), _event->y()));
+    Vec2f pos = WidgetSpaceToScreenSpace(Vec2f(_event->x(), _event->y()));
     app->SetCursorPos(pos);
     int x = 0;
     int y = 0;
     app->GetUISystem().ScreenSpaceToUISpace(pos, x, y);
     app->GetUISystem().SetCursorPos(x, y);
 
-    app->GetEventSystem().BeginEvent(CAppEvent(ConvertKey(_event->button())));
+    app->GetEventSystem().BeginEvent(AppEvent(ConvertKey(_event->button())));
     app->GetUISystem().BeginEvent();
 }
 
@@ -177,7 +177,7 @@ void SceneWidget::mouseReleaseEvent(QMouseEvent* _event) {
         return;
     }
 
-    app->GetEventSystem().EndEvent(CAppEvent(ConvertKey(_event->button())));
+    app->GetEventSystem().EndEvent(AppEvent(ConvertKey(_event->button())));
     app->GetUISystem().EndEvent();
 }
 
@@ -188,7 +188,7 @@ void SceneWidget::mouseMoveEvent(QMouseEvent* _event) {
         return;
     }
 
-    CVec2f pos = WidgetSpaceToScreenSpace(CVec2f(_event->x(), _event->y()));
+    Vec2f pos = WidgetSpaceToScreenSpace(Vec2f(_event->x(), _event->y()));
     app->SetCursorPos(pos);
     int x = 0;
     int y = 0;
@@ -204,7 +204,7 @@ void SceneWidget::keyPressEvent(QKeyEvent* _event) {
     }
 
     if (_event->isAutoRepeat() == false) {
-        app->GetEventSystem().BeginEvent(CAppEvent(ConvertKey(_event->key())));
+        app->GetEventSystem().BeginEvent(AppEvent(ConvertKey(_event->key())));
     }
 }
 
@@ -216,7 +216,7 @@ void SceneWidget::keyReleaseEvent(QKeyEvent* _event) {
     }
 
     if (_event->isAutoRepeat() == false) {
-        app->GetEventSystem().EndEvent(CAppEvent(ConvertKey(_event->key())));
+        app->GetEventSystem().EndEvent(AppEvent(ConvertKey(_event->key())));
     }
 }
 
@@ -228,14 +228,14 @@ void SceneWidget::wheelEvent(QWheelEvent* _event) {
     }
 
     app->GetEventSystem().BeginEvent(
-        CAppEvent(_event->delta() > 0 ? EventKeyWheelUp : EventKeyWheelDown));
+        AppEvent(_event->delta() > 0 ? EventKeyWheelUp : EventKeyWheelDown));
     app->GetEventSystem().EndEvent(
-        CAppEvent(_event->delta() > 0 ? EventKeyWheelUp : EventKeyWheelDown));
+        AppEvent(_event->delta() > 0 ? EventKeyWheelUp : EventKeyWheelDown));
 }
 
 void SceneWidget::dropEvent(QDropEvent* _event) {
     qDebug() << "Drop event";
-    app->GetEventSystem().EndEvent(CAppEvent(EventDragDrop));
+    app->GetEventSystem().EndEvent(AppEvent(EventDragDrop));
     _event->accept();
 }
 
@@ -246,8 +246,8 @@ void SceneWidget::dragMoveEvent(QDragMoveEvent* _event) {
     if (app == nullptr) {
         return;
     }
-    CVec2f pos =
-        WidgetSpaceToScreenSpace(CVec2f(_event->pos().x(), _event->pos().y()));
+    Vec2f pos =
+        WidgetSpaceToScreenSpace(Vec2f(_event->pos().x(), _event->pos().y()));
     app->SetCursorPos(pos);
     int x = 0;
     int y = 0;
@@ -258,7 +258,7 @@ void SceneWidget::dragMoveEvent(QDragMoveEvent* _event) {
 void SceneWidget::dragEnterEvent(QDragEnterEvent* _event) {
     qDebug() << "Drag eneter event";
 
-    app->GetEventSystem().BeginEvent(CAppEvent(EventDragDrop));
+    app->GetEventSystem().BeginEvent(AppEvent(EventDragDrop));
 
     _event->accept();
 }
@@ -266,10 +266,10 @@ void SceneWidget::dragEnterEvent(QDragEnterEvent* _event) {
 void SceneWidget::dragLeaveEvent(QDragLeaveEvent* _event) {
     qDebug() << "Drag leave event";
 
-    app->GetEventSystem().BeginEvent(CAppEvent(EventDragLeave));
-    app->GetEventSystem().EndEvent(CAppEvent(EventDragLeave));
+    app->GetEventSystem().BeginEvent(AppEvent(EventDragLeave));
+    app->GetEventSystem().EndEvent(AppEvent(EventDragLeave));
 
-    app->GetEventSystem().CancelEvent(CAppEvent(EventDragDrop));
+    app->GetEventSystem().CancelEvent(AppEvent(EventDragDrop));
 
     _event->ignore();
 }

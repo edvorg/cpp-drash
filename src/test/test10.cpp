@@ -32,7 +32,7 @@ namespace drash {
 
     namespace test {
 
-        CTest10::CTest10(greng::CGrengSystemsSet& greng) : CApp(greng) {
+        Test10::Test10(greng::GrengSystemsSet& greng) : App(greng) {
             InitCamera();
             InitObjects();
             InitLights();
@@ -40,8 +40,8 @@ namespace drash {
             GetDebugRenderer().SetTexCoordsScale(0.2);
         }
 
-        void CTest10::Step(double _dt) {
-            CApp::Step(_dt);
+        void Test10::Step(double _dt) {
+            App::Step(_dt);
 
             lightPoint1.position = lamp1Object->GetPos();
             spotLight.position = lamp1Object->GetPos();
@@ -51,22 +51,22 @@ namespace drash {
             spotLight.direction.Set(cos(angle), sin(angle), 0);
         }
 
-        void CTest10::Render() {
-            CApp::Render();
+        void Test10::Render() {
+            App::Render();
 
-            CVec3f p1(lamp1Object->GetWorldPoint(CVec2f(0, 0.5)),
+            Vec3f p1(lamp1Object->GetWorldPoint(Vec2f(0, 0.5)),
                       lamp1Object->GetPosZ());
             GetGrengSystems().GetRenderer().DrawLine(
-                *camera, p1, wallTopObject->GetPos(), 2, CColor4f(0, 0, 0, 1),
+                *camera, p1, wallTopObject->GetPos(), 2, Color4f(0, 0, 0, 1),
                 true);
         }
 
-        bool CTest10::InitCamera() {
-            greng::CCameraParams params;
+        bool Test10::InitCamera() {
+            greng::CameraParams params;
             params.pos.Set(0, 2, 20);
             params.rotation.x = -M_PI / 18.0;
 
-            greng::CCamera* cam =
+            greng::Camera* cam =
                 GetGrengSystems().GetCameraManager().CreateCamera(params);
 
             if (cam == nullptr) {
@@ -80,16 +80,16 @@ namespace drash {
             return true;
         }
 
-        bool CTest10::InitObjects() {
-            CSceneObjectGeometry* g1 =
+        bool Test10::InitObjects() {
+            SceneObjectGeometry* g1 =
                 GetGeometryManager().CreateGeometry("wall_back");
-            CSceneObjectGeometry* g2 =
+            SceneObjectGeometry* g2 =
                 GetGeometryManager().CreateGeometry("wall_top");
-            CSceneObjectGeometry* g3 =
+            SceneObjectGeometry* g3 =
                 GetGeometryManager().CreateGeometry("wall_bottom");
-            CSceneObjectGeometry* g4 =
+            SceneObjectGeometry* g4 =
                 GetGeometryManager().CreateGeometry("wall");
-            CSceneObjectGeometry* g5 =
+            SceneObjectGeometry* g5 =
                 GetGeometryManager().CreateGeometry("lamp");
 
             if (g1 == nullptr || g2 == nullptr || g3 == nullptr ||
@@ -99,75 +99,75 @@ namespace drash {
 
             g1->figures.resize(1);
             g1->figures[0].depth = 0.5;
-            g1->figures[0].vertices.push_back(CVec2f(-10, 5));
-            g1->figures[0].vertices.push_back(CVec2f(-10, -5));
-            g1->figures[0].vertices.push_back(CVec2f(10, -5));
-            g1->figures[0].vertices.push_back(CVec2f(10, 5));
+            g1->figures[0].vertices.push_back(Vec2f(-10, 5));
+            g1->figures[0].vertices.push_back(Vec2f(-10, -5));
+            g1->figures[0].vertices.push_back(Vec2f(10, -5));
+            g1->figures[0].vertices.push_back(Vec2f(10, 5));
 
             g2->figures.resize(1);
             g2->figures[0].depth = 8;
-            g2->figures[0].vertices.push_back(CVec2f(-10, 0.2));
-            g2->figures[0].vertices.push_back(CVec2f(-10, -0.2));
-            g2->figures[0].vertices.push_back(CVec2f(10, -0.2));
-            g2->figures[0].vertices.push_back(CVec2f(10, 0.2));
+            g2->figures[0].vertices.push_back(Vec2f(-10, 0.2));
+            g2->figures[0].vertices.push_back(Vec2f(-10, -0.2));
+            g2->figures[0].vertices.push_back(Vec2f(10, -0.2));
+            g2->figures[0].vertices.push_back(Vec2f(10, 0.2));
 
             g3->figures.resize(1);
             g3->figures[0].depth = 3;
-            g3->figures[0].vertices.push_back(CVec2f(-10, 0.2));
-            g3->figures[0].vertices.push_back(CVec2f(-10, -0.2));
-            g3->figures[0].vertices.push_back(CVec2f(10, -0.2));
-            g3->figures[0].vertices.push_back(CVec2f(10, 0.2));
+            g3->figures[0].vertices.push_back(Vec2f(-10, 0.2));
+            g3->figures[0].vertices.push_back(Vec2f(-10, -0.2));
+            g3->figures[0].vertices.push_back(Vec2f(10, -0.2));
+            g3->figures[0].vertices.push_back(Vec2f(10, 0.2));
 
             g4->figures.resize(1);
             g4->figures[0].depth = 3;
-            g4->figures[0].vertices.push_back(CVec2f(-0.4, 4.0));
-            g4->figures[0].vertices.push_back(CVec2f(-0.4, -4.0));
-            g4->figures[0].vertices.push_back(CVec2f(0.4, -4.0));
-            g4->figures[0].vertices.push_back(CVec2f(0.4, 4.0));
+            g4->figures[0].vertices.push_back(Vec2f(-0.4, 4.0));
+            g4->figures[0].vertices.push_back(Vec2f(-0.4, -4.0));
+            g4->figures[0].vertices.push_back(Vec2f(0.4, -4.0));
+            g4->figures[0].vertices.push_back(Vec2f(0.4, 4.0));
 
             g5->figures.resize(1);
             g5->figures[0].depth = 0.4;
             g5->figures[0].mass = 0.1;
-            g5->figures[0].vertices.push_back(CVec2f(-0.2, 0.5));
-            g5->figures[0].vertices.push_back(CVec2f(-0.2, -0.5));
-            g5->figures[0].vertices.push_back(CVec2f(0.2, -0.5));
-            g5->figures[0].vertices.push_back(CVec2f(0.2, 0.5));
+            g5->figures[0].vertices.push_back(Vec2f(-0.2, 0.5));
+            g5->figures[0].vertices.push_back(Vec2f(-0.2, -0.5));
+            g5->figures[0].vertices.push_back(Vec2f(0.2, -0.5));
+            g5->figures[0].vertices.push_back(Vec2f(0.2, 0.5));
 
-            CSceneObjectParams p1;
+            SceneObjectParams p1;
             p1.pos.Set(0, 0, -5);
             p1.dynamic = false;
             GetGeometryManager().CreateSceneObject("wall_back", p1);
 
-            CSceneObjectParams p2;
+            SceneObjectParams p2;
             p2.pos.Set(0, 5, 0);
             p2.dynamic = true;
-            CSceneObject* o2 =
+            SceneObject* o2 =
                 GetGeometryManager().CreateSceneObject("wall_top", p2);
 
-            CSceneObjectParams p3;
+            SceneObjectParams p3;
             p3.pos.Set(0, -4, 0);
             p3.dynamic = false;
             GetGeometryManager().CreateSceneObject("wall_bottom", p3);
 
-            CSceneObjectParams p4;
+            SceneObjectParams p4;
             p4.pos.Set(-9, 0, 0);
             p4.dynamic = true;
             GetGeometryManager().CreateSceneObject("wall", p4);
 
-            CSceneObjectParams p5;
+            SceneObjectParams p5;
             p5.pos.Set(9, 0, 0);
             p5.dynamic = true;
             GetGeometryManager().CreateSceneObject("wall", p5);
 
-            CSceneObjectParams p6;
+            SceneObjectParams p6;
             p6.pos.Set(-3, 3, 0);
             p6.dynamic = true;
-            CSceneObject* o6 =
+            SceneObject* o6 =
                 GetGeometryManager().CreateSceneObject("lamp", p6);
 
-            CVec3f anchor1(0, 0, 0);
+            Vec3f anchor1(0, 0, 0);
             anchor1.y += 0.5;
-            CVec3f anchor2(0, 0, 0);
+            Vec3f anchor2(0, 0, 0);
             GetScene().CreateJointRope(o6, o2, anchor1, anchor2, 3);
 
             lamp1Object = o6;
@@ -176,7 +176,7 @@ namespace drash {
             return true;
         }
 
-        bool CTest10::InitLights() {
+        bool Test10::InitLights() {
             lightPoint1.position.Set(0, 0, 0);
 
             GetDebugRenderer().SetLight(nullptr);
@@ -185,9 +185,9 @@ namespace drash {
             return true;
         }
 
-        bool CTest10::InitProcessors() {
+        bool Test10::InitProcessors() {
             GetEventSystem().SetProcessor(
-                "C-q", CAppEventProcessor([this]() { this->Quit(); }, []() {},
+                "C-q", AppEventProcessor([this]() { this->Quit(); }, []() {},
                                           []() {}));
 
             return true;

@@ -30,8 +30,8 @@ namespace drash {
 
     namespace test {
 
-        CTest9::CTest9(greng::CGrengSystemsSet& greng)
-            : CApp(greng),
+        Test9::Test9(greng::GrengSystemsSet& greng)
+            : App(greng),
               camera{ GetGrengSystems().GetCameraManager().CreateCamera({}) },
               point1{ GetGrengSystems().GetRenderer(), *camera } {
             InitCamera();
@@ -39,23 +39,23 @@ namespace drash {
             InitRotationablePoint();
         }
 
-        void CTest9::Step(double _dt) {
-            CApp::Step(_dt);
+        void Test9::Step(double _dt) {
+            App::Step(_dt);
 
             point1.SetCursorPos(GetCursorPos());
             point1.Step(_dt);
         }
 
-        void CTest9::Render() {
-            CApp::Render();
+        void Test9::Render() {
+            App::Render();
 
             point1.Render();
         }
 
-        bool CTest9::InitCamera() {
+        bool Test9::InitCamera() {
             camera->GetPos().Set({ 10, 10, 10 });
             camera->GetFov().Set(M_PI / 6.0);
-            camera->LookAt(CVec3f(0));
+            camera->LookAt(Vec3f(0));
 
             if (camera == nullptr) {
                 return false;
@@ -66,19 +66,19 @@ namespace drash {
             return true;
         }
 
-        bool CTest9::InitLights() {
+        bool Test9::InitLights() {
             light1.position.Set(0, 10, 0);
             GetDebugRenderer().SetLight(&light1);
 
             return true;
         }
 
-        bool CTest9::InitRotationablePoint() {
-            point1.SetPoint(CVec3f(0));
+        bool Test9::InitRotationablePoint() {
+            point1.SetPoint(Vec3f(0));
 
             GetEventSystem().SetProcessor(
                 "LB",
-                CAppEventProcessor([this]() { point1.RotateBegin(); }, []() {},
+                AppEventProcessor([this]() { point1.RotateBegin(); }, []() {},
                                    [this]() { point1.RotateEnd(); }));
 
             return true;

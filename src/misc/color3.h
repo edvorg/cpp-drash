@@ -27,23 +27,23 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    constexpr float CColorDefValFloat(unsigned int _comp_index) {
+    constexpr float ColorDefValFloat(unsigned int _comp_index) {
         return _comp_index < 3 ? 0.0f : 1.0f;
     }
 
-    constexpr unsigned char CColorDefValUnsignedByte(unsigned int _comp_index) {
+    constexpr unsigned char ColorDefValUnsignedByte(unsigned int _comp_index) {
         return _comp_index < 3 ? 0 : 255;
     }
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
-    class CColor3 {
+    class Color3 {
     public:
-        CColor3() = default;
-        CColor3(const CColor3& _rgb);
-        CColor3(const T& _rgb);
-        CColor3(const T& _r, const T& _g, const T& _b);
+        Color3() = default;
+        Color3(const Color3& _rgb);
+        Color3(const T& _rgb);
+        Color3(const T& _r, const T& _g, const T& _b);
 
-        CColor3& Set(const T& _r, const T& _g, const T& _b);
+        Color3& Set(const T& _r, const T& _g, const T& _b);
 
         T r = DEF_VAL_FUNC(0);
         T g = DEF_VAL_FUNC(1);
@@ -55,26 +55,26 @@ namespace drash {
 
     /// some typedefs
 
-    typedef CColor3<float, CColorDefValFloat> CColor3f;
-    typedef CColor3<unsigned char, CColorDefValUnsignedByte> CColor3ub;
+    typedef Color3<float, ColorDefValFloat> Color3f;
+    typedef Color3<unsigned char, ColorDefValUnsignedByte> Color3ub;
 
-    /// CColor3 implementation
+    /// Color3 implementation
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
-    CColor3<T, DEF_VAL_FUNC>::CColor3(const CColor3& _rgb)
+    Color3<T, DEF_VAL_FUNC>::Color3(const Color3& _rgb)
         : r(_rgb.r), g(_rgb.g), b(_rgb.b) {}
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
-    CColor3<T, DEF_VAL_FUNC>::CColor3(const T& _rgb)
+    Color3<T, DEF_VAL_FUNC>::Color3(const T& _rgb)
         : r(_rgb), g(_rgb), b(_rgb) {}
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
-    CColor3<T, DEF_VAL_FUNC>::CColor3(const T& _r, const T& _g, const T& _b)
+    Color3<T, DEF_VAL_FUNC>::Color3(const T& _r, const T& _g, const T& _b)
         : r(_r), g(_g), b(_b) {}
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
-    CColor3<T, DEF_VAL_FUNC>&
-    CColor3<T, DEF_VAL_FUNC>::Set(const T& _r, const T& _g, const T& _b) {
+    Color3<T, DEF_VAL_FUNC>&
+    Color3<T, DEF_VAL_FUNC>::Set(const T& _r, const T& _g, const T& _b) {
         this->r = _r;
         this->g = _g;
         this->b = _b;

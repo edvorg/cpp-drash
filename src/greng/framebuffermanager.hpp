@@ -30,26 +30,26 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CFrameBuffer;
-    class CTexture;
+    class FrameBuffer;
+    class Texture;
 
-    class CFrameBufferManager final {
+    class FrameBufferManager final {
     public:
         constexpr static unsigned int frameBuffersCountLimit = 1024;
 
-        CFrameBufferManager();
-        CFrameBufferManager(const CFrameBufferManager&) = delete;
-        CFrameBufferManager(CFrameBufferManager&&) = delete;
-        CFrameBufferManager& operator=(const CFrameBufferManager&) = delete;
-        CFrameBufferManager& operator=(CFrameBufferManager&&) = delete;
-        ~CFrameBufferManager();
+        FrameBufferManager();
+        FrameBufferManager(const FrameBufferManager&) = delete;
+        FrameBufferManager(FrameBufferManager&&) = delete;
+        FrameBufferManager& operator=(const FrameBufferManager&) = delete;
+        FrameBufferManager& operator=(FrameBufferManager&&) = delete;
+        ~FrameBufferManager();
 
-        CFrameBuffer* CreateFrameBuffer(const CTexture& _texture);
-        bool DestroyFrameBuffer(CFrameBuffer* _frameBuffer);
+        FrameBuffer* CreateFrameBuffer(const Texture& _texture);
+        bool DestroyFrameBuffer(FrameBuffer* _frameBuffer);
 
     protected:
     private:
-        drash::CObjectFactory<CFrameBuffer> frameBufferFactory;
+        drash::ObjectFactory<FrameBuffer> frameBufferFactory;
     };
 
 } // namespace greng

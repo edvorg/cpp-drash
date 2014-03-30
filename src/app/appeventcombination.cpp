@@ -29,7 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    void CAppEventCombination::AddEvent(const CAppEvent& _e) {
+    void AppEventCombination::AddEvent(const AppEvent& _e) {
         if (catchEvents.size() < catchEventsCountLimit) {
             auto i = std::find(catchEvents.begin(), catchEvents.end(), _e);
 
@@ -42,7 +42,7 @@ namespace drash {
         }
     }
 
-    void CAppEventCombination::RemoveEvent(const CAppEvent& _e) {
+    void AppEventCombination::RemoveEvent(const AppEvent& _e) {
         auto i = std::find(catchEvents.begin(), catchEvents.end(), _e);
 
         if (i != catchEvents.end()) {
@@ -50,15 +50,15 @@ namespace drash {
         }
     }
 
-    void CAppEventCombination::Clear() { catchEvents.clear(); }
+    void AppEventCombination::Clear() { catchEvents.clear(); }
 
-    bool CAppEventCombination::ContainsEvent(const CAppEvent& _e) const {
+    bool AppEventCombination::ContainsEvent(const AppEvent& _e) const {
         return std::find(catchEvents.begin(), catchEvents.end(), _e) !=
                catchEvents.end();
     }
 
-    bool CAppEventCombination::ContainsCombination(
-        const CAppEventCombination& _c) const {
+    bool AppEventCombination::ContainsCombination(
+        const AppEventCombination& _c) const {
         bool res = false;
 
         for (unsigned int i = 0; i < catchEvents.size(); i++) {
@@ -83,8 +83,8 @@ namespace drash {
         return res;
     }
 
-    bool CAppEventCombination::
-    operator==(const CAppEventCombination& _src) const {
+    bool AppEventCombination::
+    operator==(const AppEventCombination& _src) const {
         if (catchEvents.size() != _src.catchEvents.size()) {
             return false;
         }
@@ -105,12 +105,12 @@ namespace drash {
         return true;
     }
 
-    bool CAppEventCombination::
-    operator!=(const CAppEventCombination& _src) const {
+    bool AppEventCombination::
+    operator!=(const AppEventCombination& _src) const {
         return !(*this == _src);
     }
 
-    CLogger& operator<<(CLogger& _logger, const CAppEventCombination& _c) {
+    Logger& operator<<(Logger& _logger, const AppEventCombination& _c) {
         auto i = _c.catchEvents.begin();
 
         if (i != _c.catchEvents.end()) {

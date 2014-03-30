@@ -31,14 +31,14 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CMesh : public drash::CObjectFactory<CMesh>::CFactoryProduct {
+    class Mesh : public drash::ObjectFactory<Mesh>::FactoryProduct {
     public:
-        friend class CMeshManager;
-        friend class CRenderer;
+        friend class MeshManager;
+        friend class Renderer;
 
-        CMesh() = default;
+        Mesh() = default;
 
-        std::vector<CVertex> vertices;
+        std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
         std::vector<unsigned int> materialOffsets;
         std::vector<std::string> materialNames;

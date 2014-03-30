@@ -29,7 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    class CMatrix4f {
+    class Matrix4f {
     public:
         constexpr static const unsigned int rowsCount = 4;
         constexpr static const unsigned int columnsCount = 4;
@@ -51,12 +51,12 @@ namespace drash {
         constexpr static const unsigned int i32 = 14;
         constexpr static const unsigned int i33 = 15;
 
-        CMatrix4f() = default;
-        CMatrix4f(const CMatrix4f& _m);
+        Matrix4f() = default;
+        Matrix4f(const Matrix4f& _m);
 
-        CMatrix4f& Zero();
-        CMatrix4f& Identity();
-        CMatrix4f& Transpose();
+        Matrix4f& Zero();
+        Matrix4f& Identity();
+        Matrix4f& Transpose();
 
         float data[elemsCount];
 
@@ -64,16 +64,16 @@ namespace drash {
     private:
     };
 
-    CMatrix4f& MatrixMultiply(const CMatrix4f& _m1, const CMatrix4f& _m2,
-                              CMatrix4f& _result);
-    CVec4f& MatrixMultiply(const CMatrix4f& _m, const CVec4f& _v,
-                           CVec4f& _result);
-    CMatrix4f& MatrixScale(CMatrix4f& _m, const CVec3f _scale);
-    CMatrix4f& MatrixRotationX(CMatrix4f& _m, float _angle);
-    CMatrix4f& MatrixRotationY(CMatrix4f& _m, float _angle);
-    CMatrix4f& MatrixRotationZ(CMatrix4f& _m, float _angle);
-    CMatrix4f& MatrixTranslation(CMatrix4f& _m, const CVec3f& _translation);
-    CMatrix4f& Matrix4Perspective(CMatrix4f& _m, float _fov, float _aspect,
+    Matrix4f& MatrixMultiply(const Matrix4f& _m1, const Matrix4f& _m2,
+                              Matrix4f& _result);
+    Vec4f& MatrixMultiply(const Matrix4f& _m, const Vec4f& _v,
+                           Vec4f& _result);
+    Matrix4f& MatrixScale(Matrix4f& _m, const Vec3f _scale);
+    Matrix4f& MatrixRotationX(Matrix4f& _m, float _angle);
+    Matrix4f& MatrixRotationY(Matrix4f& _m, float _angle);
+    Matrix4f& MatrixRotationZ(Matrix4f& _m, float _angle);
+    Matrix4f& MatrixTranslation(Matrix4f& _m, const Vec3f& _translation);
+    Matrix4f& Matrix4Perspective(Matrix4f& _m, float _fov, float _aspect,
                                   float _znear, float _zfar);
 
 } // namespace drash

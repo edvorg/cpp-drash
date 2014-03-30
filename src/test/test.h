@@ -26,16 +26,16 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define TEST_H
 
 namespace greng {
-    class CGrengSystemsSet;
+    class GrengSystemsSet;
 }
 
 namespace drash {
 
-    class CApp;
+    class App;
 
     namespace test {
 
-        CApp* StartApp(greng::CGrengSystemsSet& greng, const char* _name);
+        App* StartApp(greng::GrengSystemsSet& greng, const char* _name);
 
     } // namespace test
 

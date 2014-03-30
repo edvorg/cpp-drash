@@ -32,7 +32,7 @@ namespace drash {
 
     namespace test {
 
-        CTest7::CTest7(greng::CGrengSystemsSet& greng) : CTest3(greng) {
+        Test7::Test7(greng::GrengSystemsSet& greng) : Test3(greng) {
             InitTextures();
             InitShaders();
             InitLights();
@@ -42,8 +42,8 @@ namespace drash {
             GetDebugRenderer().SetLight(&light1);
         }
 
-        void CTest7::Step(double _dt) {
-            CTest3::Step(_dt);
+        void Test7::Step(double _dt) {
+            Test3::Step(_dt);
 
             pointLight1PosAngle += _dt * 0.5;
 
@@ -54,7 +54,7 @@ namespace drash {
             light1.position.x = 150 * sin(pointLight1PosAngle);
         }
 
-        bool CTest7::InitTextures() {
+        bool Test7::InitTextures() {
             debugTexture =
                 GetGrengSystems().GetTextureManager().CreateTextureFromFile(
                     "assets/floor/diffuse.png");
@@ -66,11 +66,11 @@ namespace drash {
             return true;
         }
 
-        bool CTest7::InitShaders() {
-            greng::CVertexShader* v =
+        bool Test7::InitShaders() {
+            greng::VertexShader* v =
                 GetGrengSystems().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader2.120.vs");
-            greng::CFragmentShader* f =
+            greng::FragmentShader* f =
                 GetGrengSystems()
                     .GetFragmentShaderManager()
                     .CreateShaderFromFile("shaders/shader2.120.fs");
@@ -85,32 +85,32 @@ namespace drash {
             return true;
         }
 
-        bool CTest7::InitLights() {
+        bool Test7::InitLights() {
             light1.position.Set(0, 50, 0);
 
             return true;
         }
 
-        void CTest7::Render() {
+        void Test7::Render() {
             unsigned int ic = GetScene().EnumObjects();
 
             for (unsigned int i = 0; i < ic; i++) {
-                CSceneObject* o = GetScene().GetObjects()[i];
+                SceneObject* o = GetScene().GetObjects()[i];
                 unsigned int jc = o->EnumFigures();
 
                 for (unsigned int j = 0; j < jc; j++) {
-                    CFigure* f = o->GetFigures()[j];
+                    Figure* f = o->GetFigures()[j];
                     unsigned int kc = f->EnumVertices();
 
-                    std::vector<greng::CVertex> mv;
+                    std::vector<greng::Vertex> mv;
                     std::vector<unsigned int> mi;
 
-                    greng::CMesh* m = nullptr;
+                    greng::Mesh* m = nullptr;
 
                     if (kc >= 3) {
-                        CVec3f min(f->GetVertices()[0],
+                        Vec3f min(f->GetVertices()[0],
                                    f->GetZ() - 0.5f * f->GetDepth());
-                        CVec3f max(f->GetVertices()[0],
+                        Vec3f max(f->GetVertices()[0],
                                    f->GetZ() + 0.5f * f->GetDepth());
 
                         for (unsigned int k = 1; k < kc; k++) {
@@ -124,21 +124,21 @@ namespace drash {
                                 math::Max<float>(max.y, f->GetVertices()[k].y);
                         }
 
-                        max.Vec2() -= min.Vec2();
+                        max.AsVec2() -= min.AsVec2();
 
                         mv.resize(kc * 2 + kc * 4);
 
                         // front and back faces
 
                         for (unsigned int k = 0; k < kc; k++) {
-                            mv[k].pos = CVec3f(f->GetVertices()[k], max.z);
-                            mv[kc + k].pos = CVec3f(f->GetVertices()[k], min.z);
+                            mv[k].pos = Vec3f(f->GetVertices()[k], max.z);
+                            mv[kc + k].pos = Vec3f(f->GetVertices()[k], min.z);
 
                             mv[k].uV = mv[k].pos;
                             mv[kc + k].uV = mv[kc + k].pos;
 
-                            mv[k].uV -= min.Vec2();
-                            mv[kc + k].uV -= min.Vec2();
+                            mv[k].uV -= min.AsVec2();
+                            mv[kc + k].uV -= min.AsVec2();
 
                             mv[k].uV /= 10;
                             mv[kc + k].uV /= 10;
@@ -160,15 +160,15 @@ namespace drash {
 
                         for (unsigned int k = 1; k < kc; k++) {
                             mv[2 * kc + (k - 1) * 4 + 0].pos =
-                                CVec3f(f->GetVertices()[k - 1], max.z);
+                                Vec3f(f->GetVertices()[k - 1], max.z);
                             mv[2 * kc + (k - 1) * 4 + 1].pos =
-                                CVec3f(f->GetVertices()[k - 1], min.z);
+                                Vec3f(f->GetVertices()[k - 1], min.z);
                             mv[2 * kc + (k - 1) * 4 + 2].pos =
-                                CVec3f(f->GetVertices()[k], min.z);
+                                Vec3f(f->GetVertices()[k], min.z);
                             mv[2 * kc + (k - 1) * 4 + 3].pos =
-                                CVec3f(f->GetVertices()[k], max.z);
+                                Vec3f(f->GetVertices()[k], max.z);
 
-                            CVec2f tmp = f->GetVertices()[k - 1];
+                            Vec2f tmp = f->GetVertices()[k - 1];
                             tmp -= f->GetVertices()[k];
 
                             mv[2 * kc + (k - 1) * 4 + 0].uV.Set(0, 0);
@@ -188,15 +188,15 @@ namespace drash {
                             mi.push_back(2 * kc + (k - 1) * 4 + 0);
                         }
                         mv[2 * kc + (kc - 1) * 4 + 0].pos =
-                            CVec3f(f->GetVertices()[kc - 1], max.z);
+                            Vec3f(f->GetVertices()[kc - 1], max.z);
                         mv[2 * kc + (kc - 1) * 4 + 1].pos =
-                            CVec3f(f->GetVertices()[kc - 1], min.z);
+                            Vec3f(f->GetVertices()[kc - 1], min.z);
                         mv[2 * kc + (kc - 1) * 4 + 2].pos =
-                            CVec3f(f->GetVertices()[0], min.z);
+                            Vec3f(f->GetVertices()[0], min.z);
                         mv[2 * kc + (kc - 1) * 4 + 3].pos =
-                            CVec3f(f->GetVertices()[0], max.z);
+                            Vec3f(f->GetVertices()[0], max.z);
 
-                        CVec2f tmp = f->GetVertices()[kc - 1];
+                        Vec2f tmp = f->GetVertices()[kc - 1];
                         tmp -= f->GetVertices()[0];
 
                         mv[2 * kc + (kc - 1) * 4 + 0].uV.Set(0, 0);
@@ -224,16 +224,16 @@ namespace drash {
                     if (m != nullptr) {
                         GetGrengSystems().GetMeshManager().ComputeNormals(m);
 
-                        CMatrix4f rot;
+                        Matrix4f rot;
                         MatrixRotationZ(rot, o->GetAngle());
 
-                        CMatrix4f trans;
+                        Matrix4f trans;
                         MatrixTranslation(trans, o->GetPos());
 
-                        CMatrix4f model;
+                        Matrix4f model;
                         MatrixMultiply(trans, rot, model);
 
-                        CMatrix4f model_view;
+                        Matrix4f model_view;
                         MatrixMultiply(GetCamera().GetViewMatrix(), model,
                                        model_view);
 

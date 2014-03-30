@@ -23,8 +23,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #pragma once
-#ifndef CTESTAPP2_H
-#define CTESTAPP2_H
+#ifndef TESTAPP2_H
+#define TESTAPP2_H
 
 #include "../app/app.h"
 #include "../greng/pointlight.h"
@@ -33,21 +33,21 @@ namespace drash {
 
     namespace test {
 
-        class CTest2 : public CApp {
+        class Test2 : public App {
         public:
-            CTest2(greng::CGrengSystemsSet& greng);
+            Test2(greng::GrengSystemsSet& greng);
 
         private:
             void SetProcessors();
-            CSceneObject* selectedObject = nullptr;
+            SceneObject* selectedObject = nullptr;
 
-            greng::CPointLight light1;
+            greng::PointLight light1;
 
-            greng::CCamera* camera = nullptr;
+            greng::Camera* camera = nullptr;
         };
 
     } // namespace test
 
 } // namespace drash
 
-#endif // CTESTAPP2_H
+#endif // TESTAPP2_H

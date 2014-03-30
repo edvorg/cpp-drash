@@ -29,34 +29,34 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CRenderer;
+    class Renderer;
 }
 
 namespace drash {
 
     namespace ui {
 
-        class CUIControl;
+        class UIControl;
 
-        class CUISystem final {
+        class UISystem final {
         public:
             constexpr static const unsigned int controlsCountLimit = 10;
 
-            CUISystem(greng::CRenderer& _renderer);
-            CUISystem(const CUISystem&) = delete;
-            CUISystem(CUISystem&&) = delete;
-            CUISystem& operator=(const CUISystem&) = delete;
-            CUISystem& operator=(CUISystem&&) = delete;
-            ~CUISystem();
+            UISystem(greng::Renderer& _renderer);
+            UISystem(const UISystem&) = delete;
+            UISystem(UISystem&&) = delete;
+            UISystem& operator=(const UISystem&) = delete;
+            UISystem& operator=(UISystem&&) = delete;
+            ~UISystem();
 
-            CUIControl* CreateControl();
-            void DestroyControl(CUIControl* _control);
+            UIControl* CreateControl();
+            void DestroyControl(UIControl* _control);
 
             void SetAspectRatio(float _ratio);
             void SetWidth(unsigned int _width);
 
-            bool ScreenSpaceToUISpace(const CVec2f& _from, int& _x, int& _y);
-            bool UISpaceToScreenSpace(int _x, int _y, CVec2f& _v);
+            bool ScreenSpaceToUISpace(const Vec2f& _from, int& _x, int& _y);
+            bool UISpaceToScreenSpace(int _x, int _y, Vec2f& _v);
 
             void SetCursorPos(int _x, int _y);
             inline int GetCursorPosX() const;
@@ -72,7 +72,7 @@ namespace drash {
 
         protected:
         private:
-            CUIControl* controls[controlsCountLimit];
+            UIControl* controls[controlsCountLimit];
             unsigned int controlsCount = 0;
 
             float aspectRatio = 1;
@@ -82,13 +82,13 @@ namespace drash {
             int cursorX = 0;
             int cursorY = 0;
 
-            CUIControl* pressedControl = nullptr;
+            UIControl* pressedControl = nullptr;
 
-            greng::CRenderer& renderer;
+            greng::Renderer& renderer;
         };
 
-        inline int CUISystem::GetCursorPosX() const { return cursorX; }
-        inline int CUISystem::GetCursorPosY() const { return cursorY; }
+        inline int UISystem::GetCursorPosX() const { return cursorX; }
+        inline int UISystem::GetCursorPosY() const { return cursorY; }
 
     } // namepsace ui
 

@@ -30,28 +30,28 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
-    class CColor4 : public CColor3<T, DEF_VAL_FUNC> {
+    class Color4 : public Color3<T, DEF_VAL_FUNC> {
     public:
-        explicit CColor4() = default;
-        CColor4(const CColor4& _rgba);
-        CColor4(const CColor3<T, DEF_VAL_FUNC>& _rgb, const T& _a);
-        CColor4(const T& _rgba);
-        CColor4(const T& _r, const T& _g, const T& _b);
-        CColor4(const T& _r, const T& _g, const T& _b, const T& _a);
+        explicit Color4() = default;
+        Color4(const Color4& _rgba);
+        Color4(const Color3<T, DEF_VAL_FUNC>& _rgb, const T& _a);
+        Color4(const T& _rgba);
+        Color4(const T& _r, const T& _g, const T& _b);
+        Color4(const T& _r, const T& _g, const T& _b, const T& _a);
 
         /// setters
 
-        CColor4& Set(const CColor3<T, DEF_VAL_FUNC>& _rgb, const T& _a);
-        CColor4& Set(const T& _r, const T& _g, const T& _b, const T& _a);
+        Color4& Set(const Color3<T, DEF_VAL_FUNC>& _rgb, const T& _a);
+        Color4& Set(const T& _r, const T& _g, const T& _b, const T& _a);
 
         /// operators
 
-        CColor4& operator=(const CColor4& _rgba);
+        Color4& operator=(const Color4& _rgba);
 
         /// conversion
 
-        inline CColor3<T, DEF_VAL_FUNC>& Col3();
-        inline const CColor3<T, DEF_VAL_FUNC>& Col3() const;
+        inline Color3<T, DEF_VAL_FUNC>& Col3();
+        inline const Color3<T, DEF_VAL_FUNC>& Col3() const;
 
         T a = DEF_VAL_FUNC(3);
 
@@ -61,36 +61,36 @@ namespace drash {
 
     /// some typedefs
 
-    typedef CColor4<float, CColorDefValFloat> CColor4f;
-    typedef CColor4<unsigned char, CColorDefValUnsignedByte> CColor4ub;
+    typedef Color4<float, ColorDefValFloat> Color4f;
+    typedef Color4<unsigned char, ColorDefValUnsignedByte> Color4ub;
 
-    /// CColor3 implementation
-
-    template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
-    CColor4<T, DEF_VAL_FUNC>::CColor4(const CColor4& _rgba)
-        : CColor3<T, DEF_VAL_FUNC>(_rgba), a(_rgba.a) {}
+    /// Color3 implementation
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
-    CColor4<T, DEF_VAL_FUNC>::CColor4(const CColor3<T, DEF_VAL_FUNC>& _rgb,
+    Color4<T, DEF_VAL_FUNC>::Color4(const Color4& _rgba)
+        : Color3<T, DEF_VAL_FUNC>(_rgba), a(_rgba.a) {}
+
+    template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
+    Color4<T, DEF_VAL_FUNC>::Color4(const Color3<T, DEF_VAL_FUNC>& _rgb,
                                       const T& _a)
-        : CColor3<T, DEF_VAL_FUNC>(_rgb), a(_a) {}
+        : Color3<T, DEF_VAL_FUNC>(_rgb), a(_a) {}
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
-    CColor4<T, DEF_VAL_FUNC>::CColor4(const T& _rgba)
-        : CColor3<T, DEF_VAL_FUNC>(_rgba), a(_rgba) {}
+    Color4<T, DEF_VAL_FUNC>::Color4(const T& _rgba)
+        : Color3<T, DEF_VAL_FUNC>(_rgba), a(_rgba) {}
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
-    CColor4<T, DEF_VAL_FUNC>::CColor4(const T& _r, const T& _g, const T& _b)
-        : CColor3<T, DEF_VAL_FUNC>(_r, _g, _b) {}
+    Color4<T, DEF_VAL_FUNC>::Color4(const T& _r, const T& _g, const T& _b)
+        : Color3<T, DEF_VAL_FUNC>(_r, _g, _b) {}
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
-    CColor4<T, DEF_VAL_FUNC>::CColor4(const T& _r, const T& _g, const T& _b,
+    Color4<T, DEF_VAL_FUNC>::Color4(const T& _r, const T& _g, const T& _b,
                                       const T& _a)
-        : CColor3<T, DEF_VAL_FUNC>(_r, _g, _b), a(_a) {}
+        : Color3<T, DEF_VAL_FUNC>(_r, _g, _b), a(_a) {}
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
-    CColor4<T, DEF_VAL_FUNC>&
-    CColor4<T, DEF_VAL_FUNC>::Set(const CColor3<T, DEF_VAL_FUNC>& _rgb,
+    Color4<T, DEF_VAL_FUNC>&
+    Color4<T, DEF_VAL_FUNC>::Set(const Color3<T, DEF_VAL_FUNC>& _rgb,
                                   const T& _a) {
         this->r = _rgb.r;
         this->g = _rgb.g;
@@ -100,8 +100,8 @@ namespace drash {
     }
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
-    CColor4<T, DEF_VAL_FUNC>&
-    CColor4<T, DEF_VAL_FUNC>::Set(const T& _r, const T& _g, const T& _b,
+    Color4<T, DEF_VAL_FUNC>&
+    Color4<T, DEF_VAL_FUNC>::Set(const T& _r, const T& _g, const T& _b,
                                   const T& _a) {
         this->r = _r;
         this->g = _g;
@@ -111,8 +111,8 @@ namespace drash {
     }
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
-    CColor4<T, DEF_VAL_FUNC>& CColor4<T, DEF_VAL_FUNC>::
-    operator=(const CColor4& _rgba) {
+    Color4<T, DEF_VAL_FUNC>& Color4<T, DEF_VAL_FUNC>::
+    operator=(const Color4& _rgba) {
         this->r = _rgba.r;
         this->g = _rgba.g;
         this->b = _rgba.b;
@@ -121,13 +121,13 @@ namespace drash {
     }
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
-    inline CColor3<T, DEF_VAL_FUNC>& CColor4<T, DEF_VAL_FUNC>::Col3() {
+    inline Color3<T, DEF_VAL_FUNC>& Color4<T, DEF_VAL_FUNC>::Col3() {
         return *this;
     }
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
-    inline const CColor3<T, DEF_VAL_FUNC>&
-    CColor4<T, DEF_VAL_FUNC>::Col3() const {
+    inline const Color3<T, DEF_VAL_FUNC>&
+    Color4<T, DEF_VAL_FUNC>::Col3() const {
         return *this;
     }
 

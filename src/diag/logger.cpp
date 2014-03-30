@@ -39,9 +39,9 @@ namespace drash {
         }
     } starter;
 
-    std::ostringstream CLogger::tailStream;
+    std::ostringstream Logger::tailStream;
 
-    CLogger::CLogger(ostream& _stream) : stream(_stream) {
+    Logger::Logger(ostream& _stream) : stream(_stream) {
         out.open("./drash.log", ios_base::app);
 
         opened = out.is_open();
@@ -50,7 +50,7 @@ namespace drash {
         tailStream.clear();
     }
 
-    CLogger::~CLogger(void) {
+    Logger::~Logger(void) {
         if (opened == true) {
             out << endl;
             stream << endl;
@@ -58,7 +58,7 @@ namespace drash {
         }
     }
 
-    CLogger& CLogger::operator<<(char _c) {
+    Logger& Logger::operator<<(char _c) {
         if (opened == true) {
             out << _c;
             stream << _c;
@@ -67,7 +67,7 @@ namespace drash {
         return (*this);
     }
 
-    CLogger& CLogger::operator<<(const char* _str) {
+    Logger& Logger::operator<<(const char* _str) {
         if (opened == true) {
             out << _str;
             stream << _str;
@@ -76,7 +76,7 @@ namespace drash {
         return (*this);
     }
 
-    CLogger& CLogger::operator<<(int _v) {
+    Logger& Logger::operator<<(int _v) {
         if (opened == true) {
             out << _v;
             stream << _v;
@@ -85,7 +85,7 @@ namespace drash {
         return (*this);
     }
 
-    CLogger& CLogger::operator<<(unsigned int _v) {
+    Logger& Logger::operator<<(unsigned int _v) {
         if (opened == true) {
             out << _v;
             stream << _v;
@@ -94,7 +94,7 @@ namespace drash {
         return (*this);
     }
 
-    CLogger& CLogger::operator<<(long _v) {
+    Logger& Logger::operator<<(long _v) {
         if (opened == true) {
             out << _v;
             stream << _v;
@@ -103,7 +103,7 @@ namespace drash {
         return (*this);
     }
 
-    CLogger& CLogger::operator<<(unsigned long _v) {
+    Logger& Logger::operator<<(unsigned long _v) {
         if (opened == true) {
             out << _v;
             stream << _v;
@@ -112,7 +112,7 @@ namespace drash {
         return (*this);
     }
 
-    CLogger& CLogger::operator<<(float _v) {
+    Logger& Logger::operator<<(float _v) {
         if (opened == true) {
             out << _v;
             stream << _v;
@@ -121,7 +121,7 @@ namespace drash {
         return (*this);
     }
 
-    CLogger& CLogger::operator<<(double _v) {
+    Logger& Logger::operator<<(double _v) {
         if (opened == true) {
             out << _v;
             stream << _v;
@@ -130,6 +130,6 @@ namespace drash {
         return (*this);
     }
 
-    const string CLogger::Tail() { return tailStream.str(); }
+    const string Logger::Tail() { return tailStream.str(); }
 
 } // namespace drash

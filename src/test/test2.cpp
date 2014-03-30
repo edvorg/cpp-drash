@@ -36,8 +36,8 @@ namespace drash {
 
     namespace test {
 
-        CTest2::CTest2(greng::CGrengSystemsSet& greng) : CApp(greng) {
-            greng::CCameraParams cp;
+        Test2::Test2(greng::GrengSystemsSet& greng) : App(greng) {
+            greng::CameraParams cp;
             cp.pos.Set(0, 0, 300);
             camera = GetGrengSystems().GetCameraManager().CreateCamera(cp);
 
@@ -45,42 +45,42 @@ namespace drash {
 
             SetProcessors();
 
-            CSceneObjectGeometry g;
+            SceneObjectGeometry g;
             g.figures.resize(1);
-            g.figures[0].vertices.push_back(CVec2f(-300.0f, 5.0f));
-            g.figures[0].vertices.push_back(CVec2f(-300.0f, -5.0f));
-            g.figures[0].vertices.push_back(CVec2f(300.0f, -5.0f));
-            g.figures[0].vertices.push_back(CVec2f(300.0f, 5.0f));
+            g.figures[0].vertices.push_back(Vec2f(-300.0f, 5.0f));
+            g.figures[0].vertices.push_back(Vec2f(-300.0f, -5.0f));
+            g.figures[0].vertices.push_back(Vec2f(300.0f, -5.0f));
+            g.figures[0].vertices.push_back(Vec2f(300.0f, 5.0f));
             g.figures[0].depth = 5;
 
-            CSceneObjectParams p;
+            SceneObjectParams p;
             p.pos.y = -25;
             p.dynamic = false;
             GetScene().CreateObject(g, p);
 
-            CSceneObjectGeometry player_geometry;
+            SceneObjectGeometry player_geometry;
             player_geometry.figures.resize(1);
-            player_geometry.figures[0].vertices.push_back(CVec2f(-2, -5));
-            player_geometry.figures[0].vertices.push_back(CVec2f(2, -5));
-            player_geometry.figures[0].vertices.push_back(CVec2f(2, 5));
-            player_geometry.figures[0].vertices.push_back(CVec2f(-2, 5));
+            player_geometry.figures[0].vertices.push_back(Vec2f(-2, -5));
+            player_geometry.figures[0].vertices.push_back(Vec2f(2, -5));
+            player_geometry.figures[0].vertices.push_back(Vec2f(2, 5));
+            player_geometry.figures[0].vertices.push_back(Vec2f(-2, 5));
             player_geometry.figures[0].depth = 1;
 
-            CPlayerParams player;
+            PlayerParams player;
             player.sceneObjectParams.pos.Set(0, -20, 0);
 
             GetPlayersSystem().CreatePlayer(player_geometry, player);
 
-            CSceneObjectGeometry tg;
+            SceneObjectGeometry tg;
             tg.figures.resize(1);
-            tg.figures[0].vertices.push_back(CVec2f(-10, -5));
-            tg.figures[0].vertices.push_back(CVec2f(10, -5));
-            tg.figures[0].vertices.push_back(CVec2f(10, 5));
-            tg.figures[0].vertices.push_back(CVec2f(-10, 5));
+            tg.figures[0].vertices.push_back(Vec2f(-10, -5));
+            tg.figures[0].vertices.push_back(Vec2f(10, -5));
+            tg.figures[0].vertices.push_back(Vec2f(10, 5));
+            tg.figures[0].vertices.push_back(Vec2f(-10, 5));
             tg.figures[0].friction = 0.5;
             tg.figures[0].mass = 1;
             tg.figures[0].depth = 1;
-            CSceneObjectParams targetForFire;
+            SceneObjectParams targetForFire;
             targetForFire.pos.Set(-20, 0, 0);
             for (int i = 0; i < 10; i++) {
                 GetScene().CreateObject(tg, targetForFire);
@@ -92,22 +92,22 @@ namespace drash {
             GetDebugRenderer().SetLight(&light1);
         }
 
-        void CTest2::SetProcessors() {
+        void Test2::SetProcessors() {
             auto t = GetGeometryManager().CreateGeometry("lambda_test");
             t->figures.resize(1);
-            t->figures[0].vertices.push_back(CVec2f(-10, -10));
-            t->figures[0].vertices.push_back(CVec2f(10, -10));
-            t->figures[0].vertices.push_back(CVec2f(0, 10));
+            t->figures[0].vertices.push_back(Vec2f(-10, -10));
+            t->figures[0].vertices.push_back(Vec2f(10, -10));
+            t->figures[0].vertices.push_back(Vec2f(0, 10));
             t->figures[0].depth = 3;
 
             GetEventSystem().SetProcessor(
                 "C-S-f",
-                CAppEventProcessor([this, t]() {
-                    CPlane plane;
-                    plane.SetPoint(CVec3f(0));
-                    plane.SetNormal(CVec3f(0, 0, 1));
+                AppEventProcessor([this, t]() {
+                    Plane plane;
+                    plane.SetPoint(Vec3f(0));
+                    plane.SetNormal(Vec3f(0, 0, 1));
 
-                    CSceneObjectParams p;
+                    SceneObjectParams p;
 
                     camera->CastRay(GetCursorPos(), plane, p.pos);
 
@@ -115,11 +115,11 @@ namespace drash {
                 }));
 
             GetEventSystem().SetProcessor(
-                "LB", CAppEventProcessor([this]() // left mouse button pressed
+                "LB", AppEventProcessor([this]() // left mouse button pressed
             {
                 // choose object here
                 selectedObject = nullptr;
-                CFigure* f =
+                Figure* f =
                     GetDebugRenderer().FindFigure(*camera, GetCursorPos());
                 if (f != nullptr) {
                     selectedObject = f->GetSceneObject();
@@ -130,11 +130,11 @@ namespace drash {
             {
                           // move object if choosen
                           if (selectedObject != nullptr) {
-                              CPlane plane;
+                              Plane plane;
                               plane.SetPoint(selectedObject->GetPos());
-                              plane.SetNormal(CVec3f(0, 0, 1));
+                              plane.SetNormal(Vec3f(0, 0, 1));
 
-                              CVec3f pos;
+                              Vec3f pos;
 
                               camera->CastRay(GetCursorPos(), plane, pos);
 
@@ -143,7 +143,7 @@ namespace drash {
                       }));
 
             GetEventSystem().SetProcessor(
-                "LB C-d", CAppEventProcessor([this]() // control-d pressed after
+                "LB C-d", AppEventProcessor([this]() // control-d pressed after
                                                       // LB released
             {
                 // delete object if choosen
@@ -155,7 +155,7 @@ namespace drash {
 
             GetEventSystem().SetProcessor(
                 "C-x C-c",
-                CAppEventProcessor([this]() // key pressed. emacs like :)
+                AppEventProcessor([this]() // key pressed. emacs like :)
             { this->Quit(); }));
         }
 

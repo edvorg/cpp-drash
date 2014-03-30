@@ -33,16 +33,16 @@ namespace drash {
 
     namespace test {
 
-        class CTest11 : public CApp {
+        class Test11 : public App {
         public:
-            CTest11(greng::CGrengSystemsSet& greng);
+            Test11(greng::GrengSystemsSet& greng);
 
         private:
             virtual void Step(double _dt) override;
             virtual void Render() override;
 
-            greng::CCamera* camera = {};
-            greng::CPointLight light{};
+            greng::Camera* camera = {};
+            greng::PointLight light{};
             unsigned int delta = 0;
         };
 

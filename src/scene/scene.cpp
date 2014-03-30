@@ -35,19 +35,19 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    CScene::CScene(const CSceneParams& _params)
+    Scene::Scene(const SceneParams& _params)
         : world(b2Vec2(0, 0)),
-          objectsFactory(objectsCountLimit, "CSceneObject") {
+          objectsFactory(objectsCountLimit, "SceneObject") {
         world.SetContactFilter(this);
         world.SetContactListener(this);
         world.SetAllowSleeping(true);
         world.SetContinuousPhysics(false);
-        world.SetGravity(CVec2ToB2Vec2(_params.gravity));
+        world.SetGravity(Vec2ToB2Vec2(_params.gravity));
     }
 
-    CScene::~CScene() {
+    Scene::~Scene() {
         while (auto j = world.GetJointList()) {
-            delete static_cast<CJoint*>(j->GetUserData());
+            delete static_cast<Joint*>(j->GetUserData());
             j->SetUserData(nullptr);
             world.DestroyJoint(j);
         }
@@ -55,7 +55,7 @@ namespace drash {
         DestroyObjects();
     }
 
-    void CScene::Step(double _dt) {
+    void Scene::Step(double _dt) {
         if (paused == true) {
             return;
         }
@@ -72,7 +72,7 @@ namespace drash {
                         true) {
                         // detaching figure
 
-                        CSceneObjectGeometry g;
+                        SceneObjectGeometry g;
                         g.figures.resize(1);
                         g.figures[0]
                             .vertices.resize(objectsFactory.GetObjects()[i]
@@ -87,11 +87,11 @@ namespace drash {
                                objectsFactory.GetObjects()[i]
                                    ->figures[j]
                                    ->GetVertices(),
-                               sizeof(CVec2f) * objectsFactory.GetObjects()[i]
+                               sizeof(Vec2f) * objectsFactory.GetObjects()[i]
                                                     ->figures[j]
                                                     ->EnumVertices());
 
-                        CSceneObjectParams p;
+                        SceneObjectParams p;
                         p.angle = objectsFactory.GetObjects()[i]->angle;
                         p.dynamic = true;
                         p.fixedRotation = false;
@@ -109,7 +109,7 @@ namespace drash {
 
                         // recompute destruction graph (TODO: optimize this)
 
-                        CSceneObjectGeometry ng;
+                        SceneObjectGeometry ng;
                         objectsFactory.GetObjects()[i]->DumpGeometry(&ng);
 
                         ng.ComputeDestructionGraph(0.5);
@@ -147,7 +147,7 @@ namespace drash {
                                 comp.clear();
                                 dfs(a);
 
-                                CSceneObjectGeometry g1;
+                                SceneObjectGeometry g1;
                                 g1.figures.resize(comp.size());
 
                                 for (unsigned int b = 0; b < comp.size(); b++) {
@@ -159,13 +159,13 @@ namespace drash {
                                     memcpy(
                                         &*g1.figures[b].vertices.begin(),
                                         &*ng.figures[comp[b]].vertices.begin(),
-                                        sizeof(CVec2f) * ng.figures[comp[b]]
+                                        sizeof(Vec2f) * ng.figures[comp[b]]
                                                              .vertices.size());
                                 }
 
                                 g1.ComputeDestructionGraph(0.5);
 
-                                CSceneObjectParams p1;
+                                SceneObjectParams p1;
                                 p1.angle =
                                     objectsFactory.GetObjects()[i]->angle;
                                 p1.dynamic = true;
@@ -197,24 +197,24 @@ namespace drash {
 
                 if (o->posXYAnimator.Step(_dt)) {
                     if (o->posXYAnimator.IsTargetSet() == true) {
-                        CVec2f lv = o->posXYAnimator.GetTarget();
+                        Vec2f lv = o->posXYAnimator.GetTarget();
                         lv -= o->pos;
                         lv /= o->posXYAnimator.GetTimeRemains();
-                        o->body->SetLinearVelocity(CVec2ToB2Vec2(lv));
+                        o->body->SetLinearVelocity(Vec2ToB2Vec2(lv));
                     } else {
                         o->body->SetLinearVelocity(b2Vec2(0, 0));
                         phys_pos_changed = true;
                     }
                 } else {
-                    o->pos.Vec2() =
+                    o->pos.AsVec2() =
                         B2Vec2ToCVec2(o->body->GetWorldPoint(b2Vec2(0, 0)));
                 }
 
                 if (o->posZAnimator.Step(_dt)) {
                     for (auto i = o->currentContacts.begin();
                          i != o->currentContacts.end(); i++) {
-                        const CFigure* f1 = i->first;
-                        const CFigure* f2 = i->second;
+                        const Figure* f1 = i->first;
+                        const Figure* f2 = i->second;
 
                         float z1 = f1->GetZ() + f1->GetSceneObject()->GetPosZ();
                         float z2 = f2->GetZ() + f2->GetSceneObject()->GetPosZ();
@@ -241,7 +241,7 @@ namespace drash {
                 }
 
                 if (phys_pos_changed) {
-                    o->body->SetTransform(CVec2ToB2Vec2(o->pos), o->angle);
+                    o->body->SetTransform(Vec2ToB2Vec2(o->pos), o->angle);
                 }
 
                 i++;
@@ -253,21 +253,21 @@ namespace drash {
         world.Step(_dt, velocityIterations, positionIterations);
     }
 
-    CSceneObject* CScene::CreateObject(const CSceneObjectGeometry& _geometry,
-                                       const CSceneObjectParams& _params) {
+    SceneObject* Scene::CreateObject(const SceneObjectGeometry& _geometry,
+                                       const SceneObjectParams& _params) {
         if (world.IsLocked()) {
-            LOG_ERR("CScene::CreateObject(): world is locked now");
+            LOG_ERR("Scene::CreateObject(): world is locked now");
             return nullptr;
         }
 
-        CSceneObject* res = objectsFactory.CreateObject();
+        SceneObject* res = objectsFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
         }
 
         b2BodyDef bdef;
-        bdef.position = CVec2ToB2Vec2(_params.pos);
+        bdef.position = Vec2ToB2Vec2(_params.pos);
         bdef.angle = _params.angle;
         bdef.active = true;
         bdef.awake = true;
@@ -283,7 +283,7 @@ namespace drash {
         b2Body* b = world.CreateBody(&bdef);
 
         if (b == nullptr) {
-            LOG_ERR("CScene::CreateObject(): something wrong with box2d");
+            LOG_ERR("Scene::CreateObject(): something wrong with box2d");
             return nullptr;
         }
 
@@ -300,9 +300,9 @@ namespace drash {
         return res;
     }
 
-    bool CScene::DestroyObject(CSceneObject* _obj) {
+    bool Scene::DestroyObject(SceneObject* _obj) {
         if (objectsFactory.IsObject(_obj) == false) {
-            LOG_ERR("CScene::DestroyObject(): invalid object taken");
+            LOG_ERR("Scene::DestroyObject(): invalid object taken");
             return false;
         }
 
@@ -315,76 +315,76 @@ namespace drash {
         return true;
     }
 
-    void CScene::DestroyObjects(void) {
+    void Scene::DestroyObjects(void) {
         while (objectsFactory.EnumObjects() != 0) {
             DestroyObjectImpl(objectsFactory.GetObjects()[0]);
         }
     }
 
-    CJoint* CScene::CreateJoint(CSceneObject* _obj1, CSceneObject* _obj2,
-                                const CVec3f& _anchor) {
+    Joint* Scene::CreateJoint(SceneObject* _obj1, SceneObject* _obj2,
+                                const Vec3f& _anchor) {
         b2WeldJointDef jdef;
         jdef.Initialize(_obj1->body, _obj2->body,
-                        CVec2ToB2Vec2(_anchor.Vec2()));
+                        Vec2ToB2Vec2(_anchor.AsVec2()));
 
-        CJoint* res = new CJoint;
+        Joint* res = new Joint;
         res->joint = world.CreateJoint(&jdef);
         ;
         res->joint->SetUserData(res);
         return res;
     }
 
-    CJoint* CScene::CreateJointDistance(CSceneObject* _obj1,
-                                        CSceneObject* _obj2,
-                                        const CVec3f& _anchor1,
-                                        const CVec3f& _anchor2, float _length) {
+    Joint* Scene::CreateJointDistance(SceneObject* _obj1,
+                                        SceneObject* _obj2,
+                                        const Vec3f& _anchor1,
+                                        const Vec3f& _anchor2, float _length) {
         b2DistanceJointDef jdef;
         jdef.Initialize(_obj1->body, _obj2->body,
-                        CVec2ToB2Vec2(_anchor1.Vec2()),
-                        CVec2ToB2Vec2(_anchor2.Vec2()));
+                        Vec2ToB2Vec2(_anchor1.AsVec2()),
+                        Vec2ToB2Vec2(_anchor2.AsVec2()));
         jdef.length = _length;
 
-        CJoint* res = new CJoint;
+        Joint* res = new Joint;
         res->joint = world.CreateJoint(&jdef);
         ;
         res->joint->SetUserData(res);
         return res;
     }
 
-    CJoint* CScene::CreateJointRope(CSceneObject* _obj1, CSceneObject* _obj2,
-                                    const CVec3f& _anchor1,
-                                    const CVec3f& _anchor2, float _length) {
+    Joint* Scene::CreateJointRope(SceneObject* _obj1, SceneObject* _obj2,
+                                    const Vec3f& _anchor1,
+                                    const Vec3f& _anchor2, float _length) {
         b2RopeJointDef jdef;
         jdef.maxLength = _length;
-        jdef.localAnchorA = CVec2ToB2Vec2(_anchor1.Vec2());
-        jdef.localAnchorB = CVec2ToB2Vec2(_anchor2.Vec2());
+        jdef.localAnchorA = Vec2ToB2Vec2(_anchor1.AsVec2());
+        jdef.localAnchorB = Vec2ToB2Vec2(_anchor2.AsVec2());
         jdef.bodyA = _obj1->body;
         jdef.bodyB = _obj2->body;
         jdef.type = e_ropeJoint;
         jdef.collideConnected = false;
 
-        CJoint* res = new CJoint;
+        Joint* res = new Joint;
         res->joint = world.CreateJoint(&jdef);
         ;
         res->joint->SetUserData(res);
         return res;
     }
 
-    void CScene::DestroyJoint(CJoint* _joint) {
+    void Scene::DestroyJoint(Joint* _joint) {
         for (auto j = world.GetJointList(); j != nullptr; j = j->GetNext()) {
             if (j->GetUserData() == _joint) {
-                delete static_cast<CJoint*>(j->GetUserData());
+                delete static_cast<Joint*>(j->GetUserData());
                 world.DestroyJoint(j);
                 return;
             }
         }
     }
 
-    void CScene::SetGravity(const CVec2f& _g) {
-        world.SetGravity(CVec2ToB2Vec2(_g));
+    void Scene::SetGravity(const Vec2f& _g) {
+        world.SetGravity(Vec2ToB2Vec2(_g));
     }
 
-    void CScene::DestroyObjectImpl(CSceneObject* _obj) {
+    void Scene::DestroyObjectImpl(SceneObject* _obj) {
         for (auto& i : _obj->destroyHandlers) {
             i(_obj);
         }
@@ -403,7 +403,7 @@ namespace drash {
         objectsFactory.DestroyObject(_obj);
     }
 
-    bool CScene::ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB) {
+    bool Scene::ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB) {
         if (fixtureA->GetUserData() == nullptr ||
             fixtureB->GetUserData() == nullptr ||
             fixtureA->GetBody()->GetUserData() == nullptr ||
@@ -411,13 +411,13 @@ namespace drash {
             return false;
         }
 
-        CSceneObject* o1 =
-            static_cast<CSceneObject*>(fixtureA->GetBody()->GetUserData());
-        CSceneObject* o2 =
-            static_cast<CSceneObject*>(fixtureB->GetBody()->GetUserData());
+        SceneObject* o1 =
+            static_cast<SceneObject*>(fixtureA->GetBody()->GetUserData());
+        SceneObject* o2 =
+            static_cast<SceneObject*>(fixtureB->GetBody()->GetUserData());
 
-        CFigure* f1 = static_cast<CFigure*>(fixtureA->GetUserData());
-        CFigure* f2 = static_cast<CFigure*>(fixtureB->GetUserData());
+        Figure* f1 = static_cast<Figure*>(fixtureA->GetUserData());
+        Figure* f2 = static_cast<Figure*>(fixtureB->GetUserData());
 
         float z1 = f1->GetZ() + o1->GetPosZ();
         float z2 = f2->GetZ() + o2->GetPosZ();
@@ -426,22 +426,22 @@ namespace drash {
                (f1->GetDepth() * 0.5 + f2->GetDepth() * 0.5);
     }
 
-    void CScene::BeginContact(b2Contact* _contact) {
+    void Scene::BeginContact(b2Contact* _contact) {
         b2ContactListener::BeginContact(_contact);
 
-        CFigure* f1 =
-            static_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
-        CFigure* f2 =
-            static_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
+        Figure* f1 =
+            static_cast<Figure*>(_contact->GetFixtureA()->GetUserData());
+        Figure* f2 =
+            static_cast<Figure*>(_contact->GetFixtureB()->GetUserData());
 
         if (f1 == nullptr || f2 == nullptr) {
-            LOG_WARN("CContactListener::BeginContact(): "
+            LOG_WARN("ContactListener::BeginContact(): "
                      "can not get pointer for one of figures. Skipping");
             return;
         }
 
         if (f1 == f2 || f1->GetSceneObject() == f2->GetSceneObject()) {
-            LOG_WARN("CContactListener::BeginContact(): "
+            LOG_WARN("ContactListener::BeginContact(): "
                      "it's seems that pair of figures is part of same object");
             return;
         }
@@ -455,16 +455,16 @@ namespace drash {
 
         // ---------------------------------------------------------------------------------------------
         f1->GetSceneObject()->currentContacts.insert(
-            std::pair<const CFigure*, const CFigure*>(f2, f1));
+            std::pair<const Figure*, const Figure*>(f2, f1));
         f2->GetSceneObject()->currentContacts.insert(
-            std::pair<const CFigure*, const CFigure*>(f1, f2));
+            std::pair<const Figure*, const Figure*>(f1, f2));
         // ^
         // | this code block required for correct object movement along Z axis
-        // | look for CSceneObject::() implementation
+        // | look for SceneObject::() implementation
         // ---------------------------------------------------------------------------------------------
 
-        CVec3f speed(f2->GetSceneObject()->GetLinearVelocity(), 0);
-        speed.Vec2() -= f1->GetSceneObject()->GetLinearVelocity();
+        Vec3f speed(f2->GetSceneObject()->GetLinearVelocity(), 0);
+        speed.AsVec2() -= f1->GetSceneObject()->GetLinearVelocity();
 
         if (speed.Length() > 10) {
             if (f1->GetSceneObject()->IsDynamic() &&
@@ -481,26 +481,26 @@ namespace drash {
         }
     }
 
-    void CScene::PreSolve(b2Contact* _contact,
+    void Scene::PreSolve(b2Contact* _contact,
                           const b2Manifold* _old_manifold) {
         b2ContactListener::PreSolve(_contact, _old_manifold);
 
         /*
-        CFigure *f1 =
-        static_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
-        CFigure *f2 =
-        static_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
+        Figure *f1 =
+        static_cast<Figure*>(_contact->GetFixtureA()->GetUserData());
+        Figure *f2 =
+        static_cast<Figure*>(_contact->GetFixtureB()->GetUserData());
 
         if ( f1 == nullptr || f2 == nullptr )
         {
-            LOG_WARN( "CContactListener::BeginContact(): "
+            LOG_WARN( "ContactListener::BeginContact(): "
                       "can not get pointer for one of figures. Skipping" );
             return;
         }
 
         if ( f1 == f2 || f1->GetSceneObject() == f2->GetSceneObject() )
         {
-            LOG_WARN( "CContactListener::BeginContact(): "
+            LOG_WARN( "ContactListener::BeginContact(): "
                       "it's seems that pair of figures is part of same object"
         );
             return;
@@ -508,27 +508,27 @@ namespace drash {
         */
     }
 
-    void CScene::PostSolve(b2Contact* _contact,
+    void Scene::PostSolve(b2Contact* _contact,
                            const b2ContactImpulse* _impulse) {
         b2ContactListener::PostSolve(_contact, _impulse);
     }
 
-    void CScene::EndContact(b2Contact* _contact) {
+    void Scene::EndContact(b2Contact* _contact) {
         b2ContactListener::EndContact(_contact);
 
-        CFigure* f1 =
-            static_cast<CFigure*>(_contact->GetFixtureA()->GetUserData());
-        CFigure* f2 =
-            static_cast<CFigure*>(_contact->GetFixtureB()->GetUserData());
+        Figure* f1 =
+            static_cast<Figure*>(_contact->GetFixtureA()->GetUserData());
+        Figure* f2 =
+            static_cast<Figure*>(_contact->GetFixtureB()->GetUserData());
 
         if (f1 == nullptr || f2 == nullptr) {
-            LOG_WARN("CContactListener::BeginContact(): "
+            LOG_WARN("ContactListener::BeginContact(): "
                      "can not get pointer for one of figures. Skipping");
             return;
         }
 
         if (f1 == f2 || f1->GetSceneObject() == f2->GetSceneObject()) {
-            LOG_WARN("CContactListener::BeginContact(): "
+            LOG_WARN("ContactListener::BeginContact(): "
                      "it's seems that pair of figures is part of same object");
             return;
         }
@@ -554,12 +554,12 @@ namespace drash {
         }
         // ^
         // | this code block required for correct object movement along Z axis
-        // | look for CScene::Step() implementation
+        // | look for Scene::Step() implementation
         // ---------------------------------------------------------------------------------------------
     }
 
-    void CScene::SayGoodbye(b2Joint* _joint) {}
+    void Scene::SayGoodbye(b2Joint* _joint) {}
 
-    void CScene::SayGoodbye(b2Fixture* _fixture) {}
+    void Scene::SayGoodbye(b2Fixture* _fixture) {}
 
 } // namespace drash

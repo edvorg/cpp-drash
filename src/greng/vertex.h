@@ -30,16 +30,16 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CVertex {
+    class Vertex {
     public:
-        CVertex() = default;
+        Vertex() = default;
 
-        drash::CVec3f pos = drash::CVec3f(0);
-        drash::CVec2f uV = drash::CVec2f(0);
-        drash::CVec3f normal = drash::CVec3f(0);
-        drash::CColor4f color = drash::CColor4f(1);
-        drash::CVec3f tangent = drash::CVec3f(1, 0, 0);
-        drash::CVec3f binormal = drash::CVec3f(0, 1, 0);
+        drash::Vec3f pos = drash::Vec3f(0);
+        drash::Vec2f uV = drash::Vec2f(0);
+        drash::Vec3f normal = drash::Vec3f(0);
+        drash::Color4f color = drash::Color4f(1);
+        drash::Vec3f tangent = drash::Vec3f(1, 0, 0);
+        drash::Vec3f binormal = drash::Vec3f(0, 1, 0);
 
     protected:
     private:

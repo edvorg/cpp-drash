@@ -32,22 +32,22 @@ namespace drash {
 
     namespace ui {
 
-        class CUIControl;
-        class CUISystem;
+        class UIControl;
+        class UISystem;
 
-        class CUIWidget {
+        class UIWidget {
         public:
-            CUIWidget() = default;
-            CUIWidget(const CUIWidget&) = delete;
-            CUIWidget(CUIWidget&&) = delete;
-            CUIWidget& operator=(const CUIWidget&) = delete;
-            CUIWidget& operator=(CUIWidget&&) = delete;
-            virtual ~CUIWidget();
+            UIWidget() = default;
+            UIWidget(const UIWidget&) = delete;
+            UIWidget(UIWidget&&) = delete;
+            UIWidget& operator=(const UIWidget&) = delete;
+            UIWidget& operator=(UIWidget&&) = delete;
+            virtual ~UIWidget();
 
-            virtual void Connect(CUISystem* _system);
+            virtual void Connect(UISystem* _system);
             virtual void Disconnect();
 
-            CUISystem* GetUISystem() const;
+            UISystem* GetUISystem() const;
 
             void SetPressHandler(const std::function<void()>& _handler);
             void SetReleaseHandler(const std::function<void()>& _handler);
@@ -55,15 +55,15 @@ namespace drash {
             SetStepHandler(const std::function<void(double _dt)>& _handler);
             void SetDrawHandler(const std::function<void()>& _handler);
 
-            void SetPos(const CVec2i& _pos);
-            void SetSize(const CVec2ui& _size);
-            const CVec2i GetPos() const;
-            const CVec2ui GetSize() const;
+            void SetPos(const Vec2i& _pos);
+            void SetSize(const Vec2ui& _size);
+            const Vec2i GetPos() const;
+            const Vec2ui GetSize() const;
 
         protected:
         private:
-            CUIControl* uIControl = nullptr;
-            CUISystem* uISystem = nullptr;
+            UIControl* uIControl = nullptr;
+            UISystem* uISystem = nullptr;
         };
 
     } // namepsace ui

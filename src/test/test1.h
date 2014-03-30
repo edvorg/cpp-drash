@@ -35,10 +35,10 @@ namespace drash {
 
     namespace test {
 
-        class CTest1 : public CApp {
+        class Test1 : public App {
         public:
-            CTest1(greng::CGrengSystemsSet& greng);
-            ~CTest1();
+            Test1(greng::GrengSystemsSet& greng);
+            ~Test1();
 
         protected:
             virtual void Step(double _dt) override;
@@ -49,8 +49,8 @@ namespace drash {
         private:
             void SetProcessors();
             void BeginSplit();
-            void DetectNewSplitPoint(const CVec2f& _p1, const CVec2f& _p2,
-                                     unsigned int _index, const CRay& _r);
+            void DetectNewSplitPoint(const Vec2f& _p1, const Vec2f& _p2,
+                                     unsigned int _index, const Ray& _r);
             void ComputeIntersections();
             void EndSplit();
             void ExtrudeFigure(float _delta_depth);
@@ -60,42 +60,42 @@ namespace drash {
             void DetachCurrentObject();
             void SelectFigure();
 
-            std::vector<CVec2f> vertices;
+            std::vector<Vec2f> vertices;
             unsigned int templateCounter = 0;
-            CSceneObjectGeometry* currentTemplate = nullptr;
-            CSceneObject* currentObject = nullptr;
-            CFigure* currentFigure = nullptr;
+            SceneObjectGeometry* currentTemplate = nullptr;
+            SceneObject* currentObject = nullptr;
+            Figure* currentFigure = nullptr;
 
-            CVec2f camRotFirstClick;
+            Vec2f camRotFirstClick;
 
-            CVec3f center;
-            CVec3f x;
-            CVec3f y;
-            CVec3f z;
+            Vec3f center;
+            Vec3f x;
+            Vec3f y;
+            Vec3f z;
 
-            CVec3f axisDrawK;
+            Vec3f axisDrawK;
             unsigned int axisOver = 0;
-            CVec3f figureMoveFirstClick;
+            Vec3f figureMoveFirstClick;
             unsigned int axisMoving = 0;
 
-            CVec3f splitFigureMin;
-            CVec3f splitFigureMax;
+            Vec3f splitFigureMin;
+            Vec3f splitFigureMax;
             bool splitMode = false;
-            CPlane splitPlane;
-            CVec3f splitPlanePoint1;
-            CVec3f splitPlanePoint2;
-            CVec3f splitPlanePoint3;
-            CVec3f splitPlanePoint4;
-            CVec3f splitIntersection1;
+            Plane splitPlane;
+            Vec3f splitPlanePoint1;
+            Vec3f splitPlanePoint2;
+            Vec3f splitPlanePoint3;
+            Vec3f splitPlanePoint4;
+            Vec3f splitIntersection1;
             unsigned splitIntersection1Index = 0;
-            CVec3f splitIntersection2;
+            Vec3f splitIntersection2;
             unsigned splitIntersection2Index = 0;
             unsigned int splitIntersectionsCount = 0;
             bool splitDepth = false;
             float splitFigureCenterZ = 0;
 
-            greng::CCamera* camera = nullptr;
-            greng::CPointLight light1;
+            greng::Camera* camera = nullptr;
+            greng::PointLight light1;
         };
 
     } // namespace test

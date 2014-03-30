@@ -23,8 +23,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #pragma once
-#ifndef COBJECTCAMERA_H
-#define COBJECTCAMERA_H
+#ifndef OBJECTCAMERA_H
+#define OBJECTCAMERA_H
 
 #include "../misc/animator.h"
 #include "../misc/matrix4.h"
@@ -32,21 +32,21 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    class CPlane;
-    class CMatrix4f;
+    class Plane;
+    class Matrix4f;
 
 } // namespace drash
 
 namespace greng {
 
-    using drash::CAnimator;
-    using drash::CVec2f;
-    using drash::CVec3f;
-    using drash::CMatrix4f;
+    using drash::Animator;
+    using drash::Vec2f;
+    using drash::Vec3f;
+    using drash::Matrix4f;
 
-    class CCamera : public drash::CObjectFactory<CCamera>::CFactoryProduct {
+    class Camera : public drash::ObjectFactory<Camera>::FactoryProduct {
     public:
-        friend class CCameraManager;
+        friend class CameraManager;
 
         void Step(double _dt);
 
@@ -63,7 +63,7 @@ namespace greng {
         auto& GetAspectRatio() { return aspectRatioAnimator; }
         auto& GetAspectRatio() const { return aspectRatioAnimator; }
 
-        void LookAt(const CVec3f& _point);
+        void LookAt(const Vec3f& _point);
 
         void Forward(float _distance);
         void Strafe(float _distance);
@@ -77,8 +77,8 @@ namespace greng {
             return projectionMatrixTransposed;
         }
 
-        void CastRay(const CVec2f& _pos, const drash::CPlane& _plane,
-                     CVec3f& _result) const;
+        void CastRay(const Vec2f& _pos, const drash::Plane& _plane,
+                     Vec3f& _result) const;
 
     protected:
     private:
@@ -89,27 +89,27 @@ namespace greng {
         float orthoHeight;
         float fov;
         float depthOfView;
-        CVec3f pos;
-        CVec2f rotation;
-        CAnimator<float> orthoWidthAnimator = orthoWidth;
-        CAnimator<float> orthoHeightAnimator = orthoHeight;
-        CAnimator<float> fovAnimator = fov;
-        CAnimator<float> depthOfViewAnimator = depthOfView;
-        CAnimator<CVec3f> posAnimator = pos;
-        CAnimator<CVec2f> rotationAnimator = rotation;
+        Vec3f pos;
+        Vec2f rotation;
+        Animator<float> orthoWidthAnimator = orthoWidth;
+        Animator<float> orthoHeightAnimator = orthoHeight;
+        Animator<float> fovAnimator = fov;
+        Animator<float> depthOfViewAnimator = depthOfView;
+        Animator<Vec3f> posAnimator = pos;
+        Animator<Vec2f> rotationAnimator = rotation;
 
-        CMatrix4f rotationMatrix;
-        CMatrix4f antiRotationMatrix;
-        CMatrix4f viewMatrix;
-        CMatrix4f projectionMatrix;
+        Matrix4f rotationMatrix;
+        Matrix4f antiRotationMatrix;
+        Matrix4f viewMatrix;
+        Matrix4f projectionMatrix;
 
-        CMatrix4f viewMatrixTransposed;
-        CMatrix4f projectionMatrixTransposed;
+        Matrix4f viewMatrixTransposed;
+        Matrix4f projectionMatrixTransposed;
 
         float aspectRatio = 1.0f;
-        CAnimator<float> aspectRatioAnimator = aspectRatio;
+        Animator<float> aspectRatioAnimator = aspectRatio;
     };
 
 } // namespace greng
 
-#endif // COBJECTCAMERA_H
+#endif // OBJECTCAMERA_H

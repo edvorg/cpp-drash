@@ -29,25 +29,25 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    using drash::CLogger;
+    using drash::Logger;
 
-    CCameraManager::CCameraManager()
-        : cameraFactory(camerasCountLimit, "CCamera") {}
+    CameraManager::CameraManager()
+        : cameraFactory(camerasCountLimit, "Camera") {}
 
-    CCameraManager::~CCameraManager() {
+    CameraManager::~CameraManager() {
         while (cameraFactory.EnumObjects() != 0) {
             DestroyCamera(cameraFactory.GetObjects()[0]);
         }
     }
 
-    void CCameraManager::Step(double _dt) {
+    void CameraManager::Step(double _dt) {
         for (unsigned int i = 0; i < cameraFactory.EnumObjects(); i++) {
             cameraFactory.GetObjects()[i]->Step(_dt);
         }
     }
 
-    CCamera* CCameraManager::CreateCamera(const CCameraParams& _params) {
-        CCamera* res = cameraFactory.CreateObject();
+    Camera* CameraManager::CreateCamera(const CameraParams& _params) {
+        Camera* res = cameraFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
@@ -65,9 +65,9 @@ namespace greng {
         return res;
     }
 
-    bool CCameraManager::DestroyCamera(CCamera* _camera) {
+    bool CameraManager::DestroyCamera(Camera* _camera) {
         if (cameraFactory.IsObject(_camera) == false) {
-            LOG_ERR("CCameraManager::DestroyCamera(): Invalid object taken");
+            LOG_ERR("CameraManager::DestroyCamera(): Invalid object taken");
             return false;
         }
 
@@ -76,7 +76,7 @@ namespace greng {
         return true;
     }
 
-    void CCameraManager::SetAspectRatio(float _ratio) {
+    void CameraManager::SetAspectRatio(float _ratio) {
         if (drash::math::Abs(_ratio) < 0.000001) {
             _ratio = 1.0f;
         }

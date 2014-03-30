@@ -58,20 +58,20 @@ namespace drash {
         EventDragLeave
     };
 
-    class CAppEvent {
+    class AppEvent {
     public:
-        CAppEvent();
-        CAppEvent(const CAppEvent& _src);
-        CAppEvent(EventKey _key);
+        AppEvent();
+        AppEvent(const AppEvent& _src);
+        AppEvent(EventKey _key);
 
         inline EventKey GetKey() const;
 
         std::string ToString() const;
         void FromString(const std::string& _str);
 
-        inline bool operator==(const CAppEvent& _to) const;
-        inline bool operator!=(const CAppEvent& _to) const;
-        inline bool operator<(const CAppEvent& _to) const;
+        inline bool operator==(const AppEvent& _to) const;
+        inline bool operator!=(const AppEvent& _to) const;
+        inline bool operator<(const AppEvent& _to) const;
 
         void Dump() const;
 
@@ -79,17 +79,17 @@ namespace drash {
         EventKey key = EventKeyUnknown;
     };
 
-    inline EventKey CAppEvent::GetKey() const { return key; }
+    inline EventKey AppEvent::GetKey() const { return key; }
 
-    inline bool CAppEvent::operator==(const CAppEvent& _to) const {
+    inline bool AppEvent::operator==(const AppEvent& _to) const {
         return key == _to.key;
     }
 
-    inline bool CAppEvent::operator!=(const CAppEvent& _to) const {
+    inline bool AppEvent::operator!=(const AppEvent& _to) const {
         return key != _to.key;
     }
 
-    inline bool CAppEvent::operator<(const CAppEvent& _to) const {
+    inline bool AppEvent::operator<(const AppEvent& _to) const {
         return (unsigned int)key < (unsigned int)_to.key;
     }
 

@@ -34,10 +34,10 @@ class QTreeWidgetItem;
 class QLabel;
 
 namespace drash {
-    class CObjectEditorApp;
-    class CApp;
-    class CSceneEditorApp;
-    class CSceneObjectParams;
+    class ObjectEditorApp;
+    class App;
+    class SceneEditorApp;
+    class SceneObjectParams;
 }
 
 namespace Ui {
@@ -63,16 +63,16 @@ slots:
 private:
     Ui::EditorWindow* ui;
     bool InitScene();
-    drash::CObjectEditorApp* objectApp = nullptr;
-    drash::CSceneEditorApp* sceneApp = nullptr;
-    drash::CApp* currentApp = nullptr;
+    drash::ObjectEditorApp* objectApp = nullptr;
+    drash::SceneEditorApp* sceneApp = nullptr;
+    drash::App* currentApp = nullptr;
 
     virtual void timerEvent(QTimerEvent*) override;
 
     SceneWidget* widgetForScene = nullptr;
     SceneWidget* widgetForObjects = nullptr;
     SceneWidget* currentSceneWidget = nullptr;
-    // drash::CSceneObject * currentObject = nullptr;
+    // drash::SceneObject * currentObject = nullptr;
 
     bool dragActivated = false;
 
@@ -147,15 +147,15 @@ private:
 private:
     void CreateActions();
 
-    bool UpdateTreeTemplates(QTreeWidget* _tree, drash::CApp* _app);
+    bool UpdateTreeTemplates(QTreeWidget* _tree, drash::App* _app);
 
     void UpdateTreeSceneObjects();
 
-    drash::CTimer timer;
+    drash::Timer timer;
 
     void AddFigure();
-    void SetObjectParams(const drash::CSceneObjectParams& _params);
-    drash::CSceneObjectParams GetObjectParams() const;
+    void SetObjectParams(const drash::SceneObjectParams& _params);
+    drash::SceneObjectParams GetObjectParams() const;
 
 private:
     QHBoxLayout* layoutForScene;

@@ -26,15 +26,15 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    CAppEventProcessor::CAppEventProcessor() {}
+    AppEventProcessor::AppEventProcessor() {}
 
-    CAppEventProcessor::CAppEventProcessor(
-        const CAppEventProcessor::FuncT& _begin,
-        const CAppEventProcessor::FuncT& _processing,
-        const CAppEventProcessor::FuncT& _end)
+    AppEventProcessor::AppEventProcessor(
+        const AppEventProcessor::FuncT& _begin,
+        const AppEventProcessor::FuncT& _processing,
+        const AppEventProcessor::FuncT& _end)
         : begin(_begin), processing(_processing), end(_end) {}
 
-    CAppEventProcessor::CAppEventProcessor(const CAppEventProcessor& _src)
+    AppEventProcessor::AppEventProcessor(const AppEventProcessor& _src)
         : begin(_src.begin), processing(_src.processing), end(_src.end) {}
 
 } // namespace drash

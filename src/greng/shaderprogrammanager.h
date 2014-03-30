@@ -29,28 +29,28 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CVertexShader;
-    class CFragmentShader;
-    class CShaderProgram;
+    class VertexShader;
+    class FragmentShader;
+    class ShaderProgram;
 
-    class CShaderProgramManager {
+    class ShaderProgramManager {
     public:
         constexpr static unsigned int programsCountLimit = 32;
 
-        CShaderProgramManager();
-        CShaderProgramManager(const CShaderProgramManager&) = delete;
-        CShaderProgramManager(CShaderProgramManager&&) = delete;
-        CShaderProgramManager& operator=(const CShaderProgramManager&) = delete;
-        CShaderProgramManager& operator=(CShaderProgramManager&&) = delete;
-        ~CShaderProgramManager();
+        ShaderProgramManager();
+        ShaderProgramManager(const ShaderProgramManager&) = delete;
+        ShaderProgramManager(ShaderProgramManager&&) = delete;
+        ShaderProgramManager& operator=(const ShaderProgramManager&) = delete;
+        ShaderProgramManager& operator=(ShaderProgramManager&&) = delete;
+        ~ShaderProgramManager();
 
-        CShaderProgram* CreateProgram();
-        CShaderProgram* CreateProgram(CVertexShader* _vs, CFragmentShader* _fs);
-        bool DestroyProgram(CShaderProgram* _program);
+        ShaderProgram* CreateProgram();
+        ShaderProgram* CreateProgram(VertexShader* _vs, FragmentShader* _fs);
+        bool DestroyProgram(ShaderProgram* _program);
 
     protected:
     private:
-        drash::CObjectFactory<CShaderProgram> programFactory;
+        drash::ObjectFactory<ShaderProgram> programFactory;
     };
 
 } // namespace greng

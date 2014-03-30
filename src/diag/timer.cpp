@@ -34,16 +34,16 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    CTimer::CTimer() : startTime(0), prevTime(0), currTime(0), paused(true) {}
+    Timer::Timer() : startTime(0), prevTime(0), currTime(0), paused(true) {}
 
-    void CTimer::Reset(bool _start) {
+    void Timer::Reset(bool _start) {
         this->Update();
         startTime = prevTime = currTime;
 
         SetPaused(!_start);
     }
 
-    void CTimer::Tick() {
+    void Timer::Tick() {
         if (paused == false) {
             prevTime = currTime;
             this->Update();
@@ -53,27 +53,27 @@ namespace drash {
         }
     }
 
-    double CTimer::GetFullTime() const {
+    double Timer::GetFullTime() const {
         return (currTime - startTime) / 1000000000.0;
     }
 
-    double CTimer::GetDeltaTime() const {
+    double Timer::GetDeltaTime() const {
         return (currTime - prevTime) / 1000000000.0;
     }
 
-    CLogger& operator<<(CLogger& _logger, const CTimer& _timer) {
+    Logger& operator<<(Logger& _logger, const Timer& _timer) {
         _logger << "t: " << _timer.GetFullTime()
                 << " dt: " << _timer.GetDeltaTime();
         return _logger;
     }
 
-    void CTimer::Update() {
+    void Timer::Update() {
         timespec ts;
 
 #if defined(__MACH__) // OS X does not have clock_gettime, use clock_get_time
         clock_serv_t cclock;
         mach_timespec_t mts;
-        host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+        host_get_clock_service(mach_host_self(), ALENDAR_CLOCK, &cclock);
         clock_get_time(cclock, &mts);
         mach_port_deallocate(mach_task_self(), cclock);
         ts.tv_sec = mts.tv_sec;
@@ -86,7 +86,7 @@ namespace drash {
 
         DRASH_ASSERT(
             currTime >= prevTime &&
-            "CTimer::Update(): something wrong with time query library");
+            "Timer::Update(): something wrong with time query library");
     }
 
 } // namespace drash

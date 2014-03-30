@@ -29,29 +29,29 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CFragmentShader;
+    class FragmentShader;
 
-    class CFragmentShaderManager {
+    class FragmentShaderManager {
     public:
         constexpr static unsigned int shadersCountLimit = 32;
 
-        CFragmentShaderManager();
-        CFragmentShaderManager(const CFragmentShaderManager&) = delete;
-        CFragmentShaderManager(CFragmentShaderManager&&) = delete;
-        CFragmentShaderManager& operator=(const CFragmentShaderManager&) =
+        FragmentShaderManager();
+        FragmentShaderManager(const FragmentShaderManager&) = delete;
+        FragmentShaderManager(FragmentShaderManager&&) = delete;
+        FragmentShaderManager& operator=(const FragmentShaderManager&) =
             delete;
-        CFragmentShaderManager& operator=(CFragmentShaderManager&&) = delete;
-        ~CFragmentShaderManager();
+        FragmentShaderManager& operator=(FragmentShaderManager&&) = delete;
+        ~FragmentShaderManager();
 
-        CFragmentShader* CreateShader();
-        CFragmentShader* CreateShaderDummy();
-        CFragmentShader* CreateShaderFromSource(const char* _source);
-        CFragmentShader* CreateShaderFromFile(const char* _path);
-        bool DestroyShader(CFragmentShader* _shader);
+        FragmentShader* CreateShader();
+        FragmentShader* CreateShaderDummy();
+        FragmentShader* CreateShaderFromSource(const char* _source);
+        FragmentShader* CreateShaderFromFile(const char* _path);
+        bool DestroyShader(FragmentShader* _shader);
 
     protected:
     private:
-        drash::CObjectFactory<CFragmentShader> shaderFactory;
+        drash::ObjectFactory<FragmentShader> shaderFactory;
     };
 
 } // namespace greng

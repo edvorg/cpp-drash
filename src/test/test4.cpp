@@ -32,25 +32,25 @@ namespace drash {
 
         using namespace greng;
 
-        CTest4::CTest4(greng::CGrengSystemsSet& greng) : CApp(greng) {
+        Test4::Test4(greng::GrengSystemsSet& greng) : App(greng) {
             testButton1.Connect(&GetUISystem());
 
             testButton1.SetClickHandler([]() { LOG_INFO("click 1"); });
 
-            testButton1.SetPos(CVec2i(100, 100));
-            testButton1.SetSize(CVec2ui(200, 30));
+            testButton1.SetPos(Vec2i(100, 100));
+            testButton1.SetSize(Vec2ui(200, 30));
 
             testButton2.Connect(&GetUISystem());
 
             testButton2.SetClickHandler([]() { LOG_INFO("click 2"); });
 
-            testButton2.SetPos(CVec2i(350, 100));
-            testButton2.SetSize(CVec2ui(30, 30));
+            testButton2.SetPos(Vec2i(350, 100));
+            testButton2.SetSize(Vec2ui(30, 30));
 
             testSlider1.Connect(&GetUISystem());
 
-            testSlider1.SetPos(CVec2i(430, 100));
-            testSlider1.SetSize(CVec2ui(200, 30));
+            testSlider1.SetPos(Vec2i(430, 100));
+            testSlider1.SetSize(Vec2ui(200, 30));
 
             testSlider1.SetMin(-100);
             testSlider1.SetMax(200);
@@ -67,31 +67,31 @@ namespace drash {
             valueAnimator2.SetTarget(100, 2.0, AnimatorBehavior::Bounce);
 
             testPoint.Set(0.0f, 0.0f, 0.0f);
-            CCameraParams params;
+            CameraParams params;
             params.pos.Set(10, 10, 10.0f);
             params.rotation.Set(-M_PI / 4, M_PI / 4, 0);
-            CCamera* camera =
+            Camera* camera =
                 GetGrengSystems().GetCameraManager().CreateCamera(params);
 
             point.SetCamera(camera);
             point.SetCenter(testPoint);
 
             GetEventSystem().SetProcessor(
-                "LB", CAppEventProcessor([this]() { point.ClickBegin(); },
+                "LB", AppEventProcessor([this]() { point.ClickBegin(); },
                                          [this]() { point.ClickPressing(); },
                                          [this]() { point.ClickEnd(); }));
 
             GetDebugRenderer().SetCamera(camera);
         }
 
-        void CTest4::Step(double _dt) {
-            CApp::Step(_dt);
+        void Test4::Step(double _dt) {
+            App::Step(_dt);
             point.SetCursorPos(GetCursorPos());
             point.Step(_dt);
         }
 
-        void CTest4::Render() {
-            CApp::Render();
+        void Test4::Render() {
+            App::Render();
             point.Render(GetGrengSystems().GetRenderer());
         }
 

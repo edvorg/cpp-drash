@@ -28,22 +28,22 @@
 
 namespace drash {
 
-    CMatrix4f::CMatrix4f(const CMatrix4f& _m) {
+    Matrix4f::Matrix4f(const Matrix4f& _m) {
         memcpy(data, _m.data, sizeof(float) * elemsCount);
     }
 
-    CMatrix4f& CMatrix4f::Zero() {
+    Matrix4f& Matrix4f::Zero() {
         memset(data, 0, sizeof(float) * elemsCount);
         return *this;
     }
 
-    CMatrix4f& CMatrix4f::Identity() {
+    Matrix4f& Matrix4f::Identity() {
         Zero();
         data[i00] = data[i11] = data[i22] = data[i33] = 1;
         return *this;
     }
 
-    CMatrix4f& CMatrix4f::Transpose() {
+    Matrix4f& Matrix4f::Transpose() {
         float tmp = data[i01];
         data[i01] = data[i10];
         data[i10] = tmp;
@@ -71,8 +71,8 @@ namespace drash {
         return *this;
     }
 
-    CMatrix4f& MatrixMultiply(const CMatrix4f& _m1, const CMatrix4f& _m2,
-                              CMatrix4f& _result) {
+    Matrix4f& MatrixMultiply(const Matrix4f& _m1, const Matrix4f& _m2,
+                              Matrix4f& _result) {
         _result.data[_result.i00] = _m1.data[_m1.i00] * _m2.data[_m2.i00] +
                                     _m1.data[_m1.i01] * _m2.data[_m2.i10] +
                                     _m1.data[_m1.i02] * _m2.data[_m2.i20] +
@@ -156,8 +156,8 @@ namespace drash {
         return _result;
     }
 
-    CVec4f& MatrixMultiply(const CMatrix4f& _m, const CVec4f& _v,
-                           CVec4f& _result) {
+    Vec4f& MatrixMultiply(const Matrix4f& _m, const Vec4f& _v,
+                           Vec4f& _result) {
         _result.x = _v.x * _m.data[_m.i00] + _v.y * _m.data[_m.i01] +
                     _v.z * _m.data[_m.i02] + _v.w * _m.data[_m.i03];
 
@@ -173,7 +173,7 @@ namespace drash {
         return _result;
     }
 
-    CMatrix4f& MatrixScale(CMatrix4f& _m, const CVec3f _scale) {
+    Matrix4f& MatrixScale(Matrix4f& _m, const Vec3f _scale) {
         _m.Identity();
         _m.data[_m.i00] = _scale.x;
         _m.data[_m.i11] = _scale.y;
@@ -182,7 +182,7 @@ namespace drash {
         return _m;
     }
 
-    CMatrix4f& MatrixRotationX(CMatrix4f& _m, float _angle) {
+    Matrix4f& MatrixRotationX(Matrix4f& _m, float _angle) {
         float c = cos(_angle);
         float s = sin(_angle);
 
@@ -194,7 +194,7 @@ namespace drash {
         return _m;
     }
 
-    CMatrix4f& MatrixRotationY(CMatrix4f& _m, float _angle) {
+    Matrix4f& MatrixRotationY(Matrix4f& _m, float _angle) {
         float c = cos(_angle);
         float s = sin(_angle);
 
@@ -206,7 +206,7 @@ namespace drash {
         return _m;
     }
 
-    CMatrix4f& MatrixRotationZ(CMatrix4f& _m, float _angle) {
+    Matrix4f& MatrixRotationZ(Matrix4f& _m, float _angle) {
         float c = cos(_angle);
         float s = sin(_angle);
 
@@ -218,7 +218,7 @@ namespace drash {
         return _m;
     }
 
-    CMatrix4f& MatrixTranslation(CMatrix4f& _m, const CVec3f& _translation) {
+    Matrix4f& MatrixTranslation(Matrix4f& _m, const Vec3f& _translation) {
         _m.Identity();
 
         _m.data[_m.i03] = _translation.x;
@@ -228,7 +228,7 @@ namespace drash {
         return _m;
     }
 
-    CMatrix4f& Matrix4Perspective(CMatrix4f& _m, float _fov, float _aspect,
+    Matrix4f& Matrix4Perspective(Matrix4f& _m, float _fov, float _aspect,
                                   float _znear, float _zfar) {
         _m.Identity();
 

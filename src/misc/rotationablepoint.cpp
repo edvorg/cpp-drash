@@ -29,57 +29,57 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    CRotationablePoint::CRotationablePoint(greng::CRenderer& _renderer,
-                                           greng::CCamera& _camera)
+    RotationablePoint::RotationablePoint(greng::Renderer& _renderer,
+                                           greng::Camera& _camera)
         : renderer(_renderer), camera(_camera) {}
 
-    void CRotationablePoint::Step(double) {
-        CMatrix4f rotx;
+    void RotationablePoint::Step(double) {
+        Matrix4f rotx;
         MatrixRotationX(rotx, rotation.x);
 
-        CMatrix4f rotz;
+        Matrix4f rotz;
         MatrixRotationZ(rotz, rotation.z);
 
-        CMatrix4f roty;
+        Matrix4f roty;
         MatrixRotationY(roty, rotation.y);
 
-        CMatrix4f rot_yz;
+        Matrix4f rot_yz;
         MatrixMultiply(roty, rotz, rot_yz);
 
-        CMatrix4f rot;
+        Matrix4f rot;
         MatrixMultiply(rotx, rot_yz, rot);
 
-        CVec4f xy_normal(0, 0, 1, 0);
-        CVec4f xy_normal_transposed;
+        Vec4f xy_normal(0, 0, 1, 0);
+        Vec4f xy_normal_transposed;
         MatrixMultiply(rot, xy_normal, xy_normal_transposed);
 
-        CVec4f xz_normal(0, 1, 0, 0);
-        CVec4f xz_normal_transposed;
+        Vec4f xz_normal(0, 1, 0, 0);
+        Vec4f xz_normal_transposed;
         MatrixMultiply(rot, xz_normal, xz_normal_transposed);
 
-        CVec4f yz_normal(1, 0, 0, 0);
-        CVec4f yz_normal_transposed;
+        Vec4f yz_normal(1, 0, 0, 0);
+        Vec4f yz_normal_transposed;
         MatrixMultiply(rot, yz_normal, yz_normal_transposed);
 
-        CPlane xy;
+        Plane xy;
         xy.SetPoint(point);
         xy.SetNormal(xy_normal_transposed);
 
-        CPlane xz;
+        Plane xz;
         xz.SetPoint(point);
         xz.SetNormal(xz_normal_transposed);
 
-        CPlane yz;
+        Plane yz;
         yz.SetPoint(point);
         yz.SetNormal(yz_normal_transposed);
 
-        CVec3f xy_proj;
+        Vec3f xy_proj;
         camera.CastRay(cursorPos, xy, xy_proj);
 
-        CVec3f xz_proj;
+        Vec3f xz_proj;
         camera.CastRay(cursorPos, xz, xz_proj);
 
-        CVec3f yz_proj;
+        Vec3f yz_proj;
         camera.CastRay(cursorPos, yz, yz_proj);
 
         xy_proj -= point;
@@ -127,81 +127,81 @@ namespace drash {
         }
     }
 
-    void CRotationablePoint::Render() {
+    void RotationablePoint::Render() {
         unsigned int segments = 32;
 
         float angle = 0;
         float angle_delta = 2.0 * M_PI / segments;
 
-        CMatrix4f rotx;
+        Matrix4f rotx;
         MatrixRotationX(rotx, rotation.x);
 
-        CMatrix4f rotz;
+        Matrix4f rotz;
         MatrixRotationZ(rotz, rotation.z);
 
-        CMatrix4f roty;
+        Matrix4f roty;
         MatrixRotationY(roty, rotation.y);
 
-        CMatrix4f rot_yz;
+        Matrix4f rot_yz;
         MatrixMultiply(roty, rotz, rot_yz);
 
-        CMatrix4f rot;
+        Matrix4f rot;
         MatrixMultiply(rotx, rot_yz, rot);
 
         // Draw lines
-        CVec4f x(1, 0, 0, 0);
+        Vec4f x(1, 0, 0, 0);
 
-        CVec4f x_transposed;
+        Vec4f x_transposed;
         MatrixMultiply(rot, x, x_transposed);
 
-        x_transposed.Vec3().Normalize();
-        x_transposed.Vec3() *= radius;
-        x_transposed.Vec3() += point;
+        x_transposed.AsVec3().Normalize();
+        x_transposed.AsVec3() *= radius;
+        x_transposed.AsVec3() += point;
 
-        renderer.DrawLine(camera, point, x_transposed, 1, CColor4f(1, 0, 0, 1),
+        renderer.DrawLine(camera, point, x_transposed, 1, Color4f(1, 0, 0, 1),
                           false);
 
-        CVec4f z(0, 0, 1, 0);
+        Vec4f z(0, 0, 1, 0);
 
-        CVec4f z_transposed;
+        Vec4f z_transposed;
         MatrixMultiply(rot, z, z_transposed);
 
-        z_transposed.Vec3().Normalize();
-        z_transposed.Vec3() *= radius;
-        z_transposed.Vec3() += point;
+        z_transposed.AsVec3().Normalize();
+        z_transposed.AsVec3() *= radius;
+        z_transposed.AsVec3() += point;
 
-        renderer.DrawLine(camera, point, z_transposed, 1, CColor4f(0, 0, 1, 1),
+        renderer.DrawLine(camera, point, z_transposed, 1, Color4f(0, 0, 1, 1),
                           false);
 
-        CVec4f y(0, 1, 0, 0);
+        Vec4f y(0, 1, 0, 0);
 
-        CVec4f y_transposed;
+        Vec4f y_transposed;
         MatrixMultiply(rot, y, y_transposed);
 
-        y_transposed.Vec3().Normalize();
-        y_transposed.Vec3() *= radius;
-        y_transposed.Vec3() += point;
+        y_transposed.AsVec3().Normalize();
+        y_transposed.AsVec3() *= radius;
+        y_transposed.AsVec3() += point;
 
-        renderer.DrawLine(camera, point, y_transposed, 1, CColor4f(0, 1, 0, 1),
+        renderer.DrawLine(camera, point, y_transposed, 1, Color4f(0, 1, 0, 1),
                           false);
 
         if (axisOX == true) {
             for (unsigned int i = 0; i < segments; i++) {
-                CVec4f p1(0, radius * sin(angle), -radius * cos(angle), 0);
-                CVec4f p2(0, radius * sin(angle + angle_delta),
+                Vec4f p1(0, radius * sin(angle), -radius * cos(angle), 0);
+                Vec4f p2(0, radius * sin(angle + angle_delta),
                           -radius * cos(angle + angle_delta), 0);
 
-                CVec4f p1_transposed;
-                CVec4f p2_transposed;
+                Vec4f p1_transposed;
+                Vec4f p2_transposed;
 
                 MatrixMultiply(rot, p1, p1_transposed);
                 MatrixMultiply(rot, p2, p2_transposed);
 
-                p1_transposed.Vec3() += point;
-                p2_transposed.Vec3() += point;
+                p1_transposed.AsVec3() += point;
+                p2_transposed.AsVec3() += point;
 
                 renderer.DrawLine(camera, p1_transposed, p2_transposed, 1,
-                                  CColor4f(1, 0, 0, axisOvered == 1 ? 0.5 : 1),
+                                  Color4f(1, 0, 0, axisOvered == 1 ? 0.5 : 1),
                                   false);
 
                 angle += angle_delta;
@@ -211,21 +211,21 @@ namespace drash {
         ///
         if (axisOZ == true) {
             for (unsigned int i = 0; i < segments; i++) {
-                CVec4f p1(radius * cos(angle), radius * sin(angle), 0, 0);
-                CVec4f p2(radius * cos(angle + angle_delta),
+                Vec4f p1(radius * cos(angle), radius * sin(angle), 0, 0);
+                Vec4f p2(radius * cos(angle + angle_delta),
                           radius * sin(angle + angle_delta), 0, 0);
 
-                CVec4f p1_transposed;
-                CVec4f p2_transposed;
+                Vec4f p1_transposed;
+                Vec4f p2_transposed;
 
                 MatrixMultiply(rot, p1, p1_transposed);
                 MatrixMultiply(rot, p2, p2_transposed);
 
-                p1_transposed.Vec3() += point;
-                p2_transposed.Vec3() += point;
+                p1_transposed.AsVec3() += point;
+                p2_transposed.AsVec3() += point;
 
                 renderer.DrawLine(camera, p1_transposed, p2_transposed, 1,
-                                  CColor4f(0, 0, 1, axisOvered == 3 ? 0.5 : 1),
+                                  Color4f(0, 0, 1, axisOvered == 3 ? 0.5 : 1),
                                   false);
 
                 angle += angle_delta;
@@ -235,21 +235,21 @@ namespace drash {
         ///
         if (axisOY == true) {
             for (unsigned int i = 0; i < segments; i++) {
-                CVec4f p1(radius * cos(angle), 0, -radius * sin(angle), 0);
-                CVec4f p2(radius * cos(angle + angle_delta), 0,
+                Vec4f p1(radius * cos(angle), 0, -radius * sin(angle), 0);
+                Vec4f p2(radius * cos(angle + angle_delta), 0,
                           -radius * sin(angle + angle_delta), 0);
 
-                CVec4f p1_transposed;
-                CVec4f p2_transposed;
+                Vec4f p1_transposed;
+                Vec4f p2_transposed;
 
                 MatrixMultiply(rot, p1, p1_transposed);
                 MatrixMultiply(rot, p2, p2_transposed);
 
-                p1_transposed.Vec3() += point;
-                p2_transposed.Vec3() += point;
+                p1_transposed.AsVec3() += point;
+                p2_transposed.AsVec3() += point;
 
                 renderer.DrawLine(camera, p1_transposed, p2_transposed, 1,
-                                  CColor4f(0, 1, 0, axisOvered == 2 ? 0.5 : 1),
+                                  Color4f(0, 1, 0, axisOvered == 2 ? 0.5 : 1),
                                   false);
 
                 angle += angle_delta;
@@ -257,59 +257,59 @@ namespace drash {
         }
     }
 
-    void CRotationablePoint::RotateBegin() {
+    void RotationablePoint::RotateBegin() {
         if ((axisOvered == 1 && axisOX == true) ||
             (axisOvered == 2 && axisOY == true) ||
             (axisOvered == 3 && axisOZ == true)) {
 
             axisRotating = axisOvered;
 
-            CMatrix4f rotx;
+            Matrix4f rotx;
             MatrixRotationX(rotx, rotation.x);
 
-            CMatrix4f rotz;
+            Matrix4f rotz;
             MatrixRotationZ(rotz, rotation.z);
 
-            CMatrix4f roty;
+            Matrix4f roty;
             MatrixRotationY(roty, rotation.y);
 
-            CMatrix4f rot_yz;
+            Matrix4f rot_yz;
             MatrixMultiply(roty, rotz, rot_yz);
 
-            CMatrix4f rot;
+            Matrix4f rot;
             MatrixMultiply(rotx, rot_yz, rot);
 
-            CVec4f xy_normal(0, 0, 1, 0);
-            CVec4f xy_normal_transposed;
+            Vec4f xy_normal(0, 0, 1, 0);
+            Vec4f xy_normal_transposed;
             MatrixMultiply(rot, xy_normal, xy_normal_transposed);
 
-            CVec4f xz_normal(0, 1, 0, 0);
-            CVec4f xz_normal_transposed;
+            Vec4f xz_normal(0, 1, 0, 0);
+            Vec4f xz_normal_transposed;
             MatrixMultiply(rot, xz_normal, xz_normal_transposed);
 
-            CVec4f yz_normal(1, 0, 0, 0);
-            CVec4f yz_normal_transposed;
+            Vec4f yz_normal(1, 0, 0, 0);
+            Vec4f yz_normal_transposed;
             MatrixMultiply(rot, yz_normal, yz_normal_transposed);
 
-            CPlane xy;
+            Plane xy;
             xy.SetPoint(point);
             xy.SetNormal(xy_normal_transposed);
 
-            CPlane xz;
+            Plane xz;
             xz.SetPoint(point);
             xz.SetNormal(xz_normal_transposed);
 
-            CPlane yz;
+            Plane yz;
             yz.SetPoint(point);
             yz.SetNormal(yz_normal_transposed);
 
-            CVec3f xy_proj;
+            Vec3f xy_proj;
             camera.CastRay(cursorPos, xy, xy_proj);
 
-            CVec3f xz_proj;
+            Vec3f xz_proj;
             camera.CastRay(cursorPos, xz, xz_proj);
 
-            CVec3f yz_proj;
+            Vec3f yz_proj;
             camera.CastRay(cursorPos, yz, yz_proj);
 
             xy_proj -= point;
@@ -342,6 +342,6 @@ namespace drash {
         }
     }
 
-    void CRotationablePoint::RotateEnd() { axisRotating = 0; }
+    void RotationablePoint::RotateEnd() { axisRotating = 0; }
 
 } // namespace drash

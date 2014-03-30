@@ -32,7 +32,7 @@ namespace drash {
 
     namespace test {
 
-        CTest8::CTest8(greng::CGrengSystemsSet& greng) : CApp(greng) {
+        Test8::Test8(greng::GrengSystemsSet& greng) : App(greng) {
             InitUI();
             InitLevels();
             InitCamera();
@@ -40,20 +40,20 @@ namespace drash {
             GetGeometryManager().Load();
         }
 
-        void CTest8::Render() { CApp::Render(); }
+        void Test8::Render() { App::Render(); }
 
-        CTest8::~CTest8() {
+        Test8::~Test8() {
             GetGeometryManager().Store();
             level1->Store("level1");
             level2->Store("level2");
         }
 
-        bool CTest8::InitUI() {
+        bool Test8::InitUI() {
             GetUISystem().SetWidth(1024);
 
             button1.Connect(&GetUISystem());
-            button1.SetPos(CVec2i(5, 30));
-            button1.SetSize(CVec2ui(100, 20));
+            button1.SetPos(Vec2i(5, 30));
+            button1.SetSize(Vec2ui(100, 20));
 
             button1.SetClickHandler([this]() {
                 if (level1 != nullptr) {
@@ -62,8 +62,8 @@ namespace drash {
             });
 
             button2.Connect(&GetUISystem());
-            button2.SetPos(CVec2i(5, 5));
-            button2.SetSize(CVec2ui(100, 20));
+            button2.SetPos(Vec2i(5, 5));
+            button2.SetSize(Vec2ui(100, 20));
 
             button2.SetClickHandler([this]() {
                 if (level2 != nullptr) {
@@ -74,7 +74,7 @@ namespace drash {
             return true;
         }
 
-        bool CTest8::InitLevels() {
+        bool Test8::InitLevels() {
             level1 = GetLevelManager().CreateLevel();
             level2 = GetLevelManager().CreateLevel();
 
@@ -85,9 +85,9 @@ namespace drash {
                 return false;
             }
 
-            CSceneObjectGeometry* g1 =
+            SceneObjectGeometry* g1 =
                 GetGeometryManager().CreateGeometry("object1_geometry");
-            CSceneObjectGeometry* g2 =
+            SceneObjectGeometry* g2 =
                 GetGeometryManager().CreateGeometry("object2_geometry");
 
             if (g1 == nullptr || g2 == nullptr) {
@@ -96,20 +96,20 @@ namespace drash {
 
             g1->figures.resize(1);
             g1->figures[0].depth = 1;
-            g1->figures[0].vertices.push_back(CVec2f(-1, 0));
-            g1->figures[0].vertices.push_back(CVec2f(1, 0));
-            g1->figures[0].vertices.push_back(CVec2f(0, 1));
+            g1->figures[0].vertices.push_back(Vec2f(-1, 0));
+            g1->figures[0].vertices.push_back(Vec2f(1, 0));
+            g1->figures[0].vertices.push_back(Vec2f(0, 1));
 
             g2->figures.resize(1);
             g2->figures[0].depth = 1;
-            g2->figures[0].vertices.push_back(CVec2f(-1, -1));
-            g2->figures[0].vertices.push_back(CVec2f(1, -1));
-            g2->figures[0].vertices.push_back(CVec2f(1, 1));
-            g2->figures[0].vertices.push_back(CVec2f(-1, 1));
+            g2->figures[0].vertices.push_back(Vec2f(-1, -1));
+            g2->figures[0].vertices.push_back(Vec2f(1, -1));
+            g2->figures[0].vertices.push_back(Vec2f(1, 1));
+            g2->figures[0].vertices.push_back(Vec2f(-1, 1));
 
-            CLevelObjectDesc* p1 =
+            LevelObjectDesc* p1 =
                 level1->AddObject("object1_geometry", "obj1");
-            CLevelObjectDesc* p2 =
+            LevelObjectDesc* p2 =
                 level1->AddObject("object2_geometry", "obj2");
 
             if (p1 == nullptr || p2 == nullptr) {
@@ -118,9 +118,9 @@ namespace drash {
 
             p2->params.pos.Set(3, 0, 0);
 
-            CLevelObjectDesc* p3 =
+            LevelObjectDesc* p3 =
                 level2->AddObject("object1_geometry", "obj1");
-            CLevelObjectDesc* p4 =
+            LevelObjectDesc* p4 =
                 level2->AddObject("object2_geometry", "obj2");
 
             if (p3 == nullptr || p4 == nullptr) {
@@ -132,8 +132,8 @@ namespace drash {
             return true;
         }
 
-        bool CTest8::InitCamera() {
-            greng::CCameraParams p;
+        bool Test8::InitCamera() {
+            greng::CameraParams p;
             p.pos.Set(0, 0, 10);
             p.fov = M_PI / 6.0;
             auto c = GetGrengSystems().GetCameraManager().CreateCamera(p);
@@ -142,7 +142,7 @@ namespace drash {
             return true;
         }
 
-        bool CTest8::InitLights() {
+        bool Test8::InitLights() {
             light1.position.Set(0, 10, 0);
             GetDebugRenderer().SetLight(&light1);
             return true;

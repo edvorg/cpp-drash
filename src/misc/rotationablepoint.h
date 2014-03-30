@@ -27,24 +27,24 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CRenderer;
-    class CCamera;
+    class Renderer;
+    class Camera;
 }
 
 namespace drash {
 
-    class CRotationablePoint {
+    class RotationablePoint {
     public:
-        CRotationablePoint(greng::CRenderer& _renderer,
-                           greng::CCamera& _camera);
+        RotationablePoint(greng::Renderer& _renderer,
+                           greng::Camera& _camera);
 
         void Step(double);
         void Render();
 
-        inline void SetPoint(const CVec3f& _point);
-        inline void SetRotation(const CVec3f& _rotation);
+        inline void SetPoint(const Vec3f& _point);
+        inline void SetRotation(const Vec3f& _rotation);
 
-        inline void SetCursorPos(const CVec2f& _pos);
+        inline void SetCursorPos(const Vec2f& _pos);
         void RotateBegin();
         void RotateEnd();
 
@@ -54,17 +54,17 @@ namespace drash {
         inline void SetAxisOY(const bool _val);
         inline void SetAxisOZ(const bool _val);
 
-        inline const CVec3f& GetRotation() const;
+        inline const Vec3f& GetRotation() const;
 
     private:
-        CVec3f rotationDelta;
-        CVec2f cursorPos = CVec2f(0);
+        Vec3f rotationDelta;
+        Vec2f cursorPos = Vec2f(0);
 
-        greng::CRenderer& renderer;
-        greng::CCamera& camera;
+        greng::Renderer& renderer;
+        greng::Camera& camera;
 
-        CVec3f point = CVec3f(0);
-        CVec3f rotation = CVec3f(0);
+        Vec3f point = Vec3f(0);
+        Vec3f rotation = Vec3f(0);
 
         unsigned int axisOvered = 0;
         unsigned int axisRotating = 0;
@@ -74,31 +74,31 @@ namespace drash {
         bool axisOZ = true;
     };
 
-    inline void CRotationablePoint::SetPoint(const CVec3f& _point) {
+    inline void RotationablePoint::SetPoint(const Vec3f& _point) {
         point = _point;
     }
 
-    inline void CRotationablePoint::SetRotation(const CVec3f& _rotation) {
+    inline void RotationablePoint::SetRotation(const Vec3f& _rotation) {
         rotation = _rotation;
     }
 
-    inline void CRotationablePoint::SetCursorPos(const CVec2f& _pos) {
+    inline void RotationablePoint::SetCursorPos(const Vec2f& _pos) {
         cursorPos = _pos;
     }
 
-    inline void CRotationablePoint::SetAxisOX(const bool _val) {
+    inline void RotationablePoint::SetAxisOX(const bool _val) {
         axisOX = _val;
     }
 
-    inline void CRotationablePoint::SetAxisOY(const bool _val) {
+    inline void RotationablePoint::SetAxisOY(const bool _val) {
         axisOY = _val;
     }
 
-    inline void CRotationablePoint::SetAxisOZ(const bool _val) {
+    inline void RotationablePoint::SetAxisOZ(const bool _val) {
         axisOZ = _val;
     }
 
-    inline const CVec3f& CRotationablePoint::GetRotation() const {
+    inline const Vec3f& RotationablePoint::GetRotation() const {
         return rotation;
     }
 

@@ -23,8 +23,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #pragma once
-#ifndef CTESTAPP_H
-#define CTESTAPP_H
+#ifndef TESTAPP_H
+#define TESTAPP_H
 
 #include "../players/playerssystem.h"
 #include "../scene/scene.h"
@@ -37,10 +37,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    class CApp {
+    class App {
     public:
-        CApp(greng::CGrengSystemsSet& greng);
-        virtual ~CApp() = default;
+        App(greng::GrengSystemsSet& greng);
+        virtual ~App() = default;
 
         virtual void Step(double _dt);
         virtual void Render();
@@ -59,13 +59,13 @@ namespace drash {
         auto& GetLevelManager() { return levelManager; }
         auto& GetGrengSystems() { return grengSystems; }
 
-        /// used to make CApp childs about mouse moving event
-        /// use this from your CApp back end (Qt, SDL, etc.)
+        /// used to make App childs about mouse moving event
+        /// use this from your App back end (Qt, SDL, etc.)
         /// we assume that _pos is coordinates in screen space (-0.5, -0.5)
         /// (0.5, 0.5)
-        void SetCursorPos(const CVec2f& _pos) { cursorPos = _pos; }
+        void SetCursorPos(const Vec2f& _pos) { cursorPos = _pos; }
 
-        /// used by CApp childs for detection, where mouse cursor is
+        /// used by App childs for detection, where mouse cursor is
         /// returns coordinates in screen space (-0.5, -0.5) (0.5, 0.5)
         auto& GetCursorPos() const { return cursorPos; }
 
@@ -73,16 +73,16 @@ namespace drash {
 
     protected:
     private:
-        CVec2f cursorPos = CVec2f(0);
+        Vec2f cursorPos = Vec2f(0);
 
-        greng::CGrengSystemsSet& grengSystems;
-        CScene scene;
-        CPlayersSystem playersSystem;
-        CGeometryManager geometryManager;
-        CAppEventSystem eventSystem;
-        ui::CUISystem uISystem;
-        CLevelManager levelManager;
-        CDebugRenderer debugRenderer;
+        greng::GrengSystemsSet& grengSystems;
+        Scene scene;
+        PlayersSystem playersSystem;
+        GeometryManager geometryManager;
+        AppEventSystem eventSystem;
+        ui::UISystem uISystem;
+        LevelManager levelManager;
+        DebugRenderer debugRenderer;
 
         std::function<void()> quitHandler = []() {};
         bool quit = false;
@@ -91,4 +91,4 @@ namespace drash {
 
 } // namespace drash
 
-#endif // CTESTAPP_H
+#endif // TESTAPP_H

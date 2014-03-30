@@ -28,9 +28,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    using drash::CVec4f;
+    using drash::Vec4f;
 
-    void CCamera::Step(double _dt) {
+    void Camera::Step(double _dt) {
         bool compute_matrices = false;
 
         if (orthoWidthAnimator.Step(_dt)) {
@@ -66,17 +66,17 @@ namespace greng {
         }
     }
 
-    void CCamera::LookAt(const CVec3f& _point) {
-        CVec3f dir = _point;
+    void Camera::LookAt(const Vec3f& _point) {
+        Vec3f dir = _point;
         dir -= pos;
 
-        CVec2f dirx(-dir.z, -dir.x);
-        CVec2f diry(dirx.Length(), dir.y);
+        Vec2f dirx(-dir.z, -dir.x);
+        Vec2f diry(dirx.Length(), dir.y);
 
         dirx.Normalize();
         diry.Normalize();
 
-        CVec3f rot;
+        Vec3f rot;
 
         rot.y = acos(dirx.x);
         rot.x = asin(diry.y);
@@ -88,9 +88,9 @@ namespace greng {
         rotationAnimator = rot;
     }
 
-    void CCamera::Forward(float _distance) {
-        CVec4f z(0, 0, -1, 1);
-        CVec4f dir;
+    void Camera::Forward(float _distance) {
+        Vec4f z(0, 0, -1, 1);
+        Vec4f dir;
         MatrixMultiply(antiRotationMatrix, z, dir);
 
         dir.Normalize();
@@ -99,18 +99,18 @@ namespace greng {
         dir.z *= _distance;
         dir.w *= _distance;
 
-        CVec3f new_pos(pos);
+        Vec3f new_pos(pos);
         new_pos += dir;
         posAnimator = new_pos;
     }
 
-    void CCamera::Strafe(float _distance) {
-        CVec3f up(0, 1, 0);
-        CVec4f z(0, 0, -1, 1);
-        CVec4f dir;
+    void Camera::Strafe(float _distance) {
+        Vec3f up(0, 1, 0);
+        Vec4f z(0, 0, -1, 1);
+        Vec4f dir;
         MatrixMultiply(antiRotationMatrix, z, dir);
 
-        CVec3f strafe_dir;
+        Vec3f strafe_dir;
         Vec3Cross(up, dir, strafe_dir);
 
         strafe_dir.x *= _distance;
@@ -121,33 +121,33 @@ namespace greng {
         posAnimator = strafe_dir;
     }
 
-    void CCamera::CastRay(const CVec2f& _pos, const drash::CPlane& _plane,
-                          CVec3f& _result) const {
+    void Camera::CastRay(const Vec2f& _pos, const drash::Plane& _plane,
+                          Vec3f& _result) const {
         double c = 1.0 / cos(fov / 2.0); // hypotenuse
 
         double frame_height = 2.0 * sqrt(c * c - 1.0);
         double frame_width = frame_height * aspectRatio;
 
-        CVec2f ppos = _pos;
+        Vec2f ppos = _pos;
 
         ppos.x *= frame_width;
         ppos.y *= frame_height;
 
-        CVec4f dir(ppos, -1, 1);
-        CVec4f tmp;
+        Vec4f dir(ppos, -1, 1);
+        Vec4f tmp;
         MatrixMultiply(antiRotationMatrix, dir, tmp);
 
-        drash::CRay r;
+        drash::Ray r;
         r.SetPoint(pos);
         r.SetDirection(tmp);
         _plane.CastRay(r, _result);
     }
 
-    void CCamera::ComputeMatrices() {
-        CMatrix4f rotx;
+    void Camera::ComputeMatrices() {
+        Matrix4f rotx;
         MatrixRotationX(rotx, -rotation.x);
 
-        CMatrix4f roty;
+        Matrix4f roty;
         MatrixRotationY(roty, -rotation.y);
 
         MatrixMultiply(rotx, roty, rotationMatrix);
@@ -155,8 +155,8 @@ namespace greng {
         MatrixRotationY(roty, rotation.y);
         MatrixMultiply(roty, rotx, antiRotationMatrix);
 
-        CVec3f tv(-pos.x, -pos.y, -pos.z);
-        CMatrix4f tm;
+        Vec3f tv(-pos.x, -pos.y, -pos.z);
+        Matrix4f tm;
         MatrixTranslation(tm, tv);
 
         MatrixMultiply(rotationMatrix, tm, viewMatrix);

@@ -31,9 +31,9 @@ namespace drash {
 
     namespace ui {
 
-        CUIWidget::~CUIWidget() { this->Disconnect(); }
+        UIWidget::~UIWidget() { this->Disconnect(); }
 
-        void CUIWidget::Connect(CUISystem* _system) {
+        void UIWidget::Connect(UISystem* _system) {
             uISystem = _system;
             uIControl = uISystem->CreateControl();
             uIControl->SetDestroyHandler([this]() {
@@ -42,7 +42,7 @@ namespace drash {
             });
         }
 
-        void CUIWidget::Disconnect() {
+        void UIWidget::Disconnect() {
             if (uIControl != nullptr) {
                 uISystem->DestroyControl(uIControl);
                 uISystem = nullptr;
@@ -50,59 +50,59 @@ namespace drash {
             }
         }
 
-        CUISystem* CUIWidget::GetUISystem() const { return uISystem; }
+        UISystem* UIWidget::GetUISystem() const { return uISystem; }
 
-        void CUIWidget::SetPressHandler(const std::function<void()>& _handler) {
+        void UIWidget::SetPressHandler(const std::function<void()>& _handler) {
             if (uIControl != nullptr) {
                 uIControl->SetPressHandler(_handler);
             }
         }
 
         void
-        CUIWidget::SetReleaseHandler(const std::function<void()>& _handler) {
+        UIWidget::SetReleaseHandler(const std::function<void()>& _handler) {
             if (uIControl != nullptr) {
                 uIControl->SetReleaseHandler(_handler);
             }
         }
 
         void
-        CUIWidget::SetStepHandler(const std::function<void(double)>& _handler) {
+        UIWidget::SetStepHandler(const std::function<void(double)>& _handler) {
             if (uIControl != nullptr) {
                 uIControl->SetStepHandler(_handler);
             }
         }
 
-        void CUIWidget::SetDrawHandler(const std::function<void()>& _handler) {
+        void UIWidget::SetDrawHandler(const std::function<void()>& _handler) {
             if (uIControl != nullptr) {
                 uIControl->SetDrawHandler(_handler);
             }
         }
 
-        void CUIWidget::SetPos(const CVec2i& _pos) {
+        void UIWidget::SetPos(const Vec2i& _pos) {
             if (uIControl != nullptr) {
                 uIControl->SetPos(_pos);
             }
         }
 
-        void CUIWidget::SetSize(const CVec2ui& _size) {
+        void UIWidget::SetSize(const Vec2ui& _size) {
             if (uIControl != nullptr) {
                 uIControl->SetSize(_size);
             }
         }
 
-        const CVec2i CUIWidget::GetPos() const {
+        const Vec2i UIWidget::GetPos() const {
             if (uIControl != nullptr) {
                 return uIControl->GetPos();
             } else {
-                return CVec2i(0);
+                return Vec2i(0);
             }
         }
 
-        const CVec2ui CUIWidget::GetSize() const {
+        const Vec2ui UIWidget::GetSize() const {
             if (uIControl != nullptr) {
                 return uIControl->GetSize();
             } else {
-                return CVec2ui(0);
+                return Vec2ui(0);
             }
         }
 

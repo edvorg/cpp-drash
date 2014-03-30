@@ -26,11 +26,11 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    CRay::CRay() {}
+    Ray::Ray() {}
 
-    void CRay::SetPoint(const CVec3f& _point) { point = _point; }
+    void Ray::SetPoint(const Vec3f& _point) { point = _point; }
 
-    void CRay::SetDirection(const CVec3f& _direction) {
+    void Ray::SetDirection(const Vec3f& _direction) {
         direction = _direction;
         direction.Normalize();
     }

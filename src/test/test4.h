@@ -35,25 +35,25 @@ namespace drash {
 
     namespace test {
 
-        class CTest4 : public CApp {
+        class Test4 : public App {
         public:
-            CTest4(greng::CGrengSystemsSet& greng);
+            Test4(greng::GrengSystemsSet& greng);
 
         protected:
             virtual void Step(double _dt) override;
             virtual void Render() override;
 
         private:
-            ui::CUIButton testButton1;
-            ui::CUIButton testButton2;
-            ui::CUISlider testSlider1;
+            ui::UIButton testButton1;
+            ui::UIButton testButton2;
+            ui::UISlider testSlider1;
 
             float value = 77;
-            CAnimator<float> valueAnimator1 = value;
-            CAnimator<float> valueAnimator2 = value;
+            Animator<float> valueAnimator1 = value;
+            Animator<float> valueAnimator2 = value;
 
-            CVec3f testPoint;
-            CMoveablePoint point;
+            Vec3f testPoint;
+            MoveablePoint point;
         };
 
     } // namespace test

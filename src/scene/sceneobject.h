@@ -23,8 +23,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #pragma once
-#ifndef CSCENEOBJECT_H
-#define CSCENEOBJECT_H
+#ifndef SCENEOBJECT_H
+#define SCENEOBJECT_H
 
 #include <functional>
 #include <vector>
@@ -37,14 +37,14 @@ class b2Body;
 
 namespace drash {
 
-    class CScene;
-    class CFigureParams;
-    class CFigure;
-    class CExplosionParams;
+    class Scene;
+    class FigureParams;
+    class Figure;
+    class ExplosionParams;
 
-    class CSceneObjectGeometry final {
+    class SceneObjectGeometry final {
     public:
-        std::vector<CFigureParams> figures;
+        std::vector<FigureParams> figures;
         std::vector<unsigned int> destructionGraph;
 
         void ComputeDestructionGraph(const float _accuracy);
@@ -53,142 +53,142 @@ namespace drash {
     private:
     };
 
-    class CSceneObjectParams final {
+    class SceneObjectParams final {
     public:
         bool dynamic = true;
-        CVec3f pos;
+        Vec3f pos;
         float angle = 0;
         bool fixedRotation = false;
     };
 
-    class CSceneObject final
-        : public CObjectFactory<CSceneObject>::CFactoryProduct {
+    class SceneObject final
+        : public ObjectFactory<SceneObject>::FactoryProduct {
     public:
-        friend class CScene;
-        friend class CExplosion;
+        friend class Scene;
+        friend class Explosion;
 
         static const unsigned int figuresCountLimit = 128;
 
-        CSceneObject(void) = default;
+        SceneObject(void) = default;
 
-        CFigure* CreateFigure(const CFigureParams& _params);
-        void DestroyFigure(CFigure* _figure);
-        inline CFigure* const* GetFigures() const;
+        Figure* CreateFigure(const FigureParams& _params);
+        void DestroyFigure(Figure* _figure);
+        inline Figure* const* GetFigures() const;
         inline unsigned int EnumFigures() const;
 
         void SetDynamic(bool _dynamic);
         bool IsDynamic() const;
-        void ApplyLinearImpulse(const CVec2f& _dir, const CVec2f& _pos);
-        void SetLinearVelocity(const CVec2f& _vel);
-        CVec2f GetLinearVelocity() const;
+        void ApplyLinearImpulse(const Vec2f& _dir, const Vec2f& _pos);
+        void SetLinearVelocity(const Vec2f& _vel);
+        Vec2f GetLinearVelocity() const;
         void SetAngularVelocity(float _vel);
         float GetAngularVelocity() const;
         void SetFixedRotation(bool _fixed);
         void SetActive(bool _active);
-        CVec2f GetWorldPoint(const CVec2f& _local_point) const;
-        CVec2f GetMassCenter() const;
+        Vec2f GetWorldPoint(const Vec2f& _local_point) const;
+        Vec2f GetMassCenter() const;
 
-        void SetPos(const CVec3f _pos);
-        inline CAnimator<CVec2f>& GetPosXY();
-        inline CAnimator<float>& GetPosZ();
-        inline const CVec3f& GetPos() const;
-        inline CAnimator<float>& GetAngle();
+        void SetPos(const Vec3f _pos);
+        inline Animator<Vec2f>& GetPosXY();
+        inline Animator<float>& GetPosZ();
+        inline const Vec3f& GetPos() const;
+        inline Animator<float>& GetAngle();
 
-        friend CLogger& operator<<(CLogger& _logger,
-                                   const CSceneObject& _object);
+        friend Logger& operator<<(Logger& _logger,
+                                   const SceneObject& _object);
 
-        void DumpGeometry(CSceneObjectGeometry* _geometry) const;
+        void DumpGeometry(SceneObjectGeometry* _geometry) const;
 
         inline const std::vector<unsigned int>& GetDestructionGraph() const;
 
         inline void
-        AddDestroyHandler(const std::function<void(CSceneObject*)>& _handler);
+        AddDestroyHandler(const std::function<void(SceneObject*)>& _handler);
         inline void
-        AddFigureDestroyHandler(const std::function<void(CFigure*)>& _handler);
+        AddFigureDestroyHandler(const std::function<void(Figure*)>& _handler);
         inline void AddContactBeginHandler(
-            const std::function<void(CFigure*, CFigure*)>& _handler);
+            const std::function<void(Figure*, Figure*)>& _handler);
         inline void AddContactEndHandler(
-            const std::function<void(CFigure*, CFigure*)>& _handler);
+            const std::function<void(Figure*, Figure*)>& _handler);
 
     protected:
     private:
         b2Body* body = nullptr;
 
         //////////////////////////////////////////////////////
-        /// values, changed only be owning system (CScene) ///
+        /// values, changed only be owning system (Scene) ///
 
-        /// if flag is true, object will be destoyed with next CScene::Step()
+        /// if flag is true, object will be destoyed with next Scene::Step()
         /// invokation
         bool dead = false;
 
         //////////////////////////////////////////////
         /// figures factory //////////////////////////
 
-        CFigure* figures[figuresCountLimit];
+        Figure* figures[figuresCountLimit];
         unsigned int figuresCount = 0;
 
         /// world space postition in physics world
-        CVec3f pos = 0;
-        CAnimator<CVec2f> posXYAnimator = pos;
-        CAnimator<float> posZAnimator = pos.z;
+        Vec3f pos = 0;
+        Animator<Vec2f> posXYAnimator = pos;
+        Animator<float> posZAnimator = pos.z;
 
         /// rotation angle in radians
         float angle = 0;
-        CAnimator<float> angleAnimator = angle;
+        Animator<float> angleAnimator = angle;
 
         float lifeTime = 0.0f;
 
-        std::map<const CFigure*, const CFigure*> currentContacts;
+        std::map<const Figure*, const Figure*> currentContacts;
 
         std::vector<unsigned int> destructionGraph;
 
-        std::vector<std::function<void(CSceneObject*)> > destroyHandlers;
-        std::vector<std::function<void(CFigure*)> > figureDestroyHandlers;
-        std::vector<std::function<void(CFigure*, CFigure*)> >
+        std::vector<std::function<void(SceneObject*)> > destroyHandlers;
+        std::vector<std::function<void(Figure*)> > figureDestroyHandlers;
+        std::vector<std::function<void(Figure*, Figure*)> >
         contactBeginHandlers;
-        std::vector<std::function<void(CFigure*, CFigure*)> >
+        std::vector<std::function<void(Figure*, Figure*)> >
         contactEndHandlers;
     };
 
-    inline CFigure* const* CSceneObject::GetFigures() const { return figures; }
+    inline Figure* const* SceneObject::GetFigures() const { return figures; }
 
-    inline unsigned int CSceneObject::EnumFigures() const {
+    inline unsigned int SceneObject::EnumFigures() const {
         return figuresCount;
     }
 
-    inline CAnimator<CVec2f>& CSceneObject::GetPosXY() { return posXYAnimator; }
+    inline Animator<Vec2f>& SceneObject::GetPosXY() { return posXYAnimator; }
 
-    inline CAnimator<float>& CSceneObject::GetPosZ() { return posZAnimator; }
+    inline Animator<float>& SceneObject::GetPosZ() { return posZAnimator; }
 
-    inline const CVec3f& CSceneObject::GetPos() const { return pos; }
+    inline const Vec3f& SceneObject::GetPos() const { return pos; }
 
-    inline CAnimator<float>& CSceneObject::GetAngle() { return angleAnimator; }
+    inline Animator<float>& SceneObject::GetAngle() { return angleAnimator; }
 
     inline const std::vector<unsigned int>&
-    CSceneObject::GetDestructionGraph() const {
+    SceneObject::GetDestructionGraph() const {
         return destructionGraph;
     }
 
-    inline void CSceneObject::AddDestroyHandler(
-        const std::function<void(CSceneObject*)>& _handler) {
+    inline void SceneObject::AddDestroyHandler(
+        const std::function<void(SceneObject*)>& _handler) {
         destroyHandlers.push_back(_handler);
     }
 
-    inline void CSceneObject::AddFigureDestroyHandler(
-        const std::function<void(CFigure*)>& _handler) {
+    inline void SceneObject::AddFigureDestroyHandler(
+        const std::function<void(Figure*)>& _handler) {
         figureDestroyHandlers.push_back(_handler);
     }
 
-    inline void CSceneObject::AddContactBeginHandler(
-        const std::function<void(CFigure*, CFigure*)>& _handler) {
+    inline void SceneObject::AddContactBeginHandler(
+        const std::function<void(Figure*, Figure*)>& _handler) {
         contactBeginHandlers.push_back(_handler);
     }
 
-    inline void CSceneObject::AddContactEndHandler(
-        const std::function<void(CFigure*, CFigure*)>& _handler) {
+    inline void SceneObject::AddContactEndHandler(
+        const std::function<void(Figure*, Figure*)>& _handler) {
         contactEndHandlers.push_back(_handler);
     }
 
 } // namespace drash
 
-#endif // CSCENEOBJECT_H
+#endif // SCENEOBJECT_H

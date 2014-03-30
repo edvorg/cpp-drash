@@ -28,29 +28,29 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     constexpr const unsigned int b2Vec2size = sizeof(b2Vec2);
-    constexpr const unsigned int CVec2fsize = sizeof(CVec2f);
+    constexpr const unsigned int Vec2fsize = sizeof(Vec2f);
 
     static const b2Vec2 v1;
-    static const CVec2f v2(0, 0);
+    static const Vec2f v2(0, 0);
 
     constexpr const void* p1 = &v1;
     constexpr const void* p2 = &v1.x;
     constexpr const void* p3 = &v2;
     constexpr const void* p4 = &v2.x;
 
-#if (b2Vec2size == CVec2fsize && p1 == p2 && p3 == p4)
+#if (b2Vec2size == Vec2fsize && p1 == p2 && p3 == p4)
 
-    const b2Vec2& CVec2ToB2Vec2(const CVec2f& _v) {
+    const b2Vec2& Vec2ToB2Vec2(const Vec2f& _v) {
         return reinterpret_cast<const b2Vec2&>(_v);
     }
 
-    const CVec2f& B2Vec2ToCVec2(const b2Vec2& _v) {
-        return reinterpret_cast<const CVec2f&>(_v);
+    const Vec2f& B2Vec2ToCVec2(const b2Vec2& _v) {
+        return reinterpret_cast<const Vec2f&>(_v);
     }
 
 #else
 
-#error platform unsupported b2Vec2size != CVec2fsize
+#error platform unsupported b2Vec2size != Vec2fsize
 
 #endif
 

@@ -29,7 +29,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../misc/vec2.h"
 
 namespace drash {
-    class CApp;
+    class App;
 }
 
 class SceneWidget : public QGLWidget {
@@ -46,8 +46,8 @@ public:
     virtual void resizeGL(int _w, int _h) override;
     virtual void paintGL() override;
 
-    inline void SetApp(drash::CApp* _app);
-    inline drash::CApp* GetApp();
+    inline void SetApp(drash::App* _app);
+    inline drash::App* GetApp();
 
 protected:
     virtual void mousePressEvent(QMouseEvent* _event) override;
@@ -62,16 +62,16 @@ protected:
     virtual void dragEnterEvent(QDragEnterEvent* _event) override;
     virtual void dragLeaveEvent(QDragLeaveEvent* _event) override;
 
-    drash::CApp* app = nullptr;
+    drash::App* app = nullptr;
     float width = 1.0f;
     float height = 1.0f;
 
 private:
-    drash::CVec2f WidgetSpaceToScreenSpace(const drash::CVec2f& _from) const;
+    drash::Vec2f WidgetSpaceToScreenSpace(const drash::Vec2f& _from) const;
 };
 
-inline void SceneWidget::SetApp(drash::CApp* _app) { app = _app; }
+inline void SceneWidget::SetApp(drash::App* _app) { app = _app; }
 
-inline drash::CApp* SceneWidget::GetApp() { return app; }
+inline drash::App* SceneWidget::GetApp() { return app; }
 
 #endif // SCENEWIDGET_H

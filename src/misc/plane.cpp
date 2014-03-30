@@ -27,37 +27,37 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    extern const CPlane PlaneXY(CVec3f(0), CVec3f(0, 0, 1));
-    extern const CPlane PlaneYZ(CVec3f(0), CVec3f(1, 0, 0));
-    extern const CPlane PlaneXZ(CVec3f(0), CVec3f(0, 1, 0));
+    extern const Plane PlaneXY(Vec3f(0), Vec3f(0, 0, 1));
+    extern const Plane PlaneYZ(Vec3f(0), Vec3f(1, 0, 0));
+    extern const Plane PlaneXZ(Vec3f(0), Vec3f(0, 1, 0));
 
-    CPlane::CPlane() {}
+    Plane::Plane() {}
 
-    CPlane::CPlane(const CPlane& _plane)
+    Plane::Plane(const Plane& _plane)
         : point(_plane.point), normal(_plane.normal), d(_plane.d) {}
 
-    CPlane::CPlane(const CVec3f& _point, const CVec3f& _normal) {
+    Plane::Plane(const Vec3f& _point, const Vec3f& _normal) {
         point = _point;
         normal = _normal;
         normal.Normalize();
         ComputeD();
     }
 
-    void CPlane::SetPoint(const CVec3f& _point) {
+    void Plane::SetPoint(const Vec3f& _point) {
         point = _point;
         ComputeD();
     }
 
-    void CPlane::SetNormal(const CVec3f& _normal) {
+    void Plane::SetNormal(const Vec3f& _normal) {
         normal = _normal;
         normal.Normalize();
         ComputeD();
     }
 
-    void CPlane::Set(const CVec3f& _p1, const CVec3f& _p2, const CVec3f& _p3) {
+    void Plane::Set(const Vec3f& _p1, const Vec3f& _p2, const Vec3f& _p3) {
         point = _p1;
-        CVec3f a(_p2);
-        CVec3f b(_p3);
+        Vec3f a(_p2);
+        Vec3f b(_p3);
         a -= _p1;
         b -= _p1;
         Vec3Cross(a, b, normal);
@@ -65,7 +65,7 @@ namespace drash {
         ComputeD();
     }
 
-    void CPlane::CastRay(const CRay& _ray, CVec3f& _result) const {
+    void Plane::CastRay(const Ray& _ray, Vec3f& _result) const {
         float tmp1 = _ray.GetDirection().x * normal.x +
                      _ray.GetDirection().y * normal.y +
                      _ray.GetDirection().z * normal.z;
@@ -80,7 +80,7 @@ namespace drash {
         _result.z = _ray.GetPoint().z - _ray.GetDirection().z * tmp;
     }
 
-    void CPlane::ComputeD() {
+    void Plane::ComputeD() {
         // Ax + Bx + Cx + D = 0
         d = -normal.x * point.x - normal.y * point.y - normal.z * point.z;
     }

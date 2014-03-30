@@ -32,9 +32,9 @@ namespace drash {
 
     namespace test {
 
-        class CTest7 : public CTest3 {
+        class Test7 : public Test3 {
         public:
-            CTest7(greng::CGrengSystemsSet& greng);
+            Test7(greng::GrengSystemsSet& greng);
 
         private:
             virtual void Step(double _dt) override;
@@ -43,12 +43,12 @@ namespace drash {
             bool InitLights();
             virtual void Render() override;
 
-            greng::CTexture* debugTexture = nullptr;
-            greng::CShaderProgram* program = nullptr;
+            greng::Texture* debugTexture = nullptr;
+            greng::ShaderProgram* program = nullptr;
 
             float pointLight1PosAngle = 0;
 
-            greng::CPointLight light1;
+            greng::PointLight light1;
         };
 
     } // namespace test

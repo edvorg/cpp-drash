@@ -32,8 +32,8 @@ namespace drash {
 
     namespace ui {
 
-        void CUIButton::Connect(CUISystem* _system) {
-            CUIWidget::Connect(_system);
+        void UIButton::Connect(UISystem* _system) {
+            UIWidget::Connect(_system);
 
             SetStepHandler([this](double _dt) {
                 int local_x = GetUISystem()->GetCursorPosX() - GetPos().x;
@@ -50,12 +50,12 @@ namespace drash {
             });
 
             SetDrawHandler([this]() {
-                CColor4f c(pressed ? 0 : time, pressed ? 0.0f : 1.0f - time,
+                Color4f c(pressed ? 0 : time, pressed ? 0.0f : 1.0f - time,
                            pressed ? 1 : 0, 1);
-                CVec2f p1;
-                CVec2f p2;
-                CVec2f p3;
-                CVec2f p4;
+                Vec2f p1;
+                Vec2f p2;
+                Vec2f p3;
+                Vec2f p4;
 
                 GetUISystem()->UISpaceToScreenSpace(GetPos().x, GetPos().y, p1);
                 GetUISystem()->UISpaceToScreenSpace(
@@ -93,7 +93,7 @@ namespace drash {
             });
         }
 
-        void CUIButton::SetClickHandler(const std::function<void()>& _handler) {
+        void UIButton::SetClickHandler(const std::function<void()>& _handler) {
             clickHandler = _handler;
         }
 

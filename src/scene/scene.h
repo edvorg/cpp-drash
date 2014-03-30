@@ -23,8 +23,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #pragma once
-#ifndef CSCENE_H
-#define CSCENE_H
+#ifndef SCENE_H
+#define SCENE_H
 
 #include <Box2D/Box2D.h>
 #include "../misc/vec3.h"
@@ -34,18 +34,18 @@ class b2World;
 
 namespace drash {
 
-    class CPhysObserver;
-    class CSceneObjectGeometry;
-    class CSceneObjectParams;
-    class CSceneObject;
-    class CJoint;
+    class PhysObserver;
+    class SceneObjectGeometry;
+    class SceneObjectParams;
+    class SceneObject;
+    class Joint;
 
-    class CSceneParams {
+    class SceneParams {
     public:
-        CVec2f gravity = { 0, -9.8 };
+        Vec2f gravity = { 0, -9.8 };
     };
 
-    class CScene final : public b2ContactListener,
+    class Scene final : public b2ContactListener,
                          public b2ContactFilter,
                          public b2DestructionListener {
     public:
@@ -60,8 +60,8 @@ namespace drash {
         // **************************************************
         // * main routines **********************************
 
-        CScene(const CSceneParams& _params);
-        ~CScene(void);
+        Scene(const SceneParams& _params);
+        ~Scene(void);
 
         /// must be called once in update cycle
         /// dt - seconds
@@ -70,33 +70,33 @@ namespace drash {
         // **************************************************
         // * working with objects ***************************
 
-        CSceneObject* CreateObject(const CSceneObjectGeometry& _geometry,
-                                   const CSceneObjectParams& _params);
-        bool DestroyObject(CSceneObject* _obj);
-        inline CSceneObject* const* GetObjects(void) const;
+        SceneObject* CreateObject(const SceneObjectGeometry& _geometry,
+                                   const SceneObjectParams& _params);
+        bool DestroyObject(SceneObject* _obj);
+        inline SceneObject* const* GetObjects(void) const;
         inline unsigned int EnumObjects(void) const;
         void DestroyObjects(void);
 
         // **************************************************
         // * working with joints ****************************
 
-        CJoint* CreateJoint(CSceneObject* _obj1, CSceneObject* _obj2,
-                            const CVec3f& _anchor);
-        CJoint* CreateJointDistance(CSceneObject* _obj1, CSceneObject* _obj2,
-                                    const CVec3f& _anchor1,
-                                    const CVec3f& _anchor2, float _length);
-        CJoint* CreateJointRope(CSceneObject* _obj1, CSceneObject* _obj2,
-                                const CVec3f& _anchor1, const CVec3f& _anchor2,
+        Joint* CreateJoint(SceneObject* _obj1, SceneObject* _obj2,
+                            const Vec3f& _anchor);
+        Joint* CreateJointDistance(SceneObject* _obj1, SceneObject* _obj2,
+                                    const Vec3f& _anchor1,
+                                    const Vec3f& _anchor2, float _length);
+        Joint* CreateJointRope(SceneObject* _obj1, SceneObject* _obj2,
+                                const Vec3f& _anchor1, const Vec3f& _anchor2,
                                 float _length);
-        void DestroyJoint(CJoint* _joint);
+        void DestroyJoint(Joint* _joint);
 
-        void SetGravity(const CVec2f& _g);
+        void SetGravity(const Vec2f& _g);
 
         inline void SetPaused(bool _paused);
 
     protected:
     private:
-        void DestroyObjectImpl(CSceneObject* _obj);
+        void DestroyObjectImpl(SceneObject* _obj);
 
         virtual bool ShouldCollide(b2Fixture* fixtureA,
                                    b2Fixture* fixtureB) override;
@@ -110,21 +110,21 @@ namespace drash {
         virtual void SayGoodbye(b2Fixture* _fixture) override;
 
         b2World world;
-        CObjectFactory<CSceneObject> objectsFactory;
+        ObjectFactory<SceneObject> objectsFactory;
         bool locked = false;
         bool paused = false;
     };
 
-    inline CSceneObject* const* CScene::GetObjects(void) const {
+    inline SceneObject* const* Scene::GetObjects(void) const {
         return objectsFactory.GetObjects();
     }
 
-    inline unsigned int CScene::EnumObjects(void) const {
+    inline unsigned int Scene::EnumObjects(void) const {
         return objectsFactory.EnumObjects();
     }
 
-    inline void CScene::SetPaused(bool _paused) { paused = _paused; }
+    inline void Scene::SetPaused(bool _paused) { paused = _paused; }
 
 } // namespace drash
 
-#endif // CSCENE_H
+#endif // SCENE_H

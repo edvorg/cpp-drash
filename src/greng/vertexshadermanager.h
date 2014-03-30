@@ -29,28 +29,28 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CVertexShader;
+    class VertexShader;
 
-    class CVertexShaderManager {
+    class VertexShaderManager {
     public:
         constexpr static unsigned int shadersCountLimit = 32;
 
-        CVertexShaderManager();
-        CVertexShaderManager(const CVertexShaderManager&) = delete;
-        CVertexShaderManager(CVertexShaderManager&&) = delete;
-        CVertexShaderManager& operator=(const CVertexShaderManager&) = delete;
-        CVertexShaderManager& operator=(CVertexShaderManager&&) = delete;
-        ~CVertexShaderManager();
+        VertexShaderManager();
+        VertexShaderManager(const VertexShaderManager&) = delete;
+        VertexShaderManager(VertexShaderManager&&) = delete;
+        VertexShaderManager& operator=(const VertexShaderManager&) = delete;
+        VertexShaderManager& operator=(VertexShaderManager&&) = delete;
+        ~VertexShaderManager();
 
-        CVertexShader* CreateShader();
-        CVertexShader* CreateShaderDummy();
-        CVertexShader* CreateShaderFromSource(const char* _source);
-        CVertexShader* CreateShaderFromFile(const char* _path);
-        bool DestroyShader(CVertexShader* _shader);
+        VertexShader* CreateShader();
+        VertexShader* CreateShaderDummy();
+        VertexShader* CreateShaderFromSource(const char* _source);
+        VertexShader* CreateShaderFromFile(const char* _path);
+        bool DestroyShader(VertexShader* _shader);
 
     protected:
     private:
-        drash::CObjectFactory<CVertexShader> shaderFactory;
+        drash::ObjectFactory<VertexShader> shaderFactory;
     };
 
 } // namespace greng

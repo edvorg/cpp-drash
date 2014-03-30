@@ -33,9 +33,9 @@ namespace drash {
 
     namespace test {
 
-        class CTest5 : public CTest3 {
+        class Test5 : public Test3 {
         public:
-            CTest5(greng::CGrengSystemsSet& greng);
+            Test5(greng::GrengSystemsSet& greng);
 
         protected:
             virtual void Step(double _dt) override;
@@ -49,38 +49,38 @@ namespace drash {
             void SetupProcessors();
             void SetupLights();
 
-            greng::CMesh* mesh1 = nullptr;
-            greng::CMesh* mesh2 = nullptr;
-            greng::CMesh* mesh3 = nullptr;
-            greng::CMesh* mesh4 = nullptr;
-            CMatrix4f mesh3ConstMatrix;
-            greng::CTexture* tex1 = nullptr;
-            greng::CTexture* tex2 = nullptr;
-            greng::CTexture* tex3 = nullptr;
-            greng::CTexture* tex3normal = nullptr;
-            greng::CTexture* tex4 = nullptr;
-            greng::CTexture* tex4normal = nullptr;
-            greng::CTexture* tex5 = nullptr;
-            greng::CTexture* tex5normal = nullptr;
-            greng::CTexture* tex6 = nullptr;
-            greng::CTexture* tex7 = nullptr;
-            greng::CTexture* tex7normal = nullptr;
-            greng::CVertexShader* vertexShader1 = nullptr;
-            greng::CFragmentShader* fragmentShader1 = nullptr;
-            greng::CShaderProgram* shaderProgram1 = nullptr;
-            greng::CVertexShader* vertexShader2 = nullptr;
-            greng::CFragmentShader* fragmentShader2 = nullptr;
-            greng::CShaderProgram* shaderProgram2 = nullptr;
-            greng::CVertexShader* vertexShader3 = nullptr;
-            greng::CFragmentShader* fragmentShader3 = nullptr;
-            greng::CShaderProgram* shaderProgram3 = nullptr;
-            greng::CVertexShader* vertexShader4 = nullptr;
-            greng::CFragmentShader* fragmentShader4 = nullptr;
-            greng::CShaderProgram* shaderProgram4 = nullptr;
+            greng::Mesh* mesh1 = nullptr;
+            greng::Mesh* mesh2 = nullptr;
+            greng::Mesh* mesh3 = nullptr;
+            greng::Mesh* mesh4 = nullptr;
+            Matrix4f mesh3ConstMatrix;
+            greng::Texture* tex1 = nullptr;
+            greng::Texture* tex2 = nullptr;
+            greng::Texture* tex3 = nullptr;
+            greng::Texture* tex3normal = nullptr;
+            greng::Texture* tex4 = nullptr;
+            greng::Texture* tex4normal = nullptr;
+            greng::Texture* tex5 = nullptr;
+            greng::Texture* tex5normal = nullptr;
+            greng::Texture* tex6 = nullptr;
+            greng::Texture* tex7 = nullptr;
+            greng::Texture* tex7normal = nullptr;
+            greng::VertexShader* vertexShader1 = nullptr;
+            greng::FragmentShader* fragmentShader1 = nullptr;
+            greng::ShaderProgram* shaderProgram1 = nullptr;
+            greng::VertexShader* vertexShader2 = nullptr;
+            greng::FragmentShader* fragmentShader2 = nullptr;
+            greng::ShaderProgram* shaderProgram2 = nullptr;
+            greng::VertexShader* vertexShader3 = nullptr;
+            greng::FragmentShader* fragmentShader3 = nullptr;
+            greng::ShaderProgram* shaderProgram3 = nullptr;
+            greng::VertexShader* vertexShader4 = nullptr;
+            greng::FragmentShader* fragmentShader4 = nullptr;
+            greng::ShaderProgram* shaderProgram4 = nullptr;
 
             double angle = 0.0;
 
-            greng::CPointLight light1;
+            greng::PointLight light1;
         };
 
     } // namespace test

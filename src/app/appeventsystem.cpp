@@ -31,17 +31,17 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    CAppEventCombinationTree::CAppEventCombinationTree() {}
+    AppEventCombinationTree::AppEventCombinationTree() {}
 
-    CAppEventSystem::CAppEventSystem() { SetMode(std::string("normal")); }
+    AppEventSystem::AppEventSystem() { SetMode(std::string("normal")); }
 
-    bool CAppEventSystem::ValidateModeName(const std::string& _name) {
+    bool AppEventSystem::ValidateModeName(const std::string& _name) {
         return std::find(_name.begin(), _name.end(), ' ') == _name.end();
     }
 
-    bool CAppEventSystem::SetMode(const std::string& _name) {
+    bool AppEventSystem::SetMode(const std::string& _name) {
         if (ValidateModeName(_name) == false) {
-            LOG_ERR("CAppEventSystem::SetMode(): invalid mode name \""
+            LOG_ERR("AppEventSystem::SetMode(): invalid mode name \""
                     << _name.c_str() << "\"");
             return false;
         }
@@ -49,8 +49,8 @@ namespace drash {
         auto i = trees.find(_name);
 
         if (i == trees.end()) {
-            trees.insert(std::pair<std::string, CAppEventCombinationTree>(
-                _name, CAppEventCombinationTree()));
+            trees.insert(std::pair<std::string, AppEventCombinationTree>(
+                _name, AppEventCombinationTree()));
             i = trees.find(_name);
         } else if (i->first == currentMode) {
             return true;
@@ -69,8 +69,8 @@ namespace drash {
         return true;
     }
 
-    void CAppEventSystem::SetProcessor(const char* _combinations,
-                                       const CAppEventProcessor& _processor) {
+    void AppEventSystem::SetProcessor(const char* _combinations,
+                                       const AppEventProcessor& _processor) {
         using std::list;
         using std::string;
         using std::for_each;
@@ -80,7 +80,7 @@ namespace drash {
         str[127] = 0;
 
         list<string> simple_combinations;
-        list<CAppEventCombination> combinations;
+        list<AppEventCombination> combinations;
 
         for (char* c = strtok(str, " "); c != nullptr;
              c = strtok(nullptr, " ")) {
@@ -93,10 +93,10 @@ namespace drash {
             strncpy(str2, _str.c_str(), 127);
             str2[127] = 0;
 
-            CAppEventCombination comb;
+            AppEventCombination comb;
             for (char* c2 = strtok(str2, "-"); c2 != nullptr;
                  c2 = strtok(nullptr, "-")) {
-                CAppEvent e;
+                AppEvent e;
                 e.FromString(std::string(c2));
                 comb.AddEvent(e);
             }
@@ -104,7 +104,7 @@ namespace drash {
             combinations.push_back(comb);
         });
 
-        CAppEventCombinationTree* node = currentModeRoot;
+        AppEventCombinationTree* node = currentModeRoot;
         for (auto i = combinations.begin(); i != combinations.end(); i++) {
             bool found = false;
 
@@ -117,7 +117,7 @@ namespace drash {
             }
 
             if (found == false) {
-                node->childs.push_back(CAppEventCombinationTree());
+                node->childs.push_back(AppEventCombinationTree());
                 node->childs.back().combination = *i;
                 node = &node->childs.back();
             }
@@ -126,10 +126,10 @@ namespace drash {
         node->processor = _processor;
     }
 
-    void CAppEventSystem::Process() {
+    void AppEventSystem::Process() {
         for (auto i = currentCombinations.begin();
              i != currentCombinations.end();) {
-            CAppEventCombinationTree* c = *i;
+            AppEventCombinationTree* c = *i;
 
             if (c->state & STATE_BEGIN) {
                 c->state ^= STATE_BEGIN;
@@ -158,7 +158,7 @@ namespace drash {
         }
     }
 
-    void CAppEventSystem::BeginEvent(const CAppEvent& _event) {
+    void AppEventSystem::BeginEvent(const AppEvent& _event) {
         currentState.AddEvent(_event);
 
         // now we find key combination in current combination tree root
@@ -178,7 +178,7 @@ namespace drash {
         }
     }
 
-    void CAppEventSystem::EndEvent(const CAppEvent& _event) {
+    void AppEventSystem::EndEvent(const AppEvent& _event) {
         currentState.RemoveEvent(_event);
 
         // find key combinations, thas is not intersect current events state
@@ -207,7 +207,7 @@ namespace drash {
         }
     }
 
-    void CAppEventSystem::CancelEvent(const CAppEvent& _event) {
+    void AppEventSystem::CancelEvent(const AppEvent& _event) {
         currentState.RemoveEvent(_event);
 
         // find key combinations, thas is not intersect current events state
@@ -236,7 +236,7 @@ namespace drash {
         }
     }
 
-    int CAppEventSystem::PressEventImpl(const CAppEvent& _event) {
+    int AppEventSystem::PressEventImpl(const AppEvent& _event) {
         int res = 0;
 
         for (auto i = currentNode->childs.begin();

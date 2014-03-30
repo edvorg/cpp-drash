@@ -30,32 +30,32 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    class CLogger;
+    class Logger;
 
-    class CAppEventCombination {
+    class AppEventCombination {
     public:
         constexpr static const unsigned int catchEventsCountLimit = 3;
 
-        void AddEvent(const CAppEvent& _e);
-        void RemoveEvent(const CAppEvent& _e);
+        void AddEvent(const AppEvent& _e);
+        void RemoveEvent(const AppEvent& _e);
         inline unsigned int GetEventsCount() const;
         void Clear();
 
-        bool ContainsEvent(const CAppEvent& _e) const;
-        bool ContainsCombination(const CAppEventCombination& _c) const;
+        bool ContainsEvent(const AppEvent& _e) const;
+        bool ContainsCombination(const AppEventCombination& _c) const;
 
-        bool operator==(const CAppEventCombination& _src) const;
-        bool operator!=(const CAppEventCombination& _src) const;
+        bool operator==(const AppEventCombination& _src) const;
+        bool operator!=(const AppEventCombination& _src) const;
 
-        friend CLogger& operator<<(CLogger& _logger,
-                                   const CAppEventCombination& _c);
+        friend Logger& operator<<(Logger& _logger,
+                                   const AppEventCombination& _c);
 
     private:
     protected:
-        std::vector<CAppEvent> catchEvents;
+        std::vector<AppEvent> catchEvents;
     };
 
-    inline unsigned int CAppEventCombination::GetEventsCount() const {
+    inline unsigned int AppEventCombination::GetEventsCount() const {
         return catchEvents.size();
     }
 

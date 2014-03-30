@@ -38,7 +38,7 @@ namespace drash {
 
     namespace test {
 
-        CTest12::CTest12(greng::CGrengSystemsSet& greng) : CApp(greng) {
+        Test12::Test12(greng::GrengSystemsSet& greng) : App(greng) {
             camera = GetGrengSystems().GetCameraManager().CreateCamera({});
             camera->GetDepthOfView() = 100;
             camera->GetPos() = { 0, 0, 10 };
@@ -83,19 +83,19 @@ namespace drash {
             GetDebugRenderer().SetTexCoordsScale(0.3);
 
             GetEventSystem().SetProcessor(
-                "C-q", CAppEventProcessor([this] { Quit(); }));
+                "C-q", AppEventProcessor([this] { Quit(); }));
         }
 
-        void CTest12::Step(double _dt) {
-            CApp::Step(_dt);
+        void Test12::Step(double _dt) {
+            App::Step(_dt);
 
             static auto angle = 0.0f;
             angle += _dt;
             light.position.x = sin(angle);
         }
 
-        void CTest12::Render() {
-            CApp::Render();
+        void Test12::Render() {
+            App::Render();
 
             GetGrengSystems().GetRenderer().RenderMesh(
                 quad, 0, &texture, 1, shaderProgram1, {}, {},

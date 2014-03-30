@@ -30,13 +30,13 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CSpotLight {
+    class SpotLight {
     public:
-        CSpotLight() = default;
+        SpotLight() = default;
 
-        drash::CVec3f position = drash::CVec3f(0, 0, 0);
-        drash::CVec3f direction = drash::CVec3f(0, 0, -1);
-        drash::CColor3f color = drash::CColor3f(1, 1, 1);
+        drash::Vec3f position = drash::Vec3f(0, 0, 0);
+        drash::Vec3f direction = drash::Vec3f(0, 0, -1);
+        drash::Color3f color = drash::Color3f(1, 1, 1);
     };
 
 } // namespace greng

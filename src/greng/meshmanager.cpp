@@ -35,18 +35,18 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    using drash::CLogger;
+    using drash::Logger;
 
-    CMeshManager::CMeshManager() : meshFactory(meshesCountLimit, "CMesh") {}
+    MeshManager::MeshManager() : meshFactory(meshesCountLimit, "Mesh") {}
 
-    CMeshManager::~CMeshManager() {
+    MeshManager::~MeshManager() {
         while (meshFactory.EnumObjects() != 0) {
             DestroyMesh(meshFactory.GetObjects()[0]);
         }
     }
 
-    CMesh* CMeshManager::CreateMesh() {
-        CMesh* res = meshFactory.CreateObject();
+    Mesh* MeshManager::CreateMesh() {
+        Mesh* res = meshFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
@@ -77,8 +77,8 @@ namespace greng {
         return res;
     }
 
-    CMesh* CMeshManager::CreateMeshFromObjFile(const char* _path) {
-        CMesh* res = CreateMesh();
+    Mesh* MeshManager::CreateMeshFromObjFile(const char* _path) {
+        Mesh* res = CreateMesh();
 
         if (res == nullptr) {
             return nullptr;
@@ -86,14 +86,14 @@ namespace greng {
 
         if (LoadMeshObj(_path, res) == false) {
             LOG_ERR(
-                "CMeshManager::CreateMeshFromObjFile(): unable to load mesh \""
+                "MeshManager::CreateMeshFromObjFile(): unable to load mesh \""
                 << _path << "\"");
             DestroyMesh(res);
             return nullptr;
         }
 
         glBindBuffer(GL_ARRAY_BUFFER, res->vertexBufferId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * res->vertices.size(),
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * res->vertices.size(),
                      &res->vertices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, res->indexBufferId);
@@ -105,17 +105,17 @@ namespace greng {
         return res;
     }
 
-    CMesh* CMeshManager::CreateMeshQuad() {
-        CMesh* res = CreateMesh();
+    Mesh* MeshManager::CreateMeshQuad() {
+        Mesh* res = CreateMesh();
 
         if (res == nullptr) {
             return nullptr;
         }
 
-        CVertex v1;
-        CVertex v2;
-        CVertex v3;
-        CVertex v4;
+        Vertex v1;
+        Vertex v2;
+        Vertex v3;
+        Vertex v4;
 
         v1.pos.Set(-1, -1, 0);
         v1.uV.Set(0, 0);
@@ -146,7 +146,7 @@ namespace greng {
         res->materialOffsets.push_back(res->indices.size());
 
         glBindBuffer(GL_ARRAY_BUFFER, res->vertexBufferId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * res->vertices.size(),
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * res->vertices.size(),
                      &res->vertices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, res->indexBufferId);
@@ -158,14 +158,14 @@ namespace greng {
         return res;
     }
 
-    CMesh* CMeshManager::CreateMeshCube() {
-        CMesh* res = CreateMesh();
+    Mesh* MeshManager::CreateMeshCube() {
+        Mesh* res = CreateMesh();
 
         if (res == nullptr) {
             return nullptr;
         }
 
-        drash::CVec2f angles[6];
+        drash::Vec2f angles[6];
         angles[0].Set(0, 0);
         angles[1].Set(0, M_PI / 2);
         angles[2].Set(M_PI, 0);
@@ -173,10 +173,10 @@ namespace greng {
         angles[4].Set(-M_PI / 2.0, 0);
         angles[5].Set(M_PI / 2.0, 0);
 
-        CVertex v1;
-        CVertex v2;
-        CVertex v3;
-        CVertex v4;
+        Vertex v1;
+        Vertex v2;
+        Vertex v3;
+        Vertex v4;
 
         v1.uV.Set(0, 0);
         v2.uV.Set(0, 1);
@@ -192,19 +192,19 @@ namespace greng {
             res->indices.push_back(basei + 1);
             res->indices.push_back(basei + 2);
 
-            drash::CVec4f p1(-1, -1, 1, 1);
-            drash::CVec4f p2(-1, 1, 1, 1);
-            drash::CVec4f p3(1, 1, 1, 1);
-            drash::CVec4f p4(1, -1, 1, 1);
-            drash::CVec4f n1(0, 0, 1, 1);
+            drash::Vec4f p1(-1, -1, 1, 1);
+            drash::Vec4f p2(-1, 1, 1, 1);
+            drash::Vec4f p3(1, 1, 1, 1);
+            drash::Vec4f p4(1, -1, 1, 1);
+            drash::Vec4f n1(0, 0, 1, 1);
 
-            drash::CVec4f rp1 = p1;
-            drash::CVec4f rp2 = p2;
-            drash::CVec4f rp3 = p3;
-            drash::CVec4f rp4 = p4;
-            drash::CVec4f rn1 = n1;
+            drash::Vec4f rp1 = p1;
+            drash::Vec4f rp2 = p2;
+            drash::Vec4f rp3 = p3;
+            drash::Vec4f rp4 = p4;
+            drash::Vec4f rn1 = n1;
 
-            drash::CMatrix4f m;
+            drash::Matrix4f m;
             if (drash::math::Abs(angles[i].x) > 0.0001) {
                 drash::MatrixRotationX(m, angles[i].x);
                 drash::MatrixMultiply(m, p1, rp1);
@@ -240,7 +240,7 @@ namespace greng {
         res->materialOffsets.push_back(res->indices.size());
 
         glBindBuffer(GL_ARRAY_BUFFER, res->vertexBufferId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * res->vertices.size(),
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * res->vertices.size(),
                      &res->vertices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, res->indexBufferId);
@@ -252,30 +252,30 @@ namespace greng {
         return res;
     }
 
-    CMesh* CMeshManager::CreateMeshFromVertices(const CVertex* _vertices,
+    Mesh* MeshManager::CreateMeshFromVertices(const Vertex* _vertices,
                                                 unsigned int _vertices_count,
                                                 const unsigned int* _indices,
                                                 unsigned int _indices_count) {
         if (_vertices == nullptr || _vertices_count == 0) {
-            LOG_ERR("CMeshManager::CreateMeshFromVertices(): _vertices must be "
+            LOG_ERR("MeshManager::CreateMeshFromVertices(): _vertices must be "
                     "specified");
             return nullptr;
         }
 
         if (_indices == nullptr || _indices_count == 0) {
-            LOG_ERR("CMeshManager::CreateMeshFromVertices(): _indices must be "
+            LOG_ERR("MeshManager::CreateMeshFromVertices(): _indices must be "
                     "specified");
             return nullptr;
         }
 
-        CMesh* res = CreateMesh();
+        Mesh* res = CreateMesh();
 
         if (res == nullptr) {
             return nullptr;
         }
 
         res->vertices.resize(_vertices_count);
-        memcpy(&res->vertices[0], _vertices, sizeof(CVertex) * _vertices_count);
+        memcpy(&res->vertices[0], _vertices, sizeof(Vertex) * _vertices_count);
         res->indices.resize(_indices_count);
         memcpy(&res->indices[0], _indices,
                sizeof(unsigned int) * _indices_count);
@@ -284,7 +284,7 @@ namespace greng {
         res->materialOffsets.push_back(_indices_count);
 
         glBindBuffer(GL_ARRAY_BUFFER, res->vertexBufferId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * res->vertices.size(),
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * res->vertices.size(),
                      &res->vertices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, res->indexBufferId);
@@ -296,7 +296,7 @@ namespace greng {
         return res;
     }
 
-    bool CMeshManager::DestroyMesh(CMesh* _mesh) {
+    bool MeshManager::DestroyMesh(Mesh* _mesh) {
         if (meshFactory.IsObject(_mesh) == false) {
             return false;
         }
@@ -311,18 +311,18 @@ namespace greng {
         return true;
     }
 
-    void CMeshManager::ComputeNormals(CMesh* _mesh) {
+    void MeshManager::ComputeNormals(Mesh* _mesh) {
         if (_mesh == nullptr) {
-            LOG_ERR("CMeshManager::ComputeNormals() invalid mesh taken");
+            LOG_ERR("MeshManager::ComputeNormals() invalid mesh taken");
             return;
         }
 
         unsigned int triangles_count = _mesh->indices.size() / 3;
 
         for (unsigned int i = 0; i < triangles_count; i++) {
-            drash::CVec3f v1 = _mesh->vertices[_mesh->indices[i * 3]].pos;
-            drash::CVec3f v2 = _mesh->vertices[_mesh->indices[i * 3 + 1]].pos;
-            drash::CVec3f v3 = _mesh->vertices[_mesh->indices[i * 3 + 2]].pos;
+            drash::Vec3f v1 = _mesh->vertices[_mesh->indices[i * 3]].pos;
+            drash::Vec3f v2 = _mesh->vertices[_mesh->indices[i * 3 + 1]].pos;
+            drash::Vec3f v3 = _mesh->vertices[_mesh->indices[i * 3 + 2]].pos;
 
             v2 -= v1;
             v3 -= v1;
@@ -337,38 +337,38 @@ namespace greng {
         }
 
         glBindBuffer(GL_ARRAY_BUFFER, _mesh->vertexBufferId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * _mesh->vertices.size(),
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * _mesh->vertices.size(),
                      &_mesh->vertices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    void CMeshManager::ComputeTangentSpace(CMesh* _mesh) {
+    void MeshManager::ComputeTangentSpace(Mesh* _mesh) {
         if (_mesh == nullptr) {
-            LOG_ERR("CMeshManager::ComputeTangentSpace() invalid mesh taken");
+            LOG_ERR("MeshManager::ComputeTangentSpace() invalid mesh taken");
             return;
         }
 
         unsigned int triangles_count = _mesh->indices.size() / 3;
 
         for (unsigned int i = 0; i < triangles_count; i++) {
-            CVertex& v1 = _mesh->vertices[_mesh->indices[i * 3]];
-            CVertex& v2 = _mesh->vertices[_mesh->indices[i * 3 + 1]];
-            CVertex& v3 = _mesh->vertices[_mesh->indices[i * 3 + 2]];
+            Vertex& v1 = _mesh->vertices[_mesh->indices[i * 3]];
+            Vertex& v2 = _mesh->vertices[_mesh->indices[i * 3 + 1]];
+            Vertex& v3 = _mesh->vertices[_mesh->indices[i * 3 + 2]];
 
-            drash::CVec3f q1 = v2.pos;
-            drash::CVec3f q2 = v3.pos;
+            drash::Vec3f q1 = v2.pos;
+            drash::Vec3f q2 = v3.pos;
 
             q1 -= v1.pos;
             q2 -= v1.pos;
 
-            drash::CVec2f st1 = v2.uV;
-            drash::CVec2f st2 = v3.uV;
+            drash::Vec2f st1 = v2.uV;
+            drash::Vec2f st2 = v3.uV;
 
             st1 -= v1.uV;
             st2 -= v1.uV;
 
-            drash::CVec3f tangent;
-            drash::CVec3f binormal;
+            drash::Vec3f tangent;
+            drash::Vec3f binormal;
 
             tangent.x = st2.y * q1.x - st1.y * q2.x;
             tangent.y = st2.y * q1.y - st1.y * q2.y;
@@ -396,7 +396,7 @@ namespace greng {
         }
 
         glBindBuffer(GL_ARRAY_BUFFER, _mesh->vertexBufferId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(CVertex) * _mesh->vertices.size(),
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * _mesh->vertices.size(),
                      &_mesh->vertices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }

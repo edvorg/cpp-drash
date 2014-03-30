@@ -30,29 +30,29 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CTexture;
+    class Texture;
 
-    class CTextureManager final {
+    class TextureManager final {
     public:
         constexpr static unsigned int texturesCountLimit = 1024;
 
-        CTextureManager();
-        CTextureManager(const CTextureManager&) = delete;
-        CTextureManager(CTextureManager&&) = delete;
-        CTextureManager& operator=(const CTextureManager&) = delete;
-        CTextureManager& operator=(CTextureManager&&) = delete;
-        ~CTextureManager();
+        TextureManager();
+        TextureManager(const TextureManager&) = delete;
+        TextureManager(TextureManager&&) = delete;
+        TextureManager& operator=(const TextureManager&) = delete;
+        TextureManager& operator=(TextureManager&&) = delete;
+        ~TextureManager();
 
-        CTexture* CreateTexture();
-        CTexture* CreateTextureFromFile(const char* _path);
-        CTexture* CreateTextureDummy();
-        CTexture* CreateTextureWhite();
-        CTexture* CreateTexture(const drash::CVec2i& size);
-        bool DestroyTexture(CTexture* _texture);
+        Texture* CreateTexture();
+        Texture* CreateTextureFromFile(const char* _path);
+        Texture* CreateTextureDummy();
+        Texture* CreateTextureWhite();
+        Texture* CreateTexture(const drash::Vec2i& size);
+        bool DestroyTexture(Texture* _texture);
 
     protected:
     private:
-        drash::CObjectFactory<CTexture> textureFactory;
+        drash::ObjectFactory<Texture> textureFactory;
     };
 
 } // namespace greng

@@ -31,19 +31,19 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    using drash::CLogger;
+    using drash::Logger;
 
-    CFragmentShaderManager::CFragmentShaderManager()
-        : shaderFactory(shadersCountLimit, "CFragmentShader") {}
+    FragmentShaderManager::FragmentShaderManager()
+        : shaderFactory(shadersCountLimit, "FragmentShader") {}
 
-    CFragmentShaderManager::~CFragmentShaderManager() {
+    FragmentShaderManager::~FragmentShaderManager() {
         while (shaderFactory.EnumObjects() != 0) {
             DestroyShader(shaderFactory.GetObjects()[0]);
         }
     }
 
-    CFragmentShader* CFragmentShaderManager::CreateShader() {
-        CFragmentShader* res = shaderFactory.CreateObject();
+    FragmentShader* FragmentShaderManager::CreateShader() {
+        FragmentShader* res = shaderFactory.CreateObject();
 
         if (res == nullptr) {
             return nullptr;
@@ -59,7 +59,7 @@ namespace greng {
         return res;
     }
 
-    CFragmentShader* CFragmentShaderManager::CreateShaderDummy() {
+    FragmentShader* FragmentShaderManager::CreateShaderDummy() {
         const char* source = "#version 120\n\n"
                              "void main(void)\n"
                              "{\n"
@@ -69,13 +69,13 @@ namespace greng {
         return CreateShaderFromSource(source);
     }
 
-    CFragmentShader*
-    CFragmentShaderManager::CreateShaderFromSource(const char* _source) {
+    FragmentShader*
+    FragmentShaderManager::CreateShaderFromSource(const char* _source) {
         if (_source == nullptr) {
             return nullptr;
         }
 
-        CFragmentShader* res = CreateShader();
+        FragmentShader* res = CreateShader();
 
         if (res == nullptr) {
             return nullptr;
@@ -99,7 +99,7 @@ namespace greng {
             glGetShaderInfoLog(res->vertexShaderId, buffer_size - 1, &length,
                                buffer);
 
-            LOG_ERR("CFragmentShaderManager::CreateShaderFromSource(): "
+            LOG_ERR("FragmentShaderManager::CreateShaderFromSource(): "
                     "glCompileShader failed");
             LOG_ERR("Message: " << buffer);
 
@@ -110,8 +110,8 @@ namespace greng {
         return res;
     }
 
-    CFragmentShader*
-    CFragmentShaderManager::CreateShaderFromFile(const char* _path) {
+    FragmentShader*
+    FragmentShaderManager::CreateShaderFromFile(const char* _path) {
         if (_path == nullptr) {
             return nullptr;
         }
@@ -119,7 +119,7 @@ namespace greng {
         std::ifstream in(_path);
 
         if (in.is_open() == false) {
-            LOG_ERR("CFragmentShaderManager::CreateShaderFromFile(): unable to "
+            LOG_ERR("FragmentShaderManager::CreateShaderFromFile(): unable to "
                     "load fragment shader \""
                     << _path << "\"");
             return nullptr;
@@ -132,9 +132,9 @@ namespace greng {
         return CreateShaderFromSource(buffer);
     }
 
-    bool CFragmentShaderManager::DestroyShader(CFragmentShader* _shader) {
+    bool FragmentShaderManager::DestroyShader(FragmentShader* _shader) {
         if (shaderFactory.IsObject(_shader) == false) {
-            LOG_ERR("CFragmentShaderManager::DestroyShader(): invalid shader "
+            LOG_ERR("FragmentShaderManager::DestroyShader(): invalid shader "
                     "taken");
             return false;
         }

@@ -26,12 +26,12 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    CGrengSystemsSet::CGrengSystemsSet()
+    GrengSystemsSet::GrengSystemsSet()
         : viewport(), renderer(viewport), cameraManager(),
           meshManager(), textureManager(), frameBufferManager(),
           vertexShaderManager(), fragmentShaderManager(),
           shaderProgramManager() {}
 
-    void CGrengSystemsSet::Step(double _dt) { cameraManager.Step(_dt); }
+    void GrengSystemsSet::Step(double _dt) { cameraManager.Step(_dt); }
 
 } // namespace greng

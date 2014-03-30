@@ -36,20 +36,20 @@ namespace drash {
         Bounce = 2
     };
 
-    template <class T> class CAnimator {
+    template <class T> class Animator {
     public:
-        CAnimator() = delete;
-        CAnimator(const CAnimator& _src) = delete;
-        CAnimator& operator=(const CAnimator& _src) = delete;
-        CAnimator& operator=(CAnimator&& _src) = delete;
+        Animator() = delete;
+        Animator(const Animator& _src) = delete;
+        Animator& operator=(const Animator& _src) = delete;
+        Animator& operator=(Animator&& _src) = delete;
 
-        CAnimator(CAnimator&& _src);
-        CAnimator(T& _value_ref);
+        Animator(Animator&& _src);
+        Animator(T& _value_ref);
 
-        CAnimator& operator=(const T& _src);
-        CAnimator& operator=(T&& _src);
-        CAnimator& Set(const T& _src);
-        CAnimator& Set(T&& _src);
+        Animator& operator=(const T& _src);
+        Animator& operator=(T&& _src);
+        Animator& Set(const T& _src);
+        Animator& Set(T&& _src);
         void SetTarget(const T& _target, double _time,
                        const AnimatorBehavior& _behavior);
         inline void RemoveTarget();
@@ -78,14 +78,14 @@ namespace drash {
     };
 
     template <class T>
-    CAnimator<T>::CAnimator(CAnimator&& _src)
+    Animator<T>::Animator(Animator&& _src)
         : value(_src.value) {}
 
     template <class T>
-    CAnimator<T>::CAnimator(T& _value_ref)
+    Animator<T>::Animator(T& _value_ref)
         : value(_value_ref) {}
 
-    template <class T> CAnimator<T>& CAnimator<T>::operator=(const T& _src) {
+    template <class T> Animator<T>& Animator<T>::operator=(const T& _src) {
         value = _src;
         targetSet = false;
         valueUpdated = true;
@@ -93,7 +93,7 @@ namespace drash {
         return *this;
     }
 
-    template <class T> CAnimator<T>& CAnimator<T>::operator=(T&& _src) {
+    template <class T> Animator<T>& Animator<T>::operator=(T&& _src) {
         value = std::move(_src);
         targetSet = false;
         valueUpdated = true;
@@ -101,7 +101,7 @@ namespace drash {
         return *this;
     }
 
-    template <class T> CAnimator<T>& CAnimator<T>::Set(const T& _src) {
+    template <class T> Animator<T>& Animator<T>::Set(const T& _src) {
         value = _src;
         targetSet = false;
         valueUpdated = true;
@@ -109,7 +109,7 @@ namespace drash {
         return *this;
     }
 
-    template <class T> CAnimator<T>& CAnimator<T>::Set(T&& _src) {
+    template <class T> Animator<T>& Animator<T>::Set(T&& _src) {
         value = std::move(_src);
         targetSet = false;
         valueUpdated = true;
@@ -118,7 +118,7 @@ namespace drash {
     }
 
     template <class T>
-    void CAnimator<T>::SetTarget(const T& _target, double _time,
+    void Animator<T>::SetTarget(const T& _target, double _time,
                                  const AnimatorBehavior& _behavior) {
         fromValue = value;
         targetValue = _target;
@@ -128,19 +128,19 @@ namespace drash {
         targetSet = true;
     }
 
-    template <class T> inline void CAnimator<T>::RemoveTarget() {
+    template <class T> inline void Animator<T>::RemoveTarget() {
         targetSet = false;
     }
 
-    template <class T> inline CAnimator<T>::operator const T&() const {
+    template <class T> inline Animator<T>::operator const T&() const {
         return value;
     }
 
-    template <class T> inline const T& CAnimator<T>::Get() const {
+    template <class T> inline const T& Animator<T>::Get() const {
         return value;
     }
 
-    template <class T> inline const T& CAnimator<T>::GetTarget() const {
+    template <class T> inline const T& Animator<T>::GetTarget() const {
         if (targetSet == true) {
             return targetValue;
         } else {
@@ -148,19 +148,19 @@ namespace drash {
         }
     }
 
-    template <class T> inline double CAnimator<T>::GetTime() const {
+    template <class T> inline double Animator<T>::GetTime() const {
         return time;
     }
 
-    template <class T> inline double CAnimator<T>::GetTimeRemains() const {
+    template <class T> inline double Animator<T>::GetTimeRemains() const {
         return math::Clamp<double>(timeFull - time, 0, timeFull);
     }
 
-    template <class T> inline bool CAnimator<T>::IsTargetSet() const {
+    template <class T> inline bool Animator<T>::IsTargetSet() const {
         return targetSet;
     }
 
-    template <class T> bool CAnimator<T>::Step(double _dt) {
+    template <class T> bool Animator<T>::Step(double _dt) {
         if (targetSet == true) {
             time += _dt;
 

@@ -23,8 +23,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 // DRASH_LICENSE_END
 
 #pragma once
-#ifndef CLOGGER_H_INCLUDED
-#define CLOGGER_H_INCLUDED
+#ifndef LOGGER_H_INCLUDED
+#define LOGGER_H_INCLUDED
 
 #include <fstream>
 #include <iostream>
@@ -32,25 +32,25 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    class CLogger {
+    class Logger {
     public:
-        explicit CLogger(std::ostream& _stream);
-        ~CLogger(void);
-        CLogger& operator<<(char _c);
-        CLogger& operator<<(const char* _str);
-        CLogger& operator<<(int _v);
-        CLogger& operator<<(unsigned int _v);
-        CLogger& operator<<(long _v);
-        CLogger& operator<<(unsigned long _v);
-        CLogger& operator<<(float _v);
-        CLogger& operator<<(double _v);
+        explicit Logger(std::ostream& _stream);
+        ~Logger(void);
+        Logger& operator<<(char _c);
+        Logger& operator<<(const char* _str);
+        Logger& operator<<(int _v);
+        Logger& operator<<(unsigned int _v);
+        Logger& operator<<(long _v);
+        Logger& operator<<(unsigned long _v);
+        Logger& operator<<(float _v);
+        Logger& operator<<(double _v);
 
-        inline CLogger& operator<<(const std::string& _str);
+        inline Logger& operator<<(const std::string& _str);
 
         static const std::string Tail();
 
         static auto& shared() {
-            static CLogger logger(std::cerr);
+            static Logger logger(std::cerr);
             return logger;
         }
 
@@ -62,7 +62,7 @@ namespace drash {
         static std::ostringstream tailStream;
     };
 
-    inline CLogger& CLogger::operator<<(const std::string& _str) {
+    inline Logger& Logger::operator<<(const std::string& _str) {
         return (*this) << _str.c_str();
     }
 
@@ -71,15 +71,15 @@ namespace drash {
 #define LOG_INFO_PREFIX std::string("[I]: ")
 
 #ifdef DRASH_DEBUG
-#define LOG_ERR(mes) CLogger::shared() << LOG_ERR_PREFIX << mes
-#define LOG_WARN(mes) CLogger::shared() << LOG_WARN_PREFIX << mes
-#define LOG_INFO(mes) CLogger::shared() << LOG_INFO_PREFIX << mes
+#define LOG_ERR(mes) Logger::shared() << LOG_ERR_PREFIX << mes
+#define LOG_WARN(mes) Logger::shared() << LOG_WARN_PREFIX << mes
+#define LOG_INFO(mes) Logger::shared() << LOG_INFO_PREFIX << mes
 #else
-#define LOG_ERR(mes) CLogger::shared() << LOG_ERR_PREFIX << mes
+#define LOG_ERR(mes) Logger::shared() << LOG_ERR_PREFIX << mes
 #define LOG_WARN(mes)
 #define LOG_INFO(mes)
 #endif
 
 } // namespace drash
 
-#endif // CLOGGER_H_INCLUDED
+#endif // LOGGER_H_INCLUDED

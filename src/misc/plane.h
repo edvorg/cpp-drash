@@ -29,38 +29,38 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    class CRay;
+    class Ray;
 
-    class CPlane {
+    class Plane {
     public:
-        CPlane();
-        CPlane(const CPlane& _plane);
-        CPlane(const CVec3f& _point, const CVec3f& _normal);
+        Plane();
+        Plane(const Plane& _plane);
+        Plane(const Vec3f& _point, const Vec3f& _normal);
 
-        void SetPoint(const CVec3f& _point);
-        inline const CVec3f& GetPoint() const;
-        void SetNormal(const CVec3f& _normal);
-        inline const CVec3f& GetNormal() const;
+        void SetPoint(const Vec3f& _point);
+        inline const Vec3f& GetPoint() const;
+        void SetNormal(const Vec3f& _normal);
+        inline const Vec3f& GetNormal() const;
 
-        void Set(const CVec3f& _p1, const CVec3f& _p2, const CVec3f& _p3);
+        void Set(const Vec3f& _p1, const Vec3f& _p2, const Vec3f& _p3);
 
-        void CastRay(const CRay& _ray, CVec3f& _result) const;
+        void CastRay(const Ray& _ray, Vec3f& _result) const;
 
     private:
         void ComputeD();
 
-        CVec3f point;
-        CVec3f normal;
+        Vec3f point;
+        Vec3f normal;
         float d = 0;
     };
 
-    extern const CPlane PlaneXY;
-    extern const CPlane PlaneYZ;
-    extern const CPlane PlaneXZ;
+    extern const Plane PlaneXY;
+    extern const Plane PlaneYZ;
+    extern const Plane PlaneXZ;
 
-    inline const CVec3f& CPlane::GetPoint() const { return point; }
+    inline const Vec3f& Plane::GetPoint() const { return point; }
 
-    inline const CVec3f& CPlane::GetNormal() const { return normal; }
+    inline const Vec3f& Plane::GetNormal() const { return normal; }
 
 } // namespace drash
 

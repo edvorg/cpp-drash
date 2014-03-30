@@ -29,25 +29,25 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    template <class T> class CObjectFactory final {
+    template <class T> class ObjectFactory final {
     public:
-        class CFactoryProduct {
+        class FactoryProduct {
         public:
-            friend class CObjectFactory;
+            friend class ObjectFactory;
 
         protected:
         private:
             long int internalId;
         };
 
-        CObjectFactory() = delete;
-        CObjectFactory(const CObjectFactory&) = delete;
-        CObjectFactory(CObjectFactory&&) = delete;
-        CObjectFactory& operator=(const CObjectFactory&) = delete;
-        CObjectFactory& operator=(CObjectFactory&&) = delete;
+        ObjectFactory() = delete;
+        ObjectFactory(const ObjectFactory&) = delete;
+        ObjectFactory(ObjectFactory&&) = delete;
+        ObjectFactory& operator=(const ObjectFactory&) = delete;
+        ObjectFactory& operator=(ObjectFactory&&) = delete;
 
-        explicit CObjectFactory(unsigned int _size, const char* _product_name);
-        ~CObjectFactory();
+        explicit ObjectFactory(unsigned int _size, const char* _product_name);
+        ~ObjectFactory();
 
         T* CreateObject();
         bool DestroyObjectSafe(T* _obj);
@@ -66,13 +66,13 @@ namespace drash {
     };
 
     template <class T>
-    CObjectFactory<T>::CObjectFactory(unsigned int _size,
+    ObjectFactory<T>::ObjectFactory(unsigned int _size,
                                       const char* _product_name)
         : objectsCountLimit(_size), productName(_product_name) {
         if (objectsCountLimit == 0) {
-            LOG_ERR("CObjectFactory<"
+            LOG_ERR("ObjectFactory<"
                     << productName.c_str()
-                    << ">::CObjectFactory(): Empty factory is unusable");
+                    << ">::ObjectFactory(): Empty factory is unusable");
             return;
         }
 
@@ -82,10 +82,10 @@ namespace drash {
         }
     }
 
-    template <class T> CObjectFactory<T>::~CObjectFactory() {
+    template <class T> ObjectFactory<T>::~ObjectFactory() {
         if (objectsCount != 0) {
-            LOG_WARN("CObjectFactory<" << productName.c_str()
-                                       << ">::~CObjectFactory(): Potential "
+            LOG_WARN("ObjectFactory<" << productName.c_str()
+                                       << ">::~ObjectFactory(): Potential "
                                           "memory leak. You mush remove "
                                           "objects manually");
 
@@ -99,9 +99,9 @@ namespace drash {
         objects = nullptr;
     }
 
-    template <class T> T* CObjectFactory<T>::CreateObject() {
+    template <class T> T* ObjectFactory<T>::CreateObject() {
         if (objectsCount >= objectsCountLimit) {
-            LOG_ERR("CObjectFactory<"
+            LOG_ERR("ObjectFactory<"
                     << productName.c_str()
                     << ">::CreateObject(): Objects count exceedes it's limit ("
                     << objectsCountLimit << ')');
@@ -113,9 +113,9 @@ namespace drash {
         return res;
     }
 
-    template <class T> bool CObjectFactory<T>::DestroyObjectSafe(T* _obj) {
+    template <class T> bool ObjectFactory<T>::DestroyObjectSafe(T* _obj) {
         if (IsObject(_obj) == false) {
-            LOG_ERR("CObjectFactory<" << productName.c_str()
+            LOG_ERR("ObjectFactory<" << productName.c_str()
                                       << ">::DestroyObject(): Something wrong "
                                          "with objects creation logic. "
                                          "Skipping");
@@ -127,7 +127,7 @@ namespace drash {
         return true;
     }
 
-    template <class T> void CObjectFactory<T>::DestroyObject(T* _obj) {
+    template <class T> void ObjectFactory<T>::DestroyObject(T* _obj) {
         if (_obj->internalId < --objectsCount) {
             objects[_obj->internalId] = objects[objectsCount];
             objects[_obj->internalId]->internalId = _obj->internalId;
@@ -139,7 +139,7 @@ namespace drash {
         delete _obj;
     }
 
-    template <class T> void CObjectFactory<T>::DestroyObjects() {
+    template <class T> void ObjectFactory<T>::DestroyObjects() {
         for (unsigned int i = 0; i < objectsCount; i++) {
             delete objects[i];
             objects[i] = nullptr;
@@ -148,17 +148,17 @@ namespace drash {
         objectsCount = 0;
     }
 
-    template <class T> inline bool CObjectFactory<T>::IsObject(T* _obj) const {
+    template <class T> inline bool ObjectFactory<T>::IsObject(T* _obj) const {
         return _obj != nullptr && _obj->internalId < objectsCount &&
                _obj == objects[_obj->internalId];
     }
 
-    template <class T> inline T* const* CObjectFactory<T>::GetObjects() const {
+    template <class T> inline T* const* ObjectFactory<T>::GetObjects() const {
         return objects;
     }
 
     template <class T>
-    inline unsigned int CObjectFactory<T>::EnumObjects() const {
+    inline unsigned int ObjectFactory<T>::EnumObjects() const {
         return objectsCount;
     }
 

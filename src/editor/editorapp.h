@@ -22,8 +22,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 */
 // DRASH_LICENSE_END
 
-#ifndef CEDITORAPP_H
-#define CEDITORAPP_H
+#ifndef EDITORAPP_H
+#define EDITORAPP_H
 
 #include "../app/app.h"
 #include "../diag/timer.h"
@@ -34,7 +34,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    class CObjectEditorApp : public CApp {
+    class ObjectEditorApp : public App {
 
     public:
         enum State {
@@ -50,17 +50,17 @@ namespace drash {
 
     private:
         struct SplitContext {
-            CVec3f splitIntersection1;
+            Vec3f splitIntersection1;
             unsigned splitIntersection1Index = 0;
-            CVec3f splitIntersection2;
+            Vec3f splitIntersection2;
             unsigned splitIntersection2Index = 0;
             unsigned int splitIntersectionsCount = 0;
 
-            CFigure* figure = nullptr;
+            Figure* figure = nullptr;
         };
 
     public:
-        CObjectEditorApp();
+        ObjectEditorApp();
 
         virtual void Step(double _dt) override;
         inline virtual void Render() override;
@@ -89,7 +89,7 @@ namespace drash {
 
         void SaveCurrentObject();
 
-        inline greng::CCamera* GetCamera();
+        inline greng::Camera* GetCamera();
 
     private:
         float GetCurDepth();
@@ -101,7 +101,7 @@ namespace drash {
         bool ValidateFigure();
         void RemoveCurrentObject();
 
-        CFigure* SelectFigure(const CVec2f& _pos);
+        Figure* SelectFigure(const Vec2f& _pos);
 
         void MoveFigure();
 
@@ -118,63 +118,63 @@ namespace drash {
         std::function<std::string()> getSelectedTemplateHandler = []() {
             return std::string("");
         };
-        CSceneObjectGeometry* dragTemplate = nullptr;
+        SceneObjectGeometry* dragTemplate = nullptr;
         bool dragNow = false;
         void DrawDragTemplate();
         void ApplyDrop();
 
         // For current object
-        CSceneObject* currentObject = nullptr;
+        SceneObject* currentObject = nullptr;
         State state = Simple;
         std::string currentTemplateName = "";
         std::function<void()> treeRefreshHandler = []() {};
 
-        std::vector<drash::CVec2f> vertexs;
+        std::vector<drash::Vec2f> vertexs;
 
-        CFigure* selectedFigure = nullptr;
+        Figure* selectedFigure = nullptr;
 
-        CVec3f oldPositionCursor = CVec3f(0);
+        Vec3f oldPositionCursor = Vec3f(0);
 
-        CVec2f currentFigureVertex;
+        Vec2f currentFigureVertex;
 
-        CVec2f camRotFirstClick;
+        Vec2f camRotFirstClick;
 
         int vertexIndex = -1;
 
         bool frontSide = true;
 
-        greng::CCamera* camera = nullptr;
+        greng::Camera* camera = nullptr;
 
-        greng::CPointLight pointLight;
+        greng::PointLight pointLight;
 
-        CMoveablePoint moveablePoint;
+        MoveablePoint moveablePoint;
 
-        CVec3f oldCenterFigure;
+        Vec3f oldCenterFigure;
 
-        CTimer timer;
+        Timer timer;
 
         static const float MOVING_SPEED;
 
-        CColor4f gridColor = CColor4f(0.8, 0.8, 0.8, 1);
+        Color4f gridColor = Color4f(0.8, 0.8, 0.8, 1);
         int gridSegmentSize = 1;
-        CVec2i gridSize = CVec2i(20, 20);
+        Vec2i gridSize = Vec2i(20, 20);
 
         // for Split
 
-        CVec3f splitMin;
-        CVec3f splitMax;
-        CPlane splitPlane;
-        CVec3f splitPlanePoint1;
-        CVec3f splitPlanePoint2;
-        CVec3f splitPlanePoint3;
-        CVec3f splitPlanePoint4;
+        Vec3f splitMin;
+        Vec3f splitMax;
+        Plane splitPlane;
+        Vec3f splitPlanePoint1;
+        Vec3f splitPlanePoint2;
+        Vec3f splitPlanePoint3;
+        Vec3f splitPlanePoint4;
 
         std::vector<SplitContext> objectContexts;
         SplitContext splitFigureContext;
 
         void BeginSplit();
-        void DetectNewSplitPoint(const CVec2f& _p1, const CVec2f& _p2,
-                                 unsigned int _index, const CRay& _r,
+        void DetectNewSplitPoint(const Vec2f& _p1, const Vec2f& _p2,
+                                 unsigned int _index, const Ray& _r,
                                  SplitContext& _context) const;
         void ComputeIntersections(SplitContext& _context) const;
         void EndSplit();
@@ -182,59 +182,59 @@ namespace drash {
         void RenderSplitPlane();
         void ComputeSplitPlanePoints();
 
-        CRotationablePoint rotationPoint;
+        RotationablePoint rotationPoint;
 
         void SplitRotateStep(double _dt);
     };
 
-    inline bool CObjectEditorApp::IsStartBuild() const {
+    inline bool ObjectEditorApp::IsStartBuild() const {
         return state == BuildState;
     }
 
-    inline void CObjectEditorApp::ActiveMoveMode() {
+    inline void ObjectEditorApp::ActiveMoveMode() {
         state = MoveState;
         ChangeMode();
         //    LOG_INFO("Moving mode Active");
     }
 
-    inline void CObjectEditorApp::ActiveMoveOfAxisMode() {
+    inline void ObjectEditorApp::ActiveMoveOfAxisMode() {
         state = MoveOfAxisState;
         ChangeMode();
     }
 
     inline void
-    CObjectEditorApp::SetCurrentTemplateName(const std::string& _name) {
+    ObjectEditorApp::SetCurrentTemplateName(const std::string& _name) {
         currentTemplateName = _name;
     }
 
     inline void
-    CObjectEditorApp::SetTreeRefreshHandler(const std::function<void()>& _han) {
+    ObjectEditorApp::SetTreeRefreshHandler(const std::function<void()>& _han) {
         treeRefreshHandler = _han;
     }
 
-    inline greng::CCamera* CObjectEditorApp::GetCamera() { return camera; }
+    inline greng::Camera* ObjectEditorApp::GetCamera() { return camera; }
 
-    inline void CObjectEditorApp::ActiveSplitFigureMode() {
+    inline void ObjectEditorApp::ActiveSplitFigureMode() {
         state = SplitFigureState;
         ChangeMode();
     }
 
-    inline void CObjectEditorApp::ActiveSplitObjectMode() {
+    inline void ObjectEditorApp::ActiveSplitObjectMode() {
         state = SplitObjectState;
         ChangeMode();
         BeginSplit();
     }
 
-    inline void CObjectEditorApp::ActiveDeleteMode() {
+    inline void ObjectEditorApp::ActiveDeleteMode() {
         state = DeleteFigure;
         ChangeMode();
     }
 
-    inline void CObjectEditorApp::SetGetSelectedHandler(
+    inline void ObjectEditorApp::SetGetSelectedHandler(
         const std::function<std::string()>& _han) {
         getSelectedTemplateHandler = _han;
     }
 
 } // namespace drash
 
-#endif // CEDITORAPP_H
+#endif // EDITORAPP_H

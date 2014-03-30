@@ -32,11 +32,11 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    CGeometryManager::CGeometryManager(CScene& _scene) : scene(_scene) {}
+    GeometryManager::GeometryManager(Scene& _scene) : scene(_scene) {}
 
-    void CGeometryManager::Step(double) {}
+    void GeometryManager::Step(double) {}
 
-    CGeometryManager::~CGeometryManager() {
+    GeometryManager::~GeometryManager() {
         for (auto i = sceneObjectTemplates.begin(),
                   i_e = sceneObjectTemplates.end();
              i != i_e; i++) {
@@ -45,8 +45,8 @@ namespace drash {
         sceneObjectTemplates.clear();
     }
 
-    CSceneObjectGeometry*
-    CGeometryManager::CreateGeometry(const std::string& _name) {
+    SceneObjectGeometry*
+    GeometryManager::CreateGeometry(const std::string& _name) {
         if (_name == "") {
             return nullptr;
         } else {
@@ -57,14 +57,14 @@ namespace drash {
                 return nullptr;
             }
             MapSceneObjectItem elem;
-            elem.second = new CSceneObjectGeometry();
+            elem.second = new SceneObjectGeometry();
             elem.first = _name;
             sceneObjectTemplates.insert(elem);
             return elem.second;
         }
     }
 
-    void CGeometryManager::DestroyGeometry(CSceneObjectGeometry* _t) {
+    void GeometryManager::DestroyGeometry(SceneObjectGeometry* _t) {
         for (auto i = sceneObjectTemplates.begin(),
                   i_e = sceneObjectTemplates.end();
              i != i_e; i++) {
@@ -76,7 +76,7 @@ namespace drash {
         }
     }
 
-    void CGeometryManager::DestroyGeometry(const std::string& _name) {
+    void GeometryManager::DestroyGeometry(const std::string& _name) {
         auto iter = sceneObjectTemplates.find(_name);
         if (iter != sceneObjectTemplates.end()) {
             delete iter->second;
@@ -84,35 +84,35 @@ namespace drash {
         }
     }
 
-    CSceneObject*
-    CGeometryManager::CreateSceneObject(const std::string& _name,
-                                        const CSceneObjectParams& _params) {
+    SceneObject*
+    GeometryManager::CreateSceneObject(const std::string& _name,
+                                        const SceneObjectParams& _params) {
         auto iter = sceneObjectTemplates.find(_name);
         if (iter == sceneObjectTemplates.end()) {
             LOG_ERR("Object" << _name.c_str()
-                             << "not found in CTemplateSystem");
+                             << "not found in TemplateSystem");
             return nullptr;
         }
         return scene.CreateObject(*(iter->second), _params);
     }
 
-    CSceneObjectGeometry*
-    CGeometryManager::GetGeometry(const std::string& _name) {
+    SceneObjectGeometry*
+    GeometryManager::GetGeometry(const std::string& _name) {
         auto iter = sceneObjectTemplates.find(_name);
         if (iter == sceneObjectTemplates.end()) {
             LOG_ERR("Object " << _name.c_str()
-                              << " not found in CTemplateSystem");
+                              << " not found in TemplateSystem");
             return nullptr;
         } else {
             return iter->second;
         }
     }
 
-    CGeometryManager::SceneObjectTemplatesT& CGeometryManager::GetGeometries() {
+    GeometryManager::SceneObjectTemplatesT& GeometryManager::GetGeometries() {
         return this->sceneObjectTemplates;
     }
 
-    bool CGeometryManager::Load() {
+    bool GeometryManager::Load() {
         for (auto i = sceneObjectTemplates.begin(),
                   i_e = sceneObjectTemplates.end();
              i != i_e; i++) {
@@ -131,7 +131,7 @@ namespace drash {
         unsigned int vertices_count = 0;
         float z = 0;
         float depth = 0;
-        CVec2f vertex;
+        Vec2f vertex;
         std::string name = "";
 
         in >> templates_count;
@@ -143,7 +143,7 @@ namespace drash {
             in >> name;
             in >> figures_count;
 
-            CSceneObjectGeometry* g = CreateGeometry(name.c_str());
+            SceneObjectGeometry* g = CreateGeometry(name.c_str());
 
             g->figures.resize(figures_count);
 
@@ -174,7 +174,7 @@ namespace drash {
         return true;
     }
 
-    bool CGeometryManager::Store() {
+    bool GeometryManager::Store() {
         using std::endl;
 
         std::ofstream out("templates.txt");

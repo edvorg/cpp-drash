@@ -37,9 +37,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CGrengSystemsSet {
+    class GrengSystemsSet {
     public:
-        CGrengSystemsSet();
+        GrengSystemsSet();
 
         void Step(double _dt);
 
@@ -54,15 +54,15 @@ namespace greng {
         auto& GetViewport() { return viewport; }
 
     private:
-        greng::CViewport viewport;
-        greng::CRenderer renderer;
-        greng::CCameraManager cameraManager;
-        greng::CMeshManager meshManager;
-        greng::CTextureManager textureManager;
-        greng::CFrameBufferManager frameBufferManager;
-        greng::CVertexShaderManager vertexShaderManager;
-        greng::CFragmentShaderManager fragmentShaderManager;
-        greng::CShaderProgramManager shaderProgramManager;
+        greng::Viewport viewport;
+        greng::Renderer renderer;
+        greng::CameraManager cameraManager;
+        greng::MeshManager meshManager;
+        greng::TextureManager textureManager;
+        greng::FrameBufferManager frameBufferManager;
+        greng::VertexShaderManager vertexShaderManager;
+        greng::FragmentShaderManager fragmentShaderManager;
+        greng::ShaderProgramManager shaderProgramManager;
     };
 
 } // namespace greng

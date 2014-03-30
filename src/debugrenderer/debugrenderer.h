@@ -30,54 +30,54 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace greng {
 
-    class CTexture;
-    class CCamera;
-    class CGrengSystemsSet;
-    class CPointLight;
-    class CSpotLight;
-    class CMesh;
-    class CShaderProgram;
+    class Texture;
+    class Camera;
+    class GrengSystemsSet;
+    class PointLight;
+    class SpotLight;
+    class Mesh;
+    class ShaderProgram;
 }
 
 namespace drash {
 
-    class CScene;
-    class CFigure;
-    class CSceneObjectGeometry;
-    class CSceneObjectParams;
-    class CSceneObject;
-    class CLevelObjectDesc;
-    class CGeometryManager;
+    class Scene;
+    class Figure;
+    class SceneObjectGeometry;
+    class SceneObjectParams;
+    class SceneObject;
+    class LevelObjectDesc;
+    class GeometryManager;
 
-    class CDebugRenderer final {
+    class DebugRenderer final {
     public:
-        inline void SetCamera(greng::CCamera* _camera);
-        inline greng::CCamera* GetCamera() const;
-        inline void SetLight(greng::CPointLight* _light);
-        inline greng::CPointLight* GetLight() const;
-        inline void SetSpotLight(greng::CSpotLight* _light);
+        inline void SetCamera(greng::Camera* _camera);
+        inline greng::Camera* GetCamera() const;
+        inline void SetLight(greng::PointLight* _light);
+        inline greng::PointLight* GetLight() const;
+        inline void SetSpotLight(greng::SpotLight* _light);
 
         inline void SetTexCoordsScale(float _scale);
 
-        CDebugRenderer(greng::CGrengSystemsSet& _greng_systems, CScene& _scene,
-                       CGeometryManager& _geometry_manager);
+        DebugRenderer(greng::GrengSystemsSet& _greng_systems, Scene& _scene,
+                       GeometryManager& _geometry_manager);
 
         void Render() const;
 
-        void RenderObject(const CSceneObjectGeometry& _geometry,
-                          const CSceneObjectParams& _params);
+        void RenderObject(const SceneObjectGeometry& _geometry,
+                          const SceneObjectParams& _params);
 
         /// finds objects, visible at specified postion in screen space
         /// coordinates
         /// returns nearest one
-        CFigure* FindFigure(const greng::CCamera& _camera,
-                            const CVec2f& _pos) const;
-        CSceneObject* FindObject(const greng::CCamera& _camera,
-                                 const CVec2f& _pos) const;
+        Figure* FindFigure(const greng::Camera& _camera,
+                            const Vec2f& _pos) const;
+        SceneObject* FindObject(const greng::Camera& _camera,
+                                 const Vec2f& _pos) const;
 
-        CLevelObjectDesc* FindObject(
-            const greng::CCamera& _camera, const CVec2f& _pos,
-            std::function<CLevelObjectDesc*(unsigned int)> _object_getter,
+        LevelObjectDesc* FindObject(
+            const greng::Camera& _camera, const Vec2f& _pos,
+            std::function<LevelObjectDesc*(unsigned int)> _object_getter,
             unsigned int _objects_count);
 
     protected:
@@ -85,45 +85,45 @@ namespace drash {
         bool InitTextures();
         bool InitShaders();
 
-        greng::CMesh* CreateMesh(const CVec2f* _vertices,
+        greng::Mesh* CreateMesh(const Vec2f* _vertices,
                                  unsigned int _vertices_count, float _z,
                                  float _depth) const;
 
-        greng::CGrengSystemsSet& grengSystems;
-        CScene& scene;
-        CGeometryManager& geometryManager;
+        greng::GrengSystemsSet& grengSystems;
+        Scene& scene;
+        GeometryManager& geometryManager;
 
-        greng::CShaderProgram* shaderProgram1 = {};
-        greng::CShaderProgram* shaderProgram2 = {};
-        greng::CCamera* camera = {};
-        greng::CPointLight* light = {};
-        greng::CSpotLight* spotLight1 = {};
-        greng::CTexture* texture1Diffuse = {};
-        greng::CTexture* texture1Normal = {};
-        greng::CTexture* texture1Specular = {};
+        greng::ShaderProgram* shaderProgram1 = {};
+        greng::ShaderProgram* shaderProgram2 = {};
+        greng::Camera* camera = {};
+        greng::PointLight* light = {};
+        greng::SpotLight* spotLight1 = {};
+        greng::Texture* texture1Diffuse = {};
+        greng::Texture* texture1Normal = {};
+        greng::Texture* texture1Specular = {};
 
         float texCoordsScale = 1.0 / 40.0;
     };
 
-    inline void CDebugRenderer::SetCamera(greng::CCamera* _camera) {
+    inline void DebugRenderer::SetCamera(greng::Camera* _camera) {
         camera = _camera;
     }
 
-    inline greng::CCamera* CDebugRenderer::GetCamera() const { return camera; }
+    inline greng::Camera* DebugRenderer::GetCamera() const { return camera; }
 
-    inline void CDebugRenderer::SetLight(greng::CPointLight* _light) {
+    inline void DebugRenderer::SetLight(greng::PointLight* _light) {
         light = _light;
     }
 
-    inline greng::CPointLight* CDebugRenderer::GetLight() const {
+    inline greng::PointLight* DebugRenderer::GetLight() const {
         return light;
     }
 
-    inline void CDebugRenderer::SetSpotLight(greng::CSpotLight* _light) {
+    inline void DebugRenderer::SetSpotLight(greng::SpotLight* _light) {
         spotLight1 = _light;
     }
 
-    inline void CDebugRenderer::SetTexCoordsScale(float _scale) {
+    inline void DebugRenderer::SetTexCoordsScale(float _scale) {
         texCoordsScale = _scale;
     }
 

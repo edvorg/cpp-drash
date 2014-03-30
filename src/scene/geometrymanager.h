@@ -30,33 +30,33 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    class CScene;
-    class CSceneObjectGeometry;
-    class CSceneObjectParams;
-    class CSceneObject;
+    class Scene;
+    class SceneObjectGeometry;
+    class SceneObjectParams;
+    class SceneObject;
 
-    class CGeometryManager final {
+    class GeometryManager final {
     public:
-        typedef std::map<std::string, CSceneObjectGeometry*>
+        typedef std::map<std::string, SceneObjectGeometry*>
         SceneObjectTemplatesT;
-        typedef std::pair<std::string, CSceneObjectGeometry*>
+        typedef std::pair<std::string, SceneObjectGeometry*>
         MapSceneObjectItem;
 
-        CGeometryManager(CScene& _scene);
-        ~CGeometryManager();
+        GeometryManager(Scene& _scene);
+        ~GeometryManager();
 
         void Step(double);
 
-        /// template is just named CSceneObjectGeometry
+        /// template is just named SceneObjectGeometry
         /// we can use it to create many instances of one object at any time we
         /// want
-        CSceneObjectGeometry* CreateGeometry(const std::string& _name);
-        void DestroyGeometry(CSceneObjectGeometry* _t);
+        SceneObjectGeometry* CreateGeometry(const std::string& _name);
+        void DestroyGeometry(SceneObjectGeometry* _t);
         void DestroyGeometry(const std::string& _name);
-        CSceneObject* CreateSceneObject(const std::string& _name,
-                                        const CSceneObjectParams& _params);
+        SceneObject* CreateSceneObject(const std::string& _name,
+                                        const SceneObjectParams& _params);
 
-        CSceneObjectGeometry* GetGeometry(const std::string& _name);
+        SceneObjectGeometry* GetGeometry(const std::string& _name);
         SceneObjectTemplatesT& GetGeometries();
 
         bool Load();
@@ -66,7 +66,7 @@ namespace drash {
     private:
         SceneObjectTemplatesT sceneObjectTemplates;
 
-        CScene& scene;
+        Scene& scene;
     };
 
 } // namespace drash

@@ -28,24 +28,24 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace drash {
 
-    CFigureParams::CFigureParams() {}
+    FigureParams::FigureParams() {}
 
-    CSceneObject* CFigure::GetSceneObject() const {
-        return static_cast<CSceneObject*>(fixture->GetBody()->GetUserData());
+    SceneObject* Figure::GetSceneObject() const {
+        return static_cast<SceneObject*>(fixture->GetBody()->GetUserData());
     }
 
-    void CFigure::SetVertices(const CVec2f* _vertices, unsigned int _count) {
+    void Figure::SetVertices(const Vec2f* _vertices, unsigned int _count) {
         if (fixture == nullptr || fixture->GetShape() == nullptr ||
             fixture->GetShape()->GetType() != b2Shape::e_polygon) {
             return;
         }
 
         static_cast<b2PolygonShape*>(fixture->GetShape())
-            ->Set(&CVec2ToB2Vec2(*_vertices), _count);
+            ->Set(&Vec2ToB2Vec2(*_vertices), _count);
         fixture->GetBody()->ResetMassData();
     }
 
-    const CVec2f* CFigure::GetVertices() const {
+    const Vec2f* Figure::GetVertices() const {
         if (fixture == nullptr || fixture->GetShape() == nullptr ||
             fixture->GetShape()->GetType() != b2Shape::e_polygon) {
             return nullptr;
@@ -55,7 +55,7 @@ namespace drash {
                                    ->m_vertices);
     }
 
-    unsigned int CFigure::EnumVertices() const {
+    unsigned int Figure::EnumVertices() const {
         if (fixture == nullptr || fixture->GetShape() == nullptr ||
             fixture->GetShape()->GetType() != b2Shape::e_polygon) {
             return 0;
@@ -65,9 +65,9 @@ namespace drash {
             ->GetVertexCount();
     }
 
-    float CFigure::GetFriction() const { return fixture->GetFriction(); }
+    float Figure::GetFriction() const { return fixture->GetFriction(); }
 
-    CLogger& operator<<(CLogger& _logger, const CFigure& _figure) {
+    Logger& operator<<(Logger& _logger, const Figure& _figure) {
         if (_figure.EnumVertices()) {
             _logger << '{';
             for (unsigned int i = 0; i < _figure.EnumVertices(); i++) {
@@ -79,8 +79,8 @@ namespace drash {
         return _logger;
     }
 
-    bool CFigure::TestPoint(const CVec2f& _xy) const {
-        return fixture->TestPoint(CVec2ToB2Vec2(_xy));
+    bool Figure::TestPoint(const Vec2f& _xy) const {
+        return fixture->TestPoint(Vec2ToB2Vec2(_xy));
     }
 
 } // namespace drash
