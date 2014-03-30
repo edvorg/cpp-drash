@@ -78,13 +78,13 @@ namespace drash {
 
     template <typename T, const int DEF_VAL>
     Vec2<T, DEF_VAL> operator+(const Vec2<T, DEF_VAL>& _v1,
-                                const Vec2<T, DEF_VAL>& _v2) {
+                               const Vec2<T, DEF_VAL>& _v2) {
         return Vec2<T, DEF_VAL>(_v1.x + _v2.x, _v1.y + _v2.y);
     }
 
     template <typename T, const int DEF_VAL>
     Vec2<T, DEF_VAL> operator-(const Vec2<T, DEF_VAL>& _v1,
-                                const Vec2<T, DEF_VAL>& _v2) {
+                               const Vec2<T, DEF_VAL>& _v2) {
         return Vec2<T, DEF_VAL>(_v1.x - _v2.x, _v1.y - _v2.y);
     }
 

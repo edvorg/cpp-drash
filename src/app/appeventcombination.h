@@ -48,7 +48,7 @@ namespace drash {
         bool operator!=(const AppEventCombination& _src) const;
 
         friend Logger& operator<<(Logger& _logger,
-                                   const AppEventCombination& _c);
+                                  const AppEventCombination& _c);
 
     private:
     protected:

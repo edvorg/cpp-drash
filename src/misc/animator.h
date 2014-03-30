@@ -119,7 +119,7 @@ namespace drash {
 
     template <class T>
     void Animator<T>::SetTarget(const T& _target, double _time,
-                                 const AnimatorBehavior& _behavior) {
+                                const AnimatorBehavior& _behavior) {
         fromValue = value;
         targetValue = _target;
         time = 0;

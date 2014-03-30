@@ -35,8 +35,7 @@ namespace drash {
 
     class RotationablePoint {
     public:
-        RotationablePoint(greng::Renderer& _renderer,
-                           greng::Camera& _camera);
+        RotationablePoint(greng::Renderer& _renderer, greng::Camera& _camera);
 
         void Step(double);
         void Render();
@@ -86,17 +85,11 @@ namespace drash {
         cursorPos = _pos;
     }
 
-    inline void RotationablePoint::SetAxisOX(const bool _val) {
-        axisOX = _val;
-    }
+    inline void RotationablePoint::SetAxisOX(const bool _val) { axisOX = _val; }
 
-    inline void RotationablePoint::SetAxisOY(const bool _val) {
-        axisOY = _val;
-    }
+    inline void RotationablePoint::SetAxisOY(const bool _val) { axisOY = _val; }
 
-    inline void RotationablePoint::SetAxisOZ(const bool _val) {
-        axisOZ = _val;
-    }
+    inline void RotationablePoint::SetAxisOZ(const bool _val) { axisOZ = _val; }
 
     inline const Vec3f& RotationablePoint::GetRotation() const {
         return rotation;

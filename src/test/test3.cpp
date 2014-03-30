@@ -81,7 +81,7 @@ namespace drash {
             MatrixRotationX(m, angle);
             MatrixMultiply(m, origin, pos);
             GetGreng().GetRenderer().DrawPoint(GetCamera(), pos, 10,
-                                                      Color4f(1, 0, 0), false);
+                                               Color4f(1, 0, 0), false);
 
             angle += 0.01;
         }
@@ -139,32 +139,32 @@ namespace drash {
             GetEventSystem().SetProcessor(
                 "MB",
                 AppEventProcessor([this]() {
-                                       if (moveObject == nullptr) {
-                                           Figure* f =
-                                               GetDebugRenderer().FindFigure(
-                                                   GetCamera(), GetCursorPos());
-                                           if (f != nullptr) {
-                                               moveObject = f->GetSceneObject();
-                                           }
-                                       }
-                                   },
-                                   [this]() {
-                                       if (moveObject != nullptr) {
-                                           Plane p(PlaneXY);
-                                           p.SetPoint(moveObject->GetPos());
+                                      if (moveObject == nullptr) {
+                                          Figure* f =
+                                              GetDebugRenderer().FindFigure(
+                                                  GetCamera(), GetCursorPos());
+                                          if (f != nullptr) {
+                                              moveObject = f->GetSceneObject();
+                                          }
+                                      }
+                                  },
+                                  [this]() {
+                                      if (moveObject != nullptr) {
+                                          Plane p(PlaneXY);
+                                          p.SetPoint(moveObject->GetPos());
 
-                                           Vec3f pos;
+                                          Vec3f pos;
 
-                                           GetCamera().CastRay(GetCursorPos(),
-                                                               p, pos);
+                                          GetCamera().CastRay(GetCursorPos(), p,
+                                                              pos);
 
-                                           pos.AsVec2() -=
-                                               moveObject->GetMassCenter();
-                                           pos *= 10;
-                                           moveObject->SetLinearVelocity(pos);
-                                       }
-                                   },
-                                   [this]() {
+                                          pos.AsVec2() -=
+                                              moveObject->GetMassCenter();
+                                          pos *= 10;
+                                          moveObject->SetLinearVelocity(pos);
+                                      }
+                                  },
+                                  [this]() {
                     if (moveObject != nullptr) {
                         /// if our body is not dynamic. it wil never stop, until
                         /// we make it's velocity module to 0
@@ -212,19 +212,19 @@ namespace drash {
 
             GetEventSystem().SetProcessor(
                 "e", AppEventProcessor([this]() {},
-                                        [this]() { GetCamera().Forward(5); }));
+                                       [this]() { GetCamera().Forward(5); }));
 
             GetEventSystem().SetProcessor(
                 "q", AppEventProcessor([this]() {},
-                                        [this]() { GetCamera().Forward(-5); }));
+                                       [this]() { GetCamera().Forward(-5); }));
 
             GetEventSystem().SetProcessor(
                 "z", AppEventProcessor([this]() {},
-                                        [this]() { GetCamera().Strafe(5); }));
+                                       [this]() { GetCamera().Strafe(5); }));
 
             GetEventSystem().SetProcessor(
                 "c", AppEventProcessor([this]() {},
-                                        [this]() { GetCamera().Strafe(-5); }));
+                                       [this]() { GetCamera().Strafe(-5); }));
         }
 
         void Test3::InitObjects() {

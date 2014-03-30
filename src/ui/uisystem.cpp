@@ -30,8 +30,7 @@ namespace drash {
 
     namespace ui {
 
-        UISystem::UISystem(greng::Renderer& _renderer)
-            : renderer(_renderer) {}
+        UISystem::UISystem(greng::Renderer& _renderer) : renderer(_renderer) {}
 
         UISystem::~UISystem() {
             for (unsigned int i = 0; i < controlsCount; i++) {
@@ -72,7 +71,7 @@ namespace drash {
         }
 
         bool UISystem::ScreenSpaceToUISpace(const Vec2f& _from, int& _x,
-                                             int& _y) {
+                                            int& _y) {
             _x = (_from.x + 0.5f) * static_cast<float>(width);
             _y = (_from.y + 0.5f) * static_cast<float>(height);
             return true;

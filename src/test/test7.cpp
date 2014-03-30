@@ -55,9 +55,8 @@ namespace drash {
         }
 
         bool Test7::InitTextures() {
-            debugTexture =
-                GetGreng().GetTextureManager().CreateTextureFromFile(
-                    "assets/floor/diffuse.png");
+            debugTexture = GetGreng().GetTextureManager().CreateTextureFromFile(
+                "assets/floor/diffuse.png");
 
             if (debugTexture == nullptr) {
                 return false;
@@ -71,12 +70,10 @@ namespace drash {
                 GetGreng().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader2.120.vs");
             greng::FragmentShader* f =
-                GetGreng()
-                    .GetFragmentShaderManager()
-                    .CreateShaderFromFile("shaders/shader2.120.fs");
+                GetGreng().GetFragmentShaderManager().CreateShaderFromFile(
+                    "shaders/shader2.120.fs");
 
-            program =
-                GetGreng().GetShaderProgramManager().CreateProgram(v, f);
+            program = GetGreng().GetShaderProgramManager().CreateProgram(v, f);
 
             if (program == nullptr) {
                 return false;
@@ -109,9 +106,9 @@ namespace drash {
 
                     if (kc >= 3) {
                         Vec3f min(f->GetVertices()[0],
-                                   f->GetZ() - 0.5f * f->GetDepth());
+                                  f->GetZ() - 0.5f * f->GetDepth());
                         Vec3f max(f->GetVertices()[0],
-                                   f->GetZ() + 0.5f * f->GetDepth());
+                                  f->GetZ() + 0.5f * f->GetDepth());
 
                         for (unsigned int k = 1; k < kc; k++) {
                             min.x =
@@ -215,10 +212,8 @@ namespace drash {
                         mi.push_back(2 * kc + (kc - 1) * 4 + 3);
                         mi.push_back(2 * kc + (kc - 1) * 4 + 0);
 
-                        m = GetGreng()
-                                .GetMeshManager()
-                                .CreateMeshFromVertices(&mv[0], mv.size(),
-                                                        &mi[0], mi.size());
+                        m = GetGreng().GetMeshManager().CreateMeshFromVertices(
+                            &mv[0], mv.size(), &mi[0], mi.size());
                     }
 
                     if (m != nullptr) {

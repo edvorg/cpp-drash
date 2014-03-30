@@ -235,8 +235,7 @@ namespace greng {
         tc.y *= -1;
     }
 
-    void LoadTexCoords(std::vector<Vec2f>& uv, std::ifstream& f,
-                       unsigned int) {
+    void LoadTexCoords(std::vector<Vec2f>& uv, std::ifstream& f, unsigned int) {
         f.clear(std::ios_base::goodbit);
         f.seekg(0, std::ios_base::beg);
 

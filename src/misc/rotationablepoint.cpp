@@ -30,7 +30,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     RotationablePoint::RotationablePoint(greng::Renderer& _renderer,
-                                           greng::Camera& _camera)
+                                         greng::Camera& _camera)
         : renderer(_renderer), camera(_camera) {}
 
     void RotationablePoint::Step(double) {
@@ -189,7 +189,7 @@ namespace drash {
             for (unsigned int i = 0; i < segments; i++) {
                 Vec4f p1(0, radius * sin(angle), -radius * cos(angle), 0);
                 Vec4f p2(0, radius * sin(angle + angle_delta),
-                          -radius * cos(angle + angle_delta), 0);
+                         -radius * cos(angle + angle_delta), 0);
 
                 Vec4f p1_transposed;
                 Vec4f p2_transposed;
@@ -213,7 +213,7 @@ namespace drash {
             for (unsigned int i = 0; i < segments; i++) {
                 Vec4f p1(radius * cos(angle), radius * sin(angle), 0, 0);
                 Vec4f p2(radius * cos(angle + angle_delta),
-                          radius * sin(angle + angle_delta), 0, 0);
+                         radius * sin(angle + angle_delta), 0, 0);
 
                 Vec4f p1_transposed;
                 Vec4f p2_transposed;
@@ -237,7 +237,7 @@ namespace drash {
             for (unsigned int i = 0; i < segments; i++) {
                 Vec4f p1(radius * cos(angle), 0, -radius * sin(angle), 0);
                 Vec4f p2(radius * cos(angle + angle_delta), 0,
-                          -radius * sin(angle + angle_delta), 0);
+                         -radius * sin(angle + angle_delta), 0);
 
                 Vec4f p1_transposed;
                 Vec4f p2_transposed;

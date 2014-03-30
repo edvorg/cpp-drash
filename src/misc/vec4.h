@@ -87,7 +87,7 @@ namespace drash {
 
     template <typename T, const int DEF_VAL>
     Vec4<T, DEF_VAL>::Vec4(const Vec2<T, DEF_VAL>& _xy, const T& _z,
-                             const T& _w)
+                           const T& _w)
         : w(_w) {
         this->x = _xy.x;
         this->y = _xy.y;
@@ -108,7 +108,7 @@ namespace drash {
 
     template <typename T, const int DEF_VAL>
     Vec4<T, DEF_VAL>& Vec4<T, DEF_VAL>::Set(const T& _x, const T& _y,
-                                              const T& _z, const T& _w) {
+                                            const T& _z, const T& _w) {
         this->x = _x;
         this->y = _y;
         this->z = _z;

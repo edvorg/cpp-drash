@@ -51,8 +51,7 @@ namespace greng {
 
     class Renderer {
     public:
-        Renderer(const Viewport& newViewport)
-            : viewport(newViewport) {}
+        Renderer(const Viewport& newViewport) : viewport(newViewport) {}
         Renderer(const Renderer&) = delete;
         Renderer(Renderer&&) = delete;
         Renderer& operator=(const Renderer&) = delete;
@@ -70,9 +69,9 @@ namespace greng {
 
         /// draws triangle giving screen space coordinates (-0.5,-0.5)..(0.5,
         /// 0.5) and color
-        void DrawTriangle(const Camera& _camera, const Vec2f& _p1, const Vec2f& _p2,
-                          const Vec2f& _p3, const Color4f& _col,
-                          bool _depth_test = false) const;
+        void DrawTriangle(const Camera& _camera, const Vec2f& _p1,
+                          const Vec2f& _p2, const Vec2f& _p3,
+                          const Color4f& _col, bool _depth_test = false) const;
 
         /// draws line giving world space coordinates and color
         void DrawTriangle(const Camera& _camera, const Vec3f& _p1,
@@ -82,19 +81,21 @@ namespace greng {
         /// draws line giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
         /// start and end points
         /// and color
-        void DrawLine(const Camera& _camera, const Vec2f& _p1, const Vec2f& _p2, float _width,
-                      const Color4f& _col, bool _depth_test = false) const;
+        void DrawLine(const Camera& _camera, const Vec2f& _p1, const Vec2f& _p2,
+                      float _width, const Color4f& _col,
+                      bool _depth_test = false) const;
 
         /// draws line giving world space coordinates start and end points
         /// and color
-        void DrawLine(const Camera& _camera, const Vec3f& _p1,
-                      const Vec3f& _p2, float _width, const Color4f& _col,
+        void DrawLine(const Camera& _camera, const Vec3f& _p1, const Vec3f& _p2,
+                      float _width, const Color4f& _col,
                       bool _depth_test = true) const;
 
         /// draws lines giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
         /// and color
-        void DrawLines(const Camera& _camera, const std::vector<Vec2f>& lines, float _width,
-                       const Color4f& _col, bool _depth_test = false) const;
+        void DrawLines(const Camera& _camera, const std::vector<Vec2f>& lines,
+                       float _width, const Color4f& _col,
+                       bool _depth_test = false) const;
 
         /// draws lines giving world space coordinates
         /// and color
@@ -103,8 +104,8 @@ namespace greng {
                        bool _depth_test = true) const;
 
         /// draws point giving screen space coordinates (-0.5,-0.5)..(0.5, 0.5)
-        void DrawPoint(const Camera& _camera, const Vec2f& _p, float _size, const Color4f& _col,
-                       bool _depth_test = false) const;
+        void DrawPoint(const Camera& _camera, const Vec2f& _p, float _size,
+                       const Color4f& _col, bool _depth_test = false) const;
 
         /// draws point giving world space coordinates
         void DrawPoint(const Camera& _camera, const Vec3f& _p, float _size,
@@ -113,13 +114,11 @@ namespace greng {
         void DrawChar(const Camera& _camera, const Vec2f& _pos,
                       const Vec2f& _size, char _c);
 
-        void DrawNumber(const Camera& _camera, bool fromLeft,
-                        const Vec2f& _pos, const Vec2f& _size,
-                        unsigned int number);
+        void DrawNumber(const Camera& _camera, bool fromLeft, const Vec2f& _pos,
+                        const Vec2f& _size, unsigned int number);
 
-        void DrawString(const Camera& _camera, bool fromLeft,
-                        const Vec2f& _pos, const Vec2f& _size,
-                        const std::string& _str);
+        void DrawString(const Camera& _camera, bool fromLeft, const Vec2f& _pos,
+                        const Vec2f& _size, const std::string& _str);
 
     private:
         const FrameBuffer* lastFrameBuffer;

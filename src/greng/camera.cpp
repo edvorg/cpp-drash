@@ -122,7 +122,7 @@ namespace greng {
     }
 
     void Camera::CastRay(const Vec2f& _pos, const drash::Plane& _plane,
-                          Vec3f& _result) const {
+                         Vec3f& _result) const {
         double c = 1.0 / cos(fov / 2.0); // hypotenuse
 
         double frame_height = 2.0 * sqrt(c * c - 1.0);

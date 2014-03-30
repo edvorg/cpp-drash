@@ -86,11 +86,10 @@ namespace drash {
 
     SceneObject*
     GeometryManager::CreateSceneObject(const std::string& _name,
-                                        const SceneObjectParams& _params) {
+                                       const SceneObjectParams& _params) {
         auto iter = sceneObjectTemplates.find(_name);
         if (iter == sceneObjectTemplates.end()) {
-            LOG_ERR("Object" << _name.c_str()
-                             << "not found in TemplateSystem");
+            LOG_ERR("Object" << _name.c_str() << "not found in TemplateSystem");
             return nullptr;
         }
         return scene.CreateObject(*(iter->second), _params);

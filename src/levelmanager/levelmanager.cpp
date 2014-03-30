@@ -35,7 +35,7 @@ namespace drash {
     using drash::Logger;
 
     LevelManager::LevelManager(Scene& _scene,
-                                 GeometryManager& _geometry_manager)
+                               GeometryManager& _geometry_manager)
         : scene(_scene), templateSystem(_geometry_manager),
           levelFactory(levelsCountLimit, "Level") {}
 

@@ -41,11 +41,9 @@ namespace greng {
 
 namespace drash {
 
-    DebugRenderer::DebugRenderer(greng::Greng& _greng,
-                                   Scene& _scene,
-                                   GeometryManager& _geometry_manager)
-        : greng(_greng), scene(_scene),
-          geometryManager(_geometry_manager) {
+    DebugRenderer::DebugRenderer(greng::Greng& _greng, Scene& _scene,
+                                 GeometryManager& _geometry_manager)
+        : greng(_greng), scene(_scene), geometryManager(_geometry_manager) {
         InitTextures();
         InitShaders();
     }
@@ -74,9 +72,8 @@ namespace drash {
                 std::vector<greng::Vertex> mv;
                 std::vector<unsigned int> mi;
 
-                greng::Mesh* m =
-                    CreateMesh(f->GetVertices(), f->EnumVertices(), f->GetZ(),
-                               f->GetDepth());
+                greng::Mesh* m = CreateMesh(f->GetVertices(), f->EnumVertices(),
+                                            f->GetZ(), f->GetDepth());
 
                 if (m != nullptr) {
                     greng.GetMeshManager().ComputeNormals(m);
@@ -96,8 +93,8 @@ namespace drash {
                                    model_view);
 
                     greng::Texture* textures[3] = { texture1Diffuse,
-                                                     texture1Normal,
-                                                     texture1Specular };
+                                                    texture1Normal,
+                                                    texture1Specular };
 
                     greng.GetRenderer().RenderMesh(
                         m, 0, textures, 3,
@@ -130,30 +127,26 @@ namespace drash {
                     if (o->GetDestructionGraph().size() == jc * jc) {
                         if (o->GetDestructionGraph()[j * jc + k] != 0) {
                             Vec3f c1(o->GetWorldPoint(compute_centroid(
-                                          f->GetVertices(), f->EnumVertices())),
-                                      o->GetPosZ() + f->GetZ());
+                                         f->GetVertices(), f->EnumVertices())),
+                                     o->GetPosZ() + f->GetZ());
                             Vec3f c2(o->GetWorldPoint(compute_centroid(
-                                          o->GetFigures()[k]->GetVertices(),
-                                          o->GetFigures()[k]->EnumVertices())),
-                                      o->GetPosZ() +
-                                          o->GetFigures()[k]->GetZ());
+                                         o->GetFigures()[k]->GetVertices(),
+                                         o->GetFigures()[k]->EnumVertices())),
+                                     o->GetPosZ() + o->GetFigures()[k]->GetZ());
 
                             greng.GetRenderer().DrawLine(
-                                *camera, c1, c2, 2, Color4f(1, 0, 0, 1),
-                                false);
+                                *camera, c1, c2, 2, Color4f(1, 0, 0, 1), false);
                         } else if (o->GetDestructionGraph()[k * jc + j] != 0) {
                             Vec3f c1(o->GetWorldPoint(compute_centroid(
-                                          f->GetVertices(), f->EnumVertices())),
-                                      o->GetPosZ() + f->GetZ());
+                                         f->GetVertices(), f->EnumVertices())),
+                                     o->GetPosZ() + f->GetZ());
                             Vec3f c2(o->GetWorldPoint(compute_centroid(
-                                          o->GetFigures()[k]->GetVertices(),
-                                          o->GetFigures()[k]->EnumVertices())),
-                                      o->GetPosZ() +
-                                          o->GetFigures()[k]->GetZ());
+                                         o->GetFigures()[k]->GetVertices(),
+                                         o->GetFigures()[k]->EnumVertices())),
+                                     o->GetPosZ() + o->GetFigures()[k]->GetZ());
 
                             greng.GetRenderer().DrawLine(
-                                *camera, c1, c2, 2, Color4f(1, 0, 0, 1),
-                                false);
+                                *camera, c1, c2, 2, Color4f(1, 0, 0, 1), false);
                         }
                     }
                 }
@@ -162,7 +155,7 @@ namespace drash {
     }
 
     void DebugRenderer::RenderObject(const SceneObjectGeometry& _geometry,
-                                      const SceneObjectParams& _params) {
+                                     const SceneObjectParams& _params) {
         for (unsigned int i = 0; i < _geometry.figures.size(); i++) {
             greng::Mesh* m =
                 CreateMesh(&_geometry.figures[i].vertices[0],
@@ -185,9 +178,8 @@ namespace drash {
                 Matrix4f model_view;
                 MatrixMultiply(GetCamera()->GetViewMatrix(), model, model_view);
 
-                greng::Texture* textures[3] = { texture1Diffuse,
-                                                 texture1Normal,
-                                                 texture1Specular };
+                greng::Texture* textures[3] = { texture1Diffuse, texture1Normal,
+                                                texture1Specular };
 
                 greng.GetRenderer().RenderMesh(
                     m, 0, textures, 3,
@@ -201,7 +193,7 @@ namespace drash {
     }
 
     Figure* DebugRenderer::FindFigure(const greng::Camera& _camera,
-                                        const Vec2f& _pos) const {
+                                      const Vec2f& _pos) const {
         Figure* res = nullptr;
 
         unsigned int i = 0;
@@ -270,7 +262,7 @@ namespace drash {
     }
 
     SceneObject* DebugRenderer::FindObject(const greng::Camera& _camera,
-                                             const Vec2f& _pos) const {
+                                           const Vec2f& _pos) const {
         SceneObject* res = nullptr;
 
         unsigned int i = 0;
@@ -424,14 +416,12 @@ namespace drash {
     }
 
     bool DebugRenderer::InitTextures() {
-        texture1Diffuse =
-            greng.GetTextureManager().CreateTextureFromFile(
-                "assets/floor/diffuse.png");
+        texture1Diffuse = greng.GetTextureManager().CreateTextureFromFile(
+            "assets/floor/diffuse.png");
         texture1Normal = greng.GetTextureManager().CreateTextureFromFile(
             "assets/floor/normal.png");
-        texture1Specular =
-            greng.GetTextureManager().CreateTextureFromFile(
-                "assets/floor/specular.png");
+        texture1Specular = greng.GetTextureManager().CreateTextureFromFile(
+            "assets/floor/specular.png");
 
         if (texture1Diffuse == nullptr || texture1Normal == nullptr ||
             texture1Specular == nullptr) {
@@ -448,14 +438,12 @@ namespace drash {
         greng::FragmentShader* fs =
             greng.GetFragmentShaderManager().CreateShaderFromFile(
                 "shaders/shader6.120.fs");
-        shaderProgram1 =
-            greng.GetShaderProgramManager().CreateProgram(vs, fs);
+        shaderProgram1 = greng.GetShaderProgramManager().CreateProgram(vs, fs);
         vs = greng.GetVertexShaderManager().CreateShaderFromFile(
             "shaders/shader7.120.vs");
         fs = greng.GetFragmentShaderManager().CreateShaderFromFile(
             "shaders/shader7.120.fs");
-        shaderProgram2 =
-            greng.GetShaderProgramManager().CreateProgram(vs, fs);
+        shaderProgram2 = greng.GetShaderProgramManager().CreateProgram(vs, fs);
 
         if (shaderProgram1 == nullptr && shaderProgram2 == nullptr) {
             return false;
@@ -465,8 +453,8 @@ namespace drash {
     }
 
     greng::Mesh* DebugRenderer::CreateMesh(const Vec2f* _vertices,
-                                             unsigned int _vertices_count,
-                                             float _z, float _depth) const {
+                                           unsigned int _vertices_count,
+                                           float _z, float _depth) const {
         if (_vertices == nullptr) {
             return nullptr;
         }

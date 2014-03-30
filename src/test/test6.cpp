@@ -61,16 +61,16 @@ namespace drash {
             GetDebugRenderer().SetLight(&light1);
 
             Vec2f dir(GetPlayersSystem()
-                               .GetPlayers()[0]
-                               ->GetSceneObject()
-                               ->GetPosXY()
-                               .Get()
-                               .x -
-                           player1OldPos.x,
-                       player1OldPos.z - GetPlayersSystem()
-                                             .GetPlayers()[0]
-                                             ->GetSceneObject()
-                                             ->GetPosZ());
+                              .GetPlayers()[0]
+                              ->GetSceneObject()
+                              ->GetPosXY()
+                              .Get()
+                              .x -
+                          player1OldPos.x,
+                      player1OldPos.z - GetPlayersSystem()
+                                            .GetPlayers()[0]
+                                            ->GetSceneObject()
+                                            ->GetPosZ());
 
             if (dir.LengthSquared() < 0.00001) {
                 dir.Set(1, 0);
@@ -160,8 +160,8 @@ namespace drash {
                     &GetCamera().GetProjectionMatrix(), &light1);
             }
 
-            GetGreng().GetRenderer().DrawPoint(
-                GetCamera(), light1.position, 10, Color4f(1, 1, 1, 1), true);
+            GetGreng().GetRenderer().DrawPoint(GetCamera(), light1.position, 10,
+                                               Color4f(1, 1, 1, 1), true);
         }
 
         bool Test6::InitCamera() {
@@ -267,9 +267,8 @@ namespace drash {
             }
 
             player1FragmentShader =
-                GetGreng()
-                    .GetFragmentShaderManager()
-                    .CreateShaderFromFile("shaders/shader2.120.fs");
+                GetGreng().GetFragmentShaderManager().CreateShaderFromFile(
+                    "shaders/shader2.120.fs");
 
             if (player1FragmentShader == nullptr) {
                 return false;

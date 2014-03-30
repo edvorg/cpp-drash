@@ -70,7 +70,7 @@ namespace drash {
     }
 
     void AppEventSystem::SetProcessor(const char* _combinations,
-                                       const AppEventProcessor& _processor) {
+                                      const AppEventProcessor& _processor) {
         using std::list;
         using std::string;
         using std::for_each;

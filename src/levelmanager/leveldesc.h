@@ -52,7 +52,7 @@ namespace drash {
         ~LevelDesc();
 
         LevelObjectDesc* AddObject(const std::string& _geometry,
-                                    const std::string& _name);
+                                   const std::string& _name);
         bool DestroyObject(LevelObjectDesc* _desc);
         LevelObjectDesc* GetObject(const std::string& _name);
         inline unsigned int EnumObjects() const;

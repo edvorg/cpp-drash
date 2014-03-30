@@ -34,7 +34,7 @@ namespace drash {
     LevelDesc::~LevelDesc() { objectsFactory.DestroyObjects(); }
 
     LevelObjectDesc* LevelDesc::AddObject(const std::string& _geometry,
-                                            const std::string& _name) {
+                                          const std::string& _name) {
         auto o = objectsFactory.CreateObject();
 
         if (o == nullptr) {

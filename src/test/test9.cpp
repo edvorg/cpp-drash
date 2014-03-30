@@ -79,7 +79,7 @@ namespace drash {
             GetEventSystem().SetProcessor(
                 "LB",
                 AppEventProcessor([this]() { point1.RotateBegin(); }, []() {},
-                                   [this]() { point1.RotateEnd(); }));
+                                  [this]() { point1.RotateEnd(); }));
 
             return true;
         }

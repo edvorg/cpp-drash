@@ -48,9 +48,9 @@ namespace greng {
         Mesh* CreateMeshQuad();
         Mesh* CreateMeshCube();
         Mesh* CreateMeshFromVertices(const Vertex* _vertices,
-                                      unsigned int _vertices_count,
-                                      const unsigned int* _indices,
-                                      unsigned int _indices_count);
+                                     unsigned int _vertices_count,
+                                     const unsigned int* _indices,
+                                     unsigned int _indices_count);
         bool DestroyMesh(Mesh* _mesh);
 
         void ComputeNormals(Mesh* _mesh);

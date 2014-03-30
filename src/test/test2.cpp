@@ -125,8 +125,8 @@ namespace drash {
                     selectedObject = f->GetSceneObject();
                 }
             },
-                                         [this]() // left mouse button is being
-                                                  // pressed
+                                        [this]() // left mouse button is being
+                                                 // pressed
             {
                           // move object if choosen
                           if (selectedObject != nullptr) {
@@ -144,7 +144,7 @@ namespace drash {
 
             GetEventSystem().SetProcessor(
                 "LB C-d", AppEventProcessor([this]() // control-d pressed after
-                                                      // LB released
+                                                     // LB released
             {
                 // delete object if choosen
                 if (selectedObject != nullptr) {

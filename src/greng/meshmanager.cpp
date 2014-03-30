@@ -253,9 +253,9 @@ namespace greng {
     }
 
     Mesh* MeshManager::CreateMeshFromVertices(const Vertex* _vertices,
-                                                unsigned int _vertices_count,
-                                                const unsigned int* _indices,
-                                                unsigned int _indices_count) {
+                                              unsigned int _vertices_count,
+                                              const unsigned int* _indices,
+                                              unsigned int _indices_count) {
         if (_vertices == nullptr || _vertices_count == 0) {
             LOG_ERR("MeshManager::CreateMeshFromVertices(): _vertices must be "
                     "specified");

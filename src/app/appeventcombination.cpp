@@ -57,8 +57,8 @@ namespace drash {
                catchEvents.end();
     }
 
-    bool AppEventCombination::ContainsCombination(
-        const AppEventCombination& _c) const {
+    bool AppEventCombination::ContainsCombination(const AppEventCombination& _c)
+        const {
         bool res = false;
 
         for (unsigned int i = 0; i < catchEvents.size(); i++) {

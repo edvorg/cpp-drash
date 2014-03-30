@@ -88,8 +88,8 @@ namespace drash {
                                    ->figures[j]
                                    ->GetVertices(),
                                sizeof(Vec2f) * objectsFactory.GetObjects()[i]
-                                                    ->figures[j]
-                                                    ->EnumVertices());
+                                                   ->figures[j]
+                                                   ->EnumVertices());
 
                         SceneObjectParams p;
                         p.angle = objectsFactory.GetObjects()[i]->angle;
@@ -160,7 +160,7 @@ namespace drash {
                                         &*g1.figures[b].vertices.begin(),
                                         &*ng.figures[comp[b]].vertices.begin(),
                                         sizeof(Vec2f) * ng.figures[comp[b]]
-                                                             .vertices.size());
+                                                            .vertices.size());
                                 }
 
                                 g1.ComputeDestructionGraph(0.5);
@@ -254,7 +254,7 @@ namespace drash {
     }
 
     SceneObject* Scene::CreateObject(const SceneObjectGeometry& _geometry,
-                                       const SceneObjectParams& _params) {
+                                     const SceneObjectParams& _params) {
         if (world.IsLocked()) {
             LOG_ERR("Scene::CreateObject(): world is locked now");
             return nullptr;
@@ -322,7 +322,7 @@ namespace drash {
     }
 
     Joint* Scene::CreateJoint(SceneObject* _obj1, SceneObject* _obj2,
-                                const Vec3f& _anchor) {
+                              const Vec3f& _anchor) {
         b2WeldJointDef jdef;
         jdef.Initialize(_obj1->body, _obj2->body,
                         Vec2ToB2Vec2(_anchor.AsVec2()));
@@ -334,10 +334,9 @@ namespace drash {
         return res;
     }
 
-    Joint* Scene::CreateJointDistance(SceneObject* _obj1,
-                                        SceneObject* _obj2,
-                                        const Vec3f& _anchor1,
-                                        const Vec3f& _anchor2, float _length) {
+    Joint* Scene::CreateJointDistance(SceneObject* _obj1, SceneObject* _obj2,
+                                      const Vec3f& _anchor1,
+                                      const Vec3f& _anchor2, float _length) {
         b2DistanceJointDef jdef;
         jdef.Initialize(_obj1->body, _obj2->body,
                         Vec2ToB2Vec2(_anchor1.AsVec2()),
@@ -352,8 +351,8 @@ namespace drash {
     }
 
     Joint* Scene::CreateJointRope(SceneObject* _obj1, SceneObject* _obj2,
-                                    const Vec3f& _anchor1,
-                                    const Vec3f& _anchor2, float _length) {
+                                  const Vec3f& _anchor1, const Vec3f& _anchor2,
+                                  float _length) {
         b2RopeJointDef jdef;
         jdef.maxLength = _length;
         jdef.localAnchorA = Vec2ToB2Vec2(_anchor1.AsVec2());
@@ -481,8 +480,7 @@ namespace drash {
         }
     }
 
-    void Scene::PreSolve(b2Contact* _contact,
-                          const b2Manifold* _old_manifold) {
+    void Scene::PreSolve(b2Contact* _contact, const b2Manifold* _old_manifold) {
         b2ContactListener::PreSolve(_contact, _old_manifold);
 
         /*
@@ -509,7 +507,7 @@ namespace drash {
     }
 
     void Scene::PostSolve(b2Contact* _contact,
-                           const b2ContactImpulse* _impulse) {
+                          const b2ContactImpulse* _impulse) {
         b2ContactListener::PostSolve(_contact, _impulse);
     }
 

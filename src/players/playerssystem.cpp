@@ -42,7 +42,7 @@ namespace drash {
     }
 
     Player* PlayersSystem::CreatePlayer(const SceneObjectGeometry& _g,
-                                          const PlayerParams& _p) {
+                                        const PlayerParams& _p) {
         Player* res = playersFactory.CreateObject();
 
         if (res == nullptr) {
@@ -77,7 +77,7 @@ namespace drash {
     }
 
     bool PlayersSystem::SendMessage(Player* _player,
-                                     const PlayerMessage& _message) {
+                                    const PlayerMessage& _message) {
         if (playersFactory.IsObject(_player) == false) {
             LOG_ERR("PlayersSystem::SendMessage(): Wrong player");
             return false;
@@ -88,8 +88,7 @@ namespace drash {
             if (_player->GetSceneObject()->GetLinearVelocity().Length() <
                 _player->velocityLimit) {
                 _player->GetSceneObject()->ApplyLinearImpulse(
-                    Vec2f(-1.0, 0),
-                    _player->GetSceneObject()->GetMassCenter());
+                    Vec2f(-1.0, 0), _player->GetSceneObject()->GetMassCenter());
             }
             break;
 

@@ -39,11 +39,11 @@ namespace drash {
             camera->GetPos().SetTarget({ 10, -10, 10 }, 10,
                                        AnimatorBehavior::Bounce);
             camera->SetOrtho(true);
-            
+
             camera->GetOrthoWidth() = 10;
             camera->GetOrthoHeight() =
                 10.0 / GetGreng().GetViewport().GetAspectRatio();
-            
+
             camera->GetOrthoWidth().SetTarget(2, 5, AnimatorBehavior::Bounce);
             camera->GetOrthoHeight().SetTarget(
                 2 / GetGreng().GetViewport().GetAspectRatio(), 5,

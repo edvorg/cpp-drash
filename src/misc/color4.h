@@ -72,7 +72,7 @@ namespace drash {
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
     Color4<T, DEF_VAL_FUNC>::Color4(const Color3<T, DEF_VAL_FUNC>& _rgb,
-                                      const T& _a)
+                                    const T& _a)
         : Color3<T, DEF_VAL_FUNC>(_rgb), a(_a) {}
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
@@ -85,13 +85,13 @@ namespace drash {
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
     Color4<T, DEF_VAL_FUNC>::Color4(const T& _r, const T& _g, const T& _b,
-                                      const T& _a)
+                                    const T& _a)
         : Color3<T, DEF_VAL_FUNC>(_r, _g, _b), a(_a) {}
 
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
     Color4<T, DEF_VAL_FUNC>&
     Color4<T, DEF_VAL_FUNC>::Set(const Color3<T, DEF_VAL_FUNC>& _rgb,
-                                  const T& _a) {
+                                 const T& _a) {
         this->r = _rgb.r;
         this->g = _rgb.g;
         this->b = _rgb.b;
@@ -102,7 +102,7 @@ namespace drash {
     template <class T, T (*DEF_VAL_FUNC)(unsigned int _comp_index)>
     Color4<T, DEF_VAL_FUNC>&
     Color4<T, DEF_VAL_FUNC>::Set(const T& _r, const T& _g, const T& _b,
-                                  const T& _a) {
+                                 const T& _a) {
         this->r = _r;
         this->g = _g;
         this->b = _b;

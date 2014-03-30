@@ -28,9 +28,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace drash {
 
     App::App(greng::Greng& greng)
-        : greng(greng), scene({}), playersSystem(scene),
-          geometryManager(scene), eventSystem(),
-          uISystem(GetGreng().GetRenderer()),
+        : greng(greng), scene({}), playersSystem(scene), geometryManager(scene),
+          eventSystem(), uISystem(GetGreng().GetRenderer()),
           levelManager(scene, geometryManager),
           debugRenderer(greng, scene, geometryManager) {}
 

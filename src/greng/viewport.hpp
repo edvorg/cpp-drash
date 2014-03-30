@@ -38,9 +38,7 @@ namespace greng {
         auto& GetRightTop() { return rightTop; }
         auto& GetRightTop() const { return rightTop; }
         auto GetSize() const { return rightTop - leftBottom; }
-        void SetSize(const drash::Vec2i& size) {
-            rightTop = leftBottom + size;
-        }
+        void SetSize(const drash::Vec2i& size) { rightTop = leftBottom + size; }
         auto GetAspectRatio() const {
             auto size = GetSize();
             return size.y ? static_cast<float>(size.x) / size.y : 1.0f;

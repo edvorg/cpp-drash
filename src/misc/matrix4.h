@@ -65,16 +65,15 @@ namespace drash {
     };
 
     Matrix4f& MatrixMultiply(const Matrix4f& _m1, const Matrix4f& _m2,
-                              Matrix4f& _result);
-    Vec4f& MatrixMultiply(const Matrix4f& _m, const Vec4f& _v,
-                           Vec4f& _result);
+                             Matrix4f& _result);
+    Vec4f& MatrixMultiply(const Matrix4f& _m, const Vec4f& _v, Vec4f& _result);
     Matrix4f& MatrixScale(Matrix4f& _m, const Vec3f _scale);
     Matrix4f& MatrixRotationX(Matrix4f& _m, float _angle);
     Matrix4f& MatrixRotationY(Matrix4f& _m, float _angle);
     Matrix4f& MatrixRotationZ(Matrix4f& _m, float _angle);
     Matrix4f& MatrixTranslation(Matrix4f& _m, const Vec3f& _translation);
     Matrix4f& Matrix4Perspective(Matrix4f& _m, float _fov, float _aspect,
-                                  float _znear, float _zfar);
+                                 float _znear, float _zfar);
 
 } // namespace drash
 

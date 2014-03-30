@@ -68,7 +68,7 @@ namespace drash {
                     GetPos().x + GetSize().x, GetPos().y + GetSize().y, p3);
                 GetUISystem()->UISpaceToScreenSpace(GetPos().x + GetSize().x,
                                                     GetPos().y, p4);
-                // FIXME 
+                // FIXME
                 // GetUISystem()->GetRenderer().DrawLine(p1, p2, 1, c);
                 // GetUISystem()->GetRenderer().DrawLine(p3, p2, 1, c);
                 // GetUISystem()->GetRenderer().DrawLine(p3, p4, 1, c);
@@ -91,7 +91,7 @@ namespace drash {
                 GetUISystem()->UISpaceToScreenSpace(
                     GetPos().x + l * GetPercent(), GetPos().y + GetSize().y,
                     p8);
-                // FIXME 
+                // FIXME
                 // GetUISystem()->GetRenderer().DrawLine(p5, p6, 1, c);
                 // GetUISystem()->GetRenderer().DrawLine(p7, p6, 1, c);
                 // GetUISystem()->GetRenderer().DrawLine(p7, p8, 1, c);

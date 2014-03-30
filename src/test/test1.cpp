@@ -140,15 +140,16 @@ namespace drash {
 
             if (vertices.size()) {
                 for (int i = 0; i < (int)vertices.size() - 1; i++) {
-                    GetGreng().GetRenderer().DrawLine(*uiCamera,
-                        vertices[i], vertices[i + 1], 1, Color4f(0, 1, 0, 1));
+                    GetGreng().GetRenderer().DrawLine(*uiCamera, vertices[i],
+                                                      vertices[i + 1], 1,
+                                                      Color4f(0, 1, 0, 1));
                 }
-                GetGreng().GetRenderer().DrawLine(*uiCamera,
-                    vertices[vertices.size() - 1], GetCursorPos(), 1,
+                GetGreng().GetRenderer().DrawLine(
+                    *uiCamera, vertices[vertices.size() - 1], GetCursorPos(), 1,
                     Color4f(0, 1, 0, 1), false);
-                GetGreng().GetRenderer().DrawLine(*uiCamera,
-                    vertices[0], GetCursorPos(), 1, Color4f(0, 1, 0, 1),
-                    false);
+                GetGreng().GetRenderer().DrawLine(*uiCamera, vertices[0],
+                                                  GetCursorPos(), 1,
+                                                  Color4f(0, 1, 0, 1), false);
             }
 
             if (currentFigure != nullptr && currentObject != nullptr) {
@@ -196,17 +197,15 @@ namespace drash {
                 } else {
                     Vec3f p1(splitFigureMin.AsVec2(), splitFigureCenterZ);
                     Vec3f p2(splitFigureMin.x, splitFigureMax.y,
-                              splitFigureCenterZ);
+                             splitFigureCenterZ);
                     Vec3f p3(splitFigureMax.AsVec2(), splitFigureCenterZ);
                     Vec3f p4(splitFigureMax.x, splitFigureMin.y,
-                              splitFigureCenterZ);
+                             splitFigureCenterZ);
 
                     GetGreng().GetRenderer().DrawTriangle(
-                        GetCamera(), p1, p2, p4, Color4f(1, 0, 0.5, 0.5),
-                        true);
+                        GetCamera(), p1, p2, p4, Color4f(1, 0, 0.5, 0.5), true);
                     GetGreng().GetRenderer().DrawTriangle(
-                        GetCamera(), p4, p2, p3, Color4f(1, 0, 0.5, 0.5),
-                        true);
+                        GetCamera(), p4, p2, p3, Color4f(1, 0, 0.5, 0.5), true);
                 }
             }
         }
@@ -254,8 +253,7 @@ namespace drash {
                             Vec3f new_pos;
                             camera->CastRay(GetCursorPos(), xz, new_pos);
 
-                            Vec2f* v =
-                                new Vec2f[currentFigure->EnumVertices()];
+                            Vec2f* v = new Vec2f[currentFigure->EnumVertices()];
                             for (unsigned int i = 0;
                                  i < currentFigure->EnumVertices(); i++) {
                                 v[i].x = currentFigure->GetVertices()[i].x +
@@ -275,8 +273,7 @@ namespace drash {
                             Vec3f new_pos;
                             camera->CastRay(GetCursorPos(), xy, new_pos);
 
-                            Vec2f* v =
-                                new Vec2f[currentFigure->EnumVertices()];
+                            Vec2f* v = new Vec2f[currentFigure->EnumVertices()];
                             for (unsigned int i = 0;
                                  i < currentFigure->EnumVertices(); i++) {
                                 v[i].x = currentFigure->GetVertices()[i].x;
@@ -448,8 +445,8 @@ namespace drash {
                 splitPlane.SetNormal(Vec3f(0, 1, 0));
                 splitPlane.SetPoint(
                     Vec3f(0.5f * (splitFigureMin.x + splitFigureMax.x),
-                           0.5f * (splitFigureMin.y + splitFigureMax.y),
-                           0.5f * (splitFigureMin.z + splitFigureMax.z)));
+                          0.5f * (splitFigureMin.y + splitFigureMax.y),
+                          0.5f * (splitFigureMin.z + splitFigureMax.z)));
 
                 splitFigureCenterZ =
                     0.5f * (splitFigureMin.z + splitFigureMax.z);
@@ -459,7 +456,7 @@ namespace drash {
         }
 
         void Test1::DetectNewSplitPoint(const Vec2f& _p1, const Vec2f& _p2,
-                                         unsigned int _index, const Ray& _r) {
+                                        unsigned int _index, const Ray& _r) {
             float centerz = currentObject->GetPosZ() + currentFigure->GetZ();
 
             Plane p;
@@ -631,9 +628,9 @@ namespace drash {
         void Test1::CamViewProcessors() {
             GetEventSystem().SetProcessor(
                 "MB", AppEventProcessor([this]() {
-                                             camRotFirstClick = GetCursorPos();
-                                         },
-                                         [this]() {
+                                            camRotFirstClick = GetCursorPos();
+                                        },
+                                        [this]() {
                           Vec2f new_pos = GetCursorPos();
 
                           Vec2f rot = camera->GetRotation().Get();

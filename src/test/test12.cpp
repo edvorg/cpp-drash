@@ -45,38 +45,32 @@ namespace drash {
             camera->SetOrtho(true);
             camera->GetOrthoWidth() = 1;
             camera->GetOrthoHeight() = 1;
-            texture =
-                GetGreng().GetTextureManager().CreateTextureFromFile(
-                    "assets/space/diffuse.png");
+            texture = GetGreng().GetTextureManager().CreateTextureFromFile(
+                "assets/space/diffuse.png");
             renderTarget = GetGreng().GetTextureManager().CreateTexture(
                 GetGreng().GetViewport().GetSize());
-            frameBuffer =
-                GetGreng().GetFrameBufferManager().CreateFrameBuffer(
-                    *renderTarget);
+            frameBuffer = GetGreng().GetFrameBufferManager().CreateFrameBuffer(
+                *renderTarget);
 
             quad = GetGreng().GetMeshManager().CreateMeshQuad();
             vertexShader1 =
                 GetGreng().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader8.120.vs");
             fragmentShader1 =
-                GetGreng()
-                    .GetFragmentShaderManager()
-                    .CreateShaderFromFile("shaders/shader8.120.fs");
-            shaderProgram1 =
-                GetGreng().GetShaderProgramManager().CreateProgram(
-                    vertexShader1, fragmentShader1);
+                GetGreng().GetFragmentShaderManager().CreateShaderFromFile(
+                    "shaders/shader8.120.fs");
+            shaderProgram1 = GetGreng().GetShaderProgramManager().CreateProgram(
+                vertexShader1, fragmentShader1);
 
             quad = GetGreng().GetMeshManager().CreateMeshQuad();
             vertexShader2 =
                 GetGreng().GetVertexShaderManager().CreateShaderFromFile(
                     "shaders/shader9.120.vs");
             fragmentShader2 =
-                GetGreng()
-                    .GetFragmentShaderManager()
-                    .CreateShaderFromFile("shaders/shader9.120.fs");
-            shaderProgram2 =
-                GetGreng().GetShaderProgramManager().CreateProgram(
-                    vertexShader2, fragmentShader2);
+                GetGreng().GetFragmentShaderManager().CreateShaderFromFile(
+                    "shaders/shader9.120.fs");
+            shaderProgram2 = GetGreng().GetShaderProgramManager().CreateProgram(
+                vertexShader2, fragmentShader2);
 
             GetDebugRenderer().SetCamera(camera);
             GetDebugRenderer().SetLight(&light);

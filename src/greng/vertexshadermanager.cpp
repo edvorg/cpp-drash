@@ -118,8 +118,7 @@ namespace greng {
         return res;
     }
 
-    VertexShader*
-    VertexShaderManager::CreateShaderFromFile(const char* _path) {
+    VertexShader* VertexShaderManager::CreateShaderFromFile(const char* _path) {
         if (_path == nullptr) {
             return nullptr;
         }

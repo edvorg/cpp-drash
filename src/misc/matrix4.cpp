@@ -72,7 +72,7 @@ namespace drash {
     }
 
     Matrix4f& MatrixMultiply(const Matrix4f& _m1, const Matrix4f& _m2,
-                              Matrix4f& _result) {
+                             Matrix4f& _result) {
         _result.data[_result.i00] = _m1.data[_m1.i00] * _m2.data[_m2.i00] +
                                     _m1.data[_m1.i01] * _m2.data[_m2.i10] +
                                     _m1.data[_m1.i02] * _m2.data[_m2.i20] +
@@ -156,8 +156,7 @@ namespace drash {
         return _result;
     }
 
-    Vec4f& MatrixMultiply(const Matrix4f& _m, const Vec4f& _v,
-                           Vec4f& _result) {
+    Vec4f& MatrixMultiply(const Matrix4f& _m, const Vec4f& _v, Vec4f& _result) {
         _result.x = _v.x * _m.data[_m.i00] + _v.y * _m.data[_m.i01] +
                     _v.z * _m.data[_m.i02] + _v.w * _m.data[_m.i03];
 
@@ -229,7 +228,7 @@ namespace drash {
     }
 
     Matrix4f& Matrix4Perspective(Matrix4f& _m, float _fov, float _aspect,
-                                  float _znear, float _zfar) {
+                                 float _znear, float _zfar) {
         _m.Identity();
 
         float f = 1.0f / tan(_fov / 2.0f);

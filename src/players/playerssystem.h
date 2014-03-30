@@ -52,7 +52,7 @@ namespace drash {
         void Step(double);
 
         Player* CreatePlayer(const SceneObjectGeometry& _g,
-                              const PlayerParams& _p);
+                             const PlayerParams& _p);
         bool DestroyPlayer(Player* _player);
 
         inline Player* const* GetPlayers();

@@ -60,7 +60,7 @@ namespace drash {
         inline void SetTexCoordsScale(float _scale);
 
         DebugRenderer(greng::Greng& _greng, Scene& _scene,
-                       GeometryManager& _geometry_manager);
+                      GeometryManager& _geometry_manager);
 
         void Render() const;
 
@@ -71,14 +71,14 @@ namespace drash {
         /// coordinates
         /// returns nearest one
         Figure* FindFigure(const greng::Camera& _camera,
-                            const Vec2f& _pos) const;
+                           const Vec2f& _pos) const;
         SceneObject* FindObject(const greng::Camera& _camera,
-                                 const Vec2f& _pos) const;
+                                const Vec2f& _pos) const;
 
-        LevelObjectDesc* FindObject(
-            const greng::Camera& _camera, const Vec2f& _pos,
-            std::function<LevelObjectDesc*(unsigned int)> _object_getter,
-            unsigned int _objects_count);
+        LevelObjectDesc*
+        FindObject(const greng::Camera& _camera, const Vec2f& _pos,
+                   std::function<LevelObjectDesc*(unsigned int)> _object_getter,
+                   unsigned int _objects_count);
 
     protected:
     private:
@@ -86,8 +86,8 @@ namespace drash {
         bool InitShaders();
 
         greng::Mesh* CreateMesh(const Vec2f* _vertices,
-                                 unsigned int _vertices_count, float _z,
-                                 float _depth) const;
+                                unsigned int _vertices_count, float _z,
+                                float _depth) const;
 
         greng::Greng& greng;
         Scene& scene;
@@ -115,9 +115,7 @@ namespace drash {
         light = _light;
     }
 
-    inline greng::PointLight* DebugRenderer::GetLight() const {
-        return light;
-    }
+    inline greng::PointLight* DebugRenderer::GetLight() const { return light; }
 
     inline void DebugRenderer::SetSpotLight(greng::SpotLight* _light) {
         spotLight1 = _light;

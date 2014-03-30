@@ -107,10 +107,8 @@ namespace drash {
             g2->figures[0].vertices.push_back(Vec2f(1, 1));
             g2->figures[0].vertices.push_back(Vec2f(-1, 1));
 
-            LevelObjectDesc* p1 =
-                level1->AddObject("object1_geometry", "obj1");
-            LevelObjectDesc* p2 =
-                level1->AddObject("object2_geometry", "obj2");
+            LevelObjectDesc* p1 = level1->AddObject("object1_geometry", "obj1");
+            LevelObjectDesc* p2 = level1->AddObject("object2_geometry", "obj2");
 
             if (p1 == nullptr || p2 == nullptr) {
                 return false;
@@ -118,10 +116,8 @@ namespace drash {
 
             p2->params.pos.Set(3, 0, 0);
 
-            LevelObjectDesc* p3 =
-                level2->AddObject("object1_geometry", "obj1");
-            LevelObjectDesc* p4 =
-                level2->AddObject("object2_geometry", "obj2");
+            LevelObjectDesc* p3 = level2->AddObject("object1_geometry", "obj1");
+            LevelObjectDesc* p4 = level2->AddObject("object2_geometry", "obj2");
 
             if (p3 == nullptr || p4 == nullptr) {
                 return false;

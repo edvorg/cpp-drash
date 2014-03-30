@@ -55,10 +55,10 @@ namespace drash {
             App::Render();
 
             Vec3f p1(lamp1Object->GetWorldPoint(Vec2f(0, 0.5)),
-                      lamp1Object->GetPosZ());
-            GetGreng().GetRenderer().DrawLine(
-                *camera, p1, wallTopObject->GetPos(), 2, Color4f(0, 0, 0, 1),
-                true);
+                     lamp1Object->GetPosZ());
+            GetGreng().GetRenderer().DrawLine(*camera, p1,
+                                              wallTopObject->GetPos(), 2,
+                                              Color4f(0, 0, 0, 1), true);
         }
 
         bool Test10::InitCamera() {
@@ -188,7 +188,7 @@ namespace drash {
         bool Test10::InitProcessors() {
             GetEventSystem().SetProcessor(
                 "C-q", AppEventProcessor([this]() { this->Quit(); }, []() {},
-                                          []() {}));
+                                         []() {}));
 
             return true;
         }

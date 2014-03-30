@@ -39,8 +39,7 @@ namespace drash {
     public:
         typedef std::map<std::string, SceneObjectGeometry*>
         SceneObjectTemplatesT;
-        typedef std::pair<std::string, SceneObjectGeometry*>
-        MapSceneObjectItem;
+        typedef std::pair<std::string, SceneObjectGeometry*> MapSceneObjectItem;
 
         GeometryManager(Scene& _scene);
         ~GeometryManager();
@@ -54,7 +53,7 @@ namespace drash {
         void DestroyGeometry(SceneObjectGeometry* _t);
         void DestroyGeometry(const std::string& _name);
         SceneObject* CreateSceneObject(const std::string& _name,
-                                        const SceneObjectParams& _params);
+                                       const SceneObjectParams& _params);
 
         SceneObjectGeometry* GetGeometry(const std::string& _name);
         SceneObjectTemplatesT& GetGeometries();

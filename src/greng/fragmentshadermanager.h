@@ -38,8 +38,7 @@ namespace greng {
         FragmentShaderManager();
         FragmentShaderManager(const FragmentShaderManager&) = delete;
         FragmentShaderManager(FragmentShaderManager&&) = delete;
-        FragmentShaderManager& operator=(const FragmentShaderManager&) =
-            delete;
+        FragmentShaderManager& operator=(const FragmentShaderManager&) = delete;
         FragmentShaderManager& operator=(FragmentShaderManager&&) = delete;
         ~FragmentShaderManager();
 

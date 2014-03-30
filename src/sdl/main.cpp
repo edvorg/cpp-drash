@@ -118,7 +118,7 @@ int main(int _argc, char** _argv) {
     if (fail == false && app != nullptr) {
         glViewport(0, 0, gWindowWidth, gWindowHeight);
         app->GetGreng().GetCameraManager().SetAspectRatio(gWindowWidth /
-                                                                 gWindowHeight);
+                                                          gWindowHeight);
         greng.GetViewport().SetSize({ gWindowWidth, gWindowHeight });
         app->GetUISystem().SetAspectRatio(gWindowWidth / gWindowHeight);
         app->GetUISystem().SetWidth(gWindowWidth);

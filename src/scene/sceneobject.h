@@ -94,8 +94,7 @@ namespace drash {
         inline const Vec3f& GetPos() const;
         inline Animator<float>& GetAngle();
 
-        friend Logger& operator<<(Logger& _logger,
-                                   const SceneObject& _object);
+        friend Logger& operator<<(Logger& _logger, const SceneObject& _object);
 
         void DumpGeometry(SceneObjectGeometry* _geometry) const;
 
@@ -146,8 +145,7 @@ namespace drash {
         std::vector<std::function<void(Figure*)> > figureDestroyHandlers;
         std::vector<std::function<void(Figure*, Figure*)> >
         contactBeginHandlers;
-        std::vector<std::function<void(Figure*, Figure*)> >
-        contactEndHandlers;
+        std::vector<std::function<void(Figure*, Figure*)> > contactEndHandlers;
     };
 
     inline Figure* const* SceneObject::GetFigures() const { return figures; }

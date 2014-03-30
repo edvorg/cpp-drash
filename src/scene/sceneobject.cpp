@@ -161,10 +161,8 @@ namespace drash {
         return body->GetType() == b2_dynamicBody ? true : false;
     }
 
-    void SceneObject::ApplyLinearImpulse(const Vec2f& _dir,
-                                          const Vec2f& _pos) {
-        body->ApplyLinearImpulse(Vec2ToB2Vec2(_dir), Vec2ToB2Vec2(_pos),
-                                 true);
+    void SceneObject::ApplyLinearImpulse(const Vec2f& _dir, const Vec2f& _pos) {
+        body->ApplyLinearImpulse(Vec2ToB2Vec2(_dir), Vec2ToB2Vec2(_pos), true);
     }
 
     void SceneObject::SetLinearVelocity(const Vec2f& _vel) {

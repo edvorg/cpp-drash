@@ -96,7 +96,7 @@ namespace drash {
                 Vec3f p1(i * gridSegmentSize, 0, j * gridSegmentSize);
                 Vec3f p2(i * gridSegmentSize, 0, (j - 1) * gridSegmentSize);
                 Vec3f p3((i - 1) * gridSegmentSize, 0,
-                          (j - 1) * gridSegmentSize);
+                         (j - 1) * gridSegmentSize);
                 Vec3f p4((i - 1) * gridSegmentSize, 0, j * gridSegmentSize);
 
                 p1.x -= grid_size_half.x;
@@ -108,14 +108,14 @@ namespace drash {
                 p4.x -= grid_size_half.x;
                 p4.z -= grid_size_half.y;
 
-                GetGreng().GetRenderer().DrawLine(camera, p1, p2, 1,
-                                                         gridColor, true);
-                GetGreng().GetRenderer().DrawLine(camera, p2, p3, 1,
-                                                         gridColor, true);
-                GetGreng().GetRenderer().DrawLine(camera, p3, p4, 1,
-                                                         gridColor, true);
-                GetGreng().GetRenderer().DrawLine(camera, p4, p1, 1,
-                                                         gridColor, true);
+                GetGreng().GetRenderer().DrawLine(camera, p1, p2, 1, gridColor,
+                                                  true);
+                GetGreng().GetRenderer().DrawLine(camera, p2, p3, 1, gridColor,
+                                                  true);
+                GetGreng().GetRenderer().DrawLine(camera, p3, p4, 1, gridColor,
+                                                  true);
+                GetGreng().GetRenderer().DrawLine(camera, p4, p1, 1, gridColor,
+                                                  true);
             }
         }
 
@@ -133,22 +133,22 @@ namespace drash {
 
         if (vertexs.size() != 0 && state == BuildState) {
             for (unsigned int i = 1; i < vertexs.size(); i++) {
-                GetGreng().GetRenderer().DrawLine(
-                    vertexs[i - 1], vertexs[i], 1, Color4f(0, 1, 0, 1));
+                GetGreng().GetRenderer().DrawLine(vertexs[i - 1], vertexs[i], 1,
+                                                  Color4f(0, 1, 0, 1));
             }
-            GetGreng().GetRenderer().DrawLine(
-                vertexs[vertexs.size() - 1], GetCursorPos(), 1,
-                Color4f(0, 1, 0, 1));
-            GetGreng().GetRenderer().DrawLine(vertexs[0], GetCursorPos(),
-                                                     1, Color4f(0, 1, 0, 1));
+            GetGreng().GetRenderer().DrawLine(vertexs[vertexs.size() - 1],
+                                              GetCursorPos(), 1,
+                                              Color4f(0, 1, 0, 1));
+            GetGreng().GetRenderer().DrawLine(vertexs[0], GetCursorPos(), 1,
+                                              Color4f(0, 1, 0, 1));
         }
         if (state == StretchState && currentObject != nullptr) {
             for (unsigned int i = 0; i < currentObject->EnumFigures(); i++) {
                 Figure* figure = currentObject->GetFigures()[i];
                 for (unsigned int j = 0; j < figure->EnumVertices(); j++) {
                     Vec3f position(figure->GetVertices()[j],
-                                    currentObject->GetPosZ() + figure->GetZ() +
-                                        figure->GetDepth() * 0.5f);
+                                   currentObject->GetPosZ() + figure->GetZ() +
+                                       figure->GetDepth() * 0.5f);
 
                     Color4f color(1, 0.5, 0, 1);
 
@@ -164,8 +164,8 @@ namespace drash {
                         color.Col3().Set(255, 0, 0);
                     }
 
-                    GetGreng().GetRenderer().DrawPoint(camera, position,
-                                                              10.0f, color);
+                    GetGreng().GetRenderer().DrawPoint(camera, position, 10.0f,
+                                                       color);
 
                     color.Col3().Set(255, 155, 0);
 
@@ -181,8 +181,8 @@ namespace drash {
                         color.Col3().Set(255, 0, 0);
                     }
 
-                    GetGreng().GetRenderer().DrawPoint(camera, position,
-                                                              10.0f, color);
+                    GetGreng().GetRenderer().DrawPoint(camera, position, 10.0f,
+                                                       color);
                 }
             }
         }
@@ -397,7 +397,7 @@ namespace drash {
         GetEventSystem().SetProcessor(
             "MB",
             AppEventProcessor([this]() { camRotFirstClick = GetCursorPos(); },
-                               [this]() {
+                              [this]() {
                 Vec2f new_pos = GetCursorPos();
 
                 Vec2f rot = camera->GetRotation().Get();
@@ -411,11 +411,11 @@ namespace drash {
 
         GetEventSystem().SetProcessor(
             "w", AppEventProcessor([this]() {},
-                                    [this]() {
-                                        camera->Forward(MOVING_SPEED *
-                                                        timer.GetDeltaTime());
-                                    },
-                                    [this] {}));
+                                   [this]() {
+                                       camera->Forward(MOVING_SPEED *
+                                                       timer.GetDeltaTime());
+                                   },
+                                   [this] {}));
 
         GetEventSystem().SetProcessor(
             "a", AppEventProcessor([this]() {}, [this]() {
@@ -440,28 +440,28 @@ namespace drash {
                                              }));
 
         GetEventSystem().SetProcessor(
-            "DRDP",
-            AppEventProcessor([this]() {
-                                   if (currentObject == nullptr) {
-                                       return;
-                                   }
-                                   //        qDebug() << "Proccess enter";
-                                   dragTemplate =
-                                       GetGeometryManager().GetGeometry(
-                                           getSelectedTemplateHandler());
-                                   if (dragTemplate != nullptr) {
-                                       dragNow = true;
-                                   } else {
-                                       dragNow = false;
-                                   }
-                               },
-                               [this]() {}, [this]() {
+            "DRDP", AppEventProcessor([this]() {
+                                          if (currentObject == nullptr) {
+                                              return;
+                                          }
+                                          //        qDebug() << "Proccess
+                                          // enter";
+                                          dragTemplate =
+                                              GetGeometryManager().GetGeometry(
+                                                  getSelectedTemplateHandler());
+                                          if (dragTemplate != nullptr) {
+                                              dragNow = true;
+                                          } else {
+                                              dragNow = false;
+                                          }
+                                      },
+                                      [this]() {}, [this]() {
 
-                if (dragNow == true) {
-                    ApplyDrop();
-                    dragNow = false;
-                }
-            }));
+                        if (dragNow == true) {
+                            ApplyDrop();
+                            dragNow = false;
+                        }
+                    }));
     }
 
     bool ObjectEditorApp::BuildFigure(const std::string& _objectName) {
@@ -671,8 +671,8 @@ namespace drash {
 
             for (unsigned int j = 0; j < figure->EnumVertices(); j++) {
                 Vec3f position(figure->GetVertices()[j],
-                                currentObject->GetPosZ() + figure->GetZ() +
-                                    figure->GetDepth() * 0.5f);
+                               currentObject->GetPosZ() + figure->GetZ() +
+                                   figure->GetDepth() * 0.5f);
 
                 Plane plane;
                 plane.SetNormal(Vec3f(0, 0, 1));
@@ -875,8 +875,8 @@ namespace drash {
 
                 splitPlane.SetNormal(Vec3f(0, 1, 0));
                 splitPlane.SetPoint(Vec3f(0.5f * (splitMin.x + splitMax.x),
-                                           0.5f * (splitMin.y + splitMax.y),
-                                           0.5f * (splitMin.z + splitMax.z)));
+                                          0.5f * (splitMin.y + splitMax.y),
+                                          0.5f * (splitMin.z + splitMax.z)));
 
                 ComputeSplitPlanePoints();
                 splitFigureContext.figure = selectedFigure;
@@ -935,8 +935,8 @@ namespace drash {
                     splitPlane.SetNormal(Vec3f(0, 1, 0));
                     splitPlane.SetPoint(
                         Vec3f(0.5f * (splitMin.x + splitMax.x),
-                               0.5f * (splitMin.y + splitMax.y),
-                               0.5f * (splitMin.z + splitMax.z)));
+                              0.5f * (splitMin.y + splitMax.y),
+                              0.5f * (splitMin.z + splitMax.z)));
 
                     ComputeSplitPlanePoints();
                     for (SplitContext& context : objectContexts) {
@@ -957,10 +957,10 @@ namespace drash {
     }
 
     void ObjectEditorApp::DetectNewSplitPoint(const Vec2f& _p1,
-                                               const Vec2f& _p2,
-                                               unsigned int _index,
-                                               const Ray& _r,
-                                               SplitContext& _context) const {
+                                              const Vec2f& _p2,
+                                              unsigned int _index,
+                                              const Ray& _r,
+                                              SplitContext& _context) const {
         if (currentObject == nullptr) {
             return;
         }
@@ -1135,8 +1135,8 @@ namespace drash {
                     p2.z = currentObject->GetPosZ() + context.figure->GetZ() +
                            context.figure->GetDepth() * 0.5f;
 
-                    GetGreng().GetRenderer().DrawLine(
-                        GetCamera(), p1, p2, 2, Color4f(1, 1, 1), false);
+                    GetGreng().GetRenderer().DrawLine(GetCamera(), p1, p2, 2,
+                                                      Color4f(1, 1, 1), false);
                 };
 
                 draw_split(context.splitIntersection1);

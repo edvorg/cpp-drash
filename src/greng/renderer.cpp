@@ -202,7 +202,7 @@ namespace greng {
                 glGetUniformLocation(_program->programId, "gLight1Position");
             if (l1ploc != -1) {
                 glUniform3fv(l1ploc, 1, reinterpret_cast<const GLfloat*>(
-                                 &_light->position));
+                                            &_light->position));
             } else {
                 LOG_ERR("Renderer::RenderMesh(): Unable to find "
                         "gLight1Position attribute");
@@ -214,7 +214,7 @@ namespace greng {
                 glGetUniformLocation(_program->programId, "gLight1Position");
             if (sl1ploc != -1) {
                 glUniform3fv(sl1ploc, 1, reinterpret_cast<const GLfloat*>(
-                                 &_spot_light->position));
+                                             &_spot_light->position));
             } else {
                 LOG_ERR("Renderer::RenderMesh(): Unable to find "
                         "gLight1Position attribute");
@@ -224,7 +224,7 @@ namespace greng {
                 glGetUniformLocation(_program->programId, "gLight1Direction");
             if (sl1dloc != -1) {
                 glUniform3fv(sl1dloc, 1, reinterpret_cast<const GLfloat*>(
-                                 &_spot_light->direction));
+                                             &_spot_light->direction));
             } else {
                 LOG_ERR("Renderer::RenderMesh(): Unable to find "
                         "gLight1Direction attribute");
@@ -232,10 +232,10 @@ namespace greng {
         }
 
         glDrawElements(GL_TRIANGLES, _mesh->materialOffsets[_submesh + 1] -
-                       _mesh->materialOffsets[_submesh],
+                                         _mesh->materialOffsets[_submesh],
                        GL_UNSIGNED_INT, reinterpret_cast<const GLvoid*>(
-                           sizeof(unsigned int) *
-                           _mesh->materialOffsets[_submesh]));
+                                            sizeof(unsigned int) *
+                                            _mesh->materialOffsets[_submesh]));
 
         glDisableVertexAttribArray(tangent_loc);
         glDisableVertexAttribArray(binormal_loc);
@@ -313,8 +313,8 @@ namespace greng {
     }
 
     void Renderer::DrawLine(const Camera& _camera, const Vec2f& _p1,
-                            const Vec2f& _p2, float _width,
-                            const Color4f& _col, bool _depth_test) const {
+                            const Vec2f& _p2, float _width, const Color4f& _col,
+                            bool _depth_test) const {
         if (_depth_test == true) {
             glEnable(GL_DEPTH_TEST);
         } else {
@@ -339,8 +339,8 @@ namespace greng {
     }
 
     void Renderer::DrawLine(const Camera& _camera, const Vec3f& _p1,
-                            const Vec3f& _p2, float _width,
-                            const Color4f& _col, bool _depth_test) const {
+                            const Vec3f& _p2, float _width, const Color4f& _col,
+                            bool _depth_test) const {
         if (_depth_test == true) {
             glEnable(GL_DEPTH_TEST);
         } else {
@@ -766,7 +766,7 @@ namespace greng {
         if (corners > 1 && vertices && indices) {
             glMatrixMode(GL_PROJECTION);
             glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
-        
+
             glMatrixMode(GL_MODELVIEW);
             glLoadMatrixf(_camera.GetViewMatrixTransposed().data);
             glTranslatef(_pos.x, _pos.y, 0);

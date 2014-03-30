@@ -27,10 +27,9 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 namespace greng {
 
     Greng::Greng()
-        : viewport(), renderer(viewport), cameraManager(),
-          meshManager(), textureManager(), frameBufferManager(),
-          vertexShaderManager(), fragmentShaderManager(),
-          shaderProgramManager() {}
+        : viewport(), renderer(viewport), cameraManager(), meshManager(),
+          textureManager(), frameBufferManager(), vertexShaderManager(),
+          fragmentShaderManager(), shaderProgramManager() {}
 
     void Greng::Step(double _dt) { cameraManager.Step(_dt); }
 

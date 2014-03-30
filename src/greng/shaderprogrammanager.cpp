@@ -60,7 +60,7 @@ namespace greng {
     }
 
     ShaderProgram* ShaderProgramManager::CreateProgram(VertexShader* _vs,
-                                                         FragmentShader* _fs) {
+                                                       FragmentShader* _fs) {
         if (_vs == nullptr || _fs == nullptr) {
             return nullptr;
         }

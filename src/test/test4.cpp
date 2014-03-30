@@ -70,16 +70,15 @@ namespace drash {
             CameraParams params;
             params.pos.Set(10, 10, 10.0f);
             params.rotation.Set(-M_PI / 4, M_PI / 4, 0);
-            Camera* camera =
-                GetGreng().GetCameraManager().CreateCamera(params);
+            Camera* camera = GetGreng().GetCameraManager().CreateCamera(params);
 
             point.SetCamera(camera);
             point.SetCenter(testPoint);
 
             GetEventSystem().SetProcessor(
                 "LB", AppEventProcessor([this]() { point.ClickBegin(); },
-                                         [this]() { point.ClickPressing(); },
-                                         [this]() { point.ClickEnd(); }));
+                                        [this]() { point.ClickPressing(); },
+                                        [this]() { point.ClickEnd(); }));
 
             GetDebugRenderer().SetCamera(camera);
         }

@@ -35,8 +35,8 @@ namespace drash {
 
         AppEventProcessor();
         AppEventProcessor(const FuncT& _begin,
-                           const FuncT& _processing = []() {},
-                           const FuncT& _end = []() {});
+                          const FuncT& _processing = []() {},
+                          const FuncT& _end = []() {});
         AppEventProcessor(const AppEventProcessor& _src);
 
         inline void Begin();

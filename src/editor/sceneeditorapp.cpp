@@ -98,9 +98,7 @@ namespace drash {
         }
     }
 
-    void SceneEditorApp::UpdateTemplateSystem() {
-        GetGeometryManager().Load();
-    }
+    void SceneEditorApp::UpdateTemplateSystem() { GetGeometryManager().Load(); }
 
     bool SceneEditorApp::LoadLevel(const std::string& _filename) {
         if (currentLevel != nullptr) {
@@ -169,7 +167,7 @@ namespace drash {
     }
 
     void SceneEditorApp::AddObject(const std::string& _name,
-                                    const Vec3f& _pos) {
+                                   const Vec3f& _pos) {
         if (currentLevel == nullptr) {
             LOG_WARN("Not set current level");
             return;
@@ -213,23 +211,23 @@ namespace drash {
 
         GetEventSystem().SetProcessor(
             "LB", AppEventProcessor([this]() {
-                                         if (playLevel == true) {
-                                             return;
-                                         }
-                                         if (selectedObject != nullptr) {
-                                             moveablePoint.ClickBegin();
-                                             rotationablePoint.RotateBegin();
-                                         }
-                                     },
-                                     [this]() {
-                                         if (playLevel == true) {
-                                             return;
-                                         }
-                                         if (selectedObject != nullptr) {
-                                             moveablePoint.ClickPressing();
-                                         }
-                                     },
-                                     [this]() {
+                                        if (playLevel == true) {
+                                            return;
+                                        }
+                                        if (selectedObject != nullptr) {
+                                            moveablePoint.ClickBegin();
+                                            rotationablePoint.RotateBegin();
+                                        }
+                                    },
+                                    [this]() {
+                                        if (playLevel == true) {
+                                            return;
+                                        }
+                                        if (selectedObject != nullptr) {
+                                            moveablePoint.ClickPressing();
+                                        }
+                                    },
+                                    [this]() {
                       if (playLevel == true) {
                           return;
                       }
@@ -257,7 +255,7 @@ namespace drash {
         GetEventSystem().SetProcessor(
             "MB",
             AppEventProcessor([this]() { camRotFirstClick = GetCursorPos(); },
-                               [this]() {
+                              [this]() {
                 Vec2f new_pos = GetCursorPos();
 
                 Vec2f rot = camera->GetRotation().Get();
@@ -271,11 +269,11 @@ namespace drash {
 
         GetEventSystem().SetProcessor(
             "w", AppEventProcessor([this]() {},
-                                    [this]() {
-                                        camera->Forward(MOVING_SPEED *
-                                                        timer.GetDeltaTime());
-                                    },
-                                    [this] {}));
+                                   [this]() {
+                                       camera->Forward(MOVING_SPEED *
+                                                       timer.GetDeltaTime());
+                                   },
+                                   [this] {}));
 
         GetEventSystem().SetProcessor(
             "a", AppEventProcessor([this]() {}, [this]() {
@@ -301,14 +299,14 @@ namespace drash {
 
         GetEventSystem().SetProcessor(
             "DRDP", AppEventProcessor([this]() {
-                                           if (currentLevel != nullptr) {
-                                               // qDebug() << "Proccess enter";
-                                               dragTemplateName =
-                                                   getSelectedTemplateHandler();
-                                               dragNow = true;
-                                           }
-                                       },
-                                       [this]() {}, [this]() {
+                                          if (currentLevel != nullptr) {
+                                              // qDebug() << "Proccess enter";
+                                              dragTemplateName =
+                                                  getSelectedTemplateHandler();
+                                              dragNow = true;
+                                          }
+                                      },
+                                      [this]() {}, [this]() {
 
                         if (dragNow == true) {
                             Plane plane;
@@ -445,7 +443,7 @@ namespace drash {
     }
 
     void SceneEditorApp::LookObject(const std::string& _geometryname,
-                                     const std::string& _objectname) {
+                                    const std::string& _objectname) {
         if (currentLevel != nullptr) {
             for (unsigned int i = 0; i < currentLevel->EnumObjects(); i++) {
                 if (currentLevel->GetObjects()[i]->levelObjectName ==

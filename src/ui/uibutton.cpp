@@ -51,7 +51,7 @@ namespace drash {
 
             SetDrawHandler([this]() {
                 Color4f c(pressed ? 0 : time, pressed ? 0.0f : 1.0f - time,
-                           pressed ? 1 : 0, 1);
+                          pressed ? 1 : 0, 1);
                 Vec2f p1;
                 Vec2f p2;
                 Vec2f p3;

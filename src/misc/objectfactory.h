@@ -67,7 +67,7 @@ namespace drash {
 
     template <class T>
     ObjectFactory<T>::ObjectFactory(unsigned int _size,
-                                      const char* _product_name)
+                                    const char* _product_name)
         : objectsCountLimit(_size), productName(_product_name) {
         if (objectsCountLimit == 0) {
             LOG_ERR("ObjectFactory<"
@@ -85,9 +85,9 @@ namespace drash {
     template <class T> ObjectFactory<T>::~ObjectFactory() {
         if (objectsCount != 0) {
             LOG_WARN("ObjectFactory<" << productName.c_str()
-                                       << ">::~ObjectFactory(): Potential "
-                                          "memory leak. You mush remove "
-                                          "objects manually");
+                                      << ">::~ObjectFactory(): Potential "
+                                         "memory leak. You mush remove "
+                                         "objects manually");
 
             for (unsigned int i = 0; i < objectsCount; i++) {
                 DestroyObject(objects[i]);
@@ -116,9 +116,9 @@ namespace drash {
     template <class T> bool ObjectFactory<T>::DestroyObjectSafe(T* _obj) {
         if (IsObject(_obj) == false) {
             LOG_ERR("ObjectFactory<" << productName.c_str()
-                                      << ">::DestroyObject(): Something wrong "
-                                         "with objects creation logic. "
-                                         "Skipping");
+                                     << ">::DestroyObject(): Something wrong "
+                                        "with objects creation logic. "
+                                        "Skipping");
             return false;
         }
 

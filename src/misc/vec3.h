@@ -79,13 +79,13 @@ namespace drash {
 
     template <typename T, const int DEF_VAL>
     Vec3<T, DEF_VAL> operator+(const Vec3<T, DEF_VAL>& _v1,
-                                const Vec3<T, DEF_VAL>& _v2) {
+                               const Vec3<T, DEF_VAL>& _v2) {
         return Vec3<T, DEF_VAL>(_v1.x + _v2.x, _v1.y + _v2.y, _v1.z + _v2.z);
     }
 
     template <typename T, const int DEF_VAL>
     Vec3<T, DEF_VAL> operator-(const Vec3<T, DEF_VAL>& _v1,
-                                const Vec3<T, DEF_VAL>& _v2) {
+                               const Vec3<T, DEF_VAL>& _v2) {
         return Vec3<T, DEF_VAL>(_v1.x - _v2.x, _v1.y - _v2.y, _v1.z - _v2.z);
     }
 
@@ -97,8 +97,8 @@ namespace drash {
 
     template <typename T, const int DEF_VAL>
     Vec3<T, DEF_VAL>& Vec3Cross(const Vec3<T, DEF_VAL>& _v1,
-                                 const Vec3<T, DEF_VAL>& _v2,
-                                 Vec3<T, DEF_VAL>& _result) {
+                                const Vec3<T, DEF_VAL>& _v2,
+                                Vec3<T, DEF_VAL>& _result) {
         _result.x = _v1.y * _v2.z - _v1.z * _v2.y;
         _result.y = _v1.z * _v2.x - _v1.x * _v2.z;
         _result.z = _v1.x * _v2.y - _v1.y * _v2.x;
@@ -126,7 +126,7 @@ namespace drash {
 
     template <typename T, const int DEF_VAL>
     Vec3<T, DEF_VAL>& Vec3<T, DEF_VAL>::Set(const Vec2<T, DEF_VAL>& _xy,
-                                              const T& _z) {
+                                            const T& _z) {
         this->x = _xy.x;
         this->y = _xy.y;
         this->z = _z;
@@ -135,7 +135,7 @@ namespace drash {
 
     template <typename T, const int DEF_VAL>
     Vec3<T, DEF_VAL>& Vec3<T, DEF_VAL>::Set(const T& _x, const T& _y,
-                                              const T& _z) {
+                                            const T& _z) {
         this->x = _x;
         this->y = _y;
         this->z = _z;

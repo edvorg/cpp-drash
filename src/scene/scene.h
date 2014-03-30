@@ -46,8 +46,8 @@ namespace drash {
     };
 
     class Scene final : public b2ContactListener,
-                         public b2ContactFilter,
-                         public b2DestructionListener {
+                        public b2ContactFilter,
+                        public b2DestructionListener {
     public:
         // **************************************************
         // * static scene configuration *********************
@@ -71,7 +71,7 @@ namespace drash {
         // * working with objects ***************************
 
         SceneObject* CreateObject(const SceneObjectGeometry& _geometry,
-                                   const SceneObjectParams& _params);
+                                  const SceneObjectParams& _params);
         bool DestroyObject(SceneObject* _obj);
         inline SceneObject* const* GetObjects(void) const;
         inline unsigned int EnumObjects(void) const;
@@ -81,13 +81,13 @@ namespace drash {
         // * working with joints ****************************
 
         Joint* CreateJoint(SceneObject* _obj1, SceneObject* _obj2,
-                            const Vec3f& _anchor);
+                           const Vec3f& _anchor);
         Joint* CreateJointDistance(SceneObject* _obj1, SceneObject* _obj2,
-                                    const Vec3f& _anchor1,
-                                    const Vec3f& _anchor2, float _length);
+                                   const Vec3f& _anchor1, const Vec3f& _anchor2,
+                                   float _length);
         Joint* CreateJointRope(SceneObject* _obj1, SceneObject* _obj2,
-                                const Vec3f& _anchor1, const Vec3f& _anchor2,
-                                float _length);
+                               const Vec3f& _anchor1, const Vec3f& _anchor2,
+                               float _length);
         void DestroyJoint(Joint* _joint);
 
         void SetGravity(const Vec2f& _g);
