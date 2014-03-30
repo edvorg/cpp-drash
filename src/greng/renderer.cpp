@@ -25,6 +25,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #define GL_GLEXT_PROTOTYPES
 #include <GL/glew.h>
 #include <stack>
+#include <sstream>
 #include "renderer.h"
 #include "mesh.h"
 #include "texture.h"
@@ -409,7 +410,7 @@ namespace greng {
         glVertex2f(_p.x, _p.y);
         glEnd();
     }
-
+    
     void Renderer::DrawPoint(const Camera& _camera, const Vec3f& _p,
                              float _size, const Color4f& _col,
                              bool _depth_test) const {
@@ -435,7 +436,7 @@ namespace greng {
     }
 
     void Renderer::DrawChar(const Camera& _camera, const Vec2f& _pos,
-                            const Vec2f& _size, char _c) {
+                            const Vec2f& _size, bool _depth_test, char _c) {
         int corners = 0;
         void* vertices = nullptr;
         void* indices = nullptr;
@@ -764,6 +765,12 @@ namespace greng {
 
         // render
         if (corners > 1 && vertices && indices) {
+            if (_depth_test == true) {
+                glEnable(GL_DEPTH_TEST);
+            } else {
+                glDisable(GL_DEPTH_TEST);
+            }
+            
             glMatrixMode(GL_PROJECTION);
             glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
 
@@ -792,47 +799,34 @@ namespace greng {
 
     void Renderer::DrawNumber(const Camera& _camera, bool fromLeft,
                               const Vec2f& _pos, const Vec2f& _size,
-                              unsigned int number) {
-        auto pos = _pos;
-
-        if (fromLeft) {
-            std::stack<unsigned int> digits;
-
-            do {
-                digits.push(number % 10);
-                number /= 10;
-            } while (number);
-
-            while (digits.size()) {
-                DrawChar(_camera, pos, _size, digits.top() + '0');
-                pos.x += _size.x * CharWidth(digits.top() + '0');
-                digits.pop();
-            }
-        } else {
-            do {
-                DrawChar(_camera, pos, _size, number % 10 + '0');
-                pos.x -= _size.x * 2.5f;
-                number /= 10;
-            } while (number);
-        }
+                              bool _depth_test, int number) {        
+        std::ostringstream str;
+        str << number;
+        DrawString(_camera, fromLeft, _pos, _size, _depth_test, str.str());
     }
 
     void Renderer::DrawString(const Camera& _camera, bool fromLeft,
                               const Vec2f& _pos, const Vec2f& _size,
-                              const std::string& _str) {
+                              bool _depth_test, const std::string& _str) {
         auto pos = _pos;
 
         if (fromLeft) {
             for (auto& c : _str) {
-                DrawChar(_camera, pos, _size, c);
+                DrawChar(_camera, pos, _size, _depth_test, c);
                 pos.x += _size.x * CharWidth(c);
             }
-        } else {
+        } else if (_str.size()) {
+            pos += CharWidth(_str[_str.size() - 1]) - 2.5f;
             for (auto i = _str.size() - 1; i > 0; --i) {
-                DrawChar(_camera, pos, _size, _str[i]);
-                pos.x -= _size.x * 2.5f;
+                DrawChar(_camera, pos, _size, _depth_test, _str[i]);
+                pos.x -= _size.x * CharWidth(_str[i-1]);
             }
+            DrawChar(_camera, pos, _size, _depth_test, _str[0]);
         }
     }
 
 } // namespace greng
+
+
+
+

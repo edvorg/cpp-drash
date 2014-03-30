@@ -98,7 +98,7 @@ namespace drash {
             GetGreng().GetRenderer().DrawString(
                 *uiCamera, true,
                 { -100 + 10, 100 / camera->GetAspectRatio() - 10 }, { 1, 1 },
-                str.str());
+                false, str.str());
         }
 
     } // namespace test

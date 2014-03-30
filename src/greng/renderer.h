@@ -112,13 +112,15 @@ namespace greng {
                        const Color4f& _col, bool _depth_test = true) const;
 
         void DrawChar(const Camera& _camera, const Vec2f& _pos,
-                      const Vec2f& _size, char _c);
+                      const Vec2f& _size, bool _depth_test, char _c);
 
         void DrawNumber(const Camera& _camera, bool fromLeft, const Vec2f& _pos,
-                        const Vec2f& _size, unsigned int number);
+                        const Vec2f& _size, bool _depth_test,
+                        int number);
 
         void DrawString(const Camera& _camera, bool fromLeft, const Vec2f& _pos,
-                        const Vec2f& _size, const std::string& _str);
+                        const Vec2f& _size, bool _depth_test,
+                        const std::string& _str);
 
     private:
         const FrameBuffer* lastFrameBuffer;
