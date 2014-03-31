@@ -67,6 +67,8 @@ namespace greng {
             const Vec3f* _view_pos = nullptr,
             const FrameBuffer* _frame_buffer = nullptr);
 
+        void Clear(const FrameBuffer* _frameBuffer);
+
         /// draws triangle giving screen space coordinates (-0.5,-0.5)..(0.5,
         /// 0.5) and color
         void DrawTriangle(const Camera& _camera, const Vec2f& _p1,

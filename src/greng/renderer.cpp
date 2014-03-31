@@ -57,10 +57,6 @@ namespace greng {
             auto bufferId =
                 lastFrameBuffer ? lastFrameBuffer->frameBufferBufferId : 0;
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, bufferId);
-            glClearColor(1, 0, 0, 1);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);            
-            glViewport(viewport.GetLeftBottom().x, viewport.GetLeftBottom().y,
-                       viewport.GetRightTop().x, viewport.GetRightTop().y);
         }
 
         // glCullFace(GL_BACK);
@@ -257,6 +253,19 @@ namespace greng {
         glDisableClientState(GL_COLOR_ARRAY);
 
         glDisable(GL_TEXTURE_2D);
+    }
+
+    void Renderer::Clear(const FrameBuffer* _frameBuffer) {
+        if (_frameBuffer != lastFrameBuffer) {            
+            lastFrameBuffer = _frameBuffer;
+            auto bufferId =
+                lastFrameBuffer ? lastFrameBuffer->frameBufferBufferId : 0;
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, bufferId);
+        }
+        glClearColor(1, 0, 0, 1);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);            
+        glViewport(viewport.GetLeftBottom().x, viewport.GetLeftBottom().y,
+                   viewport.GetRightTop().x, viewport.GetRightTop().y);            
     }
 
     void Renderer::DrawTriangle(const Camera& _camera, const Vec2f& _p1,

@@ -162,9 +162,8 @@ namespace drash {
                 }
             }
 
-            // FIXME
-            // GetGreng().GetRenderer().DrawPoint(GetCamera(), light1.position, 10,
-            //                                    Color4f(1, 1, 1, 1), false);
+            GetGreng().GetRenderer().DrawPoint(GetCamera(), light1.position, 10,
+                                               Color4f(1, 1, 1, 1), false);
         }
         
         void Test5::SetupMeshes() {

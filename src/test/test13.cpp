@@ -71,7 +71,7 @@ namespace drash {
         }
 
         void Test13::Step(double _dt) {
-            App::Step(_dt);
+            Test5::Step(_dt);
 
             static auto angle = 0.0f;
             angle += _dt;
@@ -79,7 +79,9 @@ namespace drash {
         }
 
         void Test13::Render() {
-            App::Render();
+            GetGreng().GetRenderer().Clear(frameBuffer);
+
+            Test5::Render();            
 
             GetGreng().GetRenderer().RenderMesh(
                 quad, 0, &renderTarget, 1, shaderProgram2, {}, {},
