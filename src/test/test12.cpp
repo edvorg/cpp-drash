@@ -90,7 +90,7 @@ namespace drash {
         void Test12::Render() {
             App::Render();
 
-            GetGreng().GetRenderer().Clear(frameBuffer);            
+            GetGreng().GetRenderer().Clear(frameBuffer, { 0.5, 0.5, 0.5, 1}); 
             GetGreng().GetRenderer().RenderMesh(
                 quad, 0, &texture, 1, shaderProgram1, {}, {},
                 &camera->GetViewMatrix(), &camera->GetProjectionMatrix(), {},

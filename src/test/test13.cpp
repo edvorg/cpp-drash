@@ -79,7 +79,7 @@ namespace drash {
         }
 
         void Test13::Render() {
-            GetGreng().GetRenderer().Clear(frameBuffer);
+            GetGreng().GetRenderer().Clear(frameBuffer, { 0.5, 0.5, 0.5, 1 });
 
             Test5::Render();            
 

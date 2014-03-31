@@ -255,14 +255,15 @@ namespace greng {
         glDisable(GL_TEXTURE_2D);
     }
 
-    void Renderer::Clear(const FrameBuffer* _frameBuffer) {
+    void Renderer::Clear(const FrameBuffer* _frameBuffer,
+                         const Color4f& _color) {        
         if (_frameBuffer != lastFrameBuffer) {            
             lastFrameBuffer = _frameBuffer;
             auto bufferId =
                 lastFrameBuffer ? lastFrameBuffer->frameBufferBufferId : 0;
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, bufferId);
         }
-        glClearColor(1, 0, 0, 1);
+        glClearColor(_color.r, _color.g, _color.b, _color.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);            
         glViewport(viewport.GetLeftBottom().x, viewport.GetLeftBottom().y,
                    viewport.GetRightTop().x, viewport.GetRightTop().y);            
