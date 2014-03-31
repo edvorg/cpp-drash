@@ -71,11 +71,11 @@ namespace drash {
 #define LOG_INFO_PREFIX std::string("[I]: ")
 
 #ifdef DRASH_DEBUG
-#define LOG_ERR(mes) Logger::shared() << LOG_ERR_PREFIX << mes
-#define LOG_WARN(mes) Logger::shared() << LOG_WARN_PREFIX << mes
-#define LOG_INFO(mes) Logger::shared() << LOG_INFO_PREFIX << mes
+#define LOG_ERR(mes) Logger::shared() << LOG_ERR_PREFIX << mes << '\n';
+#define LOG_WARN(mes) Logger::shared() << LOG_WARN_PREFIX << mes << '\n';
+#define LOG_INFO(mes) Logger::shared() << LOG_INFO_PREFIX << mes << '\n';
 #else
-#define LOG_ERR(mes) Logger::shared() << LOG_ERR_PREFIX << mes
+#define LOG_ERR(mes) Logger::shared() << LOG_ERR_PREFIX << mes << '\n';
 #define LOG_WARN(mes)
 #define LOG_INFO(mes)
 #endif
