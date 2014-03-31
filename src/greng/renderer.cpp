@@ -58,7 +58,7 @@ namespace greng {
                 lastFrameBuffer ? lastFrameBuffer->frameBufferBufferId : 0;
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, bufferId);
             glClearColor(1, 0, 0, 1);
-            glClear(GL_COLOR_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);            
             glViewport(viewport.GetLeftBottom().x, viewport.GetLeftBottom().y,
                        viewport.GetRightTop().x, viewport.GetRightTop().y);
         }

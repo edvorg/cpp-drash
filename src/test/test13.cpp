@@ -44,11 +44,13 @@ namespace drash {
             camera->GetPos() = { 0, 0, 10 };
             camera->SetOrtho(true);
             camera->GetOrthoSize() = { 1, 1 };
-            
-            renderTarget = GetGreng().GetTextureManager().CreateTexture(
-                GetGreng().GetViewport().GetSize());
+
+            auto size = GetGreng().GetViewport().GetSize();
+            renderTarget = GetGreng().GetTextureManager().CreateTexture(size);
+            renderTargetDepth =
+                GetGreng().GetTextureManager().CreateTextureDepth(size);
             frameBuffer = GetGreng().GetFrameBufferManager().CreateFrameBuffer(
-                *renderTarget);
+                *renderTarget, *renderTargetDepth);
 
             quad = GetGreng().GetMeshManager().CreateMeshQuad();
 

@@ -48,6 +48,7 @@ namespace greng {
         Texture* CreateTextureDummy();
         Texture* CreateTextureWhite();
         Texture* CreateTexture(const drash::Vec2i& size);
+        Texture* CreateTextureDepth(const drash::Vec2i& size);
         bool DestroyTexture(Texture* _texture);
 
     protected:

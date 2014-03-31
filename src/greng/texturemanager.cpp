@@ -148,10 +148,34 @@ namespace greng {
         }
 
         glBindTexture(GL_TEXTURE_2D, res->textureBufferId);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, size.x, size.y, 0, GL_RGB,
                      GL_UNSIGNED_BYTE, {});
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        return res;
+    }
+
+    Texture* TextureManager::CreateTextureDepth(const drash::Vec2i& size) {
+        Texture* res = CreateTexture();
+
+        if (res == nullptr) {
+            return nullptr;
+        }
+
+        glBindTexture(GL_TEXTURE_2D, res->textureBufferId);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, size.x, size.y, 0,
+                     GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, {});
         glBindTexture(GL_TEXTURE_2D, 0);
 
         return res;

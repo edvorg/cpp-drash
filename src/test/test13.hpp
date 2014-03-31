@@ -45,6 +45,7 @@ namespace drash {
             greng::PointLight light;
             greng::Texture* texture;
             greng::Texture* renderTarget;
+            greng::Texture* renderTargetDepth;
             greng::FrameBuffer* frameBuffer;
             greng::Mesh* quad;
             greng::VertexShader* vertexShader2;

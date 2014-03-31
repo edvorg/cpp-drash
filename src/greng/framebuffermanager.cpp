@@ -76,6 +76,39 @@ namespace greng {
         return res;
     }
 
+    FrameBuffer* FrameBufferManager::CreateFrameBuffer(const Texture& _color,
+                                                       const Texture& _depth) {
+        FrameBuffer* res = frameBufferFactory.CreateObject();
+
+        if (res == nullptr) {
+            return nullptr;
+        }
+
+        glGenFramebuffersEXT(1, &res->frameBufferBufferId);
+
+        if (res->frameBufferBufferId == 0) {
+            frameBufferFactory.DestroyObject(res);
+            LOG_ERR("can not create framebuffer");
+            return nullptr;
+        }
+
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, res->frameBufferBufferId);
+        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+                                  GL_TEXTURE_2D, _color.textureBufferId, 0);
+        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
+                                  GL_TEXTURE_2D, _depth.textureBufferId, 0);
+        GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT };
+        glDrawBuffers(1, buffers);
+
+        if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) !=
+            GL_FRAMEBUFFER_COMPLETE_EXT)
+            LOG_ERR("frame buffer status incomplete");
+
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+
+        return res;
+    }
+
     bool FrameBufferManager::DestroyFrameBuffer(FrameBuffer* _frameBuffer) {
         if (frameBufferFactory.IsObject(_frameBuffer) == false) {
             return false;

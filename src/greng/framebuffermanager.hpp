@@ -44,7 +44,9 @@ namespace greng {
         FrameBufferManager& operator=(FrameBufferManager&&) = delete;
         ~FrameBufferManager();
 
-        FrameBuffer* CreateFrameBuffer(const Texture& _texture);
+        FrameBuffer* CreateFrameBuffer(const Texture& _color);
+        FrameBuffer* CreateFrameBuffer(const Texture& _color,
+                                       const Texture& _depth);
         bool DestroyFrameBuffer(FrameBuffer* _frameBuffer);
 
     protected:
