@@ -43,6 +43,9 @@ namespace drash {
             void SetFrameBuffer(greng::FrameBuffer* _frameBuffer) {
                 GetDebugRenderer().SetFrameBuffer(frameBuffer = _frameBuffer);
             }
+            void SetShaderProgram(greng::ShaderProgram* _program) {
+                GetDebugRenderer().SetShaderProgram(shaderProgram = _program);
+            }
 
         protected:
         private:
@@ -52,34 +55,35 @@ namespace drash {
             void SetupProcessors();
             void SetupLights();
 
-            greng::Mesh* mesh1 = nullptr;
-            greng::Mesh* mesh2 = nullptr;
-            greng::Mesh* mesh3 = nullptr;
-            greng::Mesh* mesh4 = nullptr;
+            greng::Mesh* mesh1;
+            greng::Mesh* mesh2;
+            greng::Mesh* mesh3;
+            greng::Mesh* mesh4;
             Matrix4f mesh3ConstMatrix;
-            greng::Texture* tex1 = nullptr;
-            greng::Texture* tex2 = nullptr;
-            greng::Texture* tex3 = nullptr;
-            greng::Texture* tex3normal = nullptr;
-            greng::Texture* tex4 = nullptr;
-            greng::Texture* tex4normal = nullptr;
-            greng::Texture* tex5 = nullptr;
-            greng::Texture* tex5normal = nullptr;
-            greng::Texture* tex6 = nullptr;
-            greng::Texture* tex7 = nullptr;
-            greng::Texture* tex7normal = nullptr;
-            greng::VertexShader* vertexShader1 = nullptr;
-            greng::FragmentShader* fragmentShader1 = nullptr;
-            greng::ShaderProgram* shaderProgram1 = nullptr;
-            greng::VertexShader* vertexShader2 = nullptr;
-            greng::FragmentShader* fragmentShader2 = nullptr;
-            greng::ShaderProgram* shaderProgram2 = nullptr;
-            greng::VertexShader* vertexShader3 = nullptr;
-            greng::FragmentShader* fragmentShader3 = nullptr;
-            greng::ShaderProgram* shaderProgram3 = nullptr;
-            greng::VertexShader* vertexShader4 = nullptr;
-            greng::FragmentShader* fragmentShader4 = nullptr;
-            greng::ShaderProgram* shaderProgram4 = nullptr;
+            greng::Texture* tex1;
+            greng::Texture* tex2;
+            greng::Texture* tex3;
+            greng::Texture* tex3normal;
+            greng::Texture* tex4;
+            greng::Texture* tex4normal;
+            greng::Texture* tex5;
+            greng::Texture* tex5normal;
+            greng::Texture* tex6;
+            greng::Texture* tex7;
+            greng::Texture* tex7normal;
+            greng::ShaderProgram* shaderProgram;
+            greng::VertexShader* vertexShader1;
+            greng::FragmentShader* fragmentShader1;
+            greng::ShaderProgram* shaderProgram1;
+            greng::VertexShader* vertexShader2;
+            greng::FragmentShader* fragmentShader2;
+            greng::ShaderProgram* shaderProgram2;
+            greng::VertexShader* vertexShader3;
+            greng::FragmentShader* fragmentShader3;
+            greng::ShaderProgram* shaderProgram3;
+            greng::VertexShader* vertexShader4;
+            greng::FragmentShader* fragmentShader4;
+            greng::ShaderProgram* shaderProgram4;
             greng::FrameBuffer* frameBuffer;
 
             double angle = 0.0;

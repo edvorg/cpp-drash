@@ -79,8 +79,9 @@ namespace drash {
                 Matrix4f model_view;
                 MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
+                auto program = shaderProgram ? shaderProgram : shaderProgram2;
                 GetGreng().GetRenderer().RenderMesh(
-                    mesh1, 0, &tex6, 1, shaderProgram2, &model, nullptr,
+                    mesh1, 0, &tex6, 1, program, &model, nullptr,
                     &model_view, &GetCamera().GetProjectionMatrix(), &light1,
                     {}, {}, frameBuffer);
             }
@@ -104,8 +105,9 @@ namespace drash {
                 Matrix4f model_view;
                 MatrixMultiply(GetCamera().GetViewMatrix(), model, model_view);
 
+                auto program = shaderProgram ? shaderProgram : shaderProgram2;
                 GetGreng().GetRenderer().RenderMesh(
-                    mesh2, 0, &tex2, 1, shaderProgram2, &model, nullptr,
+                    mesh2, 0, &tex2, 1, program, &model, nullptr,
                     &model_view, &GetCamera().GetProjectionMatrix(), &light1,
                     {}, {}, frameBuffer);
             }
@@ -123,10 +125,11 @@ namespace drash {
                 greng::Texture* texts[6] = {
                     tex4, tex4normal, tex3, tex3normal, tex5, tex5normal
                 };
-
+                
+                auto program = shaderProgram ? shaderProgram : shaderProgram4;
                 for (unsigned int i = 0; i < 3; i++) {
                     GetGreng().GetRenderer().RenderMesh(
-                        mesh3, i, &texts[i * 2], 2, shaderProgram4, &model,
+                        mesh3, i, &texts[i * 2], 2, program, &model,
                         nullptr, &model_view,
                         &GetCamera().GetProjectionMatrix(), &light1, nullptr,
                         &GetCamera().GetPos().Get(), frameBuffer);
@@ -153,9 +156,10 @@ namespace drash {
                     tex7, tex7normal, tex7, tex7normal, tex7, tex7normal,
                 };
 
+                auto program = shaderProgram ? shaderProgram : shaderProgram4;
                 for (unsigned int i = 0; i < 3; i++) {
                     GetGreng().GetRenderer().RenderMesh(
-                        mesh4, i, &texts[i * 2], 2, shaderProgram4, &model,
+                        mesh4, i, &texts[i * 2], 2, program, &model,
                         nullptr, &model_view,
                         &GetCamera().GetProjectionMatrix(), &light1, nullptr,
                         &GetCamera().GetPos().Get(), frameBuffer);

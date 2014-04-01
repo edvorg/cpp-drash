@@ -60,6 +60,9 @@ namespace drash {
         void SetFrameBuffer(greng::FrameBuffer* _frameBuffer) {
             FrameBuffer = _frameBuffer;
         }
+        void SetShaderProgram(greng::ShaderProgram* _program) {
+            shaderProgram = _program;
+        }
 
         void SetTexCoordsScale(float _scale);
 
@@ -97,6 +100,7 @@ namespace drash {
         Scene& scene;
         GeometryManager& geometryManager;
 
+        greng::ShaderProgram* shaderProgram = {};
         greng::ShaderProgram* shaderProgram1 = {};
         greng::ShaderProgram* shaderProgram2 = {};
         greng::Camera* camera = {};

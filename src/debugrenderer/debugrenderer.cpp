@@ -96,9 +96,11 @@ namespace drash {
                                                     texture1Normal,
                                                     texture1Specular };
 
+                    auto program = shaderProgram;
+                    if (!program) program = light == nullptr ? shaderProgram1 : shaderProgram2;
                     greng.GetRenderer().RenderMesh(
                         m, 0, textures, 3,
-                        light == nullptr ? shaderProgram1 : shaderProgram2,
+                        program,
                         &model, nullptr, &model_view,
                         &camera->GetProjectionMatrix(), light, spotLight1,
                         &camera->GetPos().Get(), FrameBuffer);
@@ -181,9 +183,11 @@ namespace drash {
                 greng::Texture* textures[3] = { texture1Diffuse, texture1Normal,
                                                 texture1Specular };
 
+                auto program = shaderProgram;
+                if (!program) program = light == nullptr ? shaderProgram1 : shaderProgram2;
                 greng.GetRenderer().RenderMesh(
                     m, 0, textures, 3,
-                    light == nullptr ? shaderProgram1 : shaderProgram2, &model,
+                    program, &model,
                     nullptr, &model_view, &camera->GetProjectionMatrix(), light,
                     spotLight1, &camera->GetPos().Get(), FrameBuffer);
 
