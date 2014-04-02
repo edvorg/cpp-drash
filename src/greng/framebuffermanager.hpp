@@ -27,6 +27,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../misc/objectfactory.h"
 #include "../misc/vec2.h"
+#include <vector>
 
 namespace greng {
 
@@ -45,7 +46,7 @@ namespace greng {
         ~FrameBufferManager();
 
         FrameBuffer* CreateFrameBuffer(const Texture& _color);
-        FrameBuffer* CreateFrameBuffer(const Texture& _color,
+        FrameBuffer* CreateFrameBuffer(const std::vector<Texture*>& _colors,
                                        const Texture& _depth);
         bool DestroyFrameBuffer(FrameBuffer* _frameBuffer);
 

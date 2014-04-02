@@ -30,6 +30,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "../ui/uislider.h"
 #include "../greng/camera.h"
 #include "../misc/moveablepoint.h"
+#include "../misc/animator.h"
 
 namespace drash {
 

@@ -256,13 +256,13 @@ namespace greng {
     }
 
     void Renderer::Clear(const FrameBuffer* _frameBuffer,
-                         const Color4f& _color) {        
-        if (_frameBuffer != lastFrameBuffer) {            
-            lastFrameBuffer = _frameBuffer;
-            auto bufferId =
+                         const Color4f& _color) {
+        GLuint bufferId = 0;
+        lastFrameBuffer = _frameBuffer;
+        if (lastFrameBuffer)
+            bufferId =
                 lastFrameBuffer ? lastFrameBuffer->frameBufferBufferId : 0;
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, bufferId);
-        }
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, bufferId);
         glClearColor(_color.r, _color.g, _color.b, _color.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);            
         glViewport(viewport.GetLeftBottom().x, viewport.GetLeftBottom().y,
@@ -282,9 +282,9 @@ namespace greng {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(_camera.GetViewMatrixTransposed().data);
+        glLoadMatrixf(_camera.GetViewMatrixTransposed().getValue().data);
         glMatrixMode(GL_PROJECTION);
-        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
+        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().getValue().data);
 
         glBegin(GL_TRIANGLES);
         glColor4f(_col.r, _col.g, _col.b, _col.a);
@@ -309,9 +309,9 @@ namespace greng {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(_camera.GetViewMatrixTransposed().data);
+        glLoadMatrixf(_camera.GetViewMatrixTransposed().getValue().data);
         glMatrixMode(GL_PROJECTION);
-        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
+        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().getValue().data);
 
         glBegin(GL_TRIANGLES);
         glColor4f(_col.r, _col.g, _col.b, _col.a);
@@ -335,9 +335,9 @@ namespace greng {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(_camera.GetViewMatrixTransposed().data);
+        glLoadMatrixf(_camera.GetViewMatrixTransposed().getValue().data);
         glMatrixMode(GL_PROJECTION);
-        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
+        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().getValue().data);
 
         glLineWidth(_width);
 
@@ -361,9 +361,9 @@ namespace greng {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(_camera.GetViewMatrixTransposed().data);
+        glLoadMatrixf(_camera.GetViewMatrixTransposed().getValue().data);
         glMatrixMode(GL_PROJECTION);
-        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
+        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().getValue().data);
 
         glLineWidth(_width);
 
@@ -409,9 +409,9 @@ namespace greng {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(_camera.GetViewMatrixTransposed().data);
+        glLoadMatrixf(_camera.GetViewMatrixTransposed().getValue().data);
         glMatrixMode(GL_PROJECTION);
-        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
+        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().getValue().data);
 
         glPointSize(_size);
 
@@ -433,9 +433,9 @@ namespace greng {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(_camera.GetViewMatrixTransposed().data);
+        glLoadMatrixf(_camera.GetViewMatrixTransposed().getValue().data);
         glMatrixMode(GL_PROJECTION);
-        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
+        glLoadMatrixf(_camera.GetProjectionMatrixTransposed().getValue().data);
 
         glPointSize(_size);
 
@@ -782,10 +782,10 @@ namespace greng {
             }
             
             glMatrixMode(GL_PROJECTION);
-            glLoadMatrixf(_camera.GetProjectionMatrixTransposed().data);
+            glLoadMatrixf(_camera.GetProjectionMatrixTransposed().getValue().data);
 
             glMatrixMode(GL_MODELVIEW);
-            glLoadMatrixf(_camera.GetViewMatrixTransposed().data);
+            glLoadMatrixf(_camera.GetViewMatrixTransposed().getValue().data);
             glTranslatef(_pos.x, _pos.y, 0);
             glScalef(_size.x, _size.y, 1);
 

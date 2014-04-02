@@ -53,8 +53,8 @@ namespace drash {
         }
 
         bool Test9::InitCamera() {
-            camera->GetPos().Set({ 10, 10, 10 });
-            camera->GetFov().Set(M_PI / 6.0);
+            camera->GetPos() = { 10, 10, 10 };            
+            camera->GetFov() = M_PI / 6.0;
             camera->LookAt(Vec3f(0));
 
             if (camera == nullptr) {

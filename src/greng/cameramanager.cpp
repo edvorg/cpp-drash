@@ -53,14 +53,12 @@ namespace greng {
             return nullptr;
         }
 
-        res->aspectRatioAnimator = aspectRatio;
-        res->orthoSizeAnimator = _params.orthoSize;
-        res->fovAnimator = _params.fov;
-        res->depthOfViewAnimator = _params.depthOfView;
-        res->posAnimator = _params.pos;
-        res->rotationAnimator = _params.rotation;
-
-        res->ComputeMatrices();
+        res->aspectRatio = aspectRatio;
+        res->orthoSize = _params.orthoSize;
+        res->fov = _params.fov;
+        res->depthOfView = _params.depthOfView;
+        res->pos = _params.pos;
+        res->rotation = _params.rotation;
 
         return res;
     }

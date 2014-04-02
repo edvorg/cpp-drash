@@ -40,7 +40,7 @@ namespace drash {
 
             auto& c = GetCamera();
             c.GetPos().SetTarget({ 0, 50, 180 }, 1.0f,
-                                 AnimatorBehavior::Single);
+                                 VarAnimatorBehavior::Single);
             c.GetRotation().Set(Vec3f(-M_PI / 12.0f, 0.0f, 0.0f));
 
             slider1.Connect(&GetUISystem());
@@ -188,7 +188,7 @@ namespace drash {
                             pos.z += 10.0f;
 
                             GetCamera().GetPos().SetTarget(
-                                pos, 0.3, AnimatorBehavior::Single);
+                                pos, 0.3, VarAnimatorBehavior::Single);
                         }));
 
             GetEventSystem().SetProcessor(
@@ -204,7 +204,7 @@ namespace drash {
                             pos.z -= 10.0f;
 
                             GetCamera().GetPos().SetTarget(
-                                pos, 0.3, AnimatorBehavior::Single);
+                                pos, 0.3, VarAnimatorBehavior::Single);
                         }));
 
             GetEventSystem().SetProcessor(

@@ -42,8 +42,8 @@ namespace drash {
             camera = GetGreng().GetCameraManager().CreateCamera({});
             camera->GetDepthOfView() = 100;
             camera->GetPos() = { 0, 0, 10 };
-            camera->SetOrtho(true);
-            camera->GetOrthoSize() = { 1, 1 };
+            camera->GetOrtho() = true;
+            camera->GetOrthoSize() = { 1, 1 };            
             texture = GetGreng().GetTextureManager().CreateTextureFromFile(
                 "assets/space/diffuse.png");
             renderTarget = GetGreng().GetTextureManager().CreateTexture(
@@ -93,12 +93,12 @@ namespace drash {
             GetGreng().GetRenderer().Clear(frameBuffer, { 0.5, 0.5, 0.5, 1}); 
             GetGreng().GetRenderer().RenderMesh(
                 quad, 0, &texture, 1, shaderProgram1, {}, {},
-                &camera->GetViewMatrix(), &camera->GetProjectionMatrix(), {},
+                &camera->GetViewMatrix().getValue(), &camera->GetProjectionMatrix().getValue(), {},
                 {}, {}, frameBuffer);
 
             GetGreng().GetRenderer().RenderMesh(
                 quad, 0, &renderTarget, 1, shaderProgram2, {}, {},
-                &camera->GetViewMatrix(), &camera->GetProjectionMatrix(),
+                &camera->GetViewMatrix().getValue(), &camera->GetProjectionMatrix().getValue(),
                 &light);
         }
 

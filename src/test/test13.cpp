@@ -42,32 +42,55 @@ namespace drash {
             camera = GetGreng().GetCameraManager().CreateCamera({});
             camera->GetDepthOfView() = 100;
             camera->GetPos() = { 0, 0, 10 };
-            camera->SetOrtho(true);
-            camera->GetOrthoSize() = { 1, 1 };
+            camera->GetOrtho() = true;
+            camera->GetOrthoSize() = { 2, 2 };
 
             auto size = GetGreng().GetViewport().GetSize();
-            renderTarget = GetGreng().GetTextureManager().CreateTexture(size);
+            renderTarget1 = GetGreng().GetTextureManager().CreateTexture(size);
+            renderTarget2 = GetGreng().GetTextureManager().CreateTexture(size);
+            renderTarget3 = GetGreng().GetTextureManager().CreateTexture(size);
             renderTargetDepth =
                 GetGreng().GetTextureManager().CreateTextureDepth(size);
             frameBuffer = GetGreng().GetFrameBufferManager().CreateFrameBuffer(
-                *renderTarget, *renderTargetDepth);
-
+                { renderTarget1, renderTarget2, renderTarget3 },
+                *renderTargetDepth);
+            
             quad = GetGreng().GetMeshManager().CreateMeshQuad();
 
             quad = GetGreng().GetMeshManager().CreateMeshQuad();
+            
+            vertexShader1 =
+                GetGreng().GetVertexShaderManager().CreateShaderFromFile(
+                    "shaders/shader12.120.vs");
+            fragmentShader1 =
+                GetGreng().GetFragmentShaderManager().CreateShaderFromFile(
+                    "shaders/shader12.120.fs");
+            shaderProgram1 = GetGreng().GetShaderProgramManager().CreateProgram(
+                vertexShader1, fragmentShader1);
+            
             vertexShader2 =
                 GetGreng().GetVertexShaderManager().CreateShaderFromFile(
-                    "shaders/shader9.120.vs");
+                    "shaders/shader11.120.vs");
             fragmentShader2 =
                 GetGreng().GetFragmentShaderManager().CreateShaderFromFile(
-                    "shaders/shader9.120.fs");
+                    "shaders/shader11.120.fs");
             shaderProgram2 = GetGreng().GetShaderProgramManager().CreateProgram(
                 vertexShader2, fragmentShader2);
+            
+            vertexShader3 =
+                GetGreng().GetVertexShaderManager().CreateShaderFromFile(
+                    "shaders/shader10.120.vs");
+            fragmentShader3 =
+                GetGreng().GetFragmentShaderManager().CreateShaderFromFile(
+                    "shaders/shader10.120.fs");
+            shaderProgram3 = GetGreng().GetShaderProgramManager().CreateProgram(
+                vertexShader3, fragmentShader3);            
 
             GetEventSystem().SetProcessor(
                 "C-q", AppEventProcessor([this] { Quit(); }));
 
             Test5::SetFrameBuffer(frameBuffer);
+            Test5::SetShaderProgram(shaderProgram1);
         }
 
         void Test13::Step(double _dt) {
@@ -80,13 +103,34 @@ namespace drash {
 
         void Test13::Render() {
             GetGreng().GetRenderer().Clear(frameBuffer, { 0.5, 0.5, 0.5, 1 });
-
             Test5::Render();            
 
-            GetGreng().GetRenderer().RenderMesh(
-                quad, 0, &renderTarget, 1, shaderProgram2, {}, {},
-                &camera->GetViewMatrix(), &camera->GetProjectionMatrix(),
-                &light);
+            std::vector<greng::Texture*> textures = {
+                renderTarget1,
+                renderTarget2,
+                renderTarget3,
+            };
+            
+            GetGreng().GetRenderer().Clear({}, { 0.5, 0.5, 0.5, 1 });
+            camera->GetPos() = Vec3f{ 1, -1, 10 };
+            GetGreng().GetRenderer().RenderMesh(                
+                quad, 0, &textures[0], 1, shaderProgram3, {}, {},
+                &camera->GetViewMatrix().getValue(), &camera->GetProjectionMatrix().getValue(), {});
+            
+            camera->GetPos() = Vec3f{ -1, -1, 10 };
+            GetGreng().GetRenderer().RenderMesh(                
+                quad, 0, &textures[1], 1, shaderProgram3, {}, {},
+                &camera->GetViewMatrix().getValue(), &camera->GetProjectionMatrix().getValue(), {});
+            
+            camera->GetPos() = Vec3f{ 1, 1, 10 };
+            GetGreng().GetRenderer().RenderMesh(                
+                quad, 0, &textures[2], 1, shaderProgram3, {}, {},
+                &camera->GetViewMatrix().getValue(), &camera->GetProjectionMatrix().getValue(), {});
+            
+            // camera->GetPos() = { -1, 1, 10 };
+            // GetGreng().GetRenderer().RenderMesh(                
+            //     quad, 0, textures.data(), 3, shaderProgram2, {}, {},
+            //     &camera->GetViewMatrix(), &camera->GetProjectionMatrix(), &light);
         }
 
     } // namespace test

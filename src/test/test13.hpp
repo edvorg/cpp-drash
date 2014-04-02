@@ -43,14 +43,21 @@ namespace drash {
 
             greng::Camera* camera;
             greng::PointLight light;
-            greng::Texture* texture;
-            greng::Texture* renderTarget;
+            greng::Texture* renderTarget1;
+            greng::Texture* renderTarget2;
+            greng::Texture* renderTarget3;
             greng::Texture* renderTargetDepth;
             greng::FrameBuffer* frameBuffer;
             greng::Mesh* quad;
+            greng::VertexShader* vertexShader1;
+            greng::FragmentShader* fragmentShader1;
+            greng::ShaderProgram* shaderProgram1;
             greng::VertexShader* vertexShader2;
             greng::FragmentShader* fragmentShader2;
             greng::ShaderProgram* shaderProgram2;
+            greng::VertexShader* vertexShader3;
+            greng::FragmentShader* fragmentShader3;
+            greng::ShaderProgram* shaderProgram3;
         };
 
     } // namespace test

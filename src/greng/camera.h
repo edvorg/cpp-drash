@@ -26,9 +26,10 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef OBJECTCAMERA_H
 #define OBJECTCAMERA_H
 
-#include "../misc/animator.h"
+#include "../misc/varanimator.hpp"
 #include "../misc/matrix4.h"
 #include "../misc/objectfactory.h"
+#include <react/react.hpp>
 
 namespace drash {
 
@@ -39,20 +40,22 @@ namespace drash {
 
 namespace greng {
 
-    using drash::Animator;
+    using drash::VarAnimator;
     using drash::Vec2f;
     using drash::Vec3f;
     using drash::Matrix4f;
+    using react::Var;
+    using react::RxRelaxed;
 
     class Camera : public drash::ObjectFactory<Camera>::FactoryProduct {
     public:
         friend class CameraManager;
 
-        void Step(double _dt);
+        Camera();
+        
+        void Step(double);
 
-        void SetOrtho(bool _ortho) { ortho = _ortho; }
-        bool IsOrtho() const { return ortho; }
-
+        auto& GetOrtho() { return ortho; }
         auto& GetOrthoSize() { return orthoSizeAnimator; }
         auto& GetFov() { return fovAnimator; }
         auto& GetDepthOfView() { return depthOfViewAnimator; }
@@ -72,39 +75,35 @@ namespace greng {
         auto& GetViewMatrix() const { return viewMatrix; }
         auto& GetProjectionMatrix() const { return projectionMatrix; }
         auto& GetViewMatrixTransposed() const { return viewMatrixTransposed; }
-        auto& GetProjectionMatrixTransposed() const {
-            return projectionMatrixTransposed;
-        }
+        auto& GetProjectionMatrixTransposed() const
+        { return projectionMatrixTransposed; }
 
         void CastRay(const Vec2f& _pos, const drash::Plane& _plane,
                      Vec3f& _result) const;
 
     protected:
     private:
-        void ComputeMatrices();
+        Var<bool> ortho;
+        Var<Vec2f> orthoSize;
+        Var<float> fov;
+        Var<float> depthOfView;
+        Var<Vec3f> pos;
+        Var<Vec2f> rotation;
+        Var<float> aspectRatio = 1.0f;
 
-        bool ortho = false;
-        Vec2f orthoSize;
-        float fov;
-        float depthOfView;
-        Vec3f pos;
-        Vec2f rotation;
-        Animator<Vec2f> orthoSizeAnimator = orthoSize;
-        Animator<float> fovAnimator = fov;
-        Animator<float> depthOfViewAnimator = depthOfView;
-        Animator<Vec3f> posAnimator = pos;
-        Animator<Vec2f> rotationAnimator = rotation;
-
-        Matrix4f rotationMatrix;
-        Matrix4f antiRotationMatrix;
-        Matrix4f viewMatrix;
-        Matrix4f projectionMatrix;
-
-        Matrix4f viewMatrixTransposed;
-        Matrix4f projectionMatrixTransposed;
-
-        float aspectRatio = 1.0f;
-        Animator<float> aspectRatioAnimator = aspectRatio;
+        VarAnimator<Var<Vec2f>> orthoSizeAnimator = orthoSize;
+        VarAnimator<Var<float>> fovAnimator = fov;
+        VarAnimator<Var<float>> depthOfViewAnimator = depthOfView;
+        VarAnimator<Var<Vec3f>> posAnimator = pos;
+        VarAnimator<Var<Vec2f>> rotationAnimator = rotation;
+        VarAnimator<Var<float>> aspectRatioAnimator = aspectRatio;
+        
+        RxRelaxed<Matrix4f> rotationMatrix;
+        RxRelaxed<Matrix4f> antiRotationMatrix;
+        RxRelaxed<Matrix4f> viewMatrix;
+        RxRelaxed<Matrix4f> projectionMatrix;
+        RxRelaxed<Matrix4f> viewMatrixTransposed;
+        RxRelaxed<Matrix4f> projectionMatrixTransposed;
     };
 
 } // namespace greng

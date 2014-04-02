@@ -76,8 +76,8 @@ namespace greng {
         return res;
     }
 
-    FrameBuffer* FrameBufferManager::CreateFrameBuffer(const Texture& _color,
-                                                       const Texture& _depth) {
+    FrameBuffer* FrameBufferManager::CreateFrameBuffer(        
+        const std::vector<Texture*>& _colors, const Texture& _depth) {        
         FrameBuffer* res = frameBufferFactory.CreateObject();
 
         if (res == nullptr) {
@@ -93,12 +93,21 @@ namespace greng {
         }
 
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, res->frameBufferBufferId);
-        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                  GL_TEXTURE_2D, _color.textureBufferId, 0);
+
+        static constexpr auto buffersLimit = 3;
+        static constexpr GLenum buffers[buffersLimit] =
+            { GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT,
+              GL_COLOR_ATTACHMENT2_EXT, };
+        const auto count = std::min<int>(_colors.size(), buffersLimit);
+
+        for (auto i = 0; i < count; ++i) {
+            glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, buffers[i],
+                                      GL_TEXTURE_2D, _colors[i]->textureBufferId, 0);
+        }
         glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
                                   GL_TEXTURE_2D, _depth.textureBufferId, 0);
-        GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT };
-        glDrawBuffers(1, buffers);
+
+        glDrawBuffers(count, buffers);
 
         if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) !=
             GL_FRAMEBUFFER_COMPLETE_EXT)

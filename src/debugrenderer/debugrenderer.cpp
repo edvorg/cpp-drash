@@ -102,7 +102,7 @@ namespace drash {
                         m, 0, textures, 3,
                         program,
                         &model, nullptr, &model_view,
-                        &camera->GetProjectionMatrix(), light, spotLight1,
+                        &camera->GetProjectionMatrix().getValue(), light, spotLight1,
                         &camera->GetPos().Get(), FrameBuffer);
 
                     greng.GetMeshManager().DestroyMesh(m);
@@ -188,7 +188,7 @@ namespace drash {
                 greng.GetRenderer().RenderMesh(
                     m, 0, textures, 3,
                     program, &model,
-                    nullptr, &model_view, &camera->GetProjectionMatrix(), light,
+                    nullptr, &model_view, &camera->GetProjectionMatrix().getValue(), light,
                     spotLight1, &camera->GetPos().Get(), FrameBuffer);
 
                 greng.GetMeshManager().DestroyMesh(m);

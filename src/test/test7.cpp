@@ -234,7 +234,7 @@ namespace drash {
 
                         GetGreng().GetRenderer().RenderMesh(
                             m, 0, &debugTexture, 1, program, &model, nullptr,
-                            &model_view, &GetCamera().GetProjectionMatrix(),
+                            &model_view, &GetCamera().GetProjectionMatrix().getValue(),
                             &light1);
 
                         GetGreng().GetMeshManager().DestroyMesh(m);

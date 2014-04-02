@@ -45,7 +45,7 @@ namespace drash {
 
             uiCamera = GetGreng().GetCameraManager().CreateCamera({});
             uiCamera->GetPos() = { 0, 0, 1 };
-            uiCamera->SetOrtho(true);
+            uiCamera->GetOrtho() = true;
             uiCamera->GetOrthoSize() = { 0.5, 0.5 };
             uiCamera->GetDepthOfView() = 100;
 
@@ -636,7 +636,7 @@ namespace drash {
                           rot.y -= new_pos.x - camRotFirstClick.x;
                           rot.x += new_pos.y - camRotFirstClick.y;
 
-                          camera->GetRotation().Set(rot);
+                          camera->GetRotation() = rot;
 
                           camRotFirstClick = new_pos;
                       }));

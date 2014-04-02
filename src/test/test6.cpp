@@ -107,7 +107,7 @@ namespace drash {
                 Vec3f t = GetCamera().GetPos().GetTarget();
                 t.x = player1->GetSceneObject()->GetPos().x;
                 GetCamera().GetPos().SetTarget(t, 1.0,
-                                               AnimatorBehavior::Single);
+                                               VarAnimatorBehavior::Single);
             }
 
             if (targetCreateTimer > 5.0 && targetDestroyed) {
@@ -157,7 +157,7 @@ namespace drash {
                 GetGreng().GetRenderer().RenderMesh(
                     player1Mesh, i, &player1Texture, 1, player1ShaderProgram,
                     &model, nullptr, &model_view,
-                    &GetCamera().GetProjectionMatrix(), &light1);
+                    &GetCamera().GetProjectionMatrix().getValue(), &light1);
             }
 
             GetGreng().GetRenderer().DrawPoint(GetCamera(), light1.position, 10,

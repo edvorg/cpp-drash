@@ -37,18 +37,18 @@ namespace drash {
             camera = GetGreng().GetCameraManager().CreateCamera({});
             camera->GetPos() = { -10, 10, 10 };
             camera->GetPos().SetTarget({ 10, -10, 10 }, 10,
-                                       AnimatorBehavior::Bounce);
-            camera->SetOrtho(true);
+                                       VarAnimatorBehavior::Bounce);
+            camera->GetOrtho() = true;
 
             camera->GetOrthoSize() =
                 { 10, 10.0 / GetGreng().GetViewport().GetAspectRatio() };
 
             camera->GetOrthoSize().SetTarget(
                 { 2, 2 / GetGreng().GetViewport().GetAspectRatio() }, 5,
-                AnimatorBehavior::Bounce);
+                VarAnimatorBehavior::Bounce);
 
             uiCamera = GetGreng().GetCameraManager().CreateCamera({});
-            uiCamera->SetOrtho(true);
+            uiCamera->GetOrtho() = true;
             uiCamera->GetOrthoSize() =
                 { 100, 100.0 / GetGreng().GetViewport().GetAspectRatio() };
             uiCamera->GetPos() = { 0, 0, 10 };
@@ -73,8 +73,7 @@ namespace drash {
             GetScene().CreateObject(g, p);
 
             GetEventSystem().SetProcessor("SPC", AppEventProcessor([this] {
-                                                     camera->SetOrtho(
-                                                         !camera->IsOrtho());
+                        camera->GetOrtho() = !camera->GetOrtho();
                                                  }));
 
             GetEventSystem().SetProcessor(

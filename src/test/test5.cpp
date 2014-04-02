@@ -82,7 +82,7 @@ namespace drash {
                 auto program = shaderProgram ? shaderProgram : shaderProgram2;
                 GetGreng().GetRenderer().RenderMesh(
                     mesh1, 0, &tex6, 1, program, &model, nullptr,
-                    &model_view, &GetCamera().GetProjectionMatrix(), &light1,
+                    &model_view, &GetCamera().GetProjectionMatrix().getValue(), &light1,
                     {}, {}, frameBuffer);
             }
 
@@ -108,7 +108,7 @@ namespace drash {
                 auto program = shaderProgram ? shaderProgram : shaderProgram2;
                 GetGreng().GetRenderer().RenderMesh(
                     mesh2, 0, &tex2, 1, program, &model, nullptr,
-                    &model_view, &GetCamera().GetProjectionMatrix(), &light1,
+                    &model_view, &GetCamera().GetProjectionMatrix().getValue(), &light1,
                     {}, {}, frameBuffer);
             }
 
@@ -131,7 +131,7 @@ namespace drash {
                     GetGreng().GetRenderer().RenderMesh(
                         mesh3, i, &texts[i * 2], 2, program, &model,
                         nullptr, &model_view,
-                        &GetCamera().GetProjectionMatrix(), &light1, nullptr,
+                        &GetCamera().GetProjectionMatrix().getValue(), &light1, nullptr,
                         &GetCamera().GetPos().Get(), frameBuffer);
                 }
             }
@@ -161,7 +161,7 @@ namespace drash {
                     GetGreng().GetRenderer().RenderMesh(
                         mesh4, i, &texts[i * 2], 2, program, &model,
                         nullptr, &model_view,
-                        &GetCamera().GetProjectionMatrix(), &light1, nullptr,
+                        &GetCamera().GetProjectionMatrix().getValue(), &light1, nullptr,
                         &GetCamera().GetPos().Get(), frameBuffer);
                 }
             }

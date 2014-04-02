@@ -30,36 +30,78 @@ namespace greng {
 
     using drash::Vec4f;
 
+    Camera::Camera() {
+        using react::link;
+        
+        link(rotation).reconnect(
+            rotationMatrix, [] (auto r) {
+                Matrix4f rotx;
+                Matrix4f roty;
+                Matrix4f res;
+                MatrixRotationX(rotx, -r.x);
+                MatrixRotationY(roty, -r.y);
+                MatrixMultiply(rotx, roty, res);
+                return res;
+            });
+        
+        link(rotation).reconnect(
+            antiRotationMatrix, [] (auto r) {
+                Matrix4f rotx;
+                Matrix4f roty;
+                Matrix4f res;
+                MatrixRotationX(rotx, r.x);
+                MatrixRotationY(roty, r.y);
+                MatrixMultiply(roty, rotx, res);
+                return res;
+            });
+
+        link(pos, rotationMatrix).reconnect(
+            viewMatrix, [] (auto p, auto r) {
+                Matrix4f res;
+                Vec3f tv(-p.x, -p.y, -p.z);
+                Matrix4f tm;
+                MatrixTranslation(tm, tv);
+                MatrixMultiply(r, tm, res);
+                return res;
+            });
+
+        link(ortho, orthoSize, depthOfView, aspectRatio, fov).reconnect(
+            projectionMatrix, [] (auto o, auto s, auto d, auto a, auto  f) {
+                Matrix4f res;
+                auto ds = d ? d : 1.0f;
+                res.Identity();
+                if (o) {
+                    res.data[res.i00] = 1.0f / (s.x ? s.x : 1.0f);
+                    res.data[res.i11] = 1.0f / (s.y ? s.y : 1.0f);
+                    res.data[res.i22] = -1.0 / ds;
+                } else {
+                    Matrix4Perspective(res, f, a, 1.0, ds + 1.0f);
+                }
+                return res;
+            });
+
+        link(viewMatrix).reconnect(
+            viewMatrixTransposed, [] (auto m) {
+                Matrix4f res = m;
+                res.Transpose();
+                return res;
+            });
+
+        link(projectionMatrix).reconnect(
+            projectionMatrixTransposed, [] (auto m) {
+                Matrix4f res = m;
+                res.Transpose();
+                return res;
+            });
+    }
+
     void Camera::Step(double _dt) {
-        bool compute_matrices = false;
-
-        if (orthoSizeAnimator.Step(_dt)) {
-            compute_matrices = true;
-        }
-
-        if (fovAnimator.Step(_dt)) {
-            compute_matrices = true;
-        }
-
-        if (depthOfViewAnimator.Step(_dt)) {
-            compute_matrices = true;
-        }
-
-        if (posAnimator.Step(_dt)) {
-            compute_matrices = true;
-        }
-
-        if (rotationAnimator.Step(_dt)) {
-            compute_matrices = true;
-        }
-
-        if (aspectRatioAnimator.Step(_dt)) {
-            compute_matrices = true;
-        }
-
-        if (compute_matrices == true) {
-            ComputeMatrices();
-        }
+        orthoSizeAnimator.Step(_dt);
+        fovAnimator.Step(_dt);
+        depthOfViewAnimator.Step(_dt);
+        posAnimator.Step(_dt);
+        rotationAnimator.Step(_dt);
+        aspectRatioAnimator.Step(_dt);
     }
 
     void Camera::LookAt(const Vec3f& _point) {
@@ -137,41 +179,6 @@ namespace greng {
         r.SetPoint(pos);
         r.SetDirection(tmp);
         _plane.CastRay(r, _result);
-    }
-
-    void Camera::ComputeMatrices() {
-        Matrix4f rotx;
-        MatrixRotationX(rotx, -rotation.x);
-
-        Matrix4f roty;
-        MatrixRotationY(roty, -rotation.y);
-
-        MatrixMultiply(rotx, roty, rotationMatrix);
-        MatrixRotationX(rotx, rotation.x);
-        MatrixRotationY(roty, rotation.y);
-        MatrixMultiply(roty, rotx, antiRotationMatrix);
-
-        Vec3f tv(-pos.x, -pos.y, -pos.z);
-        Matrix4f tm;
-        MatrixTranslation(tm, tv);
-
-        MatrixMultiply(rotationMatrix, tm, viewMatrix);
-
-        if (ortho) {
-            projectionMatrix.Identity();
-            projectionMatrix.data[projectionMatrix.i00] = 1.0 / orthoSize.x;
-            projectionMatrix.data[projectionMatrix.i11] = 1.0 / orthoSize.y;
-            projectionMatrix.data[projectionMatrix.i22] = -1.0 / depthOfView;
-        } else {
-            Matrix4Perspective(projectionMatrix, fov, aspectRatio, 1.0,
-                               depthOfView + 1.0f);
-        }
-
-        viewMatrixTransposed = viewMatrix;
-        viewMatrixTransposed.Transpose();
-
-        projectionMatrixTransposed = projectionMatrix;
-        projectionMatrixTransposed.Transpose();
     }
 
 } // namespace greng
