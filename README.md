@@ -25,4 +25,4 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 drash
 =====
 
-Free box2d based platformer with complete level destruction
+2d/3d game engine with advanced desctruction system
