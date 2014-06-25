@@ -116,6 +116,9 @@ OBJECTS=${SOURCES:.cpp=.o}
 
 all: $(SOURCES) $(EXECUTABLE)
 
+clean:  
+	find src -type f -name *.o -exec rm {} \;
+
 $(EXECUTABLE): $(OBJECTS)
 	${CC} ${CPP_FLAGS} ${LIBS} ${OBJECTS} -o ${EXECUTABLE}
 
