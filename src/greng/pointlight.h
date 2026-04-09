@@ -25,6 +25,8 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GRENG_POINTLIGHT_H
 #define GRENG_POINTLIGHT_H
 
+#include "../misc/color3.h"
+
 namespace greng {
 
     class PointLight {
@@ -32,6 +34,7 @@ namespace greng {
         PointLight() = default;
 
         drash::Vec3f position = 0;
+        drash::Color3f color = drash::Color3f(1, 1, 1);
     };
 
 } // namespace greng

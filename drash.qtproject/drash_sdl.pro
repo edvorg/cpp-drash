@@ -71,6 +71,7 @@ SOURCES += \
     ../src/test/test9.cpp \
     ../src/greng/grengsystemsset.cpp \
     ../src/test/test10.cpp \
+    ../src/test/test14.cpp \
     ../src/greng/spotlight.cpp \
     ../3rd/Box2D/Collision/b2BroadPhase.cpp \
     ../3rd/Box2D/Collision/b2CollideCircle.cpp \
@@ -189,6 +190,7 @@ HEADERS += \
     ../src/test/test9.h \
     ../src/greng/grengsystemsset.h \
     ../src/test/test10.h \
+    ../src/test/test14.h \
     ../src/greng/spotlight.h \
     ../3rd/Box2D/Collision/b2BroadPhase.h \
     ../3rd/Box2D/Collision/b2Collision.h \

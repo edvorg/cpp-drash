@@ -6,6 +6,7 @@ uniform mat4 gProjMatrix;
 
 uniform vec3 gViewPosition;
 uniform vec3 gLight1Position;
+uniform vec3 gLight2Position;
 
 attribute vec3 gTangent;
 attribute vec3 gBinormal;
@@ -15,6 +16,7 @@ varying vec3 fragPosition;
 
 varying vec3 aViewDirTangentSpace;
 varying vec3 aLight1Dir;
+varying vec3 aLight2Dir;
 
 void main(void)
 {
@@ -29,12 +31,17 @@ void main(void)
 
 	vec3 viewDir = fragPosition - gViewPosition;
 	vec3 light1Dir = gLight1Position - fragPosition;
-			  
+	vec3 light2Dir = gLight2Position - fragPosition;
+
 	aViewDirTangentSpace = vec3(tangent.x * viewDir.x + tangent.y * viewDir.y + tangent.z * viewDir.z,
-			            binormal.x * viewDir.x + binormal.y * viewDir.y + binormal.z * viewDir.z, 
+			            binormal.x * viewDir.x + binormal.y * viewDir.y + binormal.z * viewDir.z,
 		     		    normal.x * viewDir.x + normal.y * viewDir.y + normal.z * viewDir.z);
 
 	aLight1Dir = vec3(tangent.x * light1Dir.x + tangent.y * light1Dir.y + tangent.z * light1Dir.z,
-			  binormal.x * light1Dir.x + binormal.y * light1Dir.y + binormal.z * light1Dir.z, 
+			  binormal.x * light1Dir.x + binormal.y * light1Dir.y + binormal.z * light1Dir.z,
 		     	  normal.x * light1Dir.x + normal.y * light1Dir.y + normal.z * light1Dir.z);
+
+	aLight2Dir = vec3(tangent.x * light2Dir.x + tangent.y * light2Dir.y + tangent.z * light2Dir.z,
+			  binormal.x * light2Dir.x + binormal.y * light2Dir.y + binormal.z * light2Dir.z,
+			  normal.x * light2Dir.x + normal.y * light2Dir.y + normal.z * light2Dir.z);
 }

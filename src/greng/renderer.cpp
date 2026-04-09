@@ -194,37 +194,87 @@ namespace greng {
             }
         }
 
-        if (_light != nullptr) {
-            int l1ploc =
-                glGetUniformLocation(_program->programId, "gLight1Position");
-            if (l1ploc != -1) {
-                glUniform3fv(l1ploc, 1, reinterpret_cast<const GLfloat*>(
-                                            &_light->position));
-            } else {
-                LOG_ERR("Renderer::RenderMesh(): Unable to find "
-                        "gLight1Position attribute");
-            }
-        }
+        // Two-light pipeline: gLight1{Position,Color} is the "torch"
+        // (point light), gLight2{Position,Color} is the "atmosphere"
+        // (spot light, used as an area-fill). Both are uploaded every
+        // frame; missing lights upload zero colour so they contribute
+        // nothing. Tests that only use one type still see the same
+        // result they used to (the other slot is dark).
+        {
+            const GLfloat black[3] = { 0.0f, 0.0f, 0.0f };
+            const GLfloat origin[3] = { 0.0f, 0.0f, 0.0f };
 
-        if (_spot_light != nullptr) {
-            int sl1ploc =
+            int l1pos =
                 glGetUniformLocation(_program->programId, "gLight1Position");
-            if (sl1ploc != -1) {
-                glUniform3fv(sl1ploc, 1, reinterpret_cast<const GLfloat*>(
-                                             &_spot_light->position));
+            int l2pos =
+                glGetUniformLocation(_program->programId, "gLight2Position");
+            int l1col =
+                glGetUniformLocation(_program->programId, "gLightColor");
+            int l2col =
+                glGetUniformLocation(_program->programId, "gLight2Color");
+
+            // Light 1 — point light. Defaults: position at origin,
+            // colour from PointLight::color (defaults to white).
+            if (_light != nullptr) {
+                if (l1pos != -1) {
+                    glUniform3fv(l1pos, 1, reinterpret_cast<const GLfloat*>(
+                                               &_light->position));
+                }
+                if (l1col != -1) {
+                    glUniform3fv(l1col, 1, reinterpret_cast<const GLfloat*>(
+                                               &_light->color));
+                }
             } else {
-                LOG_ERR("Renderer::RenderMesh(): Unable to find "
-                        "gLight1Position attribute");
+                if (l1pos != -1) {
+                    glUniform3fv(l1pos, 1, origin);
+                }
+                if (l1col != -1) {
+                    // No point light — for backwards compat with shaders
+                    // that only have one light slot, default to white so
+                    // legacy single-light tests still light their scene.
+                    const GLfloat white[3] = { 1.0f, 1.0f, 1.0f };
+                    glUniform3fv(l1col, 1, white);
+                }
             }
 
-            int sl1dloc =
-                glGetUniformLocation(_program->programId, "gLight1Direction");
-            if (sl1dloc != -1) {
-                glUniform3fv(sl1dloc, 1, reinterpret_cast<const GLfloat*>(
-                                             &_spot_light->direction));
+            // Light 2 — spot/area light.
+            if (_spot_light != nullptr) {
+                if (l2pos != -1) {
+                    glUniform3fv(l2pos, 1, reinterpret_cast<const GLfloat*>(
+                                               &_spot_light->position));
+                }
+                if (l2col != -1) {
+                    glUniform3fv(l2col, 1, reinterpret_cast<const GLfloat*>(
+                                               &_spot_light->color));
+                }
+
+                // Legacy: shader6 reads gLight1Direction for cone math.
+                int sl1dloc = glGetUniformLocation(_program->programId,
+                                                   "gLight1Direction");
+                if (sl1dloc != -1) {
+                    glUniform3fv(sl1dloc, 1,
+                                 reinterpret_cast<const GLfloat*>(
+                                     &_spot_light->direction));
+                }
+
+                // Legacy single-light shaders write the spot's position
+                // into gLight1Position too, so they still get lit when
+                // they're the only light source (test10 etc).
+                if (_light == nullptr && l1pos != -1) {
+                    glUniform3fv(l1pos, 1, reinterpret_cast<const GLfloat*>(
+                                               &_spot_light->position));
+                }
+                if (_light == nullptr && l1col != -1) {
+                    glUniform3fv(l1col, 1, reinterpret_cast<const GLfloat*>(
+                                               &_spot_light->color));
+                }
             } else {
-                LOG_ERR("Renderer::RenderMesh(): Unable to find "
-                        "gLight1Direction attribute");
+                if (l2pos != -1) {
+                    glUniform3fv(l2pos, 1, origin);
+                }
+                if (l2col != -1) {
+                    glUniform3fv(l2col, 1, black);
+                }
             }
         }
 
@@ -594,10 +644,13 @@ namespace greng {
             vertices = verts;
             indices = inds;
         } else if (_c == 'g') {
+            // Bowl sits in the body area (y=-1..0) and the descender
+            // hook hangs below the baseline (y=-2..-1), matching 'p'.
             static const int corn = 7;
-            static GLfloat verts[corn * 2] = { 0.0f, 1.0f,  1.0f, 1.0f,  1.0f,
-                                               0.0f, -1.0f, 0.0f, -1.0f, -1.0f,
-                                               1.0f, -1.0f, 1.0f, 0.0f, };
+            static GLfloat verts[corn * 2] = { 0.0f,  -2.0f, 1.0f, -2.0f,
+                                               1.0f,  -1.0f, -1.0f,-1.0f,
+                                               -1.0f,  0.0f, 1.0f,  0.0f,
+                                               1.0f,  -1.0f, };
             static GLubyte inds[corn] = { 0, 1, 2, 3, 4, 5, 6, };
             corners = corn;
             vertices = verts;

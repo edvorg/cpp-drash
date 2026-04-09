@@ -37,6 +37,7 @@ along with drash Source Code.  If not, see <http://www.gnu.org/licenses/>.
 #include "test11.hpp"
 #include "test12.hpp"
 #include "test13.hpp"
+#include "test14.h"
 
 #include <cstring>
 
@@ -71,6 +72,8 @@ namespace drash {
                 return new Test12(greng);
             if (strcmp(_name, "test13") == 0)
                 return new Test13(greng);
+            if (strcmp(_name, "test14") == 0)
+                return new Test14(greng);
             return nullptr;
         }
 
