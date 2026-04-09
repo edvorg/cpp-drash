@@ -59,6 +59,12 @@ namespace drash {
             GetGreng().GetRenderer().DrawLine(*camera, p1,
                                               wallTopObject->GetPos(), 2,
                                               Color4f(0, 0, 0, 1), true);
+
+            // Always-glowing lamp marker — drawn unlit so the lamp stays
+            // visible even though its own spot light points away from it.
+            GetGreng().GetRenderer().DrawPoint(
+                *camera, lamp1Object->GetPos(), 30,
+                Color4f(1.0f, 0.95f, 0.6f, 1.0f), true);
         }
 
         bool Test10::InitCamera() {

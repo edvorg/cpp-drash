@@ -37,8 +37,8 @@ EventKey ConvertKey(SDLKey _key);
 EventKey ConvertButton(int _button);
 void WindowSpaceToScreenSpace(Vec2f& _from);
 
-static double gWindowWidth = 1366;
-static double gWindowHeight = 700;
+static double gWindowWidth = 1024;
+static double gWindowHeight = 600;
 
 int main(int _argc, char** _argv) {
     bool fail = false;
@@ -53,13 +53,8 @@ int main(int _argc, char** _argv) {
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 24);
-
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
@@ -67,7 +62,7 @@ int main(int _argc, char** _argv) {
     SDL_WM_SetCaption("Drash", nullptr);
 
     if (SDL_SetVideoMode(gWindowWidth, gWindowHeight, 32,
-                         SDL_HWSURFACE | SDL_OPENGL | SDL_GL_DOUBLEBUFFER) ==
+                         SDL_HWSURFACE | SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_RESIZABLE) ==
         nullptr) {
         LOG_ERR("SDL_SetVideoMode() failed");
         fail = true;
@@ -75,7 +70,7 @@ int main(int _argc, char** _argv) {
 
     glViewport(0, 0, gWindowWidth, gWindowHeight);
     greng::Greng greng;
-    greng.GetViewport().SetSize({ gWindowWidth, gWindowHeight });
+    greng.GetViewport().SetSize({ (int)gWindowWidth, (int)gWindowHeight });
 
     if (glewInit() != GLEW_OK) {
         LOG_ERR("glewInit() failed");
@@ -119,7 +114,7 @@ int main(int _argc, char** _argv) {
         glViewport(0, 0, gWindowWidth, gWindowHeight);
         app->GetGreng().GetCameraManager().SetAspectRatio(gWindowWidth /
                                                           gWindowHeight);
-        greng.GetViewport().SetSize({ gWindowWidth, gWindowHeight });
+        greng.GetViewport().SetSize({ (int)gWindowWidth, (int)gWindowHeight });
         app->GetUISystem().SetAspectRatio(gWindowWidth / gWindowHeight);
         app->GetUISystem().SetWidth(gWindowWidth);
 
@@ -175,7 +170,7 @@ int main(int _argc, char** _argv) {
                     app->GetGreng().GetCameraManager().SetAspectRatio(
                         gWindowWidth / gWindowHeight);
                     greng.GetViewport().SetSize(
-                        { gWindowWidth, gWindowHeight });
+                        { (int)gWindowWidth, (int)gWindowHeight });
                     app->GetUISystem().SetAspectRatio(gWindowWidth /
                                                       gWindowHeight);
                     app->GetUISystem().SetWidth(gWindowWidth);

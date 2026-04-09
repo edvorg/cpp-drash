@@ -41,16 +41,16 @@ namespace drash {
             camera->GetOrtho() = true;
 
             camera->GetOrthoSize() =
-                { 10, 10.0 / GetGreng().GetViewport().GetAspectRatio() };
+                { 10.0f, 10.0f / GetGreng().GetViewport().GetAspectRatio() };
 
             camera->GetOrthoSize().SetTarget(
-                { 2, 2 / GetGreng().GetViewport().GetAspectRatio() }, 5,
+                { 2.0f, 2.0f / GetGreng().GetViewport().GetAspectRatio() }, 5,
                 VarAnimatorBehavior::Bounce);
 
             uiCamera = GetGreng().GetCameraManager().CreateCamera({});
             uiCamera->GetOrtho() = true;
             uiCamera->GetOrthoSize() =
-                { 100, 100.0 / GetGreng().GetViewport().GetAspectRatio() };
+                { 100.0f, 100.0f / GetGreng().GetViewport().GetAspectRatio() };
             uiCamera->GetPos() = { 0, 0, 10 };
             uiCamera->GetDepthOfView() = 50;
 

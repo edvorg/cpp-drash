@@ -110,19 +110,8 @@ namespace drash {
                                                VarAnimatorBehavior::Single);
             }
 
-            if (targetCreateTimer > 5.0 && targetDestroyed) {
-                SceneObjectParams p;
-                p.pos.Set(math::Rand<float>(-5, 5, 0.5), 10, 0);
-
-                auto o = GetScene().CreateObject(*targetGeometry, p);
-
-                targetDestroyed = false;
-                targetCreateTimer = 0.0;
-
-                o->AddDestroyHandler([this](SceneObject*) {
-                    targetDestroyed = true;
-                });
-            }
+            // Periodic platform spawning disabled — too cluttered with the
+            // demo level.
         }
 
         void Test6::Render() {

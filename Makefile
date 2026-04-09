@@ -1,4 +1,4 @@
-CPP_FLAGS=-std=c++1y -stdlib=libc++ -O3 -Wall -DDRASH_DEBUG
+CPP_FLAGS=-std=c++17 -stdlib=libc++ -O3 -Wall -DDRASH_DEBUG
 INCLUDES=-I3rd
 CC=clang++
 
