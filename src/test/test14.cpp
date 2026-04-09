@@ -147,6 +147,21 @@ void Test14::InitTemplates() {
             kv.second->ComputeDestructionGraph(0.5f);
         }
     }
+
+    // Test14 uses its own dual-light shader (shader14) so the player
+    // can carry a torch through a chamber lit by emergency lamps. The
+    // default DebugRenderer shader (shader7) is the original
+    // single-light no-falloff shader that other tests rely on.
+    auto* vs = GetGreng().GetVertexShaderManager().CreateShaderFromFile(
+        "shaders/shader14.120.vs");
+    auto* fs = GetGreng().GetFragmentShaderManager().CreateShaderFromFile(
+        "shaders/shader14.120.fs");
+    if (vs != nullptr && fs != nullptr) {
+        auto* prog = GetGreng().GetShaderProgramManager().CreateProgram(vs, fs);
+        if (prog != nullptr) {
+            GetDebugRenderer().SetShaderProgram(prog);
+        }
+    }
 }
 
 SceneObject* Test14::CreateBox(const std::string& _name, float _halfW,
